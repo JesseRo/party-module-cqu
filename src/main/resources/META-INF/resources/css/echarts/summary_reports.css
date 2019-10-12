@@ -1,0 +1,92 @@
+@media (min-width: 768px) {
+  .summary_reports_box {
+    padding-top: 20px;
+  }
+  .summary_reports_box .reports_header {
+    height: 118px;
+  }
+  .summary_reports_box .reports_header .header_item {
+    height: 100px;
+    border: 1px solid #D8D8D8;
+    width: 24%;
+    margin-right: 11px;
+    float: left;
+  }
+  .summary_reports_box .reports_header .header_item:last-child {
+    margin-right: 0;
+  }
+  .summary_reports_box .reports_header .header_item > div {
+    display: inline-block;
+    float: left;
+  }
+  .summary_reports_box .reports_header .header_item .img_box {
+    width: 36.4%;
+    height: 100%;
+    position: relative;
+  }
+  .summary_reports_box .reports_header .header_item .img_box img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 50px;
+    margin-left: -19px;
+    margin-top: -18px;
+  }
+  .summary_reports_box .reports_header .header_item .text_box {
+    width: 63.6%;
+    padding-left: 13.6%;
+    padding-top: 30px;
+  }
+  .summary_reports_box .reports_header .header_item .text_box p {
+    font-size: 15px;
+    color: #666;
+  }
+  .summary_reports_box .reports_header .header_item .text_box p:first-child {
+    padding-bottom: 14px;
+  }
+  .summary_reports_box .reports_header .header_item .text_box .num_text {
+    font-size: 30px;
+    color: #333;
+    display: inline-block;
+    line-height: 30px;
+  }
+  .summary_reports_box .reports_box {
+    margin: 0px 0 20px 0;
+  }
+  .summary_reports_box .reports_box .reports_content_box {
+    display: inline-block;
+    height: 264px;
+    border: 1px solid #D8D8D8;
+  }
+  .summary_reports_box .reports_box .reports_content_box .num_show {
+  	font-size: 26px;
+    padding-left: 21px;
+  }
+  .summary_reports_box .reports_box .reports_content_box:first-child {
+    width: 31%;
+    background: #fff;
+    float: left;
+  }
+  .summary_reports_box .reports_box .reports_content_box:last-child {
+    width: 67%;
+    float: right;
+  }
+  .summary_reports_box .reports_box .reports_content_box .reports_header {
+    height: 58px;
+    border-bottom: 1px solid #d8d8d8;
+    font-size: 18px;
+    color: #333;
+    line-height: 58px;
+    padding-left: 24px;
+  }
+  .summary_reports_box .reports_box .reports_content_box .reports_heade_only {
+  	height: 25px;
+    font-size: 14px;
+    margin-top: 22px;
+    margin-bottom: 6px;
+    line-height: normal;
+    padding-left: 21px;
+    color: rgba(153,153,153,1);
+    border-bottom: none;
+  }
+}

@@ -1,0 +1,245 @@
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ include file="/init.jsp" %>
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>组织部子页面主题</title>
+    <link rel="stylesheet" href="${basePath }/css/party_member.css" />
+    <link rel="stylesheet" href="${basePath }/css/party_organization.css" />
+    <script type="text/javascript" src="${basePath}/js/modal.js"></script>
+    <link rel="stylesheet" href="${basePath}/css/jquery.dropdown.css"/>
+    <script type="text/javascript" src="${basePath}/js/jquery.dropdown.js?v=11"></script>
+<style type="text/css">
+.col-sm-6.col-xs-12 {
+    float: right;
+}
+
+.export_excel {
+font-size: 13px;
+    /* margin: 10px 0; */
+    padding: 5px 0;
+    display: inline-block;
+}
+    </style>
+</head>
+<body>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">指定介绍人</h4>
+            </div>
+            <div class="modal-body" style="height: 170px;"> <div class="dropdown-sin-2" style="width: 200px">
+            <select style="width: 100px;" multiple placeholder="请选择">
+                <option>张三</option>
+                <option>李四</option>
+                <option>王五</option>
+            </select></div></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary confirm" data-dismiss="modal">确定</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+                <div class="content_title">
+                                                    指定介绍人
+                </div>
+
+               <!-- <div class="col-sm-6 col-xs-12"  style="margin-bottom:20px;">
+                     <span class="col-sm-4 control-label col-xs-3" style="height: 34px;line-height: 34px;text-align: right;">发布时间</span>
+                     <div class="col-sm-8 col-xs-9">
+                     <select class="time_select form-control">
+                      <option value="">请选择时间</option>
+                      <option value="">全部</option>
+                      <option value="nowDate">本日</option>
+                      <option value="nowWeek">本周</option>
+                      <option value="more">更早</option>
+                    </select>
+                     </div>
+                </div> -->
+                <table class="content_table" style="border:1px solid #dedede;">
+                    <thead class="table_title">
+                        <tr>
+                            <c:forEach var="h" items="${title}">
+                                <th>${h}</th>
+                            </c:forEach>
+                            <th>操作</th>
+                            <th>培养教育考察结果</th>
+                            <th style="display: none;">查看详情</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table_info">
+                        <c:forEach var="c" items="${content }">
+                        <tr>
+                            <c:forEach var="ct" items="${c}" varStatus="vs">
+                                <c:choose>
+                                    <c:when  test="${vs.last}">
+                                    <td>
+                                        <c:if test="${ct == 'true'}">
+                                            <div style="display: none;">
+                                                <button id="import" type="button" class="btn btn-default col-xs-4" style="width: 50%">
+                                                    <img src="/images/import_icon.png"> 上传
+                                                </button>
+                                                <div id="upload-block" style="display: none;">
+                                                    <form action="#" method="post" target="uploadTarget" enctype="multipart/form-data">
+                                                        <input type="file" name="excel">
+                                                        <input type="submit">b
+                                                        <iframe name="uploadTarget"></iframe>
+                                                    </form>
+                                                </div>
+                                                <a id="download" href="/images/test.doc" style="line-height: 30px; display:none;">下载谈话记录</a>
+                                            </div>
+                                            <div style="display: none;">
+                                                <a class="approval" style="cursor: pointer;">通过</a>
+                                                <a class="reject" style="cursor: pointer;">驳回</a>
+                                            </div>
+                                            <button data-toggle="modal" data-target="#myModal" type="button" class="btn btn-default col-xs-4 btn-commu" style="width: 65%;">
+                                                <img src="/images/import_icon.png"> 指定介绍人
+                                            </button>
+                                            <p style="padding-left: 5px;line-height: 30px;"></p>
+
+                                        </c:if>
+                                    </td>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <td style="padding-left: 25px;">${ct}</td>
+                                    </c:otherwise>
+                                </c:choose>
+
+                            </c:forEach>
+                            <td style="display: none;">
+                                <a href="/secondaryReportDetail">查看详情</a>
+                            </td>
+                            <td>
+                                <a href="/images/test.doc">下载培养教育考察结果</a>
+                            </td>
+                        </tr>　
+　　                     </c:forEach>
+                    </tbody>
+                </table>
+
+                 <!--    分页              -->
+
+	<div class="pagination_container">
+	        <ul class="pagination" id="page"></ul>
+	        <div class="pageJump">
+	        	<input class='current_page' type="hidden" value="${pageNo}"/>
+	            <p>共<span class="total_page">${totalPage }</span>页</p>
+	            <portlet:actionURL name="/PageNoMVCActionCommand" var="pageNoUrl">
+				</portlet:actionURL>
+	            <form action="#" id="getPageNo" method="post">
+	                <input type="hidden" id="pageNo" name="pageNo" value=""/>
+	                <input type="hidden" id="total_page_" name="total_page_" value="${totalPage}"/>
+	                <span>跳转到第</span>
+	                <input type="text" id="jumpPageNo" name="jumpPageNo"/>
+	                <span>页</span>
+	                <%--  <input label="站点id" name="Site"  value="${Site }" type="hidden"/>
+	                <input label="栏目id" name="Column"  value="${Column }" type="hidden"/> --%>
+	                <input type="hidden" id="date_date" name="date" value=""/>
+	                <button type="submit" class="button">确定</button>
+	            </form>
+	        </div>
+	   </div>
+	 <script type="text/javascript">
+		 $(document).ready(function() {
+            var $commu = null;
+		    $('.approval').on('click', function(){
+		        var report = $(this).parent().parent().attr("id");
+		        $.post("${approval}", {report: report, status: 1}, function(res){
+		            if(res.success){
+                        alert("已通过");
+                        window.location.reload();
+                    }
+		        })
+		    });
+            $('.reject').on('click', function(){
+                var report = $(this).parent().parent().attr("id");
+                $.post("${approval}", {report: report, status: 2}, function(res){
+                    if(res.success){
+                        alert("已驳回");
+                        window.location.reload();
+                    }
+                })
+            });
+            $('.btn-commu').on('click', function(){
+                commu = $(this);
+            })
+
+            $('.confirm').on('click', function(){
+                var value = $('.modal-body').find('select').val();
+                commu.next().text(value);
+                alert("指定成功");
+            })
+
+            var admin_dropdown = $('.dropdown-sin-2').dropdown({
+                data : [ {
+                    name : '没有数据',
+                    disabled : true
+                } ],
+                input : '<input type="text" maxLength="20" placeholder="请输入搜索">',
+                choice : function() {
+                }
+            });
+            $('.dropdown-sin-2').data('dropdown').changeStatus();
+            $('.dropdown-sin-2').data('dropdown').update([{name:"张三",id:"张三"},{name:"李四",id:"李四"},{name:"王五",id:"王五"}], true);
+
+
+            $('#import').on('click', function(){
+                $('#upload-block [type="file"]').click();
+            });
+            $('#upload-block [type="file"]').change(function(){
+                alert('上传成功！');
+                $('#download').show();
+            })
+
+			 var pages = $(".total_page").html();
+			 var currentPage = $('.current_page').val();
+			 $("input[name='pageNo']").val($('.current_page').val());
+			if(currentPage == 1){
+				$('.page_next').removeClass('not_allow');
+				$('.page_prev').addClass('not_allow');
+
+			}else if(currentPage == pages){
+				$('.page_prev').removeClass('not_allow');
+				$('.page_next').addClass('not_allow');
+
+			}else{
+
+			};
+			$("#jumpPageNo").change(function(){
+				$("input[name='pageNo']").val($(this).val());
+			})
+	     Page({
+	         num: pages, //页码数
+	         startnum: currentPage, //指定页码
+	         elem: $('#page'), //指定的元素
+	         callback: function(n) { //回调函数
+	             $("input[name='pageNo']").val(n);
+	         //	alert($("input[name='pageNo']").val());
+	             $("#getPageNo").submit();
+	             if (n == 1) {
+	                 $('#page a').removeClass('not_allow');
+	                 $('.page_prev').addClass('not_allow');
+	             } else if (n >= $('.total_page').html()) {
+	                 $('#page a').removeClass('not_allow');
+	                 $('.page_next').addClass('not_allow')
+	             } else {
+	                 $('#page a').removeClass('not_allow');
+	             }
+	         }
+	     });
+	  });
+	 </script>
+	 </div>
+	 <!-- 分页 -->
+
+
+</body>
+
+</html>

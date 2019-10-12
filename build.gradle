@@ -1,0 +1,71 @@
+
+dependencies {
+	compile group: "org.osgi", name: "org.osgi.core", version: "6.0.0"
+	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.kernel", version: "2.0.0"
+	compileOnly group: "com.liferay.portal", name: "com.liferay.util.taglib", version: "2.0.0"
+	compileOnly group: "javax.portlet", name: "portlet-api", version: "2.0"
+	compileOnly group: "javax.servlet", name: "javax.servlet-api", version: "3.0.1"
+	compileOnly group: "jstl", name: "jstl", version: "1.2"
+	compileOnly group: "org.osgi", name: "osgi.cmpn", version: "6.0.0"
+	
+	compile files("D:\\work\\liferay-ce-portal-7.0-ga3/osgi/modules/common/hg.session.jar")
+	//compile files('D:/zmgJar/caoxmDBAPI.jar')
+	compile files('D:\\work\\liferay-ce-portal-7.0-ga3/osgi/modules/common/caoxmDBAPI.jar')
+	compile files("D:\\work\\liferay-ce-portal-7.0-ga3/osgi/modules/common/fastjson-1.2.9.jar")
+	//compile files("D:/zmgJar/postgresql-42.1.4.jar")
+	//消息推送
+	compile files("D:\\work\\liferay-ce-portal-7.0-ga3/osgi/modules/common/rocketChatApi.jar")
+	//百度编辑器导入jar
+	compile group: 'org.postgresql', name: 'postgresql', version: '42.1.4'
+	compile files("D:\\work\\liferay-ce-portal-7.0-ga3/osgi/modules/common/baidu-ueditor/commons-codec-1.9.jar")
+	compile files("D:\\work\\liferay-ce-portal-7.0-ga3/osgi/modules/common/baidu-ueditor/commons-fileupload-1.3.1.jar")
+	compile files("D:\\work\\liferay-ce-portal-7.0-ga3/osgi/modules/common/baidu-ueditor/commons-io-2.4.jar")
+	compile files("D:\\work\\liferay-ce-portal-7.0-ga3/osgi/modules/common/baidu-ueditor/json.jar")
+	compile files("D:\\work\\liferay-ce-portal-7.0-ga3/osgi/modules/common/baidu-ueditor/ueditor-1.1.2.jar")
+	
+	// 发送邮件
+	compile group: 'javax.mail', name: 'mail', version: '1.4.7'
+	compile group: 'javax.activation', name: 'activation', version: '1.1.1'
+	
+	
+	compile group: "org.springframework", name: "spring-jdbc", version: "4.3.6.RELEASE"
+	compile group: "org.springframework", name: "spring-aop", version: "4.3.6.RELEASE"
+	compile group: "org.springframework", name: "spring-aspects", version: "4.3.6.RELEASE"
+	compile group: "org.springframework", name: "spring-beans", version: "4.3.6.RELEASE"
+	compile group: "org.springframework", name: "spring-context", version: "4.3.6.RELEASE"
+	compile group: "org.springframework", name: "spring-context-support", version: "4.3.6.RELEASE"
+	compile group: "org.springframework", name: "spring-core", version: "4.3.6.RELEASE"
+	compile group: "org.springframework", name: "spring-expression", version: "4.3.6.RELEASE"
+	compile group: "org.springframework", name: "spring-framework-bom", version: "4.3.6.RELEASE"
+	compile group: "org.springframework", name: "spring-instrument", version: "4.3.6.RELEASE"
+	compile group: "org.springframework", name: "spring-orm", version: "4.3.6.RELEASE"
+	compile group: "org.springframework", name: "spring-web", version: "4.3.6.RELEASE"
+	compile group: "org.springframework", name: "spring-webmvc", version: "4.3.6.RELEASE"
+	
+	compile group: 'org.apache.servicemix.bundles', name: 'org.apache.servicemix.bundles.poi', version: '3.17_1'
+	compile group: 'com.google.code.gson', name: 'gson', version: '2.8.2'
+	
+	//cas 客户端
+	compile group: 'org.jasig.cas.client', name: 'cas-client-core', version: '3.2.1'
+	//发送短信
+	compile group: 'org.quartz-scheduler', name: 'quartz', version: '2.3.0'
+	
+}
+
+tasks.withType(JavaCompile) {
+	options.encoding = "UTF-8"
+}
+
+//加载配置文件
+def env = System.getProperty("env") ?: "dev"
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+sourceSets {
+    main {
+        resources {
+            srcDirs = ["src/main/resources", "src/main/profile/$env"]
+            exclude "src/main/profile/**"
+        }
+    }
+}

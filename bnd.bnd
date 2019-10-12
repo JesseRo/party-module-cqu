@@ -1,0 +1,52 @@
+Bundle-Name: party
+Bundle-SymbolicName: party
+Bundle-Version: 1.0.0
+Bundle-Activator: party.portlet.Init
+-includeresource: \  
+	@D:/cxm/commons-codec-1.6.jar,\
+	@D:/cxm/commons-logging-1.1.3.jar,\
+	@D:/cxm/emoji-java-3.1.3.jar,\
+	@D:/cxm/hamcrest-core-1.3.jar,\
+	@D:/cxm/httpasyncclient-4.0.2.jar,\
+	@D:/cxm/httpclient-4.3.6.jar,\
+	@D:/cxm/httpcore-4.3.3.jar,\
+	@D:/cxm/httpcore-nio-4.3.2.jar,\
+	@D:/cxm/httpmime-4.3.6.jar,\
+	@D:/cxm/jackson-annotations-2.8.0.jar,\
+	@D:/cxm/jackson-core-2.8.7.jar,\
+	@D:/cxm/jackson-databind-2.8.7.jar,\
+	@D:/cxm/json-20140107.jar,\
+	@D:/cxm/junit-4.12.jar,\
+	@D:/cxm/org.osgi.core-6.0.0.jar,\
+	@D:/cxm/unirest-java-1.4.8.jar,\
+	@D:/cxm/log4j-1.2.17.jar
+
+Export-Package: party.constants,\
+	org.apache.commons.codec.digest,\
+	com.alibaba.fastjson.*,\
+	com.baidu.ueditor.*,\
+	com.hounify.edu.chat.*,\
+	com.fasterxml.jackson.*,\
+	com.mashape.unirest.*,\
+	com.vdurmont.emoji,\
+	dt.session,\
+	org.apache.http.*,\
+	org.apache.commons.fileupload,\
+	org.apache.commons.fileupload.util.mime,\
+	org.apache.commons.fileupload.*,\
+	com.dt.annotation,\
+	com.dt.springjdbc.dao.impl,\
+	org.jasig.cas.client.authentication,\
+	org.jasig.cas.client.proxy,\
+	org.jasig.cas.client.util,\
+	org.jasig.cas.client.validation,\
+	org.opensaml,\
+	com.alibaba.druid.pool,\
+	com.alibaba.druid,\
+	com.alibaba.druid.*\
+	com.aliyun.odps.udf,\
+	oracle.sql,
+	
+Import-Package: *,org.postgresql
+
+

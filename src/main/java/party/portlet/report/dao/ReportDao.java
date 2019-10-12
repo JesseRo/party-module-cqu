@@ -1,0 +1,67 @@
+package party.portlet.report.dao;
+
+import com.dt.springjdbc.dao.impl.PostgresqlDaoImpl;
+import com.dt.springjdbc.dao.impl.PostgresqlQueryResult;
+import hg.party.entity.organization.Organization;
+import org.osgi.service.component.annotations.Component;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import party.portlet.report.entity.Report;
+
+import java.util.List;
+import java.util.Map;
+
+@Component(immediate = true,service = ReportDao.class)
+public class ReportDao extends PostgresqlDaoImpl<Report> {
+    public List<Report> getMine() {
+        String sql = "select * from hg_party_report order by status asc";
+        return null;
+    }
+
+    public Report findByReportId(String reportId) {
+        String sql = "select * from hg_party_report where report_id = '" + reportId +"'";
+        try {
+            return jdbcTemplate.queryForObject(sql, BeanPropertyRowMapper.newInstance(Report.class));
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public List<Report> findByOrgIn(List<String> orgIds) {
+        return null;
+    }
+
+    public List<Report> findByTaskId(String taskId) {
+        String sql = "select * from hg_party_report where task_id = ?";
+
+        try {
+            return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Report.class), taskId);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public PostgresqlQueryResult<Map<String, Object>> findPageByTaskId(String taskId, int page) {
+        String sql = "select r.task_id as task_id, r.org_id as org_id, o.org_name as org_name, t.theme as theme, t.description as description, " +
+                "t.publish_time as publish_time, r.time as time, r.status as status, r.reason as reason, r.files as files from hg_party_report r " +
+                "inner join hg_party_report_task t on r.task_id = t.task_id inner join hg_party_org o on r.org_id = o.org_id " +
+                "where r.task_id = ?";
+        return postGresqlFindBySql(page, 10, sql, taskId);
+    }
+
+    public PostgresqlQueryResult<Map<String, Object>> findPageByTaskIdAndStatus(String taskId, int status, int page) {
+        String sql = "select r.task_id as task_id, r.org_id as org_id, o.org_name as org_name, t.theme as theme, t.description as description, " +
+                "t.publish_time as publish_time, r.time as time, r.status as status, r.reason as reason, r.files as files from hg_party_report r " +
+                "inner join hg_party_report_task t on r.task_id = t.task_id inner join hg_party_org o on r.org_id = o.org_id " +
+                "where r.task_id = ? and r.status = ";
+        return postGresqlFindBySql(page, 10, sql, taskId, status);
+    }
+
+    public PostgresqlQueryResult<Map<String, Object>> findPageByStatus(int status, int page) {
+        String sql = "select r.task_id as task_id, r.org_id as org_id, o.org_name as org_name, t.theme as theme, t.description as description, " +
+                "t.publish_time as publish_time, r.time as time, r.status as status, r.reason as reason, r.files as files from hg_party_report r " +
+                "inner join hg_party_report_task t on r.task_id = t.task_id inner join hg_party_org o on r.org_id = o.org_id " +
+                "where r.status = ?";
+        return postGresqlFindBySql(page, 10, sql, status);
+    }
+
+}

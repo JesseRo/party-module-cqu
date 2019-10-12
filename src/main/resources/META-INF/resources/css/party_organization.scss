@@ -1,0 +1,172 @@
+@media (min-width: 768px) {
+    .main_content .min_width_1200 .nav_list {
+        .party_organization_list {
+            .height_auto {
+                height: auto;
+            }
+            >li {
+                overflow: hidden;
+            }
+            li {
+                cursor: pointer;
+                height: 27px;
+                .first_menu {
+                    padding-bottom: 5px;
+                    border-bottom: 1px solid #e1e1e1;
+                    color: #666;
+                    font-size: 16px;
+                }
+                .dropdown_icon {
+                    width: 9px;
+                    margin: 5px 0;
+                    cursor: pointer;
+                }
+                .second_menu {
+                    >li {
+                        margin: 12px 0;
+                        >a {
+                            padding-left: 24px;
+                            box-sizing: border-box;
+                            font-size: 14px;
+                            width: 100%;
+                            height: 100%;
+                            display: inline-block;
+                            text-decoration: none;
+                            &:hover {
+                                color: #fff;
+                                background-color: #ce0000;
+                            }
+                        }
+                    }
+                    .second_menu_on {
+                        >a {
+                            color: #fff;
+                            background-color: #ce0000;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .main_content .min_width_1200 {
+        .content_info {
+            .operation_bar {
+                height: 34px;
+                margin-top: 36px;
+                color: #333;
+                div {
+                    display: inline-block;
+                }
+                .select_choice {
+                    cursor: pointer;
+                    line-height: 34px;
+                    img {
+                        width: 18px;
+                    }
+                }
+                .btn_group {
+                    button {
+                        margin: 0 5px;
+                    }
+                }
+                .time_select {
+                    float: right;
+                }
+            }
+            .table_info {
+                tr {
+                    td:nth-child(1) {
+                        img {
+                            width: 18px;
+                            margin-right: 40px;
+                            cursor: pointer;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        background: #fff;
+    }
+    .small_header_container {
+        .mobile_header_title {
+            margin-left: -25px;
+        }
+    }
+    .form-group {
+        margin-top: 30px;
+    }
+    .select_choice {
+        padding: 0 15px;
+        height: 20px;
+        margin-bottom: 10px;
+    }
+    .main_content .min_width_1200 .nav_list {
+        .party_organization_list {
+            .height_auto {
+                height: auto;
+            }
+            >li {
+                overflow: hidden;
+            }
+            li {
+                cursor: pointer;
+                height: 27px;
+                .first_menu {
+                    padding: 0 3px;
+                    padding-bottom: 5px;
+                    border-bottom: 1px solid #e1e1e1;
+                    color: #666;
+                    font-size: 13px;
+                }
+                .dropdown_icon {
+                    width: 9px;
+                    margin: 5px 0;
+                    cursor: pointer;
+                }
+                .second_menu {
+                    >li {
+                        margin: 5px 0;
+                        >a {
+                            padding-left: 10px;
+                            box-sizing: border-box;
+                            font-size: 12px;
+                            width: 100%;
+                            height: 100%;
+                            display: inline-block;
+                            text-decoration: none;
+                            color: #999;
+                            &:hover {
+                                color: #fff;
+                                background-color: #ce0000;
+                            }
+                        }
+                    }
+                    .second_menu_on {
+                        >a {
+                            color: #fff;
+                            background-color: #ce0000;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.main_content .min_width_1200 .nav_list {
+    .party_organization_list {
+        .dropdown_up {
+            width: 5px;
+            margin: 6px 0;
+        }
+        .dropdown_down {
+            width: 9px;
+            margin: 8px 0;
+        }
+    }
+}

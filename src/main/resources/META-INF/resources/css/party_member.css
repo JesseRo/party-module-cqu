@@ -1,0 +1,16 @@
+body {
+  background: #f9f9f9;
+}
+
+@media (max-width: 768px) {
+  html,
+  body {
+    background: #fff;
+  }
+  .mobile_header_title {
+    margin-left: -33px;
+  }
+  .content_table .btn_group button {
+    margin-bottom: 5px;
+  }
+}

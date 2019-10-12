@@ -1,0 +1,182 @@
+@media (min-width: 768px) {
+  .mian_content {
+    overflow: hidden;
+  }
+  .mian_content .login_container {
+    width: 20%;
+    height: 45%;
+    background-color: #fff;
+    top: 14.58%;
+    left: 63.48%;
+    padding: 20px;
+    padding-top: 40px;
+  }
+  .mian_content .login_container .login_title {
+    margin-bottom: 40px;
+  }
+  .mian_content .login_icon {
+    width: 24.27%;
+    position: absolute;
+    top: 33.75%;
+    left: 22.5%;
+    z-index: 5;
+  }
+  .login_footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+  }
+  .login_footer .link_container {
+    height: 20px;
+  }
+}
+
+.mian_content {
+  position: relative;
+  padding: 0 !important;
+}
+
+.mian_content a {
+  text-decoration: none;
+}
+
+.mian_content a:hover {
+  text-decoration: none;
+}
+
+.mian_content .mian_bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.mian_content .login_container {
+  position: absolute;
+  box-sizing: border-box;
+}
+
+.mian_content .login_container .login_title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+}
+
+.mian_content .login_container .login_input .col-sm-12 {
+  position: relative;
+}
+
+.mian_content .login_container .login_input .col-sm-12 img {
+  top: 9.5px;
+  left: 24px;
+  position: absolute;
+  width: 13px;
+}
+
+.mian_content .login_container .login_input input {
+  background: #f7f7f7;
+  font-size: 12px;
+  border: 1px solid #e1e1e1;
+  text-indent: 2em;
+}
+
+.mian_content .login_container .select_role {
+  margin-top: 10px;
+  color: #999;
+  font-size: 12px;
+}
+
+.mian_content .login_container .select_role .col-sm-4 {
+  padding-left: 0 !important;
+  padding-right: 6px;
+  cursor: pointer;
+}
+
+.mian_content .login_container .select_role p {
+  color: #999;
+  font-size: 12px;
+  margin-bottom: 10px !important;
+}
+
+.mian_content .login_container .login_btn {
+  padding-top: 10px;
+}
+
+.mian_content .login_container .login_btn button {
+  background: #ce0000;
+  color: #fff;
+}
+
+.mian_content .login_container .login_btn button:hover {
+  background: #ee5c5c;
+}
+
+.mian_content .login_container .forget_pwd {
+  font-size: 12px;
+  color: #999;
+  cursor: pointer;
+  text-align: right;
+}
+
+.mian_content .login_container .type_change {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 28px;
+  cursor: pointer;
+}
+
+.mian_content .login_container .type_change img {
+  width: 100%;
+}
+
+.mian_content .form-horizontal .form-group {
+  margin: 0;
+  margin-top: 15px;
+}
+
+@media (max-width: 768px) {
+  html,
+  body {
+    height: 100%;
+    overflow-y: hidden;
+  }
+  .small_header {
+    height: 40px;
+  }
+  .small_header .back_icon {
+    width: 13px;
+    margin: 9px 0;
+  }
+  .login_container_bg {
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: .7;
+    z-index: 0;
+  }
+  .login_container {
+    width: 80%;
+    top: 20%;
+    left: 10%;
+    padding: 10px 20px;
+  }
+  .login_container .mobile_icon {
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    margin-left: -25px;
+    width: 50px;
+    z-index: 10;
+  }
+  .login_container .login_title {
+    padding: 20px 0;
+    z-index: 2;
+    position: relative;
+  }
+}

@@ -1,0 +1,224 @@
+@media (min-width: 768px) {
+  .main_content .min_width_1200 .nav_list {
+    max-height: 936px;
+  }
+  .main_content .min_width_1200 .nav_list .search_container input {
+    width: 100%;
+    font-size: 12px;
+    text-indent: 2em;
+    height: 30px;
+    color: #999;
+  }
+  .main_content .min_width_1200 .nav_list .party_organization_list .silde_more {
+    padding-left: 24px;
+  }
+  .main_content .min_width_1200 .nav_list .party_organization_list li .top_dropdown span {
+    font-size: 13px;
+  }
+  .main_content .min_width_1200 .nav_list .party_organization_list .second_menu .height_auto {
+    height: auto;
+  }
+  .main_content .min_width_1200 .nav_list .party_organization_list .second_menu .third_menu li {
+    margin: 5px 0;
+  }
+  .main_content .min_width_1200 .nav_list .party_organization_list .second_menu .third_menu a {
+    padding-left: 40px;
+    overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	}
+}
+
+.main_content .min_width_1200 .nav_list {
+  height: auto;
+  overflow-y: auto;
+}
+
+.main_content .min_width_1200 .nav_list .search_container {
+  margin: 10px auto;
+  position: relative;
+}
+
+.main_content .min_width_1200 .nav_list .search_container input {
+  width: 100%;
+  font-size: 12px;
+  text-indent: 2em;
+  height: 30px;
+  color: #999;
+}
+
+.main_content .min_width_1200 .nav_list .search_container img {
+  width: 12px;
+  position: absolute;
+  left: 5px;
+  top: 50%;
+  margin-top: -6.5px;
+}
+
+.main_content .min_width_1200 .nav_list .party_organization_list .dropdown_up {
+  width: 5px;
+  margin: 6px 0;
+}
+
+.main_content .min_width_1200 .nav_list .party_organization_list .dropdown_down {
+  width: 9px;
+  margin: 8px 0;
+}
+
+.main_content .min_width_1200 .nav_list .party_organization_list .third_menu_icon {
+  display: inline-block;
+  margin: 0 3px;
+  height: 0px;
+  width: 0px;
+}
+
+.main_content .min_width_1200 .nav_list .party_organization_list .third_menu_down {
+  margin: 3px;
+  border-top: solid 6px #999;
+  border-left: solid 6px transparent;
+  border-right: solid 6px transparent;
+}
+
+.main_content .min_width_1200 .nav_list .party_organization_list .third_menu_up {
+  border-left: solid 6px #999;
+  border-bottom: solid 6px transparent;
+  border-top: solid 6px transparent;
+}
+
+.main_content .min_width_1200 .nav_list .party_organization_list > li {
+  margin-bottom: 20px;
+}
+
+.main_content .min_width_1200 .nav_list .party_organization_list .silde_more {
+  color: #333;
+  font-size: 13px;
+}
+
+.main_content .min_width_1200 .nav_list .party_organization_list .silde_more:hover {
+  background: transparent;
+  color: #ce0000;
+}
+
+.main_content .min_width_1200 .nav_list .party_organization_list li .top_dropdown span {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.main_content .min_width_1200 .nav_list .party_organization_list .second_menu .second_menu_on .third_menu_up {
+  border-left-color: #fff;
+}
+
+.main_content .min_width_1200 .nav_list .party_organization_list .second_menu .second_menu_on .third_menu_down {
+ /*  border-top-color: #fff; */
+}
+
+.main_content .min_width_1200 .nav_list .party_organization_list .second_menu > li {
+  overflow: hidden;
+}
+
+.main_content .min_width_1200 .nav_list .party_organization_list .second_menu > li > a:hover .third_menu_up {
+  border-left-color: #fff;
+}
+
+.main_content .min_width_1200 .nav_list .party_organization_list .second_menu > li > a:hover .third_menu_down {
+  border-top-color: #fff;
+}
+
+.main_content .min_width_1200 .nav_list .party_organization_list .second_menu .height_auto {
+  height: auto;
+}
+
+.main_content .min_width_1200 .nav_list .party_organization_list .second_menu .third_menu li {
+  margin: 5px 0;
+  height: 20px;
+}
+
+.main_content .min_width_1200 .nav_list .party_organization_list .second_menu .third_menu a {
+  width: 100%;
+  height: 100%;
+  display: inline-block;
+  font-size: 12px;
+  line-height: 25px;
+}
+
+.main_content .min_width_1200 .nav_list .party_organization_list .second_menu .third_menu a:hover {
+  color:white;
+  background-color: #ce0000;
+      display: inline-block;
+      line-height:20px;
+    color: white;
+}
+
+.main_content .min_width_1200 .nav_list .party_organization_list .second_menu .third_menu_on a {
+  color:white;
+  background-color: #ce0000;
+      display: inline-block;
+      line-height:20px;
+    color: white;
+}
+
+.content_title .btn_group {
+  float: right;
+}
+
+.btn_group {
+  display: flex;
+  margin: 0;
+}
+
+.btn_group button {
+  margin: 0 5px;
+}
+
+@media (max-width: 768px) {
+  .main_content .min_width_1200 .nav_list {
+    width: 30%;
+  }
+  .main_content .min_width_1200 .nav_list .search_container {
+    padding: 0 5px;
+  }
+  .main_content .min_width_1200 .nav_list .search_container input {
+    border: 1px solid #d8d8d8;
+  }
+  .main_content .min_width_1200 .nav_list .search_container img {
+    left: 10px;
+  }
+  .main_content .min_width_1200 .nav_list .party_organization_list .third_menu_icon {
+    border-width: 4px;
+  }
+  .main_content .min_width_1200 .nav_list .party_organization_list > li:nth-last-child(1) {
+    height: 42.8px;
+  }
+  .main_content .min_width_1200 .nav_list .party_organization_list .silde_more {
+    font-size: 12px;
+  }
+  .main_content .min_width_1200 .nav_list .party_organization_list li .top_dropdown span {
+    font-size: 12px;
+  }
+  .main_content .min_width_1200 .nav_list .party_organization_list .second_menu > li {
+    margin: 0 !important;
+  }
+  .main_content .min_width_1200 .nav_list .party_organization_list .second_menu > li > a {
+    padding-left: 0 !important;
+    font-weight: 600;
+  }
+  .main_content .min_width_1200 .nav_list .party_organization_list .height_auto {
+    height: auto !important;
+  }
+  .content_info {
+    width: 70% !important;
+  }
+}
+.btn-default:hover{
+	border:1px solid #adadad!important;
+}
+thead th{
+	/* text-align:center; */
+	font-weight:600;
+}
+section#content {
+    background: #edf1f2;
+}
+.link_container.full_screen {
+    background: #edf1f2;
+}
