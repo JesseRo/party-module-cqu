@@ -28,7 +28,7 @@
     </style>
 </head>
 <body>
-<div class="content_title" style="margin-bottom:30px;">
+<div class="content_title">
     已发布
 </div>
 <table class="content_table" style="border:1px solid #dedede;">

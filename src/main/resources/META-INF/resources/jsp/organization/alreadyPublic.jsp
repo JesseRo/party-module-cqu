@@ -48,7 +48,7 @@ font-size: 13px;
                 <table class="content_table" style="border:1px solid #dedede;">
                     <thead class="table_title">
                         <tr>
-                            <th>会议类型</th>
+<%--                            <th>会议类型</th>--%>
                             <th>会议主题</th>
                             <th>发布时间</th>
                             <th>操作</th>
@@ -58,7 +58,7 @@ font-size: 13px;
                     <tbody class="table_info">
                         <c:forEach var="c" items="${grafts }"> 
                         <tr>
-                            <td>
+                            <td style="display: none;">
                                 <input type="hidden" value="${c.inform_id }"/>
                                 <input type="hidden" value="${c.id }"/>
                                   ${c.meeting_type }

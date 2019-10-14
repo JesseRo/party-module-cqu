@@ -47,7 +47,7 @@
                 <table class="content_table">
                     <thead class="table_title">
                         <tr>
-                        	<th>已读回执</th>
+<%--                        	<th>已读回执</th>--%>
                             <th>党支部</th>
                             <th>开展主题</th>
                             <th>支部主题</th>
@@ -77,7 +77,7 @@
                     <tbody class="table_info" id="tBody">
                    	    <c:forEach items="${list}" var="c" varStatus="status">
 	                        <tr>
-	                        	<td data-label="已读回执" class="receipts">${c.read_status }</td>
+<%--	                        	<td data-label="已读回执" class="receipts">${c.read_status }</td>--%>
 	                            <td data-label="党支部" class="Party_name">${c.org_namez }</td>
 	                            <td data-label="开展主题">${c.theme_ }</td>
 	                            <td data-label="支部主题">${c.meeting_theme_secondary }</td>

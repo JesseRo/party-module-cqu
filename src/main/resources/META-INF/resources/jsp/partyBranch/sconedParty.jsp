@@ -722,7 +722,7 @@ div#hg-form-container {
 			 '</div> '+                            
 			'</div>';  
 			if(!$(".mapedit").val()){
-				 $("#hg-form-container > div").eq(6).replaceWith(div);
+				 $("#hg-form-container > div").eq(5).replaceWith(div);
 			}else{
 				 $("select[name='participate']").attr("disabled","disabled");
 			}

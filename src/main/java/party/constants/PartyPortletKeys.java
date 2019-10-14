@@ -51,7 +51,8 @@ public class PartyPortletKeys {
 	public static final String partyBranchPortlet = "PartyBranchPortlet";	
 	// 二级党建
 	public static final String SeocndCommitteeToDoList = "SeocndCommitteeToDoList";
-	
+	public static final String SeocndCommitteeMeetings = "SeocndCommitteeMeetings";
+
 	public static final String SeocndCommitteeApprovalPlan = "SeocndCommitteeApprovalPlan";
 	
 	public static final String SeocndCommitteeArrangeVenue = "SeocndCommitteeArrangeVenue";
@@ -61,8 +62,9 @@ public class PartyPortletKeys {
 	public static final String SeocndCommitteeUploadNotes = "SeocndCommitteeUploadNotes";
 	
 	public static final String SconedPartySchedule = "SconedPartySchedule";
-	
-	public static final String TaskPortlet = "TaskPortlet";	
+
+	public static final String TaskPortlet = "TaskPortlet";
+	public static final String BrunchMeetingsPortlet = "BrunchMeetingsPortlet";
 	//PartyMeetingPlan
 	public static final String PartyMeetingPlan = "PartyMeetingPlan";
 	

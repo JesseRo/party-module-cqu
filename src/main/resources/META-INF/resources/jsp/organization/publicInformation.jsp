@@ -160,8 +160,8 @@
             div=div.replace("二级党组织",title);
             div=div.replace("已选goo",title);
             div=div.replace("个党委",title);
-			$("#hg-form-container > div").eq(4).replaceWith(div); 
-            $("#hg-form-container > div").eq(4).find(".control-label").addClass("form-label-required"); 
+			$("#hg-form-container > div").eq(4).replaceWith(div);
+            $("#hg-form-container > div").eq(4).find(".control-label").addClass("form-label-required");
             $.ajax({
                 url: '${getPublicObject}',  
                 type: 'POST',  

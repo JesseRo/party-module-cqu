@@ -28,15 +28,15 @@
     </style>
 </head>
 <body>
-<div class="content_title" style="margin-bottom:30px;">
+<div class="content_title">
     <label>报送情况</label>
     <c:if test="${not empty taskId}">
-        <button id="export" type="button" class="btn btn-default col-sm-2 col-xs-4" style="float: right;">
-            <img src="/images/import_icon.png">数据汇总导出
+        <button id="export" type="button" class="btn btn-default col-sm-2 col-xs-4" style="float: right;margin-top: -10px;">
+            <img src="/images/import_icon.png" style="margin-right: 10px;">数据汇总导出
         </button>
     </c:if>
 </div>
-<table class="content_table" style="border:1px solid #dedede;margin-top: 30px;" id="${taskId}">
+<table class="content_table" style="border:1px solid #dedede;" id="${taskId}">
     <thead class="table_title">
     <tr>
         <th>党委</th>
@@ -51,7 +51,7 @@
     </thead>
     <tbody class="table_info">
     <c:forEach var="c" items="${reports }">
-        <tr id="${c.task_id }">
+        <tr id="${c.report_id }">
             <td>
                 ${c.org_name}
             </td>
@@ -68,7 +68,7 @@
             </td>
             <td style="color: red;padding-left: 25px;">
                 <c:forEach var="f" items="${c.fileView }">
-                    <a href="${f.path}">f.filename</a>
+                    <a href="${f.path}">${f.filename}</a>
                 </c:forEach>
             </td>
             <td>
@@ -80,7 +80,7 @@
                 <c:choose>
                     <c:when test="${c.status == 0}">
                         <div>
-                            <a class="approval" style="cursor: pointer;">通过</a>|
+                            <a class="approval" style="cursor: pointer;">通过 </a>|
                             <a class="reject" style="cursor: pointer;">驳回</a>
                         </div>
                     </c:when>
@@ -91,7 +91,6 @@
                         已驳回
                     </c:otherwise>
                 </c:choose>
-                ${c.status }
             </td>
             <td>
                 ${c.reason}
@@ -127,29 +126,29 @@
     $(document).ready(function () {
 
         $('.approval').on('click', function () {
-            var report = $(this).parent().parent().attr("id");
+            var report = $(this).parent().parent().parent().attr("id");
             var that = this;
             $.post("${approval}", {report: report, status: 1}, function (res) {
                 if (res.success) {
                     alert("已审批");
-                    $(that).parent().html("已审批");
+                    $(that).parent().parent().html("已审批");
                 }
             })
         });
         $('.reject').on('click', function () {
-            var report = $(this).parent().parent().attr("id");
+            var report = $(this).parent().parent().parent().attr("id");
             var that = this;
             var reason = prompt("驳回原因：");
             $.post("${approval}", {report: report, status: 2, reason: reason}, function (res) {
                 if (res.success) {
                     alert("已驳回");
-                    $(that).parent().html("已驳回");
+                    $(that).parent().parent().html("已驳回");
                 }
             })
         });
 
         $('#export').on("click", function () {
-            window.location.href = "${download}" + "&taskId=" + $('table .content_table').attr("id");
+            window.location.href = "${download}" + "&taskId=" + $('table.content_table').attr("id");
         });
 
         var pages = $(".total_page").html();

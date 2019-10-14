@@ -96,6 +96,7 @@ public class SecondaryTaskReportsPortlet extends MVCPortlet {
         renderRequest.setAttribute("pageNo", taskPage.getPageNow());
         renderRequest.setAttribute("totalPage",taskPage.getTotalPage());
         renderRequest.setAttribute("reports", taskPage.getList());
+//        renderRequest.setAttribute("count", taskPage.getList().stream().filter(p->p.get("status").equals(ConstantsKey.APPROVED)).count());
         super.doView(renderRequest, renderResponse);
     }
 }

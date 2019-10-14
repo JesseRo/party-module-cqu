@@ -120,7 +120,11 @@ public class AddReportTaskActionCommand implements MVCActionCommand {
                     }
                     transactionUtil.commit();
                     SessionManager.setAttribute(actionRequest.getRequestedSessionId(), "formId-report-task", "null");
-                    actionResponse.sendRedirect("/secondary_report");
+                    if (status.equals(ConstantsKey.PUBLISHED)){
+                        actionResponse.sendRedirect("/secondary_report");
+                    }else {
+                        actionResponse.sendRedirect("/task_draft");
+                    }
                 }catch (Exception e){
                     e.printStackTrace();
                     transactionUtil.rollback();

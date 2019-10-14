@@ -709,7 +709,7 @@
                   </li>
                   <li id="historic_root" class="root" style="width: 300px;">
                       <div class="first_menu top_dropdown">
-                          <span>中共重庆三峡职业学院委员会(历史)</span>
+                          <span>中共重庆大学委员会(历史)</span>
                           <img class="right dropdown_icon" src="${basePath}/images/second_menu_up.png" />
                       </div>
                       <ul class="second_menu" id="historic">

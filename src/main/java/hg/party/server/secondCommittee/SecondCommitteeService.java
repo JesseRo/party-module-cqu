@@ -304,6 +304,9 @@ public class SecondCommitteeService {
 			   return true;
 		   }
 	   }
-	   
-	   
+
+
+	public Map<String, Object> queryInformMeetingsByInformId(String orgId, String meetingType, String taskStatus, String informId, int pageNo) {
+	   	return meetingPlanDao.queryInformMeetingsByInformId(orgId, meetingType, taskStatus, informId, pageNo);
+	}
 }

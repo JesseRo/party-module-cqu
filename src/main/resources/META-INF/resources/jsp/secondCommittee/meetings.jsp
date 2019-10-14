@@ -136,26 +136,26 @@ select#meetingType {
 <%--				        	</select>--%>
 <%--						</th>--%>
 						<th>会议主题</th>
+                        <th>上报主题</th>
 						<th>发布时间</th>
 						<th>截止时间</th>
-<%--						<th>--%>
-<%--							<select id="taskStatus" class="taskstatus height_34" onchange="typeStatusAjax()">--%>
-<%--								<option value="">任务状态</option>--%>
-<%--						 		<option value="">全部</option>--%>
-<%--							<c:forEach var="c" items="${taskStatusList}"  varStatus="status">--%>
-<%--								<c:choose>--%>
-<%--									<c:when test="${taskStatus == c.resources_key }">--%>
-<%--							 			<option value="${c.resources_key}" selected>${c.resources_value}</option>--%>
-<%--									</c:when>--%>
-<%--									<c:otherwise>--%>
-<%--										<option value="${c.resources_key}">${c.resources_value}</option>--%>
-<%--									</c:otherwise>--%>
-<%--								</c:choose>--%>
-<%--							 </c:forEach>--%>
-<%--					        </select>--%>
-<%--						</th>--%>
+						<th>
+							<select id="taskStatus" class="taskstatus height_34" onchange="typeStatusAjax()">
+								<option value="">任务状态</option>
+						 		<option value="">全部</option>
+							<c:forEach var="c" items="${taskStatusList}"  varStatus="status">
+								<c:choose>
+									<c:when test="${taskStatus == c.resources_key }">
+							 			<option value="${c.resources_key}" selected>${c.resources_value}</option>
+									</c:when>
+									<c:otherwise>
+										<option value="${c.resources_key}">${c.resources_value}</option>
+									</c:otherwise>
+								</c:choose>
+							 </c:forEach>
+					        </select>
+						</th>
 						<th>操作</th>
-						<th>详情</th>
 						<th>已读回执</th>
 						<th>上传会议记录</th>
 						<th>备注</th>
@@ -180,23 +180,24 @@ select#meetingType {
 <%--								</td>--%>
 <%--								<td data-label="会议类型" >--%>
 <%--									<c:if test="${empty c.mmeetingtype}">--%>
-<%--										 ${c.imeetingtype}	--%>
+<%--										 ${c.imeetingtype}--%>
 <%--									</c:if>--%>
 <%--									<c:if test="${not empty c.mmeetingtype}">--%>
-<%--										 ${c.mmeetingtype}		--%>
+<%--										 ${c.mmeetingtype}--%>
 <%--									</c:if>--%>
-<%--								--%>
+
 <%--								</td>--%>
 								<td data-label="会议主题" >
 								
-									<c:if test="${empty c.mmeetingtype}">
-										<a href="/checkdetail?informId=${c.inform_id }&orgId=${c.pub_org_id}" >${c.imeetingtheme}</a>
-									</c:if>
-									<c:if test="${not empty c.mmeetingtype}">
-										<a href="/checkdetail?informId=${c.inform_id }&orgId=${c.pub_org_id}" >${c.mmeetingtheme}</a>
-									</c:if>
+<%--									<c:if test="${empty c.mmeetingtype}">--%>
+<%--										<a href="/checkdetail?informId=${c.inform_id }&orgId=${c.pub_org_id}" >${c.imeetingtheme}</a>--%>
+<%--									</c:if>--%>
+<%--									<c:if test="${not empty c.mmeetingtype}">--%>
+<%--										<a href="/checkdetail?informId=${c.inform_id }&orgId=${c.pub_org_id}" >${c.mmeetingtheme}</a>--%>
+<%--									</c:if>--%>
+                                    ${c.imeetingtheme}
 								</td>
-								
+								<td data-label="上报主题" >${c.meetingthemesecondary}</td>
 								
 								<td data-label="发布时间" class="publicDate" >
 									${fn:substring(c.release_time,0,19)}
@@ -204,19 +205,19 @@ select#meetingType {
 								<td data-label="截止时间" class="deadline_time" >
 									${fn:substring(c.deadline_time,0,19)}
 								</td>
-<%--								<td data-label="任务状态" >--%>
-<%--									<c:if test="${empty c.task_status}">--%>
-<%--										--%>
-<%--									</c:if>--%>
-<%--									<c:choose>--%>
-<%--										<c:when test="${not empty c.task_status and c.task_status gt 4 }">--%>
-<%--											${statusMap[4]}--%>
-<%--										</c:when>--%>
-<%--										<c:otherwise>--%>
-<%--											${statusMap[c.task_status]}--%>
-<%--										</c:otherwise>--%>
-<%--									</c:choose>--%>
-<%--								</td>--%>
+								<td data-label="任务状态" >
+									<c:if test="${empty c.task_status}">
+
+									</c:if>
+									<c:choose>
+										<c:when test="${not empty c.task_status and c.task_status gt 4 }">
+											${statusMap[4]}
+										</c:when>
+										<c:otherwise>
+											${statusMap[c.task_status]}
+										</c:otherwise>
+									</c:choose>
+								</td>
 								
 								<td data-label="操作" >
 									
@@ -248,13 +249,7 @@ select#meetingType {
 										<a href="/sendplan?meetingId=${c.meeting_id}">重拟计划</a>
 									</c:if>
 								</td>
-								<td data-label="详情" >
-									<c:if test="${empty c.task_status && (c.meeting_type != '专题组织生活会' && c.send_to == 'f') && !c.has_resend }">
-										<a href="/meetings?informId=${c.inform_id}&orgId=${c.pub_org_id}">已上报列表</a>
-									</c:if>
-								</td>
-
-
+								
 								<td data-label="已读回执" >
 	                              <c:if test="${c.task_status gt 4}">
 	　                                                                                         <a class="check_reply_state" href="javascript:;">查看</a>
@@ -262,17 +257,17 @@ select#meetingType {
 	                                 <input type="hidden" value="${c.pub_org_id }"/>
 	　　                                                                            </c:if>
 	                            </td>
-
+								
 								<td data-label="上传会议记录" >
 									<c:if test="${c.check_status != '已上传' && (c.task_status gt 4) }">
-										<a href="/uploadnotes?meetingId=${c.meeting_id}">上传</a>
+										<a href="/uploadnotes?meetingId=${c.meeting_id}">上传</a>	
 									</c:if>
-
+									
 									<c:if test="${c.check_status eq '已上传'}">
 										已上传
 									</c:if>
 								</td>
-
+								
 								<td data-label="备注" >
 									<c:if test="${ empty c.mremark}">
 										${c.iremark}

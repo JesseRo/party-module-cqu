@@ -65,27 +65,26 @@
 	                            <th >会议主题</th>
 	                            <th style="min-width:180px">发布时间</th>
 	                            <th style="min-width:180px">截止时间</th>
-<%--	                            <th>--%>
-<%--									<select id="taskStatus" class="taskstatus height_34" onchange="typeStatusAjax()">--%>
-<%--										<option value="">任务状态</option>--%>
-<%--								 		<option value="">全部</option>--%>
-<%--									<c:forEach var="c" items="${taskStatusList}"  varStatus="status">--%>
-<%--										<c:choose>--%>
-<%--											<c:when test="${taskStatus == c.resources_key }">--%>
-<%--									 			<option value="${c.resources_key}" selected>${c.resources_value}</option>--%>
-<%--											</c:when>--%>
-<%--											<c:otherwise>--%>
-<%--												<option value="${c.resources_key}">${c.resources_value}</option>--%>
-<%--											</c:otherwise>--%>
-<%--										</c:choose>--%>
-<%--									 </c:forEach>--%>
-<%--							        </select>--%>
-<%--								</th>--%>
-									<th>操作</th>
-									<th>详情</th>
-<%--	                            <th>已读回执</th>--%>
-<%--	                            <th>上传会议记录</th>--%>
-<%--	                            <th>备注</th>--%>
+	                            <th>
+									<select id="taskStatus" class="taskstatus height_34" onchange="typeStatusAjax()">
+										<option value="">任务状态</option>
+								 		<option value="">全部</option>
+									<c:forEach var="c" items="${taskStatusList}"  varStatus="status">
+										<c:choose>
+											<c:when test="${taskStatus == c.resources_key }">
+									 			<option value="${c.resources_key}" selected>${c.resources_value}</option>
+											</c:when>
+											<c:otherwise>
+												<option value="${c.resources_key}">${c.resources_value}</option>
+											</c:otherwise>
+										</c:choose>
+									 </c:forEach>
+							        </select>
+								</th>
+                                <th>操作</th>
+	                            <th>已读回执</th>
+	                            <th>上传会议记录</th>
+	                            <th>备注</th>
 	                        </tr>
 	                    </thead>
 	                   
@@ -122,15 +121,15 @@
 		                            </td>
 		                            <td data-label="发布时间" class="publicth">${fn:substring(c.release_time,0,19)}</td>
 		                            <td data-label="截止时间" class="deadline_time">${fn:substring(c.deadline_time,0,19)}</td>
-<%--		                            <td data-label="任务状态">--%>
-<%--			                            	<c:if test="${c.task_status eq '1'}">已提交</c:if>--%>
-<%--											<c:if test="${c.task_status eq '2'}">已撤回</c:if>--%>
-<%--											<c:if test="${c.task_status eq '3'}">被驳回</c:if>--%>
-<%--											&lt;%&ndash; <c:if test="${c.task_status eq '4' ||c.task_status eq '5' || c.task_status eq '6' || c.task_status eq '7'}">--%>
-<%--			　                                                      &ndash;%&gt;  --%>
-<%--											<c:if test="${c.task_status eq '4'}">已通过</c:if>--%>
-<%--											<c:if test="${c.task_status gt 4}">已通知</c:if>--%>
-<%--		                            </td>--%>
+		                            <td data-label="任务状态">
+			                            	<c:if test="${c.task_status eq '1'}">已提交</c:if>
+											<c:if test="${c.task_status eq '2'}">已撤回</c:if>
+											<c:if test="${c.task_status eq '3'}">被驳回</c:if>
+											<%-- <c:if test="${c.task_status eq '4' ||c.task_status eq '5' || c.task_status eq '6' || c.task_status eq '7'}">
+			　                                                      --%>
+											<c:if test="${c.task_status eq '4'}">已通过</c:if>
+											<c:if test="${c.task_status gt 4}">已通知</c:if>
+		                            </td>
 				            <td data-label="操作" >
 							  <c:if test="${empty c.task_status }">
 								  <a href="/submitplan?orgId=${c.pub_org_id }&infromId=${c.inform_id }">拟定计划</a>
@@ -149,30 +148,30 @@
 			                     <input type="hidden" value="${c.pub_org_id }"/>
 			　　                          </c:if>
 				            </td>
-							<td  data-label="详情">
-								<a href="/meetings_brunch?informId=${c.inform_id}">已上报列表</a>
-							</td>
-<%--			                <td data-label="已读回执">--%>
-<%--			                      &lt;%&ndash;  <c:if test="${c.task_status eq '5' || c.task_status eq '6' || c.task_status eq '7'}">--%>
-<%--			　                                                   &ndash;%&gt; --%>
-<%--								<c:if test="${c.task_status gt 4}">--%>
-<%--								     <a class="check_reply_state">查看</a>--%>
-<%--				                     <input type="hidden" value="${c.inform_id }"/>--%>
-<%--				                     <input type="hidden" value="${c.pub_org_id }"/>--%>
-<%--			　　                                                </c:if>--%>
-<%--			                 </td>--%>
-<%--			                 <td data-label="上传会议记录">--%>
-<%--				                             &lt;%&ndash; <c:if test="${empty c.check_status && (c.task_status eq '7' || c.task_status eq '6' || c.task_status eq '5')}">--%>
-<%--			                         &ndash;%&gt;--%>
-<%--			                      <c:if test="${empty c.check_status && (c.task_status gt 4)}">--%>
-<%--			                      		<a href="/uploadnotes?meetingId=${c.meeting_id}&ogrtype=branch">上传</a>	--%>
-<%--			                       </c:if>--%>
-<%--			                       <c:if test="${c.check_status eq '已上传'}">已上传</c:if>--%>
-<%--			                 </td>--%>
-<%--			                 <td data-label="备注">--%>
-<%--			                  	<c:if test="${ empty c.mremark}">${c.iremark}</c:if>--%>
-<%--								<c:if test="${not empty c.mremark}">${c.mremark}</c:if>--%>
-<%--			                  </td>--%>
+<%--							<td  data-label="详情">--%>
+<%--								<a href="/meetings_brunch?informId=${c.inform_id}">已上报列表</a>--%>
+<%--							</td>--%>
+			                <td data-label="已读回执">
+			                      <%--  <c:if test="${c.task_status eq '5' || c.task_status eq '6' || c.task_status eq '7'}">
+			　                                                   --%>
+								<c:if test="${c.task_status gt 4}">
+								     <a class="check_reply_state">查看</a>
+				                     <input type="hidden" value="${c.inform_id }"/>
+				                     <input type="hidden" value="${c.pub_org_id }"/>
+			　　                                                </c:if>
+			                 </td>
+			                 <td data-label="上传会议记录">
+				                             <%-- <c:if test="${empty c.check_status && (c.task_status eq '7' || c.task_status eq '6' || c.task_status eq '5')}">
+			                         --%>
+			                      <c:if test="${empty c.check_status && (c.task_status gt 4)}">
+			                      		<a href="/uploadnotes?meetingId=${c.meeting_id}&ogrtype=branch">上传</a>
+			                       </c:if>
+			                       <c:if test="${c.check_status eq '已上传'}">已上传</c:if>
+			                 </td>
+			                 <td data-label="备注">
+			                  	<c:if test="${ empty c.mremark}">${c.iremark}</c:if>
+								<c:if test="${not empty c.mremark}">${c.mremark}</c:if>
+			                  </td>
 				            </tr>　 
 	　　        			</c:forEach>  
 	                   </tbody>

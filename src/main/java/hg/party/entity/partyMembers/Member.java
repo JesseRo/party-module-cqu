@@ -45,6 +45,8 @@ public class Member{
 	private String member_mailbox;
 	//专业技能职称
 	private String member_major_title;
+
+	private String member_marriage;
 	public String getMember_major_title() {
 		return member_major_title;
 	}
@@ -289,5 +291,12 @@ public class Member{
 				+ member_front_line + ", member_party_committee=" + member_party_committee + ", member_party_position="
 				+ member_party_position + "]";
 	}
-	
+
+	public String getMember_marriage() {
+		return member_marriage;
+	}
+
+	public void setMember_marriage(String member_marriage) {
+		this.member_marriage = member_marriage;
+	}
 }

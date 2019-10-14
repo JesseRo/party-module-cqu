@@ -146,7 +146,7 @@
         </div>
         <div class="content_form">
             <iframe name="forUpload" style="display: none;"></iframe>
-            <form class="form-horizontal" role="form" action="${upload }" method="post" target="forUpload">
+            <form class="form-horizontal" role="form" action="${upload }" method="post" target="forUpload" enctype="multipart/form-data">
                 <div id="hg-form-container" class="form-group">
                     <c:forEach var="f" items="${fileViews}" varStatus="varStatus">
                         <div class="col-sm-12 col-xs-12">

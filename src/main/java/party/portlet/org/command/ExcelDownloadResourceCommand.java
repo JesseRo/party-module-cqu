@@ -129,18 +129,19 @@ public class ExcelDownloadResourceCommand implements MVCResourceCommand {
                     jsonObject.put("org", member.getMember_org());
                     jsonObject.put("fomalDate", member.getMember_fomal_date());
                     jsonObject.put("address", member.getMember_address());
-                    jsonObject.put("position", member.getMember_party_position());
-                    jsonObject.put("title", member.getMember_major_title());
-                    jsonObject.put("class", member.getMember_new_class());
+                    jsonObject.put("marriage", member.getMember_marriage());
+//                    jsonObject.put("position", member.getMember_party_position());
+//                    jsonObject.put("title", member.getMember_major_title());
+//                    jsonObject.put("class", member.getMember_new_class());
                     jsonObject.put("job", member.getMember_job());
                     jsonObject.put("birthday", member.getMember_birthday());
                     ja.add(jsonObject);
                 }
                 Map<String, String> headMap = new LinkedHashMap<String, String>();
-                headMap.put("committee", "所在党委");
+                headMap.put("committee", "所在二级党组织");
                 headMap.put("name", "姓名");
                 headMap.put("sex", "性别");
-                headMap.put("birthday", "出生年月");
+                headMap.put("birthday", "出生日期");
                 headMap.put("birthPlace", "籍贯");
                 headMap.put("identity", "公民身份证号");
                 headMap.put("ethnicity", "民族");
@@ -148,12 +149,13 @@ public class ExcelDownloadResourceCommand implements MVCResourceCommand {
                 headMap.put("degree", "文化程度");
                 headMap.put("type", "党员类型");
                 headMap.put("joinDate", "入党时间");
-                headMap.put("org", "所在组织");
+                headMap.put("org", "所在支部");
                 headMap.put("fomalDate", "转正时间");
                 headMap.put("address", "家庭住址");
-                headMap.put("position", "党内职务");
-                headMap.put("title", "党费标准（元/月）");
-                headMap.put("class", "学生宿舍");
+                headMap.put("marriage", "婚姻状况");
+//                headMap.put("position", "党内职务");
+//                headMap.put("title", "党费标准（元/月）");
+//                headMap.put("class", "学生宿舍");
                 headMap.put("job", "工作岗位");
                 SXSSFWorkbook workbook = ExcelUtil.exportExcelX(title, headMap, ja, null, 0, res.getOutputStream());
                 try {

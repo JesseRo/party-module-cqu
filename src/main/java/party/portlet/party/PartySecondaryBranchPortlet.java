@@ -99,7 +99,7 @@ public class PartySecondaryBranchPortlet extends MVCPortlet{
 							"FROM (((((hg_party_inform_group_info AS gr "+
 							"Inner JOIN hg_party_org_inform_info AS info ON "+
 							"info.inform_id = gr.inform_id) "+
-							"LEFT JOIN hg_party_meeting_plan_info AS plan ON gr.inform_id = plan.inform_id AND gr.pub_org_id = plan.organization_id) "+
+							"inner JOIN hg_party_meeting_plan_info AS plan ON gr.inform_id = plan.inform_id AND gr.pub_org_id = plan.organization_id) "+
 							"LEFT JOIN hg_party_meeting_notes_info AS note ON plan.meeting_id = note.meeting_id) "+
 							"LEFT JOIN hg_party_org AS org ON org.org_id = gr.pub_org_id) "+
 							"LEFT JOIN hg_users_info AS usr ON usr.user_id = plan.auditor) "+

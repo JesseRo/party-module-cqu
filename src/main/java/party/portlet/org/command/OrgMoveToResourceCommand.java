@@ -69,14 +69,14 @@ public class OrgMoveToResourceCommand implements MVCResourceCommand {
 						+ ", \"member_fomal_date\", \"member_org\", \"member_type\", \"member_address\", \"member_phone_number\""
 						+ ", \"member_landline_number\", \"member_is_outofcontact\", \"member_outofcontact_date\", \"member_is_flow\""
 						+ ", \"member_flow_to\", \"member_membership_state\", \"member_mailbox\", \"historic\", \"member_party_position\""
-						+ ", \"member_major_title\", \"member_new_class\", \"member_front_line\", \"member_party_committee\", \"member_birth_place\")"
+						+ ", \"member_major_title\", \"member_new_class\", \"member_front_line\", \"member_party_committee\", \"member_birth_place\", \"member_marriage\")"
 						+ "VALUES ('" + m.getMember_name() + "', '" + m.getMember_sex() + "', '"
 						+ m.getMember_ethnicity() + "', NULL, '" + m.getMember_birthday() + "', '"
 						+ m.getMember_identity() + "', '" + m.getMember_degree() + "', '" + m.getMember_job() + "', '"
 						+ m.getMember_join_date() + "', '" + m.getMember_fomal_date() + "', '" + moveToOrgId + "', '"
 						+ m.getMember_type() + "', '" + m.getMember_address() + "', '" + m.getMember_phone_number()
 						+ "', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '" + false + "', NULL, NULL, NULL, NULL, '"
-						+ m.getMember_party_committee() + "', '" + m.getMember_birth_place() + "');";
+						+ m.getMember_party_committee() + "', '" + m.getMember_birth_place() + "', '" + m.getMember_marriage() + "');";
 				insertSql = insertSql.replaceAll("'null'", "NULL");
 				String updateSql = "UPDATE hg_party_member set historic=" + true + " WHERE member_identity='" + userId+ "'";
 				String deleteSsql = "delete from hg_party_group_member_info where participant_id='"+userId+"'";

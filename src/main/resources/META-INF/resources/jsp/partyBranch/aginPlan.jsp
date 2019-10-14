@@ -195,7 +195,7 @@
               '<a href="javascript:;" data-toggle="modal" data-target="#commonStaff">常用人员</a> '+
 			 '</div> '+                            
 			'</div>';                     	
-                $("#hg-form-container > div").eq(7).replaceWith(div);
+                $("#hg-form-container > div").eq(6).replaceWith(div);
 	       
 	       
 	       

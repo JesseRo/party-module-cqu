@@ -69,6 +69,7 @@ public class AddPersonActionCommand implements MVCActionCommand {
 		String email = ParamUtil.getString(actionRequest, "email");
 		String job = ParamUtil.getString(actionRequest, "job");
 		String positior = ParamUtil.getString(actionRequest, "positior");
+		String marriage = ParamUtil.getString(actionRequest, "marriage");
 		String id = ParamUtil.getString(actionRequest, "id");
 		String prevID_card = ParamUtil.getString(actionRequest, "prevID_card");
 		String title = ParamUtil.getString(actionRequest, "major_title");
@@ -89,12 +90,12 @@ public class AddPersonActionCommand implements MVCActionCommand {
 					+ ", \"member_birthday\", \"member_identity\", \"member_degree\", \"member_job\", \"member_join_date\""
 					+ ", \"member_fomal_date\", \"member_org\", \"member_type\", \"member_address\", \"member_phone_number\""
 					+ ", \"member_landline_number\", \"member_is_outofcontact\", \"member_outofcontact_date\", \"member_is_flow\""
-					+ ", \"member_flow_to\", \"member_membership_state\", \"member_mailbox\", \"historic\", \"member_party_position\""
+					+ ", \"member_flow_to\", \"member_membership_state\", \"member_mailbox\", \"historic\", \"member_party_position\", \"member_marriage\""
 					+ ", \"member_major_title\", \"member_new_class\", \"member_front_line\", \"member_party_committee\", \"member_birth_place\")"
 					+ "VALUES ('" + userName + "', '" + sex + "', '" + ethnicity + "', NULL, '" + birthday + "', '"
 					+ ID_card + "', '" + educational_level + "', '" + job + "', '" + join_party_time + "', '"
 					+ turn_Time + "', '" + orgId + "', '" + party_type + "', '" + home_addrss + "', '" + telephone
-					+ "', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '" + false + "', '" + positior + "','" + title
+					+ "', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '" + false + "', '" + positior + "','" + marriage + "','" + title
 					+ "','" + classnew + "', NULL, '" + seconedName + "', '" + birth_place + "');";
 			String Updatesql = "UPDATE hg_party_member set \"member_name\"='" + userName + "', \"member_sex\"='" + sex
 					+ "', \"member_ethnicity\"='" + ethnicity + "', \"member_birthday\"='" + birthday
@@ -103,7 +104,9 @@ public class AddPersonActionCommand implements MVCActionCommand {
 					+ "', \"member_fomal_date\"='" + turn_Time + "', \"member_org\"='" + orgId + "', \"member_type\"='"
 					+ party_type + "', \"member_address\"='" + home_addrss + "', \"member_phone_number\"='" + telephone
 					+ "',\"historic\"=" + false + ", \"member_birth_place\"='" + birth_place
-					+ "',\"member_party_position\"= '" + positior + "', \"member_major_title\"='" + title
+					+ "',\"member_party_position\"= '" + positior
+					+ "',\"member_marriage\"= '" + marriage
+					+ "', \"member_major_title\"='" + title
 					+ "', \"member_new_class\"='" + classnew + "'  WHERE id='" + id + "'";
 			if (!StringUtils.isEmpty(id)) {
 				u = UserDao.findUserByEthnicity(prevID_card);

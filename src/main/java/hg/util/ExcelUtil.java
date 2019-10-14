@@ -254,31 +254,32 @@ public class ExcelUtil
                 ii++;
             }
             int rowIndex = 0;
+
             for (Map<String , Object> rowData : sheetData) {
                 if (rowIndex >= 65535) {
                     throw new RuntimeException("数据条数超过excel最大限制");
                 }
-                if (title != null) {
-                    SXSSFRow titleRow = sheet.createRow(0);//表头 rowIndex=0
-                    titleRow.createCell(0).setCellValue(title);
-                    titleRow.getCell(0).setCellStyle(titleStyle);
-                    sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, rowData.size() - 1));
-                    rowIndex = 1;
+                if (rowIndex == 0) {
+                    if (title != null) {
+                        SXSSFRow titleRow = sheet.createRow(0);//表头 rowIndex=0
+                        titleRow.createCell(0).setCellValue(title);
+                        titleRow.getCell(0).setCellStyle(titleStyle);
+                        sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, rowData.size() - 1));
+                        rowIndex = 1;
+                    }
+                    SXSSFRow headerRow = sheet.createRow(rowIndex); //列头 rowIndex =1
+                    for (int i = 0; i < headers.length; i++) {
+                        headerRow.createCell(i).setCellValue(headers[i]);
+                        headerRow.getCell(i).setCellStyle(headerStyle);
+                    }
+                    rowIndex += 1;//数据内容从 rowIndex=2开始
                 }
-                SXSSFRow headerRow = sheet.createRow(rowIndex); //列头 rowIndex =1
-                for (int i = 0; i < headers.length; i++) {
-                    headerRow.createCell(i).setCellValue(headers[i]);
-                    headerRow.getCell(i).setCellStyle(headerStyle);
-
-                }
-                rowIndex += 1;//数据内容从 rowIndex=2开始
-
 //            JSONObject jo = (JSONObject) JSONObject.toJSON(map);
                 SXSSFRow dataRow = sheet.createRow(rowIndex);
                 for (int i = 0; i < headers.length; i++)
                 {
                     SXSSFCell newCell = dataRow.createCell(i);
-                    Object o = rowData.get(headers[ii]);
+                    Object o = rowData.get(headers[i]);
                     String cellValue = "";
                     if(o==null) cellValue = "";
                     else if(o instanceof Date) cellValue = new SimpleDateFormat(datePattern).format(o);

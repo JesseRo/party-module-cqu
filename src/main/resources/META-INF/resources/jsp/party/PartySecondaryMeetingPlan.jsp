@@ -58,7 +58,7 @@
                 <table class="content_table">
                     <thead class="table_title">
                         <tr>
-                        	<th>已读回执</th>
+<%--                        	<th>已读回执</th>--%>
                             <th>二级党组织</th>
                             <th>开展主题</th>
                             <th>二级党组织主题</th>
@@ -87,7 +87,7 @@
                     <tbody class="table_info" id="tBody">
                    	    <c:forEach items="${list}" var="c" varStatus="status">
 	                        <tr>
-	                        	<td data-label="已读回执" class="receipts">${c.read_status }</td>
+<%--	                        	<td data-label="已读回执" class="receipts">${c.read_status }</td>--%>
 	                            <td data-label="二级党组织" class="Party_name">
 	                            	<c:if test="${c.has_resend}">
 	                            		<a href="/orgviewbranch?inform_id=${c.informid}&orgName=${c.org_namez}">${c.org_namez }</a>

@@ -107,11 +107,17 @@ public class AssignedPersonDao extends PostgresqlDaoImpl<AssignedPerson> {
 	}
 
 	public List<Map<String, Object>> findDtail(String resourceId) {
-		String sql = "SELECT tt.*,plan.meeting_id,plan.start_time as time,plan.id as plan_id,plan.place,plan.check_person ,plan.task_status as state,plan.host ,plan.contact,plan.contact_phone, plan.participant_group,hg_users_info.user_name as member_name,(SELECT count(*)  from hg_party_group_member_info WHERE group_id=plan.participant_group) AS count  from "
+		String sql = "SELECT tt.*,plan.meeting_id,plan.start_time as time,plan.id as plan_id," +
+				"plan.place,plan.check_person ,plan.task_status as state,plan.host ,plan.contact," +
+				"plan.contact_phone, plan.participant_group,hg_users_info.user_name as member_name," +
+				"(SELECT count(*)  from hg_party_group_member_info WHERE group_id=plan.participant_group) " +
+				"AS count  from "
 				+ "(select DISTINCT info.*,goin.pub_org_id ,org.org_name from "
 				+ "hg_party_org_inform_info as info ,hg_party_inform_group_info as goin ,hg_party_org as org "
-				+ "WHERE info.inform_id=goin.inform_id and info.inform_id= ? and org.org_id=goin.pub_org_id and org.historic is false AND org.org_type='branch') as tt left outer  JOIN "
-				+ "hg_party_meeting_plan_info as plan on tt.inform_id=plan.inform_id and tt.pub_org_id=plan.organization_id LEFT  JOIN hg_users_info on plan.check_person=hg_users_info.user_id";
+				+ "WHERE info.inform_id=goin.inform_id and info.inform_id= ? and org.org_id=goin.pub_org_id and " +
+				"org.historic is false AND org.org_type='branch') as tt left outer  JOIN "
+				+ "hg_party_meeting_plan_info as plan on tt.inform_id=plan.inform_id and " +
+				"tt.pub_org_id=plan.organization_id LEFT  JOIN hg_users_info on plan.check_person=hg_users_info.user_id";
 		return jdbcTemplate.queryForList(sql, resourceId);
 	}
 

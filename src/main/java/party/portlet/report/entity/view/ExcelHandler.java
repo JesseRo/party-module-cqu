@@ -47,6 +47,9 @@ public class ExcelHandler {
 
     public ExcelHandler merge(ExcelHandler other) throws NotMatchingExcelDataException {
         String fileName = this.fileName + "-汇总.xlsx";
+        if (this.sheetNames == null || this.sheetNames.isEmpty()){
+            return other;
+        }
         Map<String, SheetHandler> sheets = new LinkedHashMap<>();
         for (String sheetName : sheetNames){
             try {

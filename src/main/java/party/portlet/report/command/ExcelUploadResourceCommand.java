@@ -87,6 +87,8 @@ public class ExcelUploadResourceCommand implements MVCResourceCommand {
 		report.setTime(new Timestamp(System.currentTimeMillis()));
 		report.setTask_id(taskId);
 
+		String redirect = "";
+
 		synchronized (PortalUtil.getHttpServletRequest(resourceRequest).getSession()) {
 			String originalFormId = (String) SessionManager.getAttribute(resourceRequest.getRequestedSessionId(), "formId-report");
 			if (originalFormId.equals(formId)) {
@@ -98,8 +100,8 @@ public class ExcelUploadResourceCommand implements MVCResourceCommand {
 					}.getType());
 					List<String> filenames = excelHandlers.stream().map(ExcelHandler::getFileName).collect(Collectors.toList());
 					UploadPortletRequest uploadPortletRequest = PortalUtil.getUploadPortletRequest(resourceRequest);
-					File[] uploadFiles = uploadPortletRequest.getFiles("files");
-					List<String> uploadFilenames = Stream.of(uploadFiles).map(File::getName).collect(Collectors.toList());
+					String[] uploadFiles = uploadPortletRequest.getFileNames("files");
+					List<String> uploadFilenames = Arrays.asList(uploadFiles);
 					if (!CollectionUtils.isEquals(filenames, uploadFilenames)) {
 						message = "文件名与模版不一致，请重试！";
 					} else {
@@ -113,12 +115,15 @@ public class ExcelUploadResourceCommand implements MVCResourceCommand {
 						String files = gson.toJson(excels);
 						report.setFiles(files);
 						reportDao.saveOrUpdate(report);
+						ReportOrgTask reportOrgTask = reportTaskOrgDao.findByTaskIdAndOrgId(taskId, department);
+						reportOrgTask.setStatus(ConstantsKey.REPORTED);
+						reportTaskOrgDao.saveOrUpdate(reportOrgTask);
 					}
-					ReportOrgTask reportOrgTask = reportTaskOrgDao.findByTaskIdAndOrgId(taskId, department);
-					reportOrgTask.setStatus(ConstantsKey.REPORTED);
-					reportTaskOrgDao.saveOrUpdate(reportOrgTask);
 					transactionUtil.commit();
+					SessionManager.setAttribute(resourceRequest.getRequestedSessionId(), "formId-report", "null");
+					redirect = "window.parent.location.href='/brunch_report_list';";
 				} catch (Exception e) {
+					e.printStackTrace();
 					transactionUtil.rollback();
 				}
 			}
@@ -127,7 +132,7 @@ public class ExcelUploadResourceCommand implements MVCResourceCommand {
 		HttpServletResponse res = PortalUtil.getHttpServletResponse(resourceResponse);
 
 		try {
-			res.getWriter().write("<script>alert('" + message + "');</script>");
+			res.getWriter().write("<script>alert('" + message + "');" + redirect + "</script>");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
