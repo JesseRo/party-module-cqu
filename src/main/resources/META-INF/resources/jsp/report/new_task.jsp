@@ -312,6 +312,9 @@
                     return this._bkGetActionUrl.call(this, action);
                 }
             };
+            ueObj.ready(function() {
+                ueObj.setContent($(".informationContent").val());
+            });
             $('#send').on('click', function () {
                 submit();
             });
@@ -320,6 +323,14 @@
             });
 
             function draftSubmit() {
+                var imgs = $(".table_info img[src='/images/radio_on.png']");
+                var resourcesId = [];
+                for (var i = 0; i < imgs.length; i++) {
+                    var resourceId = $(imgs[i]).prev().val();
+                    resourcesId.push(resourceId);
+                }
+                var resources = resourcesId.join(",") + "";
+                $("#hiddenPublicObject").val(resources);
 
                 $('#status').val("1");
                 $('#submit').click();
@@ -358,18 +369,17 @@
                         <span class="control-label form-label-required">任务主题</span>
                     </div>
                     <div class="col-sm-9 col-xs-9">
-                        <input class="form-control" name="theme" value="">
+                        <input class="form-control" name="theme" value="${task.theme}">
                     </div>
                 </div>
             </div>
             <div class="col-sm-12 col-xs-12 no-padding">
                 <div class="col-sm-6 col-xs-12">
                     <div class="col-sm-3 col-xs-3 ">
-                        <span class="control-label form-label-required">任务说明</span>
+                        <span class="control-label form-label-required">任务描述</span>
                     </div>
                     <div class="col-sm-9 col-xs-9">
-                                <textarea class="form-control" name="description">
-                                </textarea>
+                        <textarea class="form-control" name="description">${task.description}</textarea>
                     </div>
                 </div>
             </div>
@@ -443,7 +453,8 @@
             <input id="submit" type="submit" style="display:none;"/>
             <input id="formId" type="hidden" name="formId" value="${formId}"/>
             <input id="status" type="hidden" name="status" value="1"/>
-            <input id="taskId" type="hidden" name="taskId" value="${task.taskId}"/>
+            <input id="taskId" type="hidden" name="taskId" value="${task.task_id}"/>
+            <input class="informationContent" type="hidden" value='${task.content }'>
             <input id="hiddenPublicObject" type="hidden" name="publicObject"/>
 
             <button id="send" type="button" class="btn btn-default col-sm-2 col-xs-4" style="margin-left: 12%; ">发布

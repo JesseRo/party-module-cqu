@@ -156,9 +156,9 @@ select#meetingType {
 <%--						</th>--%>
 						<th>操作</th>
 						<th>详情</th>
-						<th>已读回执</th>
-						<th>上传会议记录</th>
-						<th>备注</th>
+<%--						<th>已读回执</th>--%>
+<%--						<th>上传会议记录</th>--%>
+<%--						<th>备注</th>--%>
 					</tr>
 				 
 				 </thead>
@@ -255,32 +255,32 @@ select#meetingType {
 								</td>
 
 
-								<td data-label="已读回执" >
-	                              <c:if test="${c.task_status gt 4}">
-	　                                                                                         <a class="check_reply_state" href="javascript:;">查看</a>
-	                                 <input type="hidden" value="${c.inform_id }"/>
-	                                 <input type="hidden" value="${c.pub_org_id }"/>
-	　　                                                                            </c:if>
-	                            </td>
+<%--								<td data-label="已读回执" >--%>
+<%--	                              <c:if test="${c.task_status gt 4}">--%>
+<%--	　                                                                                         <a class="check_reply_state" href="javascript:;">查看</a>--%>
+<%--	                                 <input type="hidden" value="${c.inform_id }"/>--%>
+<%--	                                 <input type="hidden" value="${c.pub_org_id }"/>--%>
+<%--	　　                                                                            </c:if>--%>
+<%--	                            </td>--%>
 
-								<td data-label="上传会议记录" >
-									<c:if test="${c.check_status != '已上传' && (c.task_status gt 4) }">
-										<a href="/uploadnotes?meetingId=${c.meeting_id}">上传</a>
-									</c:if>
+<%--								<td data-label="上传会议记录" >--%>
+<%--									<c:if test="${c.check_status != '已上传' && (c.task_status gt 4) }">--%>
+<%--										<a href="/uploadnotes?meetingId=${c.meeting_id}">上传</a>--%>
+<%--									</c:if>--%>
 
-									<c:if test="${c.check_status eq '已上传'}">
-										已上传
-									</c:if>
-								</td>
+<%--									<c:if test="${c.check_status eq '已上传'}">--%>
+<%--										已上传--%>
+<%--									</c:if>--%>
+<%--								</td>--%>
 
-								<td data-label="备注" >
-									<c:if test="${ empty c.mremark}">
-										${c.iremark}
-									</c:if>
-									<c:if test="${not empty c.mremark}">
-										${c.mremark}
-									</c:if>
-								</td>
+<%--								<td data-label="备注" >--%>
+<%--									<c:if test="${ empty c.mremark}">--%>
+<%--										${c.iremark}--%>
+<%--									</c:if>--%>
+<%--									<c:if test="${not empty c.mremark}">--%>
+<%--										${c.mremark}--%>
+<%--									</c:if>--%>
+<%--								</td>--%>
 							</tr>
 						</c:forEach>
 				  

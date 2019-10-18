@@ -171,7 +171,7 @@
                 success: function (returndata) {                     
 	                    for(var i=0;i<returndata.length;i++){
 	                    	var li='<li class="list-group-item table_info">' +
-	         	           '<span title="马克思主义学院党委">'+returndata[i].org_name+'</span>' +
+	         	           '<span title="'+ returndata[i].org_name +'">'+returndata[i].org_name+'</span>' +
 	        	           '<input type="hidden" value="'+returndata[i].org_id+'"/>' +
 	        	           '<img class="right" src="/images/radio.png" />' +
 	        	           '</li>' ;

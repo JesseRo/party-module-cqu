@@ -7,6 +7,7 @@ import com.google.gson.reflect.TypeToken;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.util.ParamUtil;
 import dt.session.SessionManager;
+import hg.util.ConstantsKey;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import party.constants.PartyPortletKeys;
@@ -55,12 +56,21 @@ public class BrunchReportListPortlet extends MVCPortlet {
         String department = SessionManager.getAttribute(sessionId, "department").toString();
         PostgresqlQueryResult<Map<String, Object>> pageData = taskOrgDao.findPage(department, page);
         for (Map<String , Object> data : pageData.getList()){
-            String json = (String)data.get("files");
-            List<ExcelHandler> excelHandlers = gson.fromJson(json, new TypeToken<List<ExcelHandler>>(){}.getType());
-            List<FileView> fileViews = excelHandlers.stream()
+            String json = (String)data.get("templateFiles");
+            List<ExcelHandler> templateExcelHandlers = gson.fromJson(json, new TypeToken<List<ExcelHandler>>(){}.getType());
+            List<FileView> templateFileViews = templateExcelHandlers.stream()
                     .map(p->new FileView(p.getFileName(), "/ajaxFileName/" + data.get("task_id") + "/" + p.getFileName()))
                     .collect(Collectors.toList());
-            data.put("fileView", fileViews);
+            data.put("templateFileView", templateFileViews);
+            if (data.get("status").equals(ConstantsKey.REPORTED)){
+                String uploadJson = (String)data.get("uploadFiles");
+                List<ExcelHandler> uploadExcelHandlers = gson.fromJson(uploadJson, new TypeToken<List<ExcelHandler>>(){}.getType());
+                List<FileView> uploadFileViews = uploadExcelHandlers.stream()
+                        .map(p->new FileView(p.getFileName(), "/ajaxFileName/" + data.get("task_id") + "/" + p.getFileName()))
+                        .collect(Collectors.toList());
+                data.put("uploadFileView", uploadFileViews);
+            }
+
         }
         renderRequest.setAttribute("pageNo", pageData.getPageNow());
         renderRequest.setAttribute("totalPage",pageData.getTotalPage());

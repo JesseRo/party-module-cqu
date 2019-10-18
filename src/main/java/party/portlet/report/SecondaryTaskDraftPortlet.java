@@ -9,19 +9,14 @@ import hg.util.ConstantsKey;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import party.constants.PartyPortletKeys;
-import party.portlet.report.dao.ReportDao;
 import party.portlet.report.dao.ReportTaskDao;
-import party.portlet.report.entity.Report;
 
 import javax.portlet.Portlet;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import java.io.IOException;
-import java.util.Comparator;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Component(
         immediate = true,
@@ -54,7 +49,7 @@ public class SecondaryTaskDraftPortlet extends MVCPortlet {
         if (page <= 0 ){
             page = 1;
         }
-        PostgresqlQueryResult<Map<String, Object>> taskPage = taskDao.findPageByTaskIdAndStatus(orgId, ConstantsKey.DRAFT, page);
+        PostgresqlQueryResult<Map<String, Object>> taskPage = taskDao.findPageByOrgIdAndStatus(orgId, ConstantsKey.DRAFT, page);
 
         renderRequest.setAttribute("pageNo", taskPage.getPageNow());
         renderRequest.setAttribute("totalPage",taskPage.getTotalPage());

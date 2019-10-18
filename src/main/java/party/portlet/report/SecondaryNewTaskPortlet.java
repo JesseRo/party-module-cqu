@@ -20,6 +20,7 @@ import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
@@ -59,6 +60,8 @@ public class SecondaryNewTaskPortlet extends MVCPortlet {
         if (!StringUtils.isEmpty(taskId)){
             ReportTask task =  reportTaskDao.findByTaskId(taskId);
             renderRequest.setAttribute("task", task);
+        }else {
+            renderRequest.setAttribute("task", Collections.emptyMap());
         }
 
         String formId = UUID.randomUUID().toString();

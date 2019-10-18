@@ -97,9 +97,10 @@
         <tr>
             <td>
                 <input type="hidden" value="${c.task_id }"/>
-                <img class="clickImg" src="/images/not_check_icon.png"/>${c.theme }
+                <img class="clickImg" src="/images/not_check_icon.png"/>
+                <a href="/new_task?taskId=${c.task_id }">${c.theme }</a>
             </td>
-            <td><a href="/new_task?taskId=${c.task_id }">${c.description }</a></td>
+            <td>${c.description }</td>
             <td>
                 <fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${c.publish_time }" />
             </td>
@@ -173,8 +174,8 @@
 <!-- 分页 -->
 
 
-<portlet:resourceURL id="/hg/deleteGrafts" var="deleteGrafts"/>
-<portlet:resourceURL id="/hg/publicGrafts" var="publicGrafts"/>
+<portlet:resourceURL id="/hg/report/delete" var="deleteGrafts"/>
+<portlet:resourceURL id="/hg/report/send" var="publicGrafts"/>
 <script type="text/javascript">
     console.log("ok!");
     $(".select_all").click(function () {
@@ -233,10 +234,10 @@
             $("#hg_confirm").modal("hide");
             $.ajax({
                 url: url,
-                data: {"<portlet:namespace/>resourcesId": resources},
-                dataType: "text",
-                success: function (succee) {
-                    if ("succee" == succee) {
+                data: {"task": resources},
+                dataType: "json",
+                success: function (res) {
+                    if (res.success) {
                         $(".table_info img[src='/images/checked_icon.png']").parent().parent().remove();
                         /* $.tip("删除草稿成功！");   */
                     }
@@ -267,10 +268,10 @@
             $("#hg_confirm").modal("hide");
             $.ajax({
                 url: url,
-                data: {"<portlet:namespace/>resourcesId": resources},
-                dataType: "text",
-                success: function (succee) {
-                    if ("succee" == succee) {
+                data: {"task": resources},
+                dataType: "json",
+                success: function (res) {
+                    if (res.success) {
                         $(".table_info img[src='/images/checked_icon.png']").parent().parent().remove();
                         /*  $.tip("发布成功！"); */
                     }

@@ -9,6 +9,8 @@ import party.portlet.report.entity.ReportTask;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component(immediate = true,service = ReportTaskDao.class)
 public class ReportTaskDao extends PostgresqlDaoImpl<ReportTask> {
@@ -22,8 +24,15 @@ public class ReportTaskDao extends PostgresqlDaoImpl<ReportTask> {
     }
 
 
-    public PostgresqlQueryResult<Map<String, Object>> findPageByTaskIdAndStatus(String orgId, int status, int page) {
+    public PostgresqlQueryResult<Map<String, Object>> findPageByOrgIdAndStatus(String orgId, int status, int page) {
         String sql = "select * from hg_party_report_task where publisher = ? and status = ?";
         return postGresqlFindBySql(page, 10, sql, orgId, status);
+    }
+
+    public void deleteALl(String[] ids) {
+        List<String > template = Stream.of(ids).map(p->"?").collect(Collectors.toList());
+        String idTemplate = String.join(",", template);
+        String sql = "delete from hg_party_report_task where task_id in (" + idTemplate + ")";
+        jdbcTemplate.update(sql, ids);
     }
 }

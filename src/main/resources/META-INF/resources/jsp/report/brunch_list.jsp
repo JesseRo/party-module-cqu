@@ -29,7 +29,7 @@
 </head>
 <body>
 <div class="content_title">
-    已发布
+    数据报送
 </div>
 <table class="content_table" style="border:1px solid #dedede;">
     <thead class="table_title">
@@ -39,6 +39,7 @@
         <th>任务模板</th>
         <th>发布时间</th>
         <th>状态</th>
+        <td>上报文件</td>
     </tr>
     </thead>
     <tbody class="table_info">
@@ -51,8 +52,8 @@
                 ${c.description }
             </td>
             <td style="color: red;padding-left: 25px;">
-                <c:forEach var="f" items="${c.fileView }">
-                    <a href="${f.path}">${f.filename}</a>
+                <c:forEach var="f" items="${c.templateFileView }">
+                    <a href="${f.path}" target="_blank">${f.filename}</a>
                 </c:forEach>
             </td>
             <td>
@@ -66,6 +67,13 @@
                 </c:if>
                 <c:if test="${c.status == 2}">
                     已上报
+                </c:if>
+            </td>
+            <td>
+                <c:if test="${c.status == 2}">
+                    <c:forEach var="u" items="${c.uploadFileView }">
+                        <a href="${u.path}" target="_blank">${u.filename}</a>
+                    </c:forEach>
                 </c:if>
             </td>
         </tr>

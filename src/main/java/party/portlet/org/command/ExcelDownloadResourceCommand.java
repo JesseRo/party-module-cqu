@@ -146,7 +146,7 @@ public class ExcelDownloadResourceCommand implements MVCResourceCommand {
                 headMap.put("identity", "公民身份证号");
                 headMap.put("ethnicity", "民族");
                 headMap.put("phone", "电话");
-                headMap.put("degree", "文化程度");
+                headMap.put("degree", "学历");
                 headMap.put("type", "党员类型");
                 headMap.put("joinDate", "入党时间");
                 headMap.put("org", "所在支部");

@@ -77,8 +77,13 @@ public class AddReportTaskActionCommand implements MVCActionCommand {
         Integer status =  ParamUtil.getInteger(actionRequest, "status");
         String toOrg = ParamUtil.getString(actionRequest, "publicObject");
         String taskId = ParamUtil.getString(actionRequest, "taskId");
+        ReportTask reportTask;
         if (StringUtils.isEmpty(taskId)) {
             taskId = UUID.randomUUID().toString();
+            reportTask = new ReportTask();
+            reportTask.setTask_id(taskId);
+        }else {
+            reportTask = reportTaskDao.findByTaskId(taskId);
         }
         String[] toOrgs = toOrg.split(",");
 
@@ -87,7 +92,6 @@ public class AddReportTaskActionCommand implements MVCActionCommand {
             if (formId.equals(originalFormId)) {
                 transactionUtil.startTransaction();
                 try {
-                    ReportTask reportTask = new ReportTask();
                     reportTask.setContent(content);
                     reportTask.setDescription(description);
                     reportTask.setPublisher(orgId);
@@ -95,6 +99,7 @@ public class AddReportTaskActionCommand implements MVCActionCommand {
                     reportTask.setPublish_time(new Timestamp(System.currentTimeMillis()));
                     reportTask.setStatus(status);
                     reportTask.setTask_id(taskId);
+                    reportTask.setReceivers(toOrg);
                     UploadPortletRequest uploadPortletRequest = PortalUtil.getUploadPortletRequest(actionRequest);
 
                     List<FileView> fileViewList = saveAttachment(uploadPortletRequest, taskId);
@@ -105,7 +110,7 @@ public class AddReportTaskActionCommand implements MVCActionCommand {
                         excels.add(excelHandler);
                     }
                     reportTask.setFiles(gson.toJson(excels));
-                    reportTaskDao.save(reportTask);
+                    reportTaskDao.saveOrUpdate(reportTask);
                     if (status.equals(ConstantsKey.PUBLISHED)){
                         // 新任务
                         List<ReportOrgTask> orgTasks = new ArrayList<>();

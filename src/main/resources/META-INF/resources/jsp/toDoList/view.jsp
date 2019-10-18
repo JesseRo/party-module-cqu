@@ -32,7 +32,7 @@
 		                <th>开展主题</th>
 		                <th>开展时间</th>
 		                <th>开展地点</th>
-		                <th style="min-width:300px;">操作</th>
+<%--		                <th style="min-width:300px;">操作</th>--%>
 		            </tr>
 		        </thead>
 		        <portlet:renderURL var="uploadExperienceUrl">
@@ -64,50 +64,50 @@
 							</td>
 							<td data-label="开展时间">${list.time }</td>
 							<td data-label="开展地点">${list.place }</td>
-							<td data-label="操作" class="btn_group">
-								<c:choose>
-									<c:when test="${not empty list.experienceState }">
-										<%-- <a href="/showexperience?meetingId=${list.meeting_id }&userId=${nameId}"> --%>
-										<a href="${uploadExperienceUrl }&meetingId=${list.meeting_id }&userId=${nameId}">
-											<button class="btn btn-default">查看学习心得</button>
-										</a>
-									</c:when>
-									<c:otherwise>
-										<c:if test="${list.timp == 'f'}">
-											<button class="btn btn-default" onclick="disableEvaluation('会议未结束，不能上传学习心得！')">上传学习心得</button>
-										</c:if>
-										<c:if test="${list.timp == 't'}">
-											<a href="${uploadExperienceUrl }&meetingId=${list.meeting_id }&userId=${nameId}">
-												<button class="btn btn-default">上传学习心得</button>
-											</a>
-										</c:if>
-									</c:otherwise>
-								</c:choose>
-								<c:choose>
-									<c:when test="${not empty list.enableComment }">
-										<c:choose>
-											<c:when test="${not empty list.commentState }">
-												<a href="/showevaluation?meetingId=${list.meeting_id }&userId=${nameId}">
-													<button class="btn btn-default">查看评价</button>
-												</a>
-											</c:when>
-											<c:otherwise>
-												<c:if test="${list.timp == 'f'}">
-													<button class="btn btn-default" onclick="disableEvaluation('会议未结束，不能评价！')">评价</button>
-												</c:if>
-												<c:if test="${list.timp == 't'}">
-													<a href="${evaluationUrl }&meetingId=${list.meeting_id }&userId=${nameId}">
-														<button class="btn btn-default">评价</button>
-													</a>
-												</c:if>
-											</c:otherwise>
-										</c:choose>
-									</c:when>
-									<c:otherwise>
-										<button class="btn btn-default" onclick="disableEvaluation('该会议禁用了评价!')">评价</button>
-									</c:otherwise>
-								</c:choose>
-							</td>
+<%--							<td data-label="操作" class="btn_group">--%>
+<%--								<c:choose>--%>
+<%--									<c:when test="${not empty list.experienceState }">--%>
+<%--										&lt;%&ndash; <a href="/showexperience?meetingId=${list.meeting_id }&userId=${nameId}"> &ndash;%&gt;--%>
+<%--										<a href="${uploadExperienceUrl }&meetingId=${list.meeting_id }&userId=${nameId}">--%>
+<%--											<button class="btn btn-default">查看学习心得</button>--%>
+<%--										</a>--%>
+<%--									</c:when>--%>
+<%--									<c:otherwise>--%>
+<%--										<c:if test="${list.timp == 'f'}">--%>
+<%--											<button class="btn btn-default" onclick="disableEvaluation('会议未结束，不能上传学习心得！')">上传学习心得</button>--%>
+<%--										</c:if>--%>
+<%--										<c:if test="${list.timp == 't'}">--%>
+<%--											<a href="${uploadExperienceUrl }&meetingId=${list.meeting_id }&userId=${nameId}">--%>
+<%--												<button class="btn btn-default">上传学习心得</button>--%>
+<%--											</a>--%>
+<%--										</c:if>--%>
+<%--									</c:otherwise>--%>
+<%--								</c:choose>--%>
+<%--								<c:choose>--%>
+<%--									<c:when test="${not empty list.enableComment }">--%>
+<%--										<c:choose>--%>
+<%--											<c:when test="${not empty list.commentState }">--%>
+<%--												<a href="/showevaluation?meetingId=${list.meeting_id }&userId=${nameId}">--%>
+<%--													<button class="btn btn-default">查看评价</button>--%>
+<%--												</a>--%>
+<%--											</c:when>--%>
+<%--											<c:otherwise>--%>
+<%--												<c:if test="${list.timp == 'f'}">--%>
+<%--													<button class="btn btn-default" onclick="disableEvaluation('会议未结束，不能评价！')">评价</button>--%>
+<%--												</c:if>--%>
+<%--												<c:if test="${list.timp == 't'}">--%>
+<%--													<a href="${evaluationUrl }&meetingId=${list.meeting_id }&userId=${nameId}">--%>
+<%--														<button class="btn btn-default">评价</button>--%>
+<%--													</a>--%>
+<%--												</c:if>--%>
+<%--											</c:otherwise>--%>
+<%--										</c:choose>--%>
+<%--									</c:when>--%>
+<%--									<c:otherwise>--%>
+<%--										<button class="btn btn-default" onclick="disableEvaluation('该会议禁用了评价!')">评价</button>--%>
+<%--									</c:otherwise>--%>
+<%--								</c:choose>--%>
+<%--							</td>--%>
 		           		</tr>
 		        	</c:forEach>
 		        </tbody>

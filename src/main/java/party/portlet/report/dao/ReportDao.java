@@ -26,7 +26,8 @@ public class ReportDao extends PostgresqlDaoImpl<Report> {
         }
     }
 
-    public List<Report> findByOrgIn(List<String> orgIds) {
+    public List<Report> findByTaskIdIn(List<String> orgIds) {
+
         return null;
     }
 

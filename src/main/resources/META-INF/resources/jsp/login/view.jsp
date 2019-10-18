@@ -31,7 +31,7 @@
                 <%-- <a href="${ urlAddress }"><img title="切换至统一身份认证登录" class="hidden-xs" src="/images/type_change_icon.png" /></a> --%>
             </div>
             <!-- <img class="mobile_icon visible-xs" src="/images/mobile_logo.png"> -->
-            <p class="login_title">西南大学党务工作信息平台</p>
+            <p class="login_title">重庆大学党务工作信息平台</p>
             <form class="form-horizontal" role="form">
                 <div class="form-group login_input">
                     <div class="col-sm-12">

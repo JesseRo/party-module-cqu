@@ -27,6 +27,8 @@ public class ReportTask implements Serializable {
 
     private Timestamp publish_time;
 
+    private String receivers;
+
 
     public int getId() {
         return id;
@@ -98,5 +100,13 @@ public class ReportTask implements Serializable {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public String getReceivers() {
+        return receivers;
+    }
+
+    public void setReceivers(String receivers) {
+        this.receivers = receivers;
     }
 }

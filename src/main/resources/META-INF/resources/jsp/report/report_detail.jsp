@@ -68,7 +68,7 @@
             </td>
             <td style="color: red;padding-left: 25px;">
                 <c:forEach var="f" items="${c.fileView }">
-                    <a href="${f.path}">${f.filename}</a>
+                    <a href="${f.path}" target="_blank">${f.filename}</a>
                 </c:forEach>
             </td>
             <td>

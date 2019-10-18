@@ -6,16 +6,13 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.PortalUtil;
 import dt.session.SessionManager;
 import hg.party.dao.org.OrgDao;
 import hg.util.ConstantsKey;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import party.constants.PartyPortletKeys;
-import party.portlet.report.dao.ReportDao;
 import party.portlet.report.dao.ReportTaskDao;
-import party.portlet.report.entity.Report;
 import party.portlet.report.entity.view.ExcelHandler;
 import party.portlet.report.entity.view.FileView;
 
@@ -24,7 +21,6 @@ import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import java.io.IOException;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -61,7 +57,7 @@ public class SecondaryTaskPortlet extends MVCPortlet {
         if (page <= 0 ){
             page = 1;
         }
-        PostgresqlQueryResult<Map<String, Object>> taskPage = taskDao.findPageByTaskIdAndStatus(orgId, ConstantsKey.PUBLISHED, page);
+        PostgresqlQueryResult<Map<String, Object>> taskPage = taskDao.findPageByOrgIdAndStatus(orgId, ConstantsKey.PUBLISHED, page);
         for (Map<String , Object> data : taskPage.getList()){
             String json = (String)data.get("files");
             List<ExcelHandler> excelHandlers = gson.fromJson(json, new TypeToken<List<ExcelHandler>>(){}.getType());

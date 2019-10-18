@@ -105,7 +105,7 @@ public class ExcelUploadResourceCommand implements MVCResourceCommand {
 		
 		List<Member> current = maps.stream().map(row->{
 			Member member = new Member(); 
-			member.setMember_party_committee(Optional.of(row.get("所在二级组织党委").toString().trim()).filter(p->!p.equals("")).orElse(null));
+			member.setMember_party_committee(Optional.of(row.get("所在二级党组织").toString().trim()).filter(p->!p.equals("")).orElse(null));
 			member.setMember_name(Optional.of(row.get("姓名").toString().trim()).filter(p->!p.equals("")).orElse(null));
 			member.setMember_birthday(Optional.of(row.get("出生日期").toString().trim()).filter(p->!p.equals("")).orElse(null));
 			member.setMember_sex(Optional.of(row.get("性别").toString().trim()).filter(p->!p.equals("")).orElse(null));
@@ -119,9 +119,9 @@ public class ExcelUploadResourceCommand implements MVCResourceCommand {
 			member.setMember_org(Optional.of(row.get("所在支部").toString().trim()).filter(p->!p.equals("")).orElse(null));
 			member.setMember_fomal_date(Optional.of(row.get("转正时间").toString().trim()).filter(p->!p.equals("")).orElse(null));
 			member.setMember_address(Optional.of(row.get("家庭住址").toString().trim()).filter(p->!p.equals("")).orElse(null));
-			member.setMember_party_position(Optional.of(row.get("党内职务").toString().trim()).filter(p->!p.equals("")).orElse(null));
-			member.setMember_major_title(Optional.of(row.get("党费标准（元/月）").toString().trim()).filter(p->!p.equals("")).orElse(null));
-			member.setMember_new_class(Optional.of(row.get("学生宿舍").toString().trim()).filter(p->!p.equals("")).orElse(null));
+//			member.setMember_party_position(Optional.of(row.get("党内职务").toString().trim()).filter(p->!p.equals("")).orElse(null));
+//			member.setMember_major_title(Optional.of(row.get("党费标准（元/月）").toString().trim()).filter(p->!p.equals("")).orElse(null));
+//			member.setMember_new_class(Optional.of(row.get("学生宿舍").toString().trim()).filter(p->!p.equals("")).orElse(null));
 			member.setMember_job(Optional.of(row.get("工作岗位").toString().trim()).filter(p->!p.equals("")).orElse(null));
 			member.setMember_marriage(Optional.of(row.get("婚姻状况").toString().trim()).filter(p->!p.equals("")).orElse(null));
 			return member;
@@ -131,7 +131,7 @@ public class ExcelUploadResourceCommand implements MVCResourceCommand {
 		if(committees.size() != current.size()){
 			for (String committee : committees){
 				if(committee.lastIndexOf("委员会")!=committee.length()-3){
-					throw new NotMatchingExcelDataException("第一行必须是\\n中国共产党西南大学\\n委员会:" + String.join("\\n", committee+"(错误数据!)"));
+					throw new NotMatchingExcelDataException("第一行必须是\\n中国共产党重庆大学\\n委员会:" + String.join("\\n", committee+"(错误数据!)"));
 				}else{
 					continue;
 				}
@@ -206,11 +206,11 @@ public class ExcelUploadResourceCommand implements MVCResourceCommand {
 		}
 		Organization first = orgs.get(0);
 
-		if (!first.getOrg_name().equals("中共重庆三峡职业学院委员会")){
-			throw new NotMatchingExcelDataException("第一行必须是中共重庆三峡职业学院委员会");
+		if (!first.getOrg_name().equals("中共重庆大学委员会")){
+			throw new NotMatchingExcelDataException("第一行必须是中共重庆大学委员会");
 		}
 		if (!first.getOrg_code().equals("000000")){
-			throw new NotMatchingExcelDataException("第一行必须是中共重庆三峡职业学院委员会，编号必须为000000");
+			throw new NotMatchingExcelDataException("第一行必须是中共重庆大学委员会，编号必须为000000");
 		}
 
 		List<String > oddNames = orgs.stream()
@@ -290,7 +290,7 @@ public class ExcelUploadResourceCommand implements MVCResourceCommand {
 
 		Organization root = orgDao.findByOrgId(orgId);
 		if (!root.getOrg_type().equals("organization")){
-			throw new NotMatchingExcelDataException("必须选中共重庆三峡职业学院委员会进行导入");
+			throw new NotMatchingExcelDataException("必须选中共重庆大学委员会进行导入");
 		}
 		List<Organization> current = maps.stream().map(row->{
 			Organization org = new Organization();
