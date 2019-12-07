@@ -87,7 +87,7 @@ function Page(opt) {
         },
         //active
         actPages: function(ele) {
-            ele.addClass('active').siblings().removeClass('active');
+            ele.addClass('active').siblings().removeClass('active');hua
             return clickpages.elem.children('li.active').text();
         },
 

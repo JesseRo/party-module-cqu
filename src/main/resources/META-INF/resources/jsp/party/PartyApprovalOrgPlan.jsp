@@ -5,7 +5,8 @@
 
 <script type="text/javascript" src="${basePath}/js/ajaxfileupload.js"></script>
 <script type="text/javascript" src="${basePath}/js/partyModal.js"></script>
-
+<link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/activity-manage1.css?v=1"/>
+<link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/common.min.css"/>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -83,6 +84,23 @@
 	            font-size: 13px;
 	            line-height: 15px;
 	        }
+			.content_table thead tr{
+				background: #F6F8FC;
+				height: 48px;
+				font-size: 16px;
+			}
+			.content_table thead th{
+				padding: 5px 15px !important;
+			}
+			.content_table tr:nth-child(2n) {
+				background: #FBFCFE;
+			}
+			.content_table td{
+				min-width: 130px;
+				padding: 5px 15px !important;
+				height: 48px;
+				font-size: 14px;
+			}
 	        /* 录入弹窗样式 */			
 		</style>
 	</head>
@@ -92,11 +110,17 @@
 		</portlet:resourceURL>
 		<!-- 		录入确定 -->
 		<portlet:resourceURL id="/PartyWriteActionOrgCommand" var="PartyWriteAction" />
-		<div class="content_title" style="margin-bottom:30px;">
-                                                    抽查录入
-        </div>
-		<div class="content_table_container">
-                <table class="content_table">
+		<div class="table_form_content">
+			<!-- 右侧盒子内容 -->
+			<div class="activity_manage_page">
+				<div class="breadcrumb_group" style="margin-bottom: 20px;">
+					当前位置：
+					<span class="layui-breadcrumb" lay-separator=">">
+                        <a href="javascript:;">抽查录入</a>
+                    </span>
+				</div>
+				<div class="bg_white_container">
+                <table class="content_table" style="width: 100%;">
                     <thead class="table_title">
                         <tr>
                             <th>党委名称</th>
@@ -104,18 +128,18 @@
                             <th>开展主题</th>
                             <th class="LaunchTime" style="min-width: 160px;">开始时间</th>
                             <th>操作</th>
-                            <th>开展时长(分钟)</th>
+<%--                            <th>开展时长(分钟)</th>--%>
                             <th>开展地点</th>
-                            <th>应到人数</th>
-                            <th>实到人数</th>
-                            <th>主持人</th>
+<%--                            <th>应到人数</th>--%>
+<%--                            <th>实到人数</th>--%>
+<%--                            <th>主持人</th>--%>
                             <th>联系人</th>
-                            <th>联系人电话</th>
-                            <th>任务状态</th>
+<%--                            <th>联系人电话</th>--%>
+<%--                            <th>任务状态</th>--%>
                             <th>抽查状态</th>
-                            <th>审核人</th>
+<%--                            <th>审核人</th>--%>
                             <th>图片</th>
-                            <th>备注</th>
+<%--                            <th>备注</th>--%>
                         </tr>
                     </thead>
                     <tbody class="table_info" id="tBody">
@@ -123,7 +147,7 @@
 	                        <tr>
 	                            <td data-label="党委名称" class="Party_name">${info.org_name }</td>
 	                            <td data-label="会议类型">${info.meeting_type }</td>
-	                            <td data-label="开展主题">${info.meeting_theme }</td>
+	                            <td data-label="开展主题">${info.meeting_theme_org }</td>
 	                            <td data-label="开始时间" class="LaunchTime"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${info.start_p }" /></td>
 	                            <td data-label="操作">
 	                            	<c:if test="${info.task_status_org == '5' }">
@@ -135,36 +159,36 @@
 										修改</a>
 									</c:if>
 	                            </td>
-	                            <td data-label="开展时长">${info.total_time }</td>
+<%--	                            <td data-label="开展时长">${info.total_time }</td>--%>
 	                            <td data-label="开展地点">${info.place }</td>
-	                            <td data-label="应到人数">${info.shoule_persons }</td>
-	                            <td data-label="实到人数">${info.actual_persons }</td>
-	                            <td data-label="主持人">${info.host }</td>
+<%--	                            <td data-label="应到人数">${info.shoule_persons }</td>--%>
+<%--	                            <td data-label="实到人数">${info.actual_persons }</td>--%>
+<%--	                            <td data-label="主持人">${info.host }</td>--%>
 	                            <td data-label="联系人">${info.contact }</td>
-	                            <td data-label="联系人电话">${info.contact_phone }</td>
-	                            <td data-label="任务状态">
-	                            	<c:if test="${info.task_status == '1'}"> 
-	                            		 已提交
-									</c:if>
-									<c:if test="${info.task_status == '2'}"> 
-	                            		 已撤回
-									</c:if>
-									<c:if test="${info.task_status == '3'}"> 
-	                            		 被驳回
-									</c:if>
-									<c:if test="${info.task_status == '4'}"> 
-	                            		 已通过
-									</c:if>
-									<c:if test="${info.task_status == '5'}"> 
-	                            		 已指派
-									</c:if>
-									<c:if test="${info.task_status == '6'}"> 
-	                            		 未检查
-									</c:if>
-									<c:if test="${info.task_status == '7'}"> 
-	                            		 已检查
-									</c:if>
-	                            </td>
+<%--	                            <td data-label="联系人电话">${info.contact_phone }</td>--%>
+<%--	                            <td data-label="任务状态">--%>
+<%--	                            	<c:if test="${info.task_status == '1'}"> --%>
+<%--	                            		 已提交--%>
+<%--									</c:if>--%>
+<%--									<c:if test="${info.task_status == '2'}"> --%>
+<%--	                            		 已撤回--%>
+<%--									</c:if>--%>
+<%--									<c:if test="${info.task_status == '3'}"> --%>
+<%--	                            		 被驳回--%>
+<%--									</c:if>--%>
+<%--									<c:if test="${info.task_status == '4'}"> --%>
+<%--	                            		 已通过--%>
+<%--									</c:if>--%>
+<%--									<c:if test="${info.task_status == '5'}"> --%>
+<%--	                            		 已指派--%>
+<%--									</c:if>--%>
+<%--									<c:if test="${info.task_status == '6'}"> --%>
+<%--	                            		 未检查--%>
+<%--									</c:if>--%>
+<%--									<c:if test="${info.task_status == '7'}"> --%>
+<%--	                            		 已检查--%>
+<%--									</c:if>--%>
+<%--	                            </td>--%>
 	                            <td data-label="抽查状态">
 	                            	<c:if test="${info.task_status_org == '5'}"> 
 	                            		 已指派
@@ -176,17 +200,16 @@
 	                            		 已检查
 									</c:if>
 	                            </td>
-	                            <td data-label="审核人">${info.auditor }</td>
+<%--	                            <td data-label="审核人">${info.auditor }</td>--%>
 	                            <td data-label="图片" class="img_td">
 	                            	<input type="hidden" class="imageNemeOrg" value="${info.image_org }" name="imageNeme"/>
 	                            </td>
-	                            <td data-label="备注">${info.remarks_org }</td>
+<%--	                            <td data-label="备注">${info.remarks_org }</td>--%>
 	                        </tr>
                         </c:forEach>
                     </tbody>
                 </table>
-            </div>
-            
+
  
    <!-- -----------------------分页------------------------- -->
 				<div class="pagination_container">
@@ -206,7 +229,7 @@
 			            </form>
 			        </div>
 				 </div>
-		
+				</div>
 				 <script type="text/javascript">
 					  $(document).ready(function() {
 						 var pages = $(".total_page").html();
@@ -248,7 +271,8 @@
 				  }); 
 					
 		</script> 
-		
+			</div>
+		</div>
 		<!-- 录入模态框 -->
     
 	    <!-- 模态框（Modal） -->

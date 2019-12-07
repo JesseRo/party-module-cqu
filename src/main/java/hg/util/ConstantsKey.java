@@ -27,6 +27,9 @@ public class ConstantsKey {
     public static final String BRANCH_PARTY = "党支部";
     public static final String COMMON_PARTY = "普通党员";
     public static final String OTHER_PARTY = "其他";
+
+
+
     public static final HashMap<String, String > PERMISSION_TO_ORGTYPE = new HashMap<>(); // 权限 - 组织类型对应
     public static final HashMap<String, String > ORGTYPE_TO_PERMISSION = new HashMap<>(); // 组织类型 - 权限对应
     static {
@@ -66,5 +69,16 @@ public class ConstantsKey {
         BRUNCH_REPORT_CONTENT_HEAD.put("total_number", "总人数");
         BRUNCH_REPORT_CONTENT_HEAD.put("paid_fee", "实缴党费总计");
         BRUNCH_REPORT_CONTENT_HEAD.put("should_fee", "应缴党费总计");
+    }
+
+    public static Map<String, String> DROPDOWN_TYPES_MAPPING = new LinkedHashMap<>();
+
+    static
+    {
+        DROPDOWN_TYPES_MAPPING.put("meetingType", "活动类型");
+        DROPDOWN_TYPES_MAPPING.put("reason", "驳回原因");
+        DROPDOWN_TYPES_MAPPING.put("taskStatus", "任务状态");
+        DROPDOWN_TYPES_MAPPING.put("positior", "党内职务");
+        DROPDOWN_TYPES_MAPPING.put("room", "学生宿舍园区");
     }
 }

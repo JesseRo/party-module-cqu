@@ -47,6 +47,10 @@ public class Member{
 	private String member_major_title;
 
 	private String member_marriage;
+
+	private String member_is_leader;
+
+	private String member_unit;
 	public String getMember_major_title() {
 		return member_major_title;
 	}
@@ -298,5 +302,21 @@ public class Member{
 
 	public void setMember_marriage(String member_marriage) {
 		this.member_marriage = member_marriage;
+	}
+
+	public String getMember_is_leader() {
+		return member_is_leader;
+	}
+
+	public void setMember_is_leader(String member_is_leader) {
+		this.member_is_leader = member_is_leader;
+	}
+
+	public String getMember_unit() {
+		return member_unit;
+	}
+
+	public void setMember_unit(String member_unit) {
+		this.member_unit = member_unit;
 	}
 }

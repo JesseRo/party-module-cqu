@@ -34,8 +34,11 @@
         } */
 
         button.btn.btn-default {
-            margin-left: 40%;
-            margin-right: 10%;
+            margin-left: 14%;
+            padding: 6px 20px;
+        }
+        .content_info .content_form .form-group>div {
+            margin-bottom: 20px;
         }
     </style>
     <link rel="stylesheet" href="${basePath}/css/publish.css"/>
@@ -58,29 +61,50 @@
 </head>
 <body>
 <input type="hidden" class="meetingPlanStr" value='${meetingPlanStr }'>
-<div class="">
-    <div class="content_title">
-        ${title }
-    </div>
-    <div class="content_form">
-        <form class="form-horizontal" role="form" action="${informPartyUrl }" method="post">
-            <div id="hg-form-container" class="form-group">
-                <input id="meetingId" type="hidden" name="meetingId"/>
-                <input id="groupId" type="hidden" name="groupId"/>
-                <input id="startTime" type="hidden" name="startTime"/>
-                <input type="hidden" name="formId" value="${formId}"/>
-                <input id="meeting_theme_secondary" type="hidden" name="meeting_theme_secondary"/>
-                <input id="submit" type="submit" style="display:none;"/>
-                <!-- 						<input id="hiddenstate" type="hidden" name="state"/> -->
-                <!-- 						<input id="infrom_id" type="hidden" name="infrom_id"/> -->
-                <!-- 						<input id="newAndOld" type="hidden" name="newAndOld"/> -->
-            </div>
-            <div class="btn_group col-sm-12">
-                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="formsubmitgraft()">取消
-                </button>
-                <button type="button" class="btn btn_main add_sure_btn" style="color:white" onclick="formsubmit()">确定</button>
-            </div>
-        </form>
+<div class="table_form_content">
+    <!-- 右侧盒子内容 -->
+    <div class="activity_manage_page">
+        <div class="breadcrumb_group" style="margin-bottom: 20px;">
+            当前位置：
+            <span class="layui-breadcrumb" lay-separator=">">
+                        <a href="javascript:;">组织生活管理</a>
+                        <a href="javascript:;">${title}</a>
+                    </span>
+        </div>
+        <div class="bg_white_container">
+        <div class="content_form" style="padding: 20px 0;">
+            <form class="form-horizontal" role="form" action="${informPartyUrl }" method="post"
+                  style="max-width: 960px;" enctype="multipart/form-data" >
+                <div id="hg-form-container" class="form-group">
+                    <input id="meetingId" type="hidden" name="meetingId"/>
+                    <input id="groupId" type="hidden" name="groupId"/>
+                    <input id="startTime" type="hidden" name="startTime"/>
+                    <input type="hidden" name="formId" value="${formId}"/>
+                    <input id="meeting_theme_secondary" type="hidden" name="meeting_theme_secondary"/>
+                    <input id="submit" type="submit" style="display:none;"/>
+                    <!-- 						<input id="hiddenstate" type="hidden" name="state"/> -->
+                    <!-- 						<input id="infrom_id" type="hidden" name="infrom_id"/> -->
+                    <!-- 						<input id="newAndOld" type="hidden" name="newAndOld"/> -->
+<%--                    <div class="btn_group col-sm-12">--%>
+<%--                        <button type="button" class="btn btn-default" data-dismiss="modal" onclick="formsubmitgraft()">取消--%>
+<%--                        </button>--%>
+<%--                        <button type="button" class="btn btn_main add_sure_btn" style="margin-left: 10px;color:white; background-color: #5161FF;padding: 6px 20px;" onclick="formsubmit()">确定</button>--%>
+<%--                    </div>--%>
+                    <div class="layui-inline btn_group" style="width: calc(50% - 120px);margin: 0;margin-top: 10px;">
+                        <label class="layui-form-label"></label>
+                        <div class="layui-input-inline">
+                            <button type="button" class="layui-btn" onclick="formsubmit()" lay-submit="" lay-filter="partyMemForm" style="padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;background-color: #FFAB33;border-radius: 4px;">
+                                确定
+                            </button>
+                            <button type="button" onclick="formsubmitgraft()" class="layui-btn layui-btn-primary" style="background-color: transparent;color: #666;padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;border-radius: 4px;">
+                                取消
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        </div>
     </div>
 </div>
 

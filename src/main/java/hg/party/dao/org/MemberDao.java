@@ -32,6 +32,12 @@ public class MemberDao extends PostgresqlDaoImpl<Member> {
         String sql = "select * from hg_party_member where historic is false and member_identity= ? ";
         return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Member.class),userId);
     }
+
+    public Member findByUserId(String userId) {
+        String sql = "select * from hg_party_member where historic is false and member_identity= ? ";
+        return jdbcTemplate.queryForObject(sql, BeanPropertyRowMapper.newInstance(Member.class),userId);
+    }
+
     public List<Map<String , Object>> findMemeberJob() {
     	String sql = "select DISTINCT member_job  from hg_party_member where member_job is not null";
     	return jdbcTemplate.queryForList(sql);

@@ -15,6 +15,8 @@ import hg.party.entity.navigation.NavigationPermissions;
 import hg.party.server.navigation.NavigationPermissionsServer;
 import party.constants.PartyPortletKeys;
 
+import java.util.UUID;
+
 /**
  * 文件名称： party<br>
  * 内容摘要： @TODO<br>
@@ -58,7 +60,7 @@ public class SaveAddNavigationActionCommand extends BaseMVCActionCommand {
 		
 		NavigationPermissions navigation = new NavigationPermissions();
 		//navigationId
-		navigation.setNavigationId("111");
+		navigation.setNavigationId(UUID.randomUUID().toString());
 		//导航名字
 		navigation.setNavigationName(navName);
 		//导航跳转路径

@@ -63,8 +63,15 @@ function HgDoms(form, uploadUrls, container) {
                 "								 </div>" +
                 "                            </div>";
                 
-                this.richtext = '<div class="col-sm-12 col-xs-12">' +
-				'					<script id="column_id" name="column_id" type="text/plain"></script>' +
+                this.richtext = '<div class="col-sm-12 col-xs-12" style="padding-left: 0;">' +
+                    "     <div class='col-sm-6 col-xs-12'>\n" +
+                    "                                <div class=\"col-sm-3 col-xs-3 \">\n" +
+                    "                                <span class=' control-label ${class}'>${name}</span>\n" +
+                    "                                 </div>" +
+                    "								 <div class='col-sm-9 col-xs-9'>" +
+                    '					<script id="column_id" name="column_id" type="text/plain"></script>' +
+                    "								 </div>" +
+                    "                            </div>" +
 				'				</div>';
 				
                 this.richtext_id = null;
@@ -154,7 +161,7 @@ function HgDoms(form, uploadUrls, container) {
                 function generate_richtext(column) {
                     var col_html = context[column.type.name];
                     context.richtext_id = column.id;
-                    return col_html.replace(/column_id/g, column.id);
+                    return col_html.replace(/column_id/g, column.id).replace('${name}', column.name);
                 }
 
                 this.generateHtml = function (filter) {
@@ -182,7 +189,7 @@ function HgDoms(form, uploadUrls, container) {
             		this.container.html(this.generateHtml() + this.container.html());
     	            $('.datetime').attr('onClick', "WdatePicker({dateFmt:'yyyy-MM-dd\u0020HH:mm:ss',onpicked:function(){$(this).change()}})");
     	            if(this.richtext_id){
-    	            	var ueObj = this.ueditor = UE.getEditor(this.richtext_id);
+    	            	var ueObj = this.ueditor = UE.getEditor(this.richtext_id, { initialFrameWidth:821});
 
         				UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
         				UE.Editor.prototype.getActionUrl = function(action) {

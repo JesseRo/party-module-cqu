@@ -44,15 +44,17 @@ public class SaveUpdateActionCommand extends BaseMVCActionCommand {
 		String navName = ParamUtil.getString(actionRequest, "navName");
 		String location = ParamUtil.getString(actionRequest, "location");
 		String role = ParamUtil.getString(actionRequest, "role");
+		String path = ParamUtil.getString(actionRequest, "path");
 		String navigationId = ParamUtil.getString(actionRequest, "navigationId");
-		
+
 		navName =	HtmlUtil.escape(navName);
+		path =	HtmlUtil.escape(path);
 		location =	HtmlUtil.escape(location);
 		role =	HtmlUtil.escape(role);
 		navigationId =	HtmlUtil.escape(navigationId);
 		
 		
-		navigationPermissionsServer.updateNavigation(navName, location, role, navigationId);
+		navigationPermissionsServer.updateNavigation(navName, location, role, navigationId, path);
 	}
 
 }

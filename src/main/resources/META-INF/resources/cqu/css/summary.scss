@@ -1,0 +1,316 @@
+.summary_page{
+    width: 100%;
+    height: 100%;
+    .total_account_group{
+        width: 100%;
+        height: 17.2%;
+        color: #fff;
+        >li{
+            width: 22.7%;
+            height: 100%;
+            margin-right: 3.06%;
+            border-radius: 10px;
+            float: left;
+            background-size: cover;
+            &:last-child{
+                margin-right: 0;
+                background-image: url('../images/account-bg4.png');
+            }
+            &:nth-child(1){
+                background-image: url('../images/account-bg1.png');
+            }
+            &:nth-child(2){
+                background-image: url('../images/account-bg2.png');
+            }
+            &:nth-child(3){
+                background-image: url('../images/account-bg3.png');
+            }
+            .title_group{
+                height: 34.2%;
+                font-size: 18px;
+                margin: 6.5% 0 6.5% 6.5%;
+                .title_icon{
+                    width: 15.5%;
+                    // height: 100%;
+                    display: inline-block;
+                    background-size: cover;
+                    vertical-align: middle;
+                    margin-right: 18px;
+                }
+            }
+            .total_num{
+                font-size: 36px;
+                margin-left: 12.1%;
+                line-height: 1;
+            }
+        }
+    }
+    .attend_views_activity{
+        height: 82.8%;
+        padding-top: 3.92%;
+        >div{
+            display: inline-block;
+            float: left;
+        }
+        .operate_container{
+            height: 11.9%;
+            width: 100%;
+            text-align: right;
+            position: relative;
+            p{
+                // font-size: 24px;
+                height: 24px;
+                display: inline-block;
+                left: 0;
+                position: absolute;
+            }
+            .layui-form-select{
+                height: 40px;
+                display: inline-block;
+                z-index: 10;
+                .layui-select-title{
+                    input{
+                        border: none;
+                    }
+                }
+                dl{
+                    border: none;
+                    dd{
+                        &:hover{
+                            background: transparent;
+                        }
+                        &.layui-this{
+                            background-color: transparent;
+                        }
+                    }
+                }
+            }
+            .month_select + .layui-form-select{
+                margin-right: 15px;
+                width: 90px;
+                .layui-select-title{
+                    input{
+                        color: #fff;
+                        background:#FFAB33;
+                        border-color: #FFAB33;
+                        box-shadow:0px 4px 9px 0px rgba(254,173,77,0.5);
+                        border-radius:6px;
+                        &:hover{
+                            border-color: #FFAB33;
+                        }
+                    }
+                }
+                .layui-edge{
+                    border-top-color: #fff;
+                }
+                dl{
+                    background: #FFAB33;
+                    dd{
+                        color: #fff;
+                    }
+                }
+            }
+            .terms_select + .layui-form-select{
+                .layui-select-title{
+                    input{
+                        color: #E74933;
+                        background:#FFF4C9;
+                        border-color: #FFF4C9;
+                        box-shadow:0px 4px 9px 0px rgba(255, 244, 201, .5);
+                        border-radius:6px; 
+                        &:hover{
+                            border-color: #FFF4C9!important;
+                        }
+                    }
+                }
+                .layui-edge{
+                    border-top-color: #E74933;
+                }
+                dl{
+                    background:#FFF4C9;
+                    dd{
+                        color: #E74933;
+                    }
+                    // dd{
+                    //     &:hover{
+                    //         background: transparent;
+                    //     }
+                    //     &.layui-this{
+                    //         background-color: transparent;
+                    //     }
+                    // }
+                }
+            }
+        }
+        .desc_text{
+            color: #FFAB33;
+            font-size: 20px;
+            position: absolute;
+            bottom: 10%;
+            right: 5%;
+        }
+        .attend_views_group{
+            margin-right:2.61%;
+            width: 52.4%;
+            height: 100%;
+            >div{
+                width: 100%;
+                border: 1px solid #F2F3F5;
+                box-shadow:3px 3px 12px 0px rgba(228,228,228,0.5);
+                border-radius:9px;
+            }
+            .attend_rate_group{
+                height: 50%;
+                margin-bottom: 40px;
+                padding: 5% 5% 3.25% 5%;
+                .attend_rate_container{
+                    width: 100%;
+                    // height: 88.1%;
+                    height: 100%;
+                    >div{
+                        padding: 0!important;
+                    }
+                    .attend_tooltip{
+                        background: '#7f7f7f';
+                        padding: 10px 50px 10px 10px;
+                        border-radius: 10px;
+                        p{
+                            color: #fff;
+                            line-height: 18px;
+                            font-size: 12px;
+                        }
+                    }
+                }
+            }
+            .views_group{
+                height: calc(50% - 40px);
+                padding: 5% 5% 3.25% 5%;
+                position: relative;
+                >div{
+                    display: inline-block;
+                    float: left;
+                }
+                .text_container{
+                    width: 41.875%;
+                    .title{
+                        font-size: 24px;
+                    }
+                    .sub_text_container{
+                        margin-top: 20%;
+                    }
+                    .sub_text{
+                        display: inline-block;
+                        float: left;
+                        &.current_view{
+                            margin-right: 15%;
+                        }
+                        .sub_title{
+                            color: #364064;
+                            font-size: 16px;
+                            line-height: 1;
+                            // margin-bottom: 15%;
+                            margin-bottom: 12px;
+                        }
+                        .sub_num{
+                            font-size: 32px;
+                            line-height: 1;
+                        }
+                    }
+                }
+                .view_conteiner{
+                    width: 58.125%;
+                    height: 70%;
+                }
+            }
+        }
+        .activity_plan_group{
+            height: 100%;
+            width: 44.99%;
+            border: 1px solid #F2F3F5;
+            box-shadow:3px 3px 12px 0px rgba(228,228,228,0.5);
+            border-radius:9px;
+            padding: 2.68%;
+            position: relative;
+            .operate_container{
+                height: 7%;
+            }
+            .desc_text{
+                a{
+                    color: #FFAB33;
+                }
+                bottom: 5%;
+            }
+            .activity_plan_conteiner{
+                height: 82%;
+                width: 100%;
+                >div{
+                    width: 33.33%;
+                    height: 50%;
+                    display: inline-block;
+                    float: left;
+                }
+            }
+        }
+    }
+    
+}
+@media screen and (max-width: 1536px) {
+    .summary_page{
+        .total_account_group{
+            >li{
+                .title_group{
+                    height: 38.4%;
+                    font-size: 16px;
+                    margin: 4.5% 0 4.5% 6.5%;
+                }
+                .total_num{
+                    font-size: 24px;
+                }
+            }
+        }
+        .attend_views_activity{
+            .desc_text{
+                font-size: 16px;
+            }
+            .attend_views_group{
+                .attend_rate_group{
+                }
+                .views_group{
+                    .text_container{
+                        .title{
+                            // font-size: 18px;
+                            img{
+                                height: 18px;
+                            }
+                        }
+                        .sub_text{
+                            .sub_num{
+                                font-size: 24px;
+                            }
+                        }
+                    }
+                }
+            }
+            .activity_plan_group{
+                .operate_container{
+                    height: 10%;
+                }
+            }
+        }
+        .attend_views_activity{
+            .operate_container{
+                p{
+                    // font-size: 18px;
+                    img{
+                        height: 18px;
+                    }
+                }
+                .custom_select{
+                    // padding: 6px 12px;
+                    // font-size: 14px;
+                    // height: 34px;
+                }
+            }
+        }
+    }
+}

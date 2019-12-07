@@ -63,7 +63,7 @@ public class NavigationManagementPortlet extends MVCPortlet {
 		//获取查询输入框内的title
 		String role=ParamUtil.getString(renderRequest, "title");
 		role = HtmlUtil.escape(role);
-		String sql=generalSql(role);
+//		String sql=generalSql(role);
 		Map<String, Object> postgre;//查询结果集
 //		postgre=pagenation(renderRequest,sql);
 		postgre = pagenation(renderRequest,role);
@@ -92,6 +92,7 @@ public class NavigationManagementPortlet extends MVCPortlet {
 		}
 		int pageNo=(int) postgre.get("pageNow");//当前页
 		int pages=(int) postgre.get("totalPage");//总页数
+		renderRequest.setAttribute("title", role);
 		renderRequest.setAttribute("pageNo", pageNo);
 		renderRequest.setAttribute("sum", pages);
 		renderRequest.setAttribute("list", list);
@@ -111,10 +112,10 @@ public class NavigationManagementPortlet extends MVCPortlet {
 		int pageSize=10;//每页显示条数
 		String sql = "";
 		if(role == null || "".equals(role)){
-			sql="SELECT * FROM hg_party_navigation_permissions ORDER BY navigation_to_role DESC ";
+			sql="SELECT * FROM hg_party_navigation_permissions ORDER BY navigation_to_role DESC, navigation_id asc ";
 			return  navigationPermissionsServer.pagenation(pageNo, pageSize, sql);
 		}else{
-			sql="SELECT * FROM hg_party_navigation_permissions WHERE navigation_to_role=? ";
+			sql="SELECT * FROM hg_party_navigation_permissions WHERE navigation_to_role=?  ORDER BY navigation_id asc ";
 			return  navigationPermissionsServer.pagenation(pageNo, pageSize, sql,role);
 		}
 		

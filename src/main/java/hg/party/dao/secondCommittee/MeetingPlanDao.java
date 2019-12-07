@@ -61,74 +61,77 @@ public class MeetingPlanDao extends PostgresqlDaoImpl<MeetingPlan>{
    //二级党委根据组织ID查询所有通知计划
    public Map<String,Object> queryInformMeetingsByOrgId(String orgId, String meetingType, String taskStatus, int page){
 	   
-	   String sql = "SELECT\n" +
-               "\ti.meeting_type AS imeetingtype,\n" +
-               "\ti.meeting_theme AS imeetingtheme,\n" +
-               "\ti.inform_id,\n" +
-               "\ti.remark AS iremark,\n" +
-               "\ti.deadline_time,\n" +
-               "\tG .read_status,\n" +
-               "\tG .pub_org_id,\n" +
-               "\ti .org_type,\n" +
-               "\ti.release_time,\n" +
-//               "\tM .meeting_type AS mmeetingtype,\n" +
-//               "\tM .meeting_theme AS mmeetingtheme,\n" +
-//               "\tM .meeting_id,\n" +
-//               "\tM .submit_time,\n" +
-//               "\tcast(M .task_status as INTEGER),\n" +
-               "\ti.send_branch,\n" +
-               "\tG .has_resend,\n" +
-               "\tG .send_to,\n" +
-//               "\tM .organization_id,\n" +
-//               "\tM .place,\n" +
-//               "\tM .remark AS mremark,\n" +
-//               "\tM .remark AS mremark,\n" +
-               "\ti.start_time AS istarttime,\n" +
-               "\ti.end_time AS iendtime\n" +
-//               "\tM .start_time AS mstarttime,\n" +
-//               "\tM .end_time AS mendtime,\n" +
-//               "\tM .check_status\n" +
-               "FROM\n" +
-               "\t(\n" +
-               "\t\thg_party_org_inform_info AS i\n" +
-               "\t\tLEFT JOIN PUBLIC .hg_party_inform_group_info AS G ON G .inform_id = i.inform_id\n" +
-               "\t\tAND G .pub_org_id = '" + orgId + "'\n" + 
-               "\t\tAND has_resend IS NOT TRUE\n" +
-               "\t)\n" +
-//               "LEFT JOIN PUBLIC .hg_party_meeting_plan_info AS M ON i.inform_id = M .inform_id\n" +
-//               "AND G .pub_org_id = M .organization_id\n" +
-               " WHERE\n" +
-               "\t(\n" +
-               "\t\tG .pub_org_id = '" + orgId + "' AND has_resend IS NOT TRUE \n" +
-               "\t\tOR i.org_type = '" + orgId + "'\n" +
-               "\t)\n" +
-               "AND (i.public_status = '1' or i.public_status = '2')\n";
-	   if (!StringUtils.isEmpty(meetingType) ) {
-		   sql += "AND i.meeting_type = '" + meetingType + "'\n";
-	   }
-	   if (!StringUtils.isEmpty(taskStatus)) {
-		   try {
-			   int statusCode = Integer.valueOf(taskStatus);
-			   if(statusCode > 0){
-				   if (statusCode < IGNORED_STATUS_CODE) {
-					   sql += "AND cast(M .task_status as INTEGER) = " + statusCode + "\n";
-				   }else{
-					   sql += "AND cast(M .task_status as INTEGER) >= " + IGNORED_STATUS_CODE + "\n";
-				   }
-			   }
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-	   }
-	    sql +="order by (case when G.read_status='未读' then '0' "+
-				             "when G.read_status is NULL then '1' "+ 
-				             "when G.read_status='已查看' then '1'  "+
-				             "else G.read_status end) ASC ,i.release_time DESC";
+//	   String sql = "SELECT\n" +
+//               "\ti.meeting_type AS imeetingtype,\n" +
+//               "\ti.meeting_theme AS imeetingtheme,\n" +
+//               "\ti.inform_id,\n" +
+//               "\ti.remark AS iremark,\n" +
+//               "\ti.deadline_time,\n" +
+//               "\tG .read_status,\n" +
+//               "\tG .pub_org_id,\n" +
+//               "\ti .org_type,\n" +
+//               "\ti.release_time,\n" +
+////               "\tM .meeting_type AS mmeetingtype,\n" +
+////               "\tM .meeting_theme AS mmeetingtheme,\n" +
+////               "\tM .meeting_id,\n" +
+////               "\tM .submit_time,\n" +
+////               "\tcast(M .task_status as INTEGER),\n" +
+//               "\ti.send_branch,\n" +
+//               "\tG .has_resend,\n" +
+//               "\tG .send_to,\n" +
+////               "\tM .organization_id,\n" +
+////               "\tM .place,\n" +
+////               "\tM .remark AS mremark,\n" +
+////               "\tM .remark AS mremark,\n" +
+//               "\ti.start_time AS istarttime,\n" +
+//               "\ti.end_time AS iendtime\n" +
+////               "\tM .start_time AS mstarttime,\n" +
+////               "\tM .end_time AS mendtime,\n" +
+////               "\tM .check_status\n" +
+//               "FROM\n" +
+//               "\t(\n" +
+//               "\t\thg_party_org_inform_info AS i\n" +
+//               "\t\tLEFT JOIN PUBLIC .hg_party_inform_group_info AS G ON G .inform_id = i.inform_id\n" +
+//               "\t\tAND G .pub_org_id = '" + orgId + "'\n" +
+//               "\t\tAND has_resend IS NOT TRUE\n" +
+//               "\t)\n" +
+////               "LEFT JOIN PUBLIC .hg_party_meeting_plan_info AS M ON i.inform_id = M .inform_id\n" +
+////               "AND G .pub_org_id = M .organization_id\n" +
+//               " WHERE\n" +
+//               "\t(\n" +
+//               "\t\tG .pub_org_id = '" + orgId + "' AND has_resend IS NOT TRUE \n" +
+//               "\t\tOR i.org_type = '" + orgId + "'\n" +
+//               "\t)\n" +
+//               "AND (i.public_status = '1' or i.public_status = '2')\n";
+//	   if (!StringUtils.isEmpty(meetingType) ) {
+//		   sql += "AND i.meeting_type = '" + meetingType + "'\n";
+//	   }
+//	   if (!StringUtils.isEmpty(taskStatus)) {
+//		   try {
+//			   int statusCode = Integer.valueOf(taskStatus);
+//			   if(statusCode > 0){
+//				   if (statusCode < IGNORED_STATUS_CODE) {
+//					   sql += "AND cast(M .task_status as INTEGER) = " + statusCode + "\n";
+//				   }else{
+//					   sql += "AND cast(M .task_status as INTEGER) >= " + IGNORED_STATUS_CODE + "\n";
+//				   }
+//			   }
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//	   }
+//	    sql +="order by (case when G.read_status='未读' then '0' "+
+//				             "when G.read_status is NULL then '1' "+
+//				             "when G.read_status='已查看' then '1'  "+
+//				             "else G.read_status end) ASC ,i.release_time DESC";
+	   String sql = "select * from hg_party_meeting_plan_info where" +
+			   " organization_id = ? ";
+
 	    logger.info("sql :" + sql);
 	    String sql1=sql+" limit 8 offset "+(page-1)*8;
 	    Map<String, Object> map=new HashMap<>();
-		List<Map<String,Object>> list=this.jdbcTemplate.queryForList(sql1);
-		List<Map<String,Object>> count=this.jdbcTemplate.queryForList(sql);
+		List<Map<String,Object>> list=this.jdbcTemplate.queryForList(sql1, orgId);
+		List<Map<String,Object>> count=this.jdbcTemplate.queryForList(sql, orgId);
 		int total=count.size();
 		if(total%8==0){
 			map.put("totalPage", total/8);

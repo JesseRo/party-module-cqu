@@ -20,7 +20,12 @@ public class Organization{
 	private String org_relation;
 	private String org_parent;
 	private String org_code;
-	
+
+	private String org_address;
+	private String org_fax;
+	private String org_email;
+	private String org_contactor_phone;
+
 	public String getOrg_code() {
 		return org_code;
 	}
@@ -49,7 +54,12 @@ public class Organization{
 					&& Objects.equals(org_relation, other.org_relation) 
 					&& Objects.equals(org_unit_code, other.org_unit_code) 
 					&& Objects.equals(org_unit_party_situation, other.org_unit_party_situation)
-					&& Objects.equals(org_parent, other.org_parent);
+					&& Objects.equals(org_parent, other.org_parent)
+					&& Objects.equals(org_address, other.org_address)
+					&& Objects.equals(org_fax, other.org_fax)
+					&& Objects.equals(org_email, other.org_email)
+					&& Objects.equals(org_contactor_phone, other.org_contactor_phone)
+					;
 		}else {
 			return super.equals(obj);
 		}
@@ -158,4 +168,35 @@ public class Organization{
 				+ ", org_code=" + org_code + ", historic=" + historic + "]";
 	}
 
+	public String getOrg_address() {
+		return org_address;
+	}
+
+	public void setOrg_address(String org_address) {
+		this.org_address = org_address;
+	}
+
+	public String getOrg_fax() {
+		return org_fax;
+	}
+
+	public void setOrg_fax(String org_fax) {
+		this.org_fax = org_fax;
+	}
+
+	public String getOrg_email() {
+		return org_email;
+	}
+
+	public void setOrg_email(String org_email) {
+		this.org_email = org_email;
+	}
+
+	public String getOrg_contactor_phone() {
+		return org_contactor_phone;
+	}
+
+	public void setOrg_contactor_phone(String org_contactor_phone) {
+		this.org_contactor_phone = org_contactor_phone;
+	}
 }

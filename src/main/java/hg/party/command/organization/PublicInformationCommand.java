@@ -191,6 +191,7 @@ public class PublicInformationCommand extends BaseMVCActionCommand {
                     transactionUtil.rollback();
                     throw e;
                 }
+                /* 发送短信通知
                 if ("1".equals(state) && !"orgEdit".equals(editState)) {
                     String sms = String.format("【西南大学党务工作信息平台通知】\r\n各二级党组织：请研究部署%s。\r\n主题：%s\r\n时间：%s-%s\r\n申报计划截止时间： %s\r\n党委组织部\r\n%s",
                             p.getMeeting_type(), p.getMeeting_theme(), startDate, end_time.substring(11), deadline_time, dateFormat.format(p.getRelease_time()));
@@ -202,6 +203,7 @@ public class PublicInformationCommand extends BaseMVCActionCommand {
                     List<String> numbers = orgDao.findAdminPhoneNumberIn(Arrays.asList(str));
                     SmsService.smsSend(resourceid, sms, numbers);
                 }
+                */
 
                 if ("resend".equals(editState)) {
                     actionResponse.sendRedirect("/web/guest/backlogtwo");

@@ -34,6 +34,7 @@ import hg.party.entity.organization.Organization;
 import hg.party.entity.party.Hg_Value_Attribute_Info;
 import hg.party.server.dwonlistserver.DownListServer;
 import party.constants.PartyPortletKeys;
+import party.portlet.unit.UnitDao;
 
 /**
  * @author Jesse
@@ -63,6 +64,8 @@ public class PersonAddPortlet extends MVCPortlet {
 	private MemberDao memberDao;
 	@Reference
 	private DownListServer server;
+	@Reference
+	private UnitDao unitDao;
 	
 	public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
 			throws IOException, PortletException {
@@ -112,6 +115,7 @@ public class PersonAddPortlet extends MVCPortlet {
 		renderRequest.setAttribute("positior",po);
 		renderRequest.setAttribute("room",ro);
 		renderRequest.setAttribute("role",role);
+		renderRequest.setAttribute("units", unitDao.findAll());
 		String uuid=UUID.randomUUID().toString();
 		SessionManager.setAttribute(sessionId, "addperson-formId", uuid);
 		renderRequest.setAttribute("addpersonformid",uuid);

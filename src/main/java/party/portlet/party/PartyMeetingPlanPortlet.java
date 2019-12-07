@@ -10,6 +10,7 @@ import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import dt.session.SessionManager;
 import org.apache.log4j.Logger;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -56,6 +57,7 @@ public class PartyMeetingPlanPortlet extends MVCPortlet{
 	public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
 			throws IOException, PortletException {
 		try{
+			String org = (String) SessionManager.getAttribute(renderRequest.getRequestedSessionId(), "department");
 			String informId = ParamUtil.getString(renderRequest, "informId");//通知id
 			informId = HtmlUtil.escape(informId);
 			HttpServletRequest request = PortalUtil.getHttpServletRequest(renderRequest);
@@ -83,25 +85,54 @@ public class PartyMeetingPlanPortlet extends MVCPortlet{
 			
 			
 			if(!"".equals(meeting_id) && null != meeting_id){
-				
-				String sql = "select tt.*, us.user_name as check_person_us  from "+
-						"(SELECT note.attachment AS attachment_n,plan.id as plan_id,plan.meeting_id as meeting,info.meeting_theme as theme_,org.org_id as org_id_u, "+
-						"info.start_time as start_,info.end_time as end_,plan.start_time as start_p,plan.end_time as end_p,* from "+
-						"((((hg_party_org_inform_info as info LEFT JOIN hg_party_inform_group_info as gr ON "+
-						"info.inform_id = gr.inform_id) "+
-						"LEFT JOIN  hg_party_meeting_plan_info as plan on "+
-						"gr.inform_id = plan.inform_id and gr.pub_org_id = plan.organization_id) "+
-						"LEFT JOIN hg_party_meeting_notes_info as note on "+
-						"plan.meeting_id = note.meeting_id) LEFT JOIN hg_party_org as org on "+
-						"org.org_id = gr.pub_org_id) LEFT JOIN hg_users_info as usr on "+
-						"usr.user_id = auditor "+
-						"where info.inform_id = ? "+
-						"AND org.org_type='branch' "+
-						"and org.historic is false "+
-						"ORDER BY read_status, plan.start_time DESC ) as tt "+
-						"LEFT OUTER JOIN hg_users_info as us "+
-			            "on tt.check_person=us.user_id ";
-				Map<String, Object> postgresqlResults = partyMeetingPlanInfo.postGresqlFind(pageNo, pageSize, sql, meeting_id);
+//
+//				String sql = "select tt.*, us.user_name as check_person_us  from "+
+//						"(SELECT note.attachment AS attachment_n,plan.id as plan_id,plan.meeting_id as meeting,info.meeting_theme as theme_,org.org_id as org_id_u, "+
+//						"info.start_time as start_,info.end_time as end_,plan.start_time as start_p,plan.end_time as end_p,* from "+
+//						"((((hg_party_org_inform_info as info LEFT JOIN hg_party_inform_group_info as gr ON "+
+//						"info.inform_id = gr.inform_id) "+
+//						"LEFT JOIN  hg_party_meeting_plan_info as plan on "+
+//						"gr.inform_id = plan.inform_id and gr.pub_org_id = plan.organization_id) "+
+//						"LEFT JOIN hg_party_meeting_notes_info as note on "+
+//						"plan.meeting_id = note.meeting_id) LEFT JOIN hg_party_org as org on "+
+//						"org.org_id = gr.pub_org_id) LEFT JOIN hg_users_info as usr on "+
+//						"usr.user_id = auditor "+
+//						"where info.inform_id = ? "+
+//						"AND org.org_type='branch' "+
+//						"and org.historic is false "+
+//						"ORDER BY read_status, plan.start_time DESC ) as tt "+
+//						"LEFT OUTER JOIN hg_users_info as us "+
+//			            "on tt.check_person=us.user_id ";
+
+				String sql = "SELECT\n" +
+						"\tnote.attachment AS attachment_n,\n" +
+						"-- \tgr.inform_id AS informid,\n" +
+						"\tplan.meeting_id AS meeting,\n" +
+						"\tplan.ID AS plan_id,\n" +
+						"-- \tinfo.meeting_theme AS theme_,\n" +
+						"\torg.org_id AS org_id_u,\n" +
+						"-- \tinfo.start_time AS start_,\n" +
+						"-- \tinfo.end_time AS end_,\n" +
+						"\tplan.start_time AS start_p,\n" +
+						"\tplan.end_time AS end_p,\n" +
+						"-- \torgs.org_name AS org_names,\n" +
+						"\torg.org_name AS org_namez,* \n" +
+						"FROM\n" +
+						"\thg_party_meeting_plan_info AS plan \n" +
+						"\tLEFT JOIN hg_party_meeting_notes_info AS note ON plan.meeting_id = note.meeting_id \n" +
+						"\tLEFT JOIN hg_party_org AS org ON org.org_id = plan.organization_id \n" +
+						"\tLEFT JOIN hg_users_info as users on users.user_id = plan.check_person\n" +
+						"\tWHERE\n" +
+						"\t\torg.org_type = 'brunch' and org.org_parent = ?\t\n" +
+						"\t\tAND org.historic IS FALSE \n" +
+						"\t\tAND (\n" +
+						"\t\tplan.task_status = '5' \n" +
+						"\t\tOR plan.task_status = '6' \n" +
+						"\t\tOR plan.task_status = '7' \n" +
+						")\n" +
+						"ORDER BY\n" +
+						"\t\tplan.task_status asc";
+				Map<String, Object> postgresqlResults = partyMeetingPlanInfo.postGresqlFind(pageNo, pageSize, sql, org);
 				list = (List<Map<String, Object>>) postgresqlResults.get("list");//获取集合
 				
 				String meeting_Id = "";

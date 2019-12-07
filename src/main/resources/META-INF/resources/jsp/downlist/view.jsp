@@ -11,104 +11,140 @@
      th,td{
          text-align: left;
      }
-     .form-group {
-         margin-top: 20px;
-     }
+	 .content_table thead tr{
+		 background: #F6F8FC;
+		 height: 48px;
+		 font-size: 16px;
+	 }
+	 .content_table thead th{
+		 padding: 5px 15px !important;
+	 }
+	 .content_table tr:nth-child(2n) {
+		 background: #FBFCFE;
+	 }
+	 .content_table td{
+		 min-width: 130px;
+		 padding: 5px 15px !important;
+		 height: 48px;
+		 font-size: 14px;
+	 }
+	   .dropdown_table_container.content_table_container{
+		   height: calc(100% - 60px);
+	   }
    </style>
 </head>
 <body>
-	<portlet:actionURL name="/asset/delDevice" var="delDevie"></portlet:actionURL>
-		<div class="content_form">
-				<portlet:actionURL var="findTitleURL" name="/listfindtitlecommand">
-				</portlet:actionURL>
-			<form class="form-horizontal" role="form" action="${findTitleURL }" method="post">
-				<div class="content_title hidden-xs">
-    			      下拉值维护
-      			</div>
-            	<div class="form-group">
-				  <div class="col-sm-6 col-xs-12">
-                   	<div class="col-sm-10 col-xs-9">
-						<input name="title" type="text" id="title" placeholder="请输入下拉值类型"  class="form_datetime form-control" value="${title }" name="title"/>
-                    </div>
-               	  </div>
-			    
-	    		<div class="btn_group">
-					<button class="btn btn-default main_color_btn search_btn col-sm-1 col-xs-3" type="submit">查询</button>
-						<span class="col-xs-1 visible-xs"></span>
-						<portlet:renderURL var="addInfoUrl">
-							<portlet:param name="mvcRenderCommandName" value="/asset/addDeviceRender" />
-						</portlet:renderURL>
-					<a href="${addInfoUrl}">
-						<button class="btn btn-default main_color_btn search_btn col-sm-1 col-xs-3" id="new_table">新增</button>
-					</a>
-	      	  	</div>
-	      	  	</div>
-          	 </form>   
-		<div class="content_table_container ">
-			<table class="content_table" >
-				<thead class="table_title">
-					<tr>
-						<th hidden="hidden">id</th>
-						<th>下拉值ID</th>
-						<th>下拉值</th>
-						<th>下拉值类型</th>
-						<th>备注</th>
-						<th>操作</th>
-					</tr>
-				</thead>
-				
-				 <tbody class="table_info">
-                	<c:forEach items="${list}" var="list">
-					<tr>
-						    <td class="data_id" hidden="hidden" >${list.id}</td>
-	                        <td >${list.resources_key }</td>
-	                        <td >${list.resources_value }</td>
-	                        <td >${list.resources_type }</td>
-	                        <td >${list.remark }</td>
-	                        <td class="operation">
-								<portlet:renderURL var="updateDevice">
-								   <portlet:param name="mvcRenderCommandName" value="/asset/addOrUpdateDeviceRender" />
-								   <portlet:param name="id" value="${ list.id }"/>
-								</portlet:renderURL>
-								<c:if  test="${userId eq list.user_id}">
-								<a href="${updateDevice}">
-									<button type="button" class="btn btn-default td_assign_btn" data-toggle="modal"><span class="glyphicon glyphicon-pencil" ></span>&nbsp;
-										编辑
-									</button>
-								</a>
-									<input class="input_del" name="deldevie" value="${list.id} " type="hidden"/>
-									<button type="button" class="btn btn-default td_assign_btn del_btn" data-toggle="modal" onclick="del(${list.id});">
-										&nbsp;删除
-									</button>
-						   	  </c:if>
-							</td>
-						</tr>
-					</c:forEach>
-				</tbody>
-				
-			</table>
-			
+<%--<div class="table_form_content activity_manage_container">--%>
+	<!-- 右侧盒子内容 -->
+<div class="table_form_content">
+	<div class="activity_manage_page">
+		<div class="breadcrumb_group">
+			当前位置：
+			<span class="layui-breadcrumb" lay-separator=">">
+                <a href="javascript:;">系统管理</a>
+                <a href="javascript:;">下拉值管理</a>
+            </span>
 		</div>
-		<div class="pagination_container">
-		<ul class="pagination" id="page"></ul>
-		<div class="pageJump">
-			<input class='current_page' type="hidden" value="${pageNo}"/>
-			<p>共<span class="total_page">${sum }</span>页</p>
-			<portlet:actionURL name="/PageNoMVCActionCommand" var="pageNoUrl">
+		<div class="bg_white_container">
+			<portlet:actionURL name="/asset/delDevice" var="delDevie"></portlet:actionURL>
+			<portlet:actionURL var="findTitleURL" name="/listfindtitlecommand">
 			</portlet:actionURL>
-			<form action="${pageNoUrl }" id="getPageNo" method="post">
-				<input type="hidden" id="pageNo" name="pageNo" value=""/>
-				<input type="hidden" name="Site" value="${Site }"/>
-				<input type="hidden" name="Column" value="${Column }"/>
-				<input type="hidden" id="total_page_" name="total_page_" value="${sum}"/>
-				<span>跳转到第</span>
-				<input type="text" id="jumpPageNo" name="jumpPageNo"/>
-				<span>页</span>
-				<button type="submit" class="button">确定</button>
+			<form class="form-horizontal" role="form" action="${findTitleURL }" method="post">
+				<div class="form-group">
+					<div class="col-sm-3 col-xs-12">
+						<div class="col-sm-12 col-xs-9">
+							<select name="title" type="text" id="title" placeholder="请输入下拉值类型"  class="form_datetime form-control"  name="title">
+								<option disabled>请输入下拉值类型</option>
+								<option value="">全部类型</option>
+								<option value="meetingType">活动类型</option>
+								<option value="reason">驳回原因</option>
+								<option value="taskStatus">任务状态</option>
+								<option value="positior">党内职务</option>
+								<option value="room">学生宿舍园区</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="btn_group">
+						<button class="btn btn-default main_color_btn search_btn col-sm-1 col-xs-3" type="submit" style="display: none;">查询</button>
+							<span class="col-xs-1 visible-xs"></span>
+							<portlet:renderURL var="addInfoUrl">
+								<portlet:param name="mvcRenderCommandName" value="/asset/addDeviceRender" />
+							</portlet:renderURL>
+						<a href="${addInfoUrl}">
+							<button class="layui-btn" id="new_table" style="padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;background-color: #FFAB33;border-radius: 4px;">新增</button>
+						</a>
+					</div>
+				</div>
 			</form>
+
+			<div class="content_table_container dropdown_table_container">
+				<div class="table_outer_box">
+					<ul class="fixed_thead">
+						<li style="display: none">id</li>
+						<li style="width:10%">下拉值ID</li>
+						<li style="width:10%">下拉值</li>
+						<li style="width:10%">下拉值类型</li>
+						<li style="width:40%">备注</li>
+						<li style="width:30%">操作</li>
+					</ul>
+					<div class="table_scroll_box">
+						<table class="content_table" style="width: 100%;">
+						<tbody class="table_info">
+							<c:forEach items="${list}" var="list">
+							<tr>
+								<td class="data_id" hidden="hidden" >${list.id}</td>
+								<td >${list.resources_key }</td>
+								<td >${list.resources_value }</td>
+								<td >${typeMapping[list.resources_type] }</td>
+								<td >${list.remark }</td>
+								<td class="operation">
+									<portlet:renderURL var="updateDevice">
+									   <portlet:param name="mvcRenderCommandName" value="/asset/addOrUpdateDeviceRender" />
+									   <portlet:param name="id" value="${ list.id }"/>
+									</portlet:renderURL>
+		<%--							<c:if  test="${userId eq list.user_id}">--%>
+									<a href="${updateDevice}">
+										<button type="button" class="btn btn-default td_assign_btn" data-toggle="modal"><span class="glyphicon glyphicon-pencil" ></span>&nbsp;
+											编辑
+										</button>
+									</a>
+										<input class="input_del" name="deldevie" value="${list.id} " type="hidden"/>
+										<button type="button" class="btn btn-default td_assign_btn del_btn" data-toggle="modal" onclick="del(${list.id});">
+											&nbsp;删除
+										</button>
+		<%--						  </c:if>--%>
+								</td>
+							</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+					</div>
+				</div>
+				<div class="pagination_container">
+					<ul class="pagination" id="page"></ul>
+					<div class="pageJump">
+						<input class='current_page' type="hidden" value="${pageNo}"/>
+						<p>共<span class="total_page">${sum }</span>页</p>
+						<portlet:actionURL name="/PageNoMVCActionCommand" var="pageNoUrl">
+							<portlet:param name="title" value="${title }"/>
+						</portlet:actionURL>
+						<form action="${pageNoUrl }" id="getPageNo" method="post">
+							<input type="hidden" id="pageNo" name="pageNo" value=""/>
+							<input type="hidden" name="Site" value="${Site }"/>
+							<input type="hidden" name="Column" value="${Column }"/>
+							<input type="hidden" id="total_page_" name="total_page_" value="${sum}"/>
+							<span>跳转到第</span>
+							<input type="text" id="jumpPageNo" name="jumpPageNo"/>
+							<span>页</span>
+							<button type="submit" class="button">确定</button>
+						</form>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
-	</div>
+</div>
 </body>
  <script>
  /* $(".del_btn").click(function(){
@@ -167,6 +203,10 @@
 	             }
 	         }
 	     });
+			$('#title').change(function () {
+				$('.form-horizontal').submit();
+			});
+			$('#title').val('${title}');
 	  });
     	
     	

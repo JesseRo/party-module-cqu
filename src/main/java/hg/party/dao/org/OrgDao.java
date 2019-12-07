@@ -451,4 +451,16 @@ public class OrgDao extends PostgresqlDaoImpl<Organization>{
 		map.put("list",list);
 	   return map;
 	}
+
+	public void updateDetail(Organization organization) {
+		String sql = "update hg_party_org set org_name = ?," +
+				"org_address = ?, org_phone_number = ?, org_fax = ?," +
+				"org_secretary = ?, org_email = ?, org_contactor = ?," +
+				"org_contactor_phone = ? where id = ?";
+
+		jdbcTemplate.update(sql, organization.getOrg_name(), organization.getOrg_address(),
+				organization.getOrg_phone_number(), organization.getOrg_fax(), organization.getOrg_secretary(),
+				organization.getOrg_email(), organization.getOrg_contactor(), organization.getOrg_contactor_phone(),
+				organization.getId());
+	}
 }

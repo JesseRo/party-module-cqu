@@ -59,7 +59,8 @@
                         <th>导航等级</th>
                         <th>显示位置</th>
                         <th>角色权限</th>
-                        <th>操作</th>
+						<th>顺序</th>
+						<th>操作</th>
                     </tr>
                 </thead>
                 <tbody class="table_info">
@@ -69,6 +70,7 @@
                         <td data-label="导航等级"> ${info.level }</td>
                         <td data-label="显示位置">${info.location }</td>
                         <td data-label="角色权限">${info.role }</td>
+						<td data-label="角色权限">${info.sort }</td>
                       <td data-label="操作">
 							<portlet:renderURL var="updateNavigationUrl">
 								<portlet:param name="mvcRenderCommandName" value="/navigation/updateNavigation" />

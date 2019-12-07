@@ -33,8 +33,8 @@ public class PartyMeetingPlanInfo {
 		return partyMeetingPlanInfo.postGresqlFind(pageNo, pageSize, sql);
 	}
 	//查询二级党委进度分页
-	public Map<String, Object> postGresqlFind(int pageNo, int pageSize,String sql,String department,String ss){
-		return partyMeetingPlanInfo.postGresqlFind(pageNo, pageSize, sql, department ,ss);
+	public Map<String, Object> postGresqlFind(int pageNo, int pageSize,String sql,String...ss){
+		return partyMeetingPlanInfo.postGresqlFind(pageNo, pageSize, sql, ss);
 	}
 	//根据会议id查询二级党委、
 	public List<MeetingPlan> meetingId(String meetingid){

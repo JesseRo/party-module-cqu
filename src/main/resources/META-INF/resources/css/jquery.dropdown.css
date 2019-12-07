@@ -221,8 +221,8 @@
   color: #999;
   display: block;
   text-indent: 10px;
-  font-size: 13px;
-  line-height: 32px
+  font-size: 16px;
+  line-height: 40px
 }
 
 .dropdown-display input {
@@ -363,7 +363,7 @@
   float: right;
   width: 10px;
   height: 10px;
-  background: #4AB1E9;
+  background: #FFAB33;
   border-radius: 100%;
   margin: 8px 5px 0 0
 }

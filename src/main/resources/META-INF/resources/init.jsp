@@ -12,7 +12,7 @@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 <script type="text/javascript" src="${basePath }/js/zTre/jquery.ztree.core.js"></script> 
 <script type="text/javascript" src="${basePath }/js/ajaxfileupload/ajaxfileupload.js"></script>
 <script type="text/javascript" src="${basePath}/js/bootstrap3-validation.js"></script>
-<script type="text/javascript" src="${basePath}/js/bootstrap.min.js"></script> 
+<%--<script type="text/javascript" src="${basePath}/js/bootstrap.min.js"></script> --%>
 <script type="text/javascript" src="${basePath}/js/partyModal.js"></script>
 <liferay-theme:defineObjects />
 

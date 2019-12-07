@@ -7,6 +7,7 @@ import javax.portlet.Portlet;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import hg.util.ConstantsKey;
 import org.apache.log4j.Logger;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -18,6 +19,8 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import dt.session.SessionManager;
 import hg.party.server.dwonlistserver.DownListServer;
 import party.constants.PartyPortletKeys;
+
+import static hg.util.ConstantsKey.DROPDOWN_TYPES_MAPPING;
 
 @Component(
 		immediate = true,
@@ -63,22 +66,27 @@ public class DownListPortlet extends MVCPortlet {
 			//根据sql获取结果集和分页
 //			String sql = "SELECT * FROM hg_value_attribute_info ORDER BY id desc";
 			String sql = "SELECT * FROM hg_value_attribute_info "+
-						"WHERE resources_type !='taskStatus' "+
-						"ORDER BY id desc ";	
-			//根据搜索内容查询
+					"WHERE resources_type in ('" + String.join("','", DROPDOWN_TYPES_MAPPING.keySet()) +
+					"') ORDER BY id desc ";
+				//根据搜索内容查询
 			logger.info("sou suo doView........");
 			String title=ParamUtil.getString(req, "title");
 			title =	HtmlUtil.escape(title);
 			logger.info(title);
 			Map<String, Object> postgresqlResults = listServer.postGresqlFind(pageNo,pageSize,sql);
 			if(title != null && !"".equals(title)){
-				sql = "SELECT * FROM hg_value_attribute_info where resources_type !='taskStatus' and resources_type LIKE ? OR resources_value LIKE ? OR resources_key LIKE ? ORDER BY id desc";
-				postgresqlResults = listServer.postGresqlFind(pageNo,pageSize,sql,"%"+title+"%","%"+title+"%","%"+title+"%");
+				sql = "SELECT * FROM hg_value_attribute_info" +
+						" where " +
+//						"resources_type !='taskStatus' and " +
+						"resources_type = ? ORDER BY id desc";
+				postgresqlResults = listServer.postGresqlFind(pageNo,pageSize,sql,title);
 			}
 			
 			List<Map<String, Object>> list = (List<Map<String, Object>>) postgresqlResults.get("list");//获取集合
 			int sum = (int) postgresqlResults.get("totalPage");//获取总页码
-						
+
+			req.setAttribute("typeMapping", DROPDOWN_TYPES_MAPPING);
+			req.setAttribute("title", title);
 			req.setAttribute("list", list);      //发送查询数据		
 			req.setAttribute("pageNo", pageNo); //发送当前页码
 			req.setAttribute("sum", sum);      //发送总页码

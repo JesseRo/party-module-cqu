@@ -141,33 +141,56 @@
 		</script>
 	</head>
 	<body>
-        <div class="content_title">
-            <label>数据上报</label>
-        </div>
-        <div class="content_form">
-            <iframe name="forUpload" style="display: none;"></iframe>
-            <form class="form-horizontal" role="form" action="${upload }" method="post" target="forUpload" enctype="multipart/form-data">
-                <div id="hg-form-container" class="form-group">
-                    <c:forEach var="f" items="${fileViews}" varStatus="varStatus">
-                        <div class="col-sm-12 col-xs-12">
-                            <div class="col-sm-6 col-xs-12">
-                                <div class="col-sm-3 col-xs-3 ">
-                                    <span class="control-label form-label-required">文档${varStatus.count}：</span>
-                                </div>
-                                <div class="col-sm-9 col-xs-9">
-                                    <input class="form-control" name="files" type="file">
+    <div class="table_form_content">
+        <!-- 右侧盒子内容 -->
+        <div class="activity_manage_page">
+            <div class="breadcrumb_group" style="margin-bottom: 20px;">
+                当前位置：
+                <span class="layui-breadcrumb" lay-separator=">">
+					<a href="javascript:;">数据报送</a>
+					<a href="javascript:;">数据上报</a>
+				</span>
+            </div>
+            <div class="bg_white_container">
+            <div class="content_form" style="padding: 20px 0;">
+                <iframe name="forUpload" style="display: none;"></iframe>
+                <form class="form-horizontal" role="form" action="${upload }" method="post" target="forUpload" enctype="multipart/form-data">
+                    <div id="hg-form-container" class="form-group">
+                        <c:forEach var="f" items="${fileViews}" varStatus="varStatus">
+                            <div class="col-sm-12 col-xs-12" style="margin-bottom: 20px;">
+                                <div class="col-sm-6 col-xs-12">
+                                    <div class="col-sm-3 col-xs-3 ">
+                                        <span class="control-label form-label-required">文档${varStatus.count}：</span>
+                                    </div>
+                                    <div class="col-sm-9 col-xs-9">
+                                        <input class="form-control" name="files" type="file" style="text-indent: inherit;">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </c:forEach>
-                    <input id="taskId" type="hidden" name="taskId" value="${taskId}"/>
-                    <input id="submit" type="submit" style="display:none;"/>
-                    <input id="formId" type="hidden" name="formId" value="${formId}"/>
+                        </c:forEach>
+                        <input id="taskId" type="hidden" name="taskId" value="${taskId}"/>
+                        <input id="submit" type="submit" style="display:none;"/>
+                        <input id="formId" type="hidden" name="formId" value="${formId}"/>
 
-                    <button id="send" type="button" class="btn btn-default col-sm-2 col-xs-4" style="margin-left: 12%; ">上报 </button>
-                    <button id="cancel" type="button" class="btn btn-default col-sm-2 col-xs-4" style="margin-left: 45%;">取消 </button>
-                 </div>
-            </form>
+                        <div class="layui-inline btn_group" style="width: calc(50% - 120px);margin: 0;margin-top: 10px;">
+                            <label class="layui-form-label"></label>
+                            <div class="layui-input-inline">
+                                <button id="send" type="button" class="layui-btn" lay-submit="" lay-filter="partyMemForm" style="padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;background-color: #FFAB33;border-radius: 4px;">
+                                    上报
+                                </button>
+                                <button id="cancel" type="button" class="layui-btn layui-btn-primary" style="background-color: transparent;color: #666;padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;border-radius: 4px;">
+                                    取消
+                                </button>
+                            </div>
+                        </div>
+<%--                        <button id="send" type="button" class="btn btn-default col-sm-2 col-xs-4" style="margin-left: 12%; ">上报 </button>--%>
+<%--                        <button id="cancel" type="button" class="btn btn-default col-sm-2 col-xs-4" style="margin-left: 45%;">取消 </button>--%>
+                    </div>
+                </form>
+            </div>
+            </div>
         </div>
+
+    </div>
 	</body>
 </html>

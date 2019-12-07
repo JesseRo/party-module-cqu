@@ -3,6 +3,8 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <portlet:resourceURL id="/org/memberGroup" var="candidate" />
 <portlet:resourceURL id="/org/adminSave" var="adminSave" />
+<portlet:resourceURL id="/org/detail" var="detail" />
+<portlet:resourceURL id="/org/edit" var="edit" />
 <portlet:resourceURL id="/org/admin/orgadmin" var="orgadmin" />
 
 <head>
@@ -10,6 +12,9 @@
     <link rel="stylesheet" href="${basePath}/css/account_manage.css"/>
     <link rel="stylesheet" href="${basePath}/css/jquery.dropdown.css"/>
     <script type="text/javascript" src="${basePath}/js/jquery.dropdown.js?v=11"></script>
+    <link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/party-info-manage.min.css"/>
+    <link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/common.min.css"/>
+      <link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/change-party-member.min.css" />
 
 <style>
 @media ( min-width : 768px) {
@@ -22,15 +27,17 @@
 	}
 	.main_content .min_width_1200 .nav_list .party_organization_list li {
 		cursor: pointer;
-		height: 27px;
+		height: 40px;
 	}
 	.main_content .min_width_1200 .nav_list .party_organization_list li .first_menu
-		{
-		padding-bottom: 5px;
-		border-bottom: 1px solid #e1e1e1;
-		color: #666;
-		font-size: 16px;
-	}
+    {
+        padding-bottom: 0;
+        border-bottom: none;
+        color: #333;
+        font-size: 16px;
+        padding: 0 20px;
+        line-height: 48px;
+    }
 	.main_content .min_width_1200 .nav_list .party_organization_list li .dropdown_icon
 		{
 		width: 9px;
@@ -41,21 +48,69 @@
 		{
 		margin: 12px 0;
 	}
-	.main_content .min_width_1200 .nav_list .party_organization_list li .second_menu>li>a
-		{
-		padding-left: 24px;
-		box-sizing: border-box;
-		font-size: 14px;
-		width: 100%;
-		height: 100%;
-		display: inline-block;
-		text-decoration: none;
-	}
-	.main_content .min_width_1200 .nav_list .party_organization_list li .second_menu>li>a:hover
-		{
-		color: #fff;
-		background-color: #ce0000;
-	}
+	/*.main_content .min_width_1200 .nav_list .party_organization_list li .second_menu>li>a*/
+    /*{*/
+	/*	padding-left: 24px;*/
+	/*	box-sizing: border-box;*/
+	/*	font-size: 14px;*/
+	/*	width: 100%;*/
+	/*	height: 100%;*/
+	/*	display: inline-block;*/
+	/*	text-decoration: none;*/
+    /*    white-space: nowrap;*/
+    /*    text-overflow: ellipsis;*/
+    /*    overflow: hidden;*/
+    /*    color: #333;*/
+	/*}*/
+    .main_content .min_width_1200 .nav_list .party_organization_list li .second_menu > li > a {
+        padding-left: 44px;
+        box-sizing: border-box;
+        font-size: 14px;
+        width: 100%;
+        height: 100%;
+        display: inline-block;
+        text-decoration: none;
+    }
+    .main_content .min_width_1200 .nav_list .party_organization_list li .second_menu > li {
+        margin: 12px 0;
+    }
+    .main_content .min_width_1200 .nav_list .party_organization_list .second_menu_on .third_menu a{
+        font-size: 14px;
+    }
+    .main_content .min_width_1200 .nav_list .party_organization_list .second_menu_on .third_menu a:hover{
+        background-color: #fff;
+        color: #333;
+    }
+    .main_content .min_width_1200 .nav_list .party_organization_list .second_menu_on .third_menu_on a{
+        background-color: #fff;
+        color: #333;
+    }
+    .main_content .min_width_1200 .nav_list .party_organization_list li .second_menu > li > a:hover .second_menu_on{
+        border-left-color:#999;
+    }
+    .main_content .min_width_1200 .nav_list .party_organization_list li .second_menu > li > a:hover {
+        color: #333;
+        background-color: transparent;
+    }
+
+    .main_content .min_width_1200 .nav_list .party_organization_list li .second_menu .second_menu_on > a {
+        color: #333;
+        background-color: #fff;
+    }
+    .main_content .min_width_1200 .nav_list .party_organization_list .second_menu .third_menu a {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        padding-left: 74px;
+    }
+    .second_menu > li > a{
+        height: 20px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .party_organization_list a{
+        color: #333;
+    }
 	/*  .main_content .min_width_1200 .nav_list .party_organization_list li .second_menu .second_menu_on > a {
     color: #fff;
     background-color: #ce0000;
@@ -94,6 +149,8 @@
 }
 
 @media ( max-width : 768px) {
+
+}
 	body {
 		background: #fff;
 	}
@@ -119,14 +176,6 @@
 		cursor: pointer;
 		height: 27px;
 	}
-	.main_content .min_width_1200 .nav_list .party_organization_list li .first_menu
-		{
-		padding: 0 3px;
-		padding-bottom: 5px;
-		border-bottom: 1px solid #e1e1e1;
-		color: #666;
-		font-size: 13px;
-	}
 	.main_content .min_width_1200 .nav_list .party_organization_list li .dropdown_icon
 		{
 		width: 9px;
@@ -139,36 +188,24 @@
 	}
 	.main_content .min_width_1200 .nav_list .party_organization_list li .second_menu>li>a
 		{
-		padding-left: 10px;
-		box-sizing: border-box;
-		font-size: 12px;
-		width: 100%;
-		height: 100%;
-		display: inline-block;
-		text-decoration: none;
-		color: #999;
+        padding-left: 44px;
+        box-sizing: border-box;
+        font-size: 14px;
+        width: 100%;
+        height: 34px;
+        line-height: 34px;
+        display: inline-block;
+        text-decoration: none;
 	}
-	.main_content .min_width_1200 .nav_list .party_organization_list li .second_menu>li>a:hover
-		{
-		color: #fff;
-		background-color: #ce0000;
-	}
-	/*  .main_content .min_width_1200 .nav_list .party_organization_list li .second_menu .second_menu_on > a {
-    color: #fff;
-    background-color: #ce0000;
-  }   */
-}
 
 .main_content .min_width_1200 .nav_list .party_organization_list .dropdown_up
-	{
-	width: 5px;
-	margin: 6px 0;
+{
+    transform: rotate(-90deg);
 }
 
 .main_content .min_width_1200 .nav_list .party_organization_list .dropdown_down
 	{
-	width: 9px;
-	margin: 8px 0;
+    transform: none;
 }
 
 @media ( min-width : 768px) {
@@ -260,8 +297,39 @@ button#add_submit {
 	margin-top: 30px;
 	margin-right: 50px;
 }
+
+.main_content .min_width_1200 .nav_list {
+    float: left;
+    width: 14.16vw;
+    height: 83.4vh;
+    background: #EAEEF5;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
 .btn_group {
     display: none;
+}
+.party_member_container.form_content .custom_form .layui-inline .layui-form-label {
+    margin-bottom: 0;
+}
+.admin_set{
+    margin: 48px 0 0 32px;
+    font-size: 16px;
+    height: 40px;
+}
+.admin_set .dropdown-display{
+    height: 40px;
+    line-height: 26px;
+}
+.admin_set .control-label{
+    height: 100%;
+    line-height: 40px;
+    width: 80px;
+    float: left;
+}
+.btn_container{
+    clear: both;
+    margin-left: 136px;
 }
 </style>
 <script type="text/javascript">
@@ -283,18 +351,42 @@ button#add_submit {
 			}
 		}
 
+		function orgDetail(){
+		    $.post('${detail}', {id:$('#title').next().val()}, function (res) {
+                if(res.result){
+                    $('input[name="orgName"]').val(res.data.org_name);
+                    $('input[name="address"]').val(res.data.org_address);
+                    $('input[name="contactNumber"]').val(res.data.org_phone_number);
+                    $('input[name="fax"]').val(res.data.org_fax);
+                    $('input[name="secretary"]').val(res.data.org_secretary);
+                    $('input[name="email"]').val(res.data.org_email);
+                    $('input[name="contactor"]').val(res.data.org_contactor);
+                    $('input[name="contactorNumber"]').val(res.data.org_contactor_phone);
+                }else {
+                    alert("未知错误");
+                }
+            })
+        }
+
 		$(".first_menu").click(function() {
 			$(this).parents("li").toggleClass("height_auto");
 			var _target = $(this).find("img");
 			if (_target.hasClass("dropdown_up")) {
 				_target.removeClass("dropdown_up").addClass("dropdown_down");
-				_target.attr("src", "${basePath}/images/dropdown_icon.png");
+				<%--_target.attr("src", "${basePath}/images/dropdown_icon.png");--%>
 			} else {
 				_target.removeClass("dropdown_down").addClass("dropdown_up");
-				_target.attr("src", "${basePath}/images/second_menu_up.png");
+				<%--_target.attr("src", "${basePath}/images/second_menu_up.png");--%>
 			}
 			orgId = $(this).parent().attr('org-id');
 			var orgType = $(this).parent().attr('org-type');
+
+            $('#second_title').hide();
+            $('#second_title').prev('span').hide();
+            $('#third_title').hide();
+            $('#third_title').prev('span').hide();
+            $('#first_title').show().text($(this).text());
+
 			$('#title').text($(this).text());
 			$('#title').next().val(orgId);
 			$('#title').attr("org_type", orgType);
@@ -304,47 +396,54 @@ button#add_submit {
 			$("#org_edit").hide();
 			$("#org_delete").hide();
 			orgMember(orgId, orgType);
+			orgDetail();
 		});
 		//二级菜单下拉
 		$(".second_menu").on("click",">li>a",function() {
-					if ($(this).siblings("ul").length == 0) {
-						$(".third_menu li").removeClass("third_menu_on");
-						$(".second_menu>li").removeClass("second_menu_on");
-						$(this).parent("li").addClass("second_menu_on");
-					}
-					if ($(this).parent("li").hasClass("height_auto")) {
-						$(this).parent("li").removeClass("height_auto")
-								.removeClass("second_menu_on");
-					} else if ($(this).siblings("ul").length > 0) {
-						$(this).parent("li").addClass("height_auto").addClass(
-								"second_menu_on");
-					}
-					var _target = $(this).find(".third_menu_icon");
-					if (_target.hasClass("third_menu_up")) {
-						_target.removeClass("third_menu_up").addClass(
-								"third_menu_down");
-					} else {
-						_target.removeClass("third_menu_down").addClass(
-								"third_menu_up");
-					}
-					orgId = $(this).parent().attr('id');
-					var orgType = $(this).parent().attr('org-type');
-					$('#title').text($(this).text());
-					$('#title').next().val(orgId);
-					$('#title').attr("org_type", orgType.trim());
-					console.log("二级党委选中" + orgId);
-					if ($("#current_root").attr("org-type") == 'secondary') {
-						$(".second_menu").find(".add_class").removeClass(
-								"add_class");
-						$(this).parent("li").addClass("add_class");
-					}
-					$(".btn_group").show();
-					$("#org_add").show();
-					$("#org_edit").show();
-					$("#org_delete").show();
-					orgMember(orgId, orgType);
+            if ($(this).siblings("ul").length == 0) {
+                $(".third_menu li").removeClass("third_menu_on");
+                $(".second_menu>li").removeClass("second_menu_on");
+                $(this).parent("li").addClass("second_menu_on");
+            }
+            if ($(this).parent("li").hasClass("height_auto")) {
+                $(this).parent("li").removeClass("height_auto")
+                        .removeClass("second_menu_on");
+            } else if ($(this).siblings("ul").length > 0) {
+                $(this).parent("li").addClass("height_auto").addClass(
+                        "second_menu_on");
+            }
+            var _target = $(this).find(".third_menu_icon");
+            if (_target.hasClass("third_menu_up")) {
+                _target.removeClass("third_menu_up").addClass(
+                        "third_menu_down");
+            } else {
+                _target.removeClass("third_menu_down").addClass(
+                        "third_menu_up");
+            }
+            orgId = $(this).parent().attr('id');
+            var orgType = $(this).parent().attr('org-type');
+            $('#second_title').show().text($(this).text());
+            $('#second_title').prev('span').show();
+            $('#third_title').hide();
+            $('#third_title').prev('span').hide();
 
-				});
+            $('#title').text($(this).text());
+            $('#title').next().val(orgId);
+            $('#title').attr("org_type", orgType.trim());
+            console.log("二级党委选中" + orgId);
+            if ($("#current_root").attr("org-type") == 'secondary') {
+                $(".second_menu").find(".add_class").removeClass(
+                        "add_class");
+                $(this).parent("li").addClass("add_class");
+            }
+            $(".btn_group").show();
+            $("#org_add").show();
+            $("#org_edit").show();
+            $("#org_delete").show();
+            orgMember(orgId, orgType);
+            orgDetail();
+
+        });
 
 		//三级菜单选中
 		$(".second_menu").on("click", ".third_menu li", function() {
@@ -353,6 +452,12 @@ button#add_submit {
 			$(".second_menu li").removeClass("second_menu_on");
 			$(this).parent().parent().addClass("height_auto second_menu_on");
 			orgId = $(this).attr('id');
+
+            $('#second_title').show().text($(this).parent().parent().children('a').text());
+            $('#second_title').prev('span').show();
+            $('#third_title').text($(this).children('a').text()).show();
+            $('#third_title').prev('span').show();
+
 			$('#title').text($(this).children('a').text());
 			$('#title').next().val(orgId);
 			$('#title').attr("org_type", 'branch');
@@ -362,7 +467,8 @@ button#add_submit {
 		    $("#org_edit").show();
 			$("#org_delete").show()
 			orgMember(orgId, 'branch');
-		});
+            orgDetail();
+        });
 
 		//点击展开更多
 		$(".slide_more").click(function() {
@@ -508,6 +614,7 @@ button#add_submit {
 			_ajax(option);
 		});
 
+        $('#current_root .first_menu').click();
 
 	function _ajax(_option) {
 			var url = "${orgadmin}";
@@ -584,71 +691,177 @@ button#add_submit {
 				}
 			});
 		}
+		var path = window.location.pathname;
+		if(path.indexOf('orgadmin') === -1 && path.indexOf('secondadmin') === -1){
+		    $('#admin_set').hide();
+		    $('#save').hide();
+        }else {
+		    $('#op_buttons').remove();
+        }
+        layui.use('form', function(){
+            var form = layui.form;
+            //表单提交
+            form.on('submit(partyForm)', function(data){
+                // layer.alert(JSON.stringify(data.field), {
+                //     title: '最终的提交信息'
+                // });
+                console.log(JSON.stringify(data.field));
+                var postData = data.field;
+                postData['orgId'] = $('#title').next().val();
+                $.post("${edit}", postData, function (res) {
+                    console.log(res.result)
+                    if(res.result){
+                        alert("保存成功！");
+                    }else {
+                        alert("未知错误");
+                    }
+                });
+                return false;
+            });
+
+        });
 });
 </script>
 </head>
 <body>
-<div class="main_content full_screen">
-    <div class="min_width_1200">
-        <div class="nav_list">
-            <p class="nav_list_title hidden-xs">操作中心</p>
-            <%-- <div class="search_container">
-                <input id="search" type="text" placeholder="请输入党组名称">
-                <img src="${basePath}/images/search_icon.png"/>
-            </div> --%>
-            <ul class="party_organization_list">
-                <li id="current_root" class="root" style="width: 300px;" org-id="${root.org_id}" org-type="${root.org_type}">
-                    <div class="first_menu top_dropdown">
-                        <span>${root.org_name }</span>
-                        <img class="right dropdown_icon" src="${basePath}/images/second_menu_up.png"/>
-                    </div>
-                    <ul class="second_menu" id="current">
-                        <c:forEach var="second" items="${tree[root.org_id]}" varStatus="status">
-                            <c:choose>
-                                <c:when test="${status.index le 4}">
-                                    <li id="${second.org_id}" class="second_li" org-type="${second.org_type} ">
-                                </c:when>
-                                <c:otherwise>
-                                    <li id="${second.org_id}" class="second_li" style="display: none;" org-type="${second.org_type} ">
-                                </c:otherwise>
-                            </c:choose><a href="javascript:"><span
-                                    class="third_menu_icon third_menu_up"></span>${second.org_name}</a>
-                                <c:if test="${not empty tree[second.org_id]}">
-                                    <ul class="third_menu">
-                                        <c:forEach var="third" items="${tree[second.org_id]}">
-                                            <li title="${third.org_name}" id="${third.org_id}"><a
-                                                    href="javascript:">${third.org_name}</a></li>
-                                        </c:forEach>
-                                    </ul>
-                                </c:if>
-                            </li>
-                        </c:forEach>
-                    </ul>
-                    <div class="slide_more">展开更多</div>
-                </li>
-
-            </ul>
-        </div>
-        <div class="content_form content_info">
-            <div class="content_title hidden-xs">
-                <span id="title" org_type=""></span>
-                <input type="hidden">
-                <div class="btn_group">
-                 <button id="org_add" class="btn btn-default">添加组织</button>
-                 <button id="org_edit" class="btn btn-default">编辑组织</button>
-                 <button id="org_delete" class="btn btn-default">删除组织</button>
-                </div>
+<div>
+    <div class="party_manage_container min_width_1200">
+        <div class="party_manage_page">
+            <div class="breadcrumb_group">
+                当前位置：
+                <span class="layui-breadcrumb" lay-separator=">">
+                        <a href="javascript:;">基础数据管理</a>
+                        <a href="javascript:;">党组信息管理</a>
+                    </span>
             </div>
-            <div style="margin-top: 15px;">
-                <div class="col-sm-6 col-xs-12">
-                    <span class="col-sm-2 col-xs-3 control-label" style="line-height: 32px;width: 20%;">管理员</span>
-                    <div class="col-sm-10 col-xs-9">
-                        <div class="dropdown-sin-2">
-                            <select id="admin" style="display:none;" multiple placeholder="请选择"></select>
+            <div class="party_manage_content content_form content_info">
+                <div class="nav_list">
+                    <ul class="party_organization_list">
+                        <li id="current_root" class="root" org-id="${root.org_id}" org-type="${root.org_type}">
+                            <div class="first_menu top_dropdown"
+                                 style="text-decoration: none;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;color: #333;width: 100%;">
+                                <img class="right dropdown_icon dropdown_up" style="width: auto" src="${basePath}/images/tree-arrow.png"/>
+                                <span style="font-size: 16px;font-weight: 600;color: #333;">${root.org_name }</span>
+                            </div>
+                            <ul class="second_menu" id="current">
+                                <c:forEach var="second" items="${tree[root.org_id]}" varStatus="status">
+                                    <c:choose>
+                                        <c:when test="${status.index le 4}">
+                                            <li id="${second.org_id}" class="second_li" org-type="${second.org_type} ">
+                                        </c:when>
+                                        <c:otherwise>
+                                            <li id="${second.org_id}" class="second_li" style="display: none;" org-type="${second.org_type} ">
+                                        </c:otherwise>
+                                    </c:choose><a href="javascript:"><span
+                                        class="third_menu_icon third_menu_up"></span>${second.org_name}</a>
+                                    <c:if test="${not empty tree[second.org_id]}">
+                                        <ul class="third_menu">
+                                            <c:forEach var="third" items="${tree[second.org_id]}">
+                                                <li title="${third.org_name}" id="${third.org_id}"><a
+                                                        href="javascript:">${third.org_name}</a></li>
+                                            </c:forEach>
+                                        </ul>
+                                    </c:if>
+                                    </li>
+                                </c:forEach>
+                            </ul>
+                            <div class="silde_more">展开更多</div>
+                        </li>
+
+                    </ul>
+                </div>
+                <div class="content_form content_info content_table_container party_table_container party_manage_container" style="padding-top: 0;">
+                    <div class="breadcrumb_group">
+                        当前组织：
+                        <span class="layui-breadcrumb" lay-separator=">" style="visibility: visible;">
+                            <a id="first_title" href="javascript:;" style="display: none;">重庆大学党委</a>
+                            <a href="javascript:;" id="second_title" style="display: none;">机关党委</a>
+                            <a href="javascript:;" id="third_title" style="display: none;">机关党委</a>
+                        </span>
+                        <span id="title" org_type="branch" style="display: none;">中共重庆大学某学科第一支部委员会</span>
+                        <input type="hidden">
+                    </div>
+                    <div class="table_content" id="op_buttons">
+                        <div class="btn_group table_btns" >
+                            <button id="org_add" class="btn btn-default">添加组织</button>
+                            <button id="org_edit" class="btn btn-default">编辑组织</button>
+                            <button id="org_delete" class="btn btn-default">删除组织</button>
+                        </div>
+                        <div class="form_content party_member_container">
+                            <div class="title_label" style="height: 229px;padding: 80.5px 16px;">
+                                基本信息
+                            </div>
+                            <form class="layui-form custom_form" id="partyForm">
+                                <div class="layui-inline" style="border-top: 1px solid #CCC;">
+                                    <label class="layui-form-label">党组织名称：</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="orgName" maxlength="20" lay-verify="required" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-inline" style="border-top: 1px solid #CCC;">
+                                    <label class="layui-form-label">地址：</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="address" maxlength="20" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">联系电话（座机）：</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="contactNumber" maxlength="20" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">传真：</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="fax" maxlength="20" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">党组织书记：</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="secretary" maxlength="20" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">邮箱：</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="email" maxlength="20" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">联系人：</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="contactor" maxlength="20" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">联系电话：</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="contactorNumber" maxlength="20" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-inline btn_group">
+                                    <label class="layui-form-label"></label>
+                                    <div class="layui-input-inline">
+                                        <button type="submit" class="layui-btn" lay-submit="" lay-filter="partyForm">保存</button>
+                                        <button type="reset" class="layui-btn layui-btn-primary">取消</button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
+                    <div class="col-sm-9 admin_set" id="admin_set">
+                        <span class="control-label">管理员</span>
+                        <div class="col-sm-9">
+                            <div class="dropdown-sin-2">
+                                <select id="admin" style="display:none;" multiple placeholder="请选择"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn_container">
+                        <button id="save" class="btn btn-default" style="margin-top: 32px;">保存</button>
+                    </div>
                 </div>
-                <button id="save" class="btn btn-default" style="margin-top: 32px;">保存</button>
             </div>
         </div>
     </div>

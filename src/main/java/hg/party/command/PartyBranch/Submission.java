@@ -70,7 +70,7 @@ public class Submission extends BaseMVCActionCommand {
         String newAndOld = ParamUtil.getString(actionRequest, "newAndOld");
         String sit = ParamUtil.getString(actionRequest, "sit");
         String meetingId = ParamUtil.getString(actionRequest, "meeting_id");
-        String customTheme = ParamUtil.getString(actionRequest, "customTheme");
+        String customTheme = ParamUtil.getString(actionRequest, "subject");
         formId = HtmlUtil.escape(formId);
         infromid = HtmlUtil.escape(infromid);
         startDate = HtmlUtil.escape(startDate);
@@ -108,7 +108,7 @@ public class Submission extends BaseMVCActionCommand {
         m.setTotal_time(Integer.parseInt(timeLasts));
         m.setEnd_time(endTime(startDate, timeLasts));
         m.setPlace(location);
-        m.setParticipant_group(attendMeetingPerson);
+        m.setParticipant_group(conferenceType);
         m.setHost(host);
         m.setContact(linkMan);
         m.setContact_phone(linkManTelephone);
@@ -135,9 +135,7 @@ public class Submission extends BaseMVCActionCommand {
         synchronized (PortalUtil.getHttpServletRequest(actionRequest).getSession()) {
             String originalFormId = (String) SessionManager.getAttribute(actionRequest.getRequestedSessionId(), "formId-Submission");
             if (formId.equals(originalFormId)) {
-                if (newAndOld.equals("未读")) {
-                    service.save(m);
-                } else if (newAndOld.equals("old")) {
+               if (newAndOld.equals("old")) {
                    // int n = service.save("DELETE from hg_party_meeting_plan_info WHERE inform_id='" + infromid + "' AND organization_id='" + branch + "'");
                     int n = service.deleteMeetingPlan(infromid, branch);
                 	if (n == 1) {
@@ -145,7 +143,10 @@ public class Submission extends BaseMVCActionCommand {
                     }
                 } else if (newAndOld.equals("edit")) {
                     dao.update(m);
-                }
+                }else {
+                   service.save(m);
+
+               }
                 if (uploadFiles != null && uploadFiles.length > 0 && uploadFiles[0] != null) {
                     saveAttchment(uploadFiles, meeting_id, uploadPortletRequest);
                 }
@@ -158,7 +159,7 @@ public class Submission extends BaseMVCActionCommand {
         if (newAndOld.equals("edit") && "secondary".equals(orgType)) {
             actionResponse.sendRedirect("/approvalplantwo");
         } else if ("branch".equals(orgType)) {
-            actionResponse.sendRedirect("/web/guest/task");
+            actionResponse.sendRedirect("/backlogtwo");
         } else if ("secondary".equals(orgType)) {
             actionResponse.sendRedirect("/backlogtwo");
         } else {

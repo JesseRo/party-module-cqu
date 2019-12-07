@@ -38,7 +38,7 @@ import org.osgi.service.component.annotations.Component;
 		"javax.portlet.init-param.template-path=/",
 		"javax.portlet.portlet-mode=text/html;view,edit",
 		"com.liferay.portlet.requires-namespaced-parameters=false",
-		"javax.portlet.init-param.view-template=/jsp/login/view.jsp",
+		"javax.portlet.init-param.view-template=/jsp/login/login.jsp",
 		"javax.portlet.init-param.edit-template=/jsp/login/edit.jsp",
 		"javax.portlet.name=" + PartyPortletKeys.Hgg_login,
 		"javax.portlet.resource-bundle=content.Language",

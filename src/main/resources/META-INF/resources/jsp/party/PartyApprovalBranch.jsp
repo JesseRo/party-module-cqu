@@ -3,6 +3,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <script type="text/javascript" src="${basePath}/js/partyModal.js"></script>
+<link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/activity-manage1.css?v=1"/>
+<link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/common.min.css"/>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -91,26 +93,43 @@
 }
 
 .content_table_container .outer_scroll_box #tableDiv_body {
-  padding-left: 300px;
+  /*padding-left: 300px;*/
   width: auto;
   overflow: hidden;
 }
 
 .content_table_container .outer_scroll_box #tableDiv_body .content_table tr th:nth-child(1), .content_table_container .outer_scroll_box #tableDiv_body .content_table tr th:nth-child(2), .content_table_container .outer_scroll_box #tableDiv_body .content_table tr td:nth-child(1), .content_table_container .outer_scroll_box #tableDiv_body .content_table tr td:nth-child(2) {
-  overflow: hidden;
-  background-color: #fff;
-  position: absolute;
-  z-index: 1;
-  height: 100%;
+  /*overflow: hidden;*/
+  /*background-color: #fff;*/
+  /*position: absolute;*/
+  /*z-index: 1;*/
+  /*height: 100%;*/
 }
 
 .content_table_container .outer_scroll_box #tableDiv_body .content_table tr td:nth-child(1),.content_table_container .outer_scroll_box #tableDiv_body .content_table tr th:nth-child(1) {
-  left: 0;
+  /*left: 0;*/
 }
 
 .content_table_container .outer_scroll_box #tableDiv_body .content_table tr td:nth-child(2),.content_table_container .outer_scroll_box #tableDiv_body .content_table tr th:nth-child(2) {
-  left: 150px;
+  /*left: 150px;*/
 }
+            .content_table thead tr{
+                background: #F6F8FC;
+                height: 48px;
+                font-size: 16px;
+            }
+            .content_table thead th{
+                padding: 5px 15px !important;
+            }
+            .content_table tr:nth-child(2n) {
+                background: #FBFCFE;
+            }
+            .content_table td{
+                min-width: 130px;
+                padding: 5px 15px !important;
+                height: 48px;
+                font-size: 14px;
+            }
 
  /* 固定列新增css */
 		</style>
@@ -119,30 +138,36 @@
 		<portlet:resourceURL id="/PartyRejectedCommand" var="PartyRejected" />
 		<!-- 		驳回理由 -->
 		<portlet:resourceURL id="/PartyReasonCommand" var="PartyReason" />
-		<div class="content_title" style="margin-bottom:30px;">
-                                                    审批计划
-        </div>
-	<div class="content_table_container">
-		<div class="outer_scroll_box">
-           <div class="scroll_wrapper" id="tableDiv_body">
-                <table class="content_table">
+		<div class="table_form_content">
+<%--			<div class="table_form_content activity_manage_container">--%>
+			<!-- 右侧盒子内容 -->
+			<div class="activity_manage_page">
+				<div class="breadcrumb_group" style="margin-bottom: 20px;">
+					当前位置：
+					<span class="layui-breadcrumb" lay-separator=">">
+                        <a href="javascript:;">组织生活管理</a>
+                        <a href="javascript:;">审批计划</a>
+                    </span>
+				</div>
+				<div class="bg_white_container">
+                <table class="content_table" width="100%;">
                     <thead class="table_title">
                         <tr>
-                            <th style="width: 150px;padding-top: 20px;">党支部</th>
-                            <th style="width: 150px;padding-top: 20px;">会议类型</th>
-                            <th class="PublishTime" style="min-width: 160px;">发布时间</th>
-                            <th>开展主题</th>
-                            <th>党支部主题</th>
+                            <th style="width: 150px;">党支部</th>
+                            <th style="width: 150px;">会议类型</th>
+<%--                            <th class="PublishTime" style="min-width: 160px;">发布时间</th>--%>
+                            <th>会议主题</th>
+<%--                            <th>党支部主题</th>--%>
                             <th class="PublishTime" style="min-width: 160px;">开始时间</th>
                             <th>开展时长(分钟)</th>
-                            <th>开展地点</th>
-                            <th>主持人</th>
+<%--                            <th>开展地点</th>--%>
+<%--                            <th>主持人</th>--%>
                             <th>联系人</th>
-                            <th>联系人电话</th>
-                            <th>任务状态</th>
-                            <th>审核人</th>
+<%--                            <th>联系人电话</th>--%>
+<%--                            <th>任务状态</th>--%>
+<%--                            <th>审核人</th>--%>
                             <th>操作</th>
-                            <th>备注</th>
+<%--                            <th>备注</th>--%>
                         </tr>
                     </thead>
                     <tbody class="table_info" id="tBody" >
@@ -150,47 +175,47 @@
 	                        <tr>
 	                            <td style="width: 150px;padding-top: 20px;" data-label="党支部" class="Party_name">${info.org_name }</td>
 	                            <td style="width: 150px;padding-top: 20px;text-align: center;" data-label="会议类型">${info.meeting_type }</td>
-	                            <td data-label="发布时间" class="PublishTime"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${info.submit_time }" /></td>
+<%--	                            <td data-label="发布时间" class="PublishTime"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${info.submit_time }" /></td>--%>
 	                            <td data-label="开展主题">
-	                            	<a href="/approvaldetails?meetingId=${info.meeting}&orgType=branch">${info.meeting_theme }</a>
+	                            	<a onclick="window.location.href='/approvaldetails?meetingId=${info.meeting}&orgType=branch'" href="javascript:;">${info.meeting_theme_secondary }</a>
 	                            </td>
-	                            <td data-label="党支部主题">${info.meeting_theme_secondary }</td>
+<%--	                            <td data-label="党支部主题">${info.meeting_theme_secondary }</td>--%>
 	                            <td data-label="开始时间" class="PublishTime"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${info.start_p }" /></td>
 	                            <td data-label="开展时长">${info.total_time }</td>
-	                            <td data-label="开展地点">${info.place }</td>
-	                            <td data-label="主持人">${info.host }</td>
+<%--	                            <td data-label="开展地点">${info.place }</td>--%>
+<%--	                            <td data-label="主持人">${info.host }</td>--%>
 	                            <td data-label="联系人">${info.contact }</td>
-	                            <td data-label="联系人电话">${info.contact_phone }</td>
-	                            <td data-label="任务状态">
-	                            	<c:if test="${info.task_status == '1'}"> 
-	                            		 已提交
-									</c:if>
-									<c:if test="${info.task_status == '2'}"> 
-	                            		 已撤回
-									</c:if>
-									<c:if test="${info.task_status == '3'}"> 
-	                            		 被驳回
-									</c:if>
-									<c:if test="${info.task_status == '4'}"> 
-	                            		 已通过
-									</c:if>
-									<c:if test="${info.task_status == '5'}"> 
-	                            		 已指派
-									</c:if>
-									<c:if test="${info.task_status == '6'}"> 
-	                            		 未检查
-									</c:if>
-									<c:if test="${info.task_status == '7'}"> 
-	                            		 已检查
-									</c:if>
-	                            </td>
-	                            <td data-label="审核人">${info.auditor }</td>
+<%--	                            <td data-label="联系人电话">${info.contact_phone }</td>--%>
+<%--	                            <td data-label="任务状态">--%>
+<%--	                            	<c:if test="${info.task_status == '1'}"> --%>
+<%--	                            		 已提交--%>
+<%--									</c:if>--%>
+<%--									<c:if test="${info.task_status == '2'}"> --%>
+<%--	                            		 已撤回--%>
+<%--									</c:if>--%>
+<%--									<c:if test="${info.task_status == '3'}"> --%>
+<%--	                            		 被驳回--%>
+<%--									</c:if>--%>
+<%--									<c:if test="${info.task_status == '4'}"> --%>
+<%--	                            		 已通过--%>
+<%--									</c:if>--%>
+<%--									<c:if test="${info.task_status == '5'}"> --%>
+<%--	                            		 已指派--%>
+<%--									</c:if>--%>
+<%--									<c:if test="${info.task_status == '6'}"> --%>
+<%--	                            		 未检查--%>
+<%--									</c:if>--%>
+<%--									<c:if test="${info.task_status == '7'}"> --%>
+<%--	                            		 已检查--%>
+<%--									</c:if>--%>
+<%--	                            </td>--%>
+<%--	                            <td data-label="审核人">${info.auditor }</td>--%>
 	                            <td data-label="操作">
-	                            	<c:if test="${info.task_status == '1'}">  
+	                            	<c:if test="${info.task_status == '1'}">
 									    <portlet:resourceURL id="/PartyPassCommand" var="PartyPass" />
-										<a onclick="Pass('${info.meeting }');">
+										<a onclick="Pass('${info.meeting }');" style="margin-right: 10%; color: #11D43B">
 											通过</a>
-										<a onclick="entry('${info.meeting }');">
+										<a onclick="entry('${info.meeting }');" style="cursor: pointer;color: #FE4D4D;">
 											驳回</a>
 										<script>
 // 											function Pass(meeting_id){
@@ -200,8 +225,8 @@
 // 														url:url,
 // 														data:{"meeting_id":meeting_id},
 // 									 					dataType:'json',
-// 														success:function(){ 
-// 															window.location.reload();	
+// 														success:function(){
+// 															window.location.reload();
 // 														}
 // 													});
 // 												}
@@ -220,7 +245,7 @@
 														success:function(){
 															$("#hg_confirm").modal("hide");
 															$.tip("审核成功");
-															window.location.reload();	
+															window.location.reload();
 														}
 													});
 									            })
@@ -231,44 +256,45 @@
 										<a href="/submitplan?meetingId=${info.meeting}&orgType=branch&type=edit">编辑</a>
 									</c:if>
 	                            </td>
-	                            <td data-label="备注">${info.remark }</td>
+<%--	                            <td data-label="备注">${info.remark }</td>--%>
 	                        </tr>
                         </c:forEach>
                     </tbody>
                 </table>
-                 </div>
-                </div>
-                    
-                <div id="scroll_top" style="background-color:#eee;overflow:hidden; width:100%; z-index:2;position:absolute;">
-                    <div style="margin-left:280px; width:auto;overflow-x:scroll;overflow-y:hidden;" onscroll='divScroll(this);'>
-                        <div class="scroll_bar" style="width:630px; height:1px;"></div>
-                    </div>
-                </div>
-            </div>
+
+
+<%--                <div id="scroll_top" style="background-color:#eee;overflow:hidden; width:100%; z-index:2;position:absolute;">--%>
+<%--                    <div style="margin-left:280px; width:auto;overflow-x:scroll;overflow-y:hidden;" onscroll='divScroll(this);'>--%>
+<%--                        <div class="scroll_bar" style="width:630px; height:1px;"></div>--%>
+<%--                    </div>--%>
+<%--                </div>--%>
+<%--            </div>--%>
             
             <portlet:resourceURL id="/ApprovalMeetingExcelCommand" var="export"/>
             <%-- <a class="export_excel" href="${export }">数据导出excel</a>  --%>
     
    <!-- -----------------------分页------------------------- -->
 				<div style="margin-top: 20px;" class="pagination_container">
-			        <ul class="pagination" id="page"></ul>
-			        <div class="pageJump">
-			        	<input class='current_page' type="hidden" value="${pageNo}"/>
-			            <p>共<span class="total_page">${totalPage }</span>页</p>
-			            <portlet:actionURL name="/PageNoMVCActionCommand" var="pageNoUrl">
+					<ul class="pagination" id="page"></ul>
+					<div class="pageJump">
+						<input class='current_page' type="hidden" value="${pageNo}"/>
+						<p>共<span class="total_page">${totalPage }</span>页</p>
+						<portlet:actionURL name="/PageNoMVCActionCommand" var="pageNoUrl">
 						</portlet:actionURL>
-			            <form action="${pageNoUrl }" id="getPageNo" method="post">
-			                <input type="hidden" id="pageNo" name="pageNo" value=""/>
-			                <input type="hidden" id="total_page_" name="total_page_" value="${totalPage}"/>
-			                <span>跳转到第</span>
-			                <input type="text" id="jumpPageNo" name="jumpPageNo"/>
-			                <span>页</span>
-			                <button type="submit" class="button">确定</button>
-			            </form>
-			        </div>
+						<form action="${pageNoUrl }" id="getPageNo" method="post">
+							<input type="hidden" id="pageNo" name="pageNo" value=""/>
+							<input type="hidden" id="total_page_" name="total_page_" value="${totalPage}"/>
+							<span>跳转到第</span>
+							<input type="text" id="jumpPageNo" name="jumpPageNo"/>
+							<span>页</span>
+							<button type="submit" class="button">确定</button>
+						</form>
+					</div>
 				 </div>
-		
-				 <script type="text/javascript">
+				</div>
+			</div>
+		</div>
+		 <script type="text/javascript">
 					  $(document).ready(function() {
 						 var pages = $(".total_page").html();
 						var currentPage = $('.current_page').val();

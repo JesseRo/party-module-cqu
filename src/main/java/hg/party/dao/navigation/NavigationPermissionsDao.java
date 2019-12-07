@@ -61,12 +61,12 @@ public class NavigationPermissionsDao extends PostgresqlDaoImpl<NavigationPermis
 	}
 	
 	/*导航后台管理页面修改功能*/
-	public void updateNavigation(String navName,String location,String role,String navigationId){
+	public void updateNavigation(String navName,String location,String role,String navigationId, String path){
 		String sql="UPDATE hg_party_navigation_permissions "
-				+ "SET navigation_name= ?',show_location=? ,navigation_to_role=?  "
+				+ "SET navigation_name= ?,show_location=? ,navigation_to_role=?, navigation_url = ? "
 				+ "WHERE navigation_id= ? ";
 		//this.jdbcTemplate.execute(sql);
-		jdbcTemplate.update(sql,navName,location,role,navigationId);
+		jdbcTemplate.update(sql,navName,location,role,path,navigationId);
 	}
 	
 	/*根据角色和位置获取一级导航*/

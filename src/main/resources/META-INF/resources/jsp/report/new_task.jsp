@@ -135,6 +135,10 @@
         .no-padding {
             padding-left: 0px;
             padding-right: 0px;
+            margin-bottom: 20px;
+        }
+        .right{
+            float: right;
         }
     </style>
     <link rel="stylesheet" href="${basePath}/css/publish.css"/>
@@ -294,7 +298,7 @@
                 }
             }
 
-            var ueObj = UE.getEditor("task_content");
+            var ueObj = UE.getEditor("task_content", { initialFrameWidth:821   });
             var uploadUrls = {
                 file: '${uploadfileUrl}',
                 image: '${uploadimageUrl}',
@@ -357,112 +361,133 @@
     </script>
 </head>
 <body>
-<div class="content_title">
-    <label>发布任务</label>
-</div>
-<div class="content_form">
-    <form class="form-horizontal" role="form" action="${add }" method="post">
-        <div id="hg-form-container" class="form-group">
-            <div class="col-sm-12 col-xs-12 no-padding">
-                <div class="col-sm-6 col-xs-12">
-                    <div class="col-sm-3 col-xs-3 ">
-                        <span class="control-label form-label-required">任务主题</span>
+<div class="table_form_content">
+    <!-- 右侧盒子内容 -->
+    <div class="activity_manage_page">
+        <div class="breadcrumb_group" style="margin-bottom: 20px;">
+            当前位置：
+            <span class="layui-breadcrumb" lay-separator=">">
+					<a href="javascript:;">数据报送</a>
+					<a href="javascript:;">发布任务</a>
+				</span>
+        </div>
+        <div class="bg_white_container">
+        <div class="content_form"  style="padding: 20px 0;">
+            <form class="form-horizontal" role="form" action="${add }" method="post">
+                <div id="hg-form-container" class="form-group">
+                    <div class="col-sm-12 col-xs-12 no-padding">
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="col-sm-3 col-xs-3 ">
+                                <span class="control-label form-label-required">任务主题</span>
+                            </div>
+                            <div class="col-sm-9 col-xs-9">
+                                <input class="form-control" name="theme" value="${task.theme}" style="text-indent: inherit;">
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-sm-9 col-xs-9">
-                        <input class="form-control" name="theme" value="${task.theme}">
+                    <div class="col-sm-12 col-xs-12 no-padding">
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="col-sm-3 col-xs-3 ">
+                                <span class="control-label form-label-required">任务描述</span>
+                            </div>
+                            <div class="col-sm-9 col-xs-9">
+                                <textarea class="form-control" name="description">${task.description}</textarea>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-sm-12 col-xs-12 no-padding">
-                <div class="col-sm-6 col-xs-12">
-                    <div class="col-sm-3 col-xs-3 ">
-                        <span class="control-label form-label-required">任务描述</span>
+                    <div class="col-sm-12 col-xs-12 no-padding">
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="col-sm-3 col-xs-3 ">
+                                <span class="control-label form-label-required">任务模版</span>
+                            </div>
+                            <div class="col-sm-9 col-xs-9">
+                                <input multiple type="file" name="files" style="text-indent: inherit;">
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-sm-9 col-xs-9">
-                        <textarea class="form-control" name="description">${task.description}</textarea>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-12 col-xs-12 no-padding">
-                <div class="col-sm-6 col-xs-12">
-                    <div class="col-sm-3 col-xs-3 ">
-                        <span class="control-label form-label-required">任务模版</span>
-                    </div>
-                    <div class="col-sm-9 col-xs-9">
-                        <input multiple type="file" name="files">
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-12 col-xs-12 no-padding">
-                <div class="col-sm-6 col-xs-12 publish_obj_container">
-                    <div class="col-sm-3 col-xs-3">
-                        <span class="control-label">发布对象</span>
-                    </div>
-                    <div class="col-sm-9 col-xs-9 publish_obj">
-                        <div class="publish_obj_content">
-                            <div class="publish_obj_title">
-                                二级党组织
-                                <div class="right">
-                                    <div class="select_choice all_select">
-                                        <img src="/images/not_check_icon.png"/>
-                                        <input type="hidden"/>
-                                        <span>全选</span>
+                    <div class="col-sm-12 col-xs-12 no-padding">
+                        <div class="col-sm-6 col-xs-12 publish_obj_container">
+                            <div class="col-sm-3 col-xs-3">
+                                <span class="control-label">发布对象</span>
+                            </div>
+                            <div class="col-sm-9 col-xs-9 publish_obj">
+                                <div class="publish_obj_content">
+                                    <div class="publish_obj_title">
+                                        二级党组织
+                                        <div class="right">
+                                            <div class="select_choice all_select">
+                                                <img src="/images/not_check_icon.png"/>
+                                                <input type="hidden"/>
+                                                <span>全选</span>
+                                            </div>
+                                            <div class="select_choice oppsite_select">
+                                                <img src="/images/not_check_icon.png"/>
+                                                <input type="hidden"/>
+                                                <span>反选</span>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="select_choice oppsite_select">
-                                        <img src="/images/not_check_icon.png"/>
-                                        <input type="hidden"/>
-                                        <span>反选</span>
+                                    <div class="publish_obj_info container_scroll_hidden">
+                                        <ul class="list-group">
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
-                            <div class="publish_obj_info container_scroll_hidden">
-                                <ul class="list-group">
-                                </ul>
+                        </div>
+                        <div class="col-sm-6 col-xs-12 has_select_div">
+                            <div class="has_select_container">
+                                <div class="has_select_title">
+                                    <span>已选goo</span>
+                                    <div class="right">
+                                        <span>已选择</span>
+                                        <span class="select_num"></span>
+                                        <span>个党委</span>
+                                    </div>
+                                </div>
+                                <div class="has_select_content container_scroll_hidden">
+                                    <ul class="has_select_list">
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-sm-6 col-xs-12 has_select_div">
-                    <div class="has_select_container">
-                        <div class="has_select_title">
-                            <span>已选goo</span>
-                            <div class="right">
-                                <span>已选择</span>
-                                <span class="select_num"></span>
-                                <span>个党委</span>
+                    <div class="col-sm-12 col-xs-12 no-padding">
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="col-sm-3 col-xs-3 ">
+                                <span class="control-label form-label-required">任务说明</span>
+                            </div>
+                            <div class="col-sm-9 col-xs-9">
+                                <script id="task_content" name="task_content" type="text/plain"></script>
                             </div>
                         </div>
-                        <div class="has_select_content container_scroll_hidden">
-                            <ul class="has_select_list">
-                            </ul>
+                    </div>
+
+                    <input id="submit" type="submit" style="display:none;"/>
+                    <input id="formId" type="hidden" name="formId" value="${formId}"/>
+                    <input id="status" type="hidden" name="status" value="1"/>
+                    <input id="taskId" type="hidden" name="taskId" value="${task.task_id}"/>
+                    <input class="informationContent" type="hidden" value='${task.content }'>
+                    <input id="hiddenPublicObject" type="hidden" name="publicObject"/>
+                    <div class="layui-inline btn_group" style="width: calc(50% - 120px);margin: 0;margin-top: 10px;">
+                        <label class="layui-form-label"></label>
+                        <div class="layui-input-inline">
+                            <button id="send" type="button" class="layui-btn" lay-submit="" lay-filter="partyMemForm" style="padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;background-color: #FFAB33;border-radius: 4px;">
+                                发布
+                            </button>
+                            <button id="draft" type="button" class="layui-btn layui-btn-primary" style="background-color: transparent;color: #666;padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;border-radius: 4px;">
+                                保存为草稿
+                            </button>
                         </div>
                     </div>
+<%--                    <button id="send" type="button" class="btn btn-default col-sm-2 col-xs-4" style="margin-left: 12%; ">发布--%>
+<%--                    </button>--%>
+<%--                    <button id="draft" type="button" class="btn btn-default col-sm-2 col-xs-4" style="margin-left: 45%;">保存为草稿--%>
+<%--                    </button>--%>
                 </div>
-            </div>
-            <div class="col-sm-12 col-xs-12 no-padding">
-                <div class="col-sm-6 col-xs-12">
-                    <div class="col-sm-3 col-xs-3 ">
-                        <span class="control-label form-label-required">任务说明</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-12 col-xs-12 no-padding">
-                <script id="task_content" name="task_content" type="text/plain"></script>
-            </div>
-
-            <input id="submit" type="submit" style="display:none;"/>
-            <input id="formId" type="hidden" name="formId" value="${formId}"/>
-            <input id="status" type="hidden" name="status" value="1"/>
-            <input id="taskId" type="hidden" name="taskId" value="${task.task_id}"/>
-            <input class="informationContent" type="hidden" value='${task.content }'>
-            <input id="hiddenPublicObject" type="hidden" name="publicObject"/>
-
-            <button id="send" type="button" class="btn btn-default col-sm-2 col-xs-4" style="margin-left: 12%; ">发布
-            </button>
-            <button id="draft" type="button" class="btn btn-default col-sm-2 col-xs-4" style="margin-left: 45%;">保存为草稿
-            </button>
+            </form>
         </div>
-    </form>
+        </div>
+    </div>
 </div>
 </body>
 </html>

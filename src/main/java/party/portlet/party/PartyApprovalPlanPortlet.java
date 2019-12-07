@@ -67,41 +67,50 @@ public class PartyApprovalPlanPortlet extends MVCPortlet{
 		}else{
 			pageNo = page;
 		}
-		
-			
-//		String sql = "SELECT plan.meeting_id as meeting,plan.start_time as start_p,plan.end_time as end_p,* from "+
-//					"((hg_party_meeting_plan_info as plan "+
-//					"LEFT JOIN hg_party_meeting_notes_info as note on "+
-//					"plan.meeting_id = note.meeting_id) LEFT JOIN hg_party_org as org on "+
-//					"org.org_id = plan.organization_id) LEFT JOIN hg_users_info as usr on "+
-//					"usr.user_id = auditor "+
-//					"WHERE org.org_type='secondary' "+
-//					"and org.historic is false "+
-//					"AND (plan.task_status='1' "+
-//					"OR plan.task_status='3' "+
-//					"OR plan.task_status='4' "+
-//					"OR plan.task_status='5' "+
+
+//
+//		String sql = "SELECT plan.meeting_id as meeting,plan.start_time as start_p,plan.end_time as end_p,plan.task_status as task_st,* from "+
+//					"((hg_party_meeting_plan_info as plan  "+
+//					"LEFT JOIN hg_party_meeting_notes_info as note on  "+
+//					"plan.meeting_id = note.meeting_id "+
+//					"LEFT JOIN hg_party_org_inform_info as orginfo "+
+//					"ON plan.inform_id=orginfo.inform_id "+
+//					") LEFT JOIN hg_party_org as org on  "+
+//					"org.org_id = plan.organization_id) LEFT JOIN hg_users_info as usr on  "+
+//					"usr.user_id = auditor  "+
+//					"WHERE org.org_type='secondary'  "+
+//					"and org.historic is false  "+
+//					"AND (plan.task_status='1'  "+
+//					"OR plan.task_status='3'  "+
+//					"OR plan.task_status='4'  "+
+//					"OR plan.task_status='5'  "+
 //					"OR plan.task_status='6') "+
+//					"AND orginfo.org_type= '"+orgId+"'"+
 //					"ORDER BY plan.id DESC ";
-		
-		String sql = "SELECT plan.meeting_id as meeting,plan.start_time as start_p,plan.end_time as end_p,plan.task_status as task_st,* from "+
-					"((hg_party_meeting_plan_info as plan  "+
-					"LEFT JOIN hg_party_meeting_notes_info as note on  "+
-					"plan.meeting_id = note.meeting_id "+
-					"LEFT JOIN hg_party_org_inform_info as orginfo "+
-					"ON plan.inform_id=orginfo.inform_id "+
-					") LEFT JOIN hg_party_org as org on  "+
-					"org.org_id = plan.organization_id) LEFT JOIN hg_users_info as usr on  "+
-					"usr.user_id = auditor  "+
-					"WHERE org.org_type='secondary'  "+
-					"and org.historic is false  "+
-					"AND (plan.task_status='1'  "+
-					"OR plan.task_status='3'  "+
-					"OR plan.task_status='4'  "+
-					"OR plan.task_status='5'  "+
-					"OR plan.task_status='6') "+
-					"AND orginfo.org_type= '"+orgId+"'"+
-					"ORDER BY plan.id DESC ";	
+
+		String sql = "SELECT\n" +
+				"\tplan.meeting_id AS meeting,\n" +
+				"\tplan.start_time AS start_p,\n" +
+				"\tplan.end_time AS end_p,\n" +
+				"\tplan.task_status AS task_st,* \n" +
+				"FROM\n" +
+				"\t(\n" +
+				"\t(\n" +
+				"\thg_party_meeting_plan_info AS plan\n" +
+				"\tLEFT JOIN hg_party_meeting_notes_info AS note ON plan.meeting_id = note.meeting_id\n" +
+				"\t)\n" +
+				"\tLEFT JOIN hg_party_org AS org ON org.org_id = plan.organization_id \n" +
+				"\t)\n" +
+				"WHERE\n" +
+				"\torg.org_type = 'secondary' \n" +
+				"\tAND org.historic IS FALSE \n" +
+				"\tAND (\n" +
+				"\tplan.task_status = '1' \n" +
+				"\tOR plan.task_status = '3' \n" +
+				"\tOR plan.task_status = '4' \n" +
+				")\n" +
+				"ORDER BY\n" +
+				"\tplan.task_status asc";
 						
 		Map<String, Object> postgresqlResults = partyMeetingPlanInfo.postGresqlFind(pageNo, pageSize, sql);
 		list = (List<Map<String, Object>>) postgresqlResults.get("list");//获取集合

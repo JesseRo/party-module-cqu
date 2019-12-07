@@ -1,93 +1,192 @@
-[
-  ["申请时间", "状态"],
-  [["2019-09-05", "党组织审核中", "false"]],
-  ["申请时间", "培养联系人", "入党介绍人", "状态"],
-  [["2019-09-05", "张三", "张三", "通过预备党员接收预审", "true"]],
-  ["申请时间", "培养联系人", "入党介绍人", "状态"],
-  [["2019-09-05", "张三", "张三", "预备党员继续教育考察", "true"]],
-  ["申请人", "申请时间", "性别", "教学工号"],
-  [
-    ["王同学", "2019-09-05", "男", "20190011", "true"],
-    ["周同学", "2019-09-03", "女", "20190022", "true"]
+{
+  "vars": [
+    {
+      "name": "",
+      "value": "",
+      "comment": ""
+    }
   ],
-  ["申请人", "申请时间", "性别", "教学工号"],
-  [
-    ["王同学", "2019-09-05", "男", "20190011", "true"],
-    ["周同学", "2019-09-03", "女", "20190022", "true"]
+  "columns": [
+    {
+      "id": "branch",
+      "name": "党组织：",
+      "type": {
+        "name": "chosen",
+        "checker": "branch",
+        "options": "",
+        "optionsKey": "",
+        "datePattern": ""
+      },
+      "display": true,
+      "readonly": false,
+      "required": true,
+      "defaultValue": ""
+    },
+    {
+      "id": "conferenceType",
+      "name": "会议类型：",
+      "type": {
+        "name": "chosen",
+        "checker": "conferenceType",
+        "options": "",
+        "optionsKey": "",
+        "datePattern": ""
+      },
+      "display": true,
+      "readonly": false,
+      "required": true,
+      "defaultValue": ""
+    },
+    {
+      "id": "subject",
+      "name": "开展主题：",
+      "type": {
+        "name": "str",
+        "checker": "subject"
+      },
+      "display": true,
+      "readonly": false,
+      "required": true,
+      "defaultValue": null
+    },
+    {
+      "id": "timeDuring",
+      "name": "开始时间：",
+      "type": {
+        "name": "date",
+        "checker": "timeDuring",
+        "datePattern": "yyyy-MM-dd HH:mm"
+      },
+      "display": true,
+      "readonly": false,
+      "required": true,
+      "defaultValue": null
+    },
+    {
+      "id": "timeLasts",
+      "name": "共计时长：",
+      "type": {
+        "name": "str",
+        "checker": "timeLasts"
+      },
+      "display": true,
+      "readonly": false,
+      "required": true,
+      "defaultValue": null
+    },
+    {
+      "id": "location",
+      "name": "开展地点：",
+      "type": {
+        "name": "chosen",
+        "optionsKey": "location"
+      },
+      "display": true,
+      "readonly": false,
+      "required": true,
+      "defaultValue": null
+    },
+    {
+      "id": "participate",
+      "name": "参会人员：",
+      "type": {
+        "name": "chosen",
+        "optionsKey": "participate"
+      },
+      "display": true,
+      "readonly": false,
+      "required": true,
+      "defaultValue": null
+    },
+    {
+      "id": "host",
+      "name": "主持人：",
+      "type": {
+        "name": "str",
+        "checker": "host"
+      },
+      "display": true,
+      "readonly": false,
+      "required": true,
+      "defaultValue": null
+    },
+    {
+      "id": "contact",
+      "name": "联系人：",
+      "type": {
+        "name": "str",
+        "checker": "contact"
+      },
+      "display": true,
+      "readonly": false,
+      "required": true,
+      "defaultValue": null
+    },
+    {
+      "id": "sit",
+      "name": "列席人员：",
+      "type": {
+        "name": "str",
+        "options": "",
+        "optionSql": "",
+        "optionsKey": "",
+        "datePattern": "",
+        "optionNameField": "",
+        "optionValueField": ""
+      },
+      "display": "true",
+      "readonly": null,
+      "required": "false",
+      "validation": null,
+      "defaultValue": ""
+    },
+    {
+      "id": "phoneNumber",
+      "name": "联系人电话：",
+      "type": {
+        "name": "str",
+        "checker": "phoneNumber"
+      },
+      "display": true,
+      "readonly": false,
+      "required": true,
+      "defaultValue": null
+    },
+    {
+      "id": "new_12",
+      "name": "计划内容：",
+      "type": {
+        "name": "richtext",
+        "checker": "",
+        "options": "",
+        "optionSql": "",
+        "optionsKey": "",
+        "datePattern": "",
+        "optionNameField": "",
+        "optionValueField": ""
+      },
+      "display": "true",
+      "readonly": "false",
+      "required": "true",
+      "defaultValue": ""
+    }
   ],
-  ["申请人", "申请时间", "教学工号", "培养联系人"],
-  [
-    ["王同学", "2019-09-05", "20190011", "张三", "true"],
-    ["周同学", "2019-09-03", "20190022", "李四", "true"]
-  ],
-  ["申请人", "教学工号", "培养联系人", "入党介绍人"],
-  [
-    ["王同学", "20190011", "张三", "张三", "true"],
-    ["周同学", "20190022", "李四", "李四", "true"]
-  ],
-  ["申请人", "申请支部", "教学工号", "申请时间"],
-  [
-    ["王同学", "某学院某专业一支部", "20190011", "2019-09-01", "true"],
-    ["黄同学", "某学院某专业二支部", "20193462", "2019-09-02", "true"]
-  ],
-  ["申请人", "申请支部", "教学工号", "申请时间", "培养联系人"],
-  [
-    ["王同学", "某学院某专业一支部", "20190011", "2019-09-01", "张三", "true"],
-    ["黄同学", "某学院某专业二支部", "20193462", "2019-09-02", "李老师", "true"]
-  ],
-  ["申请人", "申请支部", "教学工号", "培养联系人", "入党介绍人"],
-  [
-    ["王同学", "某学院某专业一支部", "20190011", "张三", "张三", "true"],
-    ["黄同学", "某学院某专业二支部", "20193462", "李老师", "李老师", "true"]
-  ],
-  ["姓名", "任职"],
-  [
-    ["熊辉俊", "党政办公室副主任（主持工作）", "true"],
-    ["陶  毅", "第一党总支副书记、党政办公室副主任", "true"],
-    ["杨吉林", "党委委员、组织统战部部长", "true"],
-    ["柯海浪", "纪委办公室主任、监察审计处处长", "true"],
-    ["马培森", "纪委办公室副主任、监察审计处副处长", "true"],
-    ["姜  荣", "人事处处长", "true"],
-    ["吴  红", "人事处副处长（正处级）", "true"],
-    ["蒋奕勇", "计划财务处副处长", "true"],
-    ["袁德梽", "教务处处长", "true"],
-    ["陈常红", "教务处副处长（正处级）", "true"],
-    ["蒲  鸿", "教务处副处长", "true"],
-    ["姜运隆", "教务处副处长", "true"],
-    ["赵小冬", "教务处副处长", "true"],
-    ["曾  理", "招生就业处副处长", "true"],
-    ["谭  军", "招生就业处副处长", "true"],
-    ["熊  江", "第二党总支书记、党委学工部部长、学生处处长", "true"],
-    ["黄  莉", "学生处副处长", "true"],
-    ["马绍文", "团委副书记", "true"],
-    ["张美全", "安全管理处处长", "true"],
-    ["熊泽明", "基建后勤处处长", "true"],
-    ["周朝国", "基建后勤处副处长", "true"],
-    ["夏  平", "基建后勤处副处长", "true"],
-    ["谢必武", "工会主席(提名)", "true"],
-    ["熊  玲", "工会副主席（提名）", "true"],
-    ["黄礼岗", "继续教育学院主任", "true"]
-  ],
-  ["序号", "总体", "德", "能", "勤", "绩", "廉"],
-  [
-    ["评价一", "优秀", "优秀", "优秀", "优秀", "优秀", "true"],
-    ["评价二", "称职", "良好", "良好", "良好", "良好", "true"],
-    ["评价三", "基本称职", "一般", "一般", "一般", "一般", "true"],
-    ["评价四", "不称职", "差", "差", "差", "差", "true"]
-  ],
-  [
-    ["王同学", "2018-09-05", "20190011", "张三", "true"],
-    ["周同学", "2018-09-03", "20190022", "李四", "true"]
-  ],
-  [
-    ["王同学", "2019-09-05", "20190011", "张三", "true"],
-    ["周同学", "2019-09-03", "20190022", "李四", "true"]
-  ],
-  [
-    ["评价一", "优秀", "优秀", "优秀", "优秀", "优秀", "优秀", "true"],
-    ["评价二", "称职", "良好", "良好", "良好", "良好", "良好", "true"],
-    ["评价三", "基本称职", "一般", "一般", "一般", "一般", "一般", "true"],
-    ["评价四", "不称职", "差", "差", "差", "差", "差",  "true"],
-    ["平均", "72.5", "", "", "", "", "true"]
+  "variables": [
+    {
+      "name": "meetingId",
+      "defaultValue": ""
+    },
+    {
+      "name": "infromId",
+      "defaultValue": ""
+    },
+    {
+      "name": "orgId",
+      "defaultValue": ""
+    },
+    {
+      "name": "type",
+      "defaultValue": ""
+    }
   ]
-]
+}

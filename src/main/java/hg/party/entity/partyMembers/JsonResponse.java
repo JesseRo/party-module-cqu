@@ -31,6 +31,9 @@ public class JsonResponse{
 	public static JsonResponse Success(Object data) {
 		return new JsonResponse(true, "success", data);
 	}
+	public static JsonResponse Success() {
+		return new JsonResponse(true, "success", null);
+	}
 	public static JsonResponse Success(String message,Object data) {
 		return new JsonResponse(true, message, data);
 	}

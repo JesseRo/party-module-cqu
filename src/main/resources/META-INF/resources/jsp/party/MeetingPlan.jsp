@@ -7,7 +7,8 @@
 		<portlet:param name="mvcRenderCommandName" value="/hg/showExperienceDetail"/>
 </portlet:renderURL>
 
-
+<link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/activity-manage1.css?v=1"/>
+<link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/common.min.css"/>
 <script type="text/javascript" src="${basePath}/js/partyModal.js"></script>
 <script type="text/javascript" src="${basePath}/js/ajaxfileupload.js"></script>
 <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
@@ -39,7 +40,23 @@
                    color: white;
                }
 			}
-			 
+			.content_table thead tr{
+				background: #F6F8FC;
+				height: 48px;
+				font-size: 16px;
+			}
+			.content_table thead th{
+				padding: 5px 15px !important;
+			}
+			.content_table tr:nth-child(2n) {
+				background: #FBFCFE;
+			}
+			.content_table td{
+				min-width: 130px;
+				padding: 5px 15px !important;
+				height: 48px;
+				font-size: 14px;
+			}
 		</style>
 	</head>
 	<body class="front">
@@ -50,124 +67,266 @@
 		<portlet:resourceURL id="/PartyPartActionCommand" var="PartyPartAction" />
 		<portlet:resourceURL id="/PartyWriteActionCommand" var="PartyWriteAction" />
 		<portlet:resourceURL id="/PartyRemindersCommand" var="partyRemindersUrl" />
-		<div class="content_title" style="margin-bottom:30px;">
-        	<a href="/backlogtwo" style="color: #ce0000;">待办事项</a>>查看活动进度
-        </div>
-		<div class="content_table_container">
-                <table class="content_table">
+		<div class="table_form_content">
+<%--			<div class="table_form_content activity_manage_container">--%>
+			<!-- 右侧盒子内容 -->
+			<div class="activity_manage_page">
+				<div class="breadcrumb_group" style="margin-bottom: 20px;">
+					当前位置：
+					<span class="layui-breadcrumb" lay-separator=">">
+                        <a href="javascript:;">组织生活管理</a>
+                        <a href="javascript:;">活动抽查</a>
+                    </span>
+				</div>
+				<div class="bg_white_container">
+<%--				<table id="activityTable" lay-filter="activityTable" class="custom_table"></table>--%>
+<%--				<div class="layui-form layui-border-box layui-table-view" lay-filter="LAY-table-1" lay-id="activityTable"--%>
+<%--					 style=" ">--%>
+<%--					<div class="layui-table-box">--%>
+<%--						<div class="layui-table-header">--%>
+<%--							<table cellspacing="0" cellpadding="0" border="0" class="layui-table" style="width: 100%;">--%>
+<%--								<thead>--%>
+<%--								<tr>--%>
+<%--									<th data-field="name" data-key="1-0-0" class="" >--%>
+<%--										<div class="layui-table-cell laytable-cell-1-0-0"><span>党支部</span></div>--%>
+<%--									</th>--%>
+<%--									<th data-field="createdDate" data-key="1-0-1" class="" >--%>
+<%--										<div class="layui-table-cell laytable-cell-1-0-1"><span>会议主题</span></div>--%>
+<%--									</th>--%>
+<%--									<th data-field="operate" data-key="1-0-3" class="" >--%>
+<%--										<div class="layui-table-cell laytable-cell-1-0-3"><span>开始时间</span></div>--%>
+<%--									</th>--%>
+<%--									<th data-field="operate" data-key="1-0-4" class="" >--%>
+<%--										<div class="layui-table-cell laytable-cell-1-0-4"><span>时长</span></div>--%>
+<%--									</th>--%>
+<%--									<th data-field="content" data-key="1-0-2" class="" >--%>
+<%--										<div class="layui-table-cell laytable-cell-1-0-2"><span>开展地点</span></div>--%>
+<%--									</th>--%>
+<%--									<th data-field="operate" data-key="1-0-5" class="" >--%>
+<%--										<div class="layui-table-cell laytable-cell-1-0-5"><span>操作</span></div>--%>
+<%--									</th>--%>
+<%--									<th data-field="operate" data-key="1-0-6" class="" >--%>
+<%--										<div class="layui-table-cell laytable-cell-1-0-6"><span>抽查状态</span></div>--%>
+<%--									</th>--%>
+<%--									<th data-field="operate" data-key="1-0-6" class="" >--%>
+<%--										<div class="layui-table-cell laytable-cell-1-0-6"><span>检查人</span></div>--%>
+<%--									</th>--%>
+<%--									<th data-field="operate" data-key="1-0-6" class="" >--%>
+<%--										<div class="layui-table-cell laytable-cell-1-0-6"><span>抽查状态</span></div>--%>
+<%--									</th>--%>
+<%--									<th data-field="operate" data-key="1-0-6" class="" >--%>
+<%--										<div class="layui-table-cell laytable-cell-1-0-6"><span>现场照片</span></div>--%>
+<%--									</th>--%>
+<%--									<th data-field="operate" data-key="1-0-6" class="">--%>
+<%--										<div class="layui-table-cell laytable-cell-1-0-6"><span>会议记录</span></div>--%>
+<%--									</th>--%>
+<%--									<th class="layui-table-patch">--%>
+<%--										<div class="layui-table-cell" style="width: 0.13px;"></div>--%>
+<%--									</th>--%>
+<%--								</tr>--%>
+<%--								</thead>--%>
+<%--							</table>--%>
+<%--						</div>--%>
+<%--						<div class="layui-table-body layui-table-main">--%>
+<%--							<table cellspacing="0" cellpadding="0" border="0" class="layui-table" style="width: 100%;">--%>
+<%--								<tbody>--%>
+<%--								<c:forEach items="${list}" var="c" varStatus="status">--%>
+<%--									<tr data-index="9" class="" id="${c.inform_id }">--%>
+<%--										<td data-field="name" data-key="1-0-0" class="">--%>
+<%--											<div class="layui-table-cell laytable-cell-1-0-0">--%>
+<%--													${c.org_name}--%>
+<%--											</div>--%>
+<%--										</td>--%>
+<%--										<td data-field="createdDate" data-key="1-0-1" class="">--%>
+<%--											<div class="layui-table-cell laytable-cell-1-0-1">--%>
+<%--													${c.meeting_theme_secondary}--%>
+<%--											</div>--%>
+<%--										</td>--%>
+<%--										<td data-field="operate" data-key="1-0-3" data-off="true" class="">--%>
+<%--											<div class="layui-table-cell laytable-cell-1-0-3">--%>
+<%--												<c:if test="${not empty c.start_time}">--%>
+<%--													<fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${c.start_time }"/>--%>
+<%--												</c:if>--%>
+<%--											</div>--%>
+<%--										</td>--%>
+<%--										<td data-field="operate" data-key="1-0-3" data-off="true" class="">--%>
+<%--											<div class="layui-table-cell laytable-cell-1-0-4">--%>
+<%--													${c.total_time}--%>
+<%--											</div>--%>
+<%--										</td>--%>
+<%--										<td data-field="content" data-key="1-0-2" class="">--%>
+<%--											<div class="layui-table-cell laytable-cell-1-0-2">--%>
+<%--													${c.place}--%>
+<%--											</div>--%>
+<%--										</td>--%>
+<%--										<td data-field="operate" data-key="1-0-3" data-off="true" class="" >--%>
+<%--											<div class="layui-table-cell laytable-cell-1-0-5">--%>
+<%--												<c:if test="${not empty c.plan_id && c.task_status=='6'}">--%>
+<%--													<button type="button" class="btn btn-default td_assign_btn">检查</button>--%>
+<%--													<input class="assignAll" type="hidden" value="${c.plan_id }">--%>
+<%--												</c:if>--%>
+<%--												<c:if test="${not empty c.plan_id && c.task_status=='5'}">--%>
+<%--													<button type="button" class="btn btn-default td_assign_btn">修改检查</button>--%>
+<%--													<input class="assignAll" type="hidden" value="${c.plan_id }">--%>
+<%--												</c:if>--%>
+<%--											</div>--%>
+<%--										</td>--%>
+<%--										<td data-field="operate" data-key="1-0-3" data-off="true" class="">--%>
+<%--											<div class="layui-table-cell laytable-cell-1-0-6">--%>
+<%--												<c:if test="${c.task_status == '5'}">--%>
+<%--													已指派--%>
+<%--												</c:if>--%>
+<%--												<c:if test="${c.task_status == '6'}">--%>
+<%--													未抽查--%>
+<%--												</c:if>--%>
+<%--												<c:if test="${c.task_status == '7'}">--%>
+<%--													已抽查--%>
+<%--												</c:if>--%>
+<%--											</div>--%>
+<%--										</td>--%>
+<%--										<td data-field="operate" data-key="1-0-3" data-off="true" class="">--%>
+<%--											<div class="layui-table-cell laytable-cell-1-0-6">--%>
+<%--													${c.check_person_us }--%>
+<%--											</div>--%>
+<%--										</td>--%>
+<%--										<td data-field="operate" data-key="1-0-3" data-off="true" class="img_td">--%>
+<%--											<div class="layui-table-cell laytable-cell-1-0-6">--%>
+<%--												<input type="hidden" class="imageNemeOrg" value="${c.image }" name="imageNeme"/>--%>
+<%--											</div>--%>
+<%--										</td>--%>
+
+<%--									</tr>--%>
+<%--								</c:forEach>--%>
+<%--								</tbody>--%>
+<%--							</table>--%>
+<%--						</div>--%>
+<%--					</div>--%>
+<%--				</div>--%>
+                <table class="content_table" width="100%;">
                     <thead class="table_title">
                         <tr>
-                        	<th>已读回执</th>
+<%--                        	<th>已读回执</th>--%>
                             <th>党支部</th>
                             <th>开展主题</th>
-                            <th>支部主题</th>
+<%--                            <th>支部主题</th>--%>
                             <th class="PublishTime" style="min-width: 160px;">开始时间</th>
                             <th>开展时长(分钟)</th>
-                            <th>开展地点</th>
-                            <th>主持人</th>
-                            <th>联系人</th>
-                            <th>联系人电话</th>
-                            <th>任务状态</th>
+							<th>操作</th>
+							<th>开展地点</th>
+							<th>抽查状态</th>
+<%--                            <th>主持人</th>--%>
+<%--                            <th>联系人</th>--%>
+<%--                            <th>联系人电话</th>--%>
+<%--                            <th>任务状态</th>--%>
                             <th>检查人</th>
-                            <th>审核人</th>
-                            <th>操作</th>
                             <th>现场照片</th>
-                            <th>应到人数</th>
-                            <th>实到人数</th>
-                            <th>请假人员</th>
-                            <th>出勤率</th>
-                            <th>上传会议记录</th>
-                            <th>评价得分</th>
-                            <th>查看心得</th>
-                            <th>是否异常</th>
-                            <th>备注</th>
+<%--                            <th>应到人数</th>--%>
+<%--                            <th>实到人数</th>--%>
+<%--                            <th>请假人员</th>--%>
+<%--                            <th>出勤率</th>--%>
+                            <th>会议记录</th>
+<%--                            <th>评价得分</th>--%>
+<%--                            <th>查看心得</th>--%>
+<%--                            <th>是否异常</th>--%>
+<%--                            <th>备注</th>--%>
                         </tr>
                     </thead>
                     <tbody class="table_info" id="tBody">
                    	    <c:forEach items="${list}" var="c" varStatus="status">
 	                        <tr>
-	                        	<td data-label="已读回执" class="receipts">${c.read_status }</td>
+<%--	                        	<td data-label="已读回执" class="receipts">${c.read_status }</td>--%>
 	                            <td data-label="党支部" class="Party_name">${c.org_name }</td>
-	                            <td data-label="开展主题">${c.theme_ }</td>
+<%--	                            <td data-label="开展主题">${c.theme_ }</td>--%>
 	                            <td data-label="支部主题">${c.meeting_theme_secondary }</td>
 	                            <td data-label="开始时间" class="PublishTime"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${c.start_p }" /></td>
 	                            <td data-label="开展时长">${c.total_time }</td>
+								<td data-label="操作" class="table_content">
+									<c:if test="${not empty c.plan_id && c.task_status=='6'}">
+										<button type="button" class="btn btn-default td_assign_btn">检查</button>
+										<input class="assignAll" type="hidden" value="${c.plan_id }">
+									</c:if>
+									<c:if test="${not empty c.plan_id && c.task_status=='5'}">
+										<button type="button" class="btn btn-default td_assign_btn">修改检查</button>
+										<input class="assignAll" type="hidden" value="${c.plan_id }">
+									</c:if>
+
+								</td>
 	                            <td data-label="开展地点">${c.place }</td>
-	                            <td data-label="主持人">${c.host }</td>
-	                            <td data-label="联系人">${c.contact }</td>
-	                            <td data-label="联系人电话">${c.contact_phone }</td>
-	                            <td data-label="任务状态" class="TaskState">
-	                            	<c:if test="${c.task_status == '1'}"> 
-	                            		 已提交
+								<td data-label="抽查状态">
+									<c:if test="${c.task_status == '5'}">
+										已指派
 									</c:if>
-									<c:if test="${c.task_status == '2'}"> 
-	                            		 已撤回
+									<c:if test="${c.task_status == '6'}">
+										未抽查
 									</c:if>
-									<c:if test="${c.task_status == '3'}"> 
-	                            		 被驳回
+									<c:if test="${c.task_status == '7'}">
+										已抽查
 									</c:if>
-									<c:if test="${c.task_status == '4'}"> 
-	                            		 已通过
-									</c:if>
-									<c:if test="${c.task_status == '5'}"> 
-	                            		 已指派
-									</c:if>
-									<c:if test="${c.task_status == '6'}"> 
-	                            		 未检查
-									</c:if>
-									<c:if test="${c.task_status == '7'}"> 
-	                            		 已检查
-									</c:if>
-	                            </td>
+								</td>
+<%--	                            <td data-label="主持人">${c.host }</td>--%>
+<%--	                            <td data-label="联系人">${c.contact }</td>--%>
+<%--	                            <td data-label="联系人电话">${c.contact_phone }</td>--%>
+<%--	                            <td data-label="任务状态" class="TaskState">--%>
+<%--	                            	<c:if test="${c.task_status == '1'}"> --%>
+<%--	                            		 已提交--%>
+<%--									</c:if>--%>
+<%--									<c:if test="${c.task_status == '2'}"> --%>
+<%--	                            		 已撤回--%>
+<%--									</c:if>--%>
+<%--									<c:if test="${c.task_status == '3'}"> --%>
+<%--	                            		 被驳回--%>
+<%--									</c:if>--%>
+<%--									<c:if test="${c.task_status == '4'}"> --%>
+<%--	                            		 已通过--%>
+<%--									</c:if>--%>
+<%--									<c:if test="${c.task_status == '5'}"> --%>
+<%--	                            		 已指派--%>
+<%--									</c:if>--%>
+<%--									<c:if test="${c.task_status == '6'}"> --%>
+<%--	                            		 未检查--%>
+<%--									</c:if>--%>
+<%--									<c:if test="${c.task_status == '7'}"> --%>
+<%--	                            		 已检查--%>
+<%--									</c:if>--%>
+<%--	                            </td>--%>
 	                            <td data-label="检查人">${c.check_person_us }</td>
-	                            <td data-label="审核人">${c.auditor }</td>
-	                            <td data-label="操作" class="table_content">
-	                            	<c:if test="${not empty c.plan_id && c.task_status=='6'}">
-			                           <button type="button" class="btn btn-default td_assign_btn">检查</button>
-			                           <input class="assignAll" type="hidden" value="${c.plan_id }">  
-			                        </c:if>
-			                        <c:if test="${not empty c.plan_id && c.task_status=='5'}">
-			                           <button type="button" class="btn btn-default td_assign_btn">修改检查</button>
-			                           <input class="assignAll" type="hidden" value="${c.plan_id }">  
-			                        </c:if>
-	                            	
-	                            </td>
+<%--	                            <td data-label="审核人">${c.auditor }</td>--%>
+
 	                            <td data-label="现场照片" class="img_td">
 	                            	<input type="hidden" class="imageNemeOrg" value="${c.image }" name="imageNeme"/>
 	                            </td>
-	                            <td data-label="应到人数">${c.shoule_persons }</td>
-	                            <td data-label="实到人数">${c.actual_persons }</td>
-	                            <td data-label="请假人员">${c.leave_persons }</td>
-	                            <td data-label="出勤率">${c.attendance }</td>
+<%--	                            <td data-label="应到人数">${c.shoule_persons }</td>--%>
+<%--	                            <td data-label="实到人数">${c.actual_persons }</td>--%>
+<%--	                            <td data-label="请假人员">${c.leave_persons }</td>--%>
+<%--	                            <td data-label="出勤率">${c.attendance }</td>--%>
 	                            <td data-label="上传会议记录">
-	                            	<c:if test="${not empty c.attachment_n}"> 
+	                            	<c:if test="${not empty c.attachment_n}">
 	                           			<a class="meetingAnnex">${c.check_status }
 		                            		<input type="hidden" class="annexName" value="${c.attachment_n }" name="annexName"/>
-		                            	</a> 
-									</c:if>  
-									<c:if test="${empty c.attachment_n}"> 
-									     ${c.check_status }                     
+		                            	</a>
+									</c:if>
+									<c:if test="${empty c.attachment_n}">
+									     ${c.check_status }
 									</c:if>
 	                            </td>
-	                            <td data-label="评价得分">
-	                            	<a href="/gradedetail?meetingId=${c.meeting}&branchId=${c.org_id_u}">
-	                            		${c.evaluation_score }
-	                            	</a>
-	                            </td>
-	                             <td data-label="查看心得">
-								     <c:if test="${c.task_status gt 4}">
-								     <a class="check_reply_state">查看</a>
-				                     <input type="hidden" value="${c.inform_id }"/>
-				                     <input type="hidden" value="${c.organization_id }"/>
-				                     </c:if>
-			                      </td>
-	                            <td data-label="是否异常">${c.meeting_state }</td>
-	                            <td data-label="检查情况">${c.remark }</td>
+<%--	                            <td data-label="评价得分">--%>
+<%--	                            	<a href="/gradedetail?meetingId=${c.meeting}&branchId=${c.org_id_u}">--%>
+<%--	                            		${c.evaluation_score }--%>
+<%--	                            	</a>--%>
+<%--	                            </td>--%>
+<%--	                             <td data-label="查看心得">--%>
+<%--								     <c:if test="${c.task_status gt 4}">--%>
+<%--								     <a class="check_reply_state">查看</a>--%>
+<%--				                     <input type="hidden" value="${c.inform_id }"/>--%>
+<%--				                     <input type="hidden" value="${c.organization_id }"/>--%>
+<%--				                     </c:if>--%>
+<%--			                      </td>--%>
+<%--	                            <td data-label="是否异常">${c.meeting_state }</td>--%>
+<%--	                            <td data-label="检查情况">${c.remark }</td>--%>
 	                        </tr>
                         </c:forEach>
                     </tbody>
                 </table>
-            </div>
    <!-- -----------------------分页------------------------- -->
 				<div class="pagination_container">
 			        <ul class="pagination" id="page"></ul>
@@ -187,202 +346,205 @@
 			            </form>
 			        </div>
 				 </div>
-		
-				 <script type="text/javascript">
-					 $(document).ready(function() {
-						 
-						 var pages = $(".total_page").html();
-						var currentPage = $('.current_page').val();
-						$("input[name='pageNo']").val($('.current_page').val());
-						if(currentPage == 1){
-							$('.page_next').removeClass('not_allow');
-							$('.page_prev').addClass('not_allow');
-							
-						}else if(currentPage == pages){
-							$('.page_prev').removeClass('not_allow');
-							$('.page_next').addClass('not_allow');
-							
-						}else{
-							
-						};
-						$("#jumpPageNo").change(function(){
-							$("input[name='pageNo']").val($(this).val());
-						})
-				     Page({
-				         num: pages, //页码数
-				         startnum: currentPage, //指定页码
-				         elem: $('#page'), //指定的元素
-				         callback: function(n) { //回调函数
-				             $("input[name='pageNo']").val(n);
-				             $("#getPageNo").submit();
-				             if (n == 1) {
-				                 $('#page a').removeClass('not_allow');
-				                 $('.page_prev').addClass('not_allow');
-				             } else if (n >= $('.total_page').html()) {
-				                 $('#page a').removeClass('not_allow');
-				                 $('.page_next').addClass('not_allow')
-				             } else {
-				                 $('#page a').removeClass('not_allow');
-				             }
-				         }
-				     });
-				  });
-					 
-				//任务状态加颜色
-				$(function(){
-						$(".TaskState").each(function(){
-							var _text = $(this).text();
-							if(_text == "被驳回"){
-								$(this).addClass("color_blue");
-							}else if(_text == "未检查"){
-								$(this).addClass("color_blue_1");
-							}else{}
-							
-						})
-			    	})
-		    	//已读回执加色
-		    	$(function(){
-		    		$(".receipts").each(function(){
-		    			var receipts_text = $(this).text();
-		    			if(receipts_text == "未读"){
-		    				$(this).addClass("color_blue_1");
-		    			}
-		    		})
-		    	})
-				
-			</script>
-			
-			<!-- 模态框（Modal） -->
-	        <div class="modal fade" id="keyAssign" tabindex="-1" role="dialog" aria-labelledby="keyAssignLabel" aria-hidden="true">
-	            <div class="modal-dialog">
-	                <div class="modal-content">
-	                    <div class="modal-header">
-	                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-	                        &times;
-	                    </button>
-	                        <h4 class="modal-title" id="keyAssignLabel">默认分配</h4>
-	                    </div>
-	                    <div class="modal-body">点击确定系统将任务默认分配给排序在第一位的人员</div>
-	                    <div class="modal-footer">
-	                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-	                        <button type="button" class="btn btn_main confirm_keyAssign">确定</button>
-	                    </div>
-	                </div>
-	                <!-- /.modal-content -->
-	            </div>
-	            <!-- /.modal -->
-	        </div>
-	        <!-- 模态框（Modal） -->
-	        <div class="modal fade" id="Assign" tabindex="-1" role="dialog" aria-labelledby="assignLabel" aria-hidden="true">
-	            <div class="modal-dialog">
-	                <div class="modal-content">
-	                    <div class="modal-header">
-	                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-	                            &times;
-	                        </button>
-	                        <h4 class="modal-title" id="assignLabel">系统匹配最优人员</h4>
-	                    </div>
-	                    <div class="modal-body">
-	                        <div class="assign_modal_container">
-	                            <div class="assign_modal">
-	                                <div class="assign_member">
-	                                <input type="hidden" class="hiddenValue">
-	                                <input type="hidden" class="assignId">
-	                                <input type="hidden" class="assign_name">
-	                                    <ul class="member_list member_list_append">
-	                                      
-	                                    </ul>
-	                                </div>
-	                                <div class="outof_assign_member">
-	                                    <span><!-- 不可指派人员： --></span>
-	                                    <ul class="outof_assign_list member_list outof_assign_list_append">
-	                                             
-	                                    </ul>
-	                                </div>
-	                            </div>
-	                            <div class="operation_container">
-	                                <div class="inner_operation">
-	                                    <button type="button" class="btn btn-sm btn-default add_member_btn">
-	                                        <img src="${ basePath}/images/assign_icon.png"/>
-	                                                                                                                     添加
-	                                    </button>
-	                                    <button type="button" class="btn btn-sm btn-default btn_delete">
-	                                        <img src="${ basePath}/images/assign_icon.png"/>
-	                                                                                                                      删除
-	                                    </button>
-	                                    <div class="form-horizontal add_memeber_form" role="form">
-	                                        <div class="form-group">
-	                                            <div class="col-sm-12">
-	                                                <input type="text" class="form-control add_member_input" placeholder="请输入姓名进行添加">
-	                                            </div>
-	                                        </div>
-	                                        <div class="addPersons">
-	                                        </div>
-	                                        <div class="form-group">
-	                                            <div class="col-sm-offset-2 col-sm-10 form_btn">
-	                                                <button type="button" class="btn btn-sm btn-default form_hide_btn">取消</button>
-	                                                <button type="button" class="btn btn-sm btn_main form_add_btn">确定</button>
-	                                            </div>
-	                                        </div>
-	                                        
-	                                    </div>
-	                                </div>
-	                            </div>
-	                        </div>
-	
-	                    </div>
-	                    <div class="modal-footer">
-	                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-	                        <button type="button" class="btn btn_main confirm_assign">指派</button>
-	                    </div>
-	                </div>
-	                <!-- /.modal-content -->
-	            </div>
-	            <!-- /.modal -->
-	        </div>
-	          <!--查看心得弹框  -->
-        	
-    <div class="modal fade check" id="check" tabindex="-1" role="dialog" aria-labelledby="checkLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                     &times;
-                   </button>
-                    <h4 class="modal-title" id="checkLabel">已读回执</h4>
-                </div>
-                <div class="modal-body">
-                    <table class="col-sm-12 col-xs-12 replaytable">
-                        <thead>
-                            <tr>
-                                <th style="text-align: left;">姓名</th>
-                                <th class="select_state" style="text-align: left;">
-                                    <!-- <select class="select_state">
-                                        <option value="allState">已读/未读</option>
-                                        <option value="read">已读</option>
-                                        <option value="noRead">未读</option>
-                                    </select> -->
-                                                                                                             通知
-                                    <input class="reply_infromId" type="hidden">
-                                    <input class="reply_orgId" type="hidden">
-                                  
-                                </th>
-<!--                                 <th>评分</th> -->
-                                <th style="text-align: left;">是否已上传心得</th>
-                            </tr>
-                        </thead>
-                        <tbody class="tbody_reply">
-                          
-                        </tbody>
+				</div>
+			</div>
+		</div>
 
-                    </table>
-                </div>
-<!--                 <div class="modal-footer"> -->
-<!--                     <button type="button" class="btn btn_main">确定</button> -->
-<!--                 </div> -->
-            </div>
-        </div>
-    </div>
+	 	<script type="text/javascript">
+			 $(document).ready(function() {
+
+				 var pages = $(".total_page").html();
+				var currentPage = $('.current_page').val();
+				$("input[name='pageNo']").val($('.current_page').val());
+				if(currentPage == 1){
+					$('.page_next').removeClass('not_allow');
+					$('.page_prev').addClass('not_allow');
+
+				}else if(currentPage == pages){
+					$('.page_prev').removeClass('not_allow');
+					$('.page_next').addClass('not_allow');
+
+				}else{
+
+				};
+				$("#jumpPageNo").change(function(){
+					$("input[name='pageNo']").val($(this).val());
+				})
+			 Page({
+				 num: pages, //页码数
+				 startnum: currentPage, //指定页码
+				 elem: $('#page'), //指定的元素
+				 callback: function(n) { //回调函数
+					 $("input[name='pageNo']").val(n);
+					 $("#getPageNo").submit();
+					 if (n == 1) {
+						 $('#page a').removeClass('not_allow');
+						 $('.page_prev').addClass('not_allow');
+					 } else if (n >= $('.total_page').html()) {
+						 $('#page a').removeClass('not_allow');
+						 $('.page_next').addClass('not_allow')
+					 } else {
+						 $('#page a').removeClass('not_allow');
+					 }
+				 }
+			 });
+		  });
+
+		//任务状态加颜色
+		$(function(){
+				$(".TaskState").each(function(){
+					var _text = $(this).text();
+					if(_text == "被驳回"){
+						$(this).addClass("color_blue");
+					}else if(_text == "未检查"){
+						$(this).addClass("color_blue_1");
+					}else{}
+
+				})
+			})
+		//已读回执加色
+		$(function(){
+			$(".receipts").each(function(){
+				var receipts_text = $(this).text();
+				if(receipts_text == "未读"){
+					$(this).addClass("color_blue_1");
+				}
+			})
+		})
+
+	</script>
+			
+		<!-- 模态框（Modal） -->
+		<div class="modal fade" id="keyAssign" tabindex="-1" role="dialog" aria-labelledby="keyAssignLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+						&times;
+					</button>
+						<h4 class="modal-title" id="keyAssignLabel">默认分配</h4>
+					</div>
+					<div class="modal-body">点击确定系统将任务默认分配给排序在第一位的人员</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+						<button type="button" class="btn btn_main confirm_keyAssign">确定</button>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal -->
+		</div>
+		<!-- 模态框（Modal） -->
+		<div class="modal fade" id="Assign" tabindex="-1" role="dialog" aria-labelledby="assignLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+							&times;
+						</button>
+						<h4 class="modal-title" id="assignLabel">系统匹配最优人员</h4>
+					</div>
+					<div class="modal-body">
+						<div class="assign_modal_container">
+							<div class="assign_modal">
+								<div class="assign_member">
+								<input type="hidden" class="hiddenValue">
+								<input type="hidden" class="assignId">
+								<input type="hidden" class="assign_name">
+									<ul class="member_list member_list_append">
+
+									</ul>
+								</div>
+								<div class="outof_assign_member">
+									<span><!-- 不可指派人员： --></span>
+									<ul class="outof_assign_list member_list outof_assign_list_append">
+
+									</ul>
+								</div>
+							</div>
+							<div class="operation_container">
+								<div class="inner_operation">
+									<button type="button" class="btn btn-sm btn-default add_member_btn">
+										<img src="${ basePath}/images/assign_icon.png"/>
+																													 添加
+									</button>
+									<button type="button" class="btn btn-sm btn-default btn_delete">
+										<img src="${ basePath}/images/assign_icon.png"/>
+																													  删除
+									</button>
+									<div class="form-horizontal add_memeber_form" role="form">
+										<div class="form-group">
+											<div class="col-sm-12">
+												<input type="text" class="form-control add_member_input" placeholder="请输入姓名进行添加">
+											</div>
+										</div>
+										<div class="addPersons">
+										</div>
+										<div class="form-group">
+											<div class="col-sm-offset-2 col-sm-10 form_btn">
+												<button type="button" class="btn btn-sm btn-default form_hide_btn">取消</button>
+												<button type="button" class="btn btn-sm btn_main form_add_btn">确定</button>
+											</div>
+										</div>
+
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+						<button type="button" class="btn btn_main confirm_assign">指派</button>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal -->
+		</div>
+		  <!--查看心得弹框  -->
+
+		<div class="modal fade check" id="check" tabindex="-1" role="dialog" aria-labelledby="checkLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+						 &times;
+					   </button>
+						<h4 class="modal-title" id="checkLabel">已读回执</h4>
+					</div>
+					<div class="modal-body">
+						<table class="col-sm-12 col-xs-12 replaytable">
+							<thead>
+								<tr>
+									<th style="text-align: left;">姓名</th>
+									<th class="select_state" style="text-align: left;">
+										<!-- <select class="select_state">
+											<option value="allState">已读/未读</option>
+											<option value="read">已读</option>
+											<option value="noRead">未读</option>
+										</select> -->
+																												 通知
+										<input class="reply_infromId" type="hidden">
+										<input class="reply_orgId" type="hidden">
+
+									</th>
+	<!--                                 <th>评分</th> -->
+									<th style="text-align: left;">是否已上传心得</th>
+								</tr>
+							</thead>
+							<tbody class="tbody_reply">
+
+							</tbody>
+
+						</table>
+					</div>
+	<!--                 <div class="modal-footer"> -->
+	<!--                     <button type="button" class="btn btn_main">确定</button> -->
+	<!--                 </div> -->
+				</div>
+			</div>
+		</div>
     
      <!-- 模态框2（Moda2） -->
 	     <div class="modal fade" id="input2" tabindex="-1" role="dialog" aria-labelledby="inputLabel" aria-hidden="true">

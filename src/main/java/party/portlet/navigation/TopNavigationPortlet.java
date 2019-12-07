@@ -68,14 +68,16 @@ public class TopNavigationPortlet extends MVCPortlet {
 	public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
 			throws IOException, PortletException {
 		//网站首页导航
-		Map<String,Object> map=navigationPermissionsServer.findHomePage(NAME);
-		//保存数据
 		List<Map<String,Object>> groups=new ArrayList<Map<String,Object>>();
+//		Map<String,Object> map=navigationPermissionsServer.findHomePage(NAME);
+//		groups.add(map);
+
+		//保存数据
+
 		
 		String sessionId=renderRequest.getRequestedSessionId();
 		String orgId=(String) SessionManager.getAttribute(sessionId, "department");
 		String role=(String) SessionManager.getAttribute(sessionId, "role");
-		groups.add(map);
 		List<Map<String,Object>> lists = null;
 		if(("".equals(orgId)|| orgId==null) && ("".equals(role) || role==null)){
 			
@@ -114,7 +116,7 @@ public class TopNavigationPortlet extends MVCPortlet {
 		//String role = (String) SessionManager.getAttribute(sessionId, "role");
 		if (!StringUtils.isEmpty(userId)) {
 			List<String> roles = userRoleService.getRoles((String)userId);
-			renderRequest.setAttribute("roles", String.join(",", roles));
+			renderRequest.setAttribute("roles",  roles);
 		}
 		renderRequest.setAttribute("name", name);
 		renderRequest.setAttribute("role", role);

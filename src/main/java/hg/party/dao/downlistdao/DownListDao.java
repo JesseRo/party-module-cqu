@@ -44,6 +44,14 @@ public class DownListDao  extends PostgresqlDaoImpl<Hg_Value_Attribute_Info>{
 		RowMapper<Hg_Value_Attribute_Info> rowMapper = BeanPropertyRowMapper.newInstance(Hg_Value_Attribute_Info.class);
 		return this.jdbcTemplate.query(sql, rowMapper);
 	}
+
+	//学生宿舍园区
+	public List<Hg_Value_Attribute_Info> meetType(){
+		String sql="SELECT * FROM hg_value_attribute_info "+
+				"WHERE resources_type = 'meetingType' ";
+		RowMapper<Hg_Value_Attribute_Info> rowMapper = BeanPropertyRowMapper.newInstance(Hg_Value_Attribute_Info.class);
+		return this.jdbcTemplate.query(sql, rowMapper);
+	}
 	//查询否有重复
 	public List<Hg_Value_Attribute_Info> repeat(String val,String type){
 		String sql = "SELECT * from hg_value_attribute_info "+
@@ -69,11 +77,11 @@ public class DownListDao  extends PostgresqlDaoImpl<Hg_Value_Attribute_Info>{
 	   return map;
 	}
 
-	public Map<String, Object> postGresqlFind(int pageNo, int pageSize, String sql, String s1, String s2, String s3) {
+	public Map<String, Object> postGresqlFind(int pageNo, int pageSize, String sql, String... s1) {
 		String sql1=sql+" limit "+pageSize+" offset "+(pageNo-1)*pageSize;
 	    Map<String, Object> map=new HashMap<>();
-		List<Map<String,Object>> list=this.jdbcTemplate.queryForList(sql1,s1,s2,s3);
-		List<Map<String,Object>> count=this.jdbcTemplate.queryForList(sql,s1,s2,s3);
+		List<Map<String,Object>> list=this.jdbcTemplate.queryForList(sql1,s1);
+		List<Map<String,Object>> count=this.jdbcTemplate.queryForList(sql,s1);
 		int total=count.size();
 		if(total%pageSize==0){
 			map.put("totalPage", total/pageSize);

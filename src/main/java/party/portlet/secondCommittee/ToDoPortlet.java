@@ -64,8 +64,6 @@ public class ToDoPortlet extends MVCPortlet {
 	Logger logger = Logger.getLogger(ToDoPortlet.class);
 
 
-	
-	
 	@Override
 	@Transactional
 	public void doView(RenderRequest request, RenderResponse response)
@@ -95,9 +93,9 @@ public class ToDoPortlet extends MVCPortlet {
 			List<Map<String, Object>> taskStatusList = secondCommitteeService.queryAllTaskStatus(4);
 			logger.info("meetingTypeList is  " + meetingTypeList );
 			logger.info("taskStatusList is  " + taskStatusList );
-			Map<Long, Object> taskStatuses = new HashMap<>();
+			Map<String, Object> taskStatuses = new HashMap<>();
 			for(Map<String, Object> status: taskStatusList){
-				taskStatuses.put(Long.valueOf((String)status.get("resources_key")), status.get("resources_value"));
+				taskStatuses.put((String)status.get("resources_key"), status.get("resources_value"));
 			}
 			String type = ParamUtil.getString(request, "mettingType");
 			String status = ParamUtil.getString(request, "taskstatus");

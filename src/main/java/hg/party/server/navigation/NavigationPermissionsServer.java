@@ -61,8 +61,8 @@ public class NavigationPermissionsServer {
 		return navigationPermissionsDao.findByNavigationId(navigationId);
 	}
 	
-	public void updateNavigation(String navName,String location,String role,String navigationId){
-		navigationPermissionsDao.updateNavigation(navName, location, role, navigationId);
+	public void updateNavigation(String navName,String location,String role,String navigationId, String path){
+		navigationPermissionsDao.updateNavigation(navName, location, role, navigationId, path);
 	}
 	
 	public List<Map<String,Object>> findParentNode(String role,String location){

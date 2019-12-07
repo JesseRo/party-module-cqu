@@ -22,8 +22,8 @@ public class DownListServer {
 		return listDao.postGresqlFind(pageNo, pageSize, sql);
 	}
 	//分页
-	public Map<String, Object> postGresqlFind(int pageNo,int pageSize,String sql,String s1,String s2,String s3){
-		return listDao.postGresqlFind(pageNo, pageSize, sql,s1,s2,s3);
+	public Map<String, Object> postGresqlFind(int pageNo,int pageSize,String sql,String... s){
+		return listDao.postGresqlFind(pageNo, pageSize, sql,s);
 	}
 	//根据id查询
 	public Hg_Value_Attribute_Info findById(int id){

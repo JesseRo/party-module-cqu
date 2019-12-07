@@ -224,51 +224,62 @@ public class PartyMeetingPlanInfoDao extends PostgresqlDaoImpl<MeetingPlan>{
 	
 	//bb
 	public List<Map<String, Object>> find(String starDdate,String endDate,String meetType,String theme,String seconedId,String branchId,int pageSize,int startPage,String checkState){
-		String sql= "select cc.*,cus.user_name as check_person_org_name from "+
-				    "(SELECT tt.*,us.user_name as check_person_name FROM "+
-				    "(SELECT plan.task_status as plan_state, (select org_name from hg_party_org WHERE org_id=plan.organization_id) as branch_name,"+
-					"(select org_name from hg_party_org WHERE org_id=(SELECT org_parent FROM hg_party_org WHERE org_id=plan.organization_id) and org_type!='organization' ) as second_name,"+
-					" plan.*,info.release_time from hg_party_meeting_plan_info  as plan ,hg_party_org_inform_info as info";
-		    StringBuffer buffer=new StringBuffer(sql);
-		    if (!StringUtils.isEmpty(seconedId)&&StringUtils.isEmpty(branchId)) {
-		    	buffer.append(" ,hg_party_org as org_o");
+//		String sql= "select cc.*,cus.user_name as check_person_org_name from "+
+//				    "(SELECT tt.*,us.user_name as check_person_name FROM "+
+//				    "(SELECT plan.task_status as plan_state, (select org_name from hg_party_org WHERE org_id=plan.organization_id) as branch_name,"+
+//					"(select org_name from hg_party_org WHERE org_id=(SELECT org_parent FROM hg_party_org WHERE org_id=plan.organization_id) and org_type!='organization' ) as second_name,"+
+//					" plan.*,info.release_time from hg_party_meeting_plan_info  as plan ,hg_party_org_inform_info as info";
+//		    StringBuffer buffer=new StringBuffer(sql);
+//		    if (!StringUtils.isEmpty(seconedId)&&StringUtils.isEmpty(branchId)) {
+//		    	buffer.append(" ,hg_party_org as org_o");
+//			}
+		String sql = "\n" +
+				"\tSELECT\n" +
+				"\t\tplan.task_status AS plan_state,\n" +
+				"\t\t( SELECT org_name FROM hg_party_org WHERE org_id = plan.organization_id ) AS branch_name,\n" +
+				"\t\t( SELECT org_name FROM hg_party_org WHERE org_id = ( SELECT org_parent FROM hg_party_org WHERE org_id = plan.organization_id ) AND org_type != 'organization' ) AS second_name,\n" +
+				"\t\tplan.*\n" +
+				"\tFROM\n" +
+				"\t\thg_party_meeting_plan_info AS plan\n" +
+				"\t\tLEFT OUTER JOIN hg_users_info AS us ON plan.check_person = us.user_id \n" +
+				"\t\tleft outer join hg_party_org as org_o on plan.organization_id = org_o.org_id\n" +
+				"\twhere 1 = 1 ";
+		StringBuffer buffer=new StringBuffer(sql);
+		if (!StringUtils.isEmpty(starDdate)&&StringUtils.isEmpty(endDate)) {
+			buffer.append(" AND plan.start_time>'"+starDdate+" 00:00:00' and plan.start_time<'"+starDdate+" 24:00:00'");
+		}
+		if (!StringUtils.isEmpty(starDdate)&&!StringUtils.isEmpty(endDate)) {
+			buffer.append(" AND plan.start_time>'"+starDdate+" 00:00:00' and plan.start_time<'"+endDate+" 24:00:00'");
+		}
+		if (StringUtils.isEmpty(starDdate)&&!StringUtils.isEmpty(endDate)) {
+			buffer.append(" AND plan.start_time>'"+endDate+" 00:00:00' and plan.start_time<'"+endDate+" 24:00:00'");
+		}
+		if (!StringUtils.isEmpty(meetType)) {
+			buffer.append(" and plan.meeting_type='"+meetType+"'");
+		}
+		if (!StringUtils.isEmpty(theme)) {
+			buffer.append(" and plan.meeting_theme like '%"+theme+"%'");
+		}
+		if (!StringUtils.isEmpty(seconedId)&&!StringUtils.isEmpty(branchId)) {
+			buffer.append(" AND plan.organization_id='"+branchId+"'");
+		}
+		if (!StringUtils.isEmpty(seconedId)&&StringUtils.isEmpty(branchId)) {
+			buffer.append(" and (org_o.org_parent='"+seconedId+"'  or org_o.org_id='"+seconedId+"') and plan.organization_id=org_o.org_id");
+		}
+		if (!StringUtils.isEmpty(checkState)) {
+			if ("t".equals(checkState)) {
+				buffer.append(" and plan.check_person_org is not null");
+			}else {
+				buffer.append(" and plan.check_person_org is null");
 			}
-		    buffer.append(" WHERE plan.inform_id=info.inform_id");
-		    if (!StringUtils.isEmpty(starDdate)&&StringUtils.isEmpty(endDate)) {
-				buffer.append(" AND plan.start_time>'"+starDdate+" 00:00:00' and plan.start_time<'"+starDdate+" 24:00:00'");
-			}
-		    if (!StringUtils.isEmpty(starDdate)&&!StringUtils.isEmpty(endDate)) {
-				buffer.append(" AND plan.start_time>'"+starDdate+" 00:00:00' and plan.start_time<'"+endDate+" 24:00:00'");
-			}
-		    if (StringUtils.isEmpty(starDdate)&&!StringUtils.isEmpty(endDate)) {
-				buffer.append(" AND plan.start_time>'"+endDate+" 00:00:00' and plan.start_time<'"+endDate+" 24:00:00'");
-			}
-		    if (!StringUtils.isEmpty(meetType)) {
-		    	buffer.append(" and plan.meeting_type='"+meetType+"'");
-			}
-		    if (!StringUtils.isEmpty(theme)) {
-		    	buffer.append(" and plan.meeting_theme like '%"+theme+"%'");
-			}
-		    if (!StringUtils.isEmpty(seconedId)&&!StringUtils.isEmpty(branchId)) {
-		    	buffer.append(" AND plan.organization_id='"+branchId+"'");
-			}
-		    if (!StringUtils.isEmpty(seconedId)&&StringUtils.isEmpty(branchId)) {
-		    	buffer.append(" and (org_o.org_parent='"+seconedId+"'  or org_o.org_id='"+seconedId+"') and plan.organization_id=org_o.org_id");
-			}
-		    if (!StringUtils.isEmpty(checkState)) {
-		    	if ("t".equals(checkState)) {
-		    		buffer.append(" and plan.check_person_org is not null");
-				}else {
-					buffer.append(" and plan.check_person_org is null");
-				}
-			}
-		    buffer.append(" order by info.release_time desc limit "+pageSize+" OFFSET "+startPage+"");
-		    buffer.append(" ) as tt LEFT OUTER JOIN hg_users_info as us"+
-		                  " on tt.check_person=us.user_id ) as cc LEFT OUTER JOIN hg_users_info as cus"+
-		                  " on cc.check_person_org=cus.user_id");
+		}
+		buffer.append(" order by plan.id desc limit "+pageSize+" OFFSET "+startPage+"");
+//		    buffer.append(" ) as tt LEFT OUTER JOIN hg_users_info as us"+
+//		                  " on tt.check_person=us.user_id ) as cc LEFT OUTER JOIN hg_users_info as cus"+
+//		                  " on cc.check_person_org=cus.user_id");
 //		    logger.info(buffer.toString());
 //		    System.out.println(buffer.toString());
-		    return jdbcTemplate.queryForList(buffer.toString());
+		return jdbcTemplate.queryForList(buffer.toString());
 	}
 	//bb1
 	public List<Map<String, Object>> userMeetingCount(String userName,String seconedId,String branchId,int pageSize,int startPage,String orgType,String orgId){
@@ -426,11 +437,11 @@ public class PartyMeetingPlanInfoDao extends PostgresqlDaoImpl<MeetingPlan>{
 			
 			
 		}
-		public Map<String, Object> postGresqlFind(int pageNo, int pageSize, String sql, String department, String ss) {
+		public Map<String, Object> postGresqlFind(int pageNo, int pageSize, String sql, String...ss) {
 				String sql1=sql+" limit "+pageSize+" offset "+(pageNo-1)*pageSize;
 			    Map<String, Object> map=new HashMap<>();
-				List<Map<String,Object>> list=this.jdbcTemplate.queryForList(sql1,department,ss);
-				List<Map<String,Object>> count=this.jdbcTemplate.queryForList(sql,department,ss);
+				List<Map<String,Object>> list=this.jdbcTemplate.queryForList(sql1,ss);
+				List<Map<String,Object>> count=this.jdbcTemplate.queryForList(sql,ss);
 				int total=count.size();
 				if(total%pageSize==0){
 					map.put("totalPage", total/pageSize);

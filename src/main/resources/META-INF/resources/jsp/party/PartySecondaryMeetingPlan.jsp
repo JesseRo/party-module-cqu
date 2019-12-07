@@ -30,65 +30,93 @@
                     color: white;
               }
 			}
+			.content_table thead tr{
+				background: #F6F8FC;
+				height: 48px;
+				font-size: 16px;
+			}
+			.content_table thead th{
+				padding: 5px 15px !important;
+			}
+			.content_table tr:nth-child(2n) {
+				background: #FBFCFE;
+			}
+			.content_table td{
+				min-width: 130px;
+				padding: 5px 15px !important;
+				height: 48px;
+				font-size: 14px;
+			}
 		</style>
 	</head>
 	<body class="front">
-		<div class="content_title" style="margin-bottom:30px;">
-        	<a href="/passpublic" style="color: #ce0000;">已发布</a>>二级党组织活动进度                               
-        </div>
-        <div style="height:34px;margin-bottom:20px;">
-        	<portlet:actionURL name="/OrgCheckSeconed" var="OrgCheckSeconed"></portlet:actionURL>
-	      	<form action="${OrgCheckSeconed }" id="OrgCheckSeconed_form" method="post">
-	            <div class="publish_search_box col-sm-5" style="padding-left:0;">
-	                <input type="hidden" name="informId" value="${informId }">
-	                <input type="hidden" name="pageNo" value="${pageNo }">
-	                <input type="hidden" name="totalPage" value="${totalPage }">
-	                <input name="seconedName" type="text" value="${seconedName }" class="col-sm-10" placeholder="请输入搜索内容" style="text-indent:1em;height:34px;border: 1px solid #e1e1e1;border-right: none;float:left;background:#f7f7f7;"/>
-	                <span onclick="submitOrgCheckSeconed_form();" style="background-image:url('/images/search-white.png');background-repeat: no-repeat;background-position: center;background-color:#ce0000;display:inline-block;width:52px;height:34px;vertical-align: top;"></span>
-	            </div>
-	       </form>
-	       <script type="text/javascript">
-	        function submitOrgCheckSeconed_form(){
-	     	   $("#OrgCheckSeconed_form").submit();
-	        }
-	       </script>
-        </div>
-		<div class="content_table_container">
-		       
-                <table class="content_table">
+		<div class="table_form_content">
+			<!-- 右侧盒子内容 -->
+			<div class="activity_manage_page">
+				<div class="breadcrumb_group" style="margin-bottom: 20px;">
+					当前位置：
+					<span class="layui-breadcrumb" lay-separator=">">
+							<a href="javascript:;">组织生活管理</a>
+							<a href="javascript:;">活动抽查</a>
+						</span>
+				</div>
+				<div class="bg_white_container">
+
+				<div style="height:34px;margin-bottom:20px;">
+					<portlet:actionURL name="/OrgCheckSeconed" var="OrgCheckSeconed"></portlet:actionURL>
+					<form action="${OrgCheckSeconed }" id="OrgCheckSeconed_form" method="post">
+						<div class="publish_search_box operate_form_group" style="padding-left:0;">
+							<input type="hidden" name="informId" value="${informId }">
+							<input type="hidden" name="pageNo" value="${pageNo }">
+							<input type="hidden" name="totalPage" value="${totalPage }">
+<%--							<input name="seconedName" type="text" value="${seconedName }" class="col-sm-10" placeholder="请输入搜索内容" style="text-indent:1em;height:34px;border: 1px solid #e1e1e1;border-right: none;float:left;background:#f7f7f7;"/>--%>
+<%--							<span onclick="submitOrgCheckSeconed_form();" style="background-image:url('/images/search_icon.png');background-repeat: no-repeat;background-position: center;background-color:#ce0000;display:inline-block;width:52px;height:34px;vertical-align: top;"></span>--%>
+							<div class="search_container " style="float: right;">
+								<input type="text" name="seconedName" value="${seconedName }" placeholder="搜索条件" autocomplete="off" class="layui-input custom_input">
+								<button type="button" class="layui-btn custom_btn search_btn" onclick="submitOrgCheckSeconed_form();">查询</button>
+							</div>
+						</div>
+				   </form>
+				   <script type="text/javascript">
+					function submitOrgCheckSeconed_form(){
+					   $("#OrgCheckSeconed_form").submit();
+					}
+				   </script>
+				</div>
+                <table class="content_table" style="width: 100%;">
                     <thead class="table_title">
                         <tr>
 <%--                        	<th>已读回执</th>--%>
-                            <th>二级党组织</th>
+                            <th>党组织</th>
                             <th>开展主题</th>
-                            <th>二级党组织主题</th>
+<%--                            <th>二级党组织主题</th>--%>
                             <th class="PublishTime" style="min-width: 160px;">开始时间</th>
-                             <th>操作</th>
-                            <th>开展时长(分钟)</th>
+							<th>开展时长(分钟)</th>
+					 		<th>操作</th>
                             <th>开展地点</th>
-                            <th>主持人</th>
-                            <th>联系人</th>
-                            <th>联系人电话</th>
-                            <th>任务状态</th>
+<%--                            <th>主持人</th>--%>
+<%--                            <th>联系人</th>--%>
+<%--                            <th>联系人电话</th>--%>
+<%--                            <th>任务状态</th>--%>
                             <th>抽查状态</th>
                             <th>抽查人</th>
-                            <th>审核人</th>
+<%--                            <th>审核人</th>--%>
                             <th>现场照片</th>
-                            <th>应到人数</th>
-                            <th>实到人数</th>
-                            <th>请假人员</th>
-                            <th>出勤率</th>
-                            <th>上传会议记录</th>
-                            <th>评价得分</th>
-                            <th>是否异常</th>
-                            <th>备注</th>
+<%--                            <th>应到人数</th>--%>
+<%--                            <th>实到人数</th>--%>
+<%--                            <th>请假人员</th>--%>
+<%--                            <th>出勤率</th>--%>
+                            <th>会议记录</th>
+<%--                            <th>评价得分</th>--%>
+<%--                            <th>是否异常</th>--%>
+<%--                            <th>备注</th>--%>
                         </tr>
                     </thead>
                     <tbody class="table_info" id="tBody">
                    	    <c:forEach items="${list}" var="c" varStatus="status">
 	                        <tr>
 <%--	                        	<td data-label="已读回执" class="receipts">${c.read_status }</td>--%>
-	                            <td data-label="二级党组织" class="Party_name">
+	                            <td data-label="党组织" class="Party_name">
 	                            	<c:if test="${c.has_resend}">
 	                            		<a href="/orgviewbranch?inform_id=${c.informid}&orgName=${c.org_namez}">${c.org_namez }</a>
 	                            	</c:if>
@@ -96,14 +124,15 @@
 	                            		${c.org_namez }
 	                            	</c:if>
 	                            </td>
-	                            <td data-label="开展主题">${c.theme_ }</td>
-	                            <td data-label="二级党组织主题" style="min-width: 175px;">${c.meeting_theme_secondary }</td>
+	                            <td data-label="开展主题">${c.meeting_theme_secondary }</td>
+<%--	                            <td data-label="二级党组织主题" style="min-width: 175px;">${c.meeting_theme_secondary }</td>--%>
 	                            <td data-label="开始时间" class="PublishTime">
 	                            	<c:if test="${not empty c.start_p}">    
 	                            		<fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${c.start_p }" />
 	                            	</c:if>
 	                            </td>
-	                              <td data-label="操作">
+								<td data-label="开展时长">${c.total_time }</td>
+								<td data-label="操作">
 	                            	<c:if test="${not empty c.plan_id && c.task_status_org=='6'}">
 			                           <button type="button" class="btn btn-default td_assign_btn" >抽查</button>
 			                           <input class="assignAll" type="hidden" value="${c.plan_id }">  
@@ -113,55 +142,54 @@
 			                           <input class="assignAll" type="hidden" value="${c.plan_id }">  
 			                        </c:if>
 	                            </td>
-	                            <td data-label="开展时长">${c.total_time }</td>
 	                            <td data-label="开展地点">${c.place }</td>
-	                            <td data-label="主持人">${c.host }</td>
-	                            <td data-label="联系人">${c.contact }</td>
-	                            <td data-label="联系人电话">${c.contact_phone }</td>
-	                            <td data-label="任务状态" class="TaskState">
-	                            	<c:if test="${c.task_status == '1'}"> 
-	                            		 已提交
-									</c:if>
-									<c:if test="${c.task_status == '2'}"> 
-	                            		 已撤回
-									</c:if>
-									<c:if test="${c.task_status == '3'}"> 
-	                            		 被驳回
-									</c:if>
-									<c:if test="${c.task_status == '4'}"> 
-	                            		 已通过
-									</c:if>
-									<c:if test="${c.task_status == '5'}"> 
-	                            		 已指派
-									</c:if>
-									<c:if test="${c.task_status == '6'}"> 
-	                            		 未检查
-									</c:if>
-									<c:if test="${c.task_status == '7'}"> 
-	                            		 已检查
-									</c:if>
-	                            </td>
+<%--	                            <td data-label="主持人">${c.host }</td>--%>
+<%--	                            <td data-label="联系人">${c.contact }</td>--%>
+<%--	                            <td data-label="联系人电话">${c.contact_phone }</td>--%>
+<%--	                            <td data-label="任务状态" class="TaskState">--%>
+<%--	                            	<c:if test="${c.task_status == '1'}"> --%>
+<%--	                            		 已提交--%>
+<%--									</c:if>--%>
+<%--									<c:if test="${c.task_status == '2'}"> --%>
+<%--	                            		 已撤回--%>
+<%--									</c:if>--%>
+<%--									<c:if test="${c.task_status == '3'}"> --%>
+<%--	                            		 被驳回--%>
+<%--									</c:if>--%>
+<%--									<c:if test="${c.task_status == '4'}"> --%>
+<%--	                            		 已通过--%>
+<%--									</c:if>--%>
+<%--									<c:if test="${c.task_status == '5'}"> --%>
+<%--	                            		 已指派--%>
+<%--									</c:if>--%>
+<%--									<c:if test="${c.task_status == '6'}"> --%>
+<%--	                            		 未检查--%>
+<%--									</c:if>--%>
+<%--									<c:if test="${c.task_status == '7'}"> --%>
+<%--	                            		 已检查--%>
+<%--									</c:if>--%>
+<%--	                            </td>--%>
 	                            <td data-label="抽查状态">
-	                            	<c:if test="${c.task_status_org == '5'}"> 
+	                            	<c:if test="${c.task_status == '5'}">
 	                            		 已指派
 									</c:if>
-									<c:if test="${c.task_status_org == '6'}"> 
+									<c:if test="${c.task_status == '6'}">
 	                            		 未抽查
 									</c:if>
-									<c:if test="${c.task_status_org == '7'}"> 
+									<c:if test="${c.task_status == '7'}">
 	                            		 已抽查
 									</c:if>
 	                            </td>
 	                            <td data-label="抽查人">${c.check_person_us }</td>
-	                            <td data-label="审核人">${c.auditor }</td>
+<%--	                            <td data-label="审核人">${c.auditor }</td>--%>
 	                          
 	                            <td data-label="现场照片" class="img_td">
-	                            	<input type="hidden" class="imageNemeOrg" value="${c.image_org }" name="imageNeme"/>
+	                            	<input type="hidden" class="imageNemeOrg" value="${c.image }" name="imageNeme"/>
 	                            </td>
-	                            <td data-label="应到人数">${c.shoule_persons }</td>
-	                            <td data-label="实到人数">${c.actual_persons }</td>
-	                            <td data-label="请假人员">${c.leave_persons }</td>
-	                            <td data-label="出勤率">${c.attendance }</td>
+<%--	                            <td data-label="应到人数">${c.shoule_persons }</td>--%>
+<%--	                            <td data-label="实到人数">${c.actual_persons }</td>--%>
+<%--	                            <td data-label="请假人员">${c.leave_persons }</td>--%>
+<%--	                            <td data-label="出勤率">${c.attendance }</td>--%>
 	                            <td data-label="上传会议记录">
 	                            	<c:if test="${not empty c.attachment_n}"> 
 	                           			<a class="meetingAnnex">${c.check_status }
@@ -172,18 +200,17 @@
 									     ${c.check_status }                     
 									</c:if>
 	                            </td>
-	                            <td data-label="评价得分">
-	                            	<a href="/gradedetail?meetingId=${c.meeting}&branchId=${c.org_id_u}">
-	                            		${c.evaluation_score }
-	                            	</a>
-	                            </td>
-	                            <td data-label="是否异常">${c.meeting_state_org }</td>
-	                            <td data-label="抽查情况">${c.remarks_org }</td>
+<%--	                            <td data-label="评价得分">--%>
+<%--	                            	<a href="/gradedetail?meetingId=${c.meeting}&branchId=${c.org_id_u}">--%>
+<%--	                            		${c.evaluation_score }--%>
+<%--	                            	</a>--%>
+<%--	                            </td>--%>
+<%--	                            <td data-label="是否异常">${c.meeting_state_org }</td>--%>
+<%--	                            <td data-label="抽查情况">${c.remarks_org }</td>--%>
 	                        </tr>
                         </c:forEach>
                     </tbody>
                 </table>
-            </div>
    <!-- -----------------------分页------------------------- -->
 				<div class="pagination_container">
 			        <ul class="pagination" id="page"></ul>
@@ -267,7 +294,10 @@
 					})
 				})
 		    
-			 </script> 
+			 </script>
+				</div>
+			</div>
+		</div>
 			
 		<!-- 模态框（Modal） -->
         <div class="modal fade" id="keyAssign" tabindex="-1" role="dialog" aria-labelledby="keyAssignLabel" aria-hidden="true">

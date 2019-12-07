@@ -37,7 +37,9 @@ public class PartyPortletKeys {
 	public static final String Org = "Organizations";
 
 	public static final String Hgg_login = "Hgg_login";
-	
+
+	public static final String BigScreenPortlet = "BigScreenPortlet";
+
 	public static final String AssignedPersonPorlet = "AssignedPersonPorlet";
 	
 	public static final String Graft = "Graft";
@@ -101,6 +103,12 @@ public class PartyPortletKeys {
 
 	public static final String BrunchReportPortlet = "BrunchReportPortlet";
 
+	public static final String TransportApplyPortlet = "TransportApplyPortlet";
+
+	public static final String RelationRetentionPortlet = "RelationRetentionPortlet";
+
+	public static final String TransportApproval = "TransportApproval";
+
 	public static final String PeriodPortlet = "PeriodPortlet";
 
 	public static final String SecondaryNewTaskPortlet = "SecondaryNewTaskPortlet";
@@ -155,6 +163,13 @@ public class PartyPortletKeys {
 	public static final String UserMeetingCount = "UserMeetingCount";
 	
 	public static final String PersonAddPortlet = "PersonAddPortlet";
+
+    public static final String Log = "SystemLogPortlet";
+
+	public static final String MemberEditPortlet = "MemberEditPortlet";
+
+	public static final String UnitNewPortlet = "UnitNewPortlet";
+	public static final String UnitPortlet = "UnitPortlet";
 }
 
 
