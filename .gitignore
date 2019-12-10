@@ -1,4 +1,8 @@
 .gradle/
 build/
 target/
+<<<<<<< HEAD
 .idea/
+=======
+*/.sass-cache/
+>>>>>>> c670311365fca1b45b5091b59515ba9cbe738778
