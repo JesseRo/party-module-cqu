@@ -471,13 +471,19 @@ public class PartyBranchDao extends PostgresqlDaoImpl<MeetingPlan> {
     }
 
     public List<Map<String, Object>> findAttachmentSeconed(String meetingId) {
-        String sql = "select tt.*,att.attachment_name,att.attachment_url from " +
-                "(select plan.*,org.org_name ,info.start_time as info_start ,info.end_time as info_end " +
-                "from hg_party_meeting_plan_info as plan ,hg_party_org as org ,hg_party_org_inform_info as info " +
-                "where  plan.organization_id=org.org_id and org.historic is false AND " +
-                "plan.meeting_id= ?  and plan.inform_id=info.inform_id) as tt " +
-                "LEFT OUTER JOIN hg_party_attachment  as att " +
-                "on tt.meeting_id=att.resource_id";
+//        String sql = "select tt.*,att.attachment_name,att.attachment_url from " +
+//                "(select plan.*,org.org_name ,info.start_time as info_start ,info.end_time as info_end " +
+//                "from hg_party_meeting_plan_info as plan ,hg_party_org as org ,hg_party_org_inform_info as info " +
+//                "where  plan.organization_id=org.org_id and org.historic is false AND " +
+//                "plan.meeting_id= ?  and plan.inform_id=info.inform_id) as tt " +
+//                "LEFT OUTER JOIN hg_party_attachment  as att " +
+//                "on tt.meeting_id=att.resource_id";
+        String sql = "select plan.*, org.org_name, att.attachment_name,att.attachment_url " +
+                "from hg_party_meeting_plan_info as plan left join hg_party_org as org " +
+                "on  plan.organization_id=org.org_id and org.historic is false " +
+                "LEFT OUTER JOIN hg_party_attachment as att " +
+                "on plan.meeting_id=att.resource_id " +
+                "where plan.meeting_id= ? ";
         return jdbcTemplate.queryForList(sql, meetingId);
     }
 

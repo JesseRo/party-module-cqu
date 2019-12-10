@@ -44,13 +44,13 @@
                     elem: '#logTable',
                     url: '${log}', //数据接口
                     method: 'post',
-                    where: {search: $('#searchBtn').val()},
+                    where: {search: $('#searchCondition').val()},
                     page: {
                         limit:10,   //每页条数
                         limits:[],
                         prev:'&lt;上一页',
                         next:'下一页&gt;',
-                        groups:4,
+                        groups:4
                     },
                     cols: [[ //表头
                         {field: 'id', title: 'id', hide: true},
@@ -78,8 +78,8 @@
         </div>
         <div class="bg_white_container">
             <div class="operate_form_group">
-                <input type="text" name="title" id="searchBtn" placeholder="搜索条件" autocomplete="off" class="layui-input custom_input">
-                <button type="button" class="layui-btn custom_btn search_btn">查询</button>
+                <input type="text" name="title" id="searchCondition"  placeholder="搜索条件" autocomplete="off" class="layui-input custom_input">
+                <button type="button" id="searchBtn" class="layui-btn custom_btn search_btn">查询</button>
             </div>
             <table id="logTable" lay-filter="activityTable" class="custom_table"></table>
         </div>

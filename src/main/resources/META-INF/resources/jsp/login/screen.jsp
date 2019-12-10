@@ -7,9 +7,23 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link rel="stylesheet" type="text/css" href="${basePath }/cqu/css/common.min.css?v=2"/>
-    <link rel="stylesheet" type="text/css" href="${basePath }/cqu/css/index.min.css"/>
+    <link rel="stylesheet" type="text/css" href="${basePath }/cqu/css/index.max.css"/>
     <script type="text/javascript" src="${basePath}/js/echarts.js"></script>
 </head>
+<style>
+    .attend_container .triple_charts{
+        width: 300%;
+        height: 100%;
+    }
+    .attend_container .triple_charts > div{
+        width: 33.33%;
+        height: 100%;
+        float: left;
+    }
+    .report_list_container .report_list{
+        padding: 0;
+    }
+</style>
 <div class="big_screen_container">
     <div class="content_container">
         <div class="page_title_container" style="cursor: pointer;">
@@ -68,8 +82,19 @@
         </div>
         <div class="bottom_container">
             <div class="attend_outer_container">
-                <p class="index_title">活动出勤率</p>
-                <div id="attendContainer" class="attend_container"></div>
+                <p class="index_title"><span class="text">活动出勤率</span></p>
+                <div id="attendContainer" class="attend_container">
+                    <div class="triple_charts">
+                        <div id="attendContainer1"></div>
+                        <div id="attendContainer2"></div>
+                        <div id="attendContainer3"></div>
+                    </div>
+                </div>
+                <ul class="charts_dots" style="color: transparent;">
+                    <li class="on"></li>
+                    <li></li>
+                    <li></li>
+                </ul>
             </div>
             <div class="activity_outer_container">
                 <p class="index_title">活动计划上报</p>
@@ -86,6 +111,43 @@
         </div>
     </div>
 </div>
+<script>
+    var $li = $(".charts_dots li");
+    var $charts = $(".triple_charts div");
+    var len = $li.length - 1;
+    var _index = 0;
+    var timer = null;
+    $li.click(function(){
+        _index = $(this).index();
+        play();
+    });
+
+    //封装函数
+    function play(){
+        $li.eq(_index).addClass("on").siblings().removeClass("on");
+        $(".triple_charts").animate({"marginLeft": -1 * _index * '100' + '%'}, 'slow');
+    }
+
+    //定时轮播
+    function auto(){
+        //把定时器放进timer这个对象里面
+        timer = setInterval(function(){
+            _index++;
+            if(_index > len){
+                _index = 0;
+            }
+            play();
+        },4000);
+    }
+    auto();
+    //当我移上#attendContainer的时候停止轮播
+    $("#attendContainer").hover(function(){
+        clearInterval(timer);
+    },function(){
+        //移开重新调用播放
+        auto();
+    });
+</script>
 <script>
     $(document).ready(function(){
         renderInspectorChart();
@@ -307,28 +369,31 @@
 
     //渲染活动出勤率
     function renderAttendChart(){
-        var attendChart = echarts.init(document.getElementById('attendContainer'));
+        var attendChart1 = echarts.init(document.getElementById('attendContainer1'));
+        var attendChart2 = echarts.init(document.getElementById('attendContainer2'));
+        var attendChart3 = echarts.init(document.getElementById('attendContainer3'));
         var mockData1 = [];
         var mockData2 = [];
+        var defaultData = ['音乐学院',  '音乐学院1', '音乐学院2', '音乐学院',  '音乐学院1', '音乐学院2', '音乐学院',  '音乐学院1', '音乐学院2', '音乐学院',  '音乐学院1', '音乐学院2'];
         var pushItem = function(num){
             if(num > 0){
                 mockData1.push({
                     value: 10 * num,
                     symbol: 'roundRect',
                     symbolRepeat: true,
-                    symbolSize: ['150%', '25%'],
+                    symbolSize: ['150%', '25%']
                 });
                 mockData2.push({
                     value: 150,
                     symbol: 'roundRect',
                     symbolRepeat: true,
-                    symbolSize: ['150%', '25%'],
+                    symbolSize: ['150%', '25%']
                 });
                 return pushItem(num -= 1)
             }
         };
         pushItem(12);
-        option = {
+        var option = {
             grid:{
                 top:0,
                 left:0,
@@ -337,7 +402,7 @@
                 containLabel:true
             },
             xAxis: [{
-                data: ['音乐学院',  '音乐学院1', '音乐学院2', '音乐学院',  '音乐学院1', '音乐学院2', '音乐学院',  '音乐学院1', '音乐学院2', '音乐学院',  '音乐学院1', '音乐学院2'],
+                data: defaultData,
                 axisTick: {show: false},
                 axisLine: {
                     lineStyle:{
@@ -376,8 +441,19 @@
                 data: mockData2,
             }]
         };
-        attendChart.setOption(option);
+        var option1 = JSON.parse(JSON.stringify(option));
+        var option2 = JSON.parse(JSON.stringify(option));
+        option1.xAxis[0].data = defaultData.map(function(i){
+            return i.replace(/音乐学院/g,'体育学院')
+        });
+        option2.xAxis[0].data = defaultData.map(function(i) {
+            return i.replace(/音乐学院/g,'教育学院')
+        });
+        attendChart1.setOption(option);
+        attendChart2.setOption(option1);
+        attendChart3.setOption(option2);
     };
+
     function renderActivityChart(){
         var activityEchart = echarts.init(document.getElementById('activityContainer'));
         var fontSize = (14 / 1920) * window.innerWidth;

@@ -57,56 +57,57 @@
             </span>
         </div>
         <div class="bg_white_container">
-        <table class="content_table" style="width: 100%;">
-            <thead class="table_title">
-            <tr>
-                <th>任务名称</th>
-                <th>任务描述</th>
-                <th>任务模板</th>
-                <th>发布时间</th>
-                <th>状态</th>
-                <th>上报文件</th>
-            </tr>
-            </thead>
-            <tbody class="table_info">
-            <c:forEach var="c" items="${tasks }">
-                <tr id="${c.task_id }">
-                    <td>
-                        ${c.theme }
-                    </td>
-                    <td>
-                        ${c.description }
-                    </td>
-                    <td style="color: red;padding-left: 25px;">
-                        <c:forEach var="f" items="${c.templateFileView }">
-                            <a href="${f.path}" target="_blank">${f.filename}</a>
-                        </c:forEach>
-                    </td>
-                    <td>
-                        <c:if test="${not empty c.publish_time}">
-                            <fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${c.publish_time }" />
-                        </c:if>
-                    </td>
-                    <td>
-                        <c:if test="${c.status == 1}">
-                            <a href="javascript:;" onclick="window.location.href='/brunch_report1?task=${c.task_id }'">上报</a>
-                        </c:if>
-                        <c:if test="${c.status == 2}">
-                            已上报
-                        </c:if>
-                    </td>
-                    <td>
-                        <c:if test="${c.status == 2}">
-                            <c:forEach var="u" items="${c.uploadFileView }">
-                                <a href="${u.path}" target="_blank">${u.filename}</a>
-                            </c:forEach>
-                        </c:if>
-                    </td>
+            <div class="table_outer_box">
+            <table class="layui-table custom_table">
+                <thead>
+                <tr>
+                    <td>任务名称</td>
+                    <td>任务描述</td>
+                    <td>任务模板</td>
+                    <td>发布时间</td>
+                    <td>状态</td>
+                    <td>上报文件</td>
                 </tr>
-        　　 </c:forEach>
-            </tbody>
-        </table>
-
+                </thead>
+                <tbody class="table_info">
+                <c:forEach var="c" items="${tasks }">
+                    <tr id="${c.task_id }">
+                        <td>
+                            ${c.theme }
+                        </td>
+                        <td>
+                            ${c.description }
+                        </td>
+                        <td style="color: red;padding-left: 25px;">
+                            <c:forEach var="f" items="${c.templateFileView }">
+                                <a href="${f.path}" target="_blank">${f.filename}</a>
+                            </c:forEach>
+                        </td>
+                        <td>
+                            <c:if test="${not empty c.publish_time}">
+                                <fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${c.publish_time }" />
+                            </c:if>
+                        </td>
+                        <td>
+                            <c:if test="${c.status == 1}">
+                                <a href="javascript:;" onclick="window.location.href='/brunch_report1?task=${c.task_id }'">上报</a>
+                            </c:if>
+                            <c:if test="${c.status == 2}">
+                                已上报
+                            </c:if>
+                        </td>
+                        <td>
+                            <c:if test="${c.status == 2}">
+                                <c:forEach var="u" items="${c.uploadFileView }">
+                                    <a href="${u.path}" target="_blank">${u.filename}</a>
+                                </c:forEach>
+                            </c:if>
+                        </td>
+                    </tr>
+            　　 </c:forEach>
+                </tbody>
+            </table>
+            </div>
 <!--    分页              -->
 
         <div class="pagination_container">

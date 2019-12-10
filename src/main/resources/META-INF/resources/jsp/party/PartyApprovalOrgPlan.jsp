@@ -120,95 +120,97 @@
                     </span>
 				</div>
 				<div class="bg_white_container">
-                <table class="content_table" style="width: 100%;">
-                    <thead class="table_title">
-                        <tr>
-                            <th>党委名称</th>
-                            <th>会议类型</th>
-                            <th>开展主题</th>
-                            <th class="LaunchTime" style="min-width: 160px;">开始时间</th>
-                            <th>操作</th>
-<%--                            <th>开展时长(分钟)</th>--%>
-                            <th>开展地点</th>
-<%--                            <th>应到人数</th>--%>
-<%--                            <th>实到人数</th>--%>
-<%--                            <th>主持人</th>--%>
-                            <th>联系人</th>
-<%--                            <th>联系人电话</th>--%>
-<%--                            <th>任务状态</th>--%>
-                            <th>抽查状态</th>
-<%--                            <th>审核人</th>--%>
-                            <th>图片</th>
-<%--                            <th>备注</th>--%>
-                        </tr>
-                    </thead>
-                    <tbody class="table_info" id="tBody">
-                   	    <c:forEach items="${list}" var="info" varStatus="status">
-	                        <tr>
-	                            <td data-label="党委名称" class="Party_name">${info.org_name }</td>
-	                            <td data-label="会议类型">${info.meeting_type }</td>
-	                            <td data-label="开展主题">${info.meeting_theme_org }</td>
-	                            <td data-label="开始时间" class="LaunchTime"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${info.start_p }" /></td>
-	                            <td data-label="操作">
-	                            	<c:if test="${info.task_status_org == '5' }">
-										<a onclick="entry('${info.meeting}')">
-										录入</a>
-									</c:if>
-									<c:if test="${info.task_status_org == '7' }">
-										<a onclick="entry('${info.meeting}')">
-										修改</a>
-									</c:if>
-	                            </td>
-<%--	                            <td data-label="开展时长">${info.total_time }</td>--%>
-	                            <td data-label="开展地点">${info.place }</td>
-<%--	                            <td data-label="应到人数">${info.shoule_persons }</td>--%>
-<%--	                            <td data-label="实到人数">${info.actual_persons }</td>--%>
-<%--	                            <td data-label="主持人">${info.host }</td>--%>
-	                            <td data-label="联系人">${info.contact }</td>
-<%--	                            <td data-label="联系人电话">${info.contact_phone }</td>--%>
-<%--	                            <td data-label="任务状态">--%>
-<%--	                            	<c:if test="${info.task_status == '1'}"> --%>
-<%--	                            		 已提交--%>
-<%--									</c:if>--%>
-<%--									<c:if test="${info.task_status == '2'}"> --%>
-<%--	                            		 已撤回--%>
-<%--									</c:if>--%>
-<%--									<c:if test="${info.task_status == '3'}"> --%>
-<%--	                            		 被驳回--%>
-<%--									</c:if>--%>
-<%--									<c:if test="${info.task_status == '4'}"> --%>
-<%--	                            		 已通过--%>
-<%--									</c:if>--%>
-<%--									<c:if test="${info.task_status == '5'}"> --%>
-<%--	                            		 已指派--%>
-<%--									</c:if>--%>
-<%--									<c:if test="${info.task_status == '6'}"> --%>
-<%--	                            		 未检查--%>
-<%--									</c:if>--%>
-<%--									<c:if test="${info.task_status == '7'}"> --%>
-<%--	                            		 已检查--%>
-<%--									</c:if>--%>
-<%--	                            </td>--%>
-	                            <td data-label="抽查状态">
-	                            	<c:if test="${info.task_status_org == '5'}"> 
-	                            		 已指派
-									</c:if>
-									<c:if test="${info.task_status_org == '6'}"> 
-	                            		 未检查
-									</c:if>
-									<c:if test="${info.task_status_org == '7'}"> 
-	                            		 已检查
-									</c:if>
-	                            </td>
-<%--	                            <td data-label="审核人">${info.auditor }</td>--%>
-	                            <td data-label="图片" class="img_td">
-	                            	<input type="hidden" class="imageNemeOrg" value="${info.image_org }" name="imageNeme"/>
-	                            </td>
-<%--	                            <td data-label="备注">${info.remarks_org }</td>--%>
-	                        </tr>
-                        </c:forEach>
-                    </tbody>
-                </table>
+					<div class="table_outer_box">
+						<table class="layui-table custom_table">
+							<thead class="table_title">
+							<tr>
+								<td>党委名称</td>
+								<td>会议类型</td>
+								<td>开展主题</td>
+								<td>开始时间</td>
+								<td>操作</td>
+								<%--                            <th>开展时长(分钟)</th>--%>
+								<td>开展地点</td>
+								<%--                            <th>应到人数</th>--%>
+								<%--                            <th>实到人数</th>--%>
+								<%--                            <th>主持人</th>--%>
+								<td>联系人</td>
+								<%--                            <th>联系人电话</th>--%>
+								<%--                            <th>任务状态</th>--%>
+								<td>抽查状态</td>
+								<%--                            <th>审核人</th>--%>
+								<td>图片</td>
+								<%--                            <th>备注</th>--%>
+							</tr>
+							</thead>
+							<tbody class="table_info" id="tBody">
+							<c:forEach items="${list}" var="info" varStatus="status">
+								<tr>
+									<td data-label="党委名称" class="Party_name">${info.org_name }</td>
+									<td data-label="会议类型">${info.meeting_type }</td>
+									<td data-label="开展主题">${info.meeting_theme_org }</td>
+									<td data-label="开始时间"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${info.start_p }" /></td>
+									<td data-label="操作">
+										<c:if test="${info.task_status_org == '5' }">
+											<a onclick="entry('${info.meeting}')">
+												录入</a>
+										</c:if>
+										<c:if test="${info.task_status_org == '7' }">
+											<a onclick="entry('${info.meeting}')">
+												修改</a>
+										</c:if>
+									</td>
+										<%--	                            <td data-label="开展时长">${info.total_time }</td>--%>
+									<td data-label="开展地点">${info.place }</td>
+										<%--	                            <td data-label="应到人数">${info.shoule_persons }</td>--%>
+										<%--	                            <td data-label="实到人数">${info.actual_persons }</td>--%>
+										<%--	                            <td data-label="主持人">${info.host }</td>--%>
+									<td data-label="联系人">${info.contact }</td>
+										<%--	                            <td data-label="联系人电话">${info.contact_phone }</td>--%>
+										<%--	                            <td data-label="任务状态">--%>
+										<%--	                            	<c:if test="${info.task_status == '1'}"> --%>
+										<%--	                            		 已提交--%>
+										<%--									</c:if>--%>
+										<%--									<c:if test="${info.task_status == '2'}"> --%>
+										<%--	                            		 已撤回--%>
+										<%--									</c:if>--%>
+										<%--									<c:if test="${info.task_status == '3'}"> --%>
+										<%--	                            		 被驳回--%>
+										<%--									</c:if>--%>
+										<%--									<c:if test="${info.task_status == '4'}"> --%>
+										<%--	                            		 已通过--%>
+										<%--									</c:if>--%>
+										<%--									<c:if test="${info.task_status == '5'}"> --%>
+										<%--	                            		 已指派--%>
+										<%--									</c:if>--%>
+										<%--									<c:if test="${info.task_status == '6'}"> --%>
+										<%--	                            		 未检查--%>
+										<%--									</c:if>--%>
+										<%--									<c:if test="${info.task_status == '7'}"> --%>
+										<%--	                            		 已检查--%>
+										<%--									</c:if>--%>
+										<%--	                            </td>--%>
+									<td data-label="抽查状态">
+										<c:if test="${info.task_status_org == '5'}">
+											已指派
+										</c:if>
+										<c:if test="${info.task_status_org == '6'}">
+											未检查
+										</c:if>
+										<c:if test="${info.task_status_org == '7'}">
+											已检查
+										</c:if>
+									</td>
+										<%--	                            <td data-label="审核人">${info.auditor }</td>--%>
+									<td data-label="图片" class="img_td">
+										<input type="hidden" class="imageNemeOrg" value="${info.image_org }" name="imageNeme"/>
+									</td>
+										<%--	                            <td data-label="备注">${info.remarks_org }</td>--%>
+								</tr>
+							</c:forEach>
+							</tbody>
+						</table>
+					</div>
 
  
    <!-- -----------------------分页------------------------- -->

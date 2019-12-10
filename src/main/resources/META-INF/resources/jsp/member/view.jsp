@@ -258,7 +258,9 @@
         .party_organization_list a{
             color: #333;
         }
-
+        .member_container.bg_white_container{
+            overflow: hidden;
+        }
     </style>
     <script type="text/javascript">
 
@@ -738,7 +740,7 @@
                     </div>
                     <ul class="party_organization_list">
                         <li id="current_root" class="root" style="width: 100%;">
-                            <div class="first_menu top_dropdown">
+                            <div class="first_menu top_dropdown" style="text-overflow: ellipsis;white-space: nowrap;">
                                 <img style="width: auto" class="right dropdown_icon dropdown_up" src="${basePath}/images/tree-arrow.png"/>
                                 <span style="font-size: 16px;font-weight: 600;color: #333;">西南大学委员会</span>
                             </div>
@@ -748,7 +750,7 @@
                             <div class="silde_more">展开更多</div>
                         </li>
                         <li id="historic_root" class="root" style="width: 100%;">
-                            <div class="first_menu top_dropdown">
+                            <div class="first_menu top_dropdown" style="text-overflow: ellipsis;white-space: nowrap;">
                                 <img style="width: auto" class="right dropdown_icon dropdown_up" src="${basePath}/images/tree-arrow.png"/>
                                 <span style="font-size: 16px;font-weight: 600;color: #333;">中共重庆大学委员会(历史)</span>
                             </div>
@@ -768,7 +770,7 @@
                             <a href="javascript:;" id="third_title" style="display: none;">机关党委</a>
                         </span>
                     </div>
-                    <div class="table_content bg_white_container">
+                    <div class="table_content bg_white_container member_container">
                         <div class="btn_group table_btns">
                             <button id="delete" class="btn btn-default delete_graft">删除人员</button>
                             <button id="addPerson" class="btn btn-default">添加人员</button>
@@ -787,32 +789,32 @@
                                 </form>
                             </div>
                         </div>
-                        <table class="content_table" width="100%;">
-                            <thead class="table_title">
-                            <tr style="background: #F6F8FC;">
-                                <th>
-                                    <div class="select_choice">
+                        <div class="table_outer_box">
+
+                        <table class="layui-table custom_table">
+                            <thead>
+                                <tr>
+                                    <td>
                                         <img class="select_all" src="/images/not_check_icon.png"/>
                                         <input type="hidden"/>
-                                    </div>
-                                </th>
-                                <th>姓名</th>
-                                <th>性别</th>
-                                <th>公民身份证</th>
-                                <th>联系电话</th>
-                                <th>党员类型</th>
-                                <th>操作</th>
-                            </tr>
+                                    </td>
+                                    <td>姓名</td>
+                                    <td>性别</td>
+                                    <td>公民身份证</td>
+                                    <td>联系电话</td>
+                                    <td>党员类型</td>
+                                    <td>操作</td>
+                                </tr>
                             </thead>
                             <tbody class="table_info">
 
                             </tbody>
                         </table>
+                        </div>
                         <div style="text-align: center;">
                             <ul class="pagination" id="status-pager"></ul>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>

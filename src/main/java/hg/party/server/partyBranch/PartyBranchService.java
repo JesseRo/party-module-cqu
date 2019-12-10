@@ -198,7 +198,7 @@ public class PartyBranchService {
 				  "LEFT OUTER JOIN hg_party_attachment  as att "+
 				  "on tt.meeting_id=att.resource_id";*/
         // List<Map<String, Object>> list=find(sql);
-        List<Map<String, Object>> list = dao.findAttachment(meetingId);
+        List<Map<String, Object>> list = dao.findAttachmentSeconed(meetingId);
         Map<String, Object> map = list.get(0);
         map.put("state", "old");
         String dataLong = map.get("start_time").toString();

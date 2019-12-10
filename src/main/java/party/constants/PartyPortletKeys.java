@@ -170,6 +170,8 @@ public class PartyPortletKeys {
 
 	public static final String UnitNewPortlet = "UnitNewPortlet";
 	public static final String UnitPortlet = "UnitPortlet";
+    public static final String AttendEcharts = "AttendEcharts";
+	public static final String PlanEcharts = "PlanEcharts";
 }
 
 

@@ -184,14 +184,14 @@
 			<c:forEach items="${lists }" var="navigations">
                 <c:choose>
                     <c:when test="${not empty groups[navigations.navigation_id] }">
-                        <li class="layui-nav-item">
+                        <li class="layui-nav-item" title="${navigations.navigation_name}">
                             <a href="javascript:;">
                                 <img class="menu_icon" src="${navigations.navigation_icon }">${navigations.navigation_name}
                                 <span class="layui-nav-more"></span>
                             </a>
                             <ul class="layui-nav-child">
                                 <c:forEach items="${groups[navigations.navigation_id]}" var="secondaryPage">
-                                    <li>
+                                    <li title="${secondaryPage.navigation_name}">
                                     <style>
                                         .layui-this #id${secondaryPage.navigation_id} .menu_icon{
                                            background-image: url("${navigations.navigation_icon_in }")
@@ -212,7 +212,7 @@
                         </li>
                     </c:when>
                     <c:otherwise>
-                        <li class="layui-nav-item">
+                        <li class="layui-nav-item" navigations.navigation_name>
                             <a style="cursor: pointer;" _href="${navigations.navigation_url}" onclick="window.location.href = '${navigations.navigation_url}';">
                                 <img class="menu_icon" src="${navigations.navigation_icon }"/>
                                 <span>${navigations.navigation_name}</span>

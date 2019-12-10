@@ -54,6 +54,12 @@
      .remove_star::BEFORE {
          content: "";
        }  */
+        .release_event_form.bg_white_container form{
+            width: 100%;
+        }
+        .release_event_form.bg_white_container{
+            height: calc(100vh - 40px);
+        }
     </style>
     <link rel="stylesheet" href="${basePath}/css/publish.css"/>
     <script type="text/javascript" src="${basePath}/js/My97DatePicker/WdatePicker.js"></script>
@@ -306,7 +312,7 @@
                         </a>
                     </span>
     </div>
-    <div class="bg_white_container">
+    <div class="bg_white_container release_event_form">
     <form class="form-horizontal new_publish_form" role="form" action="${submitForm }" method="post"
           enctype="multipart/form-data" style="max-width: 960px;">
         <div id="hg-form-container" class="form-group" style="padding-top: 20px;">

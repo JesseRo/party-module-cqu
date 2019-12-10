@@ -52,7 +52,7 @@
 			<form class="form-horizontal" role="form" action="${findTitleURL }" method="post">
 				<div class="form-group">
 					<div class="col-sm-3 col-xs-12">
-						<div class="col-sm-12 col-xs-9">
+						<div class="col-sm-12 col-xs-9" style="padding-left: 0;">
 							<select name="title" type="text" id="title" placeholder="请输入下拉值类型"  class="form_datetime form-control"  name="title">
 								<option disabled>请输入下拉值类型</option>
 								<option value="">全部类型</option>
@@ -80,17 +80,18 @@
 
 			<div class="content_table_container dropdown_table_container">
 				<div class="table_outer_box">
-					<ul class="fixed_thead">
-						<li style="display: none">id</li>
-						<li style="width:10%">下拉值ID</li>
-						<li style="width:10%">下拉值</li>
-						<li style="width:10%">下拉值类型</li>
-						<li style="width:40%">备注</li>
-						<li style="width:30%">操作</li>
-					</ul>
-					<div class="table_scroll_box">
-						<table class="content_table" style="width: 100%;">
-						<tbody class="table_info">
+					<table class="layui-table custom_table">
+						<thead>
+							<tr>
+								<td style="display: none;">id</td>
+								<td>下拉值ID</td>
+								<td>下拉值</td>
+								<td>下拉值类型</td>
+								<td>备注</td>
+								<td>操作</td>
+							</tr>
+						</thead>
+						<tbody>
 							<c:forEach items="${list}" var="list">
 							<tr>
 								<td class="data_id" hidden="hidden" >${list.id}</td>
@@ -119,7 +120,6 @@
 							</c:forEach>
 						</tbody>
 					</table>
-					</div>
 				</div>
 				<div class="pagination_container">
 					<ul class="pagination" id="page"></ul>
