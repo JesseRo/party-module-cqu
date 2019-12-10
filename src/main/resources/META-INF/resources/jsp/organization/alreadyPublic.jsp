@@ -84,46 +84,46 @@
     </div>
     <div class="content_table_container passpublic_table_container">
         <div class="table_outer_box">
-            <ul class="fixed_thead">
-                <li style="width:20%">活动名称</li>
-                <li style="width:20%">发布时间</li>
-                <li style="width:30%">发布内容</li>
-                <li style="width:30%">操作</li>
-            </ul>
-            <div class="table_scroll_box">
-                <table class="content_table" style="width: 100%;">
-                    <tbody class="table_info">
-                    <c:forEach var="c" items="${grafts }">
-                        <tr id="${c.inform_id }">
-                            <td style="display: none;">
-                                <input type="hidden" value="${c.inform_id }"/>
-                                <input type="hidden" value="${c.id }"/>
-                                    ${c.meeting_type }
-                            </td>
-                            <td>
-            <%--                    <a href="/checkdetail?informId=${c.inform_id }">${c.meeting_theme }</a>--%>
-                                ${c.meeting_theme }
-                            </td>
-                            <td>${c.release_time }</td>
-                            <td>${c.content }</td>
-            <%--                <td>--%>
-            <%--                    <c:if test="${orgType eq 'organization'}">--%>
-            <%--                        <a href="/sconedPartyDetail?inform_id=${c.inform_id }">查看进度</a>--%>
-            <%--                    </c:if>--%>
-            <%--                    <c:if test="${orgType eq 'secondary'}">--%>
-            <%--                        <a href="/branchview?inform_id=${c.inform_id }">查看进度</a>--%>
-            <%--                    </c:if>--%>
-            <%--                </td>--%>
-                            <td>
-                                <a onclick="window.location.href='/newinfo?informId=${c.inform_id }&orgEdit=orgEdit'" href="javascript:;" style="margin-right: 10%; color: #2E87FF">编辑</a>
-                                <a id="deleteInform" style="cursor: pointer;color: #FE4D4D;">删除</a>
-                            </td>
-                        </tr>
-                        　
-                        　　 </c:forEach>
-                    </tbody>
-                </table>
-            </div>
+            <table class="layui-table custom_table">
+                <thead>
+                    <tr>
+                        <td>活动名称</td>
+                        <td>发布时间</td>
+                        <td>发布内容</td>
+                        <td>操作</td>
+                    </tr>
+                </thead>
+                <tbody>
+                <c:forEach var="c" items="${grafts }">
+                    <tr id="${c.inform_id }">
+                        <td style="display: none;">
+                            <input type="hidden" value="${c.inform_id }"/>
+                            <input type="hidden" value="${c.id }"/>
+                                ${c.meeting_type }
+                        </td>
+                        <td>
+        <%--                    <a href="/checkdetail?informId=${c.inform_id }">${c.meeting_theme }</a>--%>
+                            ${c.meeting_theme }
+                        </td>
+                        <td>${c.release_time }</td>
+                        <td>${c.content }</td>
+        <%--                <td>--%>
+        <%--                    <c:if test="${orgType eq 'organization'}">--%>
+        <%--                        <a href="/sconedPartyDetail?inform_id=${c.inform_id }">查看进度</a>--%>
+        <%--                    </c:if>--%>
+        <%--                    <c:if test="${orgType eq 'secondary'}">--%>
+        <%--                        <a href="/branchview?inform_id=${c.inform_id }">查看进度</a>--%>
+        <%--                    </c:if>--%>
+        <%--                </td>--%>
+                        <td>
+                            <a onclick="window.location.href='/newinfo?informId=${c.inform_id }&orgEdit=orgEdit'" href="javascript:;" style="margin-right: 10%; color: #2E87FF">编辑</a>
+                            <a class="deleteInform" style="cursor: pointer;color: #FE4D4D;">删除</a>
+                        </td>
+                    </tr>
+                    　
+                    　　 </c:forEach>
+                </tbody>
+            </table>
         </div>
         <!--    分页              -->
         <div class="pagination_container">
@@ -189,21 +189,25 @@
                 }
             });
 
-            $('#deleteInform').on('click',function () {
+            $('.deleteInform').on('click',function () {
                 var $this = $(this);
-                var id = $this.parent().parent().attr('id');
-                $.ajax({
-                    url: "${deleteGrafts}",
-                    data:{"<portlet:namespace/>resourcesId":id},
-                    dataType:"text",
-                    success:function(succeed){
-                        if("succee" === succeed){
-                            window.location.reload();
-                        }else{
-                            alert("删除失败");
+                var successFunc = function(){
+                    var id = $this.parent().parent().attr('id');
+                    $.ajax({
+                        url: "${deleteGrafts}",
+                        data:{"resourcesId":id},
+                        dataType:"text",
+                        success:function(succeed){
+                            if("succee" === succeed){
+                                layuiModal.alert("删除成功");
+                                setTimeout(function(){window.location.reload()}, 1000);
+                            }else{
+                                layuiModal.alert("删除失败");
+                            }
                         }
-                    }
-                });
+                    });
+                };
+                layuiModal.confirm('', successFunc);
             });
         });
     </script>

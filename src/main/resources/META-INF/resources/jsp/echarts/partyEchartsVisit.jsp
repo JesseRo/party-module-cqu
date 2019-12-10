@@ -18,8 +18,8 @@
 	<style>
 		.activity_manage_page .charts_container{
 			width: 100%;
-			height: calc(100% - 60px);
-			margin-top: 40px;
+			height: calc(100% - 20px)!important;
+			margin-top: 0!important;
 		}
 		.activity_manage_page .operate_btns {
 			position: absolute;
@@ -47,10 +47,6 @@
 							<a href="javascript:;">系统管理</a>
 							<a href="javascript:;">访问统计</a>
 						</span>
-			</div>
-			<div class="operate_btns">
-				<button type="button" class="layui-btn">正常</button>
-				<button type="button" class="layui-btn">排列</button>
 			</div>
 			<div class="charts_container">
 				<div class="view_charts" id="viewEcharts" style="width: 100%; height: 100%;"></div>
@@ -83,12 +79,14 @@
 				},
 				grid: {
 					left: 0,
-					right: 0,
+					right: '4%',
 					bottom: '6%',
 					containLabel: true
 				},
 				xAxis: {
 					type: 'value',
+					min:0,
+					max:1000000,
 					axisTick:{
 						show:false,
 					},
@@ -96,7 +94,10 @@
 						show:false
 					},
 					axisLabel:{
-						show:false,
+						fontSize:16,
+						formatter:function(data){
+							return (data / 1000000).toFixed(2) * 100 + '%'
+						}
 					},
 					axisLine:{
 						lineStyle:{

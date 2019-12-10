@@ -66,74 +66,76 @@
             </span>
         </div>
         <div class="bg_white_container">
-        <c:if test="${not empty taskId}">
-        <div class="operate_form_group">
-            <button id="export" type type="button" class="layui-btn custom_btn publish_acti_btn">数据汇总导出</button>
-        </div>
-        </c:if>
-        <table class="content_table" style="width: 100%;" id="${taskId}">
-            <thead class="table_title">
-            <tr>
-                <th>党委</th>
-                <th>任务主题</th>
-                <th>任务描述</th>
-                <th>发布时间</th>
-                <th>上报数据</th>
-                <th>上报时间</th>
-                <th>状态</th>
-                <th>备注</th>
-            </tr>
-            </thead>
-            <tbody class="table_info">
-            <c:forEach var="c" items="${reports }">
-                <tr id="${c.report_id }">
-                    <td>
-                        ${c.org_name}
-                    </td>
-                    <td>
-                        ${c.theme }
-                    </td>
-                    <td>
-                        ${c.description }
-                    </td>
-                    <td>
-                        <c:if test="${not empty c.publish_time}">
-                            <fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${c.publish_time }" />
-                        </c:if>
-                    </td>
-                    <td style="color: red;padding-left: 25px;">
-                        <c:forEach var="f" items="${c.fileView }">
-                            <a href="${f.path}" target="_blank">${f.filename}</a>
-                        </c:forEach>
-                    </td>
-                    <td>
-                        <c:if test="${not empty c.time}">
-                            <fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${c.publish_time }" />
-                        </c:if>
-                    </td>
-                    <td>
-                        <c:choose>
-                            <c:when test="${c.status == 0}">
-                                <div>
-                                    <a class="approval" style="cursor: pointer;margin-right: 10%; color: #11D43B" >通过 </a>
-                                    <a class="reject" style="cursor: pointer;color: #FE4D4D;">驳回</a>
-                                </div>
-                            </c:when>
-                            <c:when test="${c.status == 1}">
-                                已审批
-                            </c:when>
-                            <c:otherwise>
-                                已驳回
-                            </c:otherwise>
-                        </c:choose>
-                    </td>
-                    <td>
-                        ${c.reason}
-                    </td>
-                </tr>
-        　　 </c:forEach>
-            </tbody>
-        </table>
+            <c:if test="${not empty taskId}">
+            <div class="operate_form_group">
+                <button id="export" type type="button" class="layui-btn custom_btn publish_acti_btn">数据汇总导出</button>
+            </div>
+            </c:if>
+            <div class="table_outer_box">
+                <table class="layui-table custom_table" id="${taskId}">
+                    <thead>
+                    <tr>
+                        <td>党委</td>
+                        <td>任务主题</td>
+                        <td>任务描述</td>
+                        <td>发布时间</td>
+                        <td>上报数据</td>
+                        <td>上报时间</td>
+                        <td>状态</td>
+                        <td>备注</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <c:forEach var="c" items="${reports }">
+                        <tr id="${c.report_id }">
+                            <td>
+                                ${c.org_name}
+                            </td>
+                            <td>
+                                ${c.theme }
+                            </td>
+                            <td>
+                                ${c.description }
+                            </td>
+                            <td>
+                                <c:if test="${not empty c.publish_time}">
+                                    <fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${c.publish_time }" />
+                                </c:if>
+                            </td>
+                            <td style="color: red;padding-left: 25px;">
+                                <c:forEach var="f" items="${c.fileView }">
+                                    <a href="${f.path}" target="_blank">${f.filename}</a>
+                                </c:forEach>
+                            </td>
+                            <td>
+                                <c:if test="${not empty c.time}">
+                                    <fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${c.publish_time }" />
+                                </c:if>
+                            </td>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${c.status == 0}">
+                                        <div>
+                                            <a class="approval" style="cursor: pointer;margin-right: 10%; color: #11D43B" >通过 </a>
+                                            <a class="reject" style="cursor: pointer;color: #FE4D4D;">驳回</a>
+                                        </div>
+                                    </c:when>
+                                    <c:when test="${c.status == 1}">
+                                        已审批
+                                    </c:when>
+                                    <c:otherwise>
+                                        已驳回
+                                    </c:otherwise>
+                                </c:choose>
+                            </td>
+                            <td>
+                                ${c.reason}
+                            </td>
+                        </tr>
+                　　 </c:forEach>
+                    </tbody>
+                </table>
+            </div>
         <!--    分页              -->
         <div class="pagination_container">
             <ul class="pagination" id="page"></ul>

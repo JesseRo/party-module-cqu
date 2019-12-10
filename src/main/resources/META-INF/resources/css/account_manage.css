@@ -22,7 +22,7 @@
     /*margin: 5px 0;*/
   }
   .main_content .min_width_1200 .nav_list .party_organization_list .second_menu .third_menu a {
-    padding-left: 74px;
+    padding:0 20px 0 74px;
     overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;

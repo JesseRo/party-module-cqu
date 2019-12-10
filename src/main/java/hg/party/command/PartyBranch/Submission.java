@@ -108,7 +108,7 @@ public class Submission extends BaseMVCActionCommand {
         m.setTotal_time(Integer.parseInt(timeLasts));
         m.setEnd_time(endTime(startDate, timeLasts));
         m.setPlace(location);
-        m.setParticipant_group(conferenceType);
+        m.setParticipant_group(attendMeetingPerson);
         m.setHost(host);
         m.setContact(linkMan);
         m.setContact_phone(linkManTelephone);

@@ -244,80 +244,80 @@ $(function(){
 				</form>
 				<div class="content_table_container" style="margin-top: 20px;">
 					<div class="table_outer_box">
-						<ul class="fixed_thead">
-							<li style="width:10%">党组织</li>
-							<li style="width:10%">会议类型</li>
-							<li style="width:40%">上报主题</li>
-							<li style="width:20%">开展时间</li>
-							<li style="width:10%">联系人</li>
-							<li style="width:10%">任务状态</li>
-						</ul>
-						<div class="table_scroll_box">
-							<table class="content_table" width="100%">
-								<tbody class="table_info">
-									<c:forEach items="${list}" var="info" varStatus="status">
-										<tr>
-			<%--	                            <td data-label="二级党组织" class="Party_name">	                           --%>
-			<%--	                                <c:if test="${not empty info.second_name }"> --%>
-			<%--	                            	 ${info.second_name }--%>
-			<%--									</c:if>--%>
-			<%--									 <c:if test="${ empty info.second_name }"> --%>
-			<%--	                            	  ${info.branch_name }--%>
-			<%--									</c:if>--%>
-			<%--	                            </td>--%>
-			<%--	                            <td data-label="党支部">                           --%>
-			<%--	                                <c:if test="${not empty info.second_name }"> --%>
-			<%--	                            	 ${info.branch_name }--%>
-			<%--									</c:if>--%>
-			<%--	                            </td>--%>
-											<td data-label="党支部">
-												${info.branch_name }
-											</td>
-											<td data-label="会议类型">${info.meeting_type }</td>
-			<%--	                            <td data-label="发布时间" class="publish_time"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${info.release_time }" /></td>--%>
-			<%--	                            <td data-label="开展主题">${info.meeting_theme }</td>--%>
-											<td data-label="党支部主题">${info.meeting_theme_secondary }</td>
-											<td data-label="开展时间" class="publish_time start_time"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${info.start_time }" /></td>
-			<%--	                            <td data-label="开展地点">${info.place }</td>--%>
-			<%--	                            <td data-label="主持人">${info.host }</td>--%>
-											<td data-label="联系人">${info.contact }</td>
-			<%--	                            <td data-label="联系人电话">${info.contact_phone }</td>--%>
-											<td data-label="任务状态">
-												<c:if test="${info.plan_state == '1'}">
-													 已提交
-												</c:if>
-												<c:if test="${info.plan_state == '2'}">
-													 已撤回
-												</c:if>
-												<c:if test="${info.plan_state == '3'}">
-													被驳回
-												</c:if>
-												<c:if test="${info.plan_state == '4'}">
-													 已通过
-												</c:if>
-												<c:if test="${info.plan_state == '5'}">
-													 已指派
-												</c:if>
-												<c:if test="${info.plan_state == '6'}">
-													 未检查
-												</c:if>
-												<c:if test="${info.plan_state == '7'}">
-													 已检查
-												</c:if>
-											</td>
-			<%--	                            <td data-label="审核人">${info.auditor }</td>--%>
-			<%--	                            <td data-label="检查人">${info.check_person_name }</td>--%>
-			<%--	                            <td data-label="抽查人">${info.check_person_org_name }</td>--%>
-			<%--	                            <td data-label="应到人数">${info.shoule_persons }</td>--%>
-			<%--	                            <td data-label="实到人数">${info.actual_persons }</td>--%>
-			<%--	                            <td data-label="请假人员">${info.leave_persons }</td>--%>
-			<%--	                            <td data-label="出勤率">${info.attendance }</td>--%>
-			<%--	                            <td data-label="备注" class="note">${info.note }</td>--%>
-										</tr>
-									</c:forEach>
-								</tbody>
-							</table>
-						</div>
+						<table class="layui-table custom_table">
+							<thead>
+								<tr>
+									<td>党组织</td>
+									<td>会议类型</td>
+									<td>上报主题</td>
+									<td>开展时间</td>
+									<td>联系人</td>
+									<td>任务状态</td>
+								</tr>
+							</thead>
+							<tbody>
+								<c:forEach items="${list}" var="info" varStatus="status">
+									<tr>
+		<%--	                            <td data-label="二级党组织" class="Party_name">	                           --%>
+		<%--	                                <c:if test="${not empty info.second_name }"> --%>
+		<%--	                            	 ${info.second_name }--%>
+		<%--									</c:if>--%>
+		<%--									 <c:if test="${ empty info.second_name }"> --%>
+		<%--	                            	  ${info.branch_name }--%>
+		<%--									</c:if>--%>
+		<%--	                            </td>--%>
+		<%--	                            <td data-label="党支部">                           --%>
+		<%--	                                <c:if test="${not empty info.second_name }"> --%>
+		<%--	                            	 ${info.branch_name }--%>
+		<%--									</c:if>--%>
+		<%--	                            </td>--%>
+										<td data-label="党支部">
+											${info.branch_name }
+										</td>
+										<td data-label="会议类型">${info.meeting_type }</td>
+		<%--	                            <td data-label="发布时间" class="publish_time"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${info.release_time }" /></td>--%>
+		<%--	                            <td data-label="开展主题">${info.meeting_theme }</td>--%>
+										<td data-label="党支部主题">${info.meeting_theme_secondary }</td>
+										<td data-label="开展时间" class="publish_time start_time"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${info.start_time }" /></td>
+		<%--	                            <td data-label="开展地点">${info.place }</td>--%>
+		<%--	                            <td data-label="主持人">${info.host }</td>--%>
+										<td data-label="联系人">${info.contact }</td>
+		<%--	                            <td data-label="联系人电话">${info.contact_phone }</td>--%>
+										<td data-label="任务状态">
+											<c:if test="${info.plan_state == '1'}">
+												 已提交
+											</c:if>
+											<c:if test="${info.plan_state == '2'}">
+												 已撤回
+											</c:if>
+											<c:if test="${info.plan_state == '3'}">
+												被驳回
+											</c:if>
+											<c:if test="${info.plan_state == '4'}">
+												 已通过
+											</c:if>
+											<c:if test="${info.plan_state == '5'}">
+												 已指派
+											</c:if>
+											<c:if test="${info.plan_state == '6'}">
+												 未检查
+											</c:if>
+											<c:if test="${info.plan_state == '7'}">
+												 已检查
+											</c:if>
+										</td>
+		<%--	                            <td data-label="审核人">${info.auditor }</td>--%>
+		<%--	                            <td data-label="检查人">${info.check_person_name }</td>--%>
+		<%--	                            <td data-label="抽查人">${info.check_person_org_name }</td>--%>
+		<%--	                            <td data-label="应到人数">${info.shoule_persons }</td>--%>
+		<%--	                            <td data-label="实到人数">${info.actual_persons }</td>--%>
+		<%--	                            <td data-label="请假人员">${info.leave_persons }</td>--%>
+		<%--	                            <td data-label="出勤率">${info.attendance }</td>--%>
+		<%--	                            <td data-label="备注" class="note">${info.note }</td>--%>
+									</tr>
+								</c:forEach>
+							</tbody>
+						</table>
 					</div>
 						<!-- -----------------------分页--------------------------->
 					<div class="pagination_container">

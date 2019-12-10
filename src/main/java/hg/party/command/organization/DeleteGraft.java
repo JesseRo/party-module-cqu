@@ -18,44 +18,50 @@ import party.constants.PartyPortletKeys;
 
 
 @Component(
-		immediate = true,
-		property = {
-			"javax.portlet.name="+ PartyPortletKeys.Graft,
-			"mvc.command.name=/hg/deleteGrafts"
-	    },
-	    service = MVCResourceCommand.class
+        immediate = true,
+        property = {
+                "javax.portlet.name=" + PartyPortletKeys.Graft,
+                "javax.portlet.name=" + PartyPortletKeys.AlreadyPublic,
+                "mvc.command.name=/hg/deleteGrafts"
+        },
+        service = MVCResourceCommand.class
 )
-public class DeleteGraft implements MVCResourceCommand{
-    @Reference GraftService service;
-	@Override
-	public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
-			throws PortletException {
-		String resourcesId=ParamUtil.getString(resourceRequest, "resourcesId");
-		resourcesId = HtmlUtil.escape(resourcesId);
-		System.out.println(resourcesId);
-		int n=0;
-		PrintWriter printWriter=null;
-		try {
-			 printWriter=resourceResponse.getWriter();
-			if (resourcesId!=null&&!resourcesId.trim().equals("")) {
-				String[] str=resourcesId.split(",");
-				if (str.length>1) {
-					for (int i = 0; i < str.length; i++) {
-					 n= service.deleteGraft(str[i]);
-					}
-				}else{
-					n= service.deleteGraft(resourcesId);
-				}
-			}
-			
-			if (n==1) {
-				printWriter.write("succee");
-			}else{
-				printWriter.write("fail");}
-			
-		  } catch (Exception e){
-		  }
-		     return false;
-	}
+public class DeleteGraft implements MVCResourceCommand {
+    @Reference
+    GraftService service;
+
+    @Override
+    public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
+            throws PortletException {
+        String resourcesId = ParamUtil.getString(resourceRequest, "resourcesId");
+        resourcesId = HtmlUtil.escape(resourcesId);
+        System.out.println(resourcesId);
+        int n = 0;
+        PrintWriter printWriter = null;
+        try {
+            printWriter = resourceResponse.getWriter();
+            if (resourcesId != null && !resourcesId.trim().equals("")) {
+                String[] str = resourcesId.split(",");
+                if (str.length > 1) {
+                    for (int i = 0; i < str.length; i++) {
+                        n = service.deleteGraft(str[i]);
+                    }
+                } else {
+                    n = service.deleteGraft(resourcesId);
+                }
+            }
+
+            if (n == 1) {
+                printWriter.write("succee");
+            } else {
+                printWriter.write("fail");
+            }
+            printWriter.flush();
+            printWriter.close();
+        } catch (Exception e) {
+        	e.printStackTrace();
+        }
+        return false;
+    }
 
 }

@@ -311,6 +311,7 @@
 							</form>
 						</div>
 						<div class="attend_rate_container" id="attend_rate_container"></div>
+						<p class="desc_text"><a href="javascript:;" onclick="window.location.href='/attend_charts'">查看更多</a></p>
 					</div>
 					<div class="views_group">
 						<div class="text_container">
@@ -365,7 +366,7 @@
 						<div id="activity_plan_conteiner5"></div>
 						<div id="activity_plan_conteiner6"></div>
 					</div>
-					<p class="desc_text"><a href="javascript:;">查看更多</a></p>
+					<p class="desc_text"><a href="javascript:;" onclick="window.location.href='/plan_charts'">查看更多</a></p>
 				</div>
 			</div>
 		</div>

@@ -58,42 +58,44 @@
             </span>
         </div>
         <div class="bg_white_container">
-        <table class="content_table" style="width: 100%;">
-            <thead class="table_title">
-            <tr>
-                <th>任务名称</th>
-                <th>任务描述</th>
-                <th>任务模板</th>
-                <th>发布时间</th>
-                <th>操作</th>
-            </tr>
-            </thead>
-            <tbody class="table_info">
-            <c:forEach var="c" items="${tasks }">
-                <tr id="${c.task_id }">
-                    <td>
-                            ${c.theme }
-                    </td>
-                    <td>
-                            ${c.description }
-                    </td>
-                    <td style="color: red;padding-left: 25px;">
-                        <c:forEach var="f" items="${c.fileView }">
-                            <a href="${f.path}" target="_blank">${f.filename}</a>
-                        </c:forEach>
-                    </td>
-                    <td>
-                        <c:if test="${not empty c.publish_time}">
-                            <fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${c.publish_time }" />
-                        </c:if>
-                    </td>
-                    <td>
-                        <a onclick="window.location.href='/secondaryReportDetail?task=${c.task_id }'" href="javascript:;">查看报送情况</a>
-                    </td>
-                </tr>
-                　　 </c:forEach>
-            </tbody>
-        </table>
+            <div class="table_outer_box">
+                <table class="layui-table custom_table">
+                    <thead>
+                    <tr>
+                        <td>任务名称</td>
+                        <td>任务描述</td>
+                        <td>任务模板</td>
+                        <td>发布时间</td>
+                        <td>操作</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <c:forEach var="c" items="${tasks }">
+                        <tr id="${c.task_id }">
+                            <td>
+                                    ${c.theme }
+                            </td>
+                            <td>
+                                    ${c.description }
+                            </td>
+                            <td style="color: red;padding-left: 25px;">
+                                <c:forEach var="f" items="${c.fileView }">
+                                    <a href="${f.path}" target="_blank">${f.filename}</a>
+                                </c:forEach>
+                            </td>
+                            <td>
+                                <c:if test="${not empty c.publish_time}">
+                                    <fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${c.publish_time }" />
+                                </c:if>
+                            </td>
+                            <td>
+                                <a onclick="window.location.href='/secondaryReportDetail?task=${c.task_id }'" href="javascript:;">查看报送情况</a>
+                            </td>
+                        </tr>
+                        　　 </c:forEach>
+                    </tbody>
+                </table>
+            </div>
         <div class="pagination_container">
             <ul class="pagination" id="page"></ul>
             <div class="pageJump">
