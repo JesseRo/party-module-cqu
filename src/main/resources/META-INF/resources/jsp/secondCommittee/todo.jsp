@@ -244,7 +244,7 @@
 <%--        </div>--%>
         <div class="bg_white_container">
             <div class="table_outer_box">
-                <table class="content_table" style="width: 100%;">
+                <table class="layui-table custom_table" >
                     <thead>
                     <tr>
                         <%--						<th>消息状态</th>--%>

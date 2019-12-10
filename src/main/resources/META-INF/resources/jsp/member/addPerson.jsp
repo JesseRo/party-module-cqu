@@ -85,231 +85,232 @@
                         <a href="javascript:;">党员个人信息</a>
                     </span>
         </div>
-    </div>
-    <div class="bg_white_container">
-    <div class="content_form form_container">
-        <portlet:actionURL var="addUser" name="/org/add/user">
-        </portlet:actionURL>
-        <form class="form-horizontal" id="addPersonForm" role="form" action="${addUser }" method="post"
-              style="width: 960px;">
-            <div class="form-group">
+        <div class="bg_white_container">
+            <div class="content_form form_container">
+                <portlet:actionURL var="addUser" name="/org/add/user">
+                </portlet:actionURL>
+                <form class="form-horizontal" id="addPersonForm" role="form" action="${addUser }" method="post"
+                      style="width: 960px;">
+                    <div class="form-group">
 
-                <div class="col-sm-6 col-xs-12">
-                    <span class="col-sm-3 col-xs-3 control-label form-label-required">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名</span>
-                    <div class="col-sm-9 col-xs-9">
-                        <!-- <select class="form-control"  name="meetType" id="meetType">
-                          <option value="">请选择</option>
-                        </select>  -->
-                        <input type="text" class="form-control" name="userName" id="userName" value="${info.member_name }">
-                    </div>
-                </div>
-
-                <div class="col-sm-6 col-xs-12">
-                    <span class="col-sm-3 col-xs-3 control-label form-label-required">性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别</span>
-                    <div class="col-sm-9 col-xs-9">
-                        <select class="form-control" name="sex" id="sex">
-                            <option value="" disabled>-请选择-</option>
-                            <option value="男">男</option>
-                            <option value="女">女</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="col-sm-6 col-xs-12">
-                    <span class="col-sm-3 col-xs-3 control-label form-label-required">民&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;族</span>
-                    <div class="col-sm-9 col-xs-9">
-                        <select class="form-control sconed_party" name="ethnicity" id="ethnicity">
-                            <option value="" disabled>请选择</option>
-                        </select>
-                        <%-- <input type="text" class="form-control"  name="ethnicity" id="ethnicity" value="${info.member_ethnicity }"> --%>
-                    </div>
-                </div>
-
-                <div class="col-sm-6 col-xs-12">
-                    <span class="col-sm-3 col-xs-3 control-label form-label-required">籍&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;贯</span>
-                    <div class="col-sm-9 col-xs-9" style="width: 75%;line-height: 34px;">
-                        <select id="province">
-                            <option value="请选择省份" disabled>请选择省份</option>
-                        </select>
-                        <select id="city">
-                            <option value="请选择省份" disabled>请选择城市</option>
-                        </select>
-                        <input type="text" class="form-control" readonly name="birth_place" id="birth_place"
-                               value="${info.member_birth_place }">
-                    </div>
-                </div>
-
-                <div class="col-sm-6 col-xs-12">
-                    <span class="col-sm-3 col-xs-3 control-label form-label-required">出生年月</span>
-                    <div class="col-sm-9 col-xs-9">
-                        <input type="text" name="birthday" id="labCheckDate" value="${info.member_birthday }"
-                               onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" class="form-control start_date">
-                    </div>
-                </div>
-
-                <div class="col-sm-6 col-xs-12">
-                    <span class="col-sm-3 col-xs-3 control-label form-label-required">入党时间</span>
-                    <div class="col-sm-9 col-xs-9">
-                        <input type="text" name="join_party_time" id="labCheckEndDate" value="${info.member_join_date }"
-                               onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" class="form-control start_date">
-                    </div>
-                </div>
-
-                <div class="col-sm-6 col-xs-12">
-                    <!--  <span class="col-sm-3 col-xs-3 control-label form-label-required">转正时间</span> -->
-                    <span class="col-sm-3 col-xs-3 control-label">转正时间</span>
-                    <div class="col-sm-9 col-xs-9">
-                        <input type="text" name="turn_Time" id="turn_labCheckEndDate" value="${info.member_fomal_date }"
-                               onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" class="form-control start_date">
-                    </div>
-                </div>
-                <!--
-                  <div class="col-sm-6 col-xs-12">
-                     <span class="col-sm-3 col-xs-3 control-label">抽查状态</span>
-                     <div class="col-sm-9 col-xs-9">
-                         <select class="form-control"  name="checkState" id="checkState">
-                             <option value="">--</option>
-                             <option value="f">未抽查</option>
-                             <option value="t">已抽查</option>
-                         </select>
-                     </div>
-                 </div>  -->
-                <div class="col-sm-6 col-xs-12">
-                    <span class="col-sm-3 col-xs-3 control-label form-label-required">联系电话</span>
-                    <div class="col-sm-9 col-xs-9">
-                        <input type="text" class="form-control" placeholder="手机号码" name="telephone" id="telephone"
-                               value="${info.member_phone_number }">
-                    </div>
-                </div>
-                <div class="col-sm-6 col-xs-12">
-                    <span class="col-sm-3 col-xs-3 control-label form-label-required">身份证号</span>
-                    <div class="col-sm-9 col-xs-9">
-                        <input type="text" class="form-control" name="ID_card" id="ID_card"
-                               value="${info.member_identity }">
-                    </div>
-                </div>
-
-                <div class="col-sm-6 col-xs-12">
-                    <span class="col-sm-3 col-xs-3 control-label form-label-required">文化程度</span>
-                    <div class="col-sm-9 col-xs-9">
-                        <%--  <input type="text" class="form-control"  name="educational_level" id="educational_level" value="${info.member_degree }"> --%>
-                        <select class="form-control" name="educational_level" id="educational_level">
-                            <option value="" disabled>-请选择-</option>
-                            <option value="本科">本科</option>
-                            <option value="硕士研究生">硕士研究生</option>
-                            <option value="博士研究生">博士研究生</option>
-                            <option value="其他">其他</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-xs-12">
-                    <span class="col-sm-3 col-xs-3 control-label form-label-required">党员类型</span>
-                    <div class="col-sm-9 col-xs-9">
-                        <select class="form-control" name="party_type" id="party_type">
-                            <option value="" disabled>-请选择-</option>
-                            <option value="正式党员">正式党员</option>
-                            <option value="预备党员">预备党员</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-xs-12">
-                    <span class="col-sm-3 col-xs-3 control-label form-label-required">家庭住址</span>
-                    <div class="col-sm-9 col-xs-9">
-                        <input type="text" class="form-control" name="home_addrss" id="home_addrss"
-                               value="${info.member_address }">
-                    </div>
-                </div>
-                <div class="col-sm-6 col-xs-12">
-                    <span class="col-sm-3 col-xs-3 control-label form-label-required">人员类别</span>
-                    <div class="col-sm-9 col-xs-9">
-                        <select class="form-control" name="job" id="job">
-                            <option value="" disabled>-请选择-</option>
-
-                        </select>
-                        <%--  <input type="text" class="form-control"  name="job" id="job" value="${info.member_job }"> --%>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-xs-12">
-                    <span class="col-sm-3 col-xs-3 control-label form-label-required">邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;箱</span>
-                    <div class="col-sm-9 col-xs-9">
-                        <input type="text" class="form-control" name="email" id="email" value="${info.email }">
-                    </div>
-                </div>
-    <%--            <div class="col-sm-6 col-xs-12">--%>
-    <%--                <span class="col-sm-3 col-xs-3 control-label form-label-required">党内职务</span>--%>
-    <%--                <div class="col-sm-9 col-xs-9">--%>
-    <%--                    <select class="form-control" name="positior" id="positior">--%>
-    <%--                        <option value="">-请选择-</option>--%>
-    <%--                    </select>--%>
-    <%--                </div>--%>
-    <%--            </div>--%>
-                <div class="col-sm-6 col-xs-12">
-                    <span class="col-sm-3 col-xs-3 control-label form-label-required">婚姻状况</span>
-                    <div class="col-sm-9 col-xs-9">
-                        <select class="form-control" name="marriage" id="marriage">
-                            <option value="" disabled>-请选择-</option>
-                            <option value="已婚">已婚</option>
-                            <option value="未婚">未婚</option>
-                            <option value="离异">离异</option>
-                            <option value="丧偶">丧偶</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-xs-12">
-                    <span class="col-sm-3 col-xs-3 control-label form-label-required">党费标准</span>
-                    <div class="col-sm-9 col-xs-9">
-                        <input type="text" class="form-control" name="major_title" id="major_title" onblur="check(this)"
-                               onkeyup="this.value=this.value.replace(/[^0-9.]/g,'')" placeholder="（元/月）" value="${info.member_major_title }">
-                    </div>
-                </div>
-                <div class="col-sm-6 col-xs-12">
-                    <span class="col-sm-3 col-xs-3 control-label form-label-required">行政机构</span>
-                    <div class="col-sm-9 col-xs-9">
-                        <select class="form-control" name="unit" id="unit">
-                            <option value="" disabled selected>-请选择-</option>
-                            <c:forEach items="${units}" var="u">
-                                <option value="${u.id}">${u.unit_name}</option>
-                            </c:forEach>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-xs-12">
-                    <span class="col-sm-3 col-xs-3 control-label form-label-required">是否处级以上干部</span>
-                    <div class="col-sm-9 col-xs-9">
-                        <select class="form-control" name="isLeader" id="isLeader">
-                            <option value="" disabled>-请选择-</option>
-                            <option value="是">是</option>
-                            <option value="否">否</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-xs-12" id="sushe">
-
-                </div>
-                <input type="hidden" name="seconedName" value="${seconedName }"/>
-                <input type="hidden" name="state" id="state" value="${state }"/>
-                <input type="hidden" name="prevID_card" value="${info.member_identity }"/>
-                <input type="hidden" name="id" value="${info.id }"/>
-                <input type="hidden" name="orgId" id="org_id" value="${orgId }"/>
-                <input type="hidden" name="addPersonFormId" id="addPersonFormId" value="${addpersonformid}"/>
-<%--                <input class="btn btn_main" id="button1" type="button" value="取消"/>--%>
-<%--                <input class="btn btn_main" id="button2" type="button" value="确定" onclick="formsubmit();"/>--%>
-                <div class="col-sm-12 col-xs-12">
-                    <div class="layui-inline btn_group" style="width: calc(50% - 120px);margin: 0;margin-top: 10px;">
-                        <label class="layui-form-label"></label>
-                        <div class="layui-input-inline">
-                            <button type="button" id="button1" onclick="formsubmit()" class="layui-btn" lay-submit="" lay-filter="partyMemForm" style="padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;background-color: #FFAB33;border-radius: 4px;">
-                                发布
-                            </button>
-                            <button type="button" id="button2" class="layui-btn layui-btn-primary" style="background-color: transparent;color: #666;padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;border-radius: 4px;">
-                                取消
-                            </button>
+                        <div class="col-sm-6 col-xs-12">
+                            <span class="col-sm-3 col-xs-3 control-label form-label-required">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名</span>
+                            <div class="col-sm-9 col-xs-9">
+                                <!-- <select class="form-control"  name="meetType" id="meetType">
+                                  <option value="">请选择</option>
+                                </select>  -->
+                                <input type="text" class="form-control" name="userName" id="userName" value="${info.member_name }">
+                            </div>
                         </div>
-                    </div>
+
+                        <div class="col-sm-6 col-xs-12">
+                            <span class="col-sm-3 col-xs-3 control-label form-label-required">性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别</span>
+                            <div class="col-sm-9 col-xs-9">
+                                <select class="form-control" name="sex" id="sex">
+                                    <option value="" disabled>-请选择-</option>
+                                    <option value="男">男</option>
+                                    <option value="女">女</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-xs-12">
+                            <span class="col-sm-3 col-xs-3 control-label form-label-required">民&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;族</span>
+                            <div class="col-sm-9 col-xs-9">
+                                <select class="form-control sconed_party" name="ethnicity" id="ethnicity">
+                                    <option value="" disabled>请选择</option>
+                                </select>
+                                <%-- <input type="text" class="form-control"  name="ethnicity" id="ethnicity" value="${info.member_ethnicity }"> --%>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-xs-12">
+                            <span class="col-sm-3 col-xs-3 control-label form-label-required">籍&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;贯</span>
+                            <div class="col-sm-9 col-xs-9" style="width: 75%;line-height: 34px;">
+                                <select id="province">
+                                    <option value="请选择省份" disabled>请选择省份</option>
+                                </select>
+                                <select id="city">
+                                    <option value="请选择省份" disabled>请选择城市</option>
+                                </select>
+                                <input type="text" class="form-control" readonly name="birth_place" id="birth_place"
+                                       value="${info.member_birth_place }">
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-xs-12">
+                            <span class="col-sm-3 col-xs-3 control-label form-label-required">出生年月</span>
+                            <div class="col-sm-9 col-xs-9">
+                                <input type="text" name="birthday" id="labCheckDate" value="${info.member_birthday }"
+                                       onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" class="form-control start_date">
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-xs-12">
+                            <span class="col-sm-3 col-xs-3 control-label form-label-required">入党时间</span>
+                            <div class="col-sm-9 col-xs-9">
+                                <input type="text" name="join_party_time" id="labCheckEndDate" value="${info.member_join_date }"
+                                       onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" class="form-control start_date">
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-xs-12">
+                            <!--  <span class="col-sm-3 col-xs-3 control-label form-label-required">转正时间</span> -->
+                            <span class="col-sm-3 col-xs-3 control-label">转正时间</span>
+                            <div class="col-sm-9 col-xs-9">
+                                <input type="text" name="turn_Time" id="turn_labCheckEndDate" value="${info.member_fomal_date }"
+                                       onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" class="form-control start_date">
+                            </div>
+                        </div>
+                        <!--
+                          <div class="col-sm-6 col-xs-12">
+                             <span class="col-sm-3 col-xs-3 control-label">抽查状态</span>
+                             <div class="col-sm-9 col-xs-9">
+                                 <select class="form-control"  name="checkState" id="checkState">
+                                     <option value="">--</option>
+                                     <option value="f">未抽查</option>
+                                     <option value="t">已抽查</option>
+                                 </select>
+                             </div>
+                         </div>  -->
+                        <div class="col-sm-6 col-xs-12">
+                            <span class="col-sm-3 col-xs-3 control-label form-label-required">联系电话</span>
+                            <div class="col-sm-9 col-xs-9">
+                                <input type="text" class="form-control" placeholder="手机号码" name="telephone" id="telephone"
+                                       value="${info.member_phone_number }">
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            <span class="col-sm-3 col-xs-3 control-label form-label-required">身份证号</span>
+                            <div class="col-sm-9 col-xs-9">
+                                <input type="text" class="form-control" name="ID_card" id="ID_card"
+                                       value="${info.member_identity }">
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-xs-12">
+                            <span class="col-sm-3 col-xs-3 control-label form-label-required">文化程度</span>
+                            <div class="col-sm-9 col-xs-9">
+                                <%--  <input type="text" class="form-control"  name="educational_level" id="educational_level" value="${info.member_degree }"> --%>
+                                <select class="form-control" name="educational_level" id="educational_level">
+                                    <option value="" disabled>-请选择-</option>
+                                    <option value="本科">本科</option>
+                                    <option value="硕士研究生">硕士研究生</option>
+                                    <option value="博士研究生">博士研究生</option>
+                                    <option value="其他">其他</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            <span class="col-sm-3 col-xs-3 control-label form-label-required">党员类型</span>
+                            <div class="col-sm-9 col-xs-9">
+                                <select class="form-control" name="party_type" id="party_type">
+                                    <option value="" disabled>-请选择-</option>
+                                    <option value="正式党员">正式党员</option>
+                                    <option value="预备党员">预备党员</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            <span class="col-sm-3 col-xs-3 control-label form-label-required">家庭住址</span>
+                            <div class="col-sm-9 col-xs-9">
+                                <input type="text" class="form-control" name="home_addrss" id="home_addrss"
+                                       value="${info.member_address }">
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            <span class="col-sm-3 col-xs-3 control-label form-label-required">人员类别</span>
+                            <div class="col-sm-9 col-xs-9">
+                                <select class="form-control" name="job" id="job">
+                                    <option value="" disabled>-请选择-</option>
+
+                                </select>
+                                <%--  <input type="text" class="form-control"  name="job" id="job" value="${info.member_job }"> --%>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            <span class="col-sm-3 col-xs-3 control-label form-label-required">邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;箱</span>
+                            <div class="col-sm-9 col-xs-9">
+                                <input type="text" class="form-control" name="email" id="email" value="${info.email }">
+                            </div>
+                        </div>
+                        <%--            <div class="col-sm-6 col-xs-12">--%>
+                        <%--                <span class="col-sm-3 col-xs-3 control-label form-label-required">党内职务</span>--%>
+                        <%--                <div class="col-sm-9 col-xs-9">--%>
+                        <%--                    <select class="form-control" name="positior" id="positior">--%>
+                        <%--                        <option value="">-请选择-</option>--%>
+                        <%--                    </select>--%>
+                        <%--                </div>--%>
+                        <%--            </div>--%>
+                        <div class="col-sm-6 col-xs-12">
+                            <span class="col-sm-3 col-xs-3 control-label form-label-required">婚姻状况</span>
+                            <div class="col-sm-9 col-xs-9">
+                                <select class="form-control" name="marriage" id="marriage">
+                                    <option value="" disabled>-请选择-</option>
+                                    <option value="已婚">已婚</option>
+                                    <option value="未婚">未婚</option>
+                                    <option value="离异">离异</option>
+                                    <option value="丧偶">丧偶</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            <span class="col-sm-3 col-xs-3 control-label form-label-required">党费标准</span>
+                            <div class="col-sm-9 col-xs-9">
+                                <input type="text" class="form-control" name="major_title" id="major_title" onblur="check(this)"
+                                       onkeyup="this.value=this.value.replace(/[^0-9.]/g,'')" placeholder="（元/月）" value="${info.member_major_title }">
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            <span class="col-sm-3 col-xs-3 control-label form-label-required">行政机构</span>
+                            <div class="col-sm-9 col-xs-9">
+                                <select class="form-control" name="unit" id="unit">
+                                    <option value="" disabled selected>-请选择-</option>
+                                    <c:forEach items="${units}" var="u">
+                                        <option value="${u.id}">${u.unit_name}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            <span class="col-sm-3 col-xs-3 control-label form-label-required">是否处级以上干部</span>
+                            <div class="col-sm-9 col-xs-9">
+                                <select class="form-control" name="isLeader" id="isLeader">
+                                    <option value="" disabled>-请选择-</option>
+                                    <option value="是">是</option>
+                                    <option value="否">否</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xs-12" id="sushe">
+
+                        </div>
+                        <input type="hidden" name="seconedName" value="${seconedName }"/>
+                        <input type="hidden" name="state" id="state" value="${state }"/>
+                        <input type="hidden" name="prevID_card" value="${info.member_identity }"/>
+                        <input type="hidden" name="id" value="${info.id }"/>
+                        <input type="hidden" name="orgId" id="org_id" value="${orgId }"/>
+                        <input type="hidden" name="addPersonFormId" id="addPersonFormId" value="${addpersonformid}"/>
+                        <%--                <input class="btn btn_main" id="button1" type="button" value="取消"/>--%>
+                        <%--                <input class="btn btn_main" id="button2" type="button" value="确定" onclick="formsubmit();"/>--%>
+                        <div class="col-sm-12 col-xs-12">
+                            <div class="layui-inline btn_group" style="width: calc(50% - 120px);margin: 0;margin-top: 10px;">
+                                <label class="layui-form-label"></label>
+                                <div class="layui-input-inline">
+                                    <button type="button" id="button1" onclick="formsubmit()" class="layui-btn" lay-submit="" lay-filter="partyMemForm" style="padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;background-color: #FFAB33;border-radius: 4px;">
+                                        发布
+                                    </button>
+                                    <button type="button" id="button2" class="layui-btn layui-btn-primary" style="background-color: transparent;color: #666;padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;border-radius: 4px;">
+                                        取消
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                </form>
             </div>
-        </form>
+        </div>
     </div>
-    </div>
+
 </div>
 <script type="text/javascript">
     $("#button1").click(function () {
