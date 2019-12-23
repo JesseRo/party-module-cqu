@@ -250,14 +250,14 @@ public class PartyMeetingPlanInfoDao extends PostgresqlDaoImpl<MeetingPlan> {
 //			}
         String sql = "\n" +
                 "\tSELECT\n" +
-                "\t\tplan.task_status AS plan_state,\n" +
-                "\t\t( SELECT org_name FROM hg_party_org WHERE org_id = plan.organization_id ) AS branch_name,\n" +
+                "\t\tplan.task_status AS plan_state,org_o.org_name AS branch_name,\n" +
                 "\t\t( SELECT org_name FROM hg_party_org WHERE org_id = ( SELECT org_parent FROM hg_party_org WHERE org_id = plan.organization_id ) AND org_type != 'organization' ) AS second_name,\n" +
                 "\t\tplan.*\n" +
                 "\tFROM\n" +
                 "\t\thg_party_meeting_plan_info AS plan\n" +
                 "\t\tLEFT OUTER JOIN hg_users_info AS us ON plan.check_person = us.user_id \n" +
-                "\t\tleft outer join hg_party_org as org_o on plan.organization_id = org_o.org_id\n" +
+                "\t\tleft outer join hg_party_org as org_o on plan.organization_id = org_o.org_id \n" +
+                "left join hg_party_org as org_p on org_o.org_parent = org_p.org_id and org_p.org_type != 'organization' " +
                 "\twhere 1 = 1 ";
         StringBuffer buffer = new StringBuffer(sql);
         if (!StringUtils.isEmpty(starDdate) && StringUtils.isEmpty(endDate)) {

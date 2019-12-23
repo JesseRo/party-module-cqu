@@ -44,6 +44,14 @@
             height: 48px;
             font-size: 14px;
         }
+        .report_table_box.table_outer_box{
+            height: calc(100% - 118px);
+        }
+        .table_outer_box .report_detail{
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
     </style>
 </head>
 <body>
@@ -71,8 +79,8 @@
                 <button id="export" type type="button" class="layui-btn custom_btn publish_acti_btn">数据汇总导出</button>
             </div>
             </c:if>
-            <div class="table_outer_box">
-                <table class="layui-table custom_table" id="${taskId}">
+            <div class="table_outer_box report_table_box">
+                <table class="layui-table custom_table report_detail" id="${taskId}">
                     <thead>
                     <tr>
                         <td>党委</td>

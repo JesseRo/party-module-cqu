@@ -6,7 +6,7 @@
 
 <head>
     <link rel="stylesheet" href="${basePath}/css/party_organization.css?v=5"/>
-    <link rel="stylesheet" href="${basePath}/css/account_manage.css"/>
+    <link rel="stylesheet" href="${basePath}/css/account_manage_1.css"/>
     <script src="${basePath}/js/pagination.js"></script>
     <style>
         .content-div {

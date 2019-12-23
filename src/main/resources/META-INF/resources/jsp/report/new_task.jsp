@@ -352,10 +352,13 @@
                 var resources = resourcesId.join(",") + "";
                 $("#hiddenPublicObject").val(resources);
                 if (!$("#hiddenPublicObject").val()) {
-                    showConfirm("请选择发布对象！");
+                    layuiModal.alert("请选择发布对象！");
                 }
-                $('#status').val("2");
-                $('#submit').click();
+                var confirmCallback = function(){
+                    $('#status').val("2");
+                    $('#submit').click();
+                };
+                layuiModal.confirm("确定要发布任务吗?", confirmCallback);
             }
         })
     </script>
@@ -474,8 +477,8 @@
                             <button id="send" type="button" class="layui-btn" lay-submit="" lay-filter="partyMemForm" style="padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;background-color: #FFAB33;border-radius: 4px;">
                                 发布
                             </button>
-                            <button id="draft" type="button" class="layui-btn layui-btn-primary" style="background-color: transparent;color: #666;padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;border-radius: 4px;">
-                                保存为草稿
+                            <button onclick="window.history.back();" type="button" class="layui-btn layui-btn-primary" style="background-color: transparent;color: #666;padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;border-radius: 4px;">
+                                取消
                             </button>
                         </div>
                     </div>

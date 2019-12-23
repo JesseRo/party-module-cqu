@@ -226,7 +226,7 @@ $(function(){
 					</div>
 					<portlet:resourceURL id="/hg/MeetingCountExport" var="MeetingCountExport"/>
 					<div class="btn_group" style="height: 34px;">
-						<button type="submit" class="btn btn-default main_color_btn search_btn col-sm-1 col-xs-3" >查询</button>
+						<button type="button" id="searchButton" class="custom_btn layui-btn" >查询</button>
 
 						<a style="margin-left: 20px;float: right;" href="${MeetingCountExport }&meetType=${meetType}&meetTheme=${meetTheme}&branchId=${branchId}&seconedId=${seconedId}&startTime=${startTime}&endTime=${endTime}&ifExportAll=false" >
 							<button type="button" class="btn btn-default">
@@ -271,17 +271,17 @@ $(function(){
 		<%--	                            	 ${info.branch_name }--%>
 		<%--									</c:if>--%>
 		<%--	                            </td>--%>
-										<td data-label="党支部">
+										<td data-label="党支部" title="${info.branch_name }">
 											${info.branch_name }
 										</td>
-										<td data-label="会议类型">${info.meeting_type }</td>
+										<td data-label="会议类型" title="${info.meeting_type }">${info.meeting_type }</td>
 		<%--	                            <td data-label="发布时间" class="publish_time"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${info.release_time }" /></td>--%>
 		<%--	                            <td data-label="开展主题">${info.meeting_theme }</td>--%>
-										<td data-label="党支部主题">${info.meeting_theme_secondary }</td>
-										<td data-label="开展时间" class="publish_time start_time"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${info.start_time }" /></td>
+										<td data-label="党支部主题" title="${info.meeting_theme_secondary }">${info.meeting_theme_secondary }</td>
+										<td data-label="开展时间" title="${info.start_time }" class="publish_time start_time"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${info.start_time }" /></td>
 		<%--	                            <td data-label="开展地点">${info.place }</td>--%>
 		<%--	                            <td data-label="主持人">${info.host }</td>--%>
-										<td data-label="联系人">${info.contact }</td>
+										<td data-label="联系人" title="${info.contact }">${info.contact }</td>
 		<%--	                            <td data-label="联系人电话">${info.contact_phone }</td>--%>
 										<td data-label="任务状态">
 											<c:if test="${info.plan_state == '1'}">
@@ -326,12 +326,12 @@ $(function(){
 							<input class='current_page' type="hidden" value="${pageNo}"/>
 							<p>共<span class="total_page">${totalPage }</span>页</p>
 							<portlet:actionURL name="/PageNoMVCActionCommand" var="pageNoUrl">
-								<portlet:param name="startTime" value="${startTime }"/>
-								<portlet:param name="endTime" value="${endTime }"/>
-								<portlet:param name="seconedId" value="${seconedId }"/>
-								<portlet:param name="branchId" value="${branchId }"/>
-								<portlet:param name="meetTheme" value="${meetTheme }"/>
-								<portlet:param name="meetType" value="${meetType }"/>
+<%--								<portlet:param name="startTime" value="${startTime }"/>--%>
+<%--								<portlet:param name="endTime" value="${endTime }"/>--%>
+<%--								<portlet:param name="seconedId" value="${seconedId }"/>--%>
+<%--								<portlet:param name="branchId" value="${branchId }"/>--%>
+<%--								<portlet:param name="meetTheme" value="${meetTheme }"/>--%>
+<%--								<portlet:param name="meetType" value="${meetType }"/>--%>
 							</portlet:actionURL>
 							<form action="${pageNoUrl }" id="getPageNo" method="post">
 								<input type="hidden" id="pageNo" name="pageNo" value=""/>
@@ -339,6 +339,13 @@ $(function(){
 								<input type="text" id="jumpPageNo" name="jumpPageNo"/>
 								<span>页</span>
 								<button type="submit" class="button">确定</button>
+
+								<input name="startTime" type="hidden" value="${startTime }"/>
+								<input name="endTime" type="hidden" value="${endTime }"/>
+								<input name="seconedId" type="hidden" value="${seconedId }"/>
+								<input name="branchId" type="hidden" value="${branchId }"/>
+								<input name="meetTheme" type="hidden" value="${meetTheme }"/>
+								<input name="meetType" type="hidden" value="${meetType }"/>
 							</form>
 						</div>
 					</div>
@@ -385,6 +392,15 @@ $(function(){
 							 }
 						 }
 					 });
+						$('#searchButton').on('click', function () {
+							$('#getPageNo [name=meetType]').val($('.form-group [name=meetType]').val());
+							$('#getPageNo [name=meetTheme]').val($('.form-group [name=meetTheme]').val());
+							$('#getPageNo [name=branchId]').val($('.form-group [name=branchId]').val());
+							$('#getPageNo [name=seconedId]').val($('.form-group [name=seconedId]').val());
+							$('#getPageNo [name=endTime]').val($('.form-group [name=endTime]').val());
+							$('#getPageNo [name=startTime]').val($('.form-group [name=startTime]').val());
+							$('#getPageNo').submit();
+						})
 				  });
 			 </script>
 

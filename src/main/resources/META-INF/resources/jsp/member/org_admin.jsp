@@ -9,7 +9,7 @@
 
 <head>
   <%--   <link rel="stylesheet" href="${basePath}/css/party_organization.css?v=5"/> --%>
-    <link rel="stylesheet" href="${basePath}/css/account_manage.css"/>
+    <link rel="stylesheet" href="${basePath}/css/account_manage_1.css"/>
     <link rel="stylesheet" href="${basePath}/css/jquery.dropdown.css"/>
     <script type="text/javascript" src="${basePath}/js/jquery.dropdown.js?v=11"></script>
     <link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/party-info-manage.min.css"/>
@@ -225,19 +225,19 @@
 }
 
 .add_class {
-	color: #fff;
-	background-color: #ce0000;
+    color: #333;
+    background-color: #fff;
 }
 
 .add_class a {
-	color: #fff;
-	background-color: #ce0000;
+	color: #333;
+	background-color: #fff;
 }
 
 .main_content .min_width_1200 .nav_list .party_organization_list li .second_menu .add_class>a
 	{
-	color: #fff;
-	background-color: #ce0000;
+    color: #333;
+    background-color: #fff;
 }
 
 #model {
@@ -404,6 +404,7 @@ button#add_submit {
                 $(".third_menu li").removeClass("third_menu_on");
                 $(".second_menu>li").removeClass("second_menu_on");
                 $(this).parent("li").addClass("second_menu_on");
+                $(this).parent("li").siblings("li").removeClass("second_menu_on");
             }
             if ($(this).parent("li").hasClass("height_auto")) {
                 $(this).parent("li").removeClass("height_auto")
@@ -411,6 +412,7 @@ button#add_submit {
             } else if ($(this).siblings("ul").length > 0) {
                 $(this).parent("li").addClass("height_auto").addClass(
                         "second_menu_on");
+                $(this).parent("li").siblings("li").removeClass("second_menu_on");
             }
             var _target = $(this).find(".third_menu_icon");
             if (_target.hasClass("third_menu_up")) {

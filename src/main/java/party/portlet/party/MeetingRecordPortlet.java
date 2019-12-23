@@ -84,12 +84,13 @@ public class MeetingRecordPortlet extends MVCPortlet{
 	     if (totalCount%pageSize!=0) {
 	    	 totalPage=totalPage+1;
 	     }
-	     if(pageNo==0){
-			pageNo = 1;//默认当前页为1
-	     }else if(pageNo > totalPage){
-			pageNo = totalPage;
-	     }
-	     List<Map<String, Object>> listResult= 
+	     if(pageNo > totalPage) {
+			 pageNo = totalPage;
+		 }
+	     if(pageNo<=0){
+			 pageNo = 1;//默认当前页为1
+		 }
+			 List<Map<String, Object>> listResult=
 	    	partyMeetingPlanInfo.find(startTime,endTime, meetType, meetTheme, seconedId, branchId, pageSize,
 			(pageNo-1)*pageSize,checkState);
 	     for (Map<String, Object> map : listResult) {

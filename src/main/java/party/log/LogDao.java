@@ -25,7 +25,7 @@ public class LogDao extends PostgresqlDaoImpl<Log> {
             size = 10;
         }
         search = "%" + search + "%";
-        String sql = "select * from hg_party_visit_count  where user_id like ? or hg_party_visit_count.type like ? or remark like ? or ip like ? order by time desc";
+        String sql = "select * from hg_party_visit_count  where user_id like ? or hg_party_visit_count.type like ? or remark like ? or ip like ? order by visit_time desc";
         try {
             return postGresqlFindBySql(page, size, sql, search, search, search, search);
         }catch (Exception e){

@@ -604,11 +604,12 @@
                 var host = $("input[name='host']").val();
                 var reg = /^[\u4E00-\u9FA5]{2,5}$/;
                 if (!reg.test(host)) {
-                    $.hgConfirm("提示", "请输入正确人名。 ");
-                    $("#hg_confirm").modal("show");
-                    $("#hg_confirm .btn_main").click(function () {
-                        $("#hg_confirm").modal("hide");
-                    });
+                    layuiModal.alert("请输入正确人名");
+                    // $.hgConfirm("提示", "请输入正确人名。 ");
+                    // $("#hg_confirm").modal("show");
+                    // $("#hg_confirm .btn_main").click(function () {
+                    //     $("#hg_confirm").modal("hide");
+                    // });
                 } else {
                     $("input[name='contact']").focus();
                 }
@@ -619,11 +620,12 @@
                 var contact = $("input[name='contact']").val();
                 var reg = /^[\u4E00-\u9FA5]{2,5}$/;
                 if (!reg.test(contact)) {
-                    $.hgConfirm("提示", "请输入正确人名。 ");
-                    $("#hg_confirm").modal("show");
-                    $("#hg_confirm .btn_main").click(function () {
-                        $("#hg_confirm").modal("hide");
-                    });
+                    layuiModal.alert("请输入正确人名");
+                    // $.hgConfirm("提示", "请输入正确人名。 ");
+                    // $("#hg_confirm").modal("show");
+                    // $("#hg_confirm .btn_main").click(function () {
+                    //     $("#hg_confirm").modal("hide");
+                    // });
                 } else {
                     $("input[name='sit']").focus();
                 }
@@ -633,11 +635,12 @@
                 var phoneNumber = $("input[name='phoneNumber']").val();
                 var mobile = /^1(3|4|5|7|8)\d{9}$/;
                 if (!mobile.test(phoneNumber)) {
-                    $.hgConfirm("提示", "请输入正确手机号码。");
-                    $("#hg_confirm").modal("show");
-                    $("#hg_confirm .btn_main").click(function () {
-                        $("#hg_confirm").modal("hide");
-                    });
+                    layuiModal.alert("请输入正确人名");
+                    // $.hgConfirm("提示", "请输入正确手机号码。");
+                    // $("#hg_confirm").modal("show");
+                    // $("#hg_confirm .btn_main").click(function () {
+                    //     $("#hg_confirm").modal("hide");
+                    // });
                 }
             });
 
@@ -648,11 +651,12 @@
                 if (mobile.test(phoneNumber) || phone.test(phoneNumber)) {
                     console.log("输入号码类型正确");
                 } else {
-                    $.hgConfirm("提示", "请输入正确电话号码。");
-                    $("#hg_confirm").modal("show");
-                    $("#hg_confirm .btn_main").click(function () {
-                        $("#hg_confirm").modal("hide");
-                    });
+                    layuiModal.alert("请输入正确电话号码");
+                    // $.hgConfirm("提示", "请输入正确电话号码。");
+                    // $("#hg_confirm").modal("show");
+                    // $("#hg_confirm .btn_main").click(function () {
+                    //     $("#hg_confirm").modal("hide");
+                    // });
                 }
             });
 
@@ -665,12 +669,14 @@
                 var place = $("select[name='location']").val();
                 $(".already_select").each(function () {
                     if ($(this).attr("value") === place) {
-                        $.hgConfirm("提示", "该地点已经被占用了");
-                        $("#hg_confirm").modal("show");
-                        $("#hg_confirm .btn_main").click(function () {
-                            $("#hg_confirm").modal("hide");
-                            return;
-                        });
+                        layuiModal.alert("该地点已经被占用了");
+
+                        // $.hgConfirm("提示", "该地点已经被占用了");
+                        // $("#hg_confirm").modal("show");
+                        // $("#hg_confirm .btn_main").click(function () {
+                        //     $("#hg_confirm").modal("hide");
+                        //     return;
+                        // });
                     }
                 });
             });
@@ -847,11 +853,12 @@
             var host = $("input[name='host']").val();
             var reg = /^[\u4E00-\u9FA5]{2,5}$/;
             if (!reg.test(host)) {
-                $.hgConfirm("提示", "请输入正确人名。 ");
-                $("#hg_confirm").modal("show");
-                $("#hg_confirm .btn_main").click(function () {
-                    $("#hg_confirm").modal("hide");
-                });
+                layuiModal.alert("请输入正确人名");
+                // $.hgConfirm("提示", "请输入正确人名。 ");
+                // $("#hg_confirm").modal("show");
+                // $("#hg_confirm .btn_main").click(function () {
+                //     $("#hg_confirm").modal("hide");
+                // });
             } else {
                 $("input[name='contact']").focus();
             }
@@ -861,11 +868,13 @@
             var phoneNumber = $("input[name='phoneNumber']").val();
             var mobile = /^\d{8,11}$/;
             if (!mobile.test(phoneNumber)) {
-                $.hgConfirm("提示", "请输入正确电话号码.");
-                $("#hg_confirm").modal("show");
-                $("#hg_confirm .btn_main").click(function () {
-                    $("#hg_confirm").modal("hide");
-                });
+                layuiModal.alert("请输入正确电话号码");
+
+                // $.hgConfirm("提示", "请输入正确电话号码.");
+                // $("#hg_confirm").modal("show");
+                // $("#hg_confirm .btn_main").click(function () {
+                //     $("#hg_confirm").modal("hide");
+                // });
             }
         });
 
@@ -874,11 +883,13 @@
             var host = $("input[name='host']").val();
             var reg = /^[\u4E00-\u9FA5]{2,5}$/;
             if (!reg.test(host)) {
-                $.hgConfirm("提示", "请输入正确人名。 ");
-                $("#hg_confirm").modal("show");
-                $("#hg_confirm .btn_main").click(function () {
-                    $("#hg_confirm").modal("hide");
-                });
+                layuiModal.alert("请输入正确人名");
+                //
+                // $.hgConfirm("提示", "请输入正确人名。 ");
+                // $("#hg_confirm").modal("show");
+                // $("#hg_confirm .btn_main").click(function () {
+                //     $("#hg_confirm").modal("hide");
+                // });
             } else {
                 $("input[name='sit']").focus();
             }
@@ -920,17 +931,27 @@
                 return;
             }
 
-            $.hgConfirm("提示", "确定发布吗？");
-            $("#hg_confirm").modal("show");
-            $("#hg_confirm .btn_main").click(function () {
-                $(this).attr("disabled", true);
-                $("#hg_confirm").modal("hide");
+            layuiModal.confirm("确定发布吗？", function () {
+                // $(this).attr("disabled", true);
+                // $("#hg_confirm").modal("hide");
                 $("select[name='branch'],select[name='conferenceType'],select[name='subject'],select[name='participate']").removeAttr("disabled", "disabled");
                 $('#submitFrom').click();
-                if (window.location.pathname == _pathName) {
-                    $("#hg_confirm .btn_main").attr("disabled", false);
-                }
+                // if (window.location.pathname == _pathName) {
+                //     $("#hg_confirm .btn_main").attr("disabled", false);
+                // }
             });
+            //
+            // $.hgConfirm("提示", "确定发布吗？");
+            // $("#hg_confirm").modal("show");
+            // $("#hg_confirm .btn_main").click(function () {
+            //     $(this).attr("disabled", true);
+            //     $("#hg_confirm").modal("hide");
+            //     $("select[name='branch'],select[name='conferenceType'],select[name='subject'],select[name='participate']").removeAttr("disabled", "disabled");
+            //     $('#submitFrom').click();
+            //     if (window.location.pathname == _pathName) {
+            //         $("#hg_confirm .btn_main").attr("disabled", false);
+            //     }
+            // });
         }
 
         /*  常用人员弹窗显示 */
@@ -1020,10 +1041,9 @@
         $(".use_group").on("click", ".delete_gruop", function () {
             var self = this;
             var groupId = $(this).next().val();
-            $.hgConfirm("提示", "你确认要删除吗？");
-            $("#hg_confirm").modal("show");
-            $("#hg_confirm .btn_main").click(function () {
-                $("#hg_confirm").modal("hide");
+
+            layuiModal.confirm("确认要删除吗？", function () {
+                // $("#hg_confirm").modal("hide");
                 $(self).parent().parent().remove();
                 $.ajax({
                     url: '${paersonAndGroupAddDelete}',
@@ -1041,6 +1061,28 @@
                 });
                 /*  $.tip("删除成功！"); */
             });
+
+            <%--$.hgConfirm("提示", "你确认要删除吗？");--%>
+            <%--$("#hg_confirm").modal("show");--%>
+            <%--$("#hg_confirm .btn_main").click(function () {--%>
+            <%--    $("#hg_confirm").modal("hide");--%>
+            <%--    $(self).parent().parent().remove();--%>
+            <%--    $.ajax({--%>
+            <%--        url: '${paersonAndGroupAddDelete}',--%>
+            <%--        type: 'POST',--%>
+            <%--        data: {groupId: groupId, path: "deleteGroup"},--%>
+            <%--        dataType: 'json',--%>
+            <%--        async: false,--%>
+            <%--        success: function (data) {--%>
+            <%--            $("select[name='participate'] option").each(function () {--%>
+            <%--                if ($(this).attr("value") == groupId) {--%>
+            <%--                    $(this).remove();--%>
+            <%--                }--%>
+            <%--            });--%>
+            <%--        }--%>
+            <%--    });--%>
+            <%--    /*  $.tip("删除成功！"); */--%>
+            <%--});--%>
         });
         /*  添加小组 */
         $(".addGroup").click(function () {
@@ -1159,13 +1201,12 @@
                                 $(".member_content").append(tr);
                             }
                         }
-                        $.hgConfirm("提示", "添加人员成功！");
-                        $("#hg_confirm").modal("show");
-                        $("#hg_confirm .btn_main").click(function () {
-                            $("#hg_confirm").modal("hide");
-                            $("#commonStaff").modal("hide");
-                        });
-                        /*   showConfirm("添加人员成功！") */
+                        // $("#hg_confirm").modal("show");
+                        // $("#hg_confirm .btn_main").click(function () {
+                        //     $("#hg_confirm").modal("hide");
+                        //     $("#commonStaff").modal("hide");
+                        // });
+                        showConfirm("添加人员成功！")
                     } else {
                         // alert(result.message);
                     }
@@ -1184,45 +1225,46 @@
             var boolem = true;
             if (!startTimeLong) {
                 boolem = false;
-                $.hgConfirm("提示", "请选择在规定时间范围内：   " + sDate + " —— " + eDate);
-                $("#hg_confirm").modal("show");
-                $("#hg_confirm .btn_main").click(function () {
-                    $("#hg_confirm").modal("hide");
-                });
+                showConfirm("请选择在规定时间范围内：   " + sDate + " —— " + eDate);
+                // $("#hg_confirm").modal("show");
+                // $("#hg_confirm .btn_main").click(function () {
+                //     $("#hg_confirm").modal("hide");
+                // });
             }
             if (startTimeLong > $(document).data("end_time")) {
                 boolem = false;
-                $.hgConfirm("提示", "请选择在规定时间范围内：   " + sDate + " —— " + eDate);
-                $("#hg_confirm").modal("show");
-                $("#hg_confirm .btn_main").click(function () {
-                    $("#hg_confirm").modal("hide");
-                });
+                showConfirm("请选择在规定时间范围内：   " + sDate + " —— " + eDate);
+                // $("#hg_confirm").modal("show");
+                // $("#hg_confirm .btn_main").click(function () {
+                //     $("#hg_confirm").modal("hide");
+                // });
             } else if (endTimeLong > $(document).data("end_time")) {
                 boolem = false;
-                $.hgConfirm("提示", "请选择在规定时间范围内：   " + sDate + " —— " + eDate);
-                $("#hg_confirm").modal("show");
-                $("#hg_confirm .btn_main").click(function () {
-                    $("#hg_confirm").modal("hide");
-                });
+                showConfirm( "请选择在规定时间范围内：   " + sDate + " —— " + eDate);
+                // $("#hg_confirm").modal("show");
+                // $("#hg_confirm .btn_main").click(function () {
+                //     $("#hg_confirm").modal("hide");
+                // });
             } else if (startTimeLong < $(document).data("start_time")) {
                 boolem = false;
-                $.hgConfirm("提示", "请选择在规定时间范围内：   " + sDate + " —— " + eDate);
-                $("#hg_confirm").modal("show");
-                $("#hg_confirm .btn_main").click(function () {
-                    $("#hg_confirm").modal("hide");
-                });
+                showConfirm("提示", "请选择在规定时间范围内：   " + sDate + " —— " + eDate);
+                // $("#hg_confirm").modal("show");
+                // $("#hg_confirm .btn_main").click(function () {
+                //     $("#hg_confirm").modal("hide");
+                // });
             }
 
             return boolem;
         }
 
         function showConfirm(info) {
-            $.hgConfirm("提示", info);
-            $("#hg_confirm").modal("show");
-            $("#hg_confirm .btn_main").click(function () {
-                $("#hg_confirm").modal("hide");
-                return;
-            });
+            // $.hgConfirm("提示", info);
+            // $("#hg_confirm").modal("show");
+            // $("#hg_confirm .btn_main").click(function () {
+            //     $("#hg_confirm").modal("hide");
+            //     return;
+            // });
+            layuiModal.alert(info);
         }
 
 
@@ -1235,18 +1277,10 @@
             var timelasts = $('input[name="timeLasts"]').val();
             $('select[name="conferenceType"]').attr("disabled", "disabled");
             if (!isNaN(timelasts)) {
-                if (type == '主题党日') {
-                    if (timelasts < 80) {
-                        showConfirm("主题党日类型活动时长需要>= 80 分钟。");
-                    } else {
-                        showConfirmDate();
-                    }
+                if (timelasts < 1) {
+                    showConfirm('请输入正确的会议时长分钟数（如：30）');
                 } else {
-                    if (timelasts < 1) {
-                        showConfirm('请输入正确的会议时长分钟数（如：30）');
-                    } else {
-                        showConfirmDate();
-                    }
+                    showConfirmDate();
                 }
             } else {
                 showConfirm('请输入正确的会议时长分钟数（如：30）');
@@ -1306,10 +1340,7 @@
             }
             var url = "${deletePerson}";
             var data = {groupId: groupId, user_id: user_id};
-            $.hgConfirm("提示", "你确定删除吗！");
-            $("#hg_confirm").modal("show");
-            $("#hg_confirm .btn_main").click(function () {
-                $("#hg_confirm").modal("hide");
+            layuiModal.confirm("确定删除吗?", function () {
                 $.ajax({
                     url: url,
                     data: data,
@@ -1318,11 +1349,29 @@
                         if (result.state === "ok") {
                             $(self).parent().remove();
                         } else {
-                            // showConfirm("删除失败！");
+                            showConfirm("删除失败！");
                         }
                     }
                 });
             });
+
+            // $.hgConfirm("提示", "你确定删除吗！");
+            // $("#hg_confirm").modal("show");
+            // $("#hg_confirm .btn_main").click(function () {
+            //     $("#hg_confirm").modal("hide");
+            //     $.ajax({
+            //         url: url,
+            //         data: data,
+            //         dataType: "json",
+            //         success: function (result) {
+            //             if (result.state === "ok") {
+            //                 $(self).parent().remove();
+            //             } else {
+            //                 // showConfirm("删除失败！");
+            //             }
+            //         }
+            //     });
+            // });
         });
         /*全选*/
         $(".choice_all").click(function () {

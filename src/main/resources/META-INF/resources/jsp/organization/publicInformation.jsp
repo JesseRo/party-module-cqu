@@ -339,7 +339,7 @@
             <div class="layui-inline btn_group" style="width: calc(50% - 120px);margin: 0;margin-top: 10px;">
                 <label class="layui-form-label"></label>
                 <div class="layui-input-inline">
-                    <button type="button" class="layui-btn" onclick="formsubmit()" lay-submit="" lay-filter="partyMemForm" style="padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;background-color: #FFAB33;border-radius: 4px;">
+                    <button id="button1" type="button" class="layui-btn" onclick="formsubmit()" lay-submit="" lay-filter="partyMemForm" style="padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;background-color: #FFAB33;border-radius: 4px;">
                         <c:choose>
                             <c:when test="${resend == 'resend'}">
                                 部署
@@ -445,72 +445,30 @@
             showConfirm("请选择发布对象！");
             return;
         }
-        // var startDateStr = $("input[name='startDate']").val();
-        // var endDateStr = $("input[name='end_time']").val();
-        // //var timestampStartDate=Date.parse(new Date(startDateStr));
-        // //var timestampEndDate=Date.parse(new Date(endDateStr));
-        // //console.log(startDateStr+";"+endDateStr+";"+timestampStartDate+";"+timestampEndDate);
-        // if (endDateStr < startDateStr) {
-        //     showConfirm("请选择正确时间！ 结束时间小于了开始时间？");
-        //     return;
-        // } else if ($('#isresend').val() === 'resend') {
-        //     var infromData = $(".informDat").val();
-        //     infromData = infromData.substring(0, infromData.length);
-        //     var c = JSON.parse(infromData);
-        //     if (startDateStr < c.start_time || endDateStr > c.end_time) {
-        //         /* 	$.tip("请选择正确时间！必须在组织指定的时间范围内"); */
-        //         console.log("start_time " + c.start_time + ";" + "end_time " + c.end_time);
-        //         showConfirm("请选择正确时间！必须在组织指定的时间范围内");
-        //         return;
-        //     }
-        //     var deadline = $("input[name='deadline_time']").val();
-        //     if (c.deadline_time < deadline) {
-        //         showConfirm("截止时间应该小于开始时间 !" + c.deadline_time);
-        //         return;
-        //     }
-        // }
-        // /*主题党日  */
-        // var startDate = new Date($("input[name='startDate']").val().replace(" ", "T")).getTime();
-        // var end_time = new Date($("input[name='end_time']").val().replace(" ", "T")).getTime();
-        // var minutes = (end_time - startDate) / 1000 / 60;
-        // var meetingType = $("select[name='meetingType']").val();
-        // if (meetingType === '主题党日' && minutes < 80) {
-        //     showConfirm("主题党日的时间必须大于等于80分钟！");
-        //     return;
-        // }
-        // /*校验截止时间  checkDedetime(); */
-        // var deadline_time = $("input[name='deadline_time']").val();
-        // var startDate = $("input[name='startDate']").val();
-        // var nowDate = getNowDate();
-        // console.log(nowDate);
-        // if (deadline_time > startDate) {
-        //     showConfirm("截止时间应该小于开始时间 !");
-        //     return;
-        // }
-
         var hint = $("#button1").val();
-        $.hgConfirm("提示", "确定要" + hint + "吗?");
-        $("#hg_confirm").modal("show");
-        $("#hg_confirm .btn_main").click(function () {
-            $(this).attr("disabled", true);
-            $("#hg_confirm").modal("hide");
-            // $('select[name="isComment"]').removeAttr('disabled');
-            // $('select[name="meetingType"]').removeAttr('disabled');
-            // $('input[name="publicDate"]').removeAttr('disabled');
+
+        var confirmCallback = function(){
             $('#submitFrom').click();
-            if (window.location.pathname === _pathName) {
-                $("#hg_confirm .btn_main").attr("disabled", false);
-            }
-        });
+        };
+        layuiModal.confirm("确定要" + hint + "吗?", confirmCallback);
+
+        // $.hgConfirm("提示", "确定要" + hint + "吗?");
+        // $("#hg_confirm").modal("show");
+        // $("#hg_confirm .btn_main").click(function () {
+        //     $(this).attr("disabled", true);
+        //     $("#hg_confirm").modal("hide");
+        //     // $('select[name="isComment"]').removeAttr('disabled');
+        //     // $('select[name="meetingType"]').removeAttr('disabled');
+        //     // $('input[name="publicDate"]').removeAttr('disabled');
+        //     $('#submitFrom').click();
+        //     if (window.location.pathname === _pathName) {
+        //         $("#hg_confirm .btn_main").attr("disabled", false);
+        //     }
+        // });
     }
 
     function showConfirm(info) {
-        $.hgConfirm("提示", info);
-        $("#hg_confirm").modal("show");
-        $("#hg_confirm .btn_main").click(function () {
-            $("#hg_confirm").modal("hide");
-            return;
-        });
+        layuiModal.alert(info);
     }
 
     /*   二级党委的选中及取消选中 */

@@ -28,11 +28,10 @@
                     },
                     cols: [[ //表头
                         {field: 'id', title: 'id', hide: true},
-                        {field: 'unit_code', title: '行政机构编号', width:'20%'},
-                        {field: 'unit_name', title: '行政机构名称', width:'30%'},
-                        {field: 'update_member_name', title: '更新人员', width:'20%'},
+                        {field: 'unit_name', title: '行政机构名称', width:'40%'},
+                        {field: 'update_member_name', title: '更新人员', width:'25%'},
                         {field: 'update_time', title: '更新时间', width: '20%'},
-                        {field: 'operate', title: '操作', width: '10%', toolbar: '#unitBtns'}
+                        {field: 'operate', title: '操作', width: '15%', toolbar: '#unitBtns'}
                     ]]
                 });
             });

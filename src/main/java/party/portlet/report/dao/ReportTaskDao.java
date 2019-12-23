@@ -25,7 +25,7 @@ public class ReportTaskDao extends PostgresqlDaoImpl<ReportTask> {
 
 
     public PostgresqlQueryResult<Map<String, Object>> findPageByOrgIdAndStatus(String orgId, int status, int page) {
-        String sql = "select * from hg_party_report_task where publisher = ? and status = ?";
+        String sql = "select * from hg_party_report_task where publisher = ? and status = ? order by publish_time desc ";
         return postGresqlFindBySql(page, 10, sql, orgId, status);
     }
 

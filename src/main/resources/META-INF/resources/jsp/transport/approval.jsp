@@ -11,6 +11,17 @@
 
 
     <style type="text/css">
+        .bg_white_container .layui-tab .layui-tab-content .layui-show{
+            height: 100%;
+        }
+        .bg_white_container .layui-tab .layui-tab-content{
+            padding: 0;
+            height: calc(100% - 50px);
+        }
+        .bg_white_container .layui-tab{
+            height: 100%;
+            margin: 0;
+        }
     </style>
     <script type="text/javascript" >
         $(function() {

@@ -135,12 +135,14 @@
 									<td data-label="开展时长">${c.total_time }</td>
 									<td data-label="操作">
 										<c:if test="${not empty c.plan_id && c.task_status_org=='6'}">
-										   <button type="button" class="btn btn-default td_assign_btn" >抽查</button>
-										   <input class="assignAll" type="hidden" value="${c.plan_id }">
+											<a class="td_assign_btn" href="javascript:;" style="color: #2E87FF">抽查</a>
+<%--										   	<button type="button" class="btn btn-default td_assign_btn" >抽查</button>--%>
+										   	<input class="assignAll" type="hidden" value="${c.plan_id }">
 										</c:if>
 										<c:if test="${not empty c.plan_id && c.task_status_org=='5'}">
-										   <button type="button" class="btn btn-default td_assign_btn" >修改抽查</button>
-										   <input class="assignAll" type="hidden" value="${c.plan_id }">
+											<a class="td_assign_btn" href="javascript:;" style="color: #2E87FF">修改抽查</a>
+<%--											<button type="button" class="btn btn-default td_assign_btn" >修改抽查</button>--%>
+										   	<input class="assignAll" type="hidden" value="${c.plan_id }">
 										</c:if>
 									</td>
 									<td data-label="开展地点">${c.place }</td>

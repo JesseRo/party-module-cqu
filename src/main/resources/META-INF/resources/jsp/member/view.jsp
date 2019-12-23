@@ -10,13 +10,13 @@
 <head>
     <%--     <link rel="stylesheet" href="${basePath}/css/common.css?v=5"/> --%>
     <%--   <link rel="stylesheet" href="${basePath}/css/party_organization.css?v=5" /> --%>
-    <link rel="stylesheet" href="${basePath}/css/account_manage.css"/>
+    <link rel="stylesheet" href="${basePath}/css/account_manage_1.css"/>
     <%-- <script type="text/javascript" src="${basePath}/js/jquery-3.2.1.min.js"></script>--%>
     <%--     <script src="${basePath}/js/common.js?v=5"></script> --%>
     <link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/party-info-manage.min.css"/>
     <link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/common.min.css"/>
 
-    <script src="${basePath}/js/pagination.js"></script>
+<%--    <script src="${basePath}/js/pagination.js"></script>--%>
 
     <style>
 
@@ -261,6 +261,9 @@
         .member_container.bg_white_container{
             overflow: hidden;
         }
+        .member_container .table_outer_box{
+            height: calc(100% - 118px);
+        }
     </style>
     <script type="text/javascript">
 
@@ -325,29 +328,43 @@
             }
 
 
-            function detail(members) {
-                var html = "";
+            function detail(members, isHis) {
+                var html = "<thead>\n" +
+                    "                                <tr>\n" + (isHis ? "" : (
+                    "                                    <td>\n" +
+                    "                                        <img class=\"select_all\" src=\"/images/not_check_icon.png\"/>\n" +
+                    "                                        <input type=\"hidden\"/>\n" +
+                    "                                    </td>\n")) +
+                    "                                    <td>姓名</td>\n" +
+                    "                                    <td>性别</td>\n" +
+                    "                                    <td>公民身份证</td>\n" +
+                    "                                    <td>联系电话</td>\n" +
+                    "                                    <td>党员类型</td>\n" + (isHis ? "" : (
+                "                                    <td>操作</td>\n")) +
+                    "                                </tr>\n" +
+                    "                            </thead>\n" +
+                    "                            <tbody class=\"table_info\">\n";
                 for (var i in members) {
                     var member = members[i];
-                    html += " <tr>\n" +
+                    html += " <tr>\n" + (isHis ? "" : (
                         "                                <td style=\"text-align:left;padding-left:10px;\">" +
                         "<input type=\"hidden\" value=\"" + member.member_identity + "\"> " +
-                        "<img class=\"clickImg\" src=\"/images/not_check_icon.png\"></td>" +
+                        "<img class=\"clickImg\" src=\"/images/not_check_icon.png\"></td>")) +
                         "                                <td>" + member.member_name + "</td>\n" +
                         "                                <td>" + member.member_sex + "</td>\n" +
                         "                                <td>" + member.member_identity + "</td>\n" +
                         "                                <td>" + member.member_phone_number + "</td>\n" +
-                        "                                <td>" + member.member_type + "</td>\n" +
+                        "                                <td>" + member.member_type + "</td>\n" + (isHis ? "" : (
                         "                                <td>\n" +
                         "                                    <div class=\"btn_group\">\n" +
-                        "                                        <button class=\"btn changePerson btn-default\" >组织转移</button>\n" +
-                        "                                        <button class=\"btn edit btn-default\" >编辑</button>\n" +
+                        "                                        <a class='changePerson' style=\"margin-right: 10%; color: #2E87FF; cursor: pointer;\">组织转移</a>\n" +
+                        "                                        <a class=\"edit\" style=\"cursor: pointer;color: #2E87FF;\">编辑</a>\n" +
                         "                                        <input type=\"hidden\" value=\"" + member.member_org + "\"> \n" +
                         "                                    </div>\n" +
-                        "                                </td>\n" +
+                        "                                </td>\n")) +
                         "                            </tr>";
                 }
-                return html;
+                return html + "</tbody>";;
             }
 
             function orgMember(pageNow, orgId, history) {
@@ -355,14 +372,15 @@
                 $.post('${orgMember}', {orgId: orgId, pageNow: pageNow, history: history}, function (res) {
                     if (res.result) {
                         var members = res.data.list;
-                        var trs = detail(members);
+                        var isHis = 'historic_root' == history;
+                        var trs = detail(members, isHis);
 
                         var pageTotal = parseInt(res.data.totalRow);//总页数
-                        $('tbody.table_info').html(trs);
-                        if ('historic_root' == history) {
-                            $("tbody.table_info .btn_group").hide();
-                            $(".clickImg").hide();
-                            $("#delete").hide();
+                        $('table.custom_table').html(trs);
+                        if (isHis) {
+                            $('.table_content > .btn_group').hide();
+                        }else{
+                            $('.table_content > .btn_group').show();
                         }
                         if ('secondary' != '${org_type}') {
                             $('.changePerson').hide();
@@ -428,11 +446,13 @@
                     $(".third_menu li").removeClass("third_menu_on");
                     $(".second_menu>li").removeClass("second_menu_on");
                     $(this).parent("li").addClass("second_menu_on");
+                    $(this).parent("li").siblings("li").removeClass("second_menu_on");
                 }
                 if ($(this).parent("li").hasClass("height_auto")) {
                     $(this).parent("li").removeClass("height_auto").removeClass("second_menu_on");
                 } else if ($(this).siblings("ul").length > 0) {
                     $(this).parent("li").addClass("height_auto").addClass("second_menu_on");
+                    $(this).parent("li").siblings("li").removeClass("second_menu_on");
                 }
                 var _target = $(this).find(".third_menu_icon");
                 if (_target.hasClass("third_menu_up")) {
@@ -764,14 +784,14 @@
                 <div class="content_table_container party_table_container">
                     <div class="breadcrumb_group">
                         当前组织：
-                        <span class="layui-breadcrumb" lay-separator=">" style="visibility: visible;">
+                        <span class="layui-breadcrumb" lay-separator=">" style="visibility: visible;text-overflow: ellipsis;white-space: nowrap;overflow: hidden;">
                             <a id="first_title" href="javascript:;" style="display: none;">重庆大学党委</a>
                             <a href="javascript:;" id="second_title" style="display: none;">机关党委</a>
                             <a href="javascript:;" id="third_title" style="display: none;">机关党委</a>
                         </span>
                     </div>
                     <div class="table_content bg_white_container member_container">
-                        <div class="btn_group table_btns">
+                        <div class="btn_group table_btns" style="padding-bottom: 0;">
                             <button id="delete" class="btn btn-default delete_graft">删除人员</button>
                             <button id="addPerson" class="btn btn-default">添加人员</button>
                             <button id="orgImport" class="btn btn-default">党组织导入</button>
@@ -789,7 +809,7 @@
                                 </form>
                             </div>
                         </div>
-                        <div class="table_outer_box">
+                        <div class="table_outer_box" style="margin-top: 20px;">
 
                         <table class="layui-table custom_table">
                             <thead>
@@ -844,7 +864,7 @@
             });
         }
     });
-    $(".table_info").on("click", "button.edit", function () {
+    $(".table_info").on("click", "a.edit", function () {
         console.log($(this).html());
         var personId = $(this).parent().parent().prev().prev().prev().html()
         var $this = $(this);

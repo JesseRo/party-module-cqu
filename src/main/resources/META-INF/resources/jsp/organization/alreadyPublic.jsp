@@ -101,12 +101,12 @@
                             <input type="hidden" value="${c.id }"/>
                                 ${c.meeting_type }
                         </td>
-                        <td>
+                        <td title="${c.meeting_theme }">
         <%--                    <a href="/checkdetail?informId=${c.inform_id }">${c.meeting_theme }</a>--%>
                             ${c.meeting_theme }
                         </td>
-                        <td>${c.release_time }</td>
-                        <td>${c.content }</td>
+                        <td title="${c.release_time }">${c.release_time }</td>
+                        <td title="${c.content }">${c.content }</td>
         <%--                <td>--%>
         <%--                    <c:if test="${orgType eq 'organization'}">--%>
         <%--                        <a href="/sconedPartyDetail?inform_id=${c.inform_id }">查看进度</a>--%>

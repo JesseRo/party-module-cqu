@@ -105,15 +105,9 @@
 									   <portlet:param name="id" value="${ list.id }"/>
 									</portlet:renderURL>
 		<%--							<c:if  test="${userId eq list.user_id}">--%>
-									<a href="${updateDevice}">
-										<button type="button" class="btn btn-default td_assign_btn" data-toggle="modal"><span class="glyphicon glyphicon-pencil" ></span>&nbsp;
-											编辑
-										</button>
-									</a>
-										<input class="input_del" name="deldevie" value="${list.id} " type="hidden"/>
-										<button type="button" class="btn btn-default td_assign_btn del_btn" data-toggle="modal" onclick="del(${list.id});">
-											&nbsp;删除
-										</button>
+									<a style="margin-right: 10%; color: #2E87FF; cursor: pointer;" onclick="window.location.href='${updateDevice}'">编辑</a>
+									<input class="input_del" name="deldevie" value="${list.id} " type="hidden"/>
+									<a onclick="del(${list.id});" style="cursor: pointer;color: #FE4D4D;">删除</a>
 		<%--						  </c:if>--%>
 								</td>
 							</tr>

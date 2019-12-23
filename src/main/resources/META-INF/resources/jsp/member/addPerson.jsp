@@ -300,7 +300,7 @@
                                     <button type="button" id="button1" onclick="formsubmit()" class="layui-btn" lay-submit="" lay-filter="partyMemForm" style="padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;background-color: #FFAB33;border-radius: 4px;">
                                         发布
                                     </button>
-                                    <button type="button" id="button2" class="layui-btn layui-btn-primary" style="background-color: transparent;color: #666;padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;border-radius: 4px;">
+                                    <button onclick="window.history.back();" type="button" id="button2" class="layui-btn layui-btn-primary" style="background-color: transparent;color: #666;padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;border-radius: 4px;">
                                         取消
                                     </button>
                                 </div>

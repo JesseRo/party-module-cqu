@@ -74,37 +74,13 @@
                         '</div>';
 				}
 			},
-					grid: {
-				left: 0,
-						right: '6%',
-						bottom: '6%',
-						containLabel: true
+			grid: {
+				left: '2%',
+				right: '6%',
+				bottom: '6%',
+				containLabel: true
 			},
 			xAxis: {
-				axisTick:{
-					show:true
-				},
-				axisLabel: {
-					interval:0,
-							rotate:-40,
-							textStyle: {
-						color: '#666',
-								fontSize:16
-					}
-				},
-				axisLine:{
-					lineStyle:{
-						color:'#f6f6f6',
-						width:6   //这里是坐标轴的宽度,可以去掉
-					}
-				},
-				data: ["音乐学院委员会","物理科学与技术","音乐学院委员会","物理科学与技术","音乐学院委员会","物理科学与技术","音乐学院委员会","物理科学与技术","音乐学院委员会","物理科学与技术","音乐学院委员会","物理科学与技术","物理科学与技术","音乐学院委员会","物理科学与技术","音乐学院委员会","物理科学与技术"]
-			},
-			yAxis: {
-				// show:false,
-				// axisLine:{       //y轴
-				//     show:false
-				// },
 				axisTick:{       //y轴刻度线
 					show:false
 				},
@@ -113,7 +89,7 @@
 				},
 				axisLabel:{
 					fontSize:16,
-							formatter:function(data){
+					formatter:function(data){
 						return data + '%'
 					}
 				},
@@ -123,6 +99,21 @@
 						// width:6,
 					}
 				},
+			},
+			yAxis: {
+				axisTick:{
+					show:false
+				},
+				axisLabel:{
+					fontSize:16,
+					color:'#333'
+				},
+				axisLine:{
+					lineStyle:{
+						color:'#FFAB33'
+					}
+				},
+				data: ["音乐学院委员会","物理科学与技术学院","音乐学院委员会","物理科学与技术","音乐学院委员会","物理科学与技术","音乐学院委员会","物理科学与技术","音乐学院委员会","物理科学与技术","音乐学院委员会","物理科学与技术","物理科学与技术","音乐学院委员会","物理科学与技术","音乐学院委员会","物理科学与技术"]
 			},
 			series: [{
 				name: '出勤率',
