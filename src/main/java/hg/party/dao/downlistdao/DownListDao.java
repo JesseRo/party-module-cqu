@@ -80,7 +80,7 @@ public class DownListDao  extends PostgresqlDaoImpl<Hg_Value_Attribute_Info>{
 	public Map<String, Object> postGresqlFind(int pageNo, int pageSize, String sql, String... s1) {
 		String sql1=sql+" limit "+pageSize+" offset "+(pageNo-1)*pageSize;
 	    Map<String, Object> map=new HashMap<>();
-		List<Map<String,Object>> list=this.jdbcTemplate.queryForLis]]]]]]=(sql1,s1);
+		List<Map<String,Object>> list=this.jdbcTemplate.queryForList(sql1,s1);
 		List<Map<String,Object>> count=this.jdbcTemplate.queryForList(sql,s1);
 		int total=count.size();
 		if(total%pageSize==0){
