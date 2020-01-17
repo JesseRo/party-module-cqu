@@ -157,7 +157,7 @@ public class UserService {
             } else if (ConstantsKey.BRANCH_PARTY.equals(role)) {
                 url = "/backlogtwo";
             } else if (ConstantsKey.COMMON_PARTY.equals(role)) {
-                url = "/orgcheck";
+                url = "/personalcenter";
             } else if (ConstantsKey.OTHER_PARTY.equals(role)) {
                 url = "/membertodolist";
             }else if(ConstantsKey.ORG_PROPAGANDA.equals(role)){
@@ -222,7 +222,7 @@ public class UserService {
                 } else if (ConstantsKey.BRANCH_PARTY.equals(role)) {
                     url = "/backlogtwo";
                 } else if (ConstantsKey.COMMON_PARTY.equals(role)) {
-                    url = "/orgcheck";
+                    url = "/personalcenter";
                 } else if (ConstantsKey.OTHER_PARTY.equals(role)) {
                     url = "/membertodolist";
                 } else {

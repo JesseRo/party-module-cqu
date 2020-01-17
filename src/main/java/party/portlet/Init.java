@@ -33,7 +33,7 @@ public class Init implements BundleActivator {
 	@Override
 	public void start(BundleContext context) throws Exception {
 		// Thread.sleep(1000*60*5);
-		birthdayNotic();
+//		birthdayNotic();
 	}
 
 	@Override

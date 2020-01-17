@@ -118,7 +118,14 @@
 	</head>
 	<body>
 	<div style="position: relative; width: 100%; height: 7.4vh; position: relative;">
-	<img class="left_logo" src="/images/logo.png" alt="" title="logo" style="left: 0;"/>
+	<c:choose>
+		<c:when test="${role == '组织部' or role == '二级党组织'}">
+			<img class="left_logo" src="/images/logo.png" alt="" title="logo" style="left: 0;cursor: pointer;" onclick="window.location.href='/screen'"/>
+		</c:when>
+		<c:otherwise>
+			<img class="left_logo" src="/images/logo.png" alt="" title="logo" style="left: 0;"/>
+		</c:otherwise>
+	</c:choose>
 	<div class="user_info_group">
 	<p class="avatar_info">
 	<img src="/images/avatar.png" alt="" title="头像"/>
@@ -155,7 +162,7 @@
 	</p>
 	<p>
 	<img src="/images/change-pwd.png" alt="" title="修改密码"/>
-	<span>修改密码</span>
+	<span onclick="window.location.href='/reset_password'">修改密码</span>
 	</p>
 	<p>
 	<img src="/images/exit.png" alt="" title="退出系统"/>

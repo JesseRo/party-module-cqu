@@ -620,7 +620,7 @@ button#add_submit {
 
 	function _ajax(_option) {
 			var url = "${orgadmin}";
-			var orgName = $("input[name='orgName']").val();
+			var orgName = $("input.org_name").val()
 			if (!orgName && option != "delete") {
 				alert("请输入名称");
 				return;

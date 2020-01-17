@@ -41,7 +41,7 @@ import party.constants.PartyPortletKeys;
 		
 		"com.liferay.portlet.requires-namespaced-parameters=false",
 		"javax.portlet.portlet-mode=text/html;view,edit",
-		"javax.portlet.init-param.view-template=/jsp/personalCenter/view.jsp",
+		"javax.portlet.init-param.view-template=/jsp/personalCenter/pc.jsp",
 		"javax.portlet.name=" + PartyPortletKeys.PersonalCenter,
 		"javax.portlet.resource-bundle=content.Language",
 		"javax.portlet.security-role-ref=power-user,user"

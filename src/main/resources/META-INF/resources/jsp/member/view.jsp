@@ -616,7 +616,7 @@
             $('#historic').html(generateOrg(historicSecondaries, historicBranches, 7));
             /* 单击选择按钮
             $(".clickImg").click(function(){*/
-            $("tbody.table_info").on("click", ".clickImg", function () {
+            $("table.custom_table").on("click", ".clickImg", function () {
                 var sum = 0;
                 if ($(this).attr("src") == "/images/checked_icon.png") {
                     $(this).attr("src", "/images/not_check_icon.png");
@@ -636,7 +636,7 @@
 
             });
 
-            $(".select_all").click(function () {
+            $(".custom_table").on('click', ".select_all", function () {
                 $(this).attr("src", "/images/checked_icon.png");
                 $(".clickImg").attr("src", "/images/checked_icon.png");
             });
@@ -678,7 +678,7 @@
                 })
 
             });
-            $("tbody.table_info").on("click", ".changePerson", function () {
+            $("table.custom_table").on("click", ".changePerson", function () {
                 var personId = $(this).parent().parent().prev().prev().prev().html()
                 var personName = $(this).parent().parent().prev().prev().prev().prev().prev().text()
                 var $this = $(this);
@@ -841,7 +841,7 @@
     </div>
 </div>
 <script type="text/javascript">
-    $(".table_info").on("click", "button.delete", function () {
+    $(".custom_table").on("click", "button.delete", function () {
         console.log($(this).html());
         var personId = $(this).parent().parent().prev().prev().prev().html()
         var $this = $(this);
@@ -864,9 +864,9 @@
             });
         }
     });
-    $(".table_info").on("click", "a.edit", function () {
+    $(".custom_table").on("click", "a.edit", function () {
         console.log($(this).html());
-        var personId = $(this).parent().parent().prev().prev().prev().html()
+        var personId = $(this).parent().parent().prev().prev().prev().html();
         var $this = $(this);
         var userId = personId;
         var orgId = $(".third_menu_on").attr("id");
