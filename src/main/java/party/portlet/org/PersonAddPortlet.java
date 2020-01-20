@@ -103,6 +103,7 @@ public class PersonAddPortlet extends MVCPortlet {
 			}
 			orgName +=">编辑人员";
 			state = "edit";
+			orgId = (String)list.get(0).get("member_org");
 		}else {
 			orgName +=">新增人员";
 			state = "add";

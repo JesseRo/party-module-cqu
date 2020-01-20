@@ -340,15 +340,13 @@ button#add_submit {
 			var rootType = $('#current_root').attr('org-type');
 			$('#save').attr('disabled', false);
 			refresh(orgId);
-			if ((rootType === 'organization' && orgType === 'branch')
-					|| (rootType === orgType && rootType !== 'organization')) {
-				console.log(rootType + ',' + orgType);
-				$('#save').attr('disabled', true);
-				setTimeout(function() {
-					$('.dropdown-sin-2').data('dropdown').changeStatus(
-							"readonly");
-				}, 0);
-			}
+            // console.log(rootType + ',' + orgType);
+            // $('#save').attr('disabled', true);
+            // setTimeout(function() {
+            //     $('.dropdown-sin-2').data('dropdown').changeStatus(
+            //             "readonly");
+            // }, 0);
+
 		}
 
 		function orgDetail(){

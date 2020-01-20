@@ -67,6 +67,8 @@ public class MeetingPlan {
    private String task_status_org;
    //会议二级主题
    private String meeting_theme_secondary;
+
+   private String campus;
    
    
    public String getMeeting_theme_secondary() {
@@ -263,5 +265,12 @@ public class MeetingPlan {
 				+ ", cancel_reason=" + cancel_reason + ", sit=" + sit + ", check_person_org=" + check_person_org
 				+ ", task_status_org=" + task_status_org + ", meeting_theme_secondary=" + meeting_theme_secondary + "]";
 	}
-	
+
+	public String getCampus() {
+		return campus;
+	}
+
+	public void setCampus(String campus) {
+		this.campus = campus;
+	}
 }

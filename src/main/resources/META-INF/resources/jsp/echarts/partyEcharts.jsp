@@ -288,7 +288,7 @@
 					<div class="attend_rate_group">
 						<div class="operate_container">
 							<p>
-								<img src="../images/charts-title1.png"/>
+								活动出勤率统计图
 							</p>
 							<form class="layui-form custom_form" id="selectForm1">
 								<div class="layui-form-item">
@@ -316,7 +316,8 @@
 					<div class="views_group">
 						<div class="text_container">
 							<p class="title">
-								<img src="../images/charts-title2.png"/>
+								系统访问量统计
+<%--								<img src="../images/charts-title2.png"/>--%>
 							</p>
 							<div class="sub_text_container">
 								<div class="sub_text current_view">
@@ -336,7 +337,8 @@
 				<div class="activity_plan_group">
 					<div class="operate_container">
 						<p>
-							<img src="${basePath}/cqu/images/charts-title3.png"/>
+<%--							<img src="${basePath}/cqu/images/charts-title3.png"/>--%>
+							活动计划上报统计图
 						</p>
 						<form class="layui-form custom_form" id="selectForm2">
 							<div class="layui-form-item">

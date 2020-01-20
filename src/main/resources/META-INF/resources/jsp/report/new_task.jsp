@@ -340,7 +340,7 @@
                 $('#submit').click();
             }
 
-
+            var accepts = ['.xlsx', '.xls', 'doc', 'docx'];
             function submit() {
 
                 var imgs = $(".table_info img[src='/images/radio_on.png']");
@@ -353,6 +353,15 @@
                 $("#hiddenPublicObject").val(resources);
                 if (!$("#hiddenPublicObject").val()) {
                     layuiModal.alert("请选择发布对象！");
+                }
+                var files = $('[name=files]')[0].files
+                for(var index = 0; index < files.length; index++){
+                    var filename = files[index].name;
+                    filename = filename.substr(filename.lastIndexOf("."));
+                    if(accepts.indexOf(filename) == -1){
+                        alert("请上传word或excel格式的文件");
+                        return
+                    }
                 }
                 var confirmCallback = function(){
                     $('#status').val("2");
@@ -404,7 +413,8 @@
                                 <span class="control-label form-label-required">任务模版</span>
                             </div>
                             <div class="col-sm-9 col-xs-9">
-                                <input multiple type="file" name="files" style="text-indent: inherit;">
+                                <input multiple type="file" name="files" style="text-indent: inherit;"
+                                       accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
                             </div>
                         </div>
                     </div>

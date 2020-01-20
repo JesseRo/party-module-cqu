@@ -8,7 +8,6 @@ import java.sql.Timestamp;
 @Table(name = "hg_party_report_task")
 public class ReportTask implements Serializable {
 
-
     private int id;
 
     private String task_id;
@@ -28,6 +27,8 @@ public class ReportTask implements Serializable {
     private Timestamp publish_time;
 
     private String receivers;
+
+    private String type;
 
 
     public int getId() {
@@ -108,5 +109,13 @@ public class ReportTask implements Serializable {
 
     public void setReceivers(String receivers) {
         this.receivers = receivers;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

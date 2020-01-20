@@ -14,9 +14,19 @@
 <portlet:resourceURL id="/form/uploadVideo" var="uploadvideoUrl"/>
 <!-- 附件上传 -->
 <portlet:resourceURL id="/form/uploadFile" var="uploadfileUrl"/>
+
+<portlet:resourceURL id="/org/memberGroup" var="candidate" />
+
 <html>
 <head>
     <style type="text/css">
+        .dropdown-display{
+            height: 40px;
+        }
+        input, select {
+            outline: none;
+            text-indent: 0;
+        }
         input#button1 {
             float: right;
             text-indent: 0;
@@ -371,8 +381,8 @@
             src="${ basePath }/js/utf8-jsp/third-party/codemirror/codemirror.js"></script>
     <script type="text/javascript" charset="utf-8"
             src="${ basePath }/js/utf8-jsp/third-party/zeroclipboard/ZeroClipboard.js"></script>
-
-
+    <link rel="stylesheet" href="${basePath}/css/jquery.dropdown.css"/>
+    <script type="text/javascript" src="${basePath}/js/jquery.dropdown.js?v=11"></script>
     <script type="text/javascript" src="${basePath}/js/jquery-validation.min.js"></script>
     <script type="text/javascript" src="${basePath}/js/validation-message-zh.js?v=2"></script>
 </head>
@@ -533,7 +543,7 @@
             $.ajax({
                 url: '${getPlace}',
                 type: 'POST',
-                data: {start: $('input[name="timeDuring"]').val(), last: $('input[name="timeLasts"]').val()},
+                data: {start: $('input[name="timeDuring"]').val(), last: $('[name="timeLasts"]').val()},
                 dataType: 'json',
                 async: false,
                 success: function (data) {
@@ -663,7 +673,7 @@
 
             /*    $("#hg-form-container").find(".col-sm-6.col-xs-12").eq(0).find(".col-sm-2.col-xs-3.control-label").css("font-size","12px"); */
 
-            $('input[name="timeDuring"], input[name="timeLasts"]').change(getPlace);
+            $('input[name="timeDuring"], [name="timeLasts"]').change(getPlace);
             /*开展地点弹框  */
             $("select[name='location']").change(function () {
                 var place = $("select[name='location']").val();
@@ -680,6 +690,85 @@
                     }
                 });
             });
+            var candidates = [];
+            $('.dropdown-mul-2').eq(0).dropdown({
+                data : [ {
+                    name : '没有数据',
+                    disabled : true
+                } ],
+                input : '<input type="text" maxLength="20" placeholder="请输入搜索">',
+                limitCount: 1,
+                choice : function() {
+
+                }
+            });
+            $('.dropdown-mul-2').eq(1).dropdown({
+                data : [ {
+                    name : '没有数据',
+                    disabled : true
+                } ],
+                input : '<input type="text" maxLength="20" placeholder="请输入搜索">',
+                limitCount: 1,
+                choice : function() {
+                    var selectedContact = this.$select.val();
+                    if(selectedContact && selectedContact.length > 0){
+                        var phone = candidates
+                            .filter(function(p){return p.id === selectedContact[0]})[0]
+                            .phone;
+                        $('[name=phoneNumber]').val(phone);
+                    }
+                }
+            });
+            function refresh(org) {
+                $.get('${candidate}', {
+                    orgId : org
+                }, function(res) {
+                    if (res.result) {
+                        var admins = res.data.admins;
+                        var candidatesGroup = res.data.candidates;
+                        candidates = [];
+                        var c2 = [];
+                        var _admin = {};
+                        for ( var i in admins) {
+                            _admin[admins[i]] = admins[i];
+                        }
+                        for ( var group in candidatesGroup) {
+                            for ( var j in candidatesGroup[group]) {
+                                var member = candidatesGroup[group][j];
+                                c2.push({
+                                    id : member.member_identity,
+                                    disabled : false,
+                                    groupId : group,
+                                    groupName : group,
+                                    name : member.member_name,
+                                    selected : false,
+                                    phone: member.member_phone_number
+                                });
+                                candidates.push({
+                                    id : member.member_identity,
+                                    disabled : false,
+                                    groupId : group,
+                                    groupName : group,
+                                    name : member.member_name,
+                                    selected : false,
+                                    phone: member.member_phone_number
+                                });
+                            }
+                        }
+                        if (candidates.length === 0) {
+                            candidates = [ {
+                                name : '没有数据',
+                                disabled : true
+                            } ];
+                        }
+                        $('.dropdown-mul-2').eq(0).data('dropdown').changeStatus();
+                        $('.dropdown-mul-2').eq(1).data('dropdown').changeStatus();
+                        $('.dropdown-mul-2').eq(0).data('dropdown').update(c2,true);
+                        $('.dropdown-mul-2').eq(1).data('dropdown').update(candidates,true);
+                    }
+                });
+            }
+            refresh("ddddd");
             if ($(".mapValue").val()) {
                 console.log("ok");
                 var data = $(".mapValue").val();
@@ -720,9 +809,12 @@
                 $("input[name='subject']").val(j.meeting_theme_secondary);
                 $("select[name='branch'],select[name='conferenceType'],select[name='subject']").attr("disabled", "disabled");
                 $("input[name='timeDuring']").val(j.start_time);
-                $("input[name='timeLasts']").val(j.total_time);
-                $("input[name='host']").val(j.host);
-                $("input[name='contact']").val(j.contact);
+                $("[name='timeLasts']").val(j.total_time);
+                $('.dropdown-mul-2').eq(0).data('dropdown').choose([j.host]);
+                $('.dropdown-mul-2').eq(1).data('dropdown').choose([j.contact]);
+                $("select[name='campus']").val(j.campus);
+                // $("input[name='host']").val(j.host);
+                // $("input[name='contact']").val(j.contact);
                 $("input[name='phoneNumber']").val(j.contact_phone);
                 $("input[name='sit']").val(j.sit);
                 $("input[name='customTheme']").val(j.meeting_theme_secondary);
@@ -758,9 +850,12 @@
                 $("input[name='subject']").val(j.meeting_theme);
                 $("select[name='branch'],select[name='conferenceType'],select[name='subject']").attr("disabled", "disabled");
                 $("input[name='timeDuring']").val(j.start_time);
-                $("input[name='timeLasts']").val(j.total_time);
-                $("input[name='host']").val(j.host);
-                $("input[name='contact']").val(j.contact);
+                $("[name='timeLasts']").val(j.total_time);
+                $("select[name='campus']").val(j.campus);
+                $('.dropdown-mul-2').eq(0).data('dropdown').choose([j.host]);
+                $('.dropdown-mul-2').eq(1).data('dropdown').choose([j.contact]);
+                // $("input[name='host']").val(j.host);
+                // $("input[name='contact']").val(j.contact);
                 $("input[name='phoneNumber']").val(j.contact_phone);
                 $("input[name='sit']").val(j.sit);
                 $("input[name='customTheme']").val(j.meeting_theme_secondary);
@@ -783,7 +878,7 @@
             getPlace();
             var div = '<div class="col-sm-6 col-xs-12"> ' +
                 '<div class="col-sm-3 col-xs-3" >' +
-                '<span class="control-label form-label-required">参会人员</span> ' +
+                '<span class="control-label form-label-required">参会人员：</span> ' +
                 '</div>' +
                 '<div class="col-sm-9 col-xs-9"> ' +
                 '<select class="form-control ${class}" name="participate"></select> ' +
@@ -791,7 +886,7 @@
                 '</div> ' +
                 '</div>';
             if (!$(".mapedit").val()) {
-                $("#hg-form-container > div").eq(6).replaceWith(div);
+                $("#hg-form-container > div").eq(7).replaceWith(div);
             } else {
                 $("select[name='participate']").attr("disabled", "disabled");
             }
@@ -846,6 +941,7 @@
                 }
 
             });
+
         });
     </script>
     <script type="text/javascript">
@@ -912,7 +1008,7 @@
         var _pathName = window.location.pathname;
 
         function formsubmit() {
-            var totalTime = $("input[name='timeLasts']").val();
+            var totalTime = $("[name='timeLasts']").val();
             var regu = /^[1-9]\d*$/;
             if (!regu.test(totalTime)) {
                 // $.tip("请输入正确的时长分钟数（如：30）！");
@@ -1218,7 +1314,7 @@
 
         function showConfirmDate() {
             var startTimeLong = new Date($("input[name='timeDuring']").val().replace(" ", "T") + '+08:00').getTime();
-            var endTimeLong = ($("input[name='timeLasts']").val()) * 60 * 1000 + startTimeLong;
+            var endTimeLong = ($("[name='timeLasts']").val()) * 60 * 1000 + startTimeLong;
             var sDate = getDateByLong($(document).data("start_time"));
             var eDate = getDateByLong($(document).data("end_time"));
             console.log(startTimeLong + " ;" + endTimeLong + " ;" + sDate + " ;" + eDate);
@@ -1267,25 +1363,25 @@
             layuiModal.alert(info);
         }
 
-
-        $("input[name='timeLasts']").attr('placeholder', '请输入正确的会议时长分钟数（如：30）');
-
-
-        $("#hg-form-container").on("blur", "input[name='timeLasts']", function () {
-            $('select[name="conferenceType"]').removeAttr("disabled");
-            var type = $('select[name="conferenceType"]').val();
-            var timelasts = $('input[name="timeLasts"]').val();
-            $('select[name="conferenceType"]').attr("disabled", "disabled");
-            if (!isNaN(timelasts)) {
-                if (timelasts < 1) {
-                    showConfirm('请输入正确的会议时长分钟数（如：30）');
-                } else {
-                    showConfirmDate();
-                }
-            } else {
-                showConfirm('请输入正确的会议时长分钟数（如：30）');
-            }
-        });
+        //
+        // $("input[name='timeLasts']").attr('placeholder', '请输入正确的会议时长分钟数（如：30）');
+        //
+        //
+        // $("#hg-form-container").on("blur", "input[name='timeLasts']", function () {
+        //     $('select[name="conferenceType"]').removeAttr("disabled");
+        //     var type = $('select[name="conferenceType"]').val();
+        //     var timelasts = $('input[name="timeLasts"]').val();
+        //     $('select[name="conferenceType"]').attr("disabled", "disabled");
+        //     if (!isNaN(timelasts)) {
+        //         if (timelasts < 1) {
+        //             showConfirm('请输入正确的会议时长分钟数（如：30）');
+        //         } else {
+        //             showConfirmDate();
+        //         }
+        //     } else {
+        //         showConfirm('请输入正确的会议时长分钟数（如：30）');
+        //     }
+        // });
 
 
         //格式化日期

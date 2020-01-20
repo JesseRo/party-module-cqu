@@ -12,6 +12,7 @@ import dt.session.SessionManager;
 import hg.party.dao.org.MemberDao;
 import hg.party.dao.org.OrgDao;
 import hg.party.unity.ResourceProperties;
+import hg.party.unity.WordUtils;
 import hg.util.CollectionUtils;
 import hg.util.ConstantsKey;
 import hg.util.ExcelUtil;
@@ -27,6 +28,7 @@ import party.portlet.report.dao.ReportTaskDao;
 import party.portlet.report.entity.Report;
 import party.portlet.report.entity.ReportTask;
 import party.portlet.report.entity.view.FileView;
+import party.portlet.report.entity.view.WordHandler;
 
 import javax.portlet.PortletException;
 import javax.portlet.ResourceRequest;
@@ -96,28 +98,56 @@ public class ExcelUploadResourceCommand implements MVCResourceCommand {
 				try {
 					ReportTask task = reportTaskDao.findByTaskId(taskId);
 					String json = task.getFiles();
-					List<ExcelHandler> excelHandlers = gson.fromJson(json, new TypeToken<List<ExcelHandler>>() {
-					}.getType());
-					List<String> filenames = excelHandlers.stream().map(ExcelHandler::getFileName).collect(Collectors.toList());
-					UploadPortletRequest uploadPortletRequest = PortalUtil.getUploadPortletRequest(resourceRequest);
-					String[] uploadFiles = uploadPortletRequest.getFileNames("files");
-					List<String> uploadFilenames = Arrays.asList(uploadFiles);
-					if (!CollectionUtils.isEquals(filenames, uploadFilenames)) {
-						message = "文件名与模版不一致，请重试！";
-					} else {
-						List<FileView> fileViews = saveAttachment(uploadPortletRequest, taskId, department);
-						List<ExcelHandler> excels = new ArrayList<>();
-						for (FileView fileView : fileViews) {
-							Map<String, List<Map<String, Object>>> datas = ExcelUtil.importAllSheet(fileView.getFilename(), new FileInputStream(fileView.getPath()));
-							ExcelHandler excelHandler = new ExcelHandler(fileView.getFilename(), fileView.getPath(), datas);
-							excels.add(excelHandler);
+					if (task.getType().equalsIgnoreCase(FileView.EXCEL)) {
+						List<ExcelHandler> excelHandlers = gson.fromJson(json, new TypeToken<List<ExcelHandler>>() {
+						}.getType());
+						List<String> filenames = excelHandlers.stream().map(ExcelHandler::getFileName).collect(Collectors.toList());
+						UploadPortletRequest uploadPortletRequest = PortalUtil.getUploadPortletRequest(resourceRequest);
+						String[] uploadFiles = uploadPortletRequest.getFileNames("files");
+						List<String> uploadFilenames = Arrays.asList(uploadFiles);
+						if (!CollectionUtils.isEquals(filenames, uploadFilenames)) {
+							message = "文件名与模版不一致，请重试！";
+						} else {
+							List<FileView> fileViews = saveAttachment(uploadPortletRequest, taskId, department);
+							List<ExcelHandler> excels = new ArrayList<>();
+							for (FileView fileView : fileViews) {
+								Map<String, List<Map<String, Object>>> datas = ExcelUtil.importAllSheet(fileView.getFilename(), new FileInputStream(fileView.getPath()));
+								ExcelHandler excelHandler = new ExcelHandler(fileView.getFilename(), fileView.getPath(), datas);
+								excels.add(excelHandler);
+							}
+							String files = gson.toJson(excels);
+							report.setFiles(files);
+							reportDao.saveOrUpdate(report);
+							ReportOrgTask reportOrgTask = reportTaskOrgDao.findByTaskIdAndOrgId(taskId, department);
+							reportOrgTask.setStatus(ConstantsKey.REPORTED);
+							reportTaskOrgDao.saveOrUpdate(reportOrgTask);
 						}
-						String files = gson.toJson(excels);
-						report.setFiles(files);
-						reportDao.saveOrUpdate(report);
-						ReportOrgTask reportOrgTask = reportTaskOrgDao.findByTaskIdAndOrgId(taskId, department);
-						reportOrgTask.setStatus(ConstantsKey.REPORTED);
-						reportTaskOrgDao.saveOrUpdate(reportOrgTask);
+					}else{
+						List<WordHandler> wordHandlers = gson.fromJson(json, new TypeToken<List<WordHandler>>() {
+						}.getType());
+						List<String> filenames = wordHandlers.stream().map(WordHandler::getFileName).collect(Collectors.toList());
+						UploadPortletRequest uploadPortletRequest = PortalUtil.getUploadPortletRequest(resourceRequest);
+						String[] uploadFiles = uploadPortletRequest.getFileNames("files");
+						List<String> uploadFilenames = Arrays.asList(uploadFiles);
+						if (!CollectionUtils.isEquals(filenames, uploadFilenames)) {
+							message = "文件名与模版不一致，请重试！";
+						} else {
+							List<FileView> fileViews = saveAttachment(uploadPortletRequest, taskId, department);
+							List<WordHandler> words = new ArrayList<>();
+							for (FileView fileView : fileViews) {
+								List<String> content = new ArrayList<>();
+								String data = WordUtils.importWordData(fileView.getFilename(), new FileInputStream(fileView.getPath()));
+								content.add(data);
+								WordHandler wordHandler = new WordHandler(fileView.getFilename(), fileView.getPath(), content);
+								words.add(wordHandler);
+							}
+							String files = gson.toJson(words);
+							report.setFiles(files);
+							reportDao.saveOrUpdate(report);
+							ReportOrgTask reportOrgTask = reportTaskOrgDao.findByTaskIdAndOrgId(taskId, department);
+							reportOrgTask.setStatus(ConstantsKey.REPORTED);
+							reportTaskOrgDao.saveOrUpdate(reportOrgTask);
+						}
 					}
 					transactionUtil.commit();
 					SessionManager.setAttribute(resourceRequest.getRequestedSessionId(), "formId-report", "null");
@@ -170,6 +200,4 @@ public class ExcelUploadResourceCommand implements MVCResourceCommand {
 		}
 		return fileViewList;
 	}
-
-
 }

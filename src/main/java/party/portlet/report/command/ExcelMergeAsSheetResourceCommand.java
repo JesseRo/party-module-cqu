@@ -8,6 +8,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import dt.session.SessionManager;
 import hg.party.dao.org.OrgDao;
+import hg.party.entity.organization.Organization;
 import hg.party.unity.ResourceProperties;
 import hg.party.unity.WordUtils;
 import hg.util.CollectionUtils;
@@ -19,13 +20,12 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import party.constants.PartyPortletKeys;
 import party.portlet.org.NotMatchingExcelDataException;
-import party.portlet.report.entity.view.ExcelHandler;
 import party.portlet.report.dao.ReportDao;
 import party.portlet.report.dao.ReportTaskDao;
 import party.portlet.report.dao.ReportTaskOrgDao;
 import party.portlet.report.entity.Report;
 import party.portlet.report.entity.ReportTask;
-import party.portlet.report.entity.view.FileHandler;
+import party.portlet.report.entity.view.ExcelHandler;
 import party.portlet.report.entity.view.FileView;
 import party.portlet.report.entity.view.WordHandler;
 
@@ -40,7 +40,9 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -50,11 +52,11 @@ import java.util.zip.ZipOutputStream;
         property = {
 //                "javax.portlet.name=" + PartyPortletKeys.BrunchReportPortlet,
                 "javax.portlet.name=" + PartyPortletKeys.SecondaryTaskReportPortlet,
-                "mvc.command.name=/brunch/report/download"
+                "mvc.command.name=/brunch/report/download/sheet"
         },
         service = MVCResourceCommand.class
 )
-public class ExcelDownloadResourceCommand implements MVCResourceCommand {
+public class ExcelMergeAsSheetResourceCommand implements MVCResourceCommand {
     private static final int BUFFER_SIZE = 4 * 1024;
     @Reference
     private ReportTaskDao reportTaskDao;
@@ -78,6 +80,8 @@ public class ExcelDownloadResourceCommand implements MVCResourceCommand {
         ReportTask task = reportTaskDao.findByTaskId(taskId);
         List<Report> reports = reportDao.findByTaskId(taskId);
 
+        List<Organization> organizations = orgDao.findByOrgId(reports.stream().map(Report::getOrg_id).collect(Collectors.toList()));
+        Map<String, Organization> orgMap = organizations.stream().collect(Collectors.toMap(Organization::getOrg_id, p->p));
         String json = task.getFiles();
         String type = task.getType();
 
@@ -101,11 +105,7 @@ public class ExcelDownloadResourceCommand implements MVCResourceCommand {
                                 if (curExcel == null) {
                                     throw new NotMatchingExcelDataException(String.format("%s上报文件有误。", ""));
                                 }
-                                boolean reportLegal = CollectionUtils.isEquals(curExcel.getSheetNames(), demoExcel.getSheetNames());
-                                if (!reportLegal) {
-                                    throw new NotMatchingExcelDataException(String.format("%s上报文件:%s格式有误。", "", ""));
-                                }
-                                merged = merged.merge(curExcel);
+                                merged = merged.mergeAsSheet(curExcel, orgMap.get(report.getOrg_id()).getOrg_name());
                             }
                         }
                         allMerged.add(merged);
@@ -167,86 +167,6 @@ public class ExcelDownloadResourceCommand implements MVCResourceCommand {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-            }
-        }else if (type.equalsIgnoreCase(FileView.WORD)){
-            try {
-
-                List<WordHandler> allMerged = new ArrayList<>();
-                List<WordHandler> demoWords = gson.fromJson(json, new TypeToken<List<WordHandler>>() {
-                }.getType());
-                for (WordHandler demoWord : demoWords) {
-                    WordHandler merged = WordHandler.empty(demoWord.getFileName() + "-汇总.xlsx");
-                    for (Report report : reports) {
-                        if (report.getStatus() == ConstantsKey.APPROVED) {
-                            List<WordHandler> reportWords =
-                                    gson.fromJson(report.getFiles(), new TypeToken<List<WordHandler>>() {
-                                    }.getType());
-
-                            WordHandler curWord = reportWords.stream()
-                                    .filter(p -> p.getFileName().equals(demoWord.getFileName())).findFirst().orElse(null);
-                            if (curWord == null) {
-                                throw new NotMatchingExcelDataException(String.format("%s上报文件有误。", ""));
-                            }
-                            merged = merged.merge(curWord);
-                        }
-                    }
-                    allMerged.add(merged);
-                }
-
-                HttpServletResponse res = PortalUtil.getHttpServletResponse(resourceResponse);
-
-                if (allMerged.size() == 1) {
-                    WordHandler wordHandler = allMerged.get(0);
-                    XWPFDocument document = WordUtils.export(wordHandler);
-                    String filename = wordHandler.getFileName();
-                    res.setContentType("application/msword;charset=utf-8");
-                    res.addHeader("Content-Disposition",
-                            "attachment; filename=" + new String(filename.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1));
-                    document.write(res.getOutputStream());
-                    document.close();
-                } else {
-                    ResourceProperties resourceProperties = new ResourceProperties();
-                    Properties properties = resourceProperties.getResourceProperties();//获取配置文件
-                    String uploadPath = properties.getProperty("uploadPath");
-                    File folder = new File(uploadPath + "/ajaxFileName/" + taskId);
-                    File zip = new File(folder, "汇总.zip");
-                    ZipOutputStream zipOutputStream = new ZipOutputStream(new FileOutputStream(zip));
-                    if (!zip.exists()) {
-                        zip.createNewFile();
-                    }
-                    for (WordHandler word : allMerged) {
-                        XWPFDocument document = WordUtils.export(word);
-                        String filename = word.getFileName();
-                        File merged = new File(folder, filename);
-                        FileOutputStream fileOutputStream = new FileOutputStream(new File(folder, word.getFileName()));
-                        document.write(fileOutputStream);
-                        fileOutputStream.close();
-                        document.close();
-                        FileInputStream in = new FileInputStream(merged);
-                        zipOutputStream.putNextEntry(new ZipEntry(filename));
-                        byte[] buf = new byte[BUFFER_SIZE];
-                        int len;
-                        while ((len = in.read(buf)) != -1) {
-                            zipOutputStream.write(buf, 0, len);
-                        }
-                        zipOutputStream.closeEntry();
-                        in.close();
-
-                        res.setContentType("application/zip;charset=utf-8");
-                        res.addHeader("Content-Disposition",
-                                "attachment; filename=" + new String("数据汇总.zip".getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1));
-                    }
-                    zipOutputStream.close();
-                    FileInputStream fileInputStream = new FileInputStream(zip);
-                    byte[] buf = new byte[BUFFER_SIZE];
-                    int len;
-                    while ((len = fileInputStream.read(buf)) != -1) {
-                        res.getOutputStream().write(buf, 0, len);
-                    }
-                    fileInputStream.close();
-                }
-            }catch (IOException | NotMatchingExcelDataException ee){
-                ee.printStackTrace();
             }
         }
         return false;

@@ -3,6 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <portlet:resourceURL id="/brunch/report/approval" var="approval"/>
 <portlet:resourceURL id="/brunch/report/download" var="download"/>
+<portlet:resourceURL id="/brunch/report/download/sheet" var="sheet"/>
 
 <!DOCTYPE html>
 <html>
@@ -76,11 +77,14 @@
         <div class="bg_white_container">
             <c:if test="${not empty taskId}">
             <div class="operate_form_group">
-                <button id="export" type type="button" class="layui-btn custom_btn publish_acti_btn">数据汇总导出</button>
+                <button id="export" type="button" class="layui-btn custom_btn publish_acti_btn" >数据汇总导出</button>
+                <c:if test="${task.type == 'excel'}">
+                    <button id="exportAsSheet" type="button" class="layui-btn custom_btn publish_acti_btn" style="margin-right: 20px">汇总为Sheet导出</button>
+                </c:if>
             </div>
             </c:if>
             <div class="table_outer_box report_table_box">
-                <table class="layui-table custom_table report_detail" id="${taskId}">
+                <table class="layui-table custom_table report_detail content_table" id="${taskId}">
                     <thead>
                     <tr>
                         <td>党委</td>
@@ -193,6 +197,9 @@
 
         $('#export').on("click", function () {
             window.location.href = "${download}" + "&taskId=" + $('table.content_table').attr("id");
+        });
+        $('#exportAsSheet').on("click", function () {
+            window.location.href = "${sheet}" + "&taskId=" + $('table.content_table').attr("id");
         });
 
         var pages = $(".total_page").html();

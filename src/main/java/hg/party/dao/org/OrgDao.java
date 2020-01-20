@@ -82,6 +82,14 @@ public class OrgDao extends PostgresqlDaoImpl<Organization>{
 			return null;
 		}
 	}
+	public List<Organization> findByOrgId(List<String> orgId) {
+		String sql = "select * from hg_party_org where org_id in ('" + String.join("','", orgId) +"')";
+		try {
+			return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Organization.class));
+		} catch (Exception e) {
+			return null;
+		}
+	}
 	
 	public void updateAll(List<Organization> orgs) {
 		if (orgs == null || orgs.size() == 0) {

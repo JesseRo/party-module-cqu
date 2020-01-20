@@ -126,16 +126,19 @@
 
                         <div class="col-sm-6 col-xs-12">
                             <span class="col-sm-3 col-xs-3 control-label form-label-required">籍&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;贯</span>
-                            <div class="col-sm-9 col-xs-9" style="width: 75%;line-height: 34px;">
-                                <select id="province">
-                                    <option value="请选择省份" disabled>请选择省份</option>
-                                </select>
-                                <select id="city">
-                                    <option value="请选择省份" disabled>请选择城市</option>
-                                </select>
-                                <input type="text" class="form-control" readonly name="birth_place" id="birth_place"
-                                       value="${info.member_birth_place }">
+                            <div class="col-sm-9 col-xs-9" style="">
+                                <div class="col-sm-6 col-xs-6" style="padding-left: 0;padding-right: 6px">
+                                    <select id="province" class="form-control" name="province">
+                                        <option value="请选择省份" disabled>请选择省份</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-6 col-xs-6" style="padding-left: 6px;padding-right: 0">
+                                    <select id="city" class="form-control" name="city">
+                                        <option value="请选择城市" disabled="">请选择城市</option>
+                                    </select>
+                                </div>
                             </div>
+                            <input id="birth_place" type="hidden">
                         </div>
 
                         <div class="col-sm-6 col-xs-12">
@@ -282,9 +285,9 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-sm-6 col-xs-12" id="sushe">
+<%--                        <div class="col-sm-6 col-xs-12" id="sushe">--%>
 
-                        </div>
+<%--                        </div>--%>
                         <input type="hidden" name="seconedName" value="${seconedName }"/>
                         <input type="hidden" name="state" id="state" value="${state }"/>
                         <input type="hidden" name="prevID_card" value="${info.member_identity }"/>
@@ -297,7 +300,7 @@
                             <div class="layui-inline btn_group" style="width: calc(50% - 120px);margin: 0;margin-top: 10px;">
                                 <label class="layui-form-label"></label>
                                 <div class="layui-input-inline">
-                                    <button type="button" id="button1" onclick="formsubmit()" class="layui-btn" style="padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;background-color: #FFAB33;border-radius: 4px;">
+                                    <button type="button" id="button1" class="layui-btn" style="padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;background-color: #FFAB33;border-radius: 4px;">
                                         确定
                                     </button>
                                     <button onclick="window.history.back();" type="button" id="button2" class="layui-btn layui-btn-primary" style="background-color: transparent;color: #666;padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;border-radius: 4px;">
@@ -313,9 +316,6 @@
 
 </div>
 <script type="text/javascript">
-    $("#button1").click(function () {
-        window.history.back();
-    });
     $(function () {
         var error = "${error}";
         if (error) {
@@ -347,7 +347,9 @@
         if (role.indexOf("普通党员") >= 0) {
             $("#major_title").attr("readonly", "readonly");
         }
-        $("#sushe").children().remove();
+
+        // 宿舍
+        /* $("#sushe").children().remove();
         if (myJob == "本科生" || myJob == "硕士研究生" || myJob == "博士研究生") {
             var classnew = "${info.member_new_class }";
             var classnew1 = classnew.substring(0, classnew.indexOf("园区"));
@@ -366,7 +368,7 @@
                 }
                 $("#new_class1").append(option);
             }
-        }
+        }*/
         //alert(a.length);
         for (var i = 0; i < a.length; i++) {
             var option;
@@ -457,6 +459,66 @@
                 $("#birth_place").val(data.province + "-" + data.city);
             }//选中后回调函数
         });
+        $('#province').val("${info.member_province}");
+        $('#province').change();
+        $('#city').val("${info.member_city}");
+        $('#city').change();
+        $('#unit').val('${info.unit}');
+
+        function formsubmit() {
+            var isContinue = true;
+            $(".form-label-required").next().find("input").each(function () {
+                if (!$(this).val()) {
+                    isContinue = false;
+                }
+            });
+            $(".form-label-required").next().find("select").each(function () {
+                if (!$(this).val()) {
+                    isContinue = false;
+                }
+            });
+            if (!isContinue){
+                alert("请完善基本信息");
+                return
+            }
+            if ($("#ID_card").val().length !== 18) {
+                isContinue = false;
+                alert("请输入正确的身份证号码");
+            }else if (!/^1\d{10}$/.test($("#telephone").val())) {
+                isContinue = false;
+                alert("请输入正确的手机号码");
+            }else if (!/^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/.test($("#email").val())) {
+                isContinue = false;
+                alert("请输入正确的邮箱号码");
+            }
+            if (isContinue) {
+                var data = {
+                    OrgId: $("#org_id").val(),
+                    UserId: $("#ID_card").val()
+                };
+                if ("add" == $("#state").val() || $("#ID_card").val() != "${info.member_identity }") {
+                    $.ajax({
+                        type: "post",
+                        url: "${orgexist}",
+                        data: data,
+                        dataType: "json",
+                        async: false,
+                        success: function (res) {
+                            if (true == res.state) {
+                                isContinue = false;
+                                alert(res.message);
+                            }
+                        }
+                    });
+                }
+            }else {
+                alert("请完善基本信息");
+            }
+            if (isContinue) {
+                $("#addPersonForm").submit();
+            }
+        }
+        $('#button1').on('click', formsubmit);
     });
 
     function check(e) {
@@ -505,70 +567,5 @@
         }
     };
 
-    function formsubmit() {
-        var isContinue = true;
-        $(".form-label-required").next().find("input").each(function () {
-            if (!$(this).val()) {
-                isContinue = false;
-                return;
-            }
-        });
-        $(".form-label-required").next().find("select").each(function () {
-            if (!$(this).val()) {
-                isContinue = false;
-                return;
-            }
-        });
-        var ID_card = $("#ID_card").val().length;
-        if (ID_card != 18) {
-            alert("请输入正确的身份证号码");
-            return;
-        }
-        var phoneReg = /^1\d{10}$/;
-        if (phoneReg.test($("#telephone").val())) {
-            /*  isContinue = true; */
-        } else {
-            isContinue = false;
-            alert("请输入正确的手机号码");
-            return;
-        }
-        var mailReg = /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/;
-        if (mailReg.test($("#email").val())) {
-            /*  isContinue = true; */
-        } else {
-            isContinue = false;
-            alert("请输入正确的邮箱号码");
-            return;
-        }
-        if (!isContinue) {
-            alert("请完善基本信息");
-            return;
-        }
-        var data = {
-            OrgId: $("#org_id").val(),
-            UserId: $("#ID_card").val()
-        };
-        if ("add" == $("#state").val() || $("#ID_card").val() != "${info.member_identity }") {
-            $.ajax({
-                type: "post",
-                url: "${orgexist}",
-                data: data,
-                dataType: "json",
-                async: false,
-                success: function (res) {
-                    if (true == res.state) {
-                        isContinue = false;
-                        alert(res.message);
-                        return;
-                    }
-                }
-            });
-        }
-        if (!isContinue) {
-            return;
-        } else {
-            $("#addPersonForm").submit();
-        }
-    }
 </script>
 </body>

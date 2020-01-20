@@ -54,7 +54,7 @@
                     </div>
                 </div>
                 <div class="inspector_container">
-                    <p class="index_title">活动督查情况</p>
+                    <p class="index_title">活动督察情况</p>
                     <div id="inspectorChart" class="inspector_chart"></div>
                     <div class="echarts_legend"></div>
                     <div class="echarts_num"></div>
@@ -66,7 +66,7 @@
             </div>
             <div class="data_report_container">
                 <p class="index_title">
-                    数据上报
+                    组织生活报送情况
                     <img class="title_icon" src="/images/index-date-icon.png"/>
                 </p>
                 <p class="report_title">
@@ -82,7 +82,7 @@
         </div>
         <div class="bottom_container">
             <div class="attend_outer_container">
-                <p class="index_title"><span class="text">活动出勤率</span></p>
+                <p class="index_title"><span class="text">党员分布</span></p>
                 <div id="attendContainer" class="attend_container">
                     <div class="triple_charts">
                         <div id="attendContainer1"></div>
@@ -97,7 +97,7 @@
                 </ul>
             </div>
             <div class="activity_outer_container">
-                <p class="index_title">活动计划上报</p>
+                <p class="index_title">党支部分布</p>
                 <div id="activityContainer" class="activity_container"></div>
             </div>
             <div class="view_outer_container">
@@ -228,7 +228,7 @@
             },
             borderRadius:4,
             series: [{
-                name:'活动督查情况',
+                name:'组织生活分布情况',
                 type:'pie',
                 radius: ['35%', '40%'],
                 clockwise:false,

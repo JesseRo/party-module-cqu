@@ -163,7 +163,8 @@
                                         <span class="control-label form-label-required">文档${varStatus.count}：</span>
                                     </div>
                                     <div class="col-sm-9 col-xs-9">
-                                        <input class="form-control" name="files" type="file" style="text-indent: inherit;">
+                                        <input class="form-control" name="files" type="file" style="text-indent: inherit;"
+                                               accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
                                     </div>
                                 </div>
                             </div>

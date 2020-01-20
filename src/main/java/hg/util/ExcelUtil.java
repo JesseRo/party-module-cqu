@@ -239,7 +239,7 @@ public class ExcelUtil
             if (sheetData == null){
                 throw new RuntimeException("sheet为空");
             }
-            sheet = workbook.createSheet();
+            sheet = workbook.createSheet(sheetName);
             int colSize = sheetData.get(0).size();
             int[] arrColWidth = new int[colSize];
             // 产生表格标题行,以及设置列宽
@@ -649,6 +649,7 @@ public class ExcelUtil
         }
         return entity;
     }
+
     
     public static void main(String[] arg) throws IOException, NoSuchFieldException, InvocationTargetException, IllegalAccessException
     {

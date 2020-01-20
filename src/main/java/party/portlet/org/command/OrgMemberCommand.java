@@ -13,6 +13,7 @@ import hg.party.entity.partyMembers.Member;
 import hg.util.ConstantsKey;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+import org.springframework.util.StringUtils;
 import party.constants.PartyPortletKeys;
 
 import javax.portlet.PortletException;
@@ -30,6 +31,7 @@ import java.util.stream.Collectors;
 		immediate = true,
 		property = {
 				"javax.portlet.name=" + PartyPortletKeys.OrgAdmin,
+				"javax.portlet.name=" + PartyPortletKeys.Form,
 				"mvc.command.name=/org/memberGroup"
 	    },
 	    service = MVCResourceCommand.class

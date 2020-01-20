@@ -56,6 +56,8 @@ public class AddPersonActionCommand implements MVCActionCommand {
 		String sex = ParamUtil.getString(actionRequest, "sex");
 		String ethnicity = ParamUtil.getString(actionRequest, "ethnicity");
 		String birth_place = ParamUtil.getString(actionRequest, "birth_place");
+		String province = ParamUtil.getString(actionRequest, "province");
+		String city = ParamUtil.getString(actionRequest, "city");
 		String birthday = ParamUtil.getString(actionRequest, "birthday");
 		String join_party_time = ParamUtil.getString(actionRequest, "join_party_time");
 		String turn_Time = ParamUtil.getString(actionRequest, "turn_Time");
@@ -92,12 +94,12 @@ public class AddPersonActionCommand implements MVCActionCommand {
 					+ ", \"member_birthday\", \"member_identity\", \"member_degree\", \"member_job\", \"member_join_date\""
 					+ ", \"member_fomal_date\", \"member_org\", \"member_type\", \"member_address\", \"member_phone_number\""
 					+ ", \"member_landline_number\", \"member_is_outofcontact\", \"member_outofcontact_date\", \"member_is_flow\""
-					+ ", \"member_flow_to\", \"member_membership_state\", \"member_mailbox\", \"historic\", \"member_party_position\", \"member_marriage\""
+					+ ", \"member_flow_to\", \"member_membership_state\", \"member_mailbox\", \"historic\", \"member_party_position\", \"member_marriage\", \"member_province\", \"member_city\""
 					+ ", \"member_major_title\", \"member_new_class\", \"member_front_line\", \"member_party_committee\", \"member_birth_place\", \"member_is_leader\", \"member_unit\")"
 					+ "VALUES ('" + userName + "', '" + sex + "', '" + ethnicity + "', NULL, '" + birthday + "', '"
 					+ ID_card + "', '" + educational_level + "', '" + job + "', '" + join_party_time + "', '"
 					+ turn_Time + "', '" + orgId + "', '" + party_type + "', '" + home_addrss + "', '" + telephone
-					+ "', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '" + false + "', '" + positior + "','" + marriage + "','" + title
+					+ "', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '" + false + "', '" + positior + "','" + marriage + "','"  + province + "','"  + city + "','" + title
 					+ "','" + classnew + "', NULL, '" + seconedName + "', '" + birth_place + "', '" + isLeader + "', '" + unit + "');";
 			String Updatesql = "UPDATE hg_party_member set \"member_name\"='" + userName + "', \"member_sex\"='" + sex
 					+ "', \"member_ethnicity\"='" + ethnicity + "', \"member_birthday\"='" + birthday
@@ -107,6 +109,8 @@ public class AddPersonActionCommand implements MVCActionCommand {
 					+ party_type + "', \"member_address\"='" + home_addrss + "', \"member_phone_number\"='" + telephone
 					+ "',\"historic\"=" + false + ", \"member_birth_place\"='" + birth_place
 					+ "',\"member_party_position\"= '" + positior
+					+ "',\"member_province\"= '" + province
+					+ "',\"member_city\"= '" + city
 					+ "',\"member_marriage\"= '" + marriage
 					+ "', \"member_major_title\"='" + title
 					+ "', \"member_is_leader\"='" + isLeader

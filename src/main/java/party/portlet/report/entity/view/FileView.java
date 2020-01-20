@@ -1,9 +1,15 @@
 package party.portlet.report.entity.view;
 
 public class FileView {
+    public static final String WORD = "word";
+    public static final String EXCEL = "excel";
+
+
     private String filename;
 
     private String path;
+
+    private String type;
 
     public FileView(String filename, String path){
         this.filename = filename;
@@ -28,5 +34,13 @@ public class FileView {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

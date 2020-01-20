@@ -62,17 +62,17 @@
     });
     
   //ie9 网页白屏 刷新页面
-    var browser=navigator.appName 
-    var b_version=navigator.appVersion 
-    var version=b_version.split(";"); 
-    if(version[1]){
-        var trim_Version=version[1].replace(/[ ]/g,""); 
-    }
-    if(browser=="Microsoft Internet Explorer" && trim_Version=="MSIE9.0"){
-    	if($("body").html().indexOf("logo_container") == -1){
-        	window.location.reload();
-        }
-    }
+  //   var browser=navigator.appName
+  //   var b_version=navigator.appVersion
+  //   var version=b_version.split(";");
+  //   if(version[1]){
+  //       var trim_Version=version[1].replace(/[ ]/g,"");
+  //   }
+  //   if(browser=="Microsoft Internet Explorer" && trim_Version=="MSIE9.0"){
+  //   	if($("body").html().indexOf("logo_container") == -1){
+  //       	window.location.reload();
+  //       }
+  //   }
     
 })
 

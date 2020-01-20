@@ -869,15 +869,10 @@
         var personId = $(this).parent().parent().prev().prev().prev().html();
         var $this = $(this);
         var userId = personId;
-        var orgId = $(".third_menu_on").attr("id");
-        var seconedName = $(".second_menu_on > a").text();
-        var orgName = $(".third_menu_on > a").text();
-        if (seconedName && orgId && orgName && userId) {
-            window.location.href = '/addperson?seconedName=' + seconedName + '&orgId=' + orgId + '&orgName=' + orgName + '&userId=' + userId;
-        } else {
-            alert('必须指定一个支部结点');
-            return;
-        }
+        // var orgId = $(".third_menu_on").attr("id");
+        // var seconedName = $(".second_menu_on > a").text();
+        // var orgName = $(".third_menu_on > a").text();
+        window.location.href = '/addperson?userId=' + userId;
     });
     $("#addPerson").click(function () {
         var seconedName = $(".second_menu_on > a").text();

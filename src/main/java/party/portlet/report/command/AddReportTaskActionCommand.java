@@ -11,6 +11,7 @@ import dt.session.SessionManager;
 import hg.party.dao.org.OrgDao;
 import hg.party.entity.organization.Organization;
 import hg.party.unity.ResourceProperties;
+import hg.party.unity.WordUtils;
 import hg.util.ConstantsKey;
 import hg.util.ExcelUtil;
 import hg.util.TransactionUtil;
@@ -27,6 +28,7 @@ import party.portlet.report.dao.ReportTaskOrgDao;
 import party.portlet.report.entity.ReportOrgTask;
 import party.portlet.report.entity.ReportTask;
 import party.portlet.report.entity.view.FileView;
+import party.portlet.report.entity.view.WordHandler;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -101,20 +103,39 @@ public class AddReportTaskActionCommand implements MVCActionCommand {
                     reportTask.setTask_id(taskId);
                     reportTask.setReceivers(toOrg);
                     UploadPortletRequest uploadPortletRequest = PortalUtil.getUploadPortletRequest(actionRequest);
-
                     List<FileView> fileViewList = saveAttachment(uploadPortletRequest, taskId);
-                    List<ExcelHandler> excels = new ArrayList<>();
-                    for (FileView fileView : fileViewList){
-                        Map<String, List<Map<String, Object>>> excelData = ExcelUtil.importAllSheet(fileView.getFilename(), new FileInputStream(fileView.getPath()));
-                        ExcelHandler excelHandler = new ExcelHandler(fileView.getFilename(), fileView.getPath(), excelData);
-                        excels.add(excelHandler);
+                    String type;
+                    if (fileViewList.size() > 0){
+                        type = fileViewList.get(0).getType();
+                        reportTask.setType(type);
+                    }else {
+                        throw new Exception();
                     }
-                    reportTask.setFiles(gson.toJson(excels));
+                    if (type.equalsIgnoreCase(FileView.EXCEL)) {
+                        List<ExcelHandler> excels = new ArrayList<>();
+                        for (FileView fileView : fileViewList) {
+                            Map<String, List<Map<String, Object>>> excelData = ExcelUtil.importAllSheet(fileView.getFilename(), new FileInputStream(fileView.getPath()));
+                            ExcelHandler excelHandler = new ExcelHandler(fileView.getFilename(), fileView.getPath(), excelData);
+                            excels.add(excelHandler);
+                        }
+                        reportTask.setFiles(gson.toJson(excels));
+                    }else if (type.equalsIgnoreCase(FileView.WORD)){
+                        List<WordHandler> words = new ArrayList<>();
+                        for (FileView fileView : fileViewList) {
+                            List<String> paragraph = new ArrayList<>();
+                            String wordContent = WordUtils.importWordData(fileView.getFilename(), new FileInputStream(fileView.getPath()));
+                            paragraph.add(wordContent);
+                            WordHandler wordHandler = new WordHandler(fileView.getFilename(), fileView.getPath(), paragraph);
+                            words.add(wordHandler);
+                        }
+                        reportTask.setFiles(gson.toJson(words));
+                    }
+
                     reportTaskDao.saveOrUpdate(reportTask);
-                    if (status.equals(ConstantsKey.PUBLISHED)){
+                    if (status.equals(ConstantsKey.PUBLISHED)) {
                         // 新任务
                         List<ReportOrgTask> orgTasks = new ArrayList<>();
-                        for (String org: toOrgs){
+                        for (String org : toOrgs) {
                             ReportOrgTask reportOrgTask = new ReportOrgTask();
                             reportOrgTask.setOrg_id(org);
                             reportOrgTask.setStatus(ConstantsKey.UNREPORTED);
@@ -123,6 +144,7 @@ public class AddReportTaskActionCommand implements MVCActionCommand {
                         }
                         reportTaskOrgDao.saveAll(orgTasks);
                     }
+
                     transactionUtil.commit();
                     SessionManager.setAttribute(actionRequest.getRequestedSessionId(), "formId-report-task", "null");
                     if (status.equals(ConstantsKey.PUBLISHED)){
@@ -160,6 +182,16 @@ public class AddReportTaskActionCommand implements MVCActionCommand {
                     FileUtil.copyFile(file, filePath);
                     fileView.setFilename(sourceFileName);
                     fileView.setPath(filePath.getAbsolutePath());
+                    String extension = sourceFileName.substring(sourceFileName.lastIndexOf("."));
+                    if (extension.equalsIgnoreCase(".doc")
+                            || extension.equalsIgnoreCase(".docx")){
+                        fileView.setType(FileView.WORD);
+                    }else if (extension.equalsIgnoreCase(".xls")
+                            || extension.equalsIgnoreCase(".xlsx")){
+                        fileView.setType(FileView.EXCEL);
+                    }else{
+                        fileView.setType("other");
+                    }
                     fileViewList.add(fileView);
                 } catch (IOException e) {
                     e.printStackTrace();

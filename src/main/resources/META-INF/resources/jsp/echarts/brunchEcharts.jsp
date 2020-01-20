@@ -46,7 +46,7 @@
 					<div class="attend_rate_group">
 						<div class="operate_container">
 							<p>
-								<img src="../images/charts-title1.png"/>
+								活动出勤率
 							</p>
 							<form class="layui-form custom_form" id="selectForm1">
 								<div class="layui-form-item">
@@ -67,7 +67,7 @@
 					<div class="views_group">
 						<div class="operate_container">
 							<p>
-								<img src="../images/branch-charts-title2.png"/>
+								支部党课开课情况
 							</p>
 							<form class="layui-form custom_form" id="selectForm1">
 								<div class="layui-form-item">
@@ -90,7 +90,7 @@
 					<div class="attend_rate_group">
 						<div class="operate_container">
 							<p>
-								<img src="../images/branch-charts-title3.png"/>
+								支部党员组织关系转接情况
 							</p>
 						</div>
 						<div class="attend_rate_container" id="party_relation_container"></div>
@@ -98,7 +98,7 @@
 					<div class="views_group">
 						<div class="operate_container">
 							<p>
-								<img src="../images/branch-charts-title4.png"/>
+								支部党员党龄分布情况
 							</p>
 						</div>
 						<div class="attend_rate_container" id="party_age_container"></div>

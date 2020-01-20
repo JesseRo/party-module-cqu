@@ -15,6 +15,9 @@
 <portlet:resourceURL id="/form/uploadVideo" var="uploadvideoUrl" />
 <!-- 附件上传 -->
 <portlet:resourceURL id="/form/uploadFile" var="uploadfileUrl" />
+
+<portlet:resourceURL id="/org/memberGroup" var="candidate" />
+
 <html>
 	<head>
 	<style type="text/css">
@@ -336,6 +339,8 @@ div#hg-form-container {
 	    <script type="text/javascript" charset="utf-8" src="${ basePath }/js/utf8-jsp/third-party/zeroclipboard/ZeroClipboard.js"></script>
 		<script type="text/javascript" src="${basePath}/js/jquery-validation.min.js"></script>
 		<script type="text/javascript" src="${basePath}/js/validation-message-zh.js?v=2"></script>
+        <link rel="stylesheet" href="${basePath}/css/jquery.dropdown.css"/>
+        <script type="text/javascript" src="${basePath}/js/jquery.dropdown.js?v=11"></script>
 	</head>
 	<body>
 		<input type="hidden" class="mapValue" value='${mapNew }'>
@@ -556,6 +561,74 @@ div#hg-form-container {
              	    }
             	});
             });
+            var candidates = [];
+                $('.dropdown-mul-2').eq(0).dropdown({
+                    data : [ {
+                        name : '没有数据',
+                        disabled : true
+                    } ],
+                    input : '<input type="text" maxLength="20" placeholder="请输入搜索">',
+                    limitCount: 1,
+                    choice : function() {
+                    }
+                });
+                $('.dropdown-mul-2').eq(1).dropdown({
+                    data : [ {
+                        name : '没有数据',
+                        disabled : true
+                    } ],
+                    input : '<input type="text" maxLength="20" placeholder="请输入搜索">',
+                    limitCount: 1,
+                    choice : function() {
+                        console.log(this);
+                        var selectedContact = this.$select.val();
+                        if(selectedContact.length > 0){
+                            var phone = candidates
+                                .filter(function(p){return p.member_identity === selectedContact[0]})[0]
+                                .member_phone_number;
+                            $('[name=phoneNumber]').val(phone);
+                        }
+                    }
+                });
+                function refresh(org) {
+                    $.get('${candidate}', {
+                        orgId : org
+                    }, function(res) {
+                        if (res.result) {
+                            var admins = res.data.admins;
+                            var candidatesGroup = res.data.candidates;
+                            candidates = []
+                            var _admin = {};
+                            for ( var i in admins) {
+                                _admin[admins[i]] = admins[i];
+                            }
+                            for ( var group in candidatesGroup) {
+                                for ( var j in candidatesGroup[group]) {
+                                    var member = candidatesGroup[group][j];
+                                    candidates.push({
+                                        id : member.member_identity,
+                                        disabled : false,
+                                        groupId : group,
+                                        groupName : group,
+                                        name : member.member_name,
+                                        selected : false
+                                    });
+                                }
+                            }
+                            if (candidates.length === 0) {
+                                candidates = [ {
+                                    name : '没有数据',
+                                    disabled : true
+                                } ];
+                            }
+                            $('.dropdown-mul-2').eq(0).data('dropdown').changeStatus();
+                            $('.dropdown-mul-2').eq(1).data('dropdown').changeStatus();
+                            $('.dropdown-mul-2').eq(0).data('dropdown').update(candidates,true);
+                            $('.dropdown-mul-2').eq(1).data('dropdown').update(candidates,true);
+                        }
+                    });
+                }
+                refresh("ddddd");
             if($(".mapValue").val()){
                 var data=$(".mapValue").val();
     	    	data=data.substring(0,data.length);
@@ -599,8 +672,10 @@ div#hg-form-container {
     	       $("input[name='subject']").attr("disabled","disabled");
     	       $("input[name='timeDuring']").val(j.start_time);
     	        $("input[name='timeLasts']").val(j.total_time);
-    	        $("input[name='host']").val(j.host);
-    	        $("input[name='contact']").val(j.contact);
+                $('.dropdown-mul-2').eq(0).data('dropdown').choose([j.host]);
+                $('.dropdown-mul-2').eq(1).data('dropdown').choose([j.contact]);
+    	        // $("input[name='host']").val(j.host);
+    	        // $("input[name='contact']").val(j.contact);
     	        $("input[name='phoneNumber']").val(j.contact_phone);
     	        $("input[name='sit']").val(j.sit); 
     	        $("input[name='customTheme']").val(j.meeting_theme_secondary);
@@ -642,8 +717,10 @@ div#hg-form-container {
     	       $("input[name='subject']").attr("disabled","disabled");
     	       $("input[name='timeDuring']").val(j.start_time);
     	        $("input[name='timeLasts']").val(j.total_time);
-    	        $("input[name='host']").val(j.host);
-    	        $("input[name='contact']").val(j.contact);
+                $('.dropdown-mul-2').eq(0).data('dropdown').choose([j.host]);
+                $('.dropdown-mul-2').eq(1).data('dropdown').choose([j.contact]);
+    	        // $("input[name='host']").val(j.host);
+    	        // $("input[name='contact']").val(j.contact);
     	        $("input[name='phoneNumber']").val(j.contact_phone);
     	        $("input[name='sit']").val(j.sit); 
     	        $("input[name='customTheme']").val(j.meeting_theme_secondary);
@@ -667,7 +744,7 @@ div#hg-form-container {
            getPlace();	       
 	       var div='<div class="col-sm-6 col-xs-12"> '+
 				       '<div class="col-sm-3 col-xs-3" >'+
-			           '<span class="control-label form-label-required">参会人员</span> '+
+			           '<span class="control-label form-label-required">参会人员：</span> '+
 			           '</div>'+
 					 '<div class="col-sm-9 col-xs-9"> '+                               
 					   '<select class="form-control ${class}" name="participate"></select> '+
@@ -675,7 +752,7 @@ div#hg-form-container {
 					 '</div> '+                            
 					'</div>'; 
 	       if(!$(".mapedit").val()){
-	    	   $("#hg-form-container > div").eq(7).replaceWith(div);
+	    	   $("#hg-form-container > div").eq(8).replaceWith(div);
 			}else{
 				 $("select[name='participate']").attr("disabled","disabled");
 			}
@@ -733,6 +810,8 @@ div#hg-form-container {
                }
                
 	       });
+
+
   });
         	
 </script>

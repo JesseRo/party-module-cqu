@@ -14,9 +14,11 @@ import org.osgi.service.component.annotations.Reference;
 import org.springframework.util.StringUtils;
 import party.constants.PartyPortletKeys;
 import party.portlet.report.dao.ReportDao;
+import party.portlet.report.dao.ReportTaskDao;
 import party.portlet.report.dao.ReportTaskOrgDao;
 import party.portlet.report.entity.Report;
 import party.portlet.report.entity.ReportOrgTask;
+import party.portlet.report.entity.ReportTask;
 import party.portlet.report.entity.view.ExcelHandler;
 import party.portlet.report.entity.view.FileView;
 
@@ -53,6 +55,9 @@ public class SecondaryTaskReportsPortlet extends MVCPortlet {
     private ReportDao reportDao;
 
     @Reference
+    private ReportTaskDao reportTaskDao;
+
+    @Reference
     private ReportTaskOrgDao reportTaskOrgDao;
     private Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
 
@@ -81,7 +86,9 @@ public class SecondaryTaskReportsPortlet extends MVCPortlet {
                 int status = Integer.parseInt(statusStr);
                 taskPage = reportDao.findPageByTaskIdAndStatus(taskId, status, page);
             }
+            ReportTask task = reportTaskDao.findByTaskId(taskId);
             renderRequest.setAttribute("taskId", taskId);
+            renderRequest.setAttribute("task", task);
         }
 
 

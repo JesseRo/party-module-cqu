@@ -71,7 +71,9 @@ public class Submission extends BaseMVCActionCommand {
         String sit = ParamUtil.getString(actionRequest, "sit");
         String meetingId = ParamUtil.getString(actionRequest, "meeting_id");
         String customTheme = ParamUtil.getString(actionRequest, "subject");
+        String campus = ParamUtil.getString(actionRequest, "campus");
         formId = HtmlUtil.escape(formId);
+        campus = HtmlUtil.escape(campus);
         infromid = HtmlUtil.escape(infromid);
         startDate = HtmlUtil.escape(startDate);
         attendMeetingPerson = HtmlUtil.escape(attendMeetingPerson);
@@ -115,6 +117,7 @@ public class Submission extends BaseMVCActionCommand {
         m.setContent(content);
         m.setInform_id(infromid);
         m.setSit(sit);
+        m.setCampus(campus);
         LocalDateTime ldTime = LocalDateTime.now(ZoneId.of("Asia/Shanghai"));
         Timestamp t = Timestamp.valueOf(ldTime);
         m.setSubmit_time(t);

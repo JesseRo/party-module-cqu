@@ -7,28 +7,27 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ExcelHandler {
-    private String fileName;
-
-    private String path;
-
+public class ExcelHandler extends FileHandler<ExcelHandler>{
     private List<String> sheetNames;
 
     private Map<String, SheetHandler> sheets;
 
     public ExcelHandler(String fileName){
+        super();
         this.fileName = fileName;
         this.sheetNames = new ArrayList<>();
         this.sheets = new LinkedHashMap<>();
     }
 
     public ExcelHandler(String fileName, Map<String, SheetHandler> sheets){
+        super();
         this.fileName = fileName;
         sheetNames = new ArrayList<>(sheets.keySet());
         this.sheets = sheets;
     }
 
     public ExcelHandler(String fileName, String path, Map<String, List<Map<String, Object>>> data){
+        super();
         this.fileName = fileName;
         this.path = path;
         sheetNames = new ArrayList<>();
@@ -45,8 +44,9 @@ public class ExcelHandler {
         return new ExcelHandler(fileName);
     }
 
+    @Override
     public ExcelHandler merge(ExcelHandler other) throws NotMatchingExcelDataException {
-        String fileName = this.fileName + "-汇总.xlsx";
+//        String fileName = this.fileName + "-汇总.xlsx";
         if (this.sheetNames == null || this.sheetNames.isEmpty()){
             return other;
         }
@@ -59,6 +59,17 @@ public class ExcelHandler {
                 throw new NotMatchingExcelDataException(message + e.getMessage());
             }
         }
+        return new ExcelHandler(fileName, sheets);
+    }
+
+    public ExcelHandler mergeAsSheet(ExcelHandler other, String orgName) throws NotMatchingExcelDataException {
+//        String fileName = this.fileName + "-汇总.xlsx";
+        if (this.sheetNames == null || this.sheetNames.isEmpty()){
+            this.sheetNames = new ArrayList<>();
+            this.sheets = new LinkedHashMap<>();
+        }
+
+        sheets.putIfAbsent(orgName, other.sheets.get(other.sheetNames.get(0)));
         return new ExcelHandler(fileName, sheets);
     }
 
@@ -101,4 +112,5 @@ public class ExcelHandler {
     public void setPath(String path) {
         this.path = path;
     }
+
 }
