@@ -1,4 +1,4 @@
-package party.portlet.party;
+package party.portlet.cqu;
 
 import java.io.IOException;
 import java.util.List;
@@ -81,10 +81,10 @@ public class PartyEntryOrgPortlet extends MVCPortlet{
 							"ON plan.meeting_id=notes.meeting_id) "+
 							"LEFT JOIN hg_party_org AS org "+
 							"ON plan.organization_id=org.org_id "+
-							"WHERE plan.check_person_org=? "+
+							"WHERE plan.check_person=? "+
 							"and org.historic is false "+
-							"AND (plan.task_status_org='5' "+
-							"OR plan.task_status_org='7') "+
+							"AND (plan.task_status='5' "+
+							"OR plan.task_status='7') "+
 							"ORDER BY plan.id desc ";
 				Map<String, Object> postgresqlResults = partyMeetingPlanInfo.postGresqlFind(pageNo, pageSize, sql, user_id);
 				list = (List<Map<String, Object>>) postgresqlResults.get("list");//获取集合

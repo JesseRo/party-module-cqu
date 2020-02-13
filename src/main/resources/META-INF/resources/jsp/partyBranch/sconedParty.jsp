@@ -16,6 +16,8 @@
 <portlet:resourceURL id="/form/uploadFile" var="uploadfileUrl"/>
 
 <portlet:resourceURL id="/org/memberGroup" var="candidate" />
+<portlet:resourceURL id="/hg/place/list" var="places" />
+<portlet:resourceURL id="/hg/place/add" var="addPlace" />
 
 <html>
 <head>
@@ -397,42 +399,46 @@
                 <a href="javascript:;">拟定计划</a>
             </span>
         </div>
-    <input type="hidden" class="mapValue" value='${mapNew }'>
-    <input type="hidden" class="mapOld" value='${mapold }'>
-    <input type="hidden" class="mapedit" value='${mapedit }'>
-    <input type="hidden" class="planContent" value='${planContent }'>
-    <div class="bg_white_container">
-        <div class="content_form" style="padding: 20px 0;">
-            <form class="form-horizontal" role="form" action="${submitForm }" method="post"
-                  enctype="multipart/form-data" style="max-width: 960px;">
-                <div id="hg-form-container" class="form-group">
-                    <!-- <textarea rows="3" cols="20" name="content"> </textarea> -->
-                    <input id="content_id" type="hidden" name="content"/>
-                    <input id="submitFrom" type="submit" style="display:none;"/>
-                    <input id="hiddenstate" type="hidden" name="state"/>
-                    <input id="infrom_id" type="hidden" name="infrom_id"/>
-                    <input id="newAndOld" type="hidden" name="newAndOld"/>
-                    <input id="meeting_id" type="hidden" name="meeting_id"/>
-                    <input type="hidden" name="formId" value="${formId}"/>
-                    <div class="col-sm-12 col-xs-12">
-                        <div class="layui-inline btn_group" style="width: calc(50% - 120px);margin: 0;margin-top: 10px;">
-                            <label class="layui-form-label"></label>
-                            <div class="layui-input-inline">
-                                <button type="button" onclick="formsubmit()" class="layui-btn" lay-submit="" lay-filter="partyMemForm" style="padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;background-color: #FFAB33;border-radius: 4px;">
-                                    发布
-                                </button>
-                                <button type="button" onclick="formsubmitgraft()" class="layui-btn layui-btn-primary" style="background-color: transparent;color: #666;padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;border-radius: 4px;">
-                                    取消
-                                </button>
+        <input type="hidden" class="mapValue" value='${mapNew }'>
+        <input type="hidden" class="mapOld" value='${mapold }'>
+        <input type="hidden" class="mapedit" value='${mapedit }'>
+        <input type="hidden" class="planContent" value='${planContent }'>
+
+        <div class="bg_white_container">
+            <div class="content_form" style="padding: 20px 0;">
+                <form class="form-horizontal" role="form" action="${submitForm }" method="post"
+                      enctype="multipart/form-data" style="max-width: 960px;">
+                    <div id="hg-form-container" class="form-group">
+                        <!-- <textarea rows="3" cols="20" name="content"> </textarea> -->
+                        <input id="content_id" type="hidden" name="content"/>
+                        <input id="submitFrom" type="submit" style="display:none;"/>
+                        <input id="hiddenstate" type="hidden" name="state"/>
+                        <input id="graft" type="hidden" name="graft"/>
+                        <input id="newAndOld" type="hidden" name="newAndOld"/>
+                        <input id="meeting_id" type="hidden" name="meeting_id"/>
+                        <input type="hidden" name="formId" value="${formId}"/>
+                        <div class="col-sm-12 col-xs-12">
+                            <div class="layui-inline btn_group" style="width: calc(50% - 120px);margin: 0;margin-top: 10px;">
+                                <label class="layui-form-label"></label>
+                                <div class="layui-input-inline">
+                                    <button type="button" onclick="formsubmit()" class="layui-btn" lay-submit="" lay-filter="partyMemForm" style="padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;background-color: #FFAB33;border-radius: 4px;">
+                                        发布
+                                    </button>
+                                    <button type="button" onclick="formsubmitgraft()" class="layui-btn layui-btn-primary" style="background-color: transparent;color: #666;padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;border-radius: 4px;">
+                                        暂存
+                                    </button>
+                                    <button type="button" onclick="window.history.back();" class="layui-btn layui-btn-primary" style="background-color: transparent;color: #666;padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;border-radius: 4px;">
+                                        取消
+                                    </button>
+                                </div>
                             </div>
                         </div>
+        <%--                <input class="btn btn-default" id="button2" type="button" value="取消" onclick="formsubmitgraft();"/>--%>
+        <%--                <input class="btn btn_main" id="button1" type="button" value="发布" onclick="formsubmit();"/>--%>
                     </div>
-    <%--                <input class="btn btn-default" id="button2" type="button" value="取消" onclick="formsubmitgraft();"/>--%>
-    <%--                <input class="btn btn_main" id="button1" type="button" value="发布" onclick="formsubmit();"/>--%>
-                </div>
-            </form>
-        </div>
-        </div>
+                </form>
+            </div>
+            </div>
     </div>
 </div>
 <!--   <a href="javascript:;" data-toggle="modal" data-target="#commonStaff">常用人员</a> -->
@@ -539,30 +545,59 @@
     <portlet:resourceURL id="/hg/getBranchAllPersons" var="getBranchAllPersons"/>
     <portlet:resourceURL id="/hg/deletePerson" var="deletePerson"/>
     <script type="text/javascript">
-        function getPlace() {
+        function addPlace() {
+            var campus = $('[name="campus"]').val();
+            var place = $('.dropdown-mul-2').eq(0).data('dropdown').$el.find('.valid').val();
+            if(!campus){
+                layuiModal.alert("请先选择校区");
+            }else{
+                layuiModal.confirm("确定要新增名为“" + place.trim() + "”的地点吗？", function () {
+                    $.post("${addPlace}", {place: place, campus: campus}, function (res) {
+                        if(res.result){
+                            getPlace(res.data.id);
+                        }
+                    })
+                })
+            }
+        }
+        function getPlace(placeId) {
+            var campus = $('[name="campus"]').val();
+            if (!campus){
+                layuiModal.alert("请先选择校区");
+            }
             $.ajax({
-                url: '${getPlace}',
+                url: '${places}',
                 type: 'POST',
-                data: {start: $('input[name="timeDuring"]').val(), last: $('[name="timeLasts"]').val()},
+                data: {campus: campus},
                 dataType: 'json',
                 async: false,
-                success: function (data) {
-                    console.log(data);
-                    var opts = "";
-                    opts += '<option value="" selected="selected">请选择</option>';
-                    for (var i = 0; i < data.length; i++) {
-                        var c = data[i];
-                        if ($(document).data("place") && $(document).data("place") == c.place) {
-                            opts += '<option selected="selected" value="' + c.place + '">' + c.place + '</option>';
-                        } else if (c.selected == true && c.place !== '其他') {
-                            opts += '<option class="already_select" value="' + c.place + '" style="color: red;">' + c.place + '(已被占用)</option>';
-                        } else {
-                            opts += '<option value="' + c.place + '">' + c.place + '</option>';
+                success: function (res) {
+                    if(res.result) {
+                        var place = [];
+                        for(var i in res.data){
+                            place.push({
+                                id: res.data[i].id,
+                                disabled: false,
+                                name: res.data[i].place,
+                                selected: false
+                            });
                         }
+                        $('.dropdown-mul-2').eq(0).data('dropdown').reset();
+                        $('.dropdown-mul-2').eq(0).data('dropdown').changeStatus();
+                        if(place.length === 0){
+                            place.push({
+                                name: "没有数据",
+                                disabled: true
+                            });
+                        }
+                        $('.dropdown-mul-2').eq(0).data('dropdown').update(place, true);
+                        placeId && $('.dropdown-mul-2').eq(0).data('dropdown').choose(placeId);
+
+                    }else{
+                        layuiModal.alert('获取地点失败');
                     }
-                    $("select[name='location']").html(opts);
                 },
-                error: function (returndata) {
+                error: function () {
                     alert("获取数据为空");
                 }
             });
@@ -669,44 +704,41 @@
                     // });
                 }
             });
-
-
-            /*    $("#hg-form-container").find(".col-sm-6.col-xs-12").eq(0).find(".col-sm-2.col-xs-3.control-label").css("font-size","12px"); */
-
-            $('input[name="timeDuring"], [name="timeLasts"]').change(getPlace);
             /*开展地点弹框  */
-            $("select[name='location']").change(function () {
-                var place = $("select[name='location']").val();
-                $(".already_select").each(function () {
-                    if ($(this).attr("value") === place) {
-                        layuiModal.alert("该地点已经被占用了");
 
-                        // $.hgConfirm("提示", "该地点已经被占用了");
-                        // $("#hg_confirm").modal("show");
-                        // $("#hg_confirm .btn_main").click(function () {
-                        //     $("#hg_confirm").modal("hide");
-                        //     return;
-                        // });
-                    }
-                });
-            });
-            var candidates = [];
             $('.dropdown-mul-2').eq(0).dropdown({
+                data : [ {
+                    name : '没有数据',
+                    disabled : true
+                } ],
+                searchNoData : '<li style="color:#ddd">查无数据' +
+                    '<button style="margin-left: 20px;padding: 0 10px;color: black;" type="button" onclick="addPlace()">新增地点</button></li>',
+                limitCount: 1,
+                choice : function() {
+
+                }
+            });
+            $('[name="campus"]').change(getPlace);
+
+            var candidates = [];
+            $('.dropdown-mul-2').eq(1).dropdown({
                 data : [ {
                     name : '没有数据',
                     disabled : true
                 } ],
                 input : '<input type="text" maxLength="20" placeholder="请输入搜索">',
                 limitCount: 1,
+                searchNoData : '<li style="color:#ddd">查无数据</li>',
                 choice : function() {
 
                 }
             });
-            $('.dropdown-mul-2').eq(1).dropdown({
+            $('.dropdown-mul-2').eq(2).dropdown({
                 data : [ {
                     name : '没有数据',
                     disabled : true
                 } ],
+                searchNoData : '<li style="color:#ddd">查无数据</li>',
                 input : '<input type="text" maxLength="20" placeholder="请输入搜索">',
                 limitCount: 1,
                 choice : function() {
@@ -761,10 +793,10 @@
                                 disabled : true
                             } ];
                         }
-                        $('.dropdown-mul-2').eq(0).data('dropdown').changeStatus();
                         $('.dropdown-mul-2').eq(1).data('dropdown').changeStatus();
-                        $('.dropdown-mul-2').eq(0).data('dropdown').update(c2,true);
-                        $('.dropdown-mul-2').eq(1).data('dropdown').update(candidates,true);
+                        $('.dropdown-mul-2').eq(2).data('dropdown').changeStatus();
+                        $('.dropdown-mul-2').eq(1).data('dropdown').update(c2,true);
+                        $('.dropdown-mul-2').eq(2).data('dropdown').update(candidates,true);
                     }
                 });
             }
@@ -776,22 +808,12 @@
                 console.log(data);
                 var j = JSON.parse(data);
                 console.log(j);
-                //  $("select[name='secondaryCommittee']").prepend('<option selected="selected" value="'+j.sconedId+'">'+j.sconedName+'</option>');
                 for (var i in j) {
                     $("select[name='conferenceType']").prepend('<option  value="' + j[i].resources_value + '">' + j[i].resources_value + '</option>');
                 }
                 $("select[name='branch']").prepend('<option  value="${org.org_id}">${org.org_name}</option>');
                 $("select[name='branch']").val('${org.org_id}');
                 $("select[name='branch']").attr("disabled", "disabled");
-                // $("select[name='conferenceType']").attr("disabled","disabled");
-                //   $("select[name='conferenceType']").val(j.meetingType);
-                // $("select[name='subject']").prepend('<option value="'+j.meetingTheme+'">'+j.meetingTheme+'</option>');
-                // $("select[name='subject']").attr("disabled","disabled");
-                //  $("select[name='subject']").val(j.meetingTheme);
-                $("#infrom_id").val(j.infromid);
-                $("#newAndOld").val(j.state);
-                $(document).data("start_time", j.start_time);
-                $(document).data("end_time", j.end_time);
             }
             if ($(".mapOld").val()) {
                 console.log("ok");
@@ -875,7 +897,6 @@
                 $(document).data("organization_id", j.organization_id);
             }
             /* 获取开展地点 */
-            getPlace();
             var div = '<div class="col-sm-6 col-xs-12"> ' +
                 '<div class="col-sm-3 col-xs-3" >' +
                 '<span class="control-label form-label-required">参会人员：</span> ' +
@@ -1002,7 +1023,16 @@
                $.tip("取消成功！");
             }); */
             // window.location.href="/backlogtwo";
-            window.history.back();
+            layuiModal.confirm("确定暂存吗？", function () {
+                // $(this).attr("disabled", true);
+                // $("#hg_confirm").modal("hide");
+                $("select[name='branch'],select[name='conferenceType'],select[name='subject'],select[name='participate']").removeAttr("disabled", "disabled");
+                $('#graft').val("true");
+                $('#submitFrom').click();
+                // if (window.location.pathname == _pathName) {
+                //     $("#hg_confirm .btn_main").attr("disabled", false);
+                // }
+            });
         }
 
         var _pathName = window.location.pathname;

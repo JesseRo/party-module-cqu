@@ -60,7 +60,10 @@ public class PartyMeetingPlanInfo {
 			e.printStackTrace();
 		}
 	}
-	//根据登录人id查询会议id
+	public void save(MeetingPlan meetingPlan) {
+		partyMeetingPlanInfo.saveOrUpdate(meetingPlan);
+	}
+		//根据登录人id查询会议id
 	public List<MeetingPlan> meeting_id(String userId){
 		return partyMeetingPlanInfo.meeting_id(userId);
 	}

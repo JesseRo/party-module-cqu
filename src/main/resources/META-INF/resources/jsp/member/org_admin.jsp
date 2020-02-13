@@ -172,10 +172,6 @@
 	.main_content .min_width_1200 .nav_list .party_organization_list>li {
 		overflow: hidden;
 	}
-	.main_content .min_width_1200 .nav_list .party_organization_list li {
-		cursor: pointer;
-		height: 27px;
-	}
 	.main_content .min_width_1200 .nav_list .party_organization_list li .dropdown_icon
 		{
 		width: 9px;
@@ -348,11 +344,17 @@ button#add_submit {
             // }, 0);
 
 		}
-
+        var orgTypes = {
+		    "branch": "党支部",
+            "secondary": "党总支",
+            "organization": "党委"
+		}
 		function orgDetail(){
+
 		    $.post('${detail}', {id:$('#title').next().val()}, function (res) {
                 if(res.result){
                     $('input[name="orgName"]').val(res.data.org_name);
+                    $('input[name="orgType"]').val(orgTypes[res.data.org_type]);
                     $('input[name="address"]').val(res.data.org_address);
                     $('input[name="contactNumber"]').val(res.data.org_phone_number);
                     $('input[name="fax"]').val(res.data.org_fax);
@@ -782,8 +784,11 @@ button#add_submit {
                         <input type="hidden">
                     </div>
                     <div class="table_content" id="op_buttons">
+
                         <div class="btn_group table_btns" >
-                            <button id="org_add" class="btn btn-default">添加组织</button>
+                            <c:if test="${root.org_type != 'branch'}">
+                                <button id="org_add" class="btn btn-default">添加组织</button>
+                            </c:if>
                             <button id="org_edit" class="btn btn-default">编辑组织</button>
                             <button id="org_delete" class="btn btn-default">删除组织</button>
                         </div>
@@ -796,6 +801,12 @@ button#add_submit {
                                     <label class="layui-form-label">党组织名称：</label>
                                     <div class="layui-input-inline">
                                         <input type="text" name="orgName" maxlength="20" lay-verify="required" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-inline" style="border-top: 1px solid #CCC;">
+                                    <label class="layui-form-label">党组织类型：</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="orgType" maxlength="20" disabled autocomplete="off" class="layui-input">
                                     </div>
                                 </div>
                                 <div class="layui-inline" style="border-top: 1px solid #CCC;">

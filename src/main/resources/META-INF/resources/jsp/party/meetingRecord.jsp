@@ -285,25 +285,25 @@ $(function(){
 		<%--	                            <td data-label="联系人电话">${info.contact_phone }</td>--%>
 										<td data-label="任务状态">
 											<c:if test="${info.plan_state == '1'}">
-												 已提交
+												已提交
 											</c:if>
 											<c:if test="${info.plan_state == '2'}">
-												 已撤回
+												已撤回
 											</c:if>
 											<c:if test="${info.plan_state == '3'}">
 												被驳回
 											</c:if>
 											<c:if test="${info.plan_state == '4'}">
-												 已通过
+												已通过
 											</c:if>
 											<c:if test="${info.plan_state == '5'}">
-												 已指派
+												已指派
 											</c:if>
 											<c:if test="${info.plan_state == '6'}">
-												 未检查
+												未检查
 											</c:if>
 											<c:if test="${info.plan_state == '7'}">
-												 已检查
+												已检查
 											</c:if>
 										</td>
 		<%--	                            <td data-label="审核人">${info.auditor }</td>--%>

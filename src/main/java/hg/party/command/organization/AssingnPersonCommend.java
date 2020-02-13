@@ -87,7 +87,8 @@ public class AssingnPersonCommend implements MVCResourceCommand{
 	    List<Map<String , Object>> list2 =partyMemberServer.findSecondOrgNameById(Integer.parseInt(id));
 	    String orgName=StringUtils.isEmpty(list.get(0)) ? "":list.get(0).get("org_name").toString();
 	    String seconedOrgName=StringUtils.isEmpty(list2.get(0)) ? "":list2.get(0).get("org_name").toString();
-		if ("organization".equals(orgType)) {
+//		if ("organization".equals(orgType)) {
+		if (false) {
 	    	//  n = service.saveAttachment(sqlOrg);
 	    	  n = service.orgAssign(assignId, Integer.parseInt(id));
 	    	  String sms = String.format("【西南大学】"

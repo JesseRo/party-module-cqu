@@ -38,6 +38,7 @@ import party.constants.PartyPortletKeys;
 				"javax.portlet.name=" + PartyPortletKeys.BrunchReportPortlet,
 				"javax.portlet.name=" + PartyPortletKeys.SecondaryTaskDraftPortlet,
 				"javax.portlet.name=" + PartyPortletKeys.SecondaryTaskPortlet,
+				"javax.portlet.name=" + PartyPortletKeys.LeaderMeetingStatistics,
 				"mvc.command.name=/PageNoMVCActionCommand"
 		},
 		service = MVCActionCommand.class

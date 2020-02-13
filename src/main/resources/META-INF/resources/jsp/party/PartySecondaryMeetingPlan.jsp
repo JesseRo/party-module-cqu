@@ -2,6 +2,8 @@
 <%@ include file="/init.jsp" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+<portlet:actionURL name="/PageNoMVCActionCommand" var="pageNoUrl">
+</portlet:actionURL>
 <script type="text/javascript" src="${basePath}/js/ajaxfileupload.js"></script>
 <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 <link rel="stylesheet" href="${ basePath}/css/assign.css" />
@@ -63,16 +65,15 @@
 				<div class="bg_white_container">
 
 				<div style="height:34px;margin-bottom:20px;">
-					<portlet:actionURL name="/OrgCheckSeconed" var="OrgCheckSeconed"></portlet:actionURL>
-					<form action="${OrgCheckSeconed }" id="OrgCheckSeconed_form" method="post">
+					<form action="${pageNoUrl }" id="OrgCheckSeconed_form" method="post">
 						<div class="publish_search_box operate_form_group" style="padding-left:0;">
 							<input type="hidden" name="informId" value="${informId }">
 							<input type="hidden" name="pageNo" value="${pageNo }">
-							<input type="hidden" name="totalPage" value="${totalPage }">
+							<input type="hidden" name="total_page_" value="${totalPage }">
 <%--							<input name="seconedName" type="text" value="${seconedName }" class="col-sm-10" placeholder="请输入搜索内容" style="text-indent:1em;height:34px;border: 1px solid #e1e1e1;border-right: none;float:left;background:#f7f7f7;"/>--%>
 <%--							<span onclick="submitOrgCheckSeconed_form();" style="background-image:url('/images/search_icon.png');background-repeat: no-repeat;background-position: center;background-color:#ce0000;display:inline-block;width:52px;height:34px;vertical-align: top;"></span>--%>
 							<div class="search_container " style="float: right;">
-								<input type="text" name="seconedName" value="${seconedName }" placeholder="搜索条件" autocomplete="off" class="layui-input custom_input">
+								<input type="text" name="search" value="${search }" placeholder="搜索条件" autocomplete="off" class="layui-input custom_input">
 								<button type="button" class="layui-btn custom_btn search_btn" onclick="submitOrgCheckSeconed_form();">查询</button>
 							</div>
 						</div>
@@ -92,7 +93,7 @@
 								<td>开展主题</td>
 	<%--                            <th>二级党组织主题</th>--%>
 								<td>开始时间</td>
-								<td>开展时长(分钟)</td>
+								<td>时长</td>
 								<td>操作</td>
 								<td>开展地点</td>
 	<%--                            <th>主持人</th>--%>
@@ -107,7 +108,7 @@
 	<%--                            <th>实到人数</th>--%>
 	<%--                            <th>请假人员</th>--%>
 	<%--                            <th>出勤率</th>--%>
-								<td>会议记录</td>
+<%--								<td>会议记录</td>--%>
 	<%--                            <th>评价得分</th>--%>
 	<%--                            <th>是否异常</th>--%>
 	<%--                            <th>备注</th>--%>
@@ -125,27 +126,31 @@
 											${c.org_namez }
 										</c:if>
 									</td>
-									<td data-label="开展主题">${c.meeting_theme_secondary }</td>
+									<td data-label="开展主题">
+										<a href="javascript:;" onclick="window.location.href='/approvaldetails?meetingId=${c.plan_id}&orgType=secondary'">
+												${c.meeting_theme }
+										</a>
+									</td>
 	<%--	                            <td data-label="二级党组织主题" style="min-width: 175px;">${c.meeting_theme_secondary }</td>--%>
 									<td data-label="开始时间">
 										<c:if test="${not empty c.start_p}">
 											<fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${c.start_p }" />
 										</c:if>
 									</td>
-									<td data-label="开展时长">${c.total_time }</td>
+									<td data-label="开展时长">${c.total_time/60 }</td>
 									<td data-label="操作">
-										<c:if test="${not empty c.plan_id && c.task_status_org=='6'}">
+										<c:if test="${not empty c.plan_id && c.task_status == '6'}">
 											<a class="td_assign_btn" href="javascript:;" style="color: #2E87FF">抽查</a>
 <%--										   	<button type="button" class="btn btn-default td_assign_btn" >抽查</button>--%>
 										   	<input class="assignAll" type="hidden" value="${c.plan_id }">
 										</c:if>
-										<c:if test="${not empty c.plan_id && c.task_status_org=='5'}">
+										<c:if test="${not empty c.plan_id && c.task_status == '5'}">
 											<a class="td_assign_btn" href="javascript:;" style="color: #2E87FF">修改抽查</a>
 <%--											<button type="button" class="btn btn-default td_assign_btn" >修改抽查</button>--%>
 										   	<input class="assignAll" type="hidden" value="${c.plan_id }">
 										</c:if>
 									</td>
-									<td data-label="开展地点">${c.place }</td>
+									<td data-label="开展地点">${c.campus} ${c.placeName }</td>
 	<%--	                            <td data-label="主持人">${c.host }</td>--%>
 	<%--	                            <td data-label="联系人">${c.contact }</td>--%>
 	<%--	                            <td data-label="联系人电话">${c.contact_phone }</td>--%>
@@ -193,16 +198,16 @@
 	<%--	                            <td data-label="实到人数">${c.actual_persons }</td>--%>
 	<%--	                            <td data-label="请假人员">${c.leave_persons }</td>--%>
 	<%--	                            <td data-label="出勤率">${c.attendance }</td>--%>
-									<td data-label="上传会议记录">
-										<c:if test="${not empty c.attachment_n}">
-											<a class="meetingAnnex">${c.check_status }
-												<input type="hidden" class="annexName" value="${c.attachment_n }" name="annexName"/>
-											</a>
-										</c:if>
-										<c:if test="${empty c.attachment_n}">
-											 ${c.check_status }
-										</c:if>
-									</td>
+<%--									<td data-label="上传会议记录">--%>
+<%--										<c:if test="${not empty c.attachment_n}">--%>
+<%--											<a class="meetingAnnex">${c.check_status }--%>
+<%--												<input type="hidden" class="annexName" value="${c.attachment_n }" name="annexName"/>--%>
+<%--											</a>--%>
+<%--										</c:if>--%>
+<%--										<c:if test="${empty c.attachment_n}">--%>
+<%--											 ${c.check_status }--%>
+<%--										</c:if>--%>
+<%--									</td>--%>
 	<%--	                            <td data-label="评价得分">--%>
 	<%--	                            	<a href="/gradedetail?meetingId=${c.meeting}&branchId=${c.org_id_u}">--%>
 	<%--	                            		${c.evaluation_score }--%>
@@ -221,13 +226,11 @@
 			        <div class="pageJump">
 			        	<input class='current_page' type="hidden" value="${pageNo}"/>
 			            <p>共<span class="total_page">${totalPage }</span>页</p>
-			            <portlet:actionURL name="/PageNoMVCActionCommand" var="pageNoUrl">
-						</portlet:actionURL>
 			            <form action="${pageNoUrl }" id="getPageNo" method="post">
 			                <input type="hidden" id="pageNo" name="pageNo" value=""/>
 			                <input type="hidden" id="total_page_" name="total_page_" value="${totalPage}"/>
 			                <input type="hidden" name="informId" value="${informId }"/>
-			                <input type="hidden" name="seconedName" value="${seconedName }"/>
+			                <input type="hidden" name="search" value="${search }"/>
 			                <span>跳转到第</span>
 			                <input type="text" id="jumpPageNo" name="jumpPageNo"/>
 			                <span>页</span>
@@ -336,7 +339,7 @@
                     <div class="modal-body">
                         <div class="assign_modal_container">
                             <div class="assign_modal">
-                                <div class="assign_member">
+                                <div class="assign_member" style="height: 250px;">
                                 <input type="hidden" class="hiddenValue">
                                 <input type="hidden" class="assignId">
                                 <input type="hidden" class="assign_name">
@@ -344,43 +347,42 @@
                                       
                                     </ul>
                                 </div>
-                                <div class="outof_assign_member">
-                                    <span><!-- 不可指派人员： --></span>
-                                    <ul class="outof_assign_list member_list outof_assign_list_append">
-                                             
-                                    </ul>
-                                </div>
+<%--                                <div class="outof_assign_member">--%>
+<%--                                    <span><!-- 不可指派人员： --></span>--%>
+<%--                                    <ul class="outof_assign_list member_list outof_assign_list_append">--%>
+<%--                                             --%>
+<%--                                    </ul>--%>
+<%--                                </div>--%>
                             </div>
-                            <div class="operation_container">
-                                <div class="inner_operation">
-                                    <button type="button" class="btn btn-sm btn-default add_member_btn">
-                                        <img src="${ basePath}/images/assign_icon.png"/>
-                                                                                                                     添加
-                                    </button>
-                                    <button type="button" class="btn btn-sm btn-default btn_delete">
-                                        <img src="${ basePath}/images/assign_icon.png"/>
-                                                                                                                      删除
-                                    </button>
-                                    <div class="form-horizontal add_memeber_form" role="form">
-                                        <div class="form-group">
-                                            <div class="col-sm-12">
-                                                <input type="text" class="form-control add_member_input" placeholder="请输入姓名进行添加">
-                                            </div>
-                                        </div>
-                                         <div class="addPersons">
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="col-sm-offset-2 col-sm-10 form_btn">
-                                                <button type="button" class="btn btn-sm btn-default form_hide_btn">取消</button>
-                                                <button type="button" class="btn btn-sm btn_main form_add_btn">确定</button>
-                                            </div>
-                                        </div>
-                                       
-                                    </div>
-                                </div>
-                            </div>
+<%--                            <div class="operation_container">--%>
+<%--                                <div class="inner_operation">--%>
+<%--                                    <button type="button" class="btn btn-sm btn-default add_member_btn">--%>
+<%--                                        <img src="${ basePath}/images/assign_icon.png"/>--%>
+<%--                                                                                                                     添加--%>
+<%--                                    </button>--%>
+<%--                                    <button type="button" class="btn btn-sm btn-default btn_delete">--%>
+<%--                                        <img src="${ basePath}/images/assign_icon.png"/>--%>
+<%--                                                                                                                      删除--%>
+<%--                                    </button>--%>
+<%--                                    <div class="form-horizontal add_memeber_form" role="form">--%>
+<%--                                        <div class="form-group">--%>
+<%--                                            <div class="col-sm-12">--%>
+<%--                                                <input type="text" class="form-control add_member_input" placeholder="请输入姓名进行添加">--%>
+<%--                                            </div>--%>
+<%--                                        </div>--%>
+<%--                                         <div class="addPersons">--%>
+<%--                                        </div>--%>
+<%--                                        <div class="form-group">--%>
+<%--                                            <div class="col-sm-offset-2 col-sm-10 form_btn">--%>
+<%--                                                <button type="button" class="btn btn-sm btn-default form_hide_btn">取消</button>--%>
+<%--                                                <button type="button" class="btn btn-sm btn_main form_add_btn">确定</button>--%>
+<%--                                            </div>--%>
+<%--                                        </div>--%>
+<%--                                       --%>
+<%--                                    </div>--%>
+<%--                                </div>--%>
+<%--                            </div>--%>
                         </div>
-
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
@@ -591,17 +593,12 @@
 				   success:function(result){
 					   console.log(result);
 					   for(var i=0;i<result.length;i++){
-						  /*  if(result[i].state=="0"){ */
-							       var li=$('<li class="_assgin_person">'+result[i].assigne_name+'</li>');
-							       $(".member_list_append").append(li);  
-							       li.data("id",result[i].assigne_user_id);
-		                		   li.data("name",result[i].assigne_name);
-		                		  
-		                		   console.log(li.data("id"));
-						/*    } */
-						  /*  if(result[i].state=="1"){
-							   $(".outof_assign_list_append").append('<li onclick="getDataa();">'+result[i].assigne_name+'</li>');    
-						   } */
+						   var name = result[i].member_name + ":" + result[i].org_name;
+						   var li=$('<li class="_assgin_person">'+ name + '</li>');
+						   $(".member_list_append").append(li);
+						   li.data("id",result[i].user_id);
+						   li.data("name", name);
+						   console.log(li.data("id"));
 					   }
 					   change_icon();
 				    }		   

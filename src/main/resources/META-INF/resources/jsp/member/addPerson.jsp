@@ -79,11 +79,19 @@
     <div class="activity_manage_page">
         <div class="breadcrumb_group" style="margin-bottom: 20px;">
             当前位置：
+            <c:if test="${portlet_name == 'party'}">
             <span class="layui-breadcrumb" lay-separator=">">
                         <a href="javascript:;">基础数据管理</a>
                         <a href="javascript:;" onclick="window.location.href='/partyusermanager'">党员信息管理</a>
                         <a href="javascript:;">党员个人信息</a>
                     </span>
+            </c:if>
+            <c:if test="${portlet_name == 'personal'}">
+            <span class="layui-breadcrumb" lay-separator=">">
+                        <a href="javascript:;">个人信息</a>
+            </span>
+            </c:if>
+
         </div>
         <div class="bg_white_container">
             <div class="content_form form_container">
@@ -463,7 +471,7 @@
         $('#province').change();
         $('#city').val("${info.member_city}");
         $('#city').change();
-        $('#unit').val('${info.unit}');
+        $('#unit').val('${info.member_unit}');
 
         function formsubmit() {
             var isContinue = true;

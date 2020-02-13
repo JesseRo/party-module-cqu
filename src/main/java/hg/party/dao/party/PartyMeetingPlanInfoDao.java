@@ -2,16 +2,20 @@ package hg.party.dao.party;
 
 
 import com.dt.springjdbc.dao.impl.PostgresqlDaoImpl;
+import com.dt.springjdbc.dao.impl.PostgresqlQueryResult;
 import hg.party.entity.party.MeetingPlan;
 import org.apache.log4j.Logger;
 import org.osgi.service.component.annotations.Component;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.util.StringUtils;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.sql.Array;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.*;
 
 /**
  * 文件名称： party<br>
@@ -28,6 +32,126 @@ public class PartyMeetingPlanInfoDao extends PostgresqlDaoImpl<MeetingPlan> {
                 "WHERE meeting_id= ? ";
         RowMapper<MeetingPlan> rowMapper = BeanPropertyRowMapper.newInstance(MeetingPlan.class);
         return this.jdbcTemplate.query(sql, rowMapper, meetingid);
+    }
+
+    public Map<String, Object> meetingDetail(String meetingId) {
+        String sql = "SELECT plan.*, m.member_name as contactName, p.place as placeName, host.member_name as hostName " +
+                "FROM hg_party_meeting_plan_info plan " +
+                "left join hg_party_member m on plan.contact = m.member_identity and m.historic = false " +
+                "left join hg_party_place p on p.id = plan.place " +
+                "left join hg_party_member host on host.member_identity = plan.host and m.historic = false " +
+                "WHERE meeting_id= ? ";
+        return this.jdbcTemplate.queryForMap(sql, meetingId);
+    }
+
+    public PostgresqlQueryResult<Map<String, Object>> leaderMeetingPage(int page, int size,
+                                                                        String secondId, String brunchId, String startTime, String endTime, String leader) {
+        page = Math.max(page, 0);
+        size = size <= 0 ? 10 : size;
+        List<Object> params = new ArrayList<>();
+        String sql = "SELECT\n" +
+                "\tplan.meeting_type,\n" +
+                "\tplan.meeting_theme ,\n" +
+                "\torg.org_name as org_name,\n" +
+                "\tconcat ( place.campus, place.place ) as place,\n" +
+                "\tplan.start_time ,\n" +
+                "\tplan.end_time,\n" +
+                "\tplan.total_time,\n" +
+                "\thost.member_name as host,\n" +
+                "\tcontact.member_name as contact,\n" +
+                "\tplan.contact_phone,\n" +
+                "\tchecker.member_name as checker,\n" +
+                "\tplan.check_status,\n" +
+                "\tleader.member_name as leader_name\n" +
+                "\tfrom\n" +
+                "\thg_party_meeting_member_info participant \n" +
+                "\tleft join hg_party_meeting_plan_info plan on plan.meeting_id = participant.meeting_id\n" +
+                "\tLEFT JOIN hg_party_meeting_notes_info note ON plan.meeting_id = note.meeting_id\n" +
+                "\tLEFT JOIN hg_party_org org ON plan.organization_id = org.org_id\n" +
+                "\tLEFT JOIN hg_party_member contact ON plan.contact = contact.member_identity\n" +
+                "\tLEFT JOIN hg_party_member HOST ON plan.HOST = HOST.member_identity\n" +
+                "\tLEFT JOIN hg_party_member checker ON plan.HOST = checker.member_identity\n" +
+                "\tLEFT JOIN hg_party_member leader ON participant.participant_id = leader.member_identity\n" +
+                "\tLEFT JOIN hg_party_place place ON place.\"id\" = plan.place\n" +
+                "\twhere leader.member_is_leader = '是' ";
+        if (!StringUtils.isEmpty(brunchId)){
+            sql += "and org.org_id = ? ";
+            params.add(brunchId);
+        }else if (!StringUtils.isEmpty(secondId)){
+            sql += "and org.org_parent = ? ";
+            params.add(secondId);
+        }
+        if (!StringUtils.isEmpty(startTime)){
+            sql += "and plan.end_time > ? ";
+            Timestamp start = Timestamp.valueOf(LocalDate.parse(startTime).atStartOfDay());
+            params.add(start);
+        }
+        if (!StringUtils.isEmpty(endTime)){
+            sql += "and plan.start_time < ? ";
+            Timestamp end = Timestamp.valueOf(LocalDate.parse(endTime).atStartOfDay());
+            params.add(end);
+        }
+        if (!StringUtils.isEmpty(leader)){
+            sql += "and leader.member_name = ? ";
+            params.add(leader);
+        }
+        sql += "order by plan.id asc ";
+        return postGresqlFindBySql(page, size, sql, params.toArray(new Object[0]));
+    }
+
+
+    public List<Map<String, Object>> leaderMeeting(String secondId, String brunchId, String startTime, String endTime, String leader) {
+        List<Object> params = new ArrayList<>();
+        String sql = "SELECT\n" +
+                "\tplan.meeting_type,\n" +
+                "\tplan.meeting_theme ,\n" +
+                "\torg.org_name as org_name,\n" +
+                "\tconcat ( place.campus, place.place ) as place,\n" +
+                "\tplan.start_time ,\n" +
+                "\tplan.end_time,\n" +
+                "\tplan.total_time,\n" +
+                "\thost.member_name as host,\n" +
+                "\tcontact.member_name as contact,\n" +
+                "\tplan.contact_phone,\n" +
+                "\tchecker.member_name as checker,\n" +
+                "\tplan.check_status,\n" +
+                "\tleader.member_name as leader_name,\n" +
+                "\tplan.auditor,\n" +
+                "\tplan.submit_time\n" +
+                "\tfrom\n" +
+                "\thg_party_meeting_member_info participant \n" +
+                "\tleft join hg_party_meeting_plan_info plan on plan.meeting_id = participant.meeting_id\n" +
+                "\tLEFT JOIN hg_party_meeting_notes_info note ON plan.meeting_id = note.meeting_id\n" +
+                "\tLEFT JOIN hg_party_org org ON plan.organization_id = org.org_id\n" +
+                "\tLEFT JOIN hg_party_member contact ON plan.contact = contact.member_identity\n" +
+                "\tLEFT JOIN hg_party_member HOST ON plan.HOST = HOST.member_identity\n" +
+                "\tLEFT JOIN hg_party_member checker ON plan.HOST = checker.member_identity\n" +
+                "\tLEFT JOIN hg_party_member leader ON participant.participant_id = leader.member_identity\n" +
+                "\tLEFT JOIN hg_party_place place ON place.\"id\" = plan.place\n" +
+                "\twhere leader.member_is_leader = '是' ";
+        if (!StringUtils.isEmpty(brunchId)){
+            sql += "and org.org_id = ? ";
+            params.add(brunchId);
+        }else if (!StringUtils.isEmpty(secondId)){
+            sql += "and org.org_parent = ? ";
+            params.add(secondId);
+        }
+        if (startTime != null){
+            sql += "and plan.end_time > ? ";
+            Timestamp start = Timestamp.valueOf(LocalDate.parse(startTime).atStartOfDay());
+            params.add(start);
+        }
+        if (endTime != null){
+            sql += "and plan.start_time < ? ";
+            Timestamp end = Timestamp.valueOf(LocalDate.parse(endTime).atStartOfDay());
+            params.add(end);
+        }
+        if (!StringUtils.isEmpty(leader)){
+            sql += "and leader.member_name = ? ";
+            params.add(leader);
+        }
+        sql += "order by plan.id asc ";
+        return jdbcTemplate.queryForList(sql, params.toArray(new Object[0]));
     }
 
     //上传心得编辑
@@ -457,6 +581,7 @@ public class PartyMeetingPlanInfoDao extends PostgresqlDaoImpl<MeetingPlan> {
     }
 
     public Map<String, Object> postGresqlFind(int pageNo, int pageSize, String sql, String... ss) {
+        pageNo = Math.max(1, pageNo);
         String sql1 = sql + " limit " + pageSize + " offset " + (pageNo - 1) * pageSize;
         Map<String, Object> map = new HashMap<>();
         List<Map<String, Object>> list = this.jdbcTemplate.queryForList(sql1, ss);
@@ -472,39 +597,39 @@ public class PartyMeetingPlanInfoDao extends PostgresqlDaoImpl<MeetingPlan> {
         return map;
     }
 
-    public Map<String, Object> postGresqlFind(int pageNo, int pageSize, String sql, String department) {
-        String sql1 = sql + " limit " + pageSize + " offset " + (pageNo - 1) * pageSize;
-        Map<String, Object> map = new HashMap<>();
-        List<Map<String, Object>> list = this.jdbcTemplate.queryForList(sql1, department);
-        List<Map<String, Object>> count = this.jdbcTemplate.queryForList(sql, department);
-        int total = count.size();
-        if (total % pageSize == 0) {
-            map.put("totalPage", total / pageSize);
-        } else {
-            map.put("totalPage", total / pageSize + 1);
-        }
-        map.put("pageNow", pageNo);
-        map.put("list", list);
-        return map;
-    }
-
-    public Map<String, Object> postGresqlFind(int pageNo, int pageSize, String sql) {
-		if (pageNo <= 0){
-			pageNo = 1;
-		}
-        String sql1 = sql + " limit " + pageSize + " offset " + (pageNo - 1) * pageSize;
-        Map<String, Object> map = new HashMap<>();
-        List<Map<String, Object>> list = this.jdbcTemplate.queryForList(sql1);
-        List<Map<String, Object>> count = this.jdbcTemplate.queryForList(sql);
-        int total = count.size();
-        if (total % pageSize == 0) {
-            map.put("totalPage", total / pageSize);
-        } else {
-            map.put("totalPage", total / pageSize + 1);
-        }
-        map.put("pageNow", pageNo);
-        map.put("list", list);
-        return map;
-    }
+//    public Map<String, Object> postGresqlFind(int pageNo, int pageSize, String sql, String department) {
+//        String sql1 = sql + " limit " + pageSize + " offset " + (pageNo - 1) * pageSize;
+//        Map<String, Object> map = new HashMap<>();
+//        List<Map<String, Object>> list = this.jdbcTemplate.queryForList(sql1, department);
+//        List<Map<String, Object>> count = this.jdbcTemplate.queryForList(sql, department);
+//        int total = count.size();
+//        if (total % pageSize == 0) {
+//            map.put("totalPage", total / pageSize);
+//        } else {
+//            map.put("totalPage", total / pageSize + 1);
+//        }
+//        map.put("pageNow", pageNo);
+//        map.put("list", list);
+//        return map;
+//    }
+//
+//    public Map<String, Object> postGresqlFind(int pageNo, int pageSize, String sql) {
+//		if (pageNo <= 0){
+//			pageNo = 1;
+//		}
+//        String sql1 = sql + " limit " + pageSize + " offset " + (pageNo - 1) * pageSize;
+//        Map<String, Object> map = new HashMap<>();
+//        List<Map<String, Object>> list = this.jdbcTemplate.queryForList(sql1);
+//        List<Map<String, Object>> count = this.jdbcTemplate.queryForList(sql);
+//        int total = count.size();
+//        if (total % pageSize == 0) {
+//            map.put("totalPage", total / pageSize);
+//        } else {
+//            map.put("totalPage", total / pageSize + 1);
+//        }
+//        map.put("pageNow", pageNo);
+//        map.put("list", list);
+//        return map;
+//    }
 
 }

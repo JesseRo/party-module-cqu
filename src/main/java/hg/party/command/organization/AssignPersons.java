@@ -9,8 +9,12 @@ import java.util.stream.Collectors;
 import javax.portlet.PortletException;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
+
+import hg.party.dao.secondCommittee.MeetingPlanDao;
+import hg.party.entity.party.MeetingPlan;
 import org.apache.log4j.Logger;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.springframework.util.StringUtils;
 
 import com.alibaba.fastjson.JSON;
@@ -20,6 +24,8 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import dt.session.SessionManager;
 import hg.party.server.organization.AssignedPersonService;
 import party.constants.PartyPortletKeys;
+import party.portlet.cqu.dao.CheckPersonDao;
+import party.portlet.cqu.entity.CheckPerson;
 
 @Component(
 		immediate = true,
@@ -38,7 +44,13 @@ import party.constants.PartyPortletKeys;
  */
 public class AssignPersons implements MVCResourceCommand{
 	Logger logger=Logger.getLogger(AssignPersons.class);
-	AssignedPersonService service=new AssignedPersonService();
+
+	@Reference
+	private CheckPersonDao checkPersonDao;
+
+	@Reference
+	private MeetingPlanDao meetingPlanDao;
+
 	@Override
 	public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 			throws PortletException {
@@ -50,11 +62,9 @@ public class AssignPersons implements MVCResourceCommand{
 		String orgType=(String)SessionManager.getAttribute(resourceRequest.getRequestedSessionId(), "orgType");
 			try {
 				printWriter=resourceResponse.getWriter();
-				//printWriter.write(JSON.toJSONString(service.findAssignPerson()));
-				List<Map<String, Object>> list=service.getAssignPerson(id, orgType, orgId);
-                         list=list.stream().filter(p ->(p.get("department_name")+"").equals(orgId)
-		                 ||StringUtils.isEmpty(p.get("department_name"))).collect(Collectors.toList());
-				logger.info("获取指派人员command  list  value  "+list);
+				MeetingPlan meetingPlan = meetingPlanDao.getEntityById(Integer.valueOf(id));
+
+				List<Map<String, Object>> list = checkPersonDao.getCampusPerson(meetingPlan.getCampus());
 				printWriter.write(JSON.toJSONString(list));
 			} catch (Exception e) {
 			e.printStackTrace();

@@ -161,19 +161,38 @@ public class PartyPortletKeys {
 	public static final String BranchMeetingRecordPortlet = "BranchMeetingRecordPortlet";
 	
 	public static final String UserMeetingCount = "UserMeetingCount";
-	
+
 	public static final String PersonAddPortlet = "PersonAddPortlet";
+
+	public static final String PersonalInfoPortlet = "PersonalInfoPortlet";
+
+	public static final String PersonalMeetingPortlet = "PersonalMeetingPortlet";
 
     public static final String Log = "SystemLogPortlet";
 
 	public static final String MemberEditPortlet = "MemberEditPortlet";
 
 	public static final String UnitNewPortlet = "UnitNewPortlet";
+
 	public static final String UnitPortlet = "UnitPortlet";
+
     public static final String AttendEcharts = "AttendEcharts";
+
 	public static final String PlanEcharts = "PlanEcharts";
+
+	public static final String SecondaryEcharts = "SecondaryEcharts";
+
 	public static final String BrunchEcharts = "BrunchEcharts";
+
 	public static final String ChangePasswordPortlet = "ChangePasswordPortlet";
+
+    public static final String CheckPerson = "CheckPerson";
+
+    public static final String ToCheckPortlet = "ToCheckPortlet";
+
+    public static final String MeetingNotePortlet = "MeetingNotePortlet";
+
+	public static final String LeaderMeetingStatistics = "LeaderMeetingStatistics";
 }
 
 

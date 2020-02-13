@@ -7,6 +7,8 @@ import javax.portlet.Portlet;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
+
+import hg.util.ConstantsKey;
 import org.apache.log4j.Logger;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -71,35 +73,8 @@ public class ToDoPortlet extends MVCPortlet {
 		try {
 			String sessionId=request.getRequestedSessionId();
 			String orgId = SessionManager.getAttribute(sessionId, "department").toString();
-			
-			String informId = ParamUtil.getString(request, "informId");
-			informId = HtmlUtil.escape(informId);
-			String meetingType = ParamUtil.getString(request, "meetingType");
-			meetingType = HtmlUtil.escape(meetingType);
-			String taskStatus = ParamUtil.getString(request, "taskStatus");
-			taskStatus = HtmlUtil.escape(taskStatus);
-			
-			if(!StringUtils.isEmpty(informId) && !StringUtils.isEmpty(orgId) ){
-				String informStatus = (String) secondCommitteeService.queryInformByInformorgId(informId, orgId).get(0).get("read_status");
-				logger.info("informStatus   is " + informStatus );
-				
-				if( "未读".equals( informStatus )){
-					String nextStatus ="已查看";
-					secondCommitteeService.updateInformStatus(informId, orgId, nextStatus);
-				}
-			}
-			
-			List<Map<String, Object>> meetingTypeList = secondCommitteeService.queryAllMeetingTypes("meetingType");
-			List<Map<String, Object>> taskStatusList = secondCommitteeService.queryAllTaskStatus(4);
-			logger.info("meetingTypeList is  " + meetingTypeList );
-			logger.info("taskStatusList is  " + taskStatusList );
-			Map<String, Object> taskStatuses = new HashMap<>();
-			for(Map<String, Object> status: taskStatusList){
-				taskStatuses.put((String)status.get("resources_key"), status.get("resources_value"));
-			}
-			String type = ParamUtil.getString(request, "mettingType");
-			String status = ParamUtil.getString(request, "taskstatus");
-			
+
+			String search = ParamUtil.getString(request, "search");
 			int pageNo = ParamUtil.getInteger(request, "pageNo");
 			int totalPage = ParamUtil.getInteger(request, "total_page_");//总页码
 			if(pageNo <= 0){
@@ -108,24 +83,17 @@ public class ToDoPortlet extends MVCPortlet {
 				pageNo = totalPage;
 			}
 			
-			Map<String, Object>  informMeetingList = secondCommitteeService.queryInformMeetingsByOrgId(orgId, meetingType, taskStatus, pageNo);
+			Map<String, Object>  informMeetingList = secondCommitteeService.queryInformMeetingsByOrgId(orgId, search, pageNo);
 			logger.info("informMeetingList :" + informMeetingList);
-			request.setAttribute("type", type);
-			request.setAttribute("status", status);
-			request.setAttribute("orgId", orgId );
-			request.setAttribute("meetingTypeList", meetingTypeList);
-			request.setAttribute("taskStatusList", taskStatusList);
-			request.setAttribute("statusMap", taskStatuses);
-			request.setAttribute("meetingType", meetingType);
-			request.setAttribute("taskStatus", taskStatus);
+
+			request.setAttribute("search", search);
 			request.setAttribute("pageNo", informMeetingList.get("pageNow"));
 			request.setAttribute("pages", informMeetingList.get("totalPage"));
-//			request.setAttribute("informList", informList);
-//			request.setAttribute("meetingList", meetingList); 
+			request.setAttribute("meetingStates", ConstantsKey.MEETING_STATES);
 			request.setAttribute("informMeetingList", informMeetingList.get("list"));
 		
 		} catch (Exception e) {
-			logger.info(e.getMessage());
+			e.printStackTrace();
 		}
 		super.doView(request, response);
 	}

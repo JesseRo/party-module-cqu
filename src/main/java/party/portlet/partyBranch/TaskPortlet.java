@@ -58,7 +58,7 @@ public class TaskPortlet extends MVCPortlet{
 			List<Map<String, Object>> meetingTypeList = secondCommitteeService.queryAllMeetingTypes("meetingType");
 			List<Map<String, Object>> taskStatusList = secondCommitteeService.queryAllTaskStatus(4);
 			
-			Map<String, Object> listTsak1 = secondCommitteeService.queryInformMeetingsByOrgId(orgId, meetingType, taskStatus, pageNo);
+			Map<String, Object> listTsak1 = secondCommitteeService.queryInformMeetingsByOrgId(orgId, null, pageNo);
 			List<Map<String, Object>>  informMeetingList = (List<Map<String, Object>>) listTsak1.get("list");
 			
 			renderRequest.setAttribute("meetingTypeList", meetingTypeList);

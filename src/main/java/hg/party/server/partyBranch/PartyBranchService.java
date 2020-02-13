@@ -38,8 +38,8 @@ public class PartyBranchService {
         return dao.cancleMeetingPlan(cancleReson, infromid, orgId);
     }
 
-    public int deleteMeetingPlan(String infromid, String orgId) {
-        return dao.deleteMeetingPlan(infromid, orgId);
+    public int deleteMeetingPlan(String meetingId) {
+        return dao.deleteMeetingPlan(meetingId);
     }
 
     public List<Map<String, Object>> find(String sql) {

@@ -92,7 +92,7 @@ public class PartyApprovalPlanPortlet extends MVCPortlet{
 				"\tplan.meeting_id AS meeting,\n" +
 				"\tplan.start_time AS start_p,\n" +
 				"\tplan.end_time AS end_p,\n" +
-				"\tplan.task_status AS task_st,* \n" +
+				"\tplan.task_status AS task_st, member.member_name as contactName, * \n" +
 				"FROM\n" +
 				"\t(\n" +
 				"\t(\n" +
@@ -101,16 +101,17 @@ public class PartyApprovalPlanPortlet extends MVCPortlet{
 				"\t)\n" +
 				"\tLEFT JOIN hg_party_org AS org ON org.org_id = plan.organization_id \n" +
 				"\t)\n" +
+				"left join hg_party_member member on member.member_identity = plan.contact and member.historic = false " +
 				"WHERE\n" +
-				"\torg.org_type = 'secondary' \n" +
-				"\tAND org.historic IS FALSE \n" +
+//				"\torg.org_type = 'secondary' and \n" +
+				"\torg.historic IS FALSE \n" +
 				"\tAND (\n" +
 				"\tplan.task_status = '1' \n" +
 				"\tOR plan.task_status = '3' \n" +
 				"\tOR plan.task_status = '4' \n" +
 				")\n" +
 				"ORDER BY\n" +
-				"\tplan.task_status asc";
+				"\tplan.task_status asc, plan.id desc";
 						
 		Map<String, Object> postgresqlResults = partyMeetingPlanInfo.postGresqlFind(pageNo, pageSize, sql);
 		list = (List<Map<String, Object>>) postgresqlResults.get("list");//获取集合

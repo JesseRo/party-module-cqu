@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -31,6 +32,16 @@ public class MemberDao extends PostgresqlDaoImpl<Member> {
     public List<Member> findMemberByUserId(String userId) {
         String sql = "select * from hg_party_member where historic is false and member_identity= ? ";
         return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Member.class),userId);
+    }
+
+    public List<Member> findMemberByUserId(List<String> userIds) {
+        if (userIds == null || userIds.isEmpty())
+        {
+            return Collections.emptyList();
+        }
+        String symbols = userIds.stream().map(p->"?").collect(Collectors.joining(","));
+        String sql = "select * from hg_party_member where historic is false and member_identity in (" + symbols + ") ";
+        return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Member.class), userIds.toArray(new Object[0]));
     }
 
     public Member findByUserId(String userId) {

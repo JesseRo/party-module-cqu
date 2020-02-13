@@ -273,22 +273,13 @@
 						<span>29999</span>个
 					</p>
 				</li>
-				<li>
-					<p class="title_group">
-						<img class="title_icon" src="../images/account-icon4.png"></span>
-						<span>组织生活总数</span>
-					</p>
-					<p class="total_num">
-						<span>29999</span>个
-					</p>
-				</li>
 			</ul>
 			<div class="attend_views_activity">
 				<div class="attend_views_group">
 					<div class="attend_rate_group">
 						<div class="operate_container">
 							<p>
-								活动出勤率统计图
+								党支部活动开展情况
 							</p>
 							<form class="layui-form custom_form" id="selectForm1">
 								<div class="layui-form-item">
@@ -310,35 +301,35 @@
 								</div>
 							</form>
 						</div>
-						<div class="attend_rate_container" id="attend_rate_container"></div>
+						<div class="attend_rate_container" id="brunch_meeting_container"></div>
 						<p class="desc_text"><a href="javascript:;" onclick="window.location.href='/attend_charts'">查看更多</a></p>
 					</div>
 					<div class="views_group">
 						<div class="text_container">
 							<p class="title">
-								系统访问量统计
-<%--								<img src="../images/charts-title2.png"/>--%>
+								党员性别分布情况
+								<%--								<img src="../images/charts-title2.png"/>--%>
 							</p>
 							<div class="sub_text_container">
 								<div class="sub_text current_view">
-									<p class="sub_title">今日访问量</p>
+									<p class="sub_title">男性党员</p>
 									<p class="sub_num">3888</p>
 								</div>
 								<div class="sub_text">
-									<p class="sub_title">总访问量</p>
-									<p class="sub_num">388866</p>
+									<p class="sub_title">女性党员</p>
+									<p class="sub_num">2222</p>
 								</div>
 							</div>
 						</div>
-						<div class="view_conteiner" id="view_conteiner"></div>
-						<p class="desc_text">同比昨日+7.9%</p>
+						<div class="view_conteiner" id="sex_container"></div>
+						<%--						<p class="desc_text">同比昨日+7.9%</p>--%>
 					</div>
 				</div>
 				<div class="activity_plan_group">
 					<div class="operate_container">
 						<p>
-<%--							<img src="${basePath}/cqu/images/charts-title3.png"/>--%>
-							活动计划上报统计图
+							<%--							<img src="${basePath}/cqu/images/charts-title3.png"/>--%>
+							组织生活类型分布情况
 						</p>
 						<form class="layui-form custom_form" id="selectForm2">
 							<div class="layui-form-item">
@@ -360,13 +351,7 @@
 							</div>
 						</form>
 					</div>
-					<div class="activity_plan_conteiner" id="activity_plan_conteiner">
-						<div id="activity_plan_conteiner1"></div>
-						<div id="activity_plan_conteiner2"></div>
-						<div id="activity_plan_conteiner3"></div>
-						<div id="activity_plan_conteiner4"></div>
-						<div id="activity_plan_conteiner5"></div>
-						<div id="activity_plan_conteiner6"></div>
+					<div class="activity_plan_conteiner" id="activity_conteiner">
 					</div>
 					<p class="desc_text"><a href="javascript:;" onclick="window.location.href='/plan_charts'">查看更多</a></p>
 				</div>
@@ -376,59 +361,6 @@
 
 
 		<script>
-			var menuData = [
-				{
-					title:'数据统计',
-					link:'',
-					icon:'../images/tree-icon1.png',
-					children:[
-						{
-							title:'数据汇总',
-							link:'./data-statistics/summary.html',
-						}
-					]
-				},
-				{
-					title:'组织生活管理',
-					link:'',
-					icon:'../images/tree-icon2.png',
-					children:[
-						{
-							title:'活动管理',
-							link:'./data-statistics/summary.html',
-						}
-					]
-				},
-				{
-					title:'组织关系转接',
-					icon:'../images/tree-icon3.png',
-					link:'',
-					children:[
-						{
-							title:'组织关系转出',
-							link:'./data-statistics/summary.html',
-						}
-					]
-				},
-				{
-					title:'数据报送',
-					icon:'../images/tree-icon4.png',
-					link:'',
-					children:[]
-				},
-				{
-					title:'基础数据管理',
-					icon:'../images/tree-icon5.png',
-					link:'',
-					children:[]
-				},
-				{
-					title:'系统管理',
-					icon:'../images/tree-icon6.png',
-					link:'',
-					children:[]
-				},
-			]
 			$(document).ready(function () {
 				renderAttendcharts();
 				renderViewCharts();
@@ -453,161 +385,198 @@
 			});
 			//渲染出勤率图表
 			function renderAttendcharts(){
-				var AttendChart = echarts.init(document.getElementById('attend_rate_container'));
+				var AttendChart = echarts.init(document.getElementById('brunch_meeting_container'));
 				var option = {
 					title: {
 						// text: '活动出勤率统计图',
 					},
 					tooltip: {
 						formatter: function(obj) {
-						return '<div class="attend_tooltip">' +
-                            '<p>' + obj.name + '</p>' +
-                            '<p>' + obj.seriesName + obj.data + '% </p>' +
-                        '</div>'
-					}
-				},
-						grid: {
-					left: 0,
-							right: '10%',
-							top:'15%',
-							bottom: '20%',
-							containLabel: true
-				},
-				xAxis: {
-					axisTick:{
-						show:true,
-					},
-					axisLabel: {
-						interval:0,
-								rotate:-40,
-								textStyle: {
-							color: '#666',
-									fontSize:12,
-						},
-					},
-					axisLine:{
-						lineStyle:{
-							color:'#f6f6f6',
-									width:6,   //这里是坐标轴的宽度,可以去掉
+							return '<div class="attend_tooltip">' +
+									'<p>' + obj.name + '</p>' +
+									'<p>' + obj.seriesName + obj.data + '% </p>' +
+									'</div>'
 						}
 					},
-					data: ["音乐学院委员会","物理科学与技术...","音乐学院委员会","物理科学与技术...","音乐学院委员会","物理科学与技术...","音乐学院委员会","物理科学与技术...","音乐学院委员会","物理科学与技术...","音乐学院委员会","物理科学与技术..."]
-				},
-				yAxis: {
-					show:false,
-					// axisLine:{       //y轴
-					//     show:false
-					// },
-					// axisTick:{       //y轴刻度线
-					//     show:false
-					// },
-					// splitLine: {     //网格线
-					//     show: false
-					// }
-				},
-				series: [{
-					name: '出勤率',
-					type: 'bar',
-					data: [5, 20, 36, 10, 10, 20,5, 20, 100, 10, 10, 20],
-					barWidth: 12,
-					itemStyle:{
-						marginBottom:6,
-						normal:{
-							barBorderRadius:[7, 7, 7, 7],
-							color:'#FFAB33',
+					grid: {
+						left: 0,
+						right: '10%',
+						top:'15%',
+						bottom: '20%',
+						containLabel: true
+					},
+					xAxis: {
+						axisTick:{
+							show:true,
 						},
-						emphasis:{
-							color:'#E74933'
+						axisLabel: {
+							interval:0,
+							rotate:-40,
+							textStyle: {
+								color: '#666',
+								fontSize:12,
+							},
+						},
+						axisLine:{
+							lineStyle:{
+								color:'#f6f6f6',
+								width:6,   //这里是坐标轴的宽度,可以去掉
+							}
+						},
+						data: ["音乐学院委员会","物理科学与技术...","音乐学院委员会","物理科学与技术...","音乐学院委员会","物理科学与技术...","音乐学院委员会","物理科学与技术...","音乐学院委员会","物理科学与技术...","音乐学院委员会","物理科学与技术..."]
+					},
+					yAxis: {
+						show:false,
+						// axisLine:{       //y轴
+						//     show:false
+						// },
+						// axisTick:{       //y轴刻度线
+						//     show:false
+						// },
+						// splitLine: {     //网格线
+						//     show: false
+						// }
+					},
+					series: [{
+						name: '出勤率',
+						type: 'bar',
+						data: [5, 20, 36, 10, 10, 20,5, 20, 100, 10, 10, 20],
+						barWidth: 12,
+						itemStyle:{
+							marginBottom:6,
+							normal:{
+								barBorderRadius:[7, 7, 7, 7],
+								color:'#FFAB33',
+							},
+							emphasis:{
+								color:'#E74933'
+							}
 						}
-					}
-				}]
-			};
+					}]
+				};
 				AttendChart.setOption(option);
 			}
 			//渲染访问量 图表
 			function renderViewCharts(){
-				var ViewChart = echarts.init(document.getElementById('view_conteiner'));
-				option = {
-					xAxis: {
-						show:false,
-						type: 'category',
-						data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-					},
-					yAxis: {
-						type: 'value',
-						show:false,
-					},
-					series: [{
-						data: [1820, 9232, 9301, 1934, 11290, 13130, 13820],
-						type: 'line',
-						smooth: true,
-						itemStyle: {
-							normal: {
-								color: new echarts.graphic.LinearGradient(0, 0, 0, 1,
-										[
-											{offset: 0, color: '#E74933'},
-											// {offset: 0.4, color: '#EB5BAB'},
-											// {offset: 0.6, color: '#A152DE'},
-											{offset: 1, color: '#FFAB33'}
-										]
-								)
-							}
+				var ViewChart = echarts.init(document.getElementById('sex_container'));
+				var option = {
+					tooltip: {
+						trigger: "item",
+						formatter: function formatter(obj) {
+							return '<div class="attend_tooltip">\n                            <p>'
+									.concat(obj.name, ":")
+									.concat(obj.percent, "%</p>\n                        </div>");
 						}
-					}]
+					},
+					legend: {
+						show: false
+					},
+					color: ["#FF523A", "#FFAA17"],
+					series: [
+						{
+							name: "支部党员组织关系转接情况",
+							type: "pie",
+							avoidLabelOverlap: false,
+							label: {
+								show: true,
+								position: "outside"
+							},
+							labelLine: {
+								normal: {
+									show: true
+								}
+							},
+							data: [
+								{
+									value: 220,
+									name: "女"
+								},
+								{
+									value: 312,
+									name: "男"
+								}
+							]
+						}
+					]
 				};
 				ViewChart.setOption(option);
 			}
 			//渲染计划上报 图表
 			function renderActivityCharts(){
-				var isLg = window.innerWidth > 1536;
-				var data = [10,20,20,20,40,60];
-				var colorList = ['#FF523A', '#FFAB33', '#E74933', '#FFD233', '#FF7633', '#FF7133'];
-				var titleList = ['国防生选拔培养办公室','国防生选拔培养办公','国防生选拔培养办','国防生选拔培养','国防生选拔培','国防生选拔'];
-				var option = {
-					title : {
-						text: '',
-						x:'center',
-						// y:'bottom',
-						bottom:isLg ? 0 : '-4%',
-						textStyle:{
-							fontSize:isLg ? 14 : 12,
-							fontWeight:'normal',
-							color:'#000',
+				var ViewChart = echarts.init(document.getElementById('activity_conteiner'));
+
+				option = {
+					tooltip: {
+						trigger: "item",
+						formatter: function formatter(obj) {
+							return '<div class="attend_tooltip">\n                            <p>'
+									.concat(obj.name, ":")
+									.concat(obj.percent, "%</p>\n                        </div>");
 						}
 					},
-					color:['#FF523A', '#E5E5E5'],
+					legend: {
+						show: false
+					},
+					// color: ["#FF523A", "#FFAA17"],
 					series: [
 						{
-							name:'',
-							type:'pie',
-							radius: ['50%', '70%'],
+							name: "党支部组织生活分布情况",
+							type: "pie",
+							avoidLabelOverlap: false,
 							label: {
+								show: true,
+								position: "outside"
+							},
+							labelLine: {
 								normal: {
-									show: true,
-									position:'center',
-									color:'#000',
-									fontSize:isLg ? 30 : 20
+									show: true
 								}
 							},
-							data:[
-								{value:33,name:'33%'},
-								{value:77}
+							data: [{
+								value: Math.round(Math.random() * 100),
+								name: "党员大会"
+							},
+								{
+									value: Math.round(Math.random() * 100),
+									name: "支委会"
+								},
+								{
+									value: Math.round(Math.random() * 100),
+									name: "党小组会"
+								},
+								{
+									value: Math.round(Math.random() * 100),
+									name: "党课"
+								},
+								{
+									value: Math.round(Math.random() * 100),
+									name: "民主评议党员"
+								},
+								{
+									value: Math.round(Math.random() * 100),
+									name: "组织生活会"
+								},
+								{
+									value: Math.round(Math.random() * 100),
+									name: "主题党日"
+								},
+								{
+									value: Math.round(Math.random() * 100),
+									name: "谈心谈话"
+								},
+								{
+									value: Math.round(Math.random() * 100),
+									name: "民主生活会"
+								},
+								{
+									value: Math.round(Math.random() * 100),
+									name: "党委中心组学习"
+								}
 							]
 						}
 					]
 				};
-				data.map(function(i, idx) {
-					var activityChart = echarts.init(document.getElementById("activity_plan_conteiner" + (idx + 1)));
-				var chartOpt = option;
-				var text = titleList[idx];
-				chartOpt.title.text = chartOpt.series[0].name = text;
-				chartOpt.series[0].data = [
-					{value: data[idx], name: data[idx] + '%'},
-					{value: 100 - data[idx]}
-				];
-				chartOpt.color[0] = colorList[idx];
-				activityChart.setOption(chartOpt);
-			})
+				ViewChart.setOption(option);
 			}
 		</script>
 

@@ -1,4 +1,4 @@
-package party.portlet.personalCenter;
+package party.portlet.personal;
 
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import dt.session.SessionManager;

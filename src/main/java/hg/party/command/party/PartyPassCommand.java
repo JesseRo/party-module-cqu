@@ -3,11 +3,14 @@ package hg.party.command.party;
 
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.Map;
 
 import javax.portlet.PortletException;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
+import hg.party.dao.secondCommittee.MeetingPlanDao;
+import hg.util.TransactionUtil;
 import org.apache.log4j.Logger;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -30,6 +33,7 @@ import party.constants.PartyPortletKeys;
 		property = {
 			"javax.portlet.name=" + PartyPortletKeys.PartyApprovalPlan,
 			"javax.portlet.name=" + PartyPortletKeys.PartyApprovalBranch,
+			"javax.portlet.name=" + PartyPortletKeys.PartyApproval,
 			"mvc.command.name=/PartyPassCommand"
 	    },
 	    service = MVCResourceCommand.class
@@ -37,32 +41,48 @@ import party.constants.PartyPortletKeys;
 public class PartyPassCommand implements MVCResourceCommand{
 	
 	Logger logger = Logger.getLogger(PartyPassCommand.class);
-	
+
 	@Reference
 	private PartyMeetingPlanInfo partyMeetingPlanInfo;
+	@Reference
+	private MeetingPlanDao meetingPlanDao;
+
+	@Reference
+	TransactionUtil transactionUtil;
 	
 	@Override
 	public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 			throws PortletException {
 		
-		String meeting_id = ParamUtil.getString(resourceRequest, "meeting_id");//会议id
-		meeting_id = HtmlUtil.escape(meeting_id);
+		String meetingId = ParamUtil.getString(resourceRequest, "meeting_id");//会议id
+		meetingId = HtmlUtil.escape(meetingId);
 		String sessionID=resourceRequest.getRequestedSessionId();
 		String user_id = (String)SessionManager.getAttribute(sessionID, "user_name");//登录用户
-		
-		if(!"".equals(meeting_id) && null != meeting_id){
-			List<MeetingPlan> meetingid = partyMeetingPlanInfo.meetingId(meeting_id);
-			MeetingPlan meeting = meetingid.get(0);
-			meeting.setTask_status("4");
-			meeting.setTask_status_org("6");
-			meeting.setAuditor(user_id);
-			partyMeetingPlanInfo.saveOrUpdate(meeting);
+		transactionUtil.startTransaction();
+		try {
+			if(!"".equals(meetingId) && null != meetingId){
+				List<MeetingPlan> meetings = partyMeetingPlanInfo.meetingId(meetingId);
+				MeetingPlan meeting = meetings.get(0);
+				meeting.setTask_status("6");
+				meeting.setTask_status_org("6");
+				meeting.setAuditor(user_id);
+
+				List<Map<String, Object>> participants = meetingPlanDao.queryPartys(meeting.getParticipant_group());
+				partyMeetingPlanInfo.save(meeting);
+				for (Map<String, Object> m : participants){
+					meetingPlanDao.informParty(meetingId, (String)m.get("participant_id"));
+				}
+			}
+			transactionUtil.commit();
+		}catch (Exception e){
+			e.printStackTrace();
+			transactionUtil.rollback();
 		}
-		
+
 		logger.info("通过");
 		try {
 			  PrintWriter printWriter=resourceResponse.getWriter();
-			  printWriter.write(JSON.toJSONString(meeting_id));
+			  printWriter.write(JSON.toJSONString(meetingId));
 		} catch (Exception e) {
 			// TODO: handle exception
 		}

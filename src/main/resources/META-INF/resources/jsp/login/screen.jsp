@@ -54,7 +54,7 @@
                     </div>
                 </div>
                 <div class="inspector_container">
-                    <p class="index_title">活动督察情况</p>
+                    <p class="index_title">组织生活分布情况</p>
                     <div id="inspectorChart" class="inspector_chart"></div>
                     <div class="echarts_legend"></div>
                     <div class="echarts_num"></div>

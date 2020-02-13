@@ -30,7 +30,8 @@ import party.constants.PartyPortletKeys;
 		property = {
 			"javax.portlet.name=" + PartyPortletKeys.PartyApprovalPlan,
 			"javax.portlet.name=" + PartyPortletKeys.PartyApprovalBranch,
-			"mvc.command.name=/PartyRejectedCommand"
+				"javax.portlet.name=" + PartyPortletKeys.PartyApproval,
+				"mvc.command.name=/PartyRejectedCommand"
 	    },
 	    service = MVCResourceCommand.class
 )

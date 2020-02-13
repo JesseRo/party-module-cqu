@@ -1,4 +1,4 @@
-package party.portlet.personalCenter;
+package party.portlet.personal.command;
 
 import com.google.gson.Gson;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCResourceCommand;

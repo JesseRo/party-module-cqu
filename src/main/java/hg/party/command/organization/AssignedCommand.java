@@ -32,7 +32,8 @@ import party.constants.PartyPortletKeys;
 			"javax.portlet.name="+ PartyPortletKeys.PartyMeetingPlan,
 			"javax.portlet.name=" + PartyPortletKeys.PartySecondaryBranch,
 			"javax.portlet.name=" + PartyPortletKeys.OrgCheckCountPortlet,
-			"javax.portlet.name=" + PartyPortletKeys.SecondMeetingRecordPortlet,
+				"javax.portlet.name=" + PartyPortletKeys.SecondMeetingRecordPortlet,
+				"javax.portlet.name=" + PartyPortletKeys.LeaderMeetingStatistics,
 			"mvc.command.name=/hg/assigned"
 	    },
 	    service = MVCResourceCommand.class

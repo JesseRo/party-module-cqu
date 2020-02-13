@@ -19,7 +19,7 @@ public class MeetingPlan {
    //内容
    private String content;
    //会议地点
-   private String place;
+   private int place;
    //组织id
    private String organization_id;
    // 二级党委开始时间
@@ -156,10 +156,10 @@ public class MeetingPlan {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public String getPlace() {
+	public int getPlace() {
 		return place;
 	}
-	public void setPlace(String place) {
+	public void setPlace(int place) {
 		this.place = place;
 	}
 	public Timestamp getStart_time() {

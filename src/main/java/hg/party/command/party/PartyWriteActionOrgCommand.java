@@ -104,7 +104,7 @@ public class PartyWriteActionOrgCommand implements MVCResourceCommand{
 				}
 			}
 			
-			Map<String, Object> map = new HashMap<String, Object>();
+			Map<String, Object> map = new HashMap<>();
 			map.put("meeting_id", meeting_id);
 		
 		   PrintWriter printWriter=resourceResponse.getWriter();

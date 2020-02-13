@@ -25,6 +25,8 @@
                 <div class="pwd_container">
                     <i class="input_icon"></i>
                     <input type="password" maxlength="20" id="password"/>
+                    <p style="color: red; display: none;" class="user_not_exist">用户不存在</p>
+                    <p style="color: red; display: none;" class="wrong_password">密码错误</p>
                 </div>
                 <input type="button" class="submit_btn" value="登录" />
             </form>
@@ -57,9 +59,11 @@
                 async: false,
                 success: function (result) {
                     if (result === "1") {
-                        $('.pwd_container').append('<p style="color: red;">用户不存在</p>');
+                        $('.pwd_container .user_not_exist').show();
+                        $('.pwd_container .wrong_password').hide();
                     } else if (result === "2") {
-                        $('.pwd_container').append('<p style="color: red;">密码错误</p>');
+                        $('.pwd_container .user_not_exist').hide();
+                        $('.pwd_container .wrong_password').show();
                     } else if (result.substring(0, 1) === "3") {
                         window.location.href = result.substring(1);
                     }

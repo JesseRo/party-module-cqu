@@ -100,8 +100,8 @@ public class SecondCommitteeService {
 	   
 	   
 	   //二级党委根据组织ID查询所有通知计划
-	   public Map<String, Object> queryInformMeetingsByOrgId(String orgId, String meetingType, String taskStatus, int page){
-		   return meetingPlanDao.queryInformMeetingsByOrgId(orgId, meetingType, taskStatus, page);
+	   public Map<String, Object> queryInformMeetingsByOrgId(String orgId, String search, int page){
+		   return meetingPlanDao.queryInformMeetingsByOrgId(orgId, search, page);
 	   }
 	   
 	   public List<Map<String, Object>> exportExcel(String orgId, String meetingType, String taskStatus){
@@ -180,7 +180,7 @@ public class SecondCommitteeService {
 	   }
 	   
 	   //二级党委根据meetingId查询会议
-	   public List<Map<String, Object>> queryMeetingPlanByMeetingId(String meetingId){
+	   public Map<String, Object> queryMeetingPlanByMeetingId(String meetingId){
 		   return meetingPlanDao.queryMeetingPlanByMeetingId(meetingId);
 	   }
 	   

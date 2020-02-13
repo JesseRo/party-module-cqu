@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.util.PortalUtil;
 import hg.party.server.party.PartyMeetingPlanInfo;
 import hg.party.server.party.PartyMemberServer;
 import hg.party.server.toDoList.EvaluationServer;
+import org.springframework.util.StringUtils;
 import party.constants.PartyPortletKeys;
 
 /**
@@ -58,22 +59,12 @@ public class PartySecondaryPortlet extends MVCPortlet{
 	@Override
 	public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
 			throws IOException, PortletException {
-		String informId = ParamUtil.getString(renderRequest, "informId");//通知id(分页)
-		informId = HtmlUtil.escape(informId);
-		String seconedName = ParamUtil.getString(renderRequest, "seconedName");
-		seconedName = HtmlUtil.escape(seconedName);
-		
-		HttpServletRequest request = PortalUtil.getHttpServletRequest(renderRequest);
-		String meeting_id = PortalUtil.getOriginalServletRequest(request).getParameter("inform_id");//通知id
-		meeting_id = HtmlUtil.escape(meeting_id);
-		
-		if("".equals(meeting_id) || null == meeting_id){
-			if("".equals(informId) || null == informId){
-				informId = "eca28ccf-ad61-4fc6-9084-224037aba15f";
-			}
-			meeting_id = informId;
-		}
-		
+
+		String search = ParamUtil.getString(renderRequest, "search");
+		search = HtmlUtil.escape(search);
+
+
+
 		//获取当前页
 		List<Map<String, Object>> list = null;
 		int pageNo = 0;
@@ -86,9 +77,7 @@ public class PartySecondaryPortlet extends MVCPortlet{
 		}else{
 			pageNo = page;
 		}
-		
-		if(!"".equals(meeting_id) && null != meeting_id){
-				
+
 //				String sql ="select tt.*, us.user_name as check_person_us  from "+
 //							"(SELECT note.attachment AS attachment_n,gr.inform_id AS informid,plan.meeting_id as meeting,plan.id AS plan_id,info.meeting_theme as theme_,org.org_id as org_id_u, "+
 //							"info.start_time as start_,info.end_time as end_,plan.start_time as start_p,plan.end_time as end_p,orgs.org_name AS org_names,org.org_name AS org_namez,* "+
@@ -108,66 +97,48 @@ public class PartySecondaryPortlet extends MVCPortlet{
 //							"LEFT OUTER JOIN hg_users_info as us "+
 //				            "on tt.check_person_org=us.user_id ";
 
-				String sql = "SELECT\n" +
-						"\tnote.attachment AS attachment_n,\n" +
-						"-- \tgr.inform_id AS informid,\n" +
-						"\tplan.meeting_id AS meeting,\n" +
-						"\tplan.ID AS plan_id,\n" +
-						"-- \tinfo.meeting_theme AS theme_,\n" +
-						"\torg.org_id AS org_id_u,\n" +
-						"-- \tinfo.start_time AS start_,\n" +
-						"-- \tinfo.end_time AS end_,\n" +
-						"\tplan.start_time AS start_p,\n" +
-						"\tplan.end_time AS end_p,\n" +
-						"-- \torgs.org_name AS org_names,\n" +
-						"\torg.org_name AS org_namez,* \n" +
-						"FROM\n" +
-						"\thg_party_meeting_plan_info AS plan \n" +
-						"\tLEFT JOIN hg_party_meeting_notes_info AS note ON plan.meeting_id = note.meeting_id \n" +
-						"\tLEFT JOIN hg_party_org AS org ON org.org_id = plan.organization_id \n" +
-						"\tLEFT JOIN hg_users_info as users on users.user_id = plan.check_person\n" +
-						"\tWHERE\n" +
-						"\t\torg.org_type = 'secondary' \n" +
-						"\t\tAND org.historic IS FALSE \n" +
-						"\t\tAND (\n" +
-						"\t\tplan.task_status = '5' \n" +
-						"\t\tOR plan.task_status = '6' \n" +
-						"\t\tOR plan.task_status = '7' \n" +
-						")\n" +
-						"ORDER BY\n" +
-						"\t\tplan.task_status asc";
-				Map<String, Object> postgresqlResults = partyMeetingPlanInfo.postGresqlFind(pageNo, pageSize, sql);
-				list = (List<Map<String, Object>>) postgresqlResults.get("list");//获取集合
-
-				String meeting_Id = "";
-				String average = "";
-				if(null != list){
-					for(int i = 0; i<list.size(); i++){
-						meeting_Id = (String)list.get(i).get("meeting");
-						if(null != meeting_Id){
-							List<Map<String, Object>> evalu = evaluationServer.evaluationList(meeting_Id);
-							if(null != evalu && evalu.size() > 0){
-								Map<String, Object> map = evaluationServer.meetingRating(meeting_Id);
-								if(null != map){
-									average = String.valueOf(map.get("ave"));
-									if(list.get(i).containsKey("evaluation_score")){
-										list.get(i).put("evaluation_score", average);
-									}
-								}
-							}
-						}
-					}
-				}
-				
-				totalPage = (int) postgresqlResults.get("totalPage");//获取总页码
-			
+        String sql = "SELECT\n" +
+                "\tnote.attachment AS attachment_n,\n" +
+                "\tplan.meeting_id AS meeting,\n" +
+                "\tplan.ID AS plan_id,\n" +
+                "\torg.org_id AS org_id_u,\n" +
+                "\tplan.start_time AS start_p,\n" +
+                "\tplan.end_time AS end_p,\n" +
+                "\torg.org_name AS org_namez, place.place as placeName, * \n" +
+                "FROM\n" +
+                "\thg_party_meeting_plan_info AS plan \n" +
+                "\tLEFT JOIN hg_party_meeting_notes_info AS note ON plan.meeting_id = note.meeting_id \n" +
+                "\tLEFT JOIN hg_party_org AS org ON org.org_id = plan.organization_id \n" +
+				"\tLEFT JOIN hg_users_info as users on users.user_id = plan.check_person \n" +
+				"left join hg_party_place place on place.id = plan.place " +
+				"\tWHERE\n" +
+//						"\t\torg.org_type = 'secondary' \n" +
+                "\t\t org.historic IS FALSE \n" +
+                "\t\tAND (\n" +
+                "\t\tplan.task_status = '5' \n" +
+                "\t\tOR plan.task_status = '6' \n" +
+                "\t\tOR plan.task_status = '7' \n" +
+                ")\n";
+		String _search = "%" + search + "%";
+        if (!StringUtils.isEmpty(search)){
+            sql = sql + " and (plan.meeting_theme like ? or org.org_name like ?)";
+        }
+        sql = sql + "ORDER BY\n" +
+                "\t\tplan.task_status asc";
+		Map<String, Object> postgresqlResults;
+		if (!StringUtils.isEmpty(search)) {
+			postgresqlResults = partyMeetingPlanInfo.postGresqlFind(pageNo, pageSize, sql, _search, _search);
+		}else{
+			postgresqlResults = partyMeetingPlanInfo.postGresqlFind(pageNo, pageSize, sql);
 		}
-		logger.info("list====="+list);
-		renderRequest.setAttribute("informId", meeting_id); //通知id
+        list = (List<Map<String, Object>>) postgresqlResults.get("list");//获取集合
+
+        totalPage = (int) postgresqlResults.get("totalPage");//获取总页码
+
 		renderRequest.setAttribute("list", list);
 		renderRequest.setAttribute("pageNo", pageNo);
 		renderRequest.setAttribute("totalPage", totalPage);
-		renderRequest.setAttribute("seconedName", seconedName);
+		renderRequest.setAttribute("search", search);
 		
 		super.doView(renderRequest, renderResponse);
 	}

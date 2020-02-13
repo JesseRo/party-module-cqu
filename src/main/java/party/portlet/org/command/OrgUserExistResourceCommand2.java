@@ -23,6 +23,7 @@ import party.constants.PartyPortletKeys;
 		immediate = true,
 		property = {
 				"javax.portlet.name=" + PartyPortletKeys.PersonAddPortlet,
+				"javax.portlet.name=" + PartyPortletKeys.PersonalInfoPortlet,
 				"mvc.command.name=/hg/org/exist"
 	    },
 	    service = MVCResourceCommand.class

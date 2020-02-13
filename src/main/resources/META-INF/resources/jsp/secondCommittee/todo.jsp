@@ -2,6 +2,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ include file="/init.jsp" %>
+
+<portlet:actionURL name="/PageNoMVCActionCommand" var="pageNoUrl">
+</portlet:actionURL>
 <!DOCTYPE html>
 <html>
 
@@ -143,273 +146,88 @@
                         <a href="javascript:;">已发计划</a>
                     </span>
         </div>
-<%--        <table id="activityTable" lay-filter="activityTable" class="custom_table"></table>--%>
-<%--        <div class="layui-form layui-border-box layui-table-view" lay-filter="LAY-table-1" lay-id="activityTable"--%>
-<%--             style=" ">--%>
-<%--            <div class="layui-table-box">--%>
-<%--                <div class="layui-table-header">--%>
-<%--                    <table cellspacing="0" cellpadding="0" border="0" class="layui-table">--%>
-<%--                        <thead>--%>
-<%--                        <tr>--%>
-<%--                            <th data-field="name" data-key="1-0-0" class="" style="width: 14.28%;">--%>
-<%--                                <div class="layui-table-cell laytable-cell-1-0-0"><span>会议类型</span></div>--%>
-<%--                            </th>--%>
-<%--                            <th data-field="createdDate" data-key="1-0-1" class="" style="width: 14.28%;">--%>
-<%--                                <div class="layui-table-cell laytable-cell-1-0-1"><span>会议主题</span></div>--%>
-<%--                            </th>--%>
-<%--                            <th data-field="operate" data-key="1-0-3" class="" style="width: 14.28%;">--%>
-<%--                                <div class="layui-table-cell laytable-cell-1-0-3"><span>开始时间</span></div>--%>
-<%--                            </th>--%>
-<%--                            <th data-field="operate" data-key="1-0-4" class="" style="width: 14.28%;">--%>
-<%--                                <div class="layui-table-cell laytable-cell-1-0-4"><span>时长</span></div>--%>
-<%--                            </th>--%>
-<%--                            <th data-field="content" data-key="1-0-2" class="" style="width: 14.28%;">--%>
-<%--                                <div class="layui-table-cell laytable-cell-1-0-2"><span>状态</span></div>--%>
-<%--                            </th>--%>
-<%--                            <th data-field="operate" data-key="1-0-5" class="" style="width: 14.28%;">--%>
-<%--                                <div class="layui-table-cell laytable-cell-1-0-5"><span>操作</span></div>--%>
-<%--                            </th>--%>
-<%--                            <th data-field="operate" data-key="1-0-6" class="" style="width: 14.28%;">--%>
-<%--                                <div class="layui-table-cell laytable-cell-1-0-6"><span>上传会议记录</span></div>--%>
-<%--                            </th>--%>
-<%--                            <th class="layui-table-patch">--%>
-<%--                                <div class="layui-table-cell" style="width: 0.13px;"></div>--%>
-<%--                            </th>--%>
-<%--                        </tr>--%>
-<%--                        </thead>--%>
-<%--                    </table>--%>
-<%--                </div>--%>
-<%--                <div class="layui-table-body layui-table-main">--%>
-<%--                    <table cellspacing="0" cellpadding="0" border="0" class="layui-table" style="width: 100%;">--%>
-<%--                        <tbody>--%>
-<%--                        <c:forEach var="c" items="${informMeetingList}" varStatus="status">--%>
-<%--                            <tr data-index="9" class="" id="${c.inform_id }">--%>
-<%--                                <td data-field="name" data-key="1-0-0" class=""  style="width: 14.28%;">--%>
-<%--                                    <div class="layui-table-cell laytable-cell-1-0-0">${c.meeting_type}</div>--%>
-<%--                                </td>--%>
-<%--                                <td data-field="createdDate" data-key="1-0-1" class="" style="width: 14.28%;">--%>
-<%--                                    <div class="layui-table-cell laytable-cell-1-0-1">${c.meeting_theme_secondary}</div>--%>
-<%--                                </td>--%>
-<%--                                <td data-field="operate" data-key="1-0-3" data-off="true" class="" style="width: 14.28%;">--%>
-<%--                                    <div class="layui-table-cell laytable-cell-1-0-3">--%>
-<%--                                        <c:if test="${not empty c.start_time}">--%>
-<%--                                            <fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${c.start_time }"/>--%>
-<%--                                        </c:if>--%>
-<%--                                    </div>--%>
-<%--                                </td>--%>
-<%--                                <td data-field="operate" data-key="1-0-3" data-off="true" class="" style="width: 14.28%;">--%>
-<%--                                    <div class="layui-table-cell laytable-cell-1-0-4">--%>
-<%--                                            ${c.total_time}--%>
-<%--                                    </div>--%>
-<%--                                </td>--%>
-<%--                                <td data-field="content" data-key="1-0-2" class="" style="width: 14.28%;">--%>
-<%--                                    <div class="layui-table-cell laytable-cell-1-0-2">--%>
-<%--                                        <c:if test="${empty c.task_status}">--%>
-
-<%--                                        </c:if>--%>
-<%--                                        <c:choose>--%>
-<%--                                            <c:when test="${not empty c.task_status and c.task_status gt 4 }">--%>
-<%--                                                ${statusMap['4']}--%>
-<%--                                            </c:when>--%>
-<%--                                            <c:otherwise>--%>
-<%--                                                ${statusMap[Integer.parseInt(c.task_status)]}--%>
-<%--                                            </c:otherwise>--%>
-<%--                                        </c:choose>--%>
-<%--                                    </div>--%>
-<%--                                </td>--%>
-<%--                                <td data-field="operate" data-key="1-0-3" data-off="true" class="" style="width: 14.28%;">--%>
-<%--                                    <div class="layui-table-cell laytable-cell-1-0-5">--%>
-<%--                                        <c:if test="${c.task_status eq 4}">--%>
-<%--                                            <a href="javascript:;" onclick="window.location.href='/informparty?meetingId=${c.meeting_id}'">通知党员</a>--%>
-<%--                                        </c:if>--%>
-<%--                                        <c:if test="${c.task_status eq 2||c.task_status eq 3}">--%>
-<%--                                            <a href="javascript:;" onclick="window.location.href='/sendplan?meetingId=${c.meeting_id}'">重拟计划</a>--%>
-<%--                                        </c:if>--%>
-<%--                                    </div>--%>
-<%--                                </td>--%>
-<%--                                <td data-field="operate" data-key="1-0-3" data-off="true" class="" style="width: 14.28%;">--%>
-<%--                                    <div class="layui-table-cell laytable-cell-1-0-6">--%>
-<%--                                        <c:if test="${c.task_status eq 4}">--%>
-<%--                                            <a href="javascript:;" onclick="window.location.href='/uploadnotes?meetingId=${c.meeting_id}'">上传</a>--%>
-<%--                                        </c:if>--%>
-<%--                                    </div>--%>
-<%--                                </td>--%>
-
-<%--                            </tr>--%>
-<%--                        </c:forEach>--%>
-<%--                        </tbody>--%>
-<%--                    </table>--%>
-<%--                </div>--%>
-<%--            </div>--%>
-<%--        </div>--%>
         <div class="bg_white_container">
+            <form action="${pageNoUrl }" id="searchForm" method="post">
+                <div class="publish_search_box operate_form_group" style="padding-left:0;"> <input type="hidden" name="informId" value="eca28ccf-ad61-4fc6-9084-224037aba15f">
+                    <input type="hidden" name="pageNo" value="1">
+                    <input type="hidden" name="totalPage" value="1">
+                    <div class="search_container " style="float: right;">
+                        <input type="text" name="search" value="${search}" placeholder="搜索条件" autocomplete="off" class="layui-input custom_input">
+                        <button type="button" class="layui-btn custom_btn search_btn" onclick="$('#searchForm').submit();">查询</button>
+                    </div>
+                </div>
+            </form>
             <div class="table_outer_box">
                 <table class="layui-table custom_table" >
                     <thead>
-                    <tr>
-                        <%--						<th>消息状态</th>--%>
-                        <td>
-                            会议类型
-                        </td>
-                        <td>会议主题</td>
-                        <td>发布时间</td>
-                        <td>开始时间</td>
-                        <%--						<th>--%>
-                        <%--							<select id="taskStatus" class="taskstatus height_34" onchange="typeStatusAjax()">--%>
-                        <%--								<option value="">任务状态</option>--%>
-                        <%--						 		<option value="">全部</option>--%>
-                        <%--							<c:forEach var="c" items="${taskStatusList}"  varStatus="status">--%>
-                        <%--								<c:choose>--%>
-                        <%--									<c:when test="${taskStatus == c.resources_key }">--%>
-                        <%--							 			<option value="${c.resources_key}" selected>${c.resources_value}</option>--%>
-                        <%--									</c:when>--%>
-                        <%--									<c:otherwise>--%>
-                        <%--										<option value="${c.resources_key}">${c.resources_value}</option>--%>
-                        <%--									</c:otherwise>--%>
-                        <%--								</c:choose>--%>
-                        <%--							 </c:forEach>--%>
-                        <%--					        </select>--%>
-                        <%--						</th>--%>
-                        <td>时长</td>
-                        <td>操作</td>
-                        <%--						<th>详情</th>--%>
-                        <%--						<th>已读回执</th>--%>
-                        <td>上传会议记录</td>
-                        <%--						<th>备注</th>--%>
-                    </tr>
-
+                        <tr>
+                            <td>会议类型</td>
+                            <td>会议主题</td>
+                            <td>发布时间</td>
+                            <td>开始时间</td>
+                            <td>时长</td>
+                            <td>任务状态</td>
+                            <td>操作</td>
+                        </tr>
                     </thead>
-
-
                     <tbody>
-
                     <c:forEach var="c" items="${informMeetingList}" varStatus="status">
                         <tr class="oneinfo" id="${c.inform_id }">
-                                <%--								<td data-label="消息状态" >--%>
-                                <%--									<c:choose>--%>
-                                <%--										<c:when test="${c.read_status == '未读'}">--%>
-                                <%--										 	<span style="color:red">未读</a>--%>
-                                <%--										</c:when>--%>
-                                <%--										<c:otherwise>--%>
-                                <%--											已查看--%>
-                                <%--										</c:otherwise>--%>
-                                <%--									</c:choose>--%>
-                                <%--								</td>--%>
-                            <td data-label="会议类型">
-                                    <%--									<c:if test="${empty c.mmeetingtype}">--%>
-                                    <%--										 ${c.imeetingtype}--%>
-                                    <%--									</c:if>--%>
-                                    <%--									<c:if test="${not empty c.mmeetingtype}">--%>
-                                    <%--										 ${c.mmeetingtype}--%>
-                                    <%--									</c:if>--%>
-                                    ${c.meeting_type}
+                            <td data-label="会议类型">${c.meeting_type}
                             </td>
                             <td data-label="会议主题">
-                                    ${c.meeting_theme_secondary}
-                                    <%--									<c:if test="${empty c.mmeetingtype}">--%>
-                                    <%--										<a href="/checkdetail?informId=${c.inform_id }&orgId=${c.pub_org_id}" >${c.imeetingtheme}</a>--%>
-                                    <%--									</c:if>--%>
-                                    <%--									<c:if test="${not empty c.mmeetingtype}">--%>
-                                    <%--										<a href="/checkdetail?informId=${c.inform_id }&orgId=${c.pub_org_id}" >${c.mmeetingtheme}</a>--%>
-                                    <%--									</c:if>--%>
+                                <a onclick="window.location.href='/approvaldetails?meetingId=${c.meeting_id}'" style="cursor: pointer;">${c.meeting_theme}</a>
                             </td>
-
-
                             <td data-label="发布时间">
                                 <c:if test="${not empty c.submit_time}">
-                                    <fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${c.submit_time }"/>
+                                    <fmt:formatDate pattern="yyyy-MM-dd HH:mm" value="${c.submit_time }"/>
                                 </c:if>
                             </td>
                             <td data-label="开始时间">
                                 <c:if test="${not empty c.start_time}">
-                                    <fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${c.start_time }"/>
+                                    <fmt:formatDate pattern="yyyy-MM-dd HH:mm" value="${c.start_time }"/>
                                 </c:if>
                             </td>
                             <td data-label="时长">
-                                    ${c.total_time}
+                                    ${c.total_time / 60}
                             </td>
-                                <%--								<td data-label="截止时间" class="deadline_time" >--%>
-                                <%--									${fn:substring(c.deadline_time,0,19)}--%>
-                                <%--								</td>--%>
-                                <%--								<td data-label="任务状态" >--%>
-        <%--                                                <c:if test="${empty c.task_status}">--%>
-        <%--                                                    --%>
-        <%--                                                </c:if>--%>
-        <%--                                                <c:choose>--%>
-        <%--                                                    <c:when test="${not empty c.task_status and c.task_status gt 4 }">--%>
-        <%--                                                        ${statusMap[4]}--%>
-        <%--                                                    </c:when>--%>
-        <%--                                                    <c:otherwise>--%>
-        <%--                                                        ${statusMap[c.task_status]}--%>
-        <%--                                                    </c:otherwise>--%>
-        <%--                                                </c:choose>--%>
-                                <%--								</td>--%>
-
+                            <td data-label="状态">
+                                ${meetingStates[c.task_status]}
+<%--                                <c:if test="${info.task_status == '1'}">--%>
+<%--                                    已提交--%>
+<%--                                </c:if>--%>
+<%--                                <c:if test="${info.task_status == '2'}">--%>
+<%--                                    已撤回--%>
+<%--                                </c:if>--%>
+<%--                                <c:if test="${info.task_status == '3'}">--%>
+<%--                                    被驳回--%>
+<%--                                </c:if>--%>
+<%--                                <c:if test="${info.task_status == '4'}">--%>
+<%--                                    已通过--%>
+<%--                                </c:if>--%>
+<%--                                <c:if test="${info.task_status == '5'}">--%>
+<%--                                    已指派--%>
+<%--                                </c:if>--%>
+<%--                                <c:if test="${info.task_status == '6'}">--%>
+<%--                                    未检查--%>
+<%--                                </c:if>--%>
+<%--                                <c:if test="${info.task_status == '7'}">--%>
+<%--                                    已检查--%>
+<%--                                </c:if>--%>
+                            </td>
                             <td data-label="操作">
-
-                                    <%--									<c:if test="${empty c.task_status  && (c.meeting_type != '专题组织生活会' && c.send_to == 't') && !c.has_resend}">--%>
-                                    <%--										 <a href="/newinfo?informId=${c.inform_id}&resend=resend">部署</a>--%>
-                                    <%--									</c:if>--%>
-
-                                    <%--									<c:if test="${empty c.task_status && (c.meeting_type != '专题组织生活会' && c.send_to == 'f') && !c.has_resend }">--%>
-                                    <%--										<a href="/sendplan?infromId=${c.inform_id}&orgId=${c.pub_org_id}">拟定计划</a>--%>
-                                    <%--									</c:if>--%>
-
-
-                                    <%--									<c:if test="${c.task_status eq 1}">--%>
-                                    <%--										<a href="javascript:;" class="cancl_reson">撤回</a>--%>
-                                    <%--							            <input type="hidden" value="${c.inform_id }"/>--%>
-                                    <%--                                 		<input type="hidden" value="${c.pub_org_id }"/>--%>
-                                    <%--									</c:if>--%>
-
-                                    <%--									<c:if test="${empty c.task_status && c.org_type eq orgId }">--%>
-                                    <%--										<a href="/branchview?inform_id=${c.inform_id}">查看进度</a>--%>
-                                    <%--									</c:if>--%>
-                                <c:if test="${c.task_status eq 4}">
-                                    <a onclick="window.location.href='/informparty?meetingId=${c.meeting_id}'" href="javascript:;">通知党员</a>
-                                </c:if>
-                                <c:if test="${c.task_status eq 2||c.task_status eq 3}">
+                                <c:if test="${c.task_status eq 2 || c.task_status eq 3}">
                                     <a onclick="window.location.href='/sendplan?meetingId=${c.meeting_id}'" href="javascript:;">重拟计划</a>
                                 </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${c.task_status eq 4}">
-                                    <a onclick="window.location.href='/uploadnotes?meetingId=${c.meeting_id}'" href="javascript:;">上传</a>
+                                <c:if test="${c.task_status eq 0}">
+                                    <a onclick="window.location.href='/sendplan?meetingId=${c.meeting_id}&type=edit'" href="javascript:;">编辑</a>
                                 </c:if>
                             </td>
-                                <%--								<td data-label="详情" >--%>
-                                <%--									<c:if test="${empty c.task_status && (c.meeting_type != '专题组织生活会' && c.send_to == 'f') && !c.has_resend }">--%>
-                                <%--										<a href="/meetings?informId=${c.inform_id}&orgId=${c.pub_org_id}">已上报列表</a>--%>
-                                <%--									</c:if>--%>
-                                <%--								</td>--%>
-
-
-                                <%--								<td data-label="已读回执" >--%>
-                                <%--	                              <c:if test="${c.task_status gt 4}">--%>
-                                <%--	　                                                                                         <a class="check_reply_state" href="javascript:;">查看</a>--%>
-                                <%--	                                 <input type="hidden" value="${c.inform_id }"/>--%>
-                                <%--	                                 <input type="hidden" value="${c.pub_org_id }"/>--%>
-                                <%--	　　                                                                            </c:if>--%>
-                                <%--	                            </td>--%>
-
-                                <%--								<td data-label="上传会议记录" >--%>
-                                <%--									<c:if test="${c.check_status != '已上传' && (c.task_status gt 4) }">--%>
-                                <%--										<a href="/uploadnotes?meetingId=${c.meeting_id}">上传</a>--%>
-                                <%--									</c:if>--%>
-
-                                <%--									<c:if test="${c.check_status eq '已上传'}">--%>
-                                <%--										已上传--%>
-                                <%--									</c:if>--%>
-                                <%--								</td>--%>
-
-                                <%--								<td data-label="备注" >--%>
-                                <%--									<c:if test="${ empty c.mremark}">--%>
-                                <%--										${c.iremark}--%>
-                                <%--									</c:if>--%>
-                                <%--									<c:if test="${not empty c.mremark}">--%>
-                                <%--										${c.mremark}--%>
-                                <%--									</c:if>--%>
-                                <%--								</td>--%>
+<%--                            <td>--%>
+<%--                                <c:if test="${c.task_status eq 4}">--%>
+<%--                                    <a onclick="window.location.href='/uploadnotes?meetingId=${c.meeting_id}'" href="javascript:;">上传</a>--%>
+<%--                                </c:if>--%>
+<%--                            </td>--%>
                         </tr>
                     </c:forEach>
 
@@ -422,16 +240,13 @@
                 <div class="pageJump">
                     <input class='current_page' type="hidden" value="${pageNo}"/>
                     <p>共<span class="total_page">${pages }</span>页</p>
-                    <portlet:actionURL name="/PageNoMVCActionCommand" var="pageNoUrl">
-                    </portlet:actionURL>
                     <form action="${pageNoUrl}" id="getPageNo" method="post">
                         <input type="hidden" id="pageNo" name="pageNo"/>
                         <input type="hidden" id="total_page_" name="total_page_" value="${pages}"/>
                         <span>跳转到第</span>
                         <input type="text" id="jumpPageNo" name="jumpPageNo"/>
                         <span>页</span>
-                        <input type="hidden" id="mt" name="meetingType"/>
-                        <input type="hidden" id="ts" name="taskStatus"/>
+                        <input name="search" value="${search}"/>
 
                         <button type="submit" class="button">确定</button>
                     </form>

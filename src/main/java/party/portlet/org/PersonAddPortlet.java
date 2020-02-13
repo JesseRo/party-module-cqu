@@ -72,6 +72,7 @@ public class PersonAddPortlet extends MVCPortlet {
 		
 		//	window.location.href='/addperson?oagName'+oagName+'&orgId='+orgId+'&oagName='+oagName; 
 		HttpServletRequest request=PortalUtil.getHttpServletRequest(renderRequest);
+		HttpServletRequest oriRequest = PortalUtil.getOriginalServletRequest(request);
 		String orgName=PortalUtil.getOriginalServletRequest(request).getParameter("orgName");
 		String orgId=PortalUtil.getOriginalServletRequest(request).getParameter("orgId");
 		String seconedName=PortalUtil.getOriginalServletRequest(request).getParameter("seconedName");
@@ -108,6 +109,7 @@ public class PersonAddPortlet extends MVCPortlet {
 			orgName +=">新增人员";
 			state = "add";
 		}
+		renderRequest.setAttribute("portlet_name", "party");
 		renderRequest.setAttribute("state", state);
 		renderRequest.setAttribute("orgName", orgName);
 		renderRequest.setAttribute("orgId", orgId);

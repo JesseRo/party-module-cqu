@@ -73,14 +73,11 @@ public class TodoUploadCommand extends FormRenderCommand{
 //			logger.info(e.getMessage());
 		}
 		if(!StringUtils.isEmpty(meetingId)){
-			List<Map<String, Object>> object = null;
-			if("secondary".equals(orgType)){
-				object = secondCommitteeService.queryMeetingPlanByMeetingId(meetingId);
-			}else{
-				object = secondCommitteeService.queryMeetingPlanByMeetingIdBranch(meetingId);
-			}
-			object.get(0).put("content", null);
-			meetingPlanStr = new JSONObject(object.get(0)).append("orgType", orgType).append("shouldCount", shouldCount).toString();
+			Map<String, Object> object = null;
+			object = secondCommitteeService.queryMeetingPlanByMeetingId(meetingId);
+
+			object.put("content", null);
+			meetingPlanStr = new JSONObject(object).append("orgType", orgType).append("shouldCount", shouldCount).toString();
 		}
 		
 		String from_uuid = UUID.randomUUID().toString();

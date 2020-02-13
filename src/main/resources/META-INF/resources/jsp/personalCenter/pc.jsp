@@ -3,6 +3,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
+<portlet:resourceURL id="/hg/personal/page" var="meetings" />
+<portlet:resourceURL id="/hg/personalCheck/page" var="check" />
+
+
 
 <head>
     <meta charset="utf-8">
@@ -122,6 +126,9 @@
 			top: 9.8%;
 			left: 13.6%;
 		}
+		.text_content p{
+			cursor: pointer;
+		}
 		@media screen and (max-width: 1536px){
 			.personal_center_container .text_container p{
 				font-size: 14px;
@@ -149,10 +156,8 @@
 			</div>
 			<div class="text_container left_top">
 				<p class="text_title">组织生活</p>
-				<div class="text_content">
-					<p>参会情况：30次</p>
-					<p>缺会情况：2次</p>
-					<p>党费缴纳：266.79元</p>
+				<div class="text_content" id="meeting">
+					<p>暂无数据</p>
 				</div>
 				<p class="text_line"></p>
 			</div>
@@ -166,7 +171,7 @@
 				<p class="text_line"></p>
 			</div>
 			<div class="text_container right_text_container right_top">
-				<p class="text_title">我的基础信息</p>
+				<p class="text_title" style="cursor: pointer;" onclick="window.location.href='/personal_info'">我的基础信息</p>
 				<div class="text_content">
 					<p>姓名：${userInfo.member_name}</p>
 					<p>性别：${userInfo.member_sex}</p>
@@ -178,15 +183,41 @@
 			</div>
 			<div class="text_container right_text_container right_bottom">
 				<p class="text_title">我的任务</p>
-				<div class="text_content">
-					<p>1.体育学院研究生第一党支部活动抽查</p>
-					<p>缺会情况：2次</p>
-					<p>党费缴纳：266.79元</p>
+				<div class="text_content" id="checks">
+					<p>暂无数据</p>
 				</div>
 				<p class="text_line"></p>
 			</div>
 		</div>
 	</div>
+	<script>
+		$(function () {
+			$.post('${meetings}', {page: 0, limit: 10}, function (res) {
+				var $meetings = $('#meeting');
+				if (res.data.length > 0){
+					$meetings.html("");
+					for (var i in res.data){
+						var p = $("<p></p>");
+						p.html(res.data[i].meeting_theme);
+						$meetings.append(p);
+					}
+				}
 
+
+			})
+			$.post('${check}', {page: 0, limit: 10}, function (res) {
+				var $checks = $('#checks');
+				if (res.data.length > 0){
+					$checks.html("");
+					for (var i in res.data){
+						var p = $("<p></p>");
+						p.html(res.data[i].meeting_theme);
+						$checks.append(p);
+					}
+				}
+
+			})
+		})
+	</script>
 </body>
 </html>

@@ -35,9 +35,9 @@ public class PartyBranchDao extends PostgresqlDaoImpl<MeetingPlan> {
         return jdbcTemplate.update(sql, groupId);
     }
 
-    public int deleteMeetingPlan(String infromid, String orgId) {
-        String sql = "DELETE from hg_party_meeting_plan_info WHERE inform_id= ? AND organization_id= ? ";
-        return jdbcTemplate.update(sql, infromid, orgId);
+    public int deleteMeetingPlan(String meetingId) {
+        String sql = "DELETE from hg_party_meeting_plan_info WHERE meeting_id = ?";
+        return jdbcTemplate.update(sql, meetingId);
     }
 
     public PublicInformation findByID(int id) {

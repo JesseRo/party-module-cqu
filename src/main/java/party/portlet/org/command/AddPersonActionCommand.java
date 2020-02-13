@@ -9,6 +9,7 @@ import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 
+import hg.util.ConstantsKey;
 import org.apache.log4j.Logger;
 import org.apache.xmlbeans.impl.tool.Extension.Param;
 import org.osgi.service.component.annotations.Component;
@@ -31,8 +32,11 @@ import hg.util.MD5;
 import hg.util.TransactionUtil;
 import party.constants.PartyPortletKeys;
 
-@Component(immediate = true, property = { "javax.portlet.name=" + PartyPortletKeys.PersonAddPortlet,
-		"mvc.command.name=/org/add/user" }, service = MVCActionCommand.class)
+@Component(immediate = true, property = {
+		"javax.portlet.name=" + PartyPortletKeys.PersonAddPortlet,
+		"javax.portlet.name=" + PartyPortletKeys.PersonalInfoPortlet,
+		"mvc.command.name=/org/add/user"
+}, service = MVCActionCommand.class)
 public class AddPersonActionCommand implements MVCActionCommand {
 	Logger log = Logger.getLogger(AddPersonActionCommand.class);
 
@@ -49,6 +53,7 @@ public class AddPersonActionCommand implements MVCActionCommand {
 	@Transactional
 	public boolean processAction(ActionRequest actionRequest, ActionResponse actionResponse) throws PortletException {
 		Object userId = SessionManager.getAttribute(actionRequest.getRequestedSessionId(), "userName");
+		String role = (String)SessionManager.getAttribute(actionRequest.getRequestedSessionId(), "role");
 
 		Member m = new Member();
 		User u = new User();
@@ -121,7 +126,7 @@ public class AddPersonActionCommand implements MVCActionCommand {
 			}
 			u.setUser_id(ID_card);
 			u.setUser_name(userName);
-			u.setUser_password(MD5.getMD5(ID_card.substring(12)));
+
 			u.setUser_sex(sex);
 			u.setUser_telephone(telephone);
 			u.setUser_department_id(orgId);
@@ -130,7 +135,6 @@ public class AddPersonActionCommand implements MVCActionCommand {
 			u.setUserrole("普通党员");
 			// log.info("编辑人员:["+new Date()+"] [by "+userId+"] ID_card
 			// :["+ID_card+"]");
-
 			synchronized (PortalUtil.getHttpServletRequest(actionRequest).getSession()) {
 				String originalFormId = (String) SessionManager.getAttribute(actionRequest.getRequestedSessionId(),
 						"addperson-formId");
@@ -138,6 +142,7 @@ public class AddPersonActionCommand implements MVCActionCommand {
 
 					transactionUtil.startTransaction();
 					if (!StringUtils.isEmpty(id)) {
+//						u.setUser_password(MD5.getMD5(ID_card.substring(12)));
 						memberDao.insertOrUpate(Updatesql);
 						UserDao.update(u);
 						if (!prevID_card.equals(ID_card)) {
@@ -147,14 +152,18 @@ public class AddPersonActionCommand implements MVCActionCommand {
 						}
 						log.info("编辑人员:[" + new Date() + "] [by " + userId + "]  ID_card :[" + ID_card + "]");
 					} else {
+						u.setUser_password(MD5.getMD5(ID_card.substring(12)));
 						memberDao.insertOrUpate(sql);
 						UserDao.save(u);
 						log.info("添加人员:[" + new Date() + "] [by " + userId + "]  ID_card :[" + ID_card + "]");
 					}
 					transactionUtil.commit();
 					SessionManager.setAttribute(actionRequest.getRequestedSessionId(), "addperson-formId", "NULL");
-					actionResponse.sendRedirect("/partyusermanager?org=" + orgId);
-
+					if (role.equalsIgnoreCase(ConstantsKey.COMMON_PARTY)){
+						actionResponse.sendRedirect("/personal_info");
+					}else {
+						actionResponse.sendRedirect("/partyusermanager?org=" + orgId);
+					}
 				}
 			}
 

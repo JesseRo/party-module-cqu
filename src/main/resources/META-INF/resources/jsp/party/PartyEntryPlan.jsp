@@ -241,12 +241,12 @@
 			<%--                            <th>开展主题</th>--%>
 									<td>二级党组织主题</td>
 									<td>开始时间</td>
-									<td>开展时长(分钟)</td>
+									<td style="width: 70px;">时长</td>
 			<%--                            <th>开展地点</th>--%>
 			<%--                            <th>主持人</th>--%>
 									<td>联系人</td>
 			<%--                            <th>联系人电话</th>--%>
-			<%--                            <th>任务状态</th>--%>
+									<td style="width: 120px;">任务状态</td>
 			<%--                            <th>审核人</th>--%>
 									<td>操作</td>
 			<%--                            <th>备注</th>--%>
@@ -259,40 +259,40 @@
 										<td data-label="会议类型">${info.meeting_type }</td>
 			<%--	                            <td data-label="发布时间" class="PublishTime"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${info.submit_time }" /></td>--%>
 										<td data-label="开展主题">
-											<a href="javascript:;" onclick="window.location.href='/approvaldetails?meetingId=${info.meeting}&orgType=secondary'">${info.meeting_theme_secondary }</a>
+											<a href="javascript:;" onclick="window.location.href='/approvaldetails?meetingId=${info.meeting}&orgType=secondary'">${info.meeting_theme }</a>
 										</td>
 			<%--	                            <td data-label="二级党组织主题" style="min-width: 175px;">${info.meeting_theme_secondary }</td>--%>
-										<td data-label="开始时间">
+										<td data-label="开始时间" >
 											<fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${info.start_p }" />
 										</td>
-										<td data-label="开展时长">${info.total_time }</td>
+										<td data-label="开展时长" style="width: 70px;">${info.total_time/60 }</td>
 			<%--	                            <td data-label="开展地点">${info.place }</td>--%>
 			<%--	                            <td data-label="主持人">${info.host }</td>--%>
-										<td data-label="联系人">${info.contact }</td>
+										<td data-label="联系人">${info.contactName }</td>
 			<%--	                            <td data-label="联系人电话">${info.contact_phone }</td>--%>
-			<%--	                            <td data-label="任务状态">--%>
-			<%--	                            	<c:if test="${info.task_st == '1'}"> --%>
-			<%--	                            		 已提交--%>
-			<%--									</c:if>--%>
-			<%--									<c:if test="${info.task_st == '2'}"> --%>
-			<%--	                            		 已撤回--%>
-			<%--									</c:if>--%>
-			<%--									<c:if test="${info.task_st == '3'}"> --%>
-			<%--	                            		 被驳回--%>
-			<%--									</c:if>--%>
-			<%--									<c:if test="${info.task_st == '4'}"> --%>
-			<%--	                            		 已通过--%>
-			<%--									</c:if>--%>
-			<%--									<c:if test="${info.task_st == '5'}"> --%>
-			<%--	                            		 已指派--%>
-			<%--									</c:if>--%>
-			<%--									<c:if test="${info.task_st == '6'}"> --%>
-			<%--	                            		 未检查--%>
-			<%--									</c:if>--%>
-			<%--									<c:if test="${info.task_st == '7'}"> --%>
-			<%--	                            		 已检查--%>
-			<%--									</c:if>--%>
-			<%--	                            </td>--%>
+										<td data-label="任务状态" style="width: 120px;">
+											<c:if test="${info.task_st == '1'}">
+												 已提交
+											</c:if>
+											<c:if test="${info.task_st == '2'}">
+												 已撤回
+											</c:if>
+											<c:if test="${info.task_st == '3'}">
+												 被驳回
+											</c:if>
+											<c:if test="${info.task_st == '4'}">
+												 已通过
+											</c:if>
+											<c:if test="${info.task_st == '5'}">
+												 已指派
+											</c:if>
+											<c:if test="${info.task_st == '6'}">
+												 未检查
+											</c:if>
+											<c:if test="${info.task_st == '7'}">
+												 已检查
+											</c:if>
+										</td>
 			<%--	                            <td data-label="审核人">${info.auditor }</td>--%>
 										<td data-label="操作">
 											<c:if test="${info.task_st == '1'}">
@@ -301,41 +301,6 @@
 													通过</a>
 												<a class="_clickshow" onclick="entry('${info.meeting }');" style="cursor: pointer;color: #FE4D4D;">
 													驳回</a>
-
-												<script>
-			// 											function Pass(meeting_id){
-			// 												if(confirm("确定通过吗？")){
-			// 													var url = "${PartyPass}";
-			// 													$.ajax({
-			// 														url:url,
-			// 														data:{"meeting_id":meeting_id},
-			// 									 					dataType:'json',
-			// 														success:function(){
-			// 															window.location.reload();
-			// 														}
-			// 													});
-			// 												}
-			// 											}
-
-													//点击通过 弹窗提示示例
-													function Pass(meeting_id){
-														$.hgConfirm("提示","确认通过?");
-														$("#hg_confirm").modal("show");
-														$("#hg_confirm .btn_main").click(function(){
-															var url = "${PartyPass}";
-															$.ajax({
-																url:url,
-																data:{"meeting_id":meeting_id},
-																dataType:'json',
-																success:function(){
-																	$("#hg_confirm").modal("hide");
-																	$.tip("审核成功");
-																	window.location.reload();
-																}
-															});
-														})
-													}
-												</script>
 											</c:if>
 											<c:if test="${info.task_st == '4' || info.task_st == '5' || info.task_st == '6'}">
 												<a href="javascript:;" onclick="window.location.href='/sendplan?meetingId=${info.meeting}&orgType=secondary&type=edit'"  style="color: #2E87FF">编辑</a>
@@ -370,6 +335,23 @@
 				 </div>
 				</div>
 				 <script type="text/javascript">
+					 function Pass(meeting_id){
+						 $.hgConfirm("提示","确认通过?");
+						 $("#hg_confirm").modal("show");
+						 $("#hg_confirm .btn_main").click(function(){
+							 var url = "${PartyPass}";
+							 $.ajax({
+								 url:url,
+								 data:{"meeting_id":meeting_id},
+								 dataType:'json',
+								 success:function(){
+									 $("#hg_confirm").modal("hide");
+									 $.tip("审核成功");
+									 window.location.reload();
+								 }
+							 });
+						 })
+					 }
 					  $(document).ready(function() {
 						 var pages = $(".total_page").html();
 						var currentPage = $('.current_page').val();

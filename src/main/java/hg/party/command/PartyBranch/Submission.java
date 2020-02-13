@@ -66,12 +66,13 @@ public class Submission extends BaseMVCActionCommand {
         String conferenceType = ParamUtil.getString(actionRequest, "conferenceType");
         String meeting_theme = ParamUtil.getString(actionRequest, "subject");
         String timeLasts = ParamUtil.getString(actionRequest, "timeLasts");
-        String location = ParamUtil.getString(actionRequest, "location");
+        int location = ParamUtil.getInteger(actionRequest, "location");
         String newAndOld = ParamUtil.getString(actionRequest, "newAndOld");
         String sit = ParamUtil.getString(actionRequest, "sit");
         String meetingId = ParamUtil.getString(actionRequest, "meeting_id");
         String customTheme = ParamUtil.getString(actionRequest, "subject");
         String campus = ParamUtil.getString(actionRequest, "campus");
+        boolean graft = ParamUtil.getBoolean(actionRequest, "graft");
         formId = HtmlUtil.escape(formId);
         campus = HtmlUtil.escape(campus);
         infromid = HtmlUtil.escape(infromid);
@@ -85,7 +86,6 @@ public class Submission extends BaseMVCActionCommand {
         conferenceType = HtmlUtil.escape(conferenceType);
         meeting_theme = HtmlUtil.escape(meeting_theme);
         timeLasts = HtmlUtil.escape(timeLasts);
-        location = HtmlUtil.escape(location);
         newAndOld = HtmlUtil.escape(newAndOld);
         sit = HtmlUtil.escape(sit);
         meetingId = HtmlUtil.escape(meetingId);
@@ -100,6 +100,10 @@ public class Submission extends BaseMVCActionCommand {
             m = dao.findMeetingPlan(meetingId);
         } else {
             m = new MeetingPlan();
+        }
+        if (graft){
+            m.setTask_status("0");
+        }else {
             m.setTask_status("1");
         }
         m.setMeeting_theme_secondary(customTheme);
@@ -140,7 +144,7 @@ public class Submission extends BaseMVCActionCommand {
             if (formId.equals(originalFormId)) {
                if (newAndOld.equals("old")) {
                    // int n = service.save("DELETE from hg_party_meeting_plan_info WHERE inform_id='" + infromid + "' AND organization_id='" + branch + "'");
-                    int n = service.deleteMeetingPlan(infromid, branch);
+                    int n = service.deleteMeetingPlan(meetingId);
                 	if (n == 1) {
                         service.save(m);
                     }

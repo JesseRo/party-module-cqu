@@ -1,4 +1,4 @@
-package party.portlet.personalCenter;
+package party.portlet.personal;
 
 import java.io.IOException;
 import java.util.Map;

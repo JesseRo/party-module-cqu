@@ -64,9 +64,9 @@ public class TodoInformCommand extends FormRenderCommand{
 		meetingId = HtmlUtil.escape(meetingId);
 		String meetingPlanStr=null;
 		try {
-			List<Map<String, Object>> object = secondCommitteeService.queryMeetingPlanByMeetingId(meetingId);
-			object.get(0).put("content", null);
-			meetingPlanStr = new JSONObject(object.get(0)).append("orgType", orgType).toString();
+			Map<String, Object> object = secondCommitteeService.queryMeetingPlanByMeetingId(meetingId);
+			object.put("content", null);
+			meetingPlanStr = new JSONObject(object).append("orgType", orgType).toString();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

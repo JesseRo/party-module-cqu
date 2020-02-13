@@ -36,6 +36,8 @@ import party.constants.PartyPortletKeys;
 		property = {
 			"javax.portlet.name=" + PartyPortletKeys.PartyMeetingPlan,
 			"javax.portlet.name=" + PartyPortletKeys.PartyEntry,
+			"javax.portlet.name=" + PartyPortletKeys.PartyMeetingPlan,
+			"javax.portlet.name=" + PartyPortletKeys.PartyEntryOrg,
 			"mvc.command.name=/PartyWriteActionCommand"
 	    },
 	    service = MVCResourceCommand.class

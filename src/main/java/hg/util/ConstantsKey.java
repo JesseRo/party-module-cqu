@@ -1,8 +1,6 @@
 package hg.util;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 public class ConstantsKey {
     public static final int DRAFT = 1;
@@ -28,6 +26,27 @@ public class ConstantsKey {
     public static final String COMMON_PARTY = "普通党员";
     public static final String OTHER_PARTY = "其他";
 
+    public static final String MEETING_STATE_UNSUBMITTED = "暂存中";
+    public static final String MEETING_STATE_SUBMIT = "已提交";
+    public static final String MEETING_STATE_WITHDRAW = "已撤回";
+    public static final String MEETING_STATE_REJECTED = "被驳回";
+    public static final String MEETING_STATE_PASSED = "已通过";
+    public static final String MEETING_STATE_ASSIGNED = "已指派";
+    public static final String MEETING_STATE_UNCHECKED = "未检查";
+    public static final String MEETING_STATE_CHECKED = "已检查";
+
+    public static final Map<String, String> MEETING_STATES = new HashMap<>(); // 权限 - 组织类型对应
+
+    static {
+        MEETING_STATES.put("0", MEETING_STATE_UNSUBMITTED);
+        MEETING_STATES.put("1",MEETING_STATE_SUBMIT);
+        MEETING_STATES.put("2", MEETING_STATE_WITHDRAW);
+        MEETING_STATES.put("3", MEETING_STATE_REJECTED);
+        MEETING_STATES.put("4", MEETING_STATE_PASSED);
+        MEETING_STATES.put("5", MEETING_STATE_ASSIGNED);
+        MEETING_STATES.put("6", MEETING_STATE_UNCHECKED);
+        MEETING_STATES.put("7", MEETING_STATE_CHECKED);
+    }
 
 
     public static final HashMap<String, String > PERMISSION_TO_ORGTYPE = new HashMap<>(); // 权限 - 组织类型对应

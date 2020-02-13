@@ -32,6 +32,7 @@ import java.util.stream.Collectors;
 		property = {
 				"javax.portlet.name=" + PartyPortletKeys.OrgAdmin,
 				"javax.portlet.name=" + PartyPortletKeys.Form,
+				"javax.portlet.name=" + PartyPortletKeys.CheckPerson,
 				"mvc.command.name=/org/memberGroup"
 	    },
 	    service = MVCResourceCommand.class

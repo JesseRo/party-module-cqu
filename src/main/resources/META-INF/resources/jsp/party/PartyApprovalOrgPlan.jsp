@@ -109,7 +109,7 @@
 		<portlet:resourceURL id="/PartyImageDownCommand" var ="download">  
 		</portlet:resourceURL>
 		<!-- 		录入确定 -->
-		<portlet:resourceURL id="/PartyWriteActionOrgCommand" var="PartyWriteAction" />
+		<portlet:resourceURL id="/PartyWriteActionCommand" var="PartyWriteAction" />
 		<div class="table_form_content">
 			<!-- 右侧盒子内容 -->
 			<div class="activity_manage_page">
@@ -148,14 +148,14 @@
 								<tr>
 									<td data-label="党委名称" class="Party_name">${info.org_name }</td>
 									<td data-label="会议类型">${info.meeting_type }</td>
-									<td data-label="开展主题">${info.meeting_theme_org }</td>
+									<td data-label="开展主题">${info.meeting_theme }</td>
 									<td data-label="开始时间"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${info.start_p }" /></td>
 									<td data-label="操作">
-										<c:if test="${info.task_status_org == '5' }">
+										<c:if test="${info.task_status == '5' }">
 											<a onclick="entry('${info.meeting}')">
 												录入</a>
 										</c:if>
-										<c:if test="${info.task_status_org == '7' }">
+										<c:if test="${info.task_status == '7' }">
 											<a onclick="entry('${info.meeting}')">
 												修改</a>
 										</c:if>

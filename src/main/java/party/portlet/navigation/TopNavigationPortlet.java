@@ -11,6 +11,8 @@ import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import com.liferay.portal.kernel.service.persistence.PortletUtil;
+import com.liferay.portal.kernel.util.PortalUtil;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.springframework.util.StringUtils;
@@ -117,6 +119,8 @@ public class TopNavigationPortlet extends MVCPortlet {
 		if (!StringUtils.isEmpty(userId)) {
 			List<String> roles = userRoleService.getRoles((String)userId);
 			renderRequest.setAttribute("roles",  roles);
+		}else{
+			PortalUtil.getHttpServletResponse(renderResponse).sendRedirect("/home");
 		}
 		renderRequest.setAttribute("name", name);
 		renderRequest.setAttribute("role", role);

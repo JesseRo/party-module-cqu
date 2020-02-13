@@ -28,53 +28,134 @@
 			</div>
 			<div class="bg_white_container">
 				<div class="details_container">
-					<p class="details_title">${meetingTheme }</p>
+					<p class="details_title">${org.org_name}--${meetingTheme }</p>
 					<div class="details_content">
 						<div class="details_content_title" style="border-bottom: 0px solid #e1e1e1;">
 							<p class="col-sm-6 col-xs-12"><span>会议类型</span>${type }</p>
 							<p class="col-sm-6 col-xs-12"><span>开展时间</span>${time }</p>
 						</div>
 						<div class="details_content_title" style="border-bottom: 0px solid #e1e1e1;">
-							<p class="col-sm-6 col-xs-12"><span>开展地点：</span>${meetingPlan.place }</p>
-							<p class="col-sm-6 col-xs-12"><span>参会人员：</span>${meetingUserName }</p>
+							<p class="col-sm-6 col-xs-12"><span>开展校区：</span>${meetingPlan.campus}</p>
+							<p class="col-sm-6 col-xs-12"><span>开展地点：</span>${meetingPlan.placeName }</p>
 						</div>
 						<div class="details_content_title" style="border-bottom: 0px solid #e1e1e1;">
-							<p class="col-sm-6 col-xs-12"><span>主持人：</span>${meetingPlan.host }</p>
-							<p class="col-sm-6 col-xs-12"><span>列席人员：</span>${meetingPlan.sit }</p>
+							<p class="col-sm-6 col-xs-12"><span>参会人员：</span>${meetingUserName }</p>
+							<p class="col-sm-6 col-xs-12"><span>主持人：</span>${meetingPlan.hostName }</p>
 						</div>
-						<div class="details_content_title">
-							<p class="col-sm-6 col-xs-12"><span>联系人：</span>${meetingPlan.contact }</p>
+						<div class="details_content_title" style="border-bottom: 0px solid #e1e1e1;">
+							<p class="col-sm-6 col-xs-12"><span>联系人：</span>${meetingPlan.contactName }</p>
 							<p class="col-sm-6 col-xs-12"><span>联系人电话：</span>${meetingPlan.contact_phone }</p>
 						</div>
-						<div class="details_content_info" style="word-wrap:break-word">${content }</div>
-						<h2 style="color: #47647a;font-size:14px;">
-							<u>
-								<portlet:resourceURL id="/dowloadResourceCommand" var ="download">
-									<portlet:param name="attachment_url" value="${attachment }"/>
-								</portlet:resourceURL>
-								<c:if test="${ ! empty attachment }">
-									<span class="glyphicon glyphicon-chevron-right" style="color: #47647a;"></span>&nbsp;&nbsp;附件下载:&nbsp;
-									<a href="${download}">《${ attName }》</a>
-								</c:if>
-							</u>
-						</h2>
-						<div class="btn_group">
-							<c:if test="${orgType == 'secondary'}" >
-								<a onclick="window.location.href='/approvalplanone'" href="javascript:;">
-									<button class="btn btn-default btn-lg main_color_btn">返回</button>
-								</a>
-							</c:if>
-							<c:if test="${orgType == 'branch'}" >
-								<a onclick="window.location.href='/approvalplantwo'" href="javascript:;">
-									<button class="btn btn-default btn-lg main_color_btn">返回</button>
-								</a>
-							</c:if>
+						<div class="details_content_title" style="border-bottom: 0px solid #e1e1e1;">
+							<p class="col-sm-6 col-xs-12"><span>列席人员：</span>${meetingPlan.sit }</p>
+							<p class="col-sm-6 col-xs-12"></p>
+						</div>
+						<div class="details_content_title" style="border-bottom: 0px solid #e1e1e1;">
+							<p class="col-sm-6 col-xs-12"><span>详细内容：</span></p>
+							<p class="col-sm-6 col-xs-12"></p>
+						</div>
+						<div class="details_content_info" style="word-wrap:break-word">
+							${content }
+						</div>
+<%--						<h2 style="color: #47647a;font-size:14px;">--%>
+<%--							<u>--%>
+<%--								<portlet:resourceURL id="/dowloadResourceCommand" var ="download">--%>
+<%--									<portlet:param name="attachment_url" value="${attachment }"/>--%>
+<%--								</portlet:resourceURL>--%>
+<%--								<c:if test="${ ! empty attachment }">--%>
+<%--									<span class="glyphicon glyphicon-chevron-right" style="color: #47647a;"></span>&nbsp;&nbsp;附件下载:&nbsp;--%>
+<%--									<a href="${download}">《${ attName }》</a>--%>
+<%--								</c:if>--%>
+<%--							</u>--%>
+<%--						</h2>--%>
+<%--						<div class="btn_group">--%>
+<%--							<c:if test="${orgType == 'secondary'}" >--%>
+<%--								<a onclick="window.location.href='/approvalplanone'" href="javascript:;">--%>
+<%--									<button class="btn btn-default btn-lg main_color_btn">返回</button>--%>
+<%--								</a>--%>
+<%--							</c:if>--%>
+<%--							<c:if test="${orgType == 'branch'}" >--%>
+<%--								<a onclick="window.location.href='/approvalplantwo'" href="javascript:;">--%>
+<%--									<button class="btn btn-default btn-lg main_color_btn">返回</button>--%>
+<%--								</a>--%>
+<%--							</c:if>--%>
 
+<%--						</div>--%>
+						<c:if test="${hasNote}">
+							<div class="details_content_title" style="border-bottom: 0px solid #e1e1e1;">
+								<p class="col-sm-6 col-xs-12"><span>实到人员：</span>${attendances }</p>
+								<p class="col-sm-6 col-xs-12"></p>
+							</div>
+							<div class="details_content_title">
+								<p class="col-sm-6 col-xs-12"><span>会议纪要：</span></p>
+								<p class="col-sm-6 col-xs-12"></p>
+							</div>
+							<div class="details_content_info" style="word-wrap:break-word">
+								${note.attachment }
+							</div>
+						</c:if>
+						<div class="col-sm-12 col-xs-12">
+							<div class="layui-inline btn_group"
+								 style="width: calc(50% - 120px);margin: 0;margin-top: 10px;">
+								<label class="layui-form-label"></label>
+								<div class="layui-input-inline">
+									<input value="${meetingPlan.task_status == '1'}" type="hidden">
+									<input value="${isSelf}" type="hidden">
+									<c:if test="${meetingPlan.task_status == '1' && not isSelf}">
+										<button type="button" onclick="Pass('${meetingPlan.meeting_id}');" class="layui-btn" style="padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;background-color: #FFAB33;border-radius: 4px;">
+											通过
+										</button>
+										<button type="button" onclick="reject('${meetingPlan.meeting_id}');" class="layui-btn layui-btn-primary" style="background-color: transparent;color: #666;padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;border-radius: 4px;">
+											驳回
+										</button>
+									</c:if>
+									<button type="button" onclick="window.history.back();"
+											class="layui-btn layui-btn-primary" style="background-color: transparent;color: #666;padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;border-radius: 4px;">
+										返回
+									</button>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+		<script>
+			<portlet:resourceURL id="/PartyPassCommand" var="PartyPass" />
+			<portlet:resourceURL id="/PartyRejectedCommand" var="PartyRejected" />
 
+			function Pass(meeting_id){
+				layuiModal.confirm("确认通过？", function(){
+					var url = "${PartyPass}";
+					$.ajax({
+						url:url,
+						data:{"meeting_id":meeting_id},
+						dataType:'json',
+						success:function(){
+							layuiModal.alert("已审核通过", function(){
+								window.history.back();
+							});
+						}
+					});
+				})
+			}
+			function reject(meeting_id2){
+				var url = "${PartyRejected}";
+				layuiModal.confirm("确认驳回？", function(){
+					$.ajax({
+						url:url,
+						data:{meeting_id2:meeting_id2},
+						dataType:'json',
+						async:false,
+						success:function(){
+							layuiModal.alert("已驳回", function(){
+								window.history.back();
+							});
+						}
+					});
+				});
+			}
+		</script>
+	</div>
 	</body>
 </html>
