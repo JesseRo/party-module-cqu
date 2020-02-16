@@ -193,6 +193,8 @@ public class PartyPortletKeys {
     public static final String MeetingNotePortlet = "MeetingNotePortlet";
 
 	public static final String LeaderMeetingStatistics = "LeaderMeetingStatistics";
+
+	public static final String DuesCalculate = "DuesCalculate";//党费计算
 }
 
 
