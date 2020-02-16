@@ -34,6 +34,7 @@ public class DuesCalculateService {
     public DuesResult companyMemberCal(DuesCal duesCal) {
         return companyCalculate(duesCal);
     }
+    
     /**
      * 离退休教职工党员
      * @return
@@ -41,6 +42,7 @@ public class DuesCalculateService {
     public DuesResult retireEmployeeCal(DuesCal duesCal) {
         return retireEmployeeCalculate(duesCal);
     }
+    
     /**
      * 学生党员
      * @return
@@ -48,6 +50,7 @@ public class DuesCalculateService {
     public DuesResult studentCal() {
         return new DuesResult(0,0,0,0.2);
     }
+    
     /**
      * 在职就读硕士/博士党员
      * @return
@@ -81,7 +84,7 @@ public class DuesCalculateService {
         }{
             duesPercent = new BigDecimal(0.020);
         }
-        duesMoney = duesMoney.multiply(duesPercent);
+        duesMoney = duesBasic.multiply(duesPercent);
         return new DuesResult(personTax.doubleValue(),duesBasicNum,duesPercent.doubleValue(),duesMoney.doubleValue());
     }
 
@@ -109,7 +112,7 @@ public class DuesCalculateService {
         }{
             duesPercent = new BigDecimal(0.020);
         }
-        duesMoney = duesMoney.multiply(duesPercent);
+        duesMoney = duesBasic.multiply(duesPercent);
         return new DuesResult(personTax.doubleValue(),duesBasicNum,duesPercent.doubleValue(),duesMoney.doubleValue());
     }
     private DuesResult retireEmployeeCalculate(DuesCal duesCal){
@@ -122,7 +125,7 @@ public class DuesCalculateService {
         }{
             duesPercent = new BigDecimal(0.010);
         }
-        duesMoney = duesMoney.multiply(duesPercent);
+        duesMoney = duesCal.getBasicSalary().multiply(duesPercent);
         return new DuesResult(0,duesBasicNum,duesPercent.doubleValue(),duesMoney.doubleValue());
     }
 

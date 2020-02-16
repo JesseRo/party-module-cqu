@@ -193,7 +193,7 @@
 						</div>
 
 						<!--年薪制党员-->
-						<div class="layui-tab-item layui-show" id="yearCal">
+						<div class="layui-tab-item" id="yearCal">
 							<div class="layui-form fee_form">
 								<div class="layui-form-item">
 									<label class="layui-form-label">岗位工资</label>
@@ -538,6 +538,9 @@
 	</div>
 	<script type="text/javascript">
 		$(".layui-tab ul li").on("click",function(){
+			$(".layui-tab-content .layui-tab-item .layui-input-block .basicDues").text("0元");
+			$(".layui-tab-content .layui-tab-item .layui-input-block .percentDues").text("0%");
+			$(".layui-tab-content .layui-tab-item .layui-input-block .personalTax").text("0元");
 			$(".layui-tab-content .layui-tab-item .layui-input-block .duesPerMonth").text("0元");
 			let index = $(this).index();
 			$(".layui-tab ul li").removeClass("layui-this");
@@ -618,13 +621,13 @@
 					if(data.code == 200){
 						console.log(data);
 						let duesPerMonth = data.data.duesPerMonth;
-						switch(partyType){
-							case 0:break;
-							case 1:break;
-							case 2:break;
-							case 3:break;
-							case 4:break;
-							case 5:break;
+						if(partyType!=5 && partyType!=5){
+							let basicDues = data.data.basicDues;
+							let percentDues = data.data.percentDues*100;
+							let personalTax = data.data.personalTax;
+							$(".layui-tab-content .layui-tab-item .layui-input-block .basicDues").text(basicDues.toFixed(2)+"元");
+							$(".layui-tab-content .layui-tab-item .layui-input-block .percentDues").text(percentDues.toFixed(2)+"%");
+							$(".layui-tab-content .layui-tab-item .layui-input-block .personalTax").text(personalTax.toFixed(2)+"元");
 						}
 						$(".layui-tab-content .layui-tab-item .layui-input-block .duesPerMonth").text(duesPerMonth.toFixed(2)+"元");
 					}
