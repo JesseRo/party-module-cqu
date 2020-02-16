@@ -3,15 +3,12 @@ package party.portlet.party;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import org.apache.log4j.Logger;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 import party.constants.PartyPortletKeys;
-
 import javax.portlet.Portlet;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import java.io.IOException;
-import java.util.Map;
 
 /**
  * 文件名称： party<br>
@@ -36,7 +33,6 @@ import java.util.Map;
 )
 public class DuesCalculatePortlet extends MVCPortlet {
 	Logger log = Logger.getLogger(DuesCalculatePortlet.class);
-	
 	
 	@Override
 	public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
