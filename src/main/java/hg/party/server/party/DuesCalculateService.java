@@ -1,7 +1,7 @@
 package hg.party.server.party;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
+
 
 import org.osgi.service.component.annotations.Component;
 
@@ -59,13 +59,13 @@ public class DuesCalculateService {
         return monthSalaryCalculate(duesCal);
     }
 
-
-    private DuesResult monthSalaryCalculate(DuesCal duesCal){
+   // 系统自动计算理论税值，不填写，公示按照国家标准）：应纳税额=岗位工资+薪级工资+工改（保留两位小数）+绩效工资理论值-住房公积金-医保-养老个人-失业个人-职业年金
+    private   DuesResult monthSalaryCalculate(DuesCal duesCal){
         BigDecimal personTax =  getPersonalTax(duesCal);//个税
         BigDecimal duesBasic = duesCal.getBasicSalary().add(duesCal.getLevelSalary())
                 .add(duesCal.getPriceSubsidy())
                 .add(duesCal.getPlaceSubsidy())
-                .add(duesCal.getPlaceSubsidy())
+                .add(duesCal.getPerformance())
                 .subtract(duesCal.getHousingFund())
                 .subtract(duesCal.getUnemployedInsurance())
                 .subtract(duesCal.getTreatmentInsurance())
@@ -75,25 +75,27 @@ public class DuesCalculateService {
         double duesBasicNum  = duesBasic.doubleValue();//党费基数
         BigDecimal duesPercent;//党费比例
         BigDecimal duesMoney =  new BigDecimal(0);//每月党费
-        if(duesBasicNum <= 3000){
+        if(duesBasicNum <= 0){
+            duesPercent = new BigDecimal(0.00);
+        }else if(duesBasicNum <= 3000){
             duesPercent = new BigDecimal(0.005);
         }else if(duesBasicNum <= 5000){
             duesPercent = new BigDecimal(0.010);
         }else if(duesBasicNum <= 10000){
             duesPercent = new BigDecimal(0.015);
-        }{
+        }else{
             duesPercent = new BigDecimal(0.020);
         }
         duesMoney = duesBasic.multiply(duesPercent);
         return new DuesResult(personTax.doubleValue(),duesBasicNum,duesPercent.doubleValue(),duesMoney.doubleValue());
     }
 
-    private DuesResult companyCalculate(DuesCal duesCal){
+    private  DuesResult companyCalculate(DuesCal duesCal){
         BigDecimal personTax =  getPersonalTax(duesCal);//个税
         BigDecimal duesBasic = duesCal.getBasicSalary().add(duesCal.getLevelSalary())
                 .add(duesCal.getPriceSubsidy())
                 .add(duesCal.getPlaceSubsidy())
-                .add(duesCal.getPlaceSubsidy())
+                .add(duesCal.getPerformance())
                 .subtract(duesCal.getHousingFund())
                 .subtract(duesCal.getUnemployedInsurance())
 /*                .subtract(duesCal.getTreatmentInsurance())
@@ -103,13 +105,15 @@ public class DuesCalculateService {
         double duesBasicNum  = duesBasic.doubleValue();//党费基数
         BigDecimal duesPercent;//党费比例
         BigDecimal duesMoney =  new BigDecimal(0);//每月党费
-        if(duesBasicNum <= 3000){
+        if(duesBasicNum <= 0){
+            duesPercent = new BigDecimal(0.00);
+        }else if(duesBasicNum <= 3000){
             duesPercent = new BigDecimal(0.005);
         }else if(duesBasicNum <= 5000){
             duesPercent = new BigDecimal(0.010);
         }else if(duesBasicNum <= 10000){
             duesPercent = new BigDecimal(0.015);
-        }{
+        }else{
             duesPercent = new BigDecimal(0.020);
         }
         duesMoney = duesBasic.multiply(duesPercent);
@@ -120,9 +124,11 @@ public class DuesCalculateService {
         double duesBasicNum  = duesCal.getBasicSalary().doubleValue();//党费基数
         BigDecimal duesPercent;//党费比例
         BigDecimal duesMoney =  new BigDecimal(0);//每月党费
-        if(duesBasicNum <= 5000){
+        if(duesBasicNum <= 0){
+            duesPercent = new BigDecimal(0.00);
+        }else if(duesBasicNum <= 5000){
             duesPercent = new BigDecimal(0.005);
-        }{
+        }else{
             duesPercent = new BigDecimal(0.010);
         }
         duesMoney = duesCal.getBasicSalary().multiply(duesPercent);
@@ -130,11 +136,11 @@ public class DuesCalculateService {
     }
 
 
-    private static BigDecimal getPersonalTax(DuesCal duesCal){
+    private  BigDecimal getPersonalTax(DuesCal duesCal){
         double taxMoney = duesCal.getBasicSalary().add(duesCal.getLevelSalary())
                 .add(duesCal.getPriceSubsidy())
                 .add(duesCal.getPlaceSubsidy())
-                .add(duesCal.getPlaceSubsidy())
+                .add(duesCal.getPerformance())
                 .subtract(duesCal.getHousingFund())
                 .subtract(duesCal.getUnemployedInsurance())
                 .subtract(duesCal.getTreatmentInsurance())

@@ -1,22 +1,24 @@
 package hg.party.dao.party;
 
 import com.dt.springjdbc.dao.impl.PostgresqlDaoImpl;
-import hg.party.entity.party.MeetingPlan;
+import hg.party.entity.party.JobLevelPerformance;
 import org.osgi.service.component.annotations.Component;
-
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.RowMapper;
 
 import java.util.List;
-import java.util.Map;
+
 
 @Component(immediate = true, service = JobLevelPerformanceDao.class)
-public class JobLevelPerformanceDao extends PostgresqlDaoImpl<MeetingPlan> {
+public class JobLevelPerformanceDao extends PostgresqlDaoImpl<JobLevelPerformance> {
+
+
     /**
-     * 查询岗位级别绩效查询
+     * 查询所有岗位级别绩效
      */
-    public List<Map<String, Object>> findJobLevelPerformanceAll(){
-        String sql = "select p.id,p.job_name jobName,p.job_performance jobPerformance,p.job_type_id jobTypeId,t.name jobTypeName FROM job_level_performance  as p "
-                +"LEFT  JOIN job_type as t on p.job_type_id=t.id "
-                +"order by t.id asc,p.id asc";
-        return jdbcTemplate.queryForList(sql);
+    public List<JobLevelPerformance> findAllJobLevelPerformance(){
+        String sql = "select * from job_level_performance order by id asc";
+        RowMapper<JobLevelPerformance> rowMapper = BeanPropertyRowMapper.newInstance(JobLevelPerformance.class);
+        return this.jdbcTemplate.query(sql,rowMapper);
     }
 }
