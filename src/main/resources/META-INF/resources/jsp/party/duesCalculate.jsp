@@ -71,7 +71,7 @@
 		</style>
 	</head>
 	<body class="front">
-	<div class="main_content table_form_content activity_manage_container">
+	<div class="table_form_content">
 		<!-- 右侧盒子内容 -->
 		<div class="activity_manage_page party_fee_container">
 			<div class="breadcrumb_group">
