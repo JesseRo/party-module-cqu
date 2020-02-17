@@ -31,13 +31,34 @@
                         if(res.result){
                             alert("提交成功");
                         }else {
-                            alert(res.message);
+                            alert("失败");
                         }
                     });
                     return false;
                 });
-
+                var data = ${retentionJson};
+                if(data) {
+                    form.val("retentionForm", {
+                        to_org_name: data.to_org_id,
+                        to_org_contact: data.to_org_contact,
+                        qq: data.qq,
+                        wechat: data.wechat,
+                        foreignLimit: data.foreign_limit,
+                        birthplace: data.birth_place,
+                        aboardDate: data.aboard_date,
+                        returnDate: data.return_date,
+                        toCountry: data.target_country,
+                        studyDegree: data.study_degree,
+                        currentDegree: data.current_degree,
+                        studyType: data.study_type,
+                        domestic: data.domestic_address,
+                        domesticContactPerson: data.domestic_contact,
+                        domesticContactPhone: data.domestic_contact_number,
+                        extra: data.extra
+                    });
+                }
             });
+
             //时间选择器
             layui.use('laydate', function(){
                 var laydate = layui.laydate;
@@ -78,7 +99,7 @@
                     <p>基本信息</p>
                     <p>详细信息</p>
                 </div>
-                <form class="layui-form custom_form" id="retentionForm">
+                <form class="layui-form custom_form" id="retentionForm" lay-filter="retentionForm">
                     <div class="layui-inline">
                         <label class="layui-form-label">姓名：</label>
                         <div class="layui-input-inline">
@@ -255,10 +276,20 @@
                     </div>
                     <div class="layui-inline btn_group" style="border-bottom: none;">
                         <label class="layui-form-label"></label>
-                        <div class="layui-input-inline">
-                            <button type="submit" class="layui-btn" lay-submit="" lay-filter="retentionForm">提交</button>
+                        <div class="layui-input-inline" style="padding-bottom: 0;">
+                            <c:choose>
+                                <c:when test="${already}">
+                                    <button type="submit" disabled class="layui-btn" lay-submit="" lay-filter="retentionForm">提交</button>
+                                </c:when>
+                                <c:otherwise>
+                                    <button type="submit" class="layui-btn" lay-submit="" lay-filter="retentionForm">提交</button>
+                                </c:otherwise>
+                            </c:choose>
                             <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                         </div>
+                        <c:if test="${already}">
+                            <label style="color: red;margin-top: 20px;">审核中</label>
+                        </c:if>
                     </div>
                 </form>
             </div>

@@ -23,7 +23,8 @@ public class RetentionDao extends PostgresqlDaoImpl<Retention> {
     }
 
     public PostgresqlQueryResult<Map<String, Object>> findSecondaryPage(int page, int size, String orgId) {
-        String sql = "select * from hg_party_retention t inner join hg_party_org o on t.org_id = o.org_id" +
+        String sql = "select t.*, o.org_name from hg_party_retention t " +
+                "left join hg_party_org o on t.org_id = o.org_id" +
                 " where o.org_parent = ? order by t.status asc";
         if (size <= 0){
             size = 10;
@@ -36,12 +37,38 @@ public class RetentionDao extends PostgresqlDaoImpl<Retention> {
     }
 
     public PostgresqlQueryResult<Map<String, Object>> findRootPage(int page, int size) {
-        String sql = "select * from hg_party_retention order by status asc";
+        String sql = "select t.*, o.org_name from hg_party_retention t " +
+                "left join hg_party_org o on t.org_id = o.org_id" +
+                " order by status asc";
         if (size <= 0){
             size = 10;
         }
         try {
             return postGresqlFindBySql(page, size, sql);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public Retention findByUser(String user) {
+        try {
+            String sql = "select * from hg_party_retention where user_id = ?";
+            return jdbcTemplate.queryForObject(sql, BeanPropertyRowMapper.newInstance(Retention.class), user);
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+  }
+
+    public PostgresqlQueryResult<Map<String, Object>> findBrunchPage(int page, int size, String orgId) {
+        String sql = "select t.*, o.org_name from hg_party_retention t " +
+                "left join hg_party_org o on t.org_id = o.org_id" +
+                " where o.org_id = ? order by t.status asc";
+        if (size <= 0){
+            size = 10;
+        }
+        try {
+            return postGresqlFindBySql(page, size, sql, orgId);
         } catch (Exception e) {
             return null;
         }

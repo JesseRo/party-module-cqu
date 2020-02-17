@@ -45,9 +45,9 @@ public class Retention implements Serializable {
 
     private String foreign_limit;
 
-    private Date aboard_date;
+    private String aboard_date;
 
-    private Date return_date;
+    private String return_date;
 
     private String study_degree;
 
@@ -279,19 +279,19 @@ public class Retention implements Serializable {
         this.foreign_limit = foreign_limit;
     }
 
-    public Date getAboard_date() {
+    public String getAboard_date() {
         return aboard_date;
     }
 
-    public void setAboard_date(Date aboard_date) {
+    public void setAboard_date(String  aboard_date) {
         this.aboard_date = aboard_date;
     }
 
-    public Date getReturn_date() {
+    public String getReturn_date() {
         return return_date;
     }
 
-    public void setReturn_date(Date return_date) {
+    public void setReturn_date(String return_date) {
         this.return_date = return_date;
     }
 

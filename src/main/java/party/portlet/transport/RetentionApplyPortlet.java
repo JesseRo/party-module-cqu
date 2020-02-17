@@ -12,6 +12,8 @@ import hg.party.entity.partyMembers.Member;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import party.constants.PartyPortletKeys;
+import party.portlet.transport.dao.RetentionDao;
+import party.portlet.transport.entity.Retention;
 
 import javax.portlet.Portlet;
 import javax.portlet.PortletException;
@@ -43,6 +45,8 @@ public class RetentionApplyPortlet extends MVCPortlet {
     private OrgDao orgDao;
     @Reference
     private UserDao userDao;
+    @Reference
+    private RetentionDao retentionDao;
     @Override
     public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
             throws IOException, PortletException {
@@ -52,6 +56,14 @@ public class RetentionApplyPortlet extends MVCPortlet {
             User user = userDao.findUserByEthnicity(userId);
             list.get(0).put("email", user.getUser_mailbox());
             renderRequest.setAttribute("member", list.get(0));
+        }
+        Retention retention = retentionDao.findByUser(userId);
+        if (retention != null){
+            renderRequest.setAttribute("retentionJson", gson.toJson(retention));
+            renderRequest.setAttribute("already", true);
+        }else {
+            renderRequest.setAttribute("retentionJson", "null");
+            renderRequest.setAttribute("already", false);
         }
         super.doView(renderRequest, renderResponse);
     }

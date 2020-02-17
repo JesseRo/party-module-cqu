@@ -51,7 +51,9 @@ public class TransportPageCommand implements MVCResourceCommand {
 		int page = ParamUtil.getInteger(resourceRequest, "page");
 		int size = ParamUtil.getInteger(resourceRequest, "limit");
 		PostgresqlQueryResult<Map<String, Object>> data = null;
-		if (organization.getOrg_type().equalsIgnoreCase(ConstantsKey.ORG_TYPE_SECONDARY)){
+		if (organization.getOrg_type().equalsIgnoreCase(ConstantsKey.ORG_TYPE_BRANCH)) {
+			data = transportDao.findBranchPage(page, size, orgId);
+		} else if (organization.getOrg_type().equalsIgnoreCase(ConstantsKey.ORG_TYPE_SECONDARY)){
 			data = transportDao.findSecondaryPage(page, size, orgId);
 		}else if (organization.getOrg_type().equalsIgnoreCase(ConstantsKey.ORG_TYPE_ROOT)){
 			data = transportDao.findRootPage(page, size);

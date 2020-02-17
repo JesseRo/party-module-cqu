@@ -102,11 +102,12 @@ public class RetentionSaveCommand implements MVCResourceCommand {
 		Gson gson = new Gson();
 		try {
 			retention.setUser_name(name);
+			retention.setUser_id(userId);
 			retention.setSex(sex);
 			retention.setEthnicity(ethnicity);
 			retention.setMember_type(memberType);
 			retention.setJoin_date(joinDate);
-			retention.setOrg_id(org);
+			retention.setOrg_id(orgId);
 			retention.setTo_org_id(to_org_name);
 			retention.setTo_org_contact(to_org_contact);
 			retention.setBirthday(birthday);
@@ -116,8 +117,8 @@ public class RetentionSaveCommand implements MVCResourceCommand {
 			retention.setWechat(wechat);
 			retention.setEmail(email);
 			retention.setForeign_limit(foreignLimit);
-			retention.setAboard_date( java.sql.Date.valueOf(aboardDate));
-			retention.setReturn_date(java.sql.Date.valueOf(returnDate));
+			retention.setAboard_date(aboardDate);
+			retention.setReturn_date(returnDate);
 			retention.setTarget_country(toCountry);
 			retention.setStudy_degree(studyDegree);
 			retention.setCurrent_degree(currentDegree);
@@ -126,7 +127,9 @@ public class RetentionSaveCommand implements MVCResourceCommand {
 			retention.setDomestic_contact(domesticContactPerson);
 			retention.setDomestic_contact_number(domesticContactPhone);
 			retention.setRetention_id(UUID.randomUUID().toString());
-
+			retention.setTime(new Timestamp(System.currentTimeMillis()));
+			retention.setStatus(ConstantsKey.INITIAL);
+			retention.setExtra(extra);
 			retentionDao.save(retention);
 
 			res.getWriter().write(gson.toJson(JsonResponse.Success()));

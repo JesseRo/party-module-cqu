@@ -365,6 +365,11 @@ public class MemberDao extends PostgresqlDaoImpl<Member> {
         jdbcTemplate.execute(sql);
     }
 
+    public void deleteUser(Member member) {
+        String sql = "update hg_party_member set historic = true where id = ?";
+        jdbcTemplate.update(sql, member.getId());
+    }
+
     public void updateUsers(List<Member> list) {
         if (list == null || list.size() == 0) {
             return;

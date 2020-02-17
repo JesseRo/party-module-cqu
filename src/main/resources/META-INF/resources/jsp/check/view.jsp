@@ -37,9 +37,14 @@
                     },
                     cols: [[ //表头
                         {field: 'id', title: 'id', hide: true},
-                        {field: 'member_name', title: '督察人员', width:'33.3%'},
-                        {field: 'campus', title: '所在校区', width:'33.3%'},
-                        {field: 'meeting_theme', title: '操作', width:'33.4%', toolbar: '#transportBtns'}
+                        {field: 'member_code', title: '工号', width:'15%'},
+                        {field: 'member_name', title: '姓名', width:'15%'},
+                        {field: 'org_name', title: '所在组织', width:'15%'},
+                        {field: 'secName', title: '上级组织', width:'15%'},
+                        {field: 'campus', title: '所在校区', width:'10%'},
+                        {field: 'type', title: '类别', width:'10%'},
+                        {field: 'count', title: '检查次数', width:'10%'},
+                        {field: 'meeting_theme', title: '操作', width:'10%', toolbar: '#transportBtns'}
                     ]]
                 });
             });
@@ -124,13 +129,24 @@
                         "            </select>\n" +
                         "        </div>\n" +
                         "    </div>\n" +
+                        "    <div class=\"layui-form-item\">\n" +
+                        "        <label class=\"layui-form-label\" style='width: 100px;'>类别：</label>\n" +
+                        "        <div class=\"layui-input-block\">\n" +
+                        "            <select autocomplete=\"off\" class=\"form-control\" id=\"add_type\">\n" +
+                        "                <option disabled selected>请选择类别</option>\n" +
+                        "                <option>一类</option>\n" +
+                        "                <option>二类</option>\n" +
+                        "            </select>\n" +
+                        "        </div>\n" +
+                        "    </div>\n" +
                         "</div>"
                     ,btn: ['确定', '取消']
                     ,yes: function (index) {
                         var user = $('#add_user').val();
                         var campus = $('#add_campus').val();
-                        if (user && campus){
-                            $.post('${add}', {userId: user, campus: campus}, function (res) {
+                        var type = $('#add_type').val();
+                        if (user && campus && type){
+                            $.post('${add}', {userId: user, campus: campus, type: type}, function (res) {
                                 if (res.result){
                                     _reload();
                                     layer.close(index);
@@ -167,9 +183,14 @@
                 },
                 cols: [[ //表头
                     {field: 'id', title: 'id', hide: true},
-                    {field: 'member_name', title: '督察人员', width:'33.3%'},
-                    {field: 'campus', title: '所在校区', width:'33.3%'},
-                    {field: 'meeting_theme', title: '操作', width:'33.4%', toolbar: '#transportBtns'}
+                    {field: 'member_code', title: '工号', width:'15%'},
+                    {field: 'member_name', title: '姓名', width:'15%'},
+                    {field: 'org_name', title: '所在组织', width:'15%'},
+                    {field: 'secname', title: '上级组织', width:'15%'},
+                    {field: 'campus', title: '所在校区', width:'10%'},
+                    {field: 'type', title: '类别', width:'10%'},
+                    {field: 'count', title: '检查次数', width:'10%'},
+                    {field: 'meeting_theme', title: '操作', width:'10%', toolbar: '#transportBtns'}
                 ]]
             });
         }
