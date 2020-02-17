@@ -103,7 +103,7 @@ public class PartySecondaryPortlet extends MVCPortlet{
                 "\tplan.ID AS plan_id,\n" +
                 "\torg.org_id AS org_id_u,\n" +
                 "\tplan.start_time AS start_p,\n" +
-                "\tplan.end_time AS end_p,\n" +
+                "\tplan.end_time AS end_p, users.user_name as checker,\n" +
                 "\torg.org_name AS org_namez, place.place as placeName, * \n" +
                 "FROM\n" +
                 "\thg_party_meeting_plan_info AS plan \n" +

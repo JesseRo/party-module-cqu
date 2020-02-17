@@ -35,15 +35,15 @@
                 <div class="party_organ_container">
                     <div class="organ_item">
                         <p class="organ_title">二级党组织</p>
-                        <p class="organ_num">3</p>
+                        <p class="organ_num">${secondaryCount}</p>
                     </div>
                     <div class="organ_item">
                         <p class="organ_title">党支部</p>
-                        <p class="organ_num">5</p>
+                        <p class="organ_num">${brunchCount}</p>
                     </div>
                     <div class="organ_item">
                         <p class="organ_title">党员</p>
-                        <p class="organ_num">186</p>
+                        <p class="organ_num">${allMemberCount}</p>
                     </div>
                     <div class="organ_item">
                         <p class="organ_title">党组织生活</p>
@@ -85,15 +85,21 @@
                 <p class="index_title"><span class="text">党员分布</span></p>
                 <div id="attendContainer" class="attend_container">
                     <div class="triple_charts">
-                        <div id="attendContainer1"></div>
-                        <div id="attendContainer2"></div>
-                        <div id="attendContainer3"></div>
+                        <c:forEach var="i" items="${memberGroups}">
+                            <div class="member_container"></div>
+                        </c:forEach>
+
                     </div>
                 </div>
                 <ul class="charts_dots" style="color: transparent;">
-                    <li class="on"></li>
-                    <li></li>
-                    <li></li>
+                    <c:forEach var="i" items="${memberGroups}">
+                        <c:if test="${s.index == 0}">
+                            <li class="on"></li>
+                        </c:if>
+                        <c:if test="${s.index != 0}">
+                            <li class=""></li>
+                        </c:if>
+                    </c:forEach>
                 </ul>
             </div>
             <div class="activity_outer_container">
@@ -104,7 +110,7 @@
                 <p class="index_title">
                     系统总访问量
                     <span class="view_num"></span>
-                    <span class="view_desrc">比昨日<span class="red_text">+7.9%</span></span>
+                    <span class="view_desrc">比昨日<span class="red_text">${percents}</span></span>
                 </p>
                 <div id="viewContainer" class="view_container"></div>
             </div>
@@ -369,90 +375,80 @@
 
     //渲染活动出勤率
     function renderAttendChart(){
-        var attendChart1 = echarts.init(document.getElementById('attendContainer1'));
-        var attendChart2 = echarts.init(document.getElementById('attendContainer2'));
-        var attendChart3 = echarts.init(document.getElementById('attendContainer3'));
-        var mockData1 = [];
-        var mockData2 = [];
-        var defaultData = ['音乐学院',  '音乐学院1', '音乐学院2', '音乐学院',  '音乐学院1', '音乐学院2', '音乐学院',  '音乐学院1', '音乐学院2', '音乐学院',  '音乐学院1', '音乐学院2'];
-        var pushItem = function(num){
-            if(num > 0){
-                mockData1.push({
-                    value: 10 * num,
+        var secNameGroups = ${secNameGroup};
+        var secCountGroups = ${secCountGroup};
+        $('.member_container').each(function (i, e) {
+            var attendChart = echarts.init(e);
+            var names = secNameGroups[i];
+            var counts = secCountGroups[i];
+            var items = counts.map(function (p) {
+                return {
+                    value: p,
                     symbol: 'roundRect',
                     symbolRepeat: true,
                     symbolSize: ['150%', '25%']
-                });
-                mockData2.push({
-                    value: 150,
-                    symbol: 'roundRect',
-                    symbolRepeat: true,
-                    symbolSize: ['150%', '25%']
-                });
-                return pushItem(num -= 1)
-            }
-        };
-        pushItem(12);
-        var option = {
-            grid:{
-                top:0,
-                left:0,
-                bottom:0,
-                right:0,
-                containLabel:true
-            },
-            xAxis: [{
-                data: defaultData,
-                axisTick: {show: false},
-                axisLine: {
-                    lineStyle:{
-                        color:'#F9EAEC'
-                    }
-                },
-                axisLabel: {
-                    interval:0,
-                    color:'#480707',
-                    fontSize:(14 / 1920) * window.innerWidth
                 }
-            }],
-            yAxis: {
-                splitLine: {show: false},
-                axisTick: {show: false},
-                axisLine: {show: false},
-                axisLabel: {show: false}
-            },
-            series: [{
-                type: 'pictorialBar',
-                hoverAnimation: false,
-                zlevel:10,
-                color:'#E60012',
-                barWidth:(30 / 1920) * window.innerWidth,
-                tooltip:{
-                    show:true
+            });
+            var revers = counts.map(function (p) {
+                return {
+                    value: ${maxSecCount},
+                    symbol: 'roundRect',
+                    symbolRepeat: true,
+                    symbolSize: ['150%', '25%']
+                }
+            });
+            var option = {
+                grid:{
+                    top:0,
+                    left:0,
+                    bottom:0,
+                    right:0,
+                    containLabel:true
                 },
-                data: mockData1,
-            },{
-                type: 'pictorialBar',
-                hoverAnimation: false,
-                zlevel:1,
-                color:'#F9EAEC',
-                label:{show:false},
-                barWidth:(30 / 1920) * window.innerWidth,
-                data: mockData2,
-            }]
-        };
-        var option1 = JSON.parse(JSON.stringify(option));
-        var option2 = JSON.parse(JSON.stringify(option));
-        option1.xAxis[0].data = defaultData.map(function(i){
-            return i.replace(/音乐学院/g,'体育学院')
-        });
-        option2.xAxis[0].data = defaultData.map(function(i) {
-            return i.replace(/音乐学院/g,'教育学院')
-        });
-        attendChart1.setOption(option);
-        attendChart2.setOption(option1);
-        attendChart3.setOption(option2);
-    };
+                xAxis: [{
+                    data: names,
+                    axisTick: {show: false},
+                    axisLine: {
+                        lineStyle:{
+                            color:'#F9EAEC'
+                        }
+                    },
+                    axisLabel: {
+                        interval:0,
+                        color:'#480707',
+                        fontSize:(14 / 1920) * window.innerWidth
+                    }
+                }],
+                yAxis: {
+                    splitLine: {show: false},
+                    axisTick: {show: false},
+                    axisLine: {show: false},
+                    axisLabel: {show: false}
+                },
+                series: [{
+                    type: 'pictorialBar',
+                    hoverAnimation: false,
+                    zlevel:10,
+                    color:'#E60012',
+                    barWidth:(30 / 1920) * window.innerWidth,
+                    tooltip:{
+                        show:true
+                    },
+                    data: items
+                },{
+                    type: 'pictorialBar',
+                    hoverAnimation: false,
+                    zlevel:1,
+                    color:'#F9EAEC',
+                    label:{show:false},
+                    barWidth:(30 / 1920) * window.innerWidth,
+                    data: revers
+                }]
+            };
+            attendChart.setOption(option);
+        })
+
+    }
 
     function renderActivityChart(){
         var activityEchart = echarts.init(document.getElementById('activityContainer'));
@@ -479,7 +475,7 @@
                 }
             },
             yAxis: {
-                show:false,
+                show:false
             },
             grid:{
                 top:0,
@@ -500,17 +496,17 @@
                             {offset: 0, color: '#FFCC3D'},
                             {offset: 1, color: '#F14F5D'}
                         ]
-                    ),
+                    )
                 }
             }]
         };
         activityEchart.setOption(option);
-    };
+    }
     //渲染访问量
     function renderViewChart(){
-        var num = '1,2,3,4,5,6,7,8';
+        var num = '${totalVisit}';
         var numDom = '';
-        num.split(',').map(function(i) { numDom += '<span class="num_item">' + i + '</span>'});
+        num.split('').map(function(i) { numDom += '<span class="num_item">' + i + '</span>'});
         $(".view_num").html(numDom);
         var viewEchart = echarts.init(document.getElementById('viewContainer'));
         option = {
@@ -521,7 +517,7 @@
             },
             xAxis: {
                 type: 'category',
-                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                data: ${weekdays},
                 axisTick:{
                     show:false
                 },
@@ -556,7 +552,7 @@
                 containLabel:true
             },
             series: [{
-                data: [820, 932, 901, 934, 1290, 1330, 1320],
+                data: ${weekdayCounts},
                 type: 'line',
                 color:'#E60012',
                 smooth: true,
@@ -571,7 +567,7 @@
                             offset: 0, color: 'rgba(255,56,56,0.43)' // 0% 处的颜色
                         }, {
                             offset: 1, color: 'rgba(255,56,56,0)' // 100% 处的颜色
-                        }],
+                        }]
                     }
                 }
             }]

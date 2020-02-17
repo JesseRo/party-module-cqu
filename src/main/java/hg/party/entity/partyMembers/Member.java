@@ -10,7 +10,7 @@ import com.dt.annotation.Table;
 
 @Table(name = "hg_party_member")
 public class Member{
-	private String id;
+	private int id;
 	private String member_name;
 	private String member_sex;
 	//民族
@@ -51,6 +51,8 @@ public class Member{
 	private String member_is_leader;
 
 	private String member_unit;
+	private String member_province;
+	private String member_city;
 	public String getMember_major_title() {
 		return member_major_title;
 	}
@@ -131,10 +133,10 @@ public class Member{
 		}
 	}
 
-	public String getId() {
+	public int getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 	public String getMember_name() {
@@ -318,5 +320,21 @@ public class Member{
 
 	public void setMember_unit(String member_unit) {
 		this.member_unit = member_unit;
+	}
+
+	public String getMember_city() {
+		return member_city;
+	}
+
+	public void setMember_city(String member_city) {
+		this.member_city = member_city;
+	}
+
+	public String getMember_province() {
+		return member_province;
+	}
+
+	public void setMember_province(String member_province) {
+		this.member_province = member_province;
 	}
 }

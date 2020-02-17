@@ -120,14 +120,14 @@
 	<%--	                        	<td data-label="已读回执" class="receipts">${c.read_status }</td>--%>
 									<td data-label="党组织">
 										<c:if test="${c.has_resend}">
-											<a href="/orgviewbranch?inform_id=${c.informid}&orgName=${c.org_namez}">${c.org_namez }</a>
+											<a href="/orgviewbranch?inform_id=${c.meeting_id}&orgName=${c.org_namez}">${c.org_namez }</a>
 										</c:if>
 										<c:if test="${empty c.has_resend}">
 											${c.org_namez }
 										</c:if>
 									</td>
 									<td data-label="开展主题">
-										<a href="javascript:;" onclick="window.location.href='/approvaldetails?meetingId=${c.plan_id}&orgType=secondary'">
+										<a href="javascript:;" onclick="window.location.href='/approvaldetails?meetingId=${c.meeting_id}&orgType=secondary'">
 												${c.meeting_theme }
 										</a>
 									</td>
@@ -188,7 +188,7 @@
 											 已抽查
 										</c:if>
 									</td>
-									<td data-label="抽查人">${c.check_person_us }</td>
+									<td data-label="抽查人">${c.checker }</td>
 	<%--	                            <td data-label="审核人">${c.auditor }</td>--%>
 
 									<td data-label="现场照片" class="img_td">
@@ -748,7 +748,7 @@
 		    				aa = 3;
 		    			}
 		    			for(var i = 0;i<aa;i++){
-				    		var img = '<a class="images" dataUrl='+imgArr[i]+'>图'+(i+1)+',</a>';
+				    		var img = '<a class="images" dataUrl="'+imgArr[i]+'" href="' + imgArr[i] +'">图'+(i+1)+',</a>';
 				    		$(this).append(img)
 				    	}
 		    		}

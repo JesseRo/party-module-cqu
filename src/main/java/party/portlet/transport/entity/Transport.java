@@ -59,6 +59,8 @@ public class Transport implements Serializable {
 
     private int status;
 
+    private String receipt;
+
     public int getId() {
         return id;
     }
@@ -257,5 +259,13 @@ public class Transport implements Serializable {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public String getReceipt() {
+        return receipt;
+    }
+
+    public void setReceipt(String receipt) {
+        this.receipt = receipt;
     }
 }

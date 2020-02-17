@@ -10,6 +10,7 @@ import javax.portlet.PortletException;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
+import hg.util.TransactionUtil;
 import org.apache.log4j.Logger;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -27,6 +28,9 @@ import hg.party.server.party.PartyAssignServer;
 import hg.party.server.party.PartyMeetingNoteServer;
 import hg.party.server.party.PartyMeetingPlanInfo;
 import party.constants.PartyPortletKeys;
+import party.portlet.cqu.dao.CheckPersonDao;
+import party.portlet.cqu.entity.CheckPerson;
+
 /**
  * 录入提交command(二级党组织)
  */
@@ -51,6 +55,11 @@ public class PartyWriteActionCommand implements MVCResourceCommand{
 	private PartyMeetingPlanInfo partyMeetingPlanInfo;
 	@Reference
 	private PartyAssignServer partyAssignServer;
+	@Reference
+	private CheckPersonDao checkPersonDao;
+
+	@Reference
+	private TransactionUtil transactionUtil;
 	
 	@Override
 	public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
@@ -66,6 +75,7 @@ public class PartyWriteActionCommand implements MVCResourceCommand{
 		remarks = HtmlUtil.escape(remarks);
 		meeting_state = HtmlUtil.escape(meeting_state);
 		image = HtmlUtil.escape(image);
+		transactionUtil.startTransaction();
 		try {
 			if(!"".equals(meeting_id)){
 				List<MeetingPlan> meetingPlan = partyMeetingPlanInfo.meetingId(meeting_id);
@@ -88,25 +98,18 @@ public class PartyWriteActionCommand implements MVCResourceCommand{
 					meetingN.setImage(image);
 					partyMeetingNoteServer.saveOrUpdate(meetingN);
 				}
-				
-				if(!"".equals(user_name) && null != user_name){
-					List<Assign> assignName = partyAssignServer.AssignName(user_name);
-					if(assignName.size() != 0){
-						Assign assign = assignName.get(0);
-						assign.setState(0);
-						partyAssignServer.saveOrUpdate(assign);
-					}
-				}
-				
+
+				checkPersonDao.addCount(mPlan.getCheck_person());
 			}
-			
+			transactionUtil.commit();
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("meeting_id", meeting_id);
 		
-		   PrintWriter printWriter=resourceResponse.getWriter();
-		   printWriter.write(JSON.toJSONString(meeting_id));
+		   	PrintWriter printWriter=resourceResponse.getWriter();
+		   	printWriter.write(JSON.toJSONString(meeting_id));
 		} catch (Exception e) {
 			e.printStackTrace();
+			transactionUtil.rollback();
 		}
 		
 		return false;

@@ -68,24 +68,36 @@ public class TransportApprovalCommand implements MVCResourceCommand {
 		try {
 			if (type.equalsIgnoreCase("transport")){
 				Transport transport = transportDao.findById(transportId);
-				if ((transport.getType().equalsIgnoreCase("0") ||
-						transport.getType().equalsIgnoreCase("1")) && status == ConstantsKey.APPROVED){
-					// 院内
-					User user = userDao.findUserByEthnicity(transport.getUser_id());
-					Member member = memberDao.findByUserId(transport.getUser_id());
+				if(status == ConstantsKey.APPROVED) {
+					if ((transport.getType().equalsIgnoreCase("0")
+							|| transport.getType().equalsIgnoreCase("1"))){
+						// 院内
+						User user = userDao.findUserByEthnicity(transport.getUser_id());
+						Member member = memberDao.findByUserId(transport.getUser_id());
 
-					Member newMember = new Member();
-					BeanUtils.copyProperties(member, newMember, "id");
-					member.setHistoric(true);
-					newMember.setMember_org(transport.getOrg_id());
-					user.setUser_department_id(transport.getOrg_id());
-					userDao.saveOrUpdate(user);
-					memberDao.save(newMember);
-					memberDao.save(member);
+						Member newMember = new Member();
+						BeanUtils.copyProperties(member, newMember, "id");
+						member.setHistoric(true);
+						newMember.setMember_org(transport.getOrg_id());
+						user.setUser_department_id(transport.getOrg_id());
+						userDao.saveOrUpdate(user);
+						memberDao.save(newMember);
+						memberDao.saveOrUpdate(member);
+					}
+					transportDao.update(transport);
+				}else if(status == ConstantsKey.CONFIRM) {
+					if (transport.getType().equalsIgnoreCase("2")
+						|| transport.getType().equalsIgnoreCase("3")){
+						User user = userDao.findUserByEthnicity(transport.getUser_id());
+						Member member = memberDao.findByUserId(transport.getUser_id());
+						member.setHistoric(true);
+						userDao.delete(user);
+						memberDao.saveOrUpdate(member);
+					}
 				}
 				transport.setStatus(status);
 				transport.setOperator(userId);
-				transportDao.update(transport);
+				transportDao.saveOrUpdate(transport);
 			}else {
 				Retention retention = retentionDao.findById(transportId);
 				retention.setStatus(status);

@@ -1,6 +1,8 @@
 package party.portlet.personal;
 
 import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.util.PortalUtil;
 import dt.session.SessionManager;
@@ -57,6 +59,8 @@ public class PersonalInfoPortlet extends MVCPortlet {
 	private DownListServer server;
 	@Reference
 	private UnitDao unitDao;
+
+	private Gson gson = new GsonBuilder().setDateFormat("yyyy年MM月dd年").create();
 	
 	public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
 			throws IOException, PortletException {
@@ -92,6 +96,7 @@ public class PersonalInfoPortlet extends MVCPortlet {
 				User user = UserDao.findUserByEthnicity(userId);
 				 list.get(0).put("email", user.getUser_mailbox());
 				renderRequest.setAttribute("info", list.get(0));
+				renderRequest.setAttribute("infoJson", gson.toJson(list.get(0)));
 			}
 			orgName +=">编辑人员";
 			state = "edit";

@@ -22,9 +22,26 @@ public class TransportDao extends PostgresqlDaoImpl<Transport> {
         }
     }
 
+    public Transport findByUser(String userId) {
+        String sql = "select * from hg_party_transport where user_id = ? and not (status = 5  or (status = 1 and type != '3'))";
+        try {
+            return jdbcTemplate.queryForObject(sql, BeanPropertyRowMapper.newInstance(Transport.class), userId);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public Long countByUser(String userId) {
+        String sql = "select count (*) from hg_party_transport where user_id = ? and not (status = 5 or (status = 1 and type != '3'))";
+        return jdbcTemplate.queryForObject(sql, Long.class, userId);
+
+    }
+
     public PostgresqlQueryResult<Map<String, Object>> findSecondaryPage(int page, int size, String  orgId) {
-        String sql = "select * from hg_party_transport t inner join hg_party_org o on t.org_id = o.org_id" +
-                " where o.org_parent = ? and t.type = '0' order by t.status asc";
+        String sql = "select * from hg_party_transport t " +
+                " left join hg_party_member m on m.member_identity = t.user_id" +
+                " left join hg_party_org o on o.org_id = m.member_org" +
+                " where o.org_parent = ? order by t.status asc";
         if (size <= 0){
             size = 10;
         }
@@ -37,12 +54,25 @@ public class TransportDao extends PostgresqlDaoImpl<Transport> {
 
 
     public PostgresqlQueryResult<Map<String, Object>> findRootPage(int page, int size) {
-        String sql = "select * from hg_party_transport t t.type in ('1', '2', '3') order by t.status asc";
+        String sql = "select * from hg_party_transport t order by t.status asc";
         if (size <= 0){
             size = 10;
         }
         try {
             return postGresqlFindBySql(page, size, sql);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public PostgresqlQueryResult<Map<String, Object>> findBranchPage(int page, int size, String orgId) {
+        String sql = "select * from hg_party_transport t left join hg_party_member m on t.user_id = m.member_identity" +
+                " where m.member_org = ? order by t.status asc";
+        if (size <= 0){
+            size = 10;
+        }
+        try {
+            return postGresqlFindBySql(page, size, sql, orgId);
         } catch (Exception e) {
             return null;
         }

@@ -720,6 +720,18 @@ button#add_submit {
                 });
                 return false;
             });
+            form.verify({
+                zuoji: function (value, item) {
+                    if (!/^((\d{3,4}-)|\d{3.4}-)?\d{7,8}$/.test(value)){
+                        return '请填入正确的座机号';
+                    }
+                },
+                fax: function (value, item) {
+                    if (!/^((\d{3,4}-)|\d{3.4}-)?\d{7,8}$/.test(value)){
+                        return '请填入正确的传真号';
+                    }
+                }
+            })
 
         });
 });
@@ -793,7 +805,7 @@ button#add_submit {
                             <button id="org_delete" class="btn btn-default">删除组织</button>
                         </div>
                         <div class="form_content party_member_container">
-                            <div class="title_label" style="height: 229px;padding: 80.5px 16px;">
+                            <div class="title_label" style="height: 286px;padding: 110px 16px;">
                                 基本信息
                             </div>
                             <form class="layui-form custom_form" id="partyForm">
@@ -809,22 +821,16 @@ button#add_submit {
                                         <input type="text" name="orgType" maxlength="20" disabled autocomplete="off" class="layui-input">
                                     </div>
                                 </div>
-                                <div class="layui-inline" style="border-top: 1px solid #CCC;">
-                                    <label class="layui-form-label">地址：</label>
-                                    <div class="layui-input-inline">
-                                        <input type="text" name="address" maxlength="20" autocomplete="off" class="layui-input">
-                                    </div>
-                                </div>
                                 <div class="layui-inline">
                                     <label class="layui-form-label">联系电话（座机）：</label>
                                     <div class="layui-input-inline">
-                                        <input type="text" name="contactNumber" maxlength="20" autocomplete="off" class="layui-input">
+                                        <input type="text" name="contactNumber" lay-verify="zuoji" maxlength="20" autocomplete="off" class="layui-input">
                                     </div>
                                 </div>
                                 <div class="layui-inline">
                                     <label class="layui-form-label">传真：</label>
                                     <div class="layui-input-inline">
-                                        <input type="text" name="fax" maxlength="20" autocomplete="off" class="layui-input">
+                                        <input type="text" name="fax" lay-verify="fax" maxlength="20" autocomplete="off" class="layui-input">
                                     </div>
                                 </div>
                                 <div class="layui-inline">
@@ -836,7 +842,8 @@ button#add_submit {
                                 <div class="layui-inline">
                                     <label class="layui-form-label">邮箱：</label>
                                     <div class="layui-input-inline">
-                                        <input type="text" name="email" maxlength="20" autocomplete="off" class="layui-input">
+                                        <input type="text" name="email" maxlength="20" lay-verify="email"
+                                               autocomplete="off" class="layui-input">
                                     </div>
                                 </div>
                                 <div class="layui-inline">
@@ -848,7 +855,13 @@ button#add_submit {
                                 <div class="layui-inline">
                                     <label class="layui-form-label">联系电话：</label>
                                     <div class="layui-input-inline">
-                                        <input type="text" name="contactorNumber" maxlength="20" autocomplete="off" class="layui-input">
+                                        <input type="text" name="contactorNumber" lay-verify="phone" maxlength="20" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-inline"  style="width: 100%;">
+                                    <label class="layui-form-label" style="width: 25%;">地址：</label>
+                                    <div class="layui-input-inline" style="width: 75%;">
+                                        <input type="text" name="address" maxlength="20" autocomplete="off" class="layui-input">
                                     </div>
                                 </div>
                                 <div class="layui-inline btn_group">

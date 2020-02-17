@@ -11,7 +11,7 @@ import hg.party.entity.organization.Organization;
 import hg.party.entity.partyMembers.JsonResponse;
 import hg.party.entity.partyMembers.Member;
 import hg.util.ConstantsKey;
-import org.aspectj.weaver.ast.Or;
+import hg.util.TransactionUtil;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import party.constants.PartyPortletKeys;
@@ -24,8 +24,7 @@ import javax.portlet.ResourceResponse;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.UUID;
 
 
 @Component(
@@ -43,13 +42,17 @@ public class TransportSaveCommand implements MVCResourceCommand {
 	private OrgDao orgDao;
 	@Reference
 	private TransportDao transportDao;
+	Gson gson = new Gson();
+	@Reference
+	TransactionUtil transactionUtil;
 
 	@Override
 	public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws PortletException{
 		String sessionId = resourceRequest.getRequestedSessionId();
 		String orgId = (String)SessionManager.getAttribute(sessionId, "orgId");
 		String userId = (String) SessionManager.getAttribute(sessionId, "userName");
-
+		HttpServletResponse res = PortalUtil.getHttpServletResponse(resourceResponse);
+		res.addHeader("content-type","application/json");
 		Transport transport = new Transport();
 		Member member = memberDao.findByUserId(userId);
 		Organization organization = orgDao.findByOrgId(orgId);
@@ -82,27 +85,38 @@ public class TransportSaveCommand implements MVCResourceCommand {
 		String form = ParamUtil.getString(resourceRequest, "form");
 		String title = ParamUtil.getString(resourceRequest, "title");
 		String reason = ParamUtil.getString(resourceRequest, "reason");
+		int isResubmit = ParamUtil.getInteger(resourceRequest, "isResubmit");
 
 		transport.setType(type);
 		transport.setTo_org_title(title);
 		transport.setReason(reason);
 		transport.setForm(form);
 
-		transportDao.save(transport);
-
-		HttpServletResponse res = PortalUtil.getHttpServletResponse(resourceResponse);
-		res.addHeader("content-type","application/json");
-		Gson gson = new Gson();
+		transactionUtil.startTransaction();
 		try {
+			if (isResubmit == 1) {
+				Transport reTransport = transportDao.findByUser(userId);
+				reTransport.setStatus(ConstantsKey.RESUBMIT);
+				transportDao.saveOrUpdate(reTransport);
+			}else {
+				Long already = transportDao.countByUser(userId);
+				if (already > 0){
+					throw new Exception();
+				}
+			}
+			transportDao.save(transport);
+			transactionUtil.commit();
 			res.getWriter().write(gson.toJson(JsonResponse.Success()));
-		} catch (Exception e) {
+		}catch (Exception e){
+			e.printStackTrace();
 			try {
-				e.printStackTrace();
 				res.getWriter().write(gson.toJson(new JsonResponse(false, null, null)));
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
+			transactionUtil.rollback();
 		}
+
 		return false;
 	}
 

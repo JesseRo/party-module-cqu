@@ -57,7 +57,9 @@ public class RetentionPageCommand implements MVCResourceCommand {
 			data = retentionDao.findSecondaryPage(page, size, orgId);
 		}else if (organization.getOrg_type().equalsIgnoreCase(ConstantsKey.ORG_TYPE_ROOT)){
 			data = retentionDao.findRootPage(page, size);
-		}else {
+		} else if (organization.getOrg_type().equalsIgnoreCase(ConstantsKey.ORG_TYPE_BRANCH)) {
+			data = retentionDao.findBrunchPage(page, size, orgId);
+		} else {
 			data = null;
 		}
 

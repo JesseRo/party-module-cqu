@@ -39,6 +39,7 @@ public class CheckPersonAddCommand implements MVCResourceCommand {
     public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws PortletException {
         String campus = ParamUtil.getString(resourceRequest, "campus");
         String userId = ParamUtil.getString(resourceRequest, "userId");
+        String type = ParamUtil.getString(resourceRequest, "type");
 
         HttpServletResponse res = PortalUtil.getHttpServletResponse(resourceResponse);
         res.addHeader("content-type","application/json");
@@ -46,6 +47,7 @@ public class CheckPersonAddCommand implements MVCResourceCommand {
             CheckPerson checkPerson = new CheckPerson();
             checkPerson.setCampus(campus);
             checkPerson.setUser_id(userId);
+            checkPerson.setType(type);
             checkPersonDao.saveOrUpdate(checkPerson);
             res.getWriter().write(gson.toJson(JsonResponse.Success()));
         } catch (Exception e) {

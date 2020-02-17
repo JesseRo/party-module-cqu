@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
+import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import dt.session.SessionManager;
 import hg.party.dao.org.OrgDao;
@@ -16,6 +17,7 @@ import party.portlet.report.dao.ReportTaskDao;
 import party.portlet.report.entity.ReportTask;
 import party.portlet.report.entity.view.ExcelHandler;
 import party.portlet.transport.dao.TransportDao;
+import party.portlet.transport.entity.Transport;
 
 import javax.portlet.Portlet;
 import javax.portlet.PortletException;
@@ -83,7 +85,7 @@ public class TransportApplyPortlet extends MVCPortlet {
                 });
 
         Map<String, List<Organization>> allBrunchGroup = new LinkedHashMap<>();
-        brunchInSecondary.stream()
+        allOrg.stream()
                 .filter(p->p.getOrg_type().equals(ConstantsKey.ORG_TYPE_SECONDARY))
                 .forEach( p-> {
                     List<Organization> orgs = allOrg.stream()
@@ -91,8 +93,21 @@ public class TransportApplyPortlet extends MVCPortlet {
                     allBrunchGroup.put(p.getOrg_name(), orgs);
                 });
 
+        Transport transport = transportDao.findByUser(userId);
+        if (transport == null){
+            renderRequest.setAttribute("transportJson", null);
+            renderRequest.setAttribute("already", 0);
+        }else {
+            renderRequest.setAttribute("already", 1);
+        }
+        String isResubmit = PortalUtil.getOriginalServletRequest(PortalUtil.getHttpServletRequest(renderRequest)).getParameter("resubmit");
+        renderRequest.setAttribute("transportJson", gson.toJson(transport));
+        renderRequest.setAttribute("transport", transport);
+
         renderRequest.setAttribute("brunchGroup", brunchGroup);
+        renderRequest.setAttribute("isResubmit", isResubmit);
         renderRequest.setAttribute("allBrunchGroup", allBrunchGroup);
+        renderRequest.setAttribute("statusList", ConstantsKey.STATUS_LIST);
         super.doView(renderRequest, renderResponse);
     }
 

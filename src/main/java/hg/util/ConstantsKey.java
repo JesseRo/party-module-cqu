@@ -10,6 +10,11 @@ public class ConstantsKey {
     public static final int APPROVED = 1;   //已审批
     public static final int REJECTED = 2;   //已驳回
 
+    public static final int RECEIPT = 3;   //已回执
+    public static final int CONFIRM = 4;   //已确认回执
+    public static final int RESUBMIT = 5;   //已重新提交
+    public static final String[] STATUS_LIST = {"审核中", "已审核", "已驳回","已上传回执", "已确认回执", "已重新申请"};
+
     public static final int UNREPORTED = 1;
     public static final int REPORTED = 2;
 

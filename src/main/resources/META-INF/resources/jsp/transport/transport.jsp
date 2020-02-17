@@ -3,6 +3,7 @@
 
 <portlet:resourceURL id="/transport/org" var="brunches"/>
 <portlet:resourceURL id="/transport/save" var="save"/>
+<portlet:resourceURL id="/transport/receipt" var="receipt"/>
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/organ-relation-transfer.min.css" />
@@ -14,6 +15,7 @@
     </style>
     <script type="text/javascript" >
         $(function() {
+            var data = ${transportJson};
             layui.use('form', function(){
                 var form = layui.form;
                 //表单提交
@@ -25,11 +27,7 @@
                 });
                 form.on('select(transport_type)', function(data){
                     var type = data.value;
-                    if (type === '0'){
-                        $('#reason_title').text("留在本单位原因：");
-                    }else {
-                        $('#reason_title').text("转接原因：");
-                    }
+                    $('#reason_title').text("留在本单位原因：");
                     if(type === '0'){
                         $('#org_name').hide();
                         $('#org_all').hide();
@@ -43,8 +41,21 @@
                         $('#org_brunch').hide();
                         $('#org_all').hide();
                     }
+                    form.val("organRelaForm", {
+                        transport_form: type === '3' ? "纸质" : "电子"
+                    });
                     console.log(data);
                 });
+                if (data != null){
+                    form.val("organRelaForm", {
+                        transport_type: data.type,
+                        org: data.to_org_name,
+                        org_name: data.to_org_id,
+                        transport_form: data.type === '3' ? "纸质" : "电子",
+                        transport_title: data.to_org_title,
+                        transport_reason: data.reason
+                    });
+                }
             });
             //时间选择器
             layui.use('laydate', function(){
@@ -55,80 +66,13 @@
                 });
             });
 
-            <%--function initSelect(type) {--%>
-            <%--    var candidatesGroup;--%>
-            <%--    if( type === '0'){--%>
-            <%--        candidatesGroup = groups.brunchInSecondary;--%>
-            <%--    }else if (type === '1'){--%>
-            <%--        candidatesGroup = groups.allOrg;--%>
-            <%--    }--%>
-            <%--    var candidates = [];--%>
-
-            <%--    for ( var group in candidatesGroup) {--%>
-            <%--        for ( var j in candidatesGroup[group]) {--%>
-            <%--            var member = candidatesGroup[group][j];--%>
-            <%--            candidates.push({--%>
-            <%--                id : member.org_id,--%>
-            <%--                disabled : false,--%>
-            <%--                groupId : group.org_id,--%>
-            <%--                groupName : group.org_name,--%>
-            <%--                name : member.org_name,--%>
-            <%--                selected : false--%>
-            <%--            });--%>
-            <%--        }--%>
-            <%--    }--%>
-            <%--    if (candidates.length === 0) {--%>
-            <%--        candidates = [ {--%>
-            <%--            name : '没有数据',--%>
-            <%--            disabled : true--%>
-            <%--        } ];--%>
-            <%--    }--%>
-            <%--    $('.dropdown-sin-2').data('dropdown').changeStatus();--%>
-            <%--    $('.dropdown-sin-2').data('dropdown').update(candidates,true);--%>
-            <%--}--%>
-
-            <%--function refresh(type) {--%>
-            <%--    $('.dropdown-sin-2').dropdown({--%>
-            <%--        data : [ {--%>
-            <%--            name : '没有数据',--%>
-            <%--            disabled : true--%>
-            <%--        } ],--%>
-            <%--        input : '<input type="text" maxLength="20" placeholder="请输入搜索">',--%>
-            <%--        choice : function() {--%>
-            <%--        }--%>
-            <%--    });--%>
-
-            <%--    if (groups == null){--%>
-            <%--        $.get('${brunches}', {--%>
-            <%--            orgId : org--%>
-            <%--        }, function(res) {--%>
-            <%--            if (res.result) {--%>
-            <%--                groups = res.data;--%>
-            <%--               initSelect(type);--%>
-            <%--            }--%>
-            <%--        });--%>
-            <%--    }else {--%>
-            <%--        initSelect(type);--%>
-            <%--    }--%>
-            <%--}--%>
-            <%--$('.dropdown-sin-2').dropdown({--%>
-            <%--    data : [ {--%>
-            <%--        name : '没有数据',--%>
-            <%--        disabled : true--%>
-            <%--    } ],--%>
-            <%--    input : '<input type="text" maxLength="20" placeholder="请输入搜索">',--%>
-            <%--    choice : function() {--%>
-            <%--    }--%>
-            <%--});--%>
-            // setTimeout(function() {
-            //     $('.dropdown-sin-2').data('dropdown').changeStatus(
-            //         "readonly");
-            // }, 0);
-
             var groups = null;
 
             $('._submit').on('click', function (e) {
-                var type = $('.transport_type').val();
+                if (${already} > 0){
+                    return
+                }
+                var type = $('[name=transport_type]').val();
                 var org;
                 if (type === '0' ){
                     org = $('#org_brunch_select').val();
@@ -152,6 +96,17 @@
                 $('.dropdown-sin-2').data('dropdown').choose([]);
 
             }
+            $('#upload-block [type="file"]').change(function () {
+                $('#upload-block [type="submit"]').click();
+            })
+            $('#uploadReceipt').on('click', function () {
+                $('#upload-block [type="file"]').click();
+            })
+            
+            $('#resubmit').on('click', function () {
+                window.location.href = "/transport_out?resubmit=1"
+            })
+
 
         });
     </script>
@@ -167,11 +122,11 @@
                     </span>
     </div>
     <div class="form_content">
-        <form class="layui-form custom_form" id="organRelaForm">
+        <form class="layui-form custom_form" id="organRelaForm" lay-filter="organRelaForm">
             <div class="layui-form-item">
                 <label class="layui-form-label">转出类型：</label>
                 <div class="layui-input-block">
-                    <select name="transport_type" lay-filter="transport_type" class="transport_type">
+                    <select name="transport_type" lay-filter="transport_type" class="organRelaForm">
                         <option value="0">院内</option>
                         <option value="1">校内</option>
                         <option value="2">重庆市内</option>
@@ -179,6 +134,7 @@
                     </select>
                 </div>
             </div>
+            <input name="isResubmit" value="${isResubmit}" type="hidden">
             <div class="layui-form-item">
                 <label class="layui-form-label">转出单位：</label>
                 <div class="layui-input-block" id="org_name">
@@ -215,7 +171,7 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">转出形式：</label>
                 <div class="layui-input-block">
-                    <select name="transport_form" lay-filter="aihao">
+                    <select name="transport_form" lay-filter="organRelaForm" disabled>
                         <option value="纸质"  selected="">纸质</option>
                         <option value="电子">电子</option>
                     </select>
@@ -230,7 +186,7 @@
             <div class="layui-form-item layui-form-text">
                 <label class="layui-form-label" id="reason_title">转接原因：</label>
                 <div class="layui-input-block">
-                    <select name="transport_reason" lay-filter="aihao">
+                    <select name="transport_reason" lay-filter="organRelaForm">
                         <option value="升学"  selected="">升学</option>
                         <option value="工作">工作</option>
                         <option value="其他">其他</option>
@@ -239,11 +195,46 @@
             </div>
             <div class="layui-form-item btn_group">
                 <div class="layui-input-block">
-                    <button type="button" class="layui-btn _submit" lay-submit="" lay-filter="organRelaForm">提交</button>
-                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    <c:choose>
+                        <c:when test="${already > 0 }">
+                            <button type="button" disabled class="layui-btn _submit" lay-submit="" lay-filter="organRelaForm">提交</button>
+                        </c:when>
+                        <c:otherwise>
+                            <button type="button" class="layui-btn _submit" lay-submit="" lay-filter="organRelaForm">提交</button>
+                        </c:otherwise>
+                    </c:choose>
+                    <c:if test="${transport.type eq 3 and transport.status eq 1}">
+                        <button type="button" class="layui-btn layui-btn-primary" id="printLetter">打印介绍信</button>
+
+                    </c:if>
+
                 </div>
             </div>
+            <c:if test="${already > 0 }">
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">转出状态：</label>
+                    <div class="layui-input-block">
+                        <p style="float: left;line-height: 35px;color: red;" id="status">${statusList[transport.status]}</p>
+                        <c:if test="${transport.status gt 1 and transport.type eq 3}">
+                        <button id="resubmit" type="button" class="layui-btn layui-btn-primary" style="margin-left: 15px; float:right;">
+                            重拟申请
+                        </button>
+                        </c:if>
+                        <c:if test="${transport.status eq 1 and transport.type eq 3}">
+                        <button type="button" class="layui-btn layui-btn-primary" id="uploadReceipt" style="float: right;">上传回执</button>
+                        </c:if>
+                    </div>
+                </div>
+            </c:if>
         </form>
+        <div id="upload-block" style="display: none;">
+            <form action="${receipt}" method="post" target="uploadTarget"
+                  enctype="multipart/form-data">
+                <input type="file" name="receipt">
+                <input type="submit">
+                <iframe name="uploadTarget"></iframe>
+            </form>
+        </div>
         <div class="tips_container">
             <p class="tips_title">注意事项</p>
             <p>1.请与转入单位党务工作部门（非人事）落实；</p>
