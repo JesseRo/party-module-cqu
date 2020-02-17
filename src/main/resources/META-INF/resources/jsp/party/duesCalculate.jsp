@@ -266,15 +266,16 @@
 				},
 				// 点击回调
 				click: function(d){
+					console.log(d)
 					if(d.current.isParent){
-						$("#tree2-div .layui-treeSelect.layui-form-select .layui-anim").css("display","block");
+						$("#tree2-div .layui-treeSelect.layui-unselect.layui-form-select").addClass("layui-form-selected");
 						$("#tree2-div .layui-treeSelect .layui-select-title input").val("");
 						$("#"+d.current.tId+"_switch").click()
 					}else{
 						if(d.current.data.jobPerformance != null && d.current.data.jobPerformance!= ''){
 							$(".layui-form-item input[name='performance']").val( d.current.data.jobPerformance);
 						}
-						$("#tree2-div .layui-treeSelect.layui-form-select .layui-anim").css("display","none");
+						$("#tree2-div .layui-select-title").click();
 					}
 				},
 				// 加载完成后的回调函数
