@@ -59,13 +59,13 @@ public class DuesCalculateService {
         return monthSalaryCalculate(duesCal);
     }
 
-
+   // 系统自动计算理论税值，不填写，公示按照国家标准）：应纳税额=岗位工资+薪级工资+工改（保留两位小数）+绩效工资理论值-住房公积金-医保-养老个人-失业个人-职业年金
     private DuesResult monthSalaryCalculate(DuesCal duesCal){
         BigDecimal personTax =  getPersonalTax(duesCal);//个税
         BigDecimal duesBasic = duesCal.getBasicSalary().add(duesCal.getLevelSalary())
                 .add(duesCal.getPriceSubsidy())
                 .add(duesCal.getPlaceSubsidy())
-                .add(duesCal.getPlaceSubsidy())
+                .add(duesCal.getPerformance())
                 .subtract(duesCal.getHousingFund())
                 .subtract(duesCal.getUnemployedInsurance())
                 .subtract(duesCal.getTreatmentInsurance())
@@ -93,7 +93,7 @@ public class DuesCalculateService {
         BigDecimal duesBasic = duesCal.getBasicSalary().add(duesCal.getLevelSalary())
                 .add(duesCal.getPriceSubsidy())
                 .add(duesCal.getPlaceSubsidy())
-                .add(duesCal.getPlaceSubsidy())
+                .add(duesCal.getPerformance())
                 .subtract(duesCal.getHousingFund())
                 .subtract(duesCal.getUnemployedInsurance())
 /*                .subtract(duesCal.getTreatmentInsurance())
@@ -134,7 +134,7 @@ public class DuesCalculateService {
         double taxMoney = duesCal.getBasicSalary().add(duesCal.getLevelSalary())
                 .add(duesCal.getPriceSubsidy())
                 .add(duesCal.getPlaceSubsidy())
-                .add(duesCal.getPlaceSubsidy())
+                .add(duesCal.getPerformance())
                 .subtract(duesCal.getHousingFund())
                 .subtract(duesCal.getUnemployedInsurance())
                 .subtract(duesCal.getTreatmentInsurance())
