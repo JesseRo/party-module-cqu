@@ -313,6 +313,7 @@
 				}
 			}
 			if(partyType != lastType){//切换tab清空数据
+				$("#monthCal .layui-form-item input[name='basicSalary']").val("")
 				$("#monthCal .layui-form-item input[name='levelSalary']").val("");
 				$("#monthCal .layui-form-item input[name='priceSubsidy']").val("");
 				$("#monthCal .layui-form-item input[name='placeSubsidy']").val("");
