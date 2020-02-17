@@ -7,19 +7,19 @@
 <portlet:resourceURL id="/hg/part/jobLevelTree" var="jobLevelTreeUrl" />
 <html>
 	<head>
-		<link rel="stylesheet" href="${basePath }/js/layui/css/layui.css" />
-		<link rel="stylesheet" href="${basePath }/js/layui/css/layui.css" />
-		<link rel="stylesheet" href="${basePath }/js/layui/css/modules/layer/default/layer.css" />
-		<link rel="stylesheet" href="${basePath }/css/common.min.css" />
-		<link rel="stylesheet" href="${basePath }/css/layout.min.css" />
-		<script type="text/javascript" src="${basePath}/js/jquery-3.2.1.js"></script>
-		<script type="text/javascript" src="${basePath}/js/layui/layui.js"></script>
-		<script type="text/javascript" src="${basePath}/js/layui/lay/modules/tree.js"></script>
-		<script type="text/javascript" src="${basePath}/js/layui/lay/modules/form.js"></script>
-		<script type="text/javascript" src="${basePath}/js/layui/lay/modules/layer.js"></script>
-		<script type="text/javascript" src="${basePath}/js/layui/lay/modules/util.js"></script>
-		<script type="text/javascript" src="${basePath}/js/layui/lay/modules/util.js"></script>
-		<script type="text/javascript" src="${basePath}/js/layui/module/treeSelect/treeSelect.js"></script>
+<%--		<link rel="stylesheet" href="${basePath }/js/layui/css/layui.css" />--%>
+<%--		<link rel="stylesheet" href="${basePath }/js/layui/css/layui.css" />--%>
+<%--		<link rel="stylesheet" href="${basePath }/js/layui/css/modules/layer/default/layer.css" />--%>
+<%--		<link rel="stylesheet" href="${basePath }/css/common.min.css" />--%>
+<%--		<link rel="stylesheet" href="${basePath }/css/layout.min.css" />--%>
+<%--		<script type="text/javascript" src="${basePath}/js/jquery-3.2.1.js"></script>--%>
+<%--		<script type="text/javascript" src="${basePath}/js/layui/layui.js"></script>--%>
+<%--		<script type="text/javascript" src="${basePath}/js/layui/lay/modules/tree.js"></script>--%>
+<%--		<script type="text/javascript" src="${basePath}/js/layui/lay/modules/form.js"></script>--%>
+<%--		<script type="text/javascript" src="${basePath}/js/layui/lay/modules/layer.js"></script>--%>
+<%--		<script type="text/javascript" src="${basePath}/js/layui/lay/modules/util.js"></script>--%>
+<%--		<script type="text/javascript" src="${basePath}/js/layui/lay/modules/util.js"></script>--%>
+<%--		<script type="text/javascript" src="${basePath}/js/layui/module/treeSelect/treeSelect.js"></script>--%>
 		<style>
 			.fee_form .layui-form-item .layui-input-block{
 				margin-left: 0;
