@@ -37,6 +37,19 @@ public class DuesCal {
     /*预扣职业年金*/
     private BigDecimal occupationalAnnuities;
 
+    public DuesCal(){
+        this.basicSalary = new BigDecimal(0);
+        this.levelSalary = new BigDecimal(0);
+        this.priceSubsidy = new BigDecimal(0);
+        this.placeSubsidy = new BigDecimal(0);
+        this.performance = new BigDecimal(0);
+        this.housingFund = new BigDecimal(0);
+        this.unemployedInsurance = new BigDecimal(0);
+        this.treatmentInsurance = new BigDecimal(0);
+        this.pensionInsurance = new BigDecimal(0);
+        this.occupationalAnnuities = new BigDecimal(0);
+    }
+
     public DuesCal(float basicSalary, float levelSalary, float priceSubsidy, float placeSubsidy, float performance, float housingFund, float unemployedInsurance,float treatmentInsurance,float pensionInsurance, float occupationalAnnuities) {
         this.basicSalary = new BigDecimal(basicSalary);
         this.levelSalary = new BigDecimal(levelSalary);

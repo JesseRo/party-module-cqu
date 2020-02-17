@@ -164,25 +164,25 @@
 								<div class="layui-form-item">
 									<label class="layui-form-label">个人所得税:</label>
 									<div class="layui-input-block">
-										<span class="personalTax"></span>
+										<span class="personalTax">0 元</span>
 									</div>
 								</div>
 								<div class="layui-form-item">
 									<label class="layui-form-label">党费计算基数:</label>
 									<div class="layui-input-block">
-										<span class="basicDues"></span>
+										<span class="basicDues">0 元</span>
 									</div>
 								</div>
 								<div class="layui-form-item">
 									<label class="layui-form-label">党费交纳比例:</label>
 									<div class="layui-input-block">
-										<span class="percentDues"></span>
+										<span class="percentDues">0 %</span>
 									</div>
 								</div>
 								<div class="layui-form-item">
 									<label class="layui-form-label">月应交党费:</label>
 									<div class="layui-input-block dues">
-										<span class="duesPerMonth"></span>
+										<span class="duesPerMonth">0 元</span>
 									</div>
 								</div>
 								<div class="layui-form-item">
@@ -298,12 +298,12 @@
 			$(".layui-tab-content .layui-tab-item").removeClass("layui-show");
 			$(this).addClass("layui-this");
 			if(5 == partyType){ //学生党费固定
+				$("#studentCal").addClass("layui-show");
 				cal(null);
 			}else if(4 == partyType){//退休只计算工资
 				$("#retireEmployeeCal").addClass("layui-show");
 			}else{
 				$("#monthCal").addClass("layui-show");
-				$("#studentCal").addClass("layui-show");
 				if(3 == partyType){
 					$("#pensionInsurance-div").css("display","none");
 					$("#occupationalAnnuities-div").css("display","none");
@@ -312,7 +312,14 @@
 					$("#occupationalAnnuities-div").css("display","flex");
 				}
 				if(partyType == lastType){//切换tab清空数据
-
+					$("#monthCal .layui-form-item input[name='levelSalary']").val("");
+					$("#monthCal .layui-form-item input[name='priceSubsidy']").val("");
+					$("#monthCal .layui-form-item input[name='placeSubsidy']").val("");
+					$("#monthCal .layui-form-item input[name='housingFund']").val("");
+					$("#monthCal .layui-form-item input[name='unemployedInsurance']").val("");
+					$("#monthCal .layui-form-item input[name='treatmentInsurance']").val("");
+					$("#monthCal .layui-form-item input[name='pensionInsurance']").val("");
+					$("#monthCal .layui-form-item input[name='occupationalAnnuities']").val("";
 				}
 			}
 		})
