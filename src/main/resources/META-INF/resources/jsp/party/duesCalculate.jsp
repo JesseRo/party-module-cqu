@@ -275,7 +275,7 @@
 						if(d.current.data.jobPerformance != null && d.current.data.jobPerformance!= ''){
 							$(".layui-form-item input[name='performance']").val( d.current.data.jobPerformance);
 						}
-						$("#tree2-div .layui-select-title").click();
+						$("#tree2-div .layui-treeSelect.layui-unselect.layui-form-select").removeClass("layui-form-selected");
 					}
 				},
 				// 加载完成后的回调函数
