@@ -75,7 +75,9 @@ public class DuesCalculateService {
         double duesBasicNum  = duesBasic.doubleValue();//党费基数
         BigDecimal duesPercent;//党费比例
         BigDecimal duesMoney =  new BigDecimal(0);//每月党费
-        if(duesBasicNum <= 3000){
+        if(duesBasicNum <= 0){
+            duesPercent = new BigDecimal(0.00);
+        }else if(duesBasicNum <= 3000){
             duesPercent = new BigDecimal(0.005);
         }else if(duesBasicNum <= 5000){
             duesPercent = new BigDecimal(0.010);
@@ -103,7 +105,9 @@ public class DuesCalculateService {
         double duesBasicNum  = duesBasic.doubleValue();//党费基数
         BigDecimal duesPercent;//党费比例
         BigDecimal duesMoney =  new BigDecimal(0);//每月党费
-        if(duesBasicNum <= 3000){
+        if(duesBasicNum <= 0){
+            duesPercent = new BigDecimal(0.00);
+        }else if(duesBasicNum <= 3000){
             duesPercent = new BigDecimal(0.005);
         }else if(duesBasicNum <= 5000){
             duesPercent = new BigDecimal(0.010);
@@ -120,7 +124,9 @@ public class DuesCalculateService {
         double duesBasicNum  = duesCal.getBasicSalary().doubleValue();//党费基数
         BigDecimal duesPercent;//党费比例
         BigDecimal duesMoney =  new BigDecimal(0);//每月党费
-        if(duesBasicNum <= 5000){
+        if(duesBasicNum <= 0){
+            duesPercent = new BigDecimal(0.00);
+        }else if(duesBasicNum <= 5000){
             duesPercent = new BigDecimal(0.005);
         }else{
             duesPercent = new BigDecimal(0.010);

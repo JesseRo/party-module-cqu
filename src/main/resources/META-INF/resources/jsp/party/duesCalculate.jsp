@@ -319,7 +319,7 @@
 					$("#monthCal .layui-form-item input[name='unemployedInsurance']").val("");
 					$("#monthCal .layui-form-item input[name='treatmentInsurance']").val("");
 					$("#monthCal .layui-form-item input[name='pensionInsurance']").val("");
-					$("#monthCal .layui-form-item input[name='occupationalAnnuities']").val("";
+					$("#monthCal .layui-form-item input[name='occupationalAnnuities']").val("");
 				}
 			}
 		})
