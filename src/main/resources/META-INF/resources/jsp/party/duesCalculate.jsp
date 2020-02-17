@@ -311,16 +311,16 @@
 					$("#pensionInsurance-div").css("display","flex");
 					$("#occupationalAnnuities-div").css("display","flex");
 				}
-				if(partyType == lastType){//切换tab清空数据
-					$("#monthCal .layui-form-item input[name='levelSalary']").val("");
-					$("#monthCal .layui-form-item input[name='priceSubsidy']").val("");
-					$("#monthCal .layui-form-item input[name='placeSubsidy']").val("");
-					$("#monthCal .layui-form-item input[name='housingFund']").val("");
-					$("#monthCal .layui-form-item input[name='unemployedInsurance']").val("");
-					$("#monthCal .layui-form-item input[name='treatmentInsurance']").val("");
-					$("#monthCal .layui-form-item input[name='pensionInsurance']").val("");
-					$("#monthCal .layui-form-item input[name='occupationalAnnuities']").val("");
-				}
+			}
+			if(partyType != lastType){//切换tab清空数据
+				$("#monthCal .layui-form-item input[name='levelSalary']").val("");
+				$("#monthCal .layui-form-item input[name='priceSubsidy']").val("");
+				$("#monthCal .layui-form-item input[name='placeSubsidy']").val("");
+				$("#monthCal .layui-form-item input[name='housingFund']").val("");
+				$("#monthCal .layui-form-item input[name='unemployedInsurance']").val("");
+				$("#monthCal .layui-form-item input[name='treatmentInsurance']").val("");
+				$("#monthCal .layui-form-item input[name='pensionInsurance']").val("");
+				$("#monthCal .layui-form-item input[name='occupationalAnnuities']").val("");
 			}
 		})
 		//月薪党费计算
