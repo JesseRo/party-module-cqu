@@ -266,7 +266,7 @@
 				},
 				// 点击回调
 				click: function(d){
-					console.log(d)
+					//console.log(d)
 					if(d.current.isParent){
 						$("#tree2-div .layui-treeSelect.layui-unselect.layui-form-select").addClass("layui-form-selected");
 						$("#tree2-div .layui-treeSelect .layui-select-title input").val("");
