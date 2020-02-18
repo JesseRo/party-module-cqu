@@ -530,7 +530,7 @@
 			var partyType = $(this).attr("partyType");
 			var lastType = $(".layui-tab ul .layui-this").attr("partyType");
 			if(5 == partyType){ //学生党费固定
-				cal(null);
+				studentCal();
 			}
 			if(partyType != lastType){//切换tab清空数据
 				$(".layui-form-item input[name='basicSalary']").val("")
@@ -546,17 +546,79 @@
 		})
 		//月薪党费计算
 		function monthCal(){
-			normalCal("monthCal");
+			normalCal("monthCal",1);
 		}
 		//年薪党费计算
 		function yearCal(){
-			normalCal("yearCal");
+			normalCal("yearCal",2);
 		}
 		//企业党费计算
 		function companyCal(){
-			normalCal("companyCal");
+			normalCal("companyCal",3);
 		}
-		function normalCal(id){
+		/*离退休*/
+		function retireEmployeeCal(){
+			var basicSalary = $("#retireEmployeeCal .layui-form-item input[name='basicSalary']").val();
+			if(basicSalary== null ||  (basicSalary!=null && basicSalary.trim()=="")){
+				return;
+			}
+			var data = {
+				partyType:4,
+				basicSalary:basicSalary
+			}
+			cal(data);
+		}
+		/*学生党费*/
+		function studentCal(){
+			var data = {
+				partyType:5
+			}
+			cal(data);
+		}
+		/*硕士博士党费*/
+		function masterCal(){
+			var basicSalary = $("#masterCal .layui-form-item input[name='basicSalary']").val();
+			if(basicSalary== null ||  (basicSalary!=null && basicSalary.trim()=="")){
+				return;
+			}
+			var data = {
+				partyType:6,
+				basicSalary:basicSalary
+			}
+			cal(data);
+		}
+
+		/*党费计算*/
+		function cal(data){
+			var url = "${duesCal}";
+			$.ajax({
+				url:url,
+				data:data,
+				type:"POST",
+				dataType:'json',
+				async:false,
+				success:function(data){
+					if(data.code == 200){
+						var duesPerMonth = data.data.duesPerMonth;
+						if(data.partyType!=5 && data.partyType!=4){
+							var basicDues = data.data.basicDues;
+							var percentDues = data.data.percentDues*100;
+							var personalTax = data.data.personalTax;
+							$(".layui-tab-content .layui-tab-item .layui-input-block .basicDues").text(basicDues.toFixed(2)+"元");
+							$(".layui-tab-content .layui-tab-item .layui-input-block .percentDues").text(percentDues.toFixed(2)+"%");
+							if( data.partyType!=6){
+								$(".layui-tab-content .layui-tab-item .layui-input-block .personalTax").text(personalTax.toFixed(2)+"元");
+							}
+
+						}
+						$(".layui-tab-content .layui-tab-item .layui-input-block .duesPerMonth").text(duesPerMonth.toFixed(2)+"元");
+					}
+
+				}
+			});
+		}
+
+		function normalCal(id,partType){
 			var basicSalary = $("#"+id+" .layui-form-item input[name='basicSalary']").val();
 			if(basicSalary== null ||  (basicSalary!=null && basicSalary.trim()=="")){
 				return;
@@ -573,6 +635,7 @@
 			pensionInsurance = pensionInsurance==undefined?0:pensionInsurance;
 			occupationalAnnuities = occupationalAnnuities==undefined?0:occupationalAnnuities;
 			var data = {
+				partyType:partType,
 				basicSalary:basicSalary,
 				levelSalary:levelSalary,
 				priceSubsidy:priceSubsidy,
@@ -585,58 +648,6 @@
 				occupationalAnnuities:occupationalAnnuities
 			}
 			cal(data);
-		}
-
-		/*离退休*/
-		function retireEmployeeCal(){
-			var basicSalary = $("#retireEmployeeCal .layui-form-item input[name='basicSalary']").val();
-			if(basicSalary== null ||  (basicSalary!=null && basicSalary.trim()=="")){
-				return;
-			}
-			var data = {
-				basicSalary:basicSalary
-			}
-			cal(data);
-		}
-
-		/*硕士博士党费*/
-		function masterCal(){
-			var basicSalary = $("#masterCal .layui-form-item input[name='basicSalary']").val();
-			if(basicSalary== null ||  (basicSalary!=null && basicSalary.trim()=="")){
-				return;
-			}
-			var data = {
-				basicSalary:basicSalary
-			}
-			cal(data);
-		}
-
-		/*党费计算*/
-		function cal(data){
-			var partyType = $(".layui-tab ul li.layui-this").attr("partyType");
-			var url = "${duesCal}";
-			$.ajax({
-				url:url+"&partyType="+partyType,
-				data:data,
-				type:"POST",
-				dataType:'json',
-				async:false,
-				success:function(data){
-					if(data.code == 200){
-						var duesPerMonth = data.data.duesPerMonth;
-						if(partyType!=5 && partyType!=5){
-							var basicDues = data.data.basicDues;
-							var percentDues = data.data.percentDues*100;
-							var personalTax = data.data.personalTax;
-							$(".layui-tab-content .layui-tab-item .layui-input-block .basicDues").text(basicDues.toFixed(2)+"元");
-							$(".layui-tab-content .layui-tab-item .layui-input-block .percentDues").text(percentDues.toFixed(2)+"%");
-							$(".layui-tab-content .layui-tab-item .layui-input-block .personalTax").text(personalTax.toFixed(2)+"元");
-						}
-						$(".layui-tab-content .layui-tab-item .layui-input-block .duesPerMonth").text(duesPerMonth.toFixed(2)+"元");
-					}
-
-				}
-			});
 		}
 
 	</script>
