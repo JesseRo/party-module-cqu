@@ -2,7 +2,7 @@ Bundle-Name: party
 Bundle-SymbolicName: party
 Bundle-Version: 1.0.0
 Bundle-Activator: party.portlet.Init
--includeresource: \  
+-includeresource: \ 
 	@D:/cxm/commons-codec-1.6.jar,\
 	@D:/cxm/commons-logging-1.1.3.jar,\
 	@D:/cxm/emoji-java-3.1.3.jar,\
@@ -45,7 +45,8 @@ Export-Package: party.constants,\
 	com.alibaba.druid,\
 	com.alibaba.druid.*\
 	com.aliyun.odps.udf,\
-	oracle.sql,
+	oracle.sql,\
+	com.google.gson.*; version='2.8.2',
 	
 Import-Package: *,org.postgresql
 
