@@ -8,20 +8,20 @@ dependencies {
 	compileOnly group: "jstl", name: "jstl", version: "1.2"
 	compileOnly group: "org.osgi", name: "osgi.cmpn", version: "6.0.0"
 	
-	compile files("D:\\liferay-portal-7.0-ga3/osgi/modules/common/hg.session.jar")
+	compile files("D:\\work\\liferay-ce-portal-7.0-ga3/osgi/modules/common/hg.session.jar")
 	//compile files('D:/zmgJar/caoxmDBAPI.jar')
-	compile files('D:\\liferay-portal-7.0-ga3/osgi/modules/common/caoxmDBAPI.jar')
-	compile files("D:\\liferay-portal-7.0-ga3/osgi/modules/common/fastjson-1.2.9.jar")
+	compile files('D:\\work\\liferay-ce-portal-7.0-ga3/osgi/modules/common/caoxmDBAPI.jar')
+	compile files("D:\\work\\liferay-ce-portal-7.0-ga3/osgi/modules/common/fastjson-1.2.9.jar")
 	//compile files("D:/zmgJar/postgresql-42.1.4.jar")
 	//消息推送
-	compile files("D:\\liferay-portal-7.0-ga3/osgi/modules/common/rocketChatApi.jar")
+	compile files("D:\\work\\liferay-ce-portal-7.0-ga3/osgi/modules/common/rocketChatApi.jar")
 	//百度编辑器导入jar
 	compile group: 'org.postgresql', name: 'postgresql', version: '42.1.4'
-	compile files("D:\\liferay-portal-7.0-ga3/osgi/modules/common/baidu-ueditor/commons-codec-1.9.jar")
-	compile files("D:\\liferay-portal-7.0-ga3/osgi/modules/common/baidu-ueditor/commons-fileupload-1.3.1.jar")
-	compile files("D:\\liferay-portal-7.0-ga3/osgi/modules/common/baidu-ueditor/commons-io-2.4.jar")
-	compile files("D:\\liferay-portal-7.0-ga3/osgi/modules/common/baidu-ueditor/json.jar")
-	compile files("D:\\liferay-portal-7.0-ga3/osgi/modules/common/baidu-ueditor/ueditor-1.1.2.jar")
+	compile files("D:\\work\\liferay-ce-portal-7.0-ga3/osgi/modules/common/baidu-ueditor/commons-codec-1.9.jar")
+	compile files("D:\\work\\liferay-ce-portal-7.0-ga3/osgi/modules/common/baidu-ueditor/commons-fileupload-1.3.1.jar")
+	compile files("D:\\work\\liferay-ce-portal-7.0-ga3/osgi/modules/common/baidu-ueditor/commons-io-2.4.jar")
+	compile files("D:\\work\\liferay-ce-portal-7.0-ga3/osgi/modules/common/baidu-ueditor/json.jar")
+	compile files("D:\\work\\liferay-ce-portal-7.0-ga3/osgi/modules/common/baidu-ueditor/ueditor-1.1.2.jar")
 	
 	// 发送邮件
 	compile group: 'javax.mail', name: 'mail', version: '1.4.7'
@@ -41,9 +41,10 @@ dependencies {
 	compile group: "org.springframework", name: "spring-orm", version: "4.3.6.RELEASE"
 	compile group: "org.springframework", name: "spring-web", version: "4.3.6.RELEASE"
 	compile group: "org.springframework", name: "spring-webmvc", version: "4.3.6.RELEASE"
-	compile group: 'org.springframework', name: 'spring-tx', version: '4.2.4.RELEASE'
+	
 	compile group: 'org.apache.servicemix.bundles', name: 'org.apache.servicemix.bundles.poi', version: '3.17_1'
 	compile group: 'com.google.code.gson', name: 'gson', version: '2.8.2'
+	
 	//cas 客户端
 	compile group: 'org.jasig.cas.client', name: 'cas-client-core', version: '3.2.1'
 	//发送短信

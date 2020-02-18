@@ -529,9 +529,6 @@
 			$(".layui-tab-content .layui-tab-item .layui-input-block .duesPerMonth").text("0元");
 			var partyType = $(this).attr("partyType");
 			var lastType = $(".layui-tab ul .layui-this").attr("partyType");
-			if(5 == partyType){ //学生党费固定
-				cal(null);
-			}
 			if(partyType != lastType){//切换tab清空数据
 				$(".layui-form-item input[name='basicSalary']").val("")
 				$(".layui-form-item input[name='levelSalary']").val("");
