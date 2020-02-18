@@ -56,7 +56,7 @@ public class DuesCalculateService {
      * @return
      */
     public DuesResult masterJobCal(DuesCal duesCal) {
-        return monthSalaryCalculate(duesCal);
+        return masterCalculate(duesCal);
     }
 
    // 系统自动计算理论税值，不填写，公示按照国家标准）：应纳税额=岗位工资+薪级工资+工改（保留两位小数）+绩效工资理论值-住房公积金-医保-养老个人-失业个人-职业年金
@@ -88,6 +88,30 @@ public class DuesCalculateService {
         }
         duesMoney = duesBasic.multiply(duesPercent);
         return new DuesResult(personTax.doubleValue(),duesBasicNum,duesPercent.doubleValue(),duesMoney.doubleValue());
+    }
+
+    /**
+     *硕士博士党费计算
+     *规则：在职党员交纳党费比例：每月工资收入(税后)在3000元以下(含3000元)者，交纳月工资收入的0.5%;3000元以上至5000元(含5000元)者，交纳1%;5000元以上至10000元(含10000元)者，交纳1.5%;10000元以上者，交纳2%。
+     */
+    private   DuesResult masterCalculate(DuesCal duesCal){
+        BigDecimal duesBasic = duesCal.getBasicSalary();//党费基数
+        double duesBasicNum  = duesBasic.doubleValue();
+        BigDecimal duesPercent;//党费比例
+        BigDecimal duesMoney =  new BigDecimal(0);//每月党费
+        if(duesBasicNum <= 0){
+            duesPercent = new BigDecimal(0.00);
+        }else if(duesBasicNum <= 3000){
+            duesPercent = new BigDecimal(0.005);
+        }else if(duesBasicNum <= 5000){
+            duesPercent = new BigDecimal(0.010);
+        }else if(duesBasicNum <= 10000){
+            duesPercent = new BigDecimal(0.015);
+        }else{
+            duesPercent = new BigDecimal(0.020);
+        }
+        duesMoney = duesBasic.multiply(duesPercent);
+        return new DuesResult(0,duesBasicNum,duesPercent.doubleValue(),duesMoney.doubleValue());
     }
 
     private  DuesResult companyCalculate(DuesCal duesCal){
