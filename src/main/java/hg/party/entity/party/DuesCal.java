@@ -13,11 +13,8 @@ public class DuesCal {
     /*薪级工资*/
     private BigDecimal levelSalary;
 
-    /*物价补贴*/
-    private BigDecimal priceSubsidy;
-
-    /*物价补贴*/
-    private BigDecimal placeSubsidy;
+    /*工改*/
+    private BigDecimal wageReform;
 
     /*绩效工资理论值*/
     private BigDecimal performance;
@@ -34,32 +31,40 @@ public class DuesCal {
     /*养老保险*/
     private BigDecimal pensionInsurance;
 
+    /*生育保险*/
+    private BigDecimal birthInsurance;
+
+    /*工伤保险*/
+    private BigDecimal employmentInjuryInsurance;
+
     /*预扣职业年金*/
     private BigDecimal occupationalAnnuities;
 
     public DuesCal(){
         this.basicSalary = new BigDecimal(0);
         this.levelSalary = new BigDecimal(0);
-        this.priceSubsidy = new BigDecimal(0);
-        this.placeSubsidy = new BigDecimal(0);
+        this.wageReform = new BigDecimal(0);
         this.performance = new BigDecimal(0);
         this.housingFund = new BigDecimal(0);
         this.unemployedInsurance = new BigDecimal(0);
         this.treatmentInsurance = new BigDecimal(0);
         this.pensionInsurance = new BigDecimal(0);
+        this.birthInsurance = new BigDecimal(0);
+        this.employmentInjuryInsurance = new BigDecimal(0);
         this.occupationalAnnuities = new BigDecimal(0);
     }
 
-    public DuesCal(float basicSalary, float levelSalary, float priceSubsidy, float placeSubsidy, float performance, float housingFund, float unemployedInsurance,float treatmentInsurance,float pensionInsurance, float occupationalAnnuities) {
+    public DuesCal(float basicSalary, float levelSalary, float wageReform,float performance, float housingFund, float unemployedInsurance,float treatmentInsurance,float pensionInsurance, float birthInsurance, float employmentInjuryInsurance, float occupationalAnnuities) {
         this.basicSalary = new BigDecimal(basicSalary);
         this.levelSalary = new BigDecimal(levelSalary);
-        this.priceSubsidy = new BigDecimal(priceSubsidy);
-        this.placeSubsidy = new BigDecimal(placeSubsidy);
+        this.wageReform = new BigDecimal(wageReform);
         this.performance = new BigDecimal(performance);
         this.housingFund = new BigDecimal(housingFund);
         this.unemployedInsurance = new BigDecimal(unemployedInsurance);
         this.treatmentInsurance = new BigDecimal(treatmentInsurance);
         this.pensionInsurance = new BigDecimal(pensionInsurance);
+        this.birthInsurance = new BigDecimal(birthInsurance);
+        this.employmentInjuryInsurance = new BigDecimal(employmentInjuryInsurance);
         this.occupationalAnnuities = new BigDecimal(occupationalAnnuities);
     }
 
@@ -79,20 +84,12 @@ public class DuesCal {
         this.levelSalary = levelSalary;
     }
 
-    public BigDecimal getPriceSubsidy() {
-        return priceSubsidy;
+    public BigDecimal getWageReform() {
+        return wageReform;
     }
 
-    public void setPriceSubsidy(BigDecimal priceSubsidy) {
-        this.priceSubsidy = priceSubsidy;
-    }
-
-    public BigDecimal getPlaceSubsidy() {
-        return placeSubsidy;
-    }
-
-    public void setPlaceSubsidy(BigDecimal placeSubsidy) {
-        this.placeSubsidy = placeSubsidy;
+    public void setWageReform(BigDecimal wageReform) {
+        this.wageReform = wageReform;
     }
 
     public BigDecimal getPerformance() {
@@ -133,6 +130,22 @@ public class DuesCal {
 
     public void setPensionInsurance(BigDecimal pensionInsurance) {
         this.pensionInsurance = pensionInsurance;
+    }
+
+    public BigDecimal getBirthInsurance() {
+        return birthInsurance;
+    }
+
+    public void setBirthInsurance(BigDecimal birthInsurance) {
+        this.birthInsurance = birthInsurance;
+    }
+
+    public BigDecimal getEmploymentInjuryInsurance() {
+        return employmentInjuryInsurance;
+    }
+
+    public void setEmploymentInjuryInsurance(BigDecimal employmentInjuryInsurance) {
+        this.employmentInjuryInsurance = employmentInjuryInsurance;
     }
 
     public BigDecimal getOccupationalAnnuities() {

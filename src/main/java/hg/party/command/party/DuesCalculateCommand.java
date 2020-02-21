@@ -50,15 +50,16 @@ public class DuesCalculateCommand implements MVCResourceCommand{
 		String partyType = HtmlUtil.escape(ParamUtil.getString(resourceRequest, "partyType"));
 		float basicSalary = ParamUtil.getFloat(resourceRequest, "basicSalary");
 		float levelSalary = ParamUtil.getFloat(resourceRequest, "levelSalary");
-		float priceSubsidy = ParamUtil.getFloat(resourceRequest, "priceSubsidy");
-		float placeSubsidy = ParamUtil.getFloat(resourceRequest, "placeSubsidy");
+		float wageReform = ParamUtil.getFloat(resourceRequest, "wageReform");
 		float performance = ParamUtil.getFloat(resourceRequest, "performance");
 		float housingFund = ParamUtil.getFloat(resourceRequest, "housingFund");
 		float unemployedInsurance = ParamUtil.getFloat(resourceRequest, "unemployedInsurance");
 		float treatmentInsurance = ParamUtil.getFloat(resourceRequest, "treatmentInsurance");
 		float pensionInsurance = ParamUtil.getFloat(resourceRequest, "pensionInsurance");
+		float birthInsurance = ParamUtil.getFloat(resourceRequest, "pensionInsurance");
+		float employmentInjuryInsurance = ParamUtil.getFloat(resourceRequest, "pensionInsurance");
 		float occupationalAnnuities = ParamUtil.getFloat(resourceRequest, "occupationalAnnuities");
-		DuesCal duesCal = new DuesCal(basicSalary,levelSalary,priceSubsidy,placeSubsidy,performance,housingFund,unemployedInsurance,treatmentInsurance,pensionInsurance,occupationalAnnuities);
+		DuesCal duesCal = new DuesCal(basicSalary,levelSalary,wageReform,performance,housingFund,unemployedInsurance,treatmentInsurance,pensionInsurance,birthInsurance,employmentInjuryInsurance,occupationalAnnuities);
 		try {
 			PrintWriter printWriter=resourceResponse.getWriter();
 			if(!"".equals(partyType) && null != partyType && PartyMemberTypeEnum.getEnum(partyType) !=null){

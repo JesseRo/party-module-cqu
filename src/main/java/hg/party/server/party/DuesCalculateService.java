@@ -24,7 +24,7 @@ public class DuesCalculateService {
      * @return
      */
     public DuesResult yearSalaryCal(DuesCal duesCal) {
-        return monthSalaryCalculate(duesCal);
+        return yearCalculate(duesCal);
     }
 
     /**
@@ -63,9 +63,35 @@ public class DuesCalculateService {
     private   DuesResult monthSalaryCalculate(DuesCal duesCal){
         BigDecimal personTax =  getPersonalTax(duesCal);//个税
         BigDecimal duesBasic = duesCal.getBasicSalary().add(duesCal.getLevelSalary())
-                .add(duesCal.getPriceSubsidy())
-                .add(duesCal.getPlaceSubsidy())
+                .add(duesCal.getWageReform())
                 .add(duesCal.getPerformance())
+                .subtract(duesCal.getHousingFund())
+                .subtract(duesCal.getUnemployedInsurance())
+                .subtract(duesCal.getTreatmentInsurance())
+                .subtract(duesCal.getPensionInsurance())
+                .subtract(duesCal.getOccupationalAnnuities())
+                .subtract(personTax);
+        double duesBasicNum  = duesBasic.doubleValue();//党费基数
+        BigDecimal duesPercent;//党费比例
+        BigDecimal duesMoney =  new BigDecimal(0);//每月党费
+        if(duesBasicNum <= 0){
+            duesPercent = new BigDecimal(0.00);
+        }else if(duesBasicNum <= 3000){
+            duesPercent = new BigDecimal(0.005);
+        }else if(duesBasicNum <= 5000){
+            duesPercent = new BigDecimal(0.010);
+        }else if(duesBasicNum <= 10000){
+            duesPercent = new BigDecimal(0.015);
+        }else{
+            duesPercent = new BigDecimal(0.020);
+        }
+        duesMoney = duesBasic.multiply(duesPercent);
+        return new DuesResult(personTax.doubleValue(),duesBasicNum,duesPercent.doubleValue(),duesMoney.doubleValue());
+    }
+
+    private   DuesResult yearCalculate(DuesCal duesCal){
+        BigDecimal personTax =  getPersonalTax(duesCal);//个税
+        BigDecimal duesBasic = duesCal.getBasicSalary()
                 .subtract(duesCal.getHousingFund())
                 .subtract(duesCal.getUnemployedInsurance())
                 .subtract(duesCal.getTreatmentInsurance())
@@ -116,12 +142,14 @@ public class DuesCalculateService {
 
     private  DuesResult companyCalculate(DuesCal duesCal){
         BigDecimal personTax =  getPersonalTax(duesCal);//个税
-        BigDecimal duesBasic = duesCal.getBasicSalary().add(duesCal.getLevelSalary())
-                .add(duesCal.getPriceSubsidy())
-                .add(duesCal.getPlaceSubsidy())
+        BigDecimal duesBasic = duesCal.getBasicSalary()
+                .add(duesCal.getLevelSalary())
+                .add(duesCal.getWageReform())
                 .add(duesCal.getPerformance())
                 .subtract(duesCal.getHousingFund())
                 .subtract(duesCal.getUnemployedInsurance())
+                .subtract(duesCal.getBirthInsurance())
+                .subtract(duesCal.getEmploymentInjuryInsurance())
 /*                .subtract(duesCal.getTreatmentInsurance())
                 .subtract(duesCal.getPensionInsurance())*/
                 .subtract(duesCal.getOccupationalAnnuities())
@@ -162,14 +190,16 @@ public class DuesCalculateService {
 
     private  BigDecimal getPersonalTax(DuesCal duesCal){
         double taxMoney = duesCal.getBasicSalary().add(duesCal.getLevelSalary())
-                .add(duesCal.getPriceSubsidy())
-                .add(duesCal.getPlaceSubsidy())
+                .add(duesCal.getWageReform())
                 .add(duesCal.getPerformance())
                 .subtract(duesCal.getHousingFund())
                 .subtract(duesCal.getUnemployedInsurance())
                 .subtract(duesCal.getTreatmentInsurance())
                 .subtract(duesCal.getPensionInsurance())
+                .subtract(duesCal.getBirthInsurance())
+                .subtract(duesCal.getEmploymentInjuryInsurance())
                 .subtract(duesCal.getOccupationalAnnuities())
+                .subtract(new BigDecimal(5000))
                 .doubleValue();
         BigDecimal personTax = new BigDecimal(0);
         if(taxMoney > 80000){

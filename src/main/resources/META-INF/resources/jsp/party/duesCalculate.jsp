@@ -108,15 +108,9 @@
 									</div>
 								</div>
 								<div class="layui-form-item">
-									<label class="layui-form-label">物价补贴</label>
+									<label class="layui-form-label">工 改</label>
 									<div class="layui-input-block">
-										<input type="number" name="priceSubsidy" min="0" placeholder="" autocomplete="off" class="layui-input">
-									</div>
-								</div>
-								<div class="layui-form-item">
-									<label class="layui-form-label">地方补贴</label>
-									<div class="layui-input-block">
-										<input type="number" name="placeSubsidy" min="0" placeholder="" autocomplete="off" class="layui-input">
+										<input type="number" name="wageReform" min="0" placeholder="" autocomplete="off" class="layui-input">
 									</div>
 								</div>
 								<div class="layui-form-item">
@@ -197,39 +191,9 @@
 						<div class="layui-tab-item  yearCal" id="yearCal">
 							<div class="layui-form fee_form">
 								<div class="layui-form-item">
-									<label class="layui-form-label">岗位工资</label>
+									<label class="layui-form-label">年薪月标准</label>
 									<div class="layui-input-block">
 										<input type="number" name="basicSalary" min="0" placeholder="" autocomplete="off" class="layui-input" >
-									</div>
-								</div>
-								<div class="layui-form-item">
-									<label class="layui-form-label">薪级工资</label>
-									<div class="layui-input-block">
-										<input type="number" name="levelSalary" min="0" placeholder="" autocomplete="off" class="layui-input">
-									</div>
-								</div>
-								<div class="layui-form-item">
-									<label class="layui-form-label">物价补贴</label>
-									<div class="layui-input-block">
-										<input type="number" name="priceSubsidy" min="0" placeholder="" autocomplete="off" class="layui-input">
-									</div>
-								</div>
-								<div class="layui-form-item">
-									<label class="layui-form-label">地方补贴</label>
-									<div class="layui-input-block">
-										<input type="number" name="placeSubsidy" min="0" placeholder="" autocomplete="off" class="layui-input">
-									</div>
-								</div>
-								<div class="layui-form-item">
-									<label  class="layui-form-label">岗位名称</label>
-									<div class="layui-input-block tree2-div">
-										<input type="text" class="tree2" lay-filter="jobLevelPerformance" class="layui-input">
-									</div>
-								</div>
-								<div class="layui-form-item">
-									<label class="layui-form-label">绩效工资理论值</label>
-									<div class="layui-input-block">
-										<input type="number" name="performance" min="0" placeholder="" autocomplete="off" class="layui-input">
 									</div>
 								</div>
 								<div class="layui-form-item">
@@ -310,15 +274,9 @@
 									</div>
 								</div>
 								<div class="layui-form-item">
-									<label class="layui-form-label">物价补贴</label>
+									<label class="layui-form-label">工 改</label>
 									<div class="layui-input-block">
-										<input type="number" name="priceSubsidy" min="0" placeholder="" autocomplete="off" class="layui-input">
-									</div>
-								</div>
-								<div class="layui-form-item">
-									<label class="layui-form-label">地方补贴</label>
-									<div class="layui-input-block">
-										<input type="number" name="placeSubsidy" min="0" placeholder="" autocomplete="off" class="layui-input">
+										<input type="number" name="wageReform" min="0" placeholder="" autocomplete="off" class="layui-input">
 									</div>
 								</div>
 								<div class="layui-form-item">
@@ -349,6 +307,18 @@
 									<label class="layui-form-label">医疗保险</label>
 									<div class="layui-input-block">
 										<input type="number" name="treatmentInsurance" min="0" placeholder="" autocomplete="off" class="layui-input">
+									</div>
+								</div>
+								<div class="layui-form-item" id="birthInsurance-div">
+									<label class="layui-form-label">生育保险</label>
+									<div class="layui-input-block">
+										<input type="number"  name="birthInsurance" min="0" placeholder="" autocomplete="off" class="layui-input">
+									</div>
+								</div>
+								<div class="layui-form-item" id="employmentInjuryInsurance-div">
+									<label class="layui-form-label">工伤保险</label>
+									<div class="layui-input-block">
+										<input type="number"  name="employmentInjuryInsurance" min="0" placeholder="" autocomplete="off" class="layui-input">
 									</div>
 								</div>
 								<div class="layui-form-item">
@@ -391,6 +361,18 @@
 									<label class="layui-form-label">退休工资</label>
 									<div class="layui-input-block">
 										<input type="number" name="basicSalary" min="0" placeholder="" autocomplete="off" class="layui-input" >
+									</div>
+								</div>
+								<div class="layui-form-item">
+									<label class="layui-form-label">党费计算基数:</label>
+									<div class="layui-input-block">
+										<span class="basicDues">0 元</span>
+									</div>
+								</div>
+								<div class="layui-form-item">
+									<label class="layui-form-label">党费交纳比例:</label>
+									<div class="layui-input-block">
+										<span class="percentDues">0 %</span>
 									</div>
 								</div>
 								<div class="layui-form-item">
@@ -471,7 +453,6 @@
 		initAllTree();
 		function initAllTree(){
 			initTree('monthCal');
-			initTree('yearCal');
 			initTree('companyCal');
 		}
 		function initTree(id){
@@ -535,12 +516,13 @@
 			if(partyType != lastType){//切换tab清空数据
 				$(".layui-form-item input[name='basicSalary']").val("")
 				$(".layui-form-item input[name='levelSalary']").val("");
-				$(".layui-form-item input[name='priceSubsidy']").val("");
-				$(".layui-form-item input[name='placeSubsidy']").val("");
+				$(".layui-form-item input[name='wageReform']").val("");
 				$(".layui-form-item input[name='housingFund']").val("");
 				$(".layui-form-item input[name='unemployedInsurance']").val("");
 				$(".layui-form-item input[name='treatmentInsurance']").val("");
 				$(".layui-form-item input[name='pensionInsurance']").val("");
+				$(".layui-form-item input[name='birthInsurance']").val("");
+				$(".layui-form-item input[name='employmentInjuryInsurance']").val("");
 				$(".layui-form-item input[name='occupationalAnnuities']").val("");
 			}
 		})
@@ -624,27 +606,31 @@
 				return;
 			}
 			var levelSalary = $("#"+id+" .layui-form-item input[name='levelSalary']").val();
-			var priceSubsidy = $("#"+id+" .layui-form-item input[name='priceSubsidy']").val();
-			var placeSubsidy = $("#"+id+" .layui-form-item input[name='placeSubsidy']").val();
+			var wageReform = $("#"+id+" .layui-form-item input[name='wageReform']").val();
 			var performance = $("#"+id+" .layui-form-item input[name='performance']").val();
 			var housingFund = $("#"+id+" .layui-form-item input[name='housingFund']").val();
 			var unemployedInsurance = $("#"+id+" .layui-form-item input[name='unemployedInsurance']").val();
 			var treatmentInsurance = $("#"+id+" .layui-form-item input[name='treatmentInsurance']").val();
 			var pensionInsurance = $("#"+id+" .layui-form-item input[name='pensionInsurance']").val();
+			var birthInsurance = $("#"+id+" .layui-form-item input[name='birthInsurance']").val();
+			var employmentInjuryInsurance = $("#"+id+" .layui-form-item input[name='employmentInjuryInsurance']").val();
 			var occupationalAnnuities = $("#"+id+" .layui-form-item input[name='occupationalAnnuities']").val();
 			pensionInsurance = pensionInsurance==undefined?0:pensionInsurance;
+			birthInsurance = birthInsurance==undefined?0:birthInsurance;
+			employmentInjuryInsurance = employmentInjuryInsurance==undefined?0:employmentInjuryInsurance;
 			occupationalAnnuities = occupationalAnnuities==undefined?0:occupationalAnnuities;
 			var data = {
 				partyType:partType,
 				basicSalary:basicSalary,
 				levelSalary:levelSalary,
-				priceSubsidy:priceSubsidy,
-				placeSubsidy:placeSubsidy,
+				wageReform:wageReform,
 				performance:performance,
 				housingFund:housingFund,
 				unemployedInsurance:unemployedInsurance,
 				treatmentInsurance:treatmentInsurance,
 				pensionInsurance:pensionInsurance,
+				birthInsurance:birthInsurance,
+				employmentInjuryInsurance:employmentInjuryInsurance,
 				occupationalAnnuities:occupationalAnnuities
 			}
 			cal(data);
