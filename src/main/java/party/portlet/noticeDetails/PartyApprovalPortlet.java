@@ -102,9 +102,9 @@ public class PartyApprovalPortlet extends MVCPortlet {
             String attachment = (String) meetingPlan.get("attachment");
             //参会人员
             String meetingUserId = (String) meetingPlan.get("participant_group");
-            List<Map<String, Object>> meetingUserList = partyMeetingPlanInfo.meetingUser(meetingUserId);
-            String attName = null;
-            String meetingUserName = meetingUserList.stream().map(p->(String)p.get("user_name")).collect(Collectors.joining(","));
+            List<String> meetingUserList = gson.fromJson(meetingUserId, new TypeToken<List<String>>(){}.getType());
+            List<Member> participants = memberDao.findMemberByUserId(meetingUserList);
+            String meetingUserName = participants.stream().map(Member::getMember_name).collect(Collectors.joining(","));
 
             MeetingNote meetingNote = notesDao.findByMeetingId(meetingId);
             if (meetingNote != null){
@@ -126,7 +126,6 @@ public class PartyApprovalPortlet extends MVCPortlet {
             renderRequest.setAttribute("attachment", attachment);
             renderRequest.setAttribute("meetingPlan", meetingPlan);
             renderRequest.setAttribute("meetingUserName", meetingUserName);
-            renderRequest.setAttribute("attName", attName);
             renderRequest.setAttribute("orgType", orgType);
             renderRequest.setAttribute("org", org);
             renderRequest.setAttribute("isSelf", orgId.equals(org.getOrg_id()));

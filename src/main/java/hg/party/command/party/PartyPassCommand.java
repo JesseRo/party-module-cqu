@@ -9,6 +9,8 @@ import javax.portlet.PortletException;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import hg.party.dao.secondCommittee.MeetingPlanDao;
 import hg.util.TransactionUtil;
 import org.apache.log4j.Logger;
@@ -49,6 +51,8 @@ public class PartyPassCommand implements MVCResourceCommand{
 
 	@Reference
 	TransactionUtil transactionUtil;
+
+	private Gson gson = new Gson();
 	
 	@Override
 	public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
@@ -67,10 +71,10 @@ public class PartyPassCommand implements MVCResourceCommand{
 				meeting.setTask_status_org("6");
 				meeting.setAuditor(user_id);
 
-				List<Map<String, Object>> participants = meetingPlanDao.queryPartys(meeting.getParticipant_group());
+				List<String> participants = gson.fromJson(meeting.getParticipant_group(), new TypeToken<List<String>>(){}.getType());
 				partyMeetingPlanInfo.save(meeting);
-				for (Map<String, Object> m : participants){
-					meetingPlanDao.informParty(meetingId, (String)m.get("participant_id"));
+				for (String m : participants){
+					meetingPlanDao.informParty(meetingId, m);
 				}
 			}
 			transactionUtil.commit();

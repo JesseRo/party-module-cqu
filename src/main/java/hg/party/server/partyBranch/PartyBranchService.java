@@ -102,6 +102,10 @@ public class PartyBranchService {
 
     }
 
+    public List<Map<String, Object>> getGroupsMap(String orgId) {
+        List<Map<String, Object>> list = dao.getGroupByOrgId(orgId);
+        return list;
+    }
 
     public String getGroups(String orgId) {
         List<Map<String, Object>> list = dao.getGroupByOrgId(orgId);
@@ -318,4 +322,11 @@ public class PartyBranchService {
     }
 
 
+    public List<Map<String, Object>> getGroupMembers(List<String> groupsIds) {
+        String sql = "SELECT m.member_identity as id, m.member_name as name, g.group_id, g.group_name FROM \"hg_party_group_member_info\"  gm\n" +
+                "left join hg_party_group_org_info g on gm.group_id = g.group_id\n" +
+                "left join hg_party_member m on gm.participant_id = m.member_identity\n" +
+                "where g.group_id in ('" + String.join("','", groupsIds) + "')";
+        return dao.getJdbcTemplate().queryForList(sql);
+    }
 }

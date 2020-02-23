@@ -296,7 +296,7 @@
 			<%--	                            <td data-label="审核人">${info.auditor }</td>--%>
 										<td data-label="操作">
 											<c:if test="${info.task_st == '1'}">
-												<portlet:resourceURL id="/PartyOrganizationsPassCommand" var="PartyPass" />
+												<portlet:resourceURL id="/PartyPassCommand" var="PartyPass" />
 												<a onclick="Pass('${info.meeting }');" style="margin-right: 10%; color: #11D43B">
 													通过</a>
 												<a class="_clickshow" onclick="entry('${info.meeting }');" style="cursor: pointer;color: #FE4D4D;">

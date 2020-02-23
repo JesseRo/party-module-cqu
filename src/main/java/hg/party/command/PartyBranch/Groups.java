@@ -1,7 +1,7 @@
 package hg.party.command.PartyBranch;
 
-import java.awt.List;
 import java.io.PrintWriter;
+import java.util.List;
 import java.util.Map;
 
 import javax.portlet.PortletException;
@@ -9,6 +9,7 @@ import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.springframework.util.StringUtils;
 
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
@@ -30,18 +31,19 @@ import party.constants.PartyPortletKeys;
 	    service = MVCResourceCommand.class
 )
 public class Groups implements MVCResourceCommand{
-	PartyBranchService service=new PartyBranchService();
+	@Reference
+	PartyBranchService service;
 	@Override
 	public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 			throws PortletException {
-		String orgId=ParamUtil.getString(resourceRequest, "orgId");
-		orgId = HtmlUtil.escape(orgId);
+		String orgId = ParamUtil.getString(resourceRequest, "orgId");
 		if (StringUtils.isEmpty(orgId)) {
-	           orgId=(String)SessionManager.getAttribute(resourceRequest.getRequestedSessionId(), "department");
+		   orgId = (String)SessionManager.getAttribute(resourceRequest.getRequestedSessionId(), "department");
 		}
+		resourceResponse.setContentType("application/json");
 		try {
-			PrintWriter printWriter=resourceResponse.getWriter();
-			String list=service.getGroups(orgId);
+			PrintWriter printWriter = resourceResponse.getWriter();
+//			List<Map<String, Object>> list = service.getGroupsMap(orgId);
 			printWriter.write(service.getGroups(orgId));
 		} catch (Exception e) {
 			

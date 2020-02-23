@@ -48,6 +48,7 @@ public class CheckPersonAddCommand implements MVCResourceCommand {
             checkPerson.setCampus(campus);
             checkPerson.setUser_id(userId);
             checkPerson.setType(type);
+            checkPerson.setCount(0);
             checkPersonDao.saveOrUpdate(checkPerson);
             res.getWriter().write(gson.toJson(JsonResponse.Success()));
         } catch (Exception e) {

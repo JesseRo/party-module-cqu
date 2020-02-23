@@ -15,6 +15,7 @@ import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import com.google.gson.Gson;
 import org.apache.poi.xdgf.usermodel.section.geometry.Ellipse;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -48,6 +49,7 @@ public class Submission extends BaseMVCActionCommand {
     PartyBranchService service = new PartyBranchService();
     @Reference
     private PartyBranchDao dao;
+    private Gson gson = new Gson();
 
     @Override
     protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
@@ -57,7 +59,7 @@ public class Submission extends BaseMVCActionCommand {
         String formId = ParamUtil.getString(actionRequest, "formId");
         String infromid = ParamUtil.getString(actionRequest, "infrom_id");
         String startDate = ParamUtil.getString(actionRequest, "timeDuring");
-        String attendMeetingPerson = ParamUtil.getString(actionRequest, "participate");
+        String[] attendMeetingPerson = ParamUtil.getStringValues(actionRequest, "participate");
         String host = ParamUtil.getString(actionRequest, "host");
         String linkMan = ParamUtil.getString(actionRequest, "contact");
         String linkManTelephone = ParamUtil.getString(actionRequest, "phoneNumber");
@@ -77,7 +79,6 @@ public class Submission extends BaseMVCActionCommand {
         campus = HtmlUtil.escape(campus);
         infromid = HtmlUtil.escape(infromid);
         startDate = HtmlUtil.escape(startDate);
-        attendMeetingPerson = HtmlUtil.escape(attendMeetingPerson);
         host = HtmlUtil.escape(host);
         linkMan = HtmlUtil.escape(linkMan);
         linkManTelephone = HtmlUtil.escape(linkManTelephone);
@@ -114,7 +115,7 @@ public class Submission extends BaseMVCActionCommand {
         m.setTotal_time(Integer.parseInt(timeLasts));
         m.setEnd_time(endTime(startDate, timeLasts));
         m.setPlace(location);
-        m.setParticipant_group(attendMeetingPerson);
+        m.setParticipant_group(gson.toJson(attendMeetingPerson));
         m.setHost(host);
         m.setContact(linkMan);
         m.setContact_phone(linkManTelephone);

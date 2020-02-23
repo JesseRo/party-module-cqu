@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
@@ -13,9 +14,11 @@ import javax.portlet.RenderResponse;
 import com.google.gson.Gson;
 import dt.session.SessionManager;
 import hg.party.dao.downlistdao.DownListDao;
+import hg.party.dao.org.MemberDao;
 import hg.party.dao.org.OrgDao;
 import hg.party.entity.organization.Organization;
 import hg.party.entity.party.Hg_Value_Attribute_Info;
+import hg.party.entity.partyMembers.Member;
 import org.apache.log4j.Logger;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -45,6 +48,8 @@ public class AgainPlanSconed extends FormRenderCommand {
 
     @Reference
     private OrgDao orgDao;
+    @Reference
+    private MemberDao memberDao;
     @Reference
     private DownListDao downListDao;
 
@@ -79,8 +84,11 @@ public class AgainPlanSconed extends FormRenderCommand {
         List<Hg_Value_Attribute_Info> list = downListDao.meetType();
         request.setAttribute("mapNew", new Gson().toJson(list));
 
+        List<Organization> orgs = orgDao.findTree(orgId, true, false);
+        List<Member> members = memberDao.findByOrg(orgs.stream().map(Organization::getOrg_id).collect(Collectors.toList()));
         Organization org = orgDao.findByOrgId(orgId);
         request.setAttribute("org", org);
+        request.setAttribute("members", members);
         request.setAttribute("meetingTypes", list);
         String formId = UUID.randomUUID().toString();
         SessionManager.setAttribute(request.getRequestedSessionId(), "formId-Submission", formId);

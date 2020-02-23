@@ -15,20 +15,28 @@
 <!-- 附件上传 -->
 <portlet:resourceURL id="/form/uploadFile" var="uploadfileUrl"/>
 
-<portlet:resourceURL id="/org/memberGroup" var="candidate" />
-<portlet:resourceURL id="/hg/place/list" var="places" />
-<portlet:resourceURL id="/hg/place/add" var="addPlace" />
+<portlet:resourceURL id="/org/memberGroup" var="candidate"/>
+<portlet:resourceURL id="/hg/place/list" var="places"/>
+<portlet:resourceURL id="/hg/place/add" var="addPlace"/>
 
 <html>
 <head>
     <style type="text/css">
-        .dropdown-display{
+        .layui-layer-title{
+            display: none;
+        }
+        .layui-layer-setwin{
+            display: none;
+        }
+        .dropdown-display {
             height: 40px;
         }
+
         input, select {
             outline: none;
             text-indent: 0;
         }
+
         input#button1 {
             float: right;
             text-indent: 0;
@@ -118,11 +126,15 @@
             margin-right: 5px;
         }
 
-        .table_container {
-            height: 200px;
-            overflow-y: auto;
-            border: 1px solid #d8d8d8;
+        .layui-table-cell {
+            text-align: left;
         }
+
+        /*.table_container {*/
+        /*    height: 200px;*/
+        /*    overflow-y: auto;*/
+        /*    border: 1px solid #d8d8d8;*/
+        /*}*/
 
         .common_list_container .table_container {
             /* border-right: none; */
@@ -369,6 +381,155 @@
         div#hg-form-container {
             margin-top: 15px;
         }
+        .layui-table{
+            width: 100%!important;
+        }
+        .table_form_content .custom_table + .layui-table-view{
+            padding-bottom: 60px;
+        }
+        .mult_input_container .form-control.focus, .mult_input_container .form-control.active{
+            outline: none!important;
+        }
+        .mult_input_container .form-control .badge span{
+            padding: 2px 4px;
+        }
+        .mult_input_container .form-control .badge{
+            background-color: #FFAB33;
+            padding: 3px;
+            margin: 0 2px 3px 0;
+        }
+        .mult_input_container .form-control{
+            box-shadow: none;
+            border-radius: 0;
+            border: none;
+            border-bottom: 1px solid #ccc;
+            max-height: 80px;
+            overflow-y: auto;
+            padding: 0;
+            height: auto;
+            min-height: 40px!important;
+        }
+        .mult_input_container .dropdown-menu{
+            padding: 5px;
+        }
+        .mult_input_container .text-primary{
+            color: #FFAB33!important;
+        }
+        .mult_input_container .expand_arrow + .list_container{
+            display: block;
+        }
+        .edit_group_member{
+            padding: 4px 10px!important;
+            vertical-align: middle;
+            margin-left: 10px;
+        }
+        .mult_input_container .list_container span{
+            color: #FFF;
+            background: #FFAB33;
+            padding: 4px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: inline-block;
+            margin-right: 5px;
+            max-width: 80px;
+            overflow-x: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .mult_input_container .list_container span:hover{
+            background: rgba(225, 171, 51, 0.8)!important;
+        }
+        .mult_input_container .list_container .list_item_container{
+            padding-top: 10px;
+            max-height: 80px;
+            overflow-y: auto;
+        }
+        .mult_input_container .layui-form-select, .mult_input_container .layui-form-checkbox{
+            display: none;
+        }
+        .mult_input_container .list_container{
+            display: none;
+            margin-top: 10px;
+        }
+        .mult_input_container .mult_input{
+            height: auto;
+            border-bottom: 1px solid #ddd;
+            outline: none;
+            font-size: 14px;
+            line-height: 38px;
+            overflow-y: auto;
+            max-height: 80px;
+        }
+        .mult_input_container{
+            width: 100%!important;
+            height: auto!important;
+        }
+        .mult_input_container .layui-input-inline .drop_arrow.expand_arrow{
+            transform: rotate(180deg);
+        }
+        .mult_input_container .layui-input-inline .drop_arrow{
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+            content: '';
+            background: url("${basePath}/cqu/images/tree-arrow.png");
+            position: absolute;
+            top: 20px;
+            right: -30px;
+            cursor: pointer;
+        }
+        .mult_input_container .layui-input-inline{
+            height: 100%;
+            width: calc(100% - 30px)!important;
+            position: relative;
+        }
+        .modal_content_container .left_list_container .custom_table+.layui-table-view .layui-table-body{
+            max-height: 300px!important;
+        }
+        .modal_content_container >div .layui-table-page{
+            overflow-x: auto;
+        }
+        .modal_content_container >div .layui-laypage-count, .modal_content_container >div .layui-laypage-skip{
+            display: none;
+        }
+        .modal_content_container .left_list_container .custom_btn{
+            margin: 10px 0;
+        }
+        .modal_content_container .left_list_container{
+            width: 50%;
+            margin-right: 5%;
+        }
+        .modal_content_container .right_member_container{
+            width: 45%;
+        }
+        .member_modal .modal-footer{
+            clear: both;
+        }
+        .member_modal button{
+            outline: none;
+        }
+        .modal_content_container > div{
+            display: inline-block;
+            float: left;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .member_modal .modal-dialog{
+            width: 800px!important;
+        }
+        .layui-table-cell + .layui-table-grid-down{
+            display: none;
+        }
+        .list_item_container span:hover{
+            color: #fff!important;
+        }
+        .list_item_container span{
+            background: #fff!important;
+            color: #ffab33!important;
+            border: 1px solid #ffab33!important;
+        }
     </style>
     <link rel="stylesheet" href="${basePath}/css/publish.css"/>
     <script type="text/javascript" src="${basePath}/js/My97DatePicker/WdatePicker.js"></script>
@@ -384,9 +545,14 @@
     <script type="text/javascript" charset="utf-8"
             src="${ basePath }/js/utf8-jsp/third-party/zeroclipboard/ZeroClipboard.js"></script>
     <link rel="stylesheet" href="${basePath}/css/jquery.dropdown.css"/>
+    <link rel="stylesheet" href="${basePath}/cqu/css/multiSelect.css"/>
     <script type="text/javascript" src="${basePath}/js/jquery.dropdown.js?v=11"></script>
     <script type="text/javascript" src="${basePath}/js/jquery-validation.min.js"></script>
     <script type="text/javascript" src="${basePath}/js/validation-message-zh.js?v=2"></script>
+    <script type="text/javascript" src="${basePath}/cqu/js/popper.min.js"></script>
+    <script type="text/javascript" src="${basePath}/cqu/js/polyfill.js"></script>
+    <script type="text/javascript" src="${basePath}/cqu/js/BsMultiSelect.min.js"></script>
+
 </head>
 <body>
 <div class="table_form_content ">
@@ -409,7 +575,167 @@
                 <form class="form-horizontal" role="form" action="${submitForm }" method="post"
                       enctype="multipart/form-data" style="max-width: 960px;">
                     <div id="hg-form-container" class="form-group">
-                        <!-- <textarea rows="3" cols="20" name="content"> </textarea> -->
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="col-sm-3 col-xs-3 ">
+                                <span class="control-label form-label-required">党组织：</span>
+                            </div>
+                            <div class="col-sm-9 col-xs-9">
+                                <select class="form-control ${class}" name="branch" disabled="disabled">
+                                    <option value="e38a54b1-8597-44c0-b77f-d4ba02f6ba05">中共重庆大学某学科第一支部委员会</option>
+                                    <option disabled="" selected="">请选择</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="col-sm-3 col-xs-3 ">
+                                <span class="control-label form-label-required">会议类型：</span>
+                            </div>
+                            <div class="col-sm-9 col-xs-9">
+                                <select class="form-control ${class}" name="conferenceType">
+                                    <option value="党委中心组学习">党委中心组学习</option>
+                                    <option value="组织生活会">组织生活会</option>
+                                    <option value="支委会">支委会</option>
+                                    <option value="谈心谈话">谈心谈话</option>
+                                    <option value="民主生活会">民主生活会</option>
+                                    <option value="党小组会">党小组会</option>
+                                    <option value="党课">党课</option>
+                                    <option value="主题党日">主题党日</option>
+                                    <option value="民主评议党员">民主评议党员</option>
+                                    <option disabled="" selected="">请选择</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="col-sm-3 col-xs-3 ">
+                                <span class=" control-label form-label-required">开展主题：</span>
+                            </div>
+                            <div class="col-sm-9 col-xs-9">
+                                <input class="form-control" name="subject" value="">
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="col-sm-3 col-xs-3 ">
+                                <span class="control-label form-label-required">开始时间：</span>
+                            </div>
+                            <div class="col-sm-9 col-xs-9">
+                                <input class="datetime form-control" name="timeDuring" value=""
+                                       onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',onpicked:function(){$(this).change()}})">
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="col-sm-3 col-xs-3 ">
+                                <span class="control-label form-label-required">共计时长：</span>
+                            </div>
+                            <div class="col-sm-9 col-xs-9">
+                                <select class="form-control ${class}" name="timeLasts">
+                                    <option disabled="" selected="">请选择</option>
+                                    <option value="30">0.5小时</option>
+                                    <option value="60">1小时</option>
+                                    <option value="90">1.5小时</option>
+                                    <option value="120">2小时</option>
+                                    <option value="150">2.5小时</option>
+                                    <option value="180">3小时</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="col-sm-3 col-xs-3 ">
+                                <span class="control-label form-label-required">开展校区：</span>
+                            </div>
+                            <div class="col-sm-9 col-xs-9">
+                                <select class="form-control ${class}" name="campus">
+                                    <option disabled="" selected="">请选择</option>
+                                    <option value="A区">A区</option>
+                                    <option value="B区">B区</option>
+                                    <option value="C区">C区</option>
+                                    <option value="虎溪校区">虎溪校区</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="col-sm-3 col-xs-3 ">
+                                <span class="control-label form-label-required">开展地点：</span>
+                            </div>
+                            <div class="col-sm-9 col-xs-9">
+                                <div class="dropdown-mul-2 dropdown-multiple">
+                                    <select style="display:none" name="location" multiple="" placeholder="请选择">
+                                        <option disabled="" value="undefined">没有数据</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="col-sm-3 col-xs-3 ">
+                                <span class="control-label form-label-required">主持人：</span>
+                            </div>
+                            <div class="col-sm-9 col-xs-9">
+                                <div class="dropdown-mul-2 dropdown-multiple">
+                                    <select style="display:none" name="host" multiple="" placeholder="请选择">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="col-sm-3 col-xs-3 ">
+                                <span class="control-label form-label-required">联系人：</span>
+                            </div>
+                            <div class="col-sm-9 col-xs-9">
+                                <div class="dropdown-mul-2 dropdown-multiple">
+                                    <select style="display:none" name="contact" multiple="" placeholder="请选择">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="col-sm-3 col-xs-3 ">
+                                <span class=" control-label ${class}">列席人员：</span>
+                            </div>
+                            <div class="col-sm-9 col-xs-9">
+                                <input class="form-control" name="sit" value="">
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="col-sm-3 col-xs-3 ">
+                                <span class=" control-label form-label-required">联系人电话：</span>
+                            </div>
+                            <div class="col-sm-9 col-xs-9">
+                                <input class="form-control" name="phoneNumber" value="">
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-xs-12">
+                            <div class="col-sm-3 col-xs-3" style="width: 12.5%;margin-left: -3px;">
+                                <span class=" control-label form-label-required">参会人员：</span>
+                            </div>
+                            <div class="col-sm-9 col-xs-9 mult_input_container" style="width: 87.5%!important;" >
+                                <div class="layui-input-inline">
+                                    <select name="participate" id="attend_member_select" class="mult_input" multiple="multiple" style="display: none;">
+                                    </select>
+                                    <i class="drop_arrow"></i>
+                                    <div class="list_container">
+                                        <p>
+                                            常用列表
+                                            <span class="edit_group_member">编辑</span>
+                                        </p>
+                                        <p class="list_item_container">
+                                            <span id="group1" title="group1人员" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="bottom">group1</span>
+                                            <span id="group2" title="group2人员" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="bottom">group2</span>
+                                            <span id="group3" title="group3人员" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="bottom">group3</span>
+                                            <span id="group4" title="group4人员" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="bottom">group4</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-xs-12">
+                            <div class="col-sm-6 col-xs-12" style="padding-left: 0;">
+                                <div class="col-sm-3 col-xs-3 ">
+                                    <span class=" control-label form-label-required">计划内容：</span>
+                                </div>
+                                <div class="col-sm-9 col-xs-9">
+                                    <script id="new_12" name="new_12" type="text/plain"></script>
+                                </div>
+                            </div>
+                        </div>
                         <input id="content_id" type="hidden" name="content"/>
                         <input id="submitFrom" type="submit" style="display:none;"/>
                         <input id="hiddenstate" type="hidden" name="state"/>
@@ -418,1031 +744,1039 @@
                         <input id="meeting_id" type="hidden" name="meeting_id"/>
                         <input type="hidden" name="formId" value="${formId}"/>
                         <div class="col-sm-12 col-xs-12">
-                            <div class="layui-inline btn_group" style="width: calc(50% - 120px);margin: 0;margin-top: 10px;">
+                            <div class="layui-inline btn_group"
+                                 style="width: calc(50% - 120px);margin: 0;margin-top: 10px;">
                                 <label class="layui-form-label"></label>
                                 <div class="layui-input-inline">
-                                    <button type="button" onclick="formsubmit()" class="layui-btn" lay-submit="" lay-filter="partyMemForm" style="padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;background-color: #FFAB33;border-radius: 4px;">
+                                    <button type="button" onclick="formsubmit()" class="layui-btn" lay-submit=""
+                                            lay-filter="partyMemForm"
+                                            style="padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;background-color: #FFAB33;border-radius: 4px;">
                                         发布
                                     </button>
-                                    <button type="button" onclick="formsubmitgraft()" class="layui-btn layui-btn-primary" style="background-color: transparent;color: #666;padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;border-radius: 4px;">
+                                    <button type="button" onclick="formsubmitgraft()"
+                                            class="layui-btn layui-btn-primary"
+                                            style="background-color: transparent;color: #666;padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;border-radius: 4px;">
                                         暂存
                                     </button>
-                                    <button type="button" onclick="window.history.back();" class="layui-btn layui-btn-primary" style="background-color: transparent;color: #666;padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;border-radius: 4px;">
+                                    <button type="button" onclick="window.history.back();"
+                                            class="layui-btn layui-btn-primary"
+                                            style="background-color: transparent;color: #666;padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;border-radius: 4px;">
                                         取消
                                     </button>
                                 </div>
                             </div>
                         </div>
-        <%--                <input class="btn btn-default" id="button2" type="button" value="取消" onclick="formsubmitgraft();"/>--%>
-        <%--                <input class="btn btn_main" id="button1" type="button" value="发布" onclick="formsubmit();"/>--%>
                     </div>
                 </form>
             </div>
-            </div>
+        </div>
     </div>
-</div>
-<!--   <a href="javascript:;" data-toggle="modal" data-target="#commonStaff">常用人员</a> -->
-<!-- 模态框（Modal） -->
-<div class="modal fade check" id="commonStaff" tabindex="-1" role="dialog" aria-labelledby="commonStaffLabel"
-     aria-hidden="true">
-    <div class="modal-dialog" style="width:40%;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                    &times;
-                </button>
-                <h4 class="modal-title" id="commonStaffLabel" style="font-size: 20px;">常用人员</h4>
-            </div>
-            <div class="modal-body">
-                <div class="common_list_container col-sm-5 col-xs-12 ">
-                    <div class="table_title">常用列表</div>
-                    <div class="table_container">
-                        <table class="common_list">
-                            <thead class="first_thead">
-                            <tr>
-                                <th> 选择</th>
-                                <th>名称</th>
-                                <th> 操作</th>
-                            </tr>
-                            </thead>
-                            <tbody class="use_group">
-                            </tbody>
-                        </table>
+    <div class="modal member_modal" id="memberModal" tabindex="-1" role="dialog" aria-labelledby="memberModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="memberModalLabel" style="height: 32px;">
+                        常用列表
+                    </h4>
+                    <button type="button" class="close close-modal" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                </div>
+                <div class="modal-body modal_content_container">
+                    <div class="left_list_container">
+                        <p class="">常用列表</p>
+                        <button class="layui-btn custom_btn add_group_btn" style="height: 32px;">添加</button>
+                        <div class="table_container">
+                            <table id="groupTable" lay-filter="groupTable" class="custom_table"></table>
+                        </div>
                     </div>
-
-                    <div class="add_btn">
-                        <button class="btn btn-sm btn-default">
-                            <img src="/images/add_icon.png"/>添加
-                        </button>
-                        <form class="form-horizontal" role="form">
-                            <div class="form-group">
-                                <div class="col-sm-12">
-                                    <input type="text" class="form-control add_member_input groupName"
-                                           placeholder="请输入新建小组名字">
-                                </div>
-                                <div class="col-sm-offset-2 col-sm-10 form_btn">
-                                    <button type="button" class="btn btn-sm btn-default form_hide_btn">取消</button>
-                                    <button type="button" class="btn btn-sm btn_main form_add_btn addGroup">确定</button>
+                    <div class="right_member_container">
+                        <p class="" id="member_title">常用人员</p>
+                        <form class="layui-form" action="">
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <select name="city" lay-search="" lay-filter="member" placeholder="可搜索可输入">
+                                        <option value="" disabled>添加人员</option>
+                                        <c:forEach var="m" items="${members}">
+                                            <option value="${m.member_identity}">${m.member_name}</option>
+                                        </c:forEach>
+                                    </select>
                                 </div>
                             </div>
                         </form>
-                    </div>
-                </div>
-                <div class="divide_img col-sm-1 hidden-xs">
-                    <img src="/images/modal_arrow.png"/>
-                </div>
-                <div class="common_member_container col-sm-6 col-xs-12">
-                    <div class="table_title">常用人员</div>
-                    <div class="table_container">
-                        <div class="common_member_list">
-                            <div class="member_title">
-                                已添加人员
-                            </div>
-                            <div class="member_content">
-                                <!--  <span>
-                                                                                                                              张三
-                                         <img src="/images/X-icon.png"/>
-
-                                 </span> -->
-                            </div>
+                        <div class="table_container">
+                            <table id="memberTable" lay-filter="memberTable" class="custom_table"></table>
                         </div>
-                    </div>
-                    <div class="all_member_list">
-                        <!--  <p>党支部人员</p> -->
-                        <div class="member_list_title">
-                            <p>党支部人员</p>
-                            <div class="right">
-                                <div class="select_choice first_select_box">
-                                    <img class="choice_all" src="/images/not_check_icon.png"/>
-                                    <input type="hidden"/>
-                                    <span>全选</span>
-                                </div>
-                                <div class="select_choice">
-                                    <img class="against_choice" src="/images/not_check_icon.png"/>
-                                    <input type="hidden"/>
-                                    <span>反选</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="list_item_box">
-
-                        </div>
-
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <!-- <button type="button" class="btn btn-default" data-dismiss="modal">取消</button> -->
-                    <button type="button" class="btn btn_main sure_add">确定添加</button>
+                    <button type="button" class="layui-btn custom_btn close-modal" data-dismiss="modal">
+                        关闭
+                    </button>
                 </div>
             </div>
         </div>
+        <!-- 右侧盒子内容 -->
     </div>
 
-    <!-- 常用人员，组的增加，修改，删除 -->
-    <portlet:resourceURL id="/hg/paersonAndGroupAddDelete" var="paersonAndGroupAddDelete"/>
-    <portlet:resourceURL id="/hg/assignedAddPerson" var="assignedAddPerson"/>
-    <portlet:resourceURL id="/hg/getBranchAllPersons" var="getBranchAllPersons"/>
-    <portlet:resourceURL id="/hg/deletePerson" var="deletePerson"/>
-    <script type="text/javascript">
-        function addPlace() {
-            var campus = $('[name="campus"]').val();
-            var place = $('.dropdown-mul-2').eq(0).data('dropdown').$el.find('.valid').val();
-            if(!campus){
-                layuiModal.alert("请先选择校区");
-            }else{
-                layuiModal.confirm("确定要新增名为“" + place.trim() + "”的地点吗？", function () {
-                    $.post("${addPlace}", {place: place, campus: campus}, function (res) {
-                        if(res.result){
-                            getPlace(res.data.id);
-                        }
-                    })
-                })
-            }
-        }
-        function getPlace(placeId) {
-            var campus = $('[name="campus"]').val();
-            if (!campus){
-                layuiModal.alert("请先选择校区");
-            }
-            $.ajax({
-                url: '${places}',
-                type: 'POST',
-                data: {campus: campus},
-                dataType: 'json',
-                async: false,
-                success: function (res) {
-                    if(res.result) {
-                        var place = [];
-                        for(var i in res.data){
-                            place.push({
-                                id: res.data[i].id,
-                                disabled: false,
-                                name: res.data[i].place,
-                                selected: false
-                            });
-                        }
-                        $('.dropdown-mul-2').eq(0).data('dropdown').reset();
-                        $('.dropdown-mul-2').eq(0).data('dropdown').changeStatus();
-                        if(place.length === 0){
-                            place.push({
-                                name: "没有数据",
-                                disabled: true
-                            });
-                        }
-                        $('.dropdown-mul-2').eq(0).data('dropdown').update(place, true);
-                        placeId && $('.dropdown-mul-2').eq(0).data('dropdown').choose(placeId);
-
-                    }else{
-                        layuiModal.alert('获取地点失败');
-                    }
-                },
-                error: function () {
-                    alert("获取数据为空");
-                }
-            });
-        }
-
-        $(function () {
-            var form = ${design};
-            var uploadUrls = {
-                file: '${uploadfileUrl}',
-                image: '${uploadimageUrl}',
-                video: '${uploadvideoUrl}'
-            };
-            var hgDoms = new HgDoms(form, uploadUrls, 'hg-form-container');
-            var rules = {};
-            console.log(JSON.stringify(form));
-            for (var k in form.columns) {
-                var column = form.columns[k];
-                if (column.validation || column.required) {
-                    var r = {};
-                    if (column.validation) {
-                        var v = column.validateParam;
-                        if (v) {
-                            try {
-                                v = eval(v);
-                            } catch (e) {
-                                console.log(e);
-                            }
-                        } else {
-                            v = true;
-                        }
-                        r[column.validation] = v;
-                    }
-                    if (column.required) {
-                        r.required = true;
-                    }
-                    rules[column.id] = r;
-                }
-            }
-
-            $("#hg-form-container").parent().validate({
-                submitHandler: function (form) {
-                    form.submit();
-                    return false;
-                },
-                rules: rules
-            });
-
-            $("input[name='host']").blur(function () {
-                var host = $("input[name='host']").val();
-                var reg = /^[\u4E00-\u9FA5]{2,5}$/;
-                if (!reg.test(host)) {
-                    layuiModal.alert("请输入正确人名");
-                    // $.hgConfirm("提示", "请输入正确人名。 ");
-                    // $("#hg_confirm").modal("show");
-                    // $("#hg_confirm .btn_main").click(function () {
-                    //     $("#hg_confirm").modal("hide");
-                    // });
-                } else {
-                    $("input[name='contact']").focus();
-                }
-            });
-
-
-            $("input[name='contact']").blur(function () {
-                var contact = $("input[name='contact']").val();
-                var reg = /^[\u4E00-\u9FA5]{2,5}$/;
-                if (!reg.test(contact)) {
-                    layuiModal.alert("请输入正确人名");
-                    // $.hgConfirm("提示", "请输入正确人名。 ");
-                    // $("#hg_confirm").modal("show");
-                    // $("#hg_confirm .btn_main").click(function () {
-                    //     $("#hg_confirm").modal("hide");
-                    // });
-                } else {
-                    $("input[name='sit']").focus();
-                }
-            });
-
-            $("input[name='phoneNumber']").blur(function () {
-                var phoneNumber = $("input[name='phoneNumber']").val();
-                var mobile = /^1(3|4|5|7|8)\d{9}$/;
-                if (!mobile.test(phoneNumber)) {
-                    layuiModal.alert("请输入正确人名");
-                    // $.hgConfirm("提示", "请输入正确手机号码。");
-                    // $("#hg_confirm").modal("show");
-                    // $("#hg_confirm .btn_main").click(function () {
-                    //     $("#hg_confirm").modal("hide");
-                    // });
-                }
-            });
-
-            $("input[name='phoneNumber']").blur(function () {
-                var phoneNumber = $("input[name='phoneNumber']").val();
-                var mobile = /^1(3|4|5|7|8)\d{9}$/;
-                var phone = /^0\d{2,3}\-\d{7,8}$/;
-                if (mobile.test(phoneNumber) || phone.test(phoneNumber)) {
-                    console.log("输入号码类型正确");
-                } else {
-                    layuiModal.alert("请输入正确电话号码");
-                    // $.hgConfirm("提示", "请输入正确电话号码。");
-                    // $("#hg_confirm").modal("show");
-                    // $("#hg_confirm .btn_main").click(function () {
-                    //     $("#hg_confirm").modal("hide");
-                    // });
-                }
-            });
-            /*开展地点弹框  */
-
-            $('.dropdown-mul-2').eq(0).dropdown({
-                data : [ {
-                    name : '没有数据',
-                    disabled : true
-                } ],
-                searchNoData : '<li style="color:#ddd">查无数据' +
-                    '<button style="margin-left: 20px;padding: 0 10px;color: black;" type="button" onclick="addPlace()">新增地点</button></li>',
-                limitCount: 1,
-                choice : function() {
-
-                }
-            });
-            $('[name="campus"]').change(getPlace);
-
-            var candidates = [];
-            $('.dropdown-mul-2').eq(1).dropdown({
-                data : [ {
-                    name : '没有数据',
-                    disabled : true
-                } ],
-                input : '<input type="text" maxLength="20" placeholder="请输入搜索">',
-                limitCount: 1,
-                searchNoData : '<li style="color:#ddd">查无数据</li>',
-                choice : function() {
-
-                }
-            });
-            $('.dropdown-mul-2').eq(2).dropdown({
-                data : [ {
-                    name : '没有数据',
-                    disabled : true
-                } ],
-                searchNoData : '<li style="color:#ddd">查无数据</li>',
-                input : '<input type="text" maxLength="20" placeholder="请输入搜索">',
-                limitCount: 1,
-                choice : function() {
-                    var selectedContact = this.$select.val();
-                    if(selectedContact && selectedContact.length > 0){
-                        var phone = candidates
-                            .filter(function(p){return p.id === selectedContact[0]})[0]
-                            .phone;
-                        $('[name=phoneNumber]').val(phone);
-                    }
-                }
-            });
-            function refresh(org) {
-                $.get('${candidate}', {
-                    orgId : org
-                }, function(res) {
+</div>
+<!-- 常用人员，组的增加，修改，删除 -->
+<portlet:resourceURL id="/hg/paersonAndGroupAddDelete" var="paersonAndGroupAddDelete"/>
+<portlet:resourceURL id="/hg/assignedAddPerson" var="assignedAddPerson"/>
+<portlet:resourceURL id="/hg/getBranchAllPersons" var="getBranchAllPersons"/>
+<portlet:resourceURL id="/hg/deletePerson" var="deletePerson"/>
+<script type="text/html" id="groupOperateBtns">
+    <div class="operate_btns">
+        <span class="red_text delete_td" title="删除" onclick="deleteTd(event,1)">删除</span>
+    </div>
+</script>
+<script type="text/html" id="memberOperateBtns">
+    <div class="operate_btns">
+        <span class="red_text delete_td" title="删除" onclick="deleteTd(event,2)">删除</span>
+    </div>
+</script>
+<script type="text/javascript">
+    var memberTable, groupTable, table;
+    function addPlace() {
+        var campus = $('[name="campus"]').val();
+        var place = $('.dropdown-mul-2').eq(0).data('dropdown').$el.find('.valid').val();
+        if (!campus) {
+            layuiModal.alert("请先选择校区");
+        } else {
+            layuiModal.confirm("确定要新增名为“" + place.trim() + "”的地点吗？", function () {
+                $.post("${addPlace}", {place: place, campus: campus}, function (res) {
                     if (res.result) {
-                        var admins = res.data.admins;
-                        var candidatesGroup = res.data.candidates;
-                        candidates = [];
-                        var c2 = [];
-                        var _admin = {};
-                        for ( var i in admins) {
-                            _admin[admins[i]] = admins[i];
-                        }
-                        for ( var group in candidatesGroup) {
-                            for ( var j in candidatesGroup[group]) {
-                                var member = candidatesGroup[group][j];
-                                c2.push({
-                                    id : member.member_identity,
-                                    disabled : false,
-                                    groupId : group,
-                                    groupName : group,
-                                    name : member.member_name,
-                                    selected : false,
-                                    phone: member.member_phone_number
-                                });
-                                candidates.push({
-                                    id : member.member_identity,
-                                    disabled : false,
-                                    groupId : group,
-                                    groupName : group,
-                                    name : member.member_name,
-                                    selected : false,
-                                    phone: member.member_phone_number
-                                });
-                            }
-                        }
-                        if (candidates.length === 0) {
-                            candidates = [ {
-                                name : '没有数据',
-                                disabled : true
-                            } ];
-                        }
-                        $('.dropdown-mul-2').eq(1).data('dropdown').changeStatus();
-                        $('.dropdown-mul-2').eq(2).data('dropdown').changeStatus();
-                        $('.dropdown-mul-2').eq(1).data('dropdown').update(c2,true);
-                        $('.dropdown-mul-2').eq(2).data('dropdown').update(candidates,true);
+                        getPlace(res.data.id);
                     }
-                });
-            }
-            refresh("ddddd");
-            if ($(".mapValue").val()) {
-                console.log("ok");
-                var data = $(".mapValue").val();
-                data = data.substring(0, data.length);
-                console.log(data);
-                var j = JSON.parse(data);
-                console.log(j);
-                for (var i in j) {
-                    $("select[name='conferenceType']").prepend('<option  value="' + j[i].resources_value + '">' + j[i].resources_value + '</option>');
-                }
-                $("select[name='branch']").prepend('<option  value="${org.org_id}">${org.org_name}</option>');
-                $("select[name='branch']").val('${org.org_id}');
-                $("select[name='branch']").attr("disabled", "disabled");
-            }
-            if ($(".mapOld").val()) {
-                console.log("ok");
-                var data = $(".mapOld").val();
-                data = data.substring(0, data.length);
-                console.log(data);
-                var j = JSON.parse(data);
-                console.log(j);
-                //   $("select[name='secondaryCommittee']").prepend('<option selected="selected" value="'+j.sconedParty+'">'+j.sconedParty+'</option>');
-                $("select[name='branch']").prepend('<option  value="' + j.organization_id + '">' + j.org_name + '</option>');
-                $("select[name='branch']").val(j.organization_id);
-                // $("select[name='conferenceType']").prepend('<option  value="' + j.meeting_type + '">' + j.meeting_type + '</option>');
-                $("select[name='conferenceType']").val(j.meeting_type);
-                // $("select[name='subject']").prepend('<option  value="' + j.meeting_theme + '">' + j.meeting_theme + '</option>');
-                $("input[name='subject']").val(j.meeting_theme_secondary);
-                $("select[name='branch'],select[name='conferenceType'],select[name='subject']").attr("disabled", "disabled");
-                $("input[name='timeDuring']").val(j.start_time);
-                $("[name='timeLasts']").val(j.total_time);
-                $('.dropdown-mul-2').eq(0).data('dropdown').choose([j.host]);
-                $('.dropdown-mul-2').eq(1).data('dropdown').choose([j.contact]);
-                $("select[name='campus']").val(j.campus);
-                // $("input[name='host']").val(j.host);
-                // $("input[name='contact']").val(j.contact);
-                $("input[name='phoneNumber']").val(j.contact_phone);
-                $("input[name='sit']").val(j.sit);
-                $("input[name='customTheme']").val(j.meeting_theme_secondary);
-                if (j.attachment_name) {
-                    $("input[name='attachment']").parent().append("<span>" + j.attachment_name + "</span>");
-                }
-                $("#infrom_id").val(j.inform_id);
-                $("#newAndOld").val(j.state);
-                $("#meeting_id").val(j.meeting_id);
-                hgDoms.ueditor.ready(function () {
-                    hgDoms.ueditor.setContent($(".planContent").val());
-                });
-                $(document).data("start_time", j.info_start);
-                $(document).data("end_time", j.info_end);
-                $(document).data("place", j.place);
-                $(document).data("participant_group", j.participant_group);
-                /*  $(document).data("organization_id",j.organization_id); */
-            }
-            /*计划编辑  */
-            if ($(".mapedit").val()) {
-                console.log("ok");
-                var data = $(".mapedit").val();
-                data = data.substring(0, data.length);
-                console.log(data);
-                var j = JSON.parse(data);
-                console.log(j);
-                //   $("select[name='secondaryCommittee']").prepend('<option selected="selected" value="'+j.sconedParty+'">'+j.sconedParty+'</option>');
-                $("select[name='branch']").prepend('<option  value="' + j.organization_id + '">' + j.org_name + '</option>');
-                $("select[name='branch']").val(j.organization_id);
-                // $("select[name='conferenceType']").prepend('<option  value="' + j.meeting_type + '">' + j.meeting_type + '</option>');
-                $("select[name='conferenceType']").val(j.meeting_type);
-                // $("select[name='subject']").prepend('<option  value="' + j.meeting_theme + '">' + j.meeting_theme + '</option>');
-                $("input[name='subject']").val(j.meeting_theme);
-                $("select[name='branch'],select[name='conferenceType'],select[name='subject']").attr("disabled", "disabled");
-                $("input[name='timeDuring']").val(j.start_time);
-                $("[name='timeLasts']").val(j.total_time);
-                $("select[name='campus']").val(j.campus);
-                $('.dropdown-mul-2').eq(0).data('dropdown').choose([j.host]);
-                $('.dropdown-mul-2').eq(1).data('dropdown').choose([j.contact]);
-                // $("input[name='host']").val(j.host);
-                // $("input[name='contact']").val(j.contact);
-                $("input[name='phoneNumber']").val(j.contact_phone);
-                $("input[name='sit']").val(j.sit);
-                $("input[name='customTheme']").val(j.meeting_theme_secondary);
-                if (j.attachment_name) {
-                    $("input[name='attachment']").parent().append("<span>" + j.attachment_name + "</span>");
-                }
-                $("#infrom_id").val(j.inform_id);
-                $("#newAndOld").val(j.state);
-                $("#meeting_id").val(j.meeting_id);
-                hgDoms.ueditor.ready(function () {
-                    hgDoms.ueditor.setContent($(".planContent").val());
-                });
-                $(document).data("start_time", j.info_start);
-                $(document).data("end_time", j.info_end);
-                $(document).data("place", j.place);
-                $(document).data("participant_group", j.participant_group);
-                $(document).data("organization_id", j.organization_id);
-            }
-            /* 获取开展地点 */
-            var div = '<div class="col-sm-6 col-xs-12"> ' +
-                '<div class="col-sm-3 col-xs-3" >' +
-                '<span class="control-label form-label-required">参会人员：</span> ' +
-                '</div>' +
-                '<div class="col-sm-9 col-xs-9"> ' +
-                '<select class="form-control ${class}" name="participate"></select> ' +
-                '<a style="position:absolute;font-size:13px;" href="javascript:;" class="_commonStaff"><img class="often_png" src="/images/often.png">常用人员</a> ' +
-                '</div> ' +
-                '</div>';
-            if (!$(".mapedit").val()) {
-                $("#hg-form-container > div").eq(7).replaceWith(div);
-            } else {
-                $("select[name='participate']").attr("disabled", "disabled");
-            }
-            var branchId = $(document).data("organization_id");
-            //获取常用组
-            $.ajax({
-                url: '${getGroup}',
-                type: 'POST',
-                data: {orgId: branchId},
-                dataType: 'json',
-                async: false,
-                success: function (returndata) {
-                    console.log(returndata)
-                    for (var i = 0; i < returndata.length; i++) {
-                        if ($(document).data("participant_group") && $(document).data("participant_group") == returndata[i].group_id) {
-                            $("select[name='participate']").append('<option  value="' + returndata[i].group_id + '">' + returndata[i].group_name + '</option>');
-                            $("select[name='participate']").val(returndata[i].group_id);
-                        } else {
-                            $("select[name='participate']").append('<option value="' + returndata[i].group_id + '">' + returndata[i].group_name + '</option>');
-                        }
-                        var tr = $('<tr> ' +
-                            '<td class="check_td">' +
-                            '<img class="chang_img" src="/images/radio.png" />' +
-                            '<input type="hidden" value="' + returndata[i].group_id + '"/> ' +
-                            '</td> ' +
-                            '<td>' + returndata[i].group_name + '</td> ' +
-                            '<td> ' +
-                            '<img class="delete_gruop" src="/images/delete_icon.png"/> ' +
-                            '<input type="hidden" value="' + returndata[i].group_id + '"/> ' +
-                            '</td> ' +
-                            '</tr>');
-                        $(".use_group").append(tr);
-                    }
-                },
-                error: function (returndata) {
-                    alert("获取数据失败！");
-                }
-            });
-            /*获取支部的说有人员  */
-            $.ajax({
-                url: '${getBranchAllPersons}',
-                type: 'POST',
-                data: {orgId: $(document).data("organization_id")},
-                dataType: 'json',
-                async: false,
-                success: function (data) {
-                    for (var i = 0; i < data.length; i++) {
-                        var span = $('<span class="branch_person">' + data[i].user_name + '</span>' +
-                            '<input type="hidden" value="' + data[i].user_id + '"/>');
-                        $(".list_item_box").append(span);
-                    }
-                }
+                })
+            })
+        }
+    }
 
-            });
+    function getPlace(placeId) {
+        var campus = $('[name="campus"]').val();
+        if (!campus) {
+            layuiModal.alert("请先选择校区");
+        }
+        $.ajax({
+            url: '${places}',
+            type: 'POST',
+            data: {campus: campus},
+            dataType: 'json',
+            async: false,
+            success: function (res) {
+                if (res.result) {
+                    var place = [];
+                    for (var i in res.data) {
+                        place.push({
+                            id: res.data[i].id,
+                            disabled: false,
+                            name: res.data[i].place,
+                            selected: false
+                        });
+                    }
+                    $('.dropdown-mul-2').eq(0).data('dropdown').reset();
+                    $('.dropdown-mul-2').eq(0).data('dropdown').changeStatus();
+                    if (place.length === 0) {
+                        place.push({
+                            name: "没有数据",
+                            disabled: true
+                        });
+                    }
+                    $('.dropdown-mul-2').eq(0).data('dropdown').update(place, true);
+                    placeId && $('.dropdown-mul-2').eq(0).data('dropdown').choose(placeId);
 
+                } else {
+                    layuiModal.alert('获取地点失败');
+                }
+            },
+            error: function () {
+                alert("获取数据为空");
+            }
         });
-    </script>
-    <script type="text/javascript">
+    }
+    // 参会人员 组件
+    <portlet:resourceURL id="/hg/groupAndMember" var="groupsAndMembers"/>
+    var mockMember;
+    function groupsAndMembers(){
+        $.post('${groupsAndMembers}', function(res){
+            if(res.result){
+                mockMember = res.data;
+                var groupSpans = '';
+                mockMember.forEach(function(e){
+                    groupSpans += "<span id=\"" + e.id + "\" title=\"" + e.name + "\" " +
+                        "data-container=\"body\" data-toggle=\"popover\" data-trigger=\"hover\" " +
+                        "data-placement=\"bottom\" data-content='" + e.member.map(function(m){return m.name;}).join(",")  + "'>" + e.name + "</span>";
+                });
+                $(".list_item_container").html(groupSpans);
+                $("[data-toggle='popover']").popover();
+            }else {
+                layuiModal.alert(res.message);
+            }
+        })
+    }
+
+    var commonOpts = function(id, className, data, idField, nameField, toolbar){
+        return {
+            elem: id,
+            data: data,
+            page: {
+                limit:5,
+                prev:'&lt;上一页',
+                next:'下一页&gt;'
+            },
+            width: '100%',
+            cols: [[ //表头
+                {field: idField, title: 'id',  unresize:true, hide: true},
+                {field: nameField, title: '名字', unresize:true, templet: function(d){
+                        return '<span class="'+ className +'" title="'+ d[nameField] +'" style="width:80px;display:inline-block" onclick="addMember(event)">'+ d[nameField] +'</span>'
+                    }, width: '50%'},
+                {field: 'operate', title: '操作', toolbar: toolbar, unresize:true, width: '50%'}
+            ]]
+        };
+    };
+
+    function renderGroup() {
+        $.post('${getGroup}', function (res) {
+            if (!groupTable){
+                groupTable = table.render(commonOpts('#groupTable', 'group_td_name', res, 'group_id', 'group_name', '#groupOperateBtns'));
+            }else {
+                groupTable.reload({data: res})
+            }
+        })
+    }
+
+    function renderMember() {
+        if (currentGroup){
+            $.post('${paersonAndGroupAddDelete}', {groupId: currentGroup, path: "getGroupPersons"}, function (res) {
+                res = JSON.parse(res);
+                if (!memberTable){
+                    memberTable = table.render(commonOpts('#memberTable', 'member_td_name', res, 'participant_id', 'member_name', '#memberOperateBtns'));
+                }else {
+                    memberTable.reload({data: res});
+                }
+            })
+        }else {
+            layuiModal.alert('请先选择一个常用组！');
+        }
+
+    }
+    //删除按钮
+    function deleteTd(e, type){
+        console.log(e,'e');
+        layuiModal.confirm("确认要删除吗？", function () {
+            if(type === 1){
+                var id = $(e.target).parent().parent().parent().parent().find("[data-field='group_id']").children().text();
+                $.ajax({
+                    url: '${paersonAndGroupAddDelete}',
+                    type: 'POST',
+                    data: {groupId: id, path: "deleteGroup"},
+                    dataType: 'json',
+                    async: false,
+                    success: function (res) {
+                        if(res){
+                            renderGroup();
+                            console.log(e,'e ');
+                        }
+                        groupsAndMembers()
+                    }
+                });
+            }else if (type === 2){
+                var url = "${deletePerson}";
+                if(currentGroup) {
+                    var id = $(e.target).parent().parent().parent().parent().find("[data-field='participant_id']").children().text();
+                    var data = {groupId: currentGroup, user_id: id};
+                    layuiModal.confirm("确定删除吗?", function () {
+                        $.ajax({
+                            url: url,
+                            data: data,
+                            dataType: "json",
+                            success: function (result) {
+                                if (result.state === "ok") {
+                                    renderMember();
+                                } else {
+                                    showConfirm("删除失败！");
+                                }
+                                groupsAndMembers()
+                            }
+                        });
+                    });
+                }
+            }
+        });
+    }
+    var currentGroup, allMember = [];
+    //点击组名 添加人员
+    function addMember(e){
+        //判断是否是常用列表 名字列
+        if($(e.target).hasClass("group_td_name")){
+            var id = $(e.target).parent().parent().parent().find("[data-field='group_id']").children().text();
+            var name = $(e.target).parent().parent().parent().find("[data-field='group_name']").children().text();
+            currentGroup = id;
+            $('#member_title').text(name + '-人员列表');
+            renderMember();
+            console.log(e,'e ')
+            groupsAndMembers()
+        }
+    }
+    $(function () {
+        var uploadUrls = {
+            file: '${uploadfileUrl}',
+            image: '${uploadimageUrl}',
+            video: '${uploadvideoUrl}'
+        };
+        $('.datetime').attr('onClick', "WdatePicker({dateFmt:'yyyy-MM-dd\u0020HH:mm:ss',onpicked:function(){$(this).change()}})");
+        var ueditor = UE.getEditor("new_12", { initialFrameWidth:821});
+
+        UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
+        UE.Editor.prototype.getActionUrl = function(action) {
+            if (action == 'uploadimage' || action == 'uploadscrawl' || action == 'uploadimage') {
+                return uploadUrls.image;
+            } else if (action == 'uploadvideo') {//视频
+                return uploadUrls.video;
+            } else if (action == 'uploadfile') {//附件
+                return uploadUrls.file;
+            } else {
+                return this._bkGetActionUrl.call(this, action);
+            }
+        };
+
+        // $("#hg-form-container").parent().validate({
+        //     submitHandler: function (form) {
+        //         form.submit();
+        //         return false;
+        //     },
+        //     rules: rules
+        // });
+
         $("input[name='host']").blur(function () {
             var host = $("input[name='host']").val();
             var reg = /^[\u4E00-\u9FA5]{2,5}$/;
             if (!reg.test(host)) {
                 layuiModal.alert("请输入正确人名");
-                // $.hgConfirm("提示", "请输入正确人名。 ");
-                // $("#hg_confirm").modal("show");
-                // $("#hg_confirm .btn_main").click(function () {
-                //     $("#hg_confirm").modal("hide");
-                // });
             } else {
                 $("input[name='contact']").focus();
             }
         });
 
-        $("input[name='phoneNumber']").blur(function () {
-            var phoneNumber = $("input[name='phoneNumber']").val();
-            var mobile = /^\d{8,11}$/;
-            if (!mobile.test(phoneNumber)) {
-                layuiModal.alert("请输入正确电话号码");
-
-                // $.hgConfirm("提示", "请输入正确电话号码.");
-                // $("#hg_confirm").modal("show");
-                // $("#hg_confirm .btn_main").click(function () {
-                //     $("#hg_confirm").modal("hide");
-                // });
-            }
-        });
-
 
         $("input[name='contact']").blur(function () {
-            var host = $("input[name='host']").val();
+            var contact = $("input[name='contact']").val();
             var reg = /^[\u4E00-\u9FA5]{2,5}$/;
-            if (!reg.test(host)) {
+            if (!reg.test(contact)) {
                 layuiModal.alert("请输入正确人名");
-                //
-                // $.hgConfirm("提示", "请输入正确人名。 ");
-                // $("#hg_confirm").modal("show");
-                // $("#hg_confirm .btn_main").click(function () {
-                //     $("#hg_confirm").modal("hide");
-                // });
             } else {
                 $("input[name='sit']").focus();
             }
         });
 
-
-        function formsubmitgraft() {
-            /*  $.hgConfirm("提示","确定取消吗？");
-             $("#hg_confirm").modal("show");
-             $("#hg_confirm .btn_main").click(function(){
-               $("#hg_confirm").modal("hide");
-                 $("#hiddenstate").val(0);
-                 history.back();
-               $.tip("取消成功！");
-            }); */
-            // window.location.href="/backlogtwo";
-            layuiModal.confirm("确定暂存吗？", function () {
-                // $(this).attr("disabled", true);
-                // $("#hg_confirm").modal("hide");
-                $("select[name='branch'],select[name='conferenceType'],select[name='subject'],select[name='participate']").removeAttr("disabled", "disabled");
-                $('#graft').val("true");
-                $('#submitFrom').click();
-                // if (window.location.pathname == _pathName) {
-                //     $("#hg_confirm .btn_main").attr("disabled", false);
-                // }
-            });
-        }
-
-        var _pathName = window.location.pathname;
-
-        function formsubmit() {
-            var totalTime = $("[name='timeLasts']").val();
-            var regu = /^[1-9]\d*$/;
-            if (!regu.test(totalTime)) {
-                // $.tip("请输入正确的时长分钟数（如：30）！");
-                showConfirm("请输入正确的时长分钟数（如：30）！");
-                return;
-            }
-            var bool = showConfirmDate();
-            if (!bool) {
-                return;
-            }
-
+        $("input[name='phoneNumber']").blur(function () {
             var phoneNumber = $("input[name='phoneNumber']").val();
-            var mobile = /^\d{8,11}$/;
+            var mobile = /^1(3|4|5|7|8)\d{9}$/;
             if (!mobile.test(phoneNumber)) {
-                showConfirm("请输入正确电话号码。");
-                return;
+                layuiModal.alert("请输入正确人名");
             }
-
-            layuiModal.confirm("确定发布吗？", function () {
-                // $(this).attr("disabled", true);
-                // $("#hg_confirm").modal("hide");
-                $("select[name='branch'],select[name='conferenceType'],select[name='subject'],select[name='participate']").removeAttr("disabled", "disabled");
-                $('#submitFrom').click();
-                // if (window.location.pathname == _pathName) {
-                //     $("#hg_confirm .btn_main").attr("disabled", false);
-                // }
-            });
-            //
-            // $.hgConfirm("提示", "确定发布吗？");
-            // $("#hg_confirm").modal("show");
-            // $("#hg_confirm .btn_main").click(function () {
-            //     $(this).attr("disabled", true);
-            //     $("#hg_confirm").modal("hide");
-            //     $("select[name='branch'],select[name='conferenceType'],select[name='subject'],select[name='participate']").removeAttr("disabled", "disabled");
-            //     $('#submitFrom').click();
-            //     if (window.location.pathname == _pathName) {
-            //         $("#hg_confirm .btn_main").attr("disabled", false);
-            //     }
-            // });
-        }
-
-        /*  常用人员弹窗显示 */
-        $("#hg-form-container").on("click", "._commonStaff", function () {
-            $(".chang_img").attr("src", "/images/radio.png");
-            $(".add_btn > .btn").css("display", "block");
-            $(".member_content").empty();
-            $("#commonStaff").modal("show");
         });
-        /* 常用人员窗口关闭 */
-        $(".close_modal").click(function () {
-            $("#commonStaff").modal("hide");
-        });
-        /* 常用人员 添加 */
-        $(".add_btn").on("click", ">.btn", function () {
-            $(this).css("display", "none");
-            $(this).siblings("form").css("display", "inline-block");
-        })
 
-        /*  取消添加弹窗 */
-        $(".add_btn").on("click", ".form_hide_btn", function () {
-            $(this).parents("form").css("display", "none");
-            $(this).parents("form").siblings(".btn").css("display", "inline-block");
-            $(this).parents(".form-group").find(".add_member_input").val("");
-        })
-
-        /* 常用人员  添加按钮消失 */
-        $(".use_group").on("click", ".check_td", function () {
-            if ($(this).children("img").attr("src").indexOf("_on") > -1) {
-                $(this).children("img").attr("src", "/images/radio.png");
-                /* $(this).parents(".table_container").siblings(".add_btn").css("display","block"); */
+        $("input[name='phoneNumber']").blur(function () {
+            var phoneNumber = $("input[name='phoneNumber']").val();
+            var mobile = /^1(3|4|5|7|8)\d{9}$/;
+            var phone = /^0\d{2,3}\-\d{7,8}$/;
+            if (mobile.test(phoneNumber) || phone.test(phoneNumber)) {
+                console.log("输入号码类型正确");
             } else {
-                $(".check_td img").each(function () {
-                    // console.log($(this).attr("src"));
-                    $(this).attr("src", "/images/radio.png");
-                })
-                $(this).children("img").attr("src", "/images/radio_on.png");
-                /* $(this).parents(".table_container").siblings(".add_btn").css("display","none"); */
+                layuiModal.alert("请输入正确电话号码");
             }
-            $(".member_content").empty();
-            var groupId = $(this).find("input").val();
-            $.ajax({
-                url: '${paersonAndGroupAddDelete}',
-                type: 'POST',
-                data: {groupId: groupId, path: "getGroupPersons"},
-                dataType: 'json',
-                async: false,
-                success: function (data) {
-                    console.log("图片变换" + data);
-                    /* $(".member_content").empty(); */
-                    for (var i = 0; i < data.length; i++) {
-                        var c = data[i];
-                        var tr = $('<span>' + c.member_name + '<img class="delete_img" src="/images/X-icon.png"/>' +
-                            '<input type="hidden" value="' + c.participant_id + '"/> ' +
-                            '</span>');
-                        $(".member_content").append(tr);
+        });
+        /*开展地点弹框  */
+
+        $('.dropdown-mul-2').eq(0).dropdown({
+            data: [{
+                name: '没有数据',
+                disabled: true
+            }],
+            searchNoData: '<li style="color:#ddd">查无数据' +
+                '<button style="margin-left: 20px;padding: 0 10px;color: black;" type="button" onclick="addPlace()">新增地点</button></li>',
+            limitCount: 1,
+            choice: function () {
+
+            }
+        });
+        $('[name="campus"]').change(getPlace);
+
+        var candidates = [];
+        $('.dropdown-mul-2').eq(1).dropdown({
+            data: [{
+                name: '没有数据',
+                disabled: true
+            }],
+            input: '<input type="text" maxLength="20" placeholder="请输入搜索">',
+            limitCount: 1,
+            searchNoData: '<li style="color:#ddd">查无数据</li>',
+            choice: function () {
+
+            }
+        });
+        $('.dropdown-mul-2').eq(2).dropdown({
+            data: [{
+                name: '没有数据',
+                disabled: true
+            }],
+            searchNoData: '<li style="color:#ddd">查无数据</li>',
+            input: '<input type="text" maxLength="20" placeholder="请输入搜索">',
+            limitCount: 1,
+            choice: function () {
+                var selectedContact = this.$select.val();
+                if (selectedContact && selectedContact.length > 0) {
+                    var phone = candidates
+                        .filter(function (p) {
+                            return p.id === selectedContact[0]
+                        })[0]
+                        .phone;
+                    $('[name=phoneNumber]').val(phone);
+                }
+            }
+        });
+
+        function refresh(org, host, contact, participants) {
+            $.get('${candidate}', {
+                orgId: org
+            }, function (res) {
+                if (res.result) {
+                    var admins = res.data.admins;
+                    var candidatesGroup = res.data.candidates;
+                    candidates = [];
+                    var c2 = [];
+                    var _admin = {};
+                    for (var i in admins) {
+                        _admin[admins[i]] = admins[i];
+                    }
+                    for (var group in candidatesGroup) {
+                        for (var j in candidatesGroup[group]) {
+                            var member = candidatesGroup[group][j];
+                            c2.push({
+                                id: member.member_identity,
+                                disabled: false,
+                                groupId: group,
+                                groupName: group,
+                                name: member.member_name,
+                                selected: false,
+                                phone: member.member_phone_number
+                            });
+                            candidates.push({
+                                id: member.member_identity,
+                                disabled: false,
+                                groupId: group,
+                                groupName: group,
+                                name: member.member_name,
+                                selected: false,
+                                phone: member.member_phone_number
+                            });
+                            allMember.push({
+                                id: member.member_identity,
+                                name: member.member_name
+                            })
+                        }
+                    }
+                    if (candidates.length === 0) {
+                        candidates = [{
+                            name: '没有数据',
+                            disabled: true
+                        }];
+                    }
+                    $('.dropdown-mul-2').eq(1).data('dropdown').changeStatus();
+                    $('.dropdown-mul-2').eq(2).data('dropdown').changeStatus();
+                    $('.dropdown-mul-2').eq(1).data('dropdown').update(c2, true);
+                    $('.dropdown-mul-2').eq(2).data('dropdown').update(candidates, true);
+
+                    host && $('.dropdown-mul-2').eq(1).data('dropdown').choose(host);
+                    contact && $('.dropdown-mul-2').eq(2).data('dropdown').choose(contact);
+
+                    var selectOpts = '';
+                    selectOpts += allMember.map(function(m){return "<option value='" + m.id + "'>" + m.name + "</option>"}).join('');
+                    $("#attend_member_select").html(selectOpts);
+                    //使用插件
+                    $("#attend_member_select").bsMultiSelect({q:'e'}, {a:'x'});
+
+                    if(participants){
+                        participants.forEach(function (e) {
+                            $('[data-option-id=' + e + ']').click();
+                        })
+                        $("select[name='participate']").attr("disabled", "disabled");
                     }
                 }
             });
-
+        }
+        layui.use('layer', function() {
+            var layer = layui.layer;
         });
 
-        /*  选择按钮图片变化  */
-        /*  $(".use_group").on("click",".chang_img",function(){
-           $(".use_group .chang_img").attr("src","/images/radio.png");
-           $(this).attr("src","/images/radio_on.png");
-           var groupId=$(this).next().val();
-            $.ajax({
-                     url: '${paersonAndGroupAddDelete}',
-               type: 'POST',  
-               data: {groupId:groupId,path:"getGroupPersons"},
-               dataType:'json',
-               async: false,   
-               success: function (data) {
-            	   console.log("图片变换"+data);
-            	   $(".group_members").empty();
-            	   for(var i=0;i<data.length;i++){
-            		   var c=data[i];		
-            		   var tr=$('<span>'+c.member_name+'<img src="/images/X-icon.png"/></span>');
-                       $(".group_members").append(tr);
-            	   }
-               }
-	  });
-      });  */
+        $('.edit_group_member').on('click', function () {
+            layer.open({
+                type: 1
+                ,content: $("#memberModal")
+            });
+        });
+        $('.close-modal').on('click', function () {
+            layer.closeAll();
+        });
 
-        /* 删除小组 */
-        $(".use_group").on("click", ".delete_gruop", function () {
-            var self = this;
-            var groupId = $(this).next().val();
 
-            layuiModal.confirm("确认要删除吗？", function () {
-                // $("#hg_confirm").modal("hide");
-                $(self).parent().parent().remove();
+        $(".mult_input_container .drop_arrow").on("click", '', function(e){
+            $(e.target).hasClass("expand_arrow") ? $(e.target).removeClass("expand_arrow") : $(e.target).addClass("expand_arrow");
+        });
+
+
+        groupsAndMembers();
+
+        //点击组名 默认选中人员
+        $(".list_item_container").on("click", 'span', function(e){
+            var groupId = $(e.target).attr('id');
+            var originVal = $("#attend_member_select").val();
+            var bsMultiSelect = $('#attend_member_select').BsMultiSelect();
+            $('.dashboardcode-bsmultiselect .dropdown-menu li').each(function(idx, e){
+                var val = $(e).attr("data-option-id");
+                var selected = $("#attend_member_select").val() || [];
+                (selected.indexOf(val) === -1 && mockMember
+                    .some(function(p){return p.id === groupId && p.member.map(function(m){return m.id}).indexOf(val) > -1;}))
+                && $(e).click();
+            });
+        });
+        //常用列表 弹窗列表
+        layui.use('table', function(){
+            table = layui.table;
+            renderGroup();
+        });
+        //常用列表添加按钮
+        $(".add_group_btn").on("click", '', function(){
+            layer.prompt({title: '添加列表', formType: 0}, function(text, index){
                 $.ajax({
                     url: '${paersonAndGroupAddDelete}',
                     type: 'POST',
-                    data: {groupId: groupId, path: "deleteGroup"},
+                    data: {groupName: text, path: "addGroup"},
                     dataType: 'json',
                     async: false,
                     success: function (data) {
-                        $("select[name='participate'] option").each(function () {
-                            if ($(this).attr("value") == groupId) {
-                                $(this).remove();
-                            }
-                        });
+                        layuiModal.alert("已添加常用组");
+                        renderGroup();
+                        groupsAndMembers()
                     }
                 });
-                /*  $.tip("删除成功！"); */
+                layer.close(index);
+                console.log(text, 'pass', index);
             });
-
-            <%--$.hgConfirm("提示", "你确认要删除吗？");--%>
-            <%--$("#hg_confirm").modal("show");--%>
-            <%--$("#hg_confirm .btn_main").click(function () {--%>
-            <%--    $("#hg_confirm").modal("hide");--%>
-            <%--    $(self).parent().parent().remove();--%>
-            <%--    $.ajax({--%>
-            <%--        url: '${paersonAndGroupAddDelete}',--%>
-            <%--        type: 'POST',--%>
-            <%--        data: {groupId: groupId, path: "deleteGroup"},--%>
-            <%--        dataType: 'json',--%>
-            <%--        async: false,--%>
-            <%--        success: function (data) {--%>
-            <%--            $("select[name='participate'] option").each(function () {--%>
-            <%--                if ($(this).attr("value") == groupId) {--%>
-            <%--                    $(this).remove();--%>
-            <%--                }--%>
-            <%--            });--%>
-            <%--        }--%>
-            <%--    });--%>
-            <%--    /*  $.tip("删除成功！"); */--%>
-            <%--});--%>
         });
-        /*  添加小组 */
-        $(".addGroup").click(function () {
-            var groupName = $(".groupName").val();
-            if (!groupName) {
-                showConfirm("小组名不能为空！");
-                return;
+
+        //监听人员选择
+        layui.use('form', function(){
+            var form = layui.form;
+            //监听人员选择框
+            form.on('select(member)', function(data){
+                if(currentGroup) {
+                    $.ajax({
+                        url: "${paersonAndGroupAddDelete}",
+                        data: {participant_id: data.value, groupId: currentGroup, path: "addPerson"},
+                        dataType: "json",
+                        success: function (result) {
+                            if ("ok" == result.state) {
+                                layuiModal.alert("添加人员成功！");
+                                renderMember();
+                                groupsAndMembers()
+                            } else {
+                            }
+                        }
+                    });
+                }else {
+                    layuiModal.alert('请先选择一个常用组！');
+                }
+
+                console.log(data.elem); //得到select原始DOM对象
+                console.log(data.value); //得到被选中的值
+                console.log(data.othis); //得到美化后的DOM对象
+            });
+        });
+
+        if ($(".mapValue").val()) {
+            console.log("ok");
+            var data = $(".mapValue").val();
+            data = data.substring(0, data.length);
+            console.log(data);
+            var j = JSON.parse(data);
+            console.log(j);
+            for (var i in j) {
+                $("select[name='conferenceType']").prepend('<option  value="' + j[i].resources_value + '">' + j[i].resources_value + '</option>');
             }
-            var branchId = $("select[name='branch']").val();
-            $(this).parents(".form-horizontal").siblings("button.btn").css("display", "inline-block");
-            $(this).parents(".form-horizontal").css("display", "none");
+            $("select[name='branch']").prepend('<option  value="${org.org_id}">${org.org_name}</option>');
+            $("select[name='branch']").val('${org.org_id}');
+            $("select[name='branch']").attr("disabled", "disabled");
+            refresh("ddddd");
+        }
+        if ($(".mapOld").val()) {
+            console.log("ok");
+            var data = $(".mapOld").val();
+            data = data.substring(0, data.length);
+            console.log(data);
+            var j = JSON.parse(data);
+            console.log(j);
+            //   $("select[name='secondaryCommittee']").prepend('<option selected="selected" value="'+j.sconedParty+'">'+j.sconedParty+'</option>');
+            $("select[name='branch']").prepend('<option  value="' + j.organization_id + '">' + j.org_name + '</option>');
+            $("select[name='branch']").val(j.organization_id);
+            // $("select[name='conferenceType']").prepend('<option  value="' + j.meeting_type + '">' + j.meeting_type + '</option>');
+            $("select[name='conferenceType']").val(j.meeting_type);
+            // $("select[name='subject']").prepend('<option  value="' + j.meeting_theme + '">' + j.meeting_theme + '</option>');
+            $("input[name='subject']").val(j.meeting_theme_secondary);
+            $("select[name='branch'],select[name='conferenceType'],select[name='subject']").attr("disabled", "disabled");
+            $("input[name='timeDuring']").val(j.start_time);
+            $("[name='timeLasts']").val(j.total_time);
+            var participants = JSON.parse(j.participant_group);
+            refresh("ddddd", [j.host], [j.contact], participants);
+            $("select[name='campus']").val(j.campus);
+            getPlace(j.place);
+            // $("input[name='host']").val(j.host);
+            // $("input[name='contact']").val(j.contact);
+            $("input[name='phoneNumber']").val(j.contact_phone);
+            $("input[name='sit']").val(j.sit);
+            $("input[name='customTheme']").val(j.meeting_theme_secondary);
+            if (j.attachment_name) {
+                $("input[name='attachment']").parent().append("<span>" + j.attachment_name + "</span>");
+            }
+            $("#infrom_id").val(j.inform_id);
+            $("#newAndOld").val(j.state);
+            $("#meeting_id").val(j.meeting_id);
+            ueditor.ready(function () {
+                ueditor.setContent($(".planContent").val());
+            });
+            var participants = JSON.parse(j.participant_group);
+            $(document).data("start_time", j.info_start);
+            $(document).data("end_time", j.info_end);
+            $(document).data("place", j.place);
+            $(document).data("participant_group", j.participant_group);
+            /*  $(document).data("organization_id",j.organization_id); */
+        }
+        /*计划编辑  */
+        if ($(".mapedit").val()) {
+            console.log("ok");
+            var data = $(".mapedit").val();
+            data = data.substring(0, data.length);
+            console.log(data);
+            var j = JSON.parse(data);
+            console.log(j);
+            //   $("select[name='secondaryCommittee']").prepend('<option selected="selected" value="'+j.sconedParty+'">'+j.sconedParty+'</option>');
+            $("select[name='branch']").prepend('<option  value="' + j.organization_id + '">' + j.org_name + '</option>');
+            $("select[name='branch']").val(j.organization_id);
+            // $("select[name='conferenceType']").prepend('<option  value="' + j.meeting_type + '">' + j.meeting_type + '</option>');
+            $("select[name='conferenceType']").val(j.meeting_type);
+            // $("select[name='subject']").prepend('<option  value="' + j.meeting_theme + '">' + j.meeting_theme + '</option>');
+            $("input[name='subject']").val(j.meeting_theme);
+            $("select[name='branch'],select[name='conferenceType'],select[name='subject']").attr("disabled", "disabled");
+            $("input[name='timeDuring']").val(j.start_time);
+            $("[name='timeLasts']").val(j.total_time);
+            $("select[name='campus']").val(j.campus);
+            getPlace(j.place);
+            var participants = JSON.parse(j.participant_group);
+            refresh("ddddd", [j.host], [j.contact], participants);
+            // $("input[name='host']").val(j.host);
+            // $("input[name='contact']").val(j.contact);
+            $("input[name='phoneNumber']").val(j.contact_phone);
+            $("input[name='sit']").val(j.sit);
+            $("input[name='customTheme']").val(j.meeting_theme_secondary);
+            if (j.attachment_name) {
+                $("input[name='attachment']").parent().append("<span>" + j.attachment_name + "</span>");
+            }
+            $("#infrom_id").val(j.inform_id);
+            $("#newAndOld").val(j.state);
+            $("#meeting_id").val(j.meeting_id);
+            ueditor.ready(function () {
+                ueditor.setContent($(".planContent").val());
+            });
+            $(document).data("start_time", j.info_start);
+            $(document).data("end_time", j.info_end);
+            $(document).data("place", j.place);
+            $(document).data("participant_group", j.participant_group);
+            $(document).data("organization_id", j.organization_id);
+        }
+
+        var branchId = $(document).data("organization_id");
+
+    });
+</script>
+<script type="text/javascript">
+    $("input[name='host']").blur(function () {
+        var host = $("input[name='host']").val();
+        var reg = /^[\u4E00-\u9FA5]{2,5}$/;
+        if (!reg.test(host)) {
+            layuiModal.alert("请输入正确人名");
+        } else {
+            $("input[name='contact']").focus();
+        }
+    });
+
+    $("input[name='phoneNumber']").blur(function () {
+        var phoneNumber = $("input[name='phoneNumber']").val();
+        var mobile = /^\d{8,11}$/;
+        if (!mobile.test(phoneNumber)) {
+            layuiModal.alert("请输入正确电话号码");
+        }
+    });
+
+
+    $("input[name='contact']").blur(function () {
+        var host = $("input[name='host']").val();
+        var reg = /^[\u4E00-\u9FA5]{2,5}$/;
+        if (!reg.test(host)) {
+            layuiModal.alert("请输入正确人名");
+        } else {
+            $("input[name='sit']").focus();
+        }
+    });
+
+
+    function formsubmitgraft() {
+        layuiModal.confirm("确定暂存吗？", function () {
+            $("select[name='branch'],select[name='conferenceType'],select[name='subject'],select[name='participate']").removeAttr("disabled", "disabled");
+            $('#graft').val("true");
+            $('#submitFrom').click();
+        });
+    }
+
+    var _pathName = window.location.pathname;
+
+    function formsubmit() {
+        var phoneNumber = $("input[name='phoneNumber']").val();
+        var mobile = /^\d{8,11}$/;
+        if (!mobile.test(phoneNumber)) {
+            showConfirm("请输入正确电话号码。");
+            return;
+        }
+
+        layuiModal.confirm("确定发布吗？", function () {
+            $("select[name='branch'],select[name='conferenceType'],select[name='subject'],select[name='participate']").removeAttr("disabled", "disabled");
+            $('#submitFrom').click();
+        });
+    }
+
+    /*  常用人员弹窗显示 */
+    $("#hg-form-container").on("click", "._commonStaff", function () {
+        $(".chang_img").attr("src", "/images/radio.png");
+        $(".add_btn > .btn").css("display", "block");
+        $(".member_content").empty();
+        $("#commonStaff").modal("show");
+    });
+    /* 常用人员窗口关闭 */
+    $(".close_modal").click(function () {
+        $("#commonStaff").modal("hide");
+    });
+    /* 常用人员 添加 */
+    $(".add_btn").on("click", ">.btn", function () {
+        $(this).css("display", "none");
+        $(this).siblings("form").css("display", "inline-block");
+    })
+
+    /*  取消添加弹窗 */
+    $(".add_btn").on("click", ".form_hide_btn", function () {
+        $(this).parents("form").css("display", "none");
+        $(this).parents("form").siblings(".btn").css("display", "inline-block");
+        $(this).parents(".form-group").find(".add_member_input").val("");
+    })
+
+    /* 常用人员  添加按钮消失 */
+    $(".use_group").on("click", ".check_td", function () {
+        if ($(this).children("img").attr("src").indexOf("_on") > -1) {
+            $(this).children("img").attr("src", "/images/radio.png");
+            /* $(this).parents(".table_container").siblings(".add_btn").css("display","block"); */
+        } else {
+            $(".check_td img").each(function () {
+                // console.log($(this).attr("src"));
+                $(this).attr("src", "/images/radio.png");
+            })
+            $(this).children("img").attr("src", "/images/radio_on.png");
+            /* $(this).parents(".table_container").siblings(".add_btn").css("display","none"); */
+        }
+        $(".member_content").empty();
+        var groupId = $(this).find("input").val();
+        $.ajax({
+            url: '${paersonAndGroupAddDelete}',
+            type: 'POST',
+            data: {groupId: groupId, path: "getGroupPersons"},
+            dataType: 'json',
+            async: false,
+            success: function (data) {
+                console.log("图片变换" + data);
+                /* $(".member_content").empty(); */
+                for (var i = 0; i < data.length; i++) {
+                    var c = data[i];
+                    var tr = $('<span>' + c.member_name + '<img class="delete_img" src="/images/X-icon.png"/>' +
+                        '<input type="hidden" value="' + c.participant_id + '"/> ' +
+                        '</span>');
+                    $(".member_content").append(tr);
+                }
+            }
+        });
+
+    });
+
+    /* 删除小组 */
+    $(".use_group").on("click", ".delete_gruop", function () {
+        var self = this;
+        var groupId = $(this).next().val();
+
+        layuiModal.confirm("确认要删除吗？", function () {
+            // $("#hg_confirm").modal("hide");
+            $(self).parent().parent().remove();
             $.ajax({
                 url: '${paersonAndGroupAddDelete}',
                 type: 'POST',
-                data: {groupName: groupName, branchId: branchId, path: "addGroup"},
+                data: {groupId: groupId, path: "deleteGroup"},
                 dataType: 'json',
                 async: false,
                 success: function (data) {
-                    var tr = $(' <tr> ' +
-                        '<td class="check_td"> ' +
-                        '<img class="chang_img" src="/images/radio.png" />' +
-                        '<input type="hidden" value="' + data.uuid + '"/> ' +
-                        '</td> ' +
-                        ' <td>' + groupName + '</td> ' +
-                        '<td> ' +
-                        '<img class="delete_gruop" src="/images/delete_icon.png"/> ' +
-                        '<input type="hidden" value="' + data.uuid + '"/> ' +
-                        ' </td> ' +
-                        '</tr>');
-                    $(".use_group").append(tr);
-                    $(".groupName").val("");
-                    $("select[name='participate']").append('<option value="' + data.uuid + '">' + groupName + '</option>');
-
+                    $("select[name='participate'] option").each(function () {
+                        if ($(this).attr("value") == groupId) {
+                            $(this).remove();
+                        }
+                    });
                 }
             });
         });
 
-        //添加指派人员
-        $(".add_person").on("change", function () {
-            var url = "${assignedAddPerson}"
-            var userName = $(".add_person").val();
-            var data = {userName: userName, path: "find"};
-            $(".addPersons").empty();
+    });
+    /*  添加小组 */
+    $(".addGroup").click(function () {
+        var groupName = $(".groupName").val();
+        if (!groupName) {
+            showConfirm("小组名不能为空！");
+            return;
+        }
+        var branchId = $("select[name='branch']").val();
+        $(this).parents(".form-horizontal").siblings("button.btn").css("display", "inline-block");
+        $(this).parents(".form-horizontal").css("display", "none");
+        $.ajax({
+            url: '${paersonAndGroupAddDelete}',
+            type: 'POST',
+            data: {groupName: groupName, branchId: branchId, path: "addGroup"},
+            dataType: 'json',
+            async: false,
+            success: function (data) {
+                var tr = $(' <tr> ' +
+                    '<td class="check_td"> ' +
+                    '<img class="chang_img" src="/images/radio.png" />' +
+                    '<input type="hidden" value="' + data.uuid + '"/> ' +
+                    '</td> ' +
+                    ' <td>' + groupName + '</td> ' +
+                    '<td> ' +
+                    '<img class="delete_gruop" src="/images/delete_icon.png"/> ' +
+                    '<input type="hidden" value="' + data.uuid + '"/> ' +
+                    ' </td> ' +
+                    '</tr>');
+                $(".use_group").append(tr);
+                $(".groupName").val("");
+                $("select[name='participate']").append('<option value="' + data.uuid + '">' + groupName + '</option>');
+
+            }
+        });
+    });
+
+    //添加指派人员
+    $(".add_person").on("change", function () {
+        var url = "${assignedAddPerson}"
+        var userName = $(".add_person").val();
+        var data = {userName: userName, path: "find"};
+        $(".addPersons").empty();
+        $.ajax({
+            url: url,
+            data: data,
+            dataType: "json",
+            success: function (result) {
+                console.log(result);
+                if (result.state == 'succeed') {
+                    for (var i = 0; i < result.data.length; i++) {
+                        var c = result.data[i];
+                        $(".addPersons").append('<label><input name="Fruit" type="radio" value="' + c.user_id + '"/>' + c.user_name + '</label>');
+                    }
+                }
+                if (result.state == 'fail') {
+                    $(".addPersons").append('<p style="color:red;">' + result.message + '</p>');
+                }
+            }
+        });
+
+    });
+    /*添加人员  */
+    $(".sure_add").click(function () {
+        var groupId = $("img[src='/images/radio_on.png']").next().val();
+        var assigne_user_id = $('input:radio:checked').val();
+
+        var userIds = $(".person_class");
+        var resourcesId = new Array("");
+        for (var i = 0; i < userIds.length; i++) {
+            var resourceId = $(userIds[i]).next().val();
+            resourcesId.push(resourceId);
+        }
+        var assigne_user_id = resourcesId.join(",").substring(1) + "";
+        if (!groupId) {
+            showConfirm("请先选择小组！");
+            return;
+        }
+        if (!assigne_user_id) {
+            showConfirm("请选择人员 ！");
+            return;
+        }
+        var url = "${paersonAndGroupAddDelete}"
+        var data = {participant_id: assigne_user_id, groupId: groupId, path: "addPerson"};
+        $.ajax({
+            url: url,
+            data: data,
+            dataType: "json",
+            success: function (result) {
+                if ("ok" == result.state) {
+                    var arr = [];
+                    $(".member_content input").each(function () {
+                        var id = $(this).val();
+                        arr.push(id);
+                    })
+                    var arr2 = [];
+                    $(".person_class").each(function () {
+                        var name = $(this).html();
+                        var id = $(this).next().val();
+                        arr2.push({"name": name, "id": id})
+                    })
+
+                    for (var i = 0; i < arr2.length; i++) {
+                        var repeat = false;
+                        for (var j = 0; j < arr.length; j++) {
+                            if (arr2[i].id == arr[j]) {
+                                repeat = true;
+                                break;
+                            }
+                        }
+
+                        if (!repeat) {
+                            var tr = $('<span>' + arr2[i].name + '<img class="delete_img" src="/images/X-icon.png"/>' +
+                                '<input type="hidden" value="' + arr2[i].id + '"/> ' +
+                                '</span>');
+                            $(".member_content").append(tr);
+                        }
+                    }
+                    showConfirm("添加人员成功！")
+                } else {
+                }
+            }
+        });
+
+    });
+
+
+    function showConfirmDate() {
+        var startTimeLong = new Date($("input[name='timeDuring']").val().replace(" ", "T") + '+08:00').getTime();
+        var endTimeLong = ($("[name='timeLasts']").val()) * 60 * 1000 + startTimeLong;
+        var sDate = getDateByLong($(document).data("start_time"));
+        var eDate = getDateByLong($(document).data("end_time"));
+        console.log(startTimeLong + " ;" + endTimeLong + " ;" + sDate + " ;" + eDate);
+        var boolem = true;
+        if (!startTimeLong) {
+            boolem = false;
+            showConfirm("请选择在规定时间范围内：   " + sDate + " —— " + eDate);
+        }
+        if (startTimeLong > $(document).data("end_time")) {
+            boolem = false;
+            showConfirm("请选择在规定时间范围内：   " + sDate + " —— " + eDate);
+        } else if (endTimeLong > $(document).data("end_time")) {
+            boolem = false;
+            showConfirm("请选择在规定时间范围内：   " + sDate + " —— " + eDate);
+        } else if (startTimeLong < $(document).data("start_time")) {
+            boolem = false;
+            showConfirm("提示", "请选择在规定时间范围内：   " + sDate + " —— " + eDate);
+        }
+
+        return true;
+    }
+
+    function showConfirm(info) {
+        layuiModal.alert(info);
+    }
+
+
+    //格式化日期
+    function getDateByLong(dateLong) {
+        var date = new Date(dateLong);
+        var moth = date.getMonth() + 1;
+        if (moth < 10) {
+            moth = "0" + moth;
+        }
+        var day = date.getDate();
+        if (day < 10) {
+            day = "0" + day;
+        }
+        var hour = date.getHours();
+        if (hour < 10) {
+            hour = "0" + hour;
+        }
+        var minuts = date.getMinutes();
+        if (minuts < 10) {
+            minuts = "0" + minuts;
+        }
+        var ss = date.getSeconds();
+        if (ss < 10) {
+            ss = "0" + ss;
+        }
+        var defaultTime = date.getFullYear() + '-' + moth + '-' + day + ' ' + hour + ':' + minuts + ':' + ss;
+        return defaultTime;
+    }
+
+    /* 支部人员点击效果切换 */
+    $(".list_item_box").on("click", ".branch_person", function () {
+        if ($(this).hasClass("person_class")) {
+            $(this).css("background", "white");
+            $(this).removeClass("person_class");
+        } else {
+            $(this).css("background", "#CE0000");
+            $(this).addClass("person_class");
+        }
+    });
+    /* 删除常用组人员 */
+    $(".member_content").on("click", ".delete_img", function () {
+        var self = this;
+        var groupId = $("img[src='/images/radio_on.png']").next().val();
+        var user_id = $(this).next().val();
+        if (!groupId) {
+            showConfirm("请先选择小组！");
+            return;
+        }
+        if (!user_id) {
+            showConfirm("请选择人员 ！");
+            return;
+        }
+        var url = "${deletePerson}";
+        var data = {groupId: groupId, user_id: user_id};
+        layuiModal.confirm("确定删除吗?", function () {
             $.ajax({
                 url: url,
                 data: data,
                 dataType: "json",
                 success: function (result) {
-                    console.log(result);
-                    if (result.state == 'succeed') {
-                        for (var i = 0; i < result.data.length; i++) {
-                            var c = result.data[i];
-                            $(".addPersons").append('<label><input name="Fruit" type="radio" value="' + c.user_id + '"/>' + c.user_name + '</label>');
-                        }
-                    }
-                    if (result.state == 'fail') {
-                        $(".addPersons").append('<p style="color:red;">' + result.message + '</p>');
-                    }
-                }
-            });
-
-        });
-        /*添加人员  */
-        $(".sure_add").click(function () {
-            var groupId = $("img[src='/images/radio_on.png']").next().val();
-            var assigne_user_id = $('input:radio:checked').val();
-
-            var userIds = $(".person_class");
-            var resourcesId = new Array("");
-            for (var i = 0; i < userIds.length; i++) {
-                var resourceId = $(userIds[i]).next().val();
-                resourcesId.push(resourceId);
-            }
-            var assigne_user_id = resourcesId.join(",").substring(1) + "";
-            if (!groupId) {
-                showConfirm("请先选择小组！");
-                return;
-            }
-            if (!assigne_user_id) {
-                showConfirm("请选择人员 ！");
-                return;
-            }
-            var url = "${paersonAndGroupAddDelete}"
-            var data = {participant_id: assigne_user_id, groupId: groupId, path: "addPerson"};
-            $.ajax({
-                url: url,
-                data: data,
-                dataType: "json",
-                success: function (result) {
-                    if ("ok" == result.state) {
-                        var arr = [];
-                        $(".member_content input").each(function () {
-                            var id = $(this).val();
-                            arr.push(id);
-                        })
-                        var arr2 = [];
-                        $(".person_class").each(function () {
-                            var name = $(this).html();
-                            var id = $(this).next().val();
-                            arr2.push({"name": name, "id": id})
-                        })
-
-                        for (var i = 0; i < arr2.length; i++) {
-                            var repeat = false;
-                            for (var j = 0; j < arr.length; j++) {
-                                if (arr2[i].id == arr[j]) {
-                                    repeat = true;
-                                    break;
-                                }
-                            }
-
-                            if (!repeat) {
-                                var tr = $('<span>' + arr2[i].name + '<img class="delete_img" src="/images/X-icon.png"/>' +
-                                    '<input type="hidden" value="' + arr2[i].id + '"/> ' +
-                                    '</span>');
-                                $(".member_content").append(tr);
-                            }
-                        }
-                        // $("#hg_confirm").modal("show");
-                        // $("#hg_confirm .btn_main").click(function () {
-                        //     $("#hg_confirm").modal("hide");
-                        //     $("#commonStaff").modal("hide");
-                        // });
-                        showConfirm("添加人员成功！")
+                    if (result.state === "ok") {
+                        $(self).parent().remove();
                     } else {
-                        // alert(result.message);
+                        showConfirm("删除失败！");
                     }
                 }
             });
-
         });
 
+    });
+    /*全选*/
+    $(".choice_all").click(function () {
+        $(this).attr("src", "/images/checked_icon.png");
+        $(".branch_person").css("background", "#CE0000");
+        $(".list_item_box").find(".person_class").removeClass("person_class");
+        $(".branch_person").addClass("person_class");
+        $(".against_choice").attr("src", "/images/not_check_icon.png");
 
-        function showConfirmDate() {
-            var startTimeLong = new Date($("input[name='timeDuring']").val().replace(" ", "T") + '+08:00').getTime();
-            var endTimeLong = ($("[name='timeLasts']").val()) * 60 * 1000 + startTimeLong;
-            var sDate = getDateByLong($(document).data("start_time"));
-            var eDate = getDateByLong($(document).data("end_time"));
-            console.log(startTimeLong + " ;" + endTimeLong + " ;" + sDate + " ;" + eDate);
-            var boolem = true;
-            if (!startTimeLong) {
-                boolem = false;
-                showConfirm("请选择在规定时间范围内：   " + sDate + " —— " + eDate);
-                // $("#hg_confirm").modal("show");
-                // $("#hg_confirm .btn_main").click(function () {
-                //     $("#hg_confirm").modal("hide");
-                // });
-            }
-            if (startTimeLong > $(document).data("end_time")) {
-                boolem = false;
-                showConfirm("请选择在规定时间范围内：   " + sDate + " —— " + eDate);
-                // $("#hg_confirm").modal("show");
-                // $("#hg_confirm .btn_main").click(function () {
-                //     $("#hg_confirm").modal("hide");
-                // });
-            } else if (endTimeLong > $(document).data("end_time")) {
-                boolem = false;
-                showConfirm( "请选择在规定时间范围内：   " + sDate + " —— " + eDate);
-                // $("#hg_confirm").modal("show");
-                // $("#hg_confirm .btn_main").click(function () {
-                //     $("#hg_confirm").modal("hide");
-                // });
-            } else if (startTimeLong < $(document).data("start_time")) {
-                boolem = false;
-                showConfirm("提示", "请选择在规定时间范围内：   " + sDate + " —— " + eDate);
-                // $("#hg_confirm").modal("show");
-                // $("#hg_confirm .btn_main").click(function () {
-                //     $("#hg_confirm").modal("hide");
-                // });
-            }
-
-            return boolem;
-        }
-
-        function showConfirm(info) {
-            // $.hgConfirm("提示", info);
-            // $("#hg_confirm").modal("show");
-            // $("#hg_confirm .btn_main").click(function () {
-            //     $("#hg_confirm").modal("hide");
-            //     return;
-            // });
-            layuiModal.alert(info);
-        }
-
-        //
-        // $("input[name='timeLasts']").attr('placeholder', '请输入正确的会议时长分钟数（如：30）');
-        //
-        //
-        // $("#hg-form-container").on("blur", "input[name='timeLasts']", function () {
-        //     $('select[name="conferenceType"]').removeAttr("disabled");
-        //     var type = $('select[name="conferenceType"]').val();
-        //     var timelasts = $('input[name="timeLasts"]').val();
-        //     $('select[name="conferenceType"]').attr("disabled", "disabled");
-        //     if (!isNaN(timelasts)) {
-        //         if (timelasts < 1) {
-        //             showConfirm('请输入正确的会议时长分钟数（如：30）');
-        //         } else {
-        //             showConfirmDate();
-        //         }
-        //     } else {
-        //         showConfirm('请输入正确的会议时长分钟数（如：30）');
-        //     }
-        // });
-
-
-        //格式化日期
-        function getDateByLong(dateLong) {
-            var date = new Date(dateLong);
-            var moth = date.getMonth() + 1;
-            if (moth < 10) {
-                moth = "0" + moth;
-            }
-            var day = date.getDate();
-            if (day < 10) {
-                day = "0" + day;
-            }
-            var hour = date.getHours();
-            if (hour < 10) {
-                hour = "0" + hour;
-            }
-            var minuts = date.getMinutes();
-            if (minuts < 10) {
-                minuts = "0" + minuts;
-            }
-            var ss = date.getSeconds();
-            if (ss < 10) {
-                ss = "0" + ss;
-            }
-            var defaultTime = date.getFullYear() + '-' + moth + '-' + day + ' ' + hour + ':' + minuts + ':' + ss;
-            return defaultTime;
-        }
-
-        /* 支部人员点击效果切换 */
-        $(".list_item_box").on("click", ".branch_person", function () {
+    });
+    /* 反选 */
+    $(".against_choice").click(function () {
+        $(this).attr("src", "/images/checked_icon.png");
+        $(".branch_person").each(function () {
             if ($(this).hasClass("person_class")) {
                 $(this).css("background", "white");
                 $(this).removeClass("person_class");
@@ -1451,87 +1785,8 @@
                 $(this).addClass("person_class");
             }
         });
-        /* 删除常用组人员 */
-        $(".member_content").on("click", ".delete_img", function () {
-            var self = this;
-            var groupId = $("img[src='/images/radio_on.png']").next().val();
-            var user_id = $(this).next().val();
-            if (!groupId) {
-                showConfirm("请先选择小组！");
-                return;
-            }
-            if (!user_id) {
-                showConfirm("请选择人员 ！");
-                return;
-            }
-            var url = "${deletePerson}";
-            var data = {groupId: groupId, user_id: user_id};
-            layuiModal.confirm("确定删除吗?", function () {
-                $.ajax({
-                    url: url,
-                    data: data,
-                    dataType: "json",
-                    success: function (result) {
-                        if (result.state === "ok") {
-                            $(self).parent().remove();
-                        } else {
-                            showConfirm("删除失败！");
-                        }
-                    }
-                });
-            });
-
-            // $.hgConfirm("提示", "你确定删除吗！");
-            // $("#hg_confirm").modal("show");
-            // $("#hg_confirm .btn_main").click(function () {
-            //     $("#hg_confirm").modal("hide");
-            //     $.ajax({
-            //         url: url,
-            //         data: data,
-            //         dataType: "json",
-            //         success: function (result) {
-            //             if (result.state === "ok") {
-            //                 $(self).parent().remove();
-            //             } else {
-            //                 // showConfirm("删除失败！");
-            //             }
-            //         }
-            //     });
-            // });
-        });
-        /*全选*/
-        $(".choice_all").click(function () {
-            $(this).attr("src", "/images/checked_icon.png");
-            $(".branch_person").css("background", "#CE0000");
-            $(".list_item_box").find(".person_class").removeClass("person_class");
-            $(".branch_person").addClass("person_class");
-            $(".against_choice").attr("src", "/images/not_check_icon.png");
-
-        });
-        /* 反选 */
-        $(".against_choice").click(function () {
-            $(this).attr("src", "/images/checked_icon.png");
-            $(".branch_person").each(function () {
-                if ($(this).hasClass("person_class")) {
-                    $(this).css("background", "white");
-                    $(this).removeClass("person_class");
-                } else {
-                    $(this).css("background", "#CE0000");
-                    $(this).addClass("person_class");
-                }
-            });
-            $(".choice_all").attr("src", "/images/not_check_icon.png");
-        });
-    </script>
-    <!-- <script>
-            function fresh(){
-                var _location = location.href;
-                if(_location.indexOf("?")>0 && _location.indexOf("#reload")<0){
-                    window.location.reload();
-                    location.href+="#reload";
-                 }
-            };
-            setTimeout("fresh()",10);
-        </script> -->
+        $(".choice_all").attr("src", "/images/not_check_icon.png");
+    });
+</script>
 </body>
 </html>
