@@ -1,6 +1,9 @@
 <%@ include file="/init.jsp" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
-
+<!-- 党组织支部活动统计-->
+<portlet:resourceURL id="/hg/part/collegeActivitiesStatistics" var="collegeActivitiesStatistics" />
+<!-- 党组织活动类型统计-->
+<portlet:resourceURL id="/hg/part/activitiesTypeStatistic" var="activitiesTypeStatistic" />
 <html>
 	<head>
 	    <meta charset='utf-8' />
@@ -252,7 +255,7 @@
 						<span>全校二级党组织数目</span>
 					</p>
 					<p class="total_num">
-						<span>29999</span>个
+						<span>${orgNumber}</span>个
 					</p>
 				</li>
 				<li>
@@ -261,7 +264,7 @@
 						<span>全校党支部数目</span>
 					</p>
 					<p class="total_num">
-						<span>29999</span>个
+						<span>${branchNumber}</span>个
 					</p>
 				</li>
 				<li>
@@ -270,7 +273,7 @@
 						<span>全校党员数目</span>
 					</p>
 					<p class="total_num">
-						<span>29999</span>个
+						<span>${userStatistics.count}</span>个
 					</p>
 				</li>
 			</ul>
@@ -285,17 +288,18 @@
 								<div class="layui-form-item">
 									<div class="layui-input-block">
 										<select class="custom_select month_select" lay-filter="attend-month-select">
-											<option value="0">9月</option>
-											<option value="1">9月</option>
-											<option value="2">9月</option>
-											<option value="3">9月</option>
+											<c:forEach var="i" begin="1" end="12">
+												<option value="0" selected>所有月份</option>
+												<c:forEach var="i" begin="1" end="12">
+													<option value="${i}" >${i}月</option>
+												</c:forEach>
+											</c:forEach>
 										</select>
 										<select class="custom_select terms_select" lay-filter="attend-terms-select">
-											<option value="0">按学期</option>
-											<option value="1">22</option>
-											<option value="2">22</option>
-											<option value="3">22</option>
-											<option value="4">22222</option>
+											<option value="0" selected>所有年度</option>
+											<c:forEach var="i" begin="0" end="${currentYear-1990}" >
+												<option value="${currentYear-i}" >${currentYear-i}</option>
+											</c:forEach>
 										</select>
 									</div>
 								</div>
@@ -313,11 +317,11 @@
 							<div class="sub_text_container">
 								<div class="sub_text current_view">
 									<p class="sub_title">男性党员</p>
-									<p class="sub_num">3888</p>
+									<p class="sub_num">${userStatistics.maleCount}</p>
 								</div>
 								<div class="sub_text">
 									<p class="sub_title">女性党员</p>
-									<p class="sub_num">2222</p>
+									<p class="sub_num">${userStatistics.femaleCount}</p>
 								</div>
 							</div>
 						</div>
@@ -335,17 +339,16 @@
 							<div class="layui-form-item">
 								<div class="layui-input-block">
 									<select class="custom_select month_select" lay-filter="activity-month-select">
-										<option value="0">9月</option>
-										<option value="1">9月</option>
-										<option value="2">9月</option>
-										<option value="3">9月</option>
+										<option value="0" selected>所有月份</option>
+										<c:forEach var="i" begin="1" end="12">
+											<option value="${i}" >${i}月</option>
+										</c:forEach>
 									</select>
 									<select class="custom_select terms_select" lay-filter="activity-terms-select">
-										<option value="0">按学期</option>
-										<option value="1">22</option>
-										<option value="2">22</option>
-										<option value="3">22</option>
-										<option value="4">22222</option>
+										<option value="0" selected>所有年度</option>
+										<c:forEach var="i" begin="0" end="${currentYear-1990}" >
+											<option value="${currentYear-i}" >${currentYear-i}</option>
+										</c:forEach>
 									</select>
 								</div>
 							</div>
@@ -362,39 +365,95 @@
 
 		<script>
 			$(document).ready(function () {
-				renderAttendcharts();
+				showCollegeCharts(0,0);
 				renderViewCharts();
-				renderActivityCharts();
+				showActivityCharts(0,0)
 			});
 			//表单
 			layui.use('form', function(){
 				var form = layui.form;
-				//出勤率 月份 监听select
 				form.on('select(attend-month-select)', function(data){
-					console.log(data.value); //得到被选中的值
+					var year = $("#selectForm1 .terms_select").val();
+					var month = data.value;
+					showCollegeCharts(year,month);
 				});
 				form.on('select(attend-terms-select)', function(data){
-					console.log(data.value);
+					var year = data.value;
+					var month = $("#selectForm1 .month_select").val();
+					showCollegeCharts(year,month);
 				});
 				form.on('select(activity-month-select)', function(data){
-					console.log(data.value);
+					var year = $("#selectForm2 .terms_select").val();
+					var month = data.value;
+					showActivityCharts(year,month);
 				});
 				form.on('select(activity-terms-select)', function(data){
-					console.log(data.value);
+					var year = data.value;
+					var month = $("#selectForm2 .month_select").val();
+					showActivityCharts(year,month);
 				});
 			});
-			//渲染出勤率图表
-			function renderAttendcharts(){
+
+
+			function showCollegeCharts(year, month){
+				$.ajax({
+					url:"${collegeActivitiesStatistics}",
+					data:{year:year,month:month},
+					type:"POST",
+					dataType:'json',
+					async:false,
+					success:function(data){
+						if(data.code == 200) {
+							var arr = data.data;
+							var colData = new Array();
+							var rowData =new Array();
+							if(arr != null && arr.length>0){
+								for(var i=0;i<arr.length;i++){
+									colData.push(arr[i].property);
+									rowData.push(arr[i].num);
+								}
+							}
+							renderCollegeCharts(colData,rowData);
+						}
+					}
+				});
+			}
+			function showActivityCharts(year, month){
+				$.ajax({
+					url:"${activitiesTypeStatistic}",
+					data:{year:year,month:month},
+					type:"POST",
+					dataType:'json',
+					async:false,
+					success:function(data){
+						if(data.code == 200) {
+							var arr = data.data;
+							var eChartData = new Array();
+							if(arr != null && arr.length>0){
+								for(var i=0;i<arr.length;i++){
+									eChartData.push({
+										name:arr[i].property,
+										value:arr[i].num
+									});
+								};
+							}
+							renderActivityCharts(eChartData);
+						}
+					}
+				});
+			}
+			//学院活动开展情况
+			function renderCollegeCharts(colData,rowData){
 				var AttendChart = echarts.init(document.getElementById('brunch_meeting_container'));
 				var option = {
 					title: {
-						// text: '活动出勤率统计图',
+						// text: '党支部活动开展情况',
 					},
 					tooltip: {
 						formatter: function(obj) {
 							return '<div class="attend_tooltip">' +
 									'<p>' + obj.name + '</p>' +
-									'<p>' + obj.seriesName + obj.data + '% </p>' +
+									'<p>' + obj.data + '次 </p>' +
 									'</div>'
 						}
 					},
@@ -423,7 +482,7 @@
 								width:6,   //这里是坐标轴的宽度,可以去掉
 							}
 						},
-						data: ["音乐学院委员会","物理科学与技术...","音乐学院委员会","物理科学与技术...","音乐学院委员会","物理科学与技术...","音乐学院委员会","物理科学与技术...","音乐学院委员会","物理科学与技术...","音乐学院委员会","物理科学与技术..."]
+						data: colData
 					},
 					yAxis: {
 						show:false,
@@ -438,9 +497,9 @@
 						// }
 					},
 					series: [{
-						name: '出勤率',
+						name: '',
 						type: 'bar',
-						data: [5, 20, 36, 10, 10, 20,5, 20, 100, 10, 10, 20],
+						data: rowData,
 						barWidth: 12,
 						itemStyle:{
 							marginBottom:6,
@@ -488,11 +547,11 @@
 							},
 							data: [
 								{
-									value: 220,
+									value: parseInt('${userStatistics.femaleCount}'),
 									name: "女"
 								},
 								{
-									value: 312,
+									value: parseInt('${userStatistics.maleCount}'),
 									name: "男"
 								}
 							]
@@ -501,11 +560,10 @@
 				};
 				ViewChart.setOption(option);
 			}
-			//渲染计划上报 图表
-			function renderActivityCharts(){
+			//渲染党组织活动类型统计
+			function renderActivityCharts(data){
 				var ViewChart = echarts.init(document.getElementById('activity_conteiner'));
-
-				option = {
+				var option = {
 					tooltip: {
 						trigger: "item",
 						formatter: function formatter(obj) {
@@ -532,47 +590,7 @@
 									show: true
 								}
 							},
-							data: [{
-								value: Math.round(Math.random() * 100),
-								name: "党员大会"
-							},
-								{
-									value: Math.round(Math.random() * 100),
-									name: "支委会"
-								},
-								{
-									value: Math.round(Math.random() * 100),
-									name: "党小组会"
-								},
-								{
-									value: Math.round(Math.random() * 100),
-									name: "党课"
-								},
-								{
-									value: Math.round(Math.random() * 100),
-									name: "民主评议党员"
-								},
-								{
-									value: Math.round(Math.random() * 100),
-									name: "组织生活会"
-								},
-								{
-									value: Math.round(Math.random() * 100),
-									name: "主题党日"
-								},
-								{
-									value: Math.round(Math.random() * 100),
-									name: "谈心谈话"
-								},
-								{
-									value: Math.round(Math.random() * 100),
-									name: "民主生活会"
-								},
-								{
-									value: Math.round(Math.random() * 100),
-									name: "党委中心组学习"
-								}
-							]
+							data: data
 						}
 					]
 				};

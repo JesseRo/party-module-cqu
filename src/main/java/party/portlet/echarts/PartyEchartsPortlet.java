@@ -1,9 +1,6 @@
 package party.portlet.echarts;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import java.text.DecimalFormat;  
 
@@ -21,6 +18,7 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 
 import hg.party.server.party.PartyOrgServer;
 import party.constants.PartyPortletKeys;
+import hg.party.entity.party.UserStatistics;
 
 /**
  * 文件名称： 报表<br>
@@ -54,9 +52,12 @@ public class PartyEchartsPortlet extends MVCPortlet{
 		List<Map<String, Object>> listType = partyOrgServer.partyEchartsType();//会议分布
 		int orgNumber = Integer.parseInt(String.valueOf(partyOrgServer.orgNumber().get(0).get("count")));//二级党组织个数
 		int branchNumber = Integer.parseInt(String.valueOf(partyOrgServer.branchNumber().get(0).get("count")));//党支部个数
-		int userNumber = Integer.parseInt(String.valueOf(partyOrgServer.userNumber().get(0).get("count")));//党员人数
+		//int userNumber = Integer.parseInt(String.valueOf(partyOrgServer.userNumber().get(0).get("count")));//党员人数
+		UserStatistics userStatistics = partyOrgServer.userStatistics();//党员统计
 		int mettingNumber = Integer.parseInt(String.valueOf(partyOrgServer.mettingNumber().get(0).get("count")));//组织活动数
 		int visitNumber = Integer.parseInt(String.valueOf(partyOrgServer.dateVisit().get("count")));//查询日访问量
+		Calendar calendar = Calendar.getInstance();
+		int currentYear = calendar.get(Calendar.YEAR);
 		//主题党日出勤率统计
 		List<Map<String, Object>> atten = partyOrgServer.attenEchartss();
 		double f = 0.0;
@@ -107,11 +108,12 @@ public class PartyEchartsPortlet extends MVCPortlet{
         		hiet = 395;
         	}
         	renderRequest.setAttribute("hiet", hiet);
+			renderRequest.setAttribute("currentYear", currentYear);
         	renderRequest.setAttribute("mapStr", mapStr);  
         	renderRequest.setAttribute("mapStrType", mapStrType); 
         	renderRequest.setAttribute("orgNumber", orgNumber); 
         	renderRequest.setAttribute("branchNumber", branchNumber); 
-        	renderRequest.setAttribute("userNumber", userNumber); 
+        	renderRequest.setAttribute("userStatistics", userStatistics);//党员统计
         	renderRequest.setAttribute("mettingNumber", mettingNumber); 
         	renderRequest.setAttribute("atten",atten); //出勤率
         	renderRequest.setAttribute("dateVisit", visitNumber);

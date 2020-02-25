@@ -1,11 +1,10 @@
 package hg.party.dao.party;
 
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import hg.party.entity.party.BaseStatistics;
 import org.osgi.service.component.annotations.Component;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
@@ -13,6 +12,7 @@ import org.springframework.jdbc.core.RowMapper;
 import com.dt.springjdbc.dao.impl.PostgresqlDaoImpl;
 
 import hg.party.entity.organization.Organization;
+import hg.party.entity.party.UserStatistics;
 
 /**
  * 文件名称： party<br>
@@ -98,6 +98,64 @@ public class PartyOrgDao extends PostgresqlDaoImpl<Organization>{
 		String sql = "select count(*) from hg_party_member where historic = false ";
 		return jdbcTemplate.queryForList(sql);
 	}
+	//党员统计
+	public UserStatistics userStatistics(){
+		String sql = "select count(*) count ,sum(case when member_sex='男' then 1 else 0 end ) maleCount,sum(case when member_sex='女' then 1 else 0 end ) femaleCount from hg_party_member where historic = false ";
+		RowMapper<UserStatistics> rowMapper = BeanPropertyRowMapper.newInstance(UserStatistics.class);
+		return jdbcTemplate.queryForObject(sql,rowMapper);
+	}
+	//学院开展活动统计
+	public List<BaseStatistics> collegeActivitiesStatistics(int year, int month){
+		Calendar calendar = Calendar.getInstance();
+		RowMapper<BaseStatistics> rowMapper = BeanPropertyRowMapper.newInstance(BaseStatistics.class);
+		if(year==0 && month ==0){//统计所有
+			String sql = "select  o.org_name property,COALESCE(i.num,0) num  from (select org_name,org_id from hg_party_org where org_type = 'secondary') o left join (select org_type, count(org_type) num from hg_party_org_inform_info group by org_type) i on  i.org_type = o.org_id";
+			return jdbcTemplate.query(sql,rowMapper);
+		}
+
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
+		String sql = "select  o.org_name property,COALESCE(i.num,0) num  from (select org_name,org_id from hg_party_org where org_type = 'secondary') o left join (select org_type, count(org_type) num from hg_party_org_inform_info where start_time>=? and start_time < ? group by org_type) i on  i.org_type = o.org_id";
+		if(year>0 && month==0){//全年统计
+			calendar.set(year,0,1);
+			Timestamp startTime = Timestamp.valueOf(formatter.format(calendar.getTime()));
+			calendar.set(year,11,1);
+			Timestamp  endTime = Timestamp.valueOf(formatter.format(calendar.getTime()));
+			return jdbcTemplate.query(sql,rowMapper,startTime,endTime);
+		}else{//按月统计
+			calendar.set(year,month-1,1);
+			Timestamp startTime = Timestamp.valueOf(formatter.format(calendar.getTime()));
+			calendar.set(year,month,1);
+			Timestamp  endTime = Timestamp.valueOf(formatter.format(calendar.getTime()));
+			return jdbcTemplate.query(sql,rowMapper,startTime,endTime);
+		}
+
+	}
+	//党活动分类统计
+	public List<BaseStatistics> activitiesTypeStatistic(int year, int month){
+		Calendar calendar = Calendar.getInstance();
+		RowMapper<BaseStatistics> rowMapper = BeanPropertyRowMapper.newInstance(BaseStatistics.class);
+		if(year==0 && month ==0){//统计所有
+			String sql = "SELECT i.meeting_type property,count(i.meeting_type) num  from hg_party_org_inform_info i group by i.meeting_type";
+			return jdbcTemplate.query(sql,rowMapper);
+		}
+
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
+		String sql = "SELECT i.meeting_type property,count(i.meeting_type) num  from hg_party_org_inform_info i  group by i.meeting_type where start_time>=? and start_time < ?";
+		if(year>0 && month==0){//全年统计
+			calendar.set(year,0,1);
+			Timestamp startTime = Timestamp.valueOf(formatter.format(calendar.getTime()));
+			calendar.set(year,11,1);
+			Timestamp  endTime = Timestamp.valueOf(formatter.format(calendar.getTime()));
+			return jdbcTemplate.query(sql,rowMapper,startTime,endTime);
+		}else{//按月统计
+			calendar.set(year,month-1,1);
+			Timestamp startTime = Timestamp.valueOf(formatter.format(calendar.getTime()));
+			calendar.set(year,month,1);
+			Timestamp  endTime = Timestamp.valueOf(formatter.format(calendar.getTime()));
+			return jdbcTemplate.query(sql,rowMapper,startTime,endTime);
+		}
+	}
+
 	//查询组织活动个数
 	public List<Map<String, Object>> mettingNumber(){
 		String sql = "SELECT count(*) from hg_party_org_inform_info ";
@@ -154,4 +212,15 @@ public class PartyOrgDao extends PostgresqlDaoImpl<Organization>{
 		map.put("list",list);
 	   return map;
 	}
+
+	public static void main(String[] args) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(2020,0,1);
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
+		String startTime = formatter.format(calendar.getTime());
+		calendar.set(2020,2+1,1);
+		String ennTime = formatter.format(calendar.getTime());
+		System.out.println();
+	}
+
 }

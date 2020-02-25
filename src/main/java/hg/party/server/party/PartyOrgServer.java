@@ -3,6 +3,8 @@ package hg.party.server.party;
 import java.util.List;
 import java.util.Map;
 
+import hg.party.entity.party.UserStatistics;
+import hg.party.entity.party.BaseStatistics;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -42,6 +44,10 @@ public class PartyOrgServer {
 	//查询党员人数
 	public List<Map<String, Object>> userNumber(){
 		return partyOrgDao.userNumber();
+	}
+	//查询党员人数统计
+	public UserStatistics userStatistics(){
+		return partyOrgDao.userStatistics();
 	}
 	//查询组织活动个数
 	public List<Map<String, Object>> mettingNumber(){
@@ -102,5 +108,15 @@ public class PartyOrgServer {
 	//学院出勤率报表2
 	public List<Map<String, Object>> attenEchartss(){
 		return partyOrgDao.attenEcharts();
+	}
+
+	//学院开展活动统计
+	public List<BaseStatistics> collegeActivitiesStatistics(int year, int month){
+		return partyOrgDao.collegeActivitiesStatistics(year,month);
+	}
+	//党活动分类统计
+
+	public List<BaseStatistics> activitiesTypeStatistic(int year, int month){
+		return partyOrgDao.activitiesTypeStatistic(year,month);
 	}
 }
