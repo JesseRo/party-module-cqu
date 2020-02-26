@@ -306,7 +306,7 @@
 							</form>
 						</div>
 						<div class="attend_rate_container" id="brunch_meeting_container"></div>
-						<p class="desc_text"><a href="javascript:;" onclick="window.location.href='/attend_charts'">查看更多</a></p>
+						<p class="desc_text"><a href="javascript:;" onclick="window.location.href='/attend_charts?year=0&month=1'">查看更多</a></p>
 					</div>
 					<div class="views_group">
 						<div class="text_container">
@@ -501,6 +501,7 @@
 						type: 'bar',
 						data: rowData,
 						barWidth: 12,
+						barMinHeight: 2,
 						itemStyle:{
 							marginBottom:6,
 							normal:{

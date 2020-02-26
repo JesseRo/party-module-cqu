@@ -2,7 +2,10 @@ package party.portlet.echarts;
 
 import com.alibaba.fastjson.JSON;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
+import com.liferay.portal.kernel.util.ParamUtil;
+import hg.party.entity.party.BaseStatistics;
 import hg.party.server.party.PartyOrgServer;
+import hg.util.result.ResultUtil;
 import org.apache.log4j.Logger;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -13,11 +16,8 @@ import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import java.io.IOException;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 
 /**
  * 文件名称： 报表<br>
@@ -40,11 +40,16 @@ import java.util.Map;
 	)
 public class AttendEchartsPortlet extends MVCPortlet{
 	Logger logger = Logger.getLogger(AttendEchartsPortlet.class);
-
+	@Reference
+	private PartyOrgServer partyOrgServer;
 	
 	@Override
 	public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
 			throws IOException, PortletException {
+		int year = ParamUtil.getInteger(renderRequest, "year");
+		int month = ParamUtil.getInteger(renderRequest, "month");
+		List<BaseStatistics> collegeActivitiesStatisticsList = partyOrgServer.collegeActivitiesStatistics(year,month);
+		renderRequest.setAttribute("collegeActivitiesStatisticsList",JSON.toJSONString(collegeActivitiesStatisticsList));
 		super.doView(renderRequest, renderResponse);
 	}
 

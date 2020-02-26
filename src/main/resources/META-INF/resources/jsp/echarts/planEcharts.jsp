@@ -48,7 +48,7 @@
 			<div class="breadcrumb_group">
 				当前位置：
 				<span class="layui-breadcrumb" lay-separator=">">
-                        <a href="javascript:;">系统管理</a>
+                        <a href="javascript:;">数据统计</a>
                         <a href="javascript:;">活动计划上报</a>
                     </span>
 			</div>

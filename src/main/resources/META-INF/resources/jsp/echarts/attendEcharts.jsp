@@ -1,6 +1,5 @@
 <%@ include file="/init.jsp" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
-
 <html>
 	<head>
 	    <meta charset='utf-8' />
@@ -12,7 +11,7 @@
 	    <link rel="stylesheet" href="${basePath}/css/echarts/summary_reports.css"/> --%>
 		<script type="text/javascript" src="${basePath}/js/echarts.js"></script>
 
-		<title>访问量统计</title>
+		<title>党支部活动统计</title>
 	</head>
 	<body>
 	<style>
@@ -47,8 +46,8 @@
 			<div class="breadcrumb_group">
 				当前位置：
 				<span class="layui-breadcrumb" lay-separator=">">
-							<a href="javascript:;">系统管理</a>
-							<a href="javascript:;">活动出勤率</a>
+							<a href="javascript:;">数据统计</a>
+							<a href="javascript:;">党支部活动</a>
 						</span>
 			</div>
 			<div class="charts_container attend_charts_container">
@@ -58,80 +57,92 @@
 	</div>
 	<script>
 		$(document).ready(function () {
-			renderViewCharts();
+			showCollegeCharts();
 		});
-		function renderViewCharts(){
+		function showCollegeCharts(){
+			var arr = JSON.parse('${collegeActivitiesStatisticsList}');
+			var colData = new Array();
+			var rowData =new Array();
+			if(arr != null && arr.length>0){
+				for(var i=0;i<arr.length;i++){
+					colData.push(arr[i].property);
+					rowData.push(arr[i].num);
+				}
+			}
+			renderCollegeCharts(colData,rowData)
+		}
+		//学院党组织活动开展情况
+		function renderCollegeCharts(colData,rowData){
 			var AttendChart = echarts.init(document.getElementById('attendEcharts'));
-			option = {
+			var option = {
 				title: {
-					// text: '活动出勤率统计图',
+					// text: '党支部活动开展情况',
 				},
 				tooltip: {
-					formatter:function(obj) {
-					return '<div class="attend_tooltip">' +
-                            '<p>' + obj.name + '</p>' +
-                            '<p>' + obj.seriesName + ':' + obj.data + '%</p>' +
-                        '</div>';
-				}
-			},
-			grid: {
-				left: '2%',
-				right: '6%',
-				bottom: '6%',
-				containLabel: true
-			},
-			xAxis: {
-				axisTick:{       //y轴刻度线
-					show:false
-				},
-				splitLine: {     //网格线
-					show: false
-				},
-				axisLabel:{
-					fontSize:16,
-					formatter:function(data){
-						return data + '%'
+					formatter: function(obj) {
+						return '<div class="attend_tooltip">' +
+								'<p>' + obj.name + '</p>' +
+								'<p>' + obj.data + '次 </p>' +
+								'</div>'
 					}
 				},
-				axisLine:{
-					lineStyle:{
-						color:'#FFAB33'
-						// width:6,
-					}
+				grid: {
+					left: 0,
+					right: '10%',
+					top:'15%',
+					bottom: '20%',
+					containLabel: true
 				},
-			},
-			yAxis: {
-				axisTick:{
-					show:false
-				},
-				axisLabel:{
-					fontSize:16,
-					color:'#333'
-				},
-				axisLine:{
-					lineStyle:{
-						color:'#FFAB33'
-					}
-				},
-				data: ["音乐学院委员会","物理科学与技术学院","音乐学院委员会","物理科学与技术","音乐学院委员会","物理科学与技术","音乐学院委员会","物理科学与技术","音乐学院委员会","物理科学与技术","音乐学院委员会","物理科学与技术","物理科学与技术","音乐学院委员会","物理科学与技术","音乐学院委员会","物理科学与技术"]
-			},
-			series: [{
-				name: '出勤率',
-				type: 'bar',
-				data: [5, 20, 36, 10, 10, 20,5, 20, 100, 10, 10, 20, 36, 10, 10, 20,5],
-				barWidth: 12,
-				itemStyle:{
-					marginBottom:6,
-					normal:{
-						barBorderRadius:[7, 7, 7, 7],
-						color:'#FFAB33'
+				xAxis: {
+					axisTick:{
+						show:true,
 					},
-					emphasis:{
-						color:'#E74933'
+					axisLabel: {
+						interval:0,
+						rotate:-40,
+						textStyle: {
+							color: '#666',
+							fontSize:12,
+						},
+					},
+					axisLine:{
+						lineStyle:{
+							color:'#f6f6f6',
+							width:6,   //这里是坐标轴的宽度,可以去掉
+						}
+					},
+					data: colData
+				},
+				yAxis: {
+					show:false,
+					// axisLine:{       //y轴
+					//     show:false
+					// },
+					// axisTick:{       //y轴刻度线
+					//     show:false
+					// },
+					// splitLine: {     //网格线
+					//     show: false
+					// }
+				},
+				series: [{
+					name: '组织活动次数',
+					type: 'bar',
+					data: rowData,
+					barWidth: 12,
+					barMinHeight: 10,
+					itemStyle:{
+						marginBottom:6,
+						normal:{
+							barBorderRadius:[7, 7, 7, 7],
+							color:'#FFAB33',
+						},
+						emphasis:{
+							color:'#E74933'
+						}
 					}
-				}
-			}]
-		};
+				}]
+			};
 			AttendChart.setOption(option);
 		}
 
