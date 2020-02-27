@@ -356,7 +356,7 @@
 					</div>
 					<div class="activity_plan_conteiner" id="activity_conteiner">
 					</div>
-					<p class="desc_text"><a href="javascript:;" onclick="window.location.href='/plan_charts'">查看更多</a></p>
+					<%--<p class="desc_text"><a href="javascript:;" onclick="window.location.href='/plan_charts'">查看更多</a></p>--%>
 				</div>
 			</div>
 		</div>
