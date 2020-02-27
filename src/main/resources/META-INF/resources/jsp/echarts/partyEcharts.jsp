@@ -347,7 +347,7 @@
 									<select class="custom_select terms_select" lay-filter="activity-terms-select">
 										<option value="0" selected>所有年度</option>
 										<c:forEach var="i" begin="0" end="${currentYear-1990}" >
-											<option value="${currentYear-i}" >${currentYear-i}</option>
+											<option value="${currentYear-i}">${currentYear-i}</option>
 										</c:forEach>
 									</select>
 								</div>
