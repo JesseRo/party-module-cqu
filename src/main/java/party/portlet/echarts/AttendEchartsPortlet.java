@@ -3,6 +3,7 @@ package party.portlet.echarts;
 import com.alibaba.fastjson.JSON;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.PortalUtil;
 import hg.party.entity.party.BaseStatistics;
 import hg.party.server.party.PartyOrgServer;
 import hg.util.result.ResultUtil;
@@ -15,6 +16,8 @@ import javax.portlet.Portlet;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
+import javax.servlet.http.HttpServletRequest;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -46,8 +49,13 @@ public class AttendEchartsPortlet extends MVCPortlet{
 	@Override
 	public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
 			throws IOException, PortletException {
-		int year = ParamUtil.getInteger(renderRequest, "year");
-		int month = ParamUtil.getInteger(renderRequest, "month");
+
+		HttpServletRequest request = PortalUtil.getHttpServletRequest(renderRequest);
+		String yearStr = PortalUtil.getOriginalServletRequest(request).getParameter("year");
+		String monthStr = PortalUtil.getOriginalServletRequest(request).getParameter("month");
+		int year = yearStr == null ? 0: Integer.parseInt(yearStr);
+		int month = monthStr == null ? 0: Integer.parseInt(monthStr);
+		logger.info("year="+year+"  moth="+month);
 		List<BaseStatistics> collegeActivitiesStatisticsList = partyOrgServer.collegeActivitiesStatistics(year,month);
 		renderRequest.setAttribute("collegeActivitiesStatisticsList",JSON.toJSONString(collegeActivitiesStatisticsList));
 		super.doView(renderRequest, renderResponse);
