@@ -2,11 +2,8 @@ package party.portlet.echarts;
 
 import com.alibaba.fastjson.JSON;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
-import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.PortalUtil;
 import hg.party.entity.party.BaseStatistics;
 import hg.party.server.party.PartyOrgServer;
-import hg.util.result.ResultUtil;
 import org.apache.log4j.Logger;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -16,9 +13,12 @@ import javax.portlet.Portlet;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
-import javax.servlet.http.HttpServletRequest;
+
 
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 
@@ -31,7 +31,7 @@ import java.util.List;
 		property = {
 			"com.liferay.portlet.display-category=category.sample",
 			"com.liferay.portlet.instanceable=true",
-			"javax.portlet.display-name=出勤率统计",
+			"javax.portlet.display-name=学院党组织活动统计",
 			"javax.portlet.init-param.template-path=/",
 			"com.liferay.portlet.requires-namespaced-parameters=false",
 			"javax.portlet.init-param.view-template=/jsp/echarts/attendEcharts.jsp",
@@ -49,15 +49,20 @@ public class AttendEchartsPortlet extends MVCPortlet{
 	@Override
 	public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
 			throws IOException, PortletException {
-
-		HttpServletRequest request = PortalUtil.getHttpServletRequest(renderRequest);
-		String yearStr = PortalUtil.getOriginalServletRequest(request).getParameter("year");
-		String monthStr = PortalUtil.getOriginalServletRequest(request).getParameter("month");
-		int year = yearStr == null ? 0: Integer.parseInt(yearStr);
-		int month = monthStr == null ? 0: Integer.parseInt(monthStr);
+		Calendar calendar = Calendar.getInstance();
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
+		int year = calendar.get(Calendar.YEAR);
+		int month = calendar.get(Calendar.MONTH);
 		logger.info("year="+year+"  moth="+month);
-		List<BaseStatistics> collegeActivitiesStatisticsList = partyOrgServer.collegeActivitiesStatistics(year,month);
+		calendar.set(year-1,month,1);
+		Timestamp startTime = Timestamp.valueOf(formatter.format(calendar.getTime()));
+		calendar.set(year,month+1,1);//选择的截止月份计算在内
+		Timestamp endTime = Timestamp.valueOf(formatter.format(calendar.getTime()));
+		List<BaseStatistics> collegeActivitiesStatisticsList = partyOrgServer.searchCollegeActivitiesStatistics(startTime,endTime);
 		renderRequest.setAttribute("collegeActivitiesStatisticsList",JSON.toJSONString(collegeActivitiesStatisticsList));
+		//页面起止日期格式：2020-01 - 2020-01
+		String dateStr = new StringBuffer().append(year-1).append("-").append(month).append(" - ").append(year).append("-").append(month+1).toString();
+		renderRequest.setAttribute("dateStr",dateStr);
 		super.doView(renderRequest, renderResponse);
 	}
 

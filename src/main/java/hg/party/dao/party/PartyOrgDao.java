@@ -130,7 +130,14 @@ public class PartyOrgDao extends PostgresqlDaoImpl<Organization>{
 		}
 
 	}
-	//党活动分类统计
+	//学院开展活动统计
+	public List<BaseStatistics> searchCollegeActivitiesStatistics(Timestamp startTime, Timestamp  endTime){
+		RowMapper<BaseStatistics> rowMapper = BeanPropertyRowMapper.newInstance(BaseStatistics.class);
+		String sql = "select  o.org_name property,COALESCE(i.num,0) num  from (select org_name,org_id from hg_party_org where org_type = 'secondary') o left join (select org_type, count(org_type) num from hg_party_org_inform_info where start_time>=? and start_time < ? group by org_type) i on  i.org_type = o.org_id";
+		return jdbcTemplate.query(sql,rowMapper,startTime,endTime);
+
+	}
+	//党活动分类年月统计
 	public List<BaseStatistics> activitiesTypeStatistic(int year, int month){
 		Calendar calendar = Calendar.getInstance();
 		RowMapper<BaseStatistics> rowMapper = BeanPropertyRowMapper.newInstance(BaseStatistics.class);
@@ -154,6 +161,12 @@ public class PartyOrgDao extends PostgresqlDaoImpl<Organization>{
 			Timestamp  endTime = Timestamp.valueOf(formatter.format(calendar.getTime()));
 			return jdbcTemplate.query(sql,rowMapper,startTime,endTime);
 		}
+	}
+	//党活动分类起止日期统计
+	public List<BaseStatistics> searchActivitiesTypeStatistics(Timestamp startTime, Timestamp  endTime){
+		RowMapper<BaseStatistics> rowMapper = BeanPropertyRowMapper.newInstance(BaseStatistics.class);
+		String sql = "SELECT i.meeting_type property,count(i.meeting_type) num  from hg_party_org_inform_info i  group by i.meeting_type where start_time>=? and start_time < ?";
+		return jdbcTemplate.query(sql,rowMapper,startTime,endTime);
 	}
 
 	//查询组织活动个数
@@ -211,16 +224,6 @@ public class PartyOrgDao extends PostgresqlDaoImpl<Organization>{
 		map.put("pageNow", pageNo);
 		map.put("list",list);
 	   return map;
-	}
-
-	public static void main(String[] args) {
-		Calendar calendar = Calendar.getInstance();
-		calendar.set(2020,0,1);
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
-		String startTime = formatter.format(calendar.getTime());
-		calendar.set(2020,2+1,1);
-		String ennTime = formatter.format(calendar.getTime());
-		System.out.println();
 	}
 
 }

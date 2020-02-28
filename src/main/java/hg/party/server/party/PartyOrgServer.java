@@ -1,5 +1,6 @@
 package hg.party.server.party;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
@@ -110,13 +111,20 @@ public class PartyOrgServer {
 		return partyOrgDao.attenEcharts();
 	}
 
-	//学院开展活动统计
+	//学院开展活动年月统计
 	public List<BaseStatistics> collegeActivitiesStatistics(int year, int month){
 		return partyOrgDao.collegeActivitiesStatistics(year,month);
 	}
-	//党活动分类统计
-
+	//学院开展活动起止日期统计
+	public List<BaseStatistics> searchCollegeActivitiesStatistics(Timestamp startTime, Timestamp  endTime){
+		return partyOrgDao.searchCollegeActivitiesStatistics(startTime,endTime);
+	}
+	//党活动分类年月统计
 	public List<BaseStatistics> activitiesTypeStatistic(int year, int month){
 		return partyOrgDao.activitiesTypeStatistic(year,month);
+	}
+	//党活动分类起止日期统计
+	public List<BaseStatistics> searchActivitiesTypeStatistics(Timestamp startTime, Timestamp  endTime){
+		return partyOrgDao.searchActivitiesTypeStatistics(startTime,endTime);
 	}
 }

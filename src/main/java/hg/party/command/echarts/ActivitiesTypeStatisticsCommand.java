@@ -16,6 +16,7 @@ import javax.portlet.PortletException;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 import java.io.PrintWriter;
+import java.sql.Timestamp;
 import java.util.List;
 
 
@@ -40,17 +41,16 @@ public class ActivitiesTypeStatisticsCommand implements MVCResourceCommand{
 	@Override
 	public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 			throws PortletException {
-		int year = ParamUtil.getInteger(resourceRequest, "year");
-		int month = ParamUtil.getInteger(resourceRequest, "month");
+		String start = ParamUtil.getString(resourceRequest, "startTime");
+		String end = ParamUtil.getString(resourceRequest, "endTime");
 		try {
+			Timestamp ts = new Timestamp(System.currentTimeMillis());
+			Timestamp startTime = ts.valueOf(start);
+			Timestamp endTime = ts.valueOf(end);
 			PrintWriter printWriter=resourceResponse.getWriter();
-			logger.info("查询党活动分类年月统计");
-			if(month >= 0 && year >= 0){
-				List<BaseStatistics> activitiesTypeStatistic = partyOrgServer.activitiesTypeStatistic(year,month);
-				printWriter.write(JSON.toJSONString(ResultUtil.success(activitiesTypeStatistic)));
-			}else{
-				printWriter.write(JSON.toJSONString(ResultUtil.fail("年月参数数据错误！")));
-			}
+			logger.info("查询党活动分类日期统计");
+			List<BaseStatistics> collegeActivitiesStatistics = partyOrgServer.searchActivitiesTypeStatistics(startTime,endTime);
+			printWriter.write(JSON.toJSONString(ResultUtil.success(collegeActivitiesStatistics)));
 
 		} catch (Exception e) {
 			e.printStackTrace();

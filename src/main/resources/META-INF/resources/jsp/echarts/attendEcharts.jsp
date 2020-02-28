@@ -1,5 +1,7 @@
 <%@ include file="/init.jsp" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
+<!-- 党组织支部活动统计-->
+<portlet:resourceURL id="/hg/part/collegeActivitiesStatistics" var="collegeActivitiesStatistics" />
 <html>
 	<head>
 	    <meta charset='utf-8' />
@@ -50,14 +52,22 @@
 							<a href="javascript:;">党支部活动</a>
 						</span>
 			</div>
+			<div class="activitiesTypeEChart">
+				日期范围：
+				<div class="layui-inline">
+					<input type="text" class="layui-input" id="dateSelect">
+				</div>
+			</div>
 			<div class="charts_container attend_charts_container">
 				<div class="view_charts" id="attendEcharts" style="width: 100%; height: 100%;"></div>
 			</div>
 		</div>
 	</div>
 	<script>
+		var attendChart;
 		$(document).ready(function () {
 			showCollegeCharts();
+			renderDateSelect();
 		});
 		function showCollegeCharts(){
 			var arr = JSON.parse('${collegeActivitiesStatisticsList}');
@@ -71,9 +81,56 @@
 			}
 			renderCollegeCharts(colData,rowData)
 		}
+		function renderDateSelect(){
+			layui.use('laydate', function(){
+				var laydate = layui.laydate;
+				laydate.render({
+					elem: '#dateSelect'
+					,type: 'month'
+					,value: '${dateStr}'
+					,isInitValue: true
+					,range: true
+					//,trigger: 'click'
+					,done: function(value, date, endDate){
+						var startTime = date.year+"-"+date.month+"-"+date.date+" 00:00:00";
+						var endTime = date.year+"-"+date.month+"-"+date.date+" 00:00:00";
+						getStatisticsData(startTime,endTime);
+					}
+					,change: function(value, date, endDate){
+						this.elem.val(value)
+					}
+				});
+			})
+		}
+		function getStatisticsData(startTime,endTime){
+			$.ajax({
+				url:"${collegeActivitiesStatistics}",
+				data:{startTime:startTime,endTime:endTime},
+				type:"POST",
+				dataType:'json',
+				async:true,
+				success:function(data){
+					if(data.code == 200) {
+						var arr = data.data;
+						var colData = new Array();
+						var rowData =new Array();
+						if(arr != null && arr.length>0){
+							for(var i=0;i<arr.length;i++){
+								colData.push(arr[i].property);
+								rowData.push(arr[i].num);
+							}
+						}
+						renderCollegeCharts(colData,rowData);
+					}
+				}
+			});
+		}
 		//学院党组织活动开展情况
 		function renderCollegeCharts(colData,rowData){
-			var AttendChart = echarts.init(document.getElementById('attendEcharts'));
+			if (attendChart != null && attendChart != "" && attendChart != undefined) {
+				attendChart.dispose();
+			}
+			attendChart = echarts.init(document.getElementById('attendEcharts'));
 			var option = {
 				title: {
 					// text: '党支部活动开展情况',
@@ -143,7 +200,7 @@
 					}
 				}]
 			};
-			AttendChart.setOption(option);
+			attendChart.setOption(option);
 		}
 
 	</script>
