@@ -38,6 +38,9 @@
 			width: 90px;
 			border-radius: 6px;
 		}
+		.activitiesTypeEChart{
+			padding:5px 5px;
+		}
 		.main_content{
 			background: transparent!important;
 		}
@@ -133,66 +136,73 @@
 			attendChart = echarts.init(document.getElementById('attendEcharts'));
 			var option = {
 				title: {
-					// text: '党支部活动开展情况',
+					// text: '活动出勤率统计图',
+				},
+				legend: {
+					data: ['次数']
 				},
 				tooltip: {
-					formatter: function(obj) {
+					formatter:function(obj) {
 						return '<div class="attend_tooltip">' +
 								'<p>' + obj.name + '</p>' +
-								'<p>' + obj.data + '次 </p>' +
-								'</div>'
+								'<p>' + obj.seriesName + ':' + obj.data + ' 次</p>' +
+								'</div>';
 					}
 				},
 				grid: {
-					left: 0,
-					right: '10%',
-					top:'15%',
-					bottom: '20%',
+					left: '2%',
+					right: '6%',
+					bottom: '6%',
 					containLabel: true
 				},
 				xAxis: {
-					axisTick:{
-						show:true,
+					axisTick:{       //y轴刻度线
+						show:false
 					},
-					axisLabel: {
-						interval:0,
-						rotate:-40,
-						textStyle: {
-							color: '#666',
-							fontSize:12,
-						},
+					splitLine: {     //网格线
+						show: false
+					},
+					axisLabel:{
+						fontSize:16,
+						formatter:function(data){
+							return data + ' 次'
+						}
 					},
 					axisLine:{
 						lineStyle:{
-							color:'#f6f6f6',
-							width:6,   //这里是坐标轴的宽度,可以去掉
+							color:'#FFAB33'
+							// width:6,
+						}
+					},
+					type: 'value',
+					minInterval: 1,
+				},
+				yAxis: {
+					axisTick:{
+						show:false
+					},
+					axisLabel:{
+						fontSize:16,
+						color:'#333'
+					},
+					axisLine:{
+						lineStyle:{
+							color:'#FFAB33'
 						}
 					},
 					data: colData
-				},
-				yAxis: {
-					show:false,
-					// axisLine:{       //y轴
-					//     show:false
-					// },
-					// axisTick:{       //y轴刻度线
-					//     show:false
-					// },
-					// splitLine: {     //网格线
-					//     show: false
-					// }
 				},
 				series: [{
 					name: '组织活动次数',
 					type: 'bar',
 					data: rowData,
 					barWidth: 12,
-					barMinHeight: 10,
+					barMinHeight: 2,
 					itemStyle:{
 						marginBottom:6,
 						normal:{
 							barBorderRadius:[7, 7, 7, 7],
-							color:'#FFAB33',
+							color:'#FFAB33'
 						},
 						emphasis:{
 							color:'#E74933'
