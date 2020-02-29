@@ -96,7 +96,7 @@
 					//,trigger: 'click'
 					,done: function(value, date, endDate){
 						var startTime = date.year+"-"+date.month+"-"+date.date+" 00:00:00";
-						var endTime = date.year+"-"+date.month+"-"+date.date+" 00:00:00";
+						var endTime = endDate.year+"-"+endDate.month+"-"+endDate.date+" 00:00:00";
 						getStatisticsData(startTime,endTime);
 					}
 					,change: function(value, date, endDate){
