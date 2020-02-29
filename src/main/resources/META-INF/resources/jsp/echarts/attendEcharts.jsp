@@ -139,7 +139,7 @@
 					// text: '活动出勤率统计图',
 				},
 				legend: {
-					data: ['次数']
+					data: ['组织活动次数']
 				},
 				tooltip: {
 					formatter:function(obj) {
