@@ -11,8 +11,10 @@ import hg.party.entity.organization.Organization;
 import hg.party.entity.partyMembers.JsonResponse;
 import hg.party.entity.partyMembers.Member;
 import hg.util.ConstantsKey;
+import hg.util.TransactionUtil;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+import org.springframework.beans.factory.annotation.Autowired;
 import party.constants.PartyPortletKeys;
 import party.portlet.transport.dao.RetentionDao;
 import party.portlet.transport.entity.Retention;
@@ -48,6 +50,9 @@ public class RetentionSaveCommand implements MVCResourceCommand {
 
 	@Reference
 	private RetentionDao retentionDao;
+
+	@Autowired
+	private TransactionUtil transactionUtil;
 
 
 	@Override
@@ -94,6 +99,7 @@ public class RetentionSaveCommand implements MVCResourceCommand {
 		String domesticContactPerson = ParamUtil.getString(resourceRequest, "domesticContactPerson");
 		String domesticContactPhone = ParamUtil.getString(resourceRequest, "domesticContactPhone");
 		String extra = ParamUtil.getString(resourceRequest, "extra");
+		String isResubmit = ParamUtil.getString(resourceRequest, "isResubmit");
 
 
 
@@ -101,6 +107,12 @@ public class RetentionSaveCommand implements MVCResourceCommand {
 		res.addHeader("content-type","application/json");
 		Gson gson = new Gson();
 		try {
+			transactionUtil.startTransaction();
+			if (isResubmit.equalsIgnoreCase("1")){
+				Retention oriRetention = retentionDao.findByUser(userId);
+				oriRetention.setStatus(6);
+				retentionDao.saveOrUpdate(oriRetention);
+			}
 			retention.setUser_name(name);
 			retention.setUser_id(userId);
 			retention.setSex(sex);
@@ -132,8 +144,10 @@ public class RetentionSaveCommand implements MVCResourceCommand {
 			retention.setExtra(extra);
 			retentionDao.save(retention);
 
+			transactionUtil.commit();
 			res.getWriter().write(gson.toJson(JsonResponse.Success()));
 		} catch (Exception e) {
+			transactionUtil.rollback();
 			try {
 				e.printStackTrace();
 				res.getWriter().write(gson.toJson(new JsonResponse(false, null, null)));

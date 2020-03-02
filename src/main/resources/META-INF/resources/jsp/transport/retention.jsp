@@ -274,21 +274,23 @@
                             <input name="extra" type="text" maxlength="20" lay-verify="required" autocomplete="off" class="layui-input">
                         </div>
                     </div>
+                    <input name="isResubmit" value="${isResubmit}" type="hidden">
                     <div class="layui-inline btn_group" style="border-bottom: none;">
                         <label class="layui-form-label"></label>
                         <div class="layui-input-inline" style="padding-bottom: 0;">
                             <c:choose>
                                 <c:when test="${already}">
-                                    <button type="submit" disabled class="layui-btn" lay-submit="" lay-filter="retentionForm">提交</button>
+                                    <button type="button" class="layui-btn" id="resend">重拟申请</button>
                                 </c:when>
                                 <c:otherwise>
                                     <button type="submit" class="layui-btn" lay-submit="" lay-filter="retentionForm">提交</button>
+                                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                                 </c:otherwise>
                             </c:choose>
                             <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                         </div>
                         <c:if test="${already}">
-                            <label style="color: red;margin-top: 20px;">审核中</label>
+                            <label style="color: red;margin-top: 20px;">${status}</label>
                         </c:if>
                     </div>
                 </form>

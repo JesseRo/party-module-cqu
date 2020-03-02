@@ -52,7 +52,7 @@ public class RetentionDao extends PostgresqlDaoImpl<Retention> {
 
     public Retention findByUser(String user) {
         try {
-            String sql = "select * from hg_party_retention where user_id = ?";
+            String sql = "select * from hg_party_retention where user_id = ? and status < 5";
             return jdbcTemplate.queryForObject(sql, BeanPropertyRowMapper.newInstance(Retention.class), user);
         }catch (Exception e){
             e.printStackTrace();

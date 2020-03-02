@@ -203,10 +203,10 @@
                             <button type="button" class="layui-btn _submit" lay-submit="" lay-filter="organRelaForm">提交</button>
                         </c:otherwise>
                     </c:choose>
-                    <c:if test="${transport.type eq 3 and transport.status eq 1}">
-                        <button type="button" class="layui-btn layui-btn-primary" id="printLetter">打印介绍信</button>
+<%--                    <c:if test="${transport.type eq 3 and transport.status eq 1}">--%>
+<%--                        <button type="button" class="layui-btn layui-btn-primary" id="printLetter">打印介绍信</button>--%>
 
-                    </c:if>
+<%--                    </c:if>--%>
 
                 </div>
             </div>
@@ -215,7 +215,7 @@
                     <label class="layui-form-label">转出状态：</label>
                     <div class="layui-input-block">
                         <p style="float: left;line-height: 35px;color: red;" id="status">${statusList[transport.status]}</p>
-                        <c:if test="${transport.status gt 1 and transport.type eq 3}">
+                        <c:if test="${(transport.status gt 1 and transport.type eq 3) or transport.status eq 2}">
                         <button id="resubmit" type="button" class="layui-btn layui-btn-primary" style="margin-left: 15px; float:right;">
                             重拟申请
                         </button>

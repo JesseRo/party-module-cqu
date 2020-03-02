@@ -94,20 +94,21 @@ public class TransportApplyPortlet extends MVCPortlet {
                 });
 
         Transport transport = transportDao.findByUser(userId);
-        if (transport == null){
-            renderRequest.setAttribute("transportJson", null);
+        String isResubmit = PortalUtil.getOriginalServletRequest(PortalUtil.getHttpServletRequest(renderRequest)).getParameter("resubmit");
+
+        if (transport == null || ("1").equalsIgnoreCase(isResubmit)){
+            renderRequest.setAttribute("transportJson", "null");
             renderRequest.setAttribute("already", 0);
         }else {
             renderRequest.setAttribute("already", 1);
+            renderRequest.setAttribute("isResubmit", isResubmit);
+            renderRequest.setAttribute("statusList", ConstantsKey.STATUS_LIST);
+            renderRequest.setAttribute("transportJson", gson.toJson(transport));
+            renderRequest.setAttribute("transport", transport);
         }
-        String isResubmit = PortalUtil.getOriginalServletRequest(PortalUtil.getHttpServletRequest(renderRequest)).getParameter("resubmit");
-        renderRequest.setAttribute("transportJson", gson.toJson(transport));
-        renderRequest.setAttribute("transport", transport);
-
-        renderRequest.setAttribute("brunchGroup", brunchGroup);
-        renderRequest.setAttribute("isResubmit", isResubmit);
         renderRequest.setAttribute("allBrunchGroup", allBrunchGroup);
-        renderRequest.setAttribute("statusList", ConstantsKey.STATUS_LIST);
+        renderRequest.setAttribute("brunchGroup", brunchGroup);
+
         super.doView(renderRequest, renderResponse);
     }
 

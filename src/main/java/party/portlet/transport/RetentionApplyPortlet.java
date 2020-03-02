@@ -3,12 +3,14 @@ package party.portlet.transport;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
+import com.liferay.portal.kernel.util.PortalUtil;
 import dt.session.SessionManager;
 import hg.party.dao.login.UserDao;
 import hg.party.dao.org.MemberDao;
 import hg.party.dao.org.OrgDao;
 import hg.party.entity.login.User;
 import hg.party.entity.partyMembers.Member;
+import hg.util.ConstantsKey;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import party.constants.PartyPortletKeys;
@@ -51,6 +53,8 @@ public class RetentionApplyPortlet extends MVCPortlet {
     public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
             throws IOException, PortletException {
         String userId = (String)SessionManager.getAttribute(renderRequest.getRequestedSessionId(), "userName");
+        String isResubmit = PortalUtil.getOriginalServletRequest(PortalUtil.getHttpServletRequest(renderRequest)).getParameter("resubmit");
+
         List<Map<String, Object>> list = orgDao.findPersonByuserId(userId);
         if (list!=null&&list.size()>0) {
             User user = userDao.findUserByEthnicity(userId);
@@ -58,12 +62,14 @@ public class RetentionApplyPortlet extends MVCPortlet {
             renderRequest.setAttribute("member", list.get(0));
         }
         Retention retention = retentionDao.findByUser(userId);
-        if (retention != null){
+        if (retention != null && !"1".equalsIgnoreCase(isResubmit)){
             renderRequest.setAttribute("retentionJson", gson.toJson(retention));
             renderRequest.setAttribute("already", true);
+            renderRequest.setAttribute("status", ConstantsKey.STATUS_LIST[retention.getStatus()]);
         }else {
             renderRequest.setAttribute("retentionJson", "null");
             renderRequest.setAttribute("already", false);
+            renderRequest.setAttribute("isResubmit", isResubmit);
         }
         super.doView(renderRequest, renderResponse);
     }
