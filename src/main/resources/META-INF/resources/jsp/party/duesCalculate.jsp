@@ -48,6 +48,9 @@
 				line-height: 20px;
 
 			}
+			.layui-form-item .layui-input{
+				background-color: #f5f5f5;
+			}
 			.party_fee_container .party_fee_content .fee_main_content .layui-this{
 				background-color: #ffab33;
 				color: #fff;
@@ -98,61 +101,61 @@
 								<div class="layui-form-item">
 									<label class="layui-form-label">岗位工资</label>
 									<div class="layui-input-block">
-										<input type="number" name="basicSalary" min="0" placeholder="" autocomplete="off" class="layui-input" >
+										<input type="number" name="basicSalary" min="0" placeholder="" autocomplete="off" class="layui-input" value="0" >
 									</div>
 								</div>
 								<div class="layui-form-item">
 									<label class="layui-form-label">薪级工资</label>
 									<div class="layui-input-block">
-										<input type="number" name="levelSalary" min="0" placeholder="" autocomplete="off" class="layui-input">
+										<input type="number" name="levelSalary" min="0" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
 								</div>
 								<div class="layui-form-item">
 									<label class="layui-form-label">工 改</label>
 									<div class="layui-input-block">
-										<input type="number" name="wageReform" min="0" placeholder="" autocomplete="off" class="layui-input">
+										<input type="number" name="wageReform" min="0" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
 								</div>
 								<div class="layui-form-item">
 									<label  class="layui-form-label">岗位名称</label>
-									<div class="layui-input-block" class="tree2-div">
+									<div class="layui-input-block tree2-div">
 										<input type="text" class="tree2" lay-filter="jobLevelPerformance" class="layui-input">
 									</div>
 								</div>
 								<div class="layui-form-item">
 									<label class="layui-form-label">绩效工资理论值</label>
 									<div class="layui-input-block">
-										<input type="number" name="performance" min="0" placeholder="" autocomplete="off" class="layui-input">
+										<input type="number" name="performance" min="0" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
 								</div>
 								<div class="layui-form-item">
 									<label class="layui-form-label">住房公积金</label>
 									<div class="layui-input-block">
-										<input type="number" name="housingFund" min="0" placeholder="" autocomplete="off" class="layui-input">
+										<input type="number" name="housingFund" min="0" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
 								</div>
 								<div class="layui-form-item">
 									<label class="layui-form-label">失业保险</label>
 									<div class="layui-input-block">
-										<input type="number" name="unemployedInsurance" min="0" placeholder="" autocomplete="off" class="layui-input">
+										<input type="number" name="unemployedInsurance" min="0" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
 								</div>
 								<div class="layui-form-item">
 									<label class="layui-form-label">医疗保险</label>
 									<div class="layui-input-block">
-										<input type="number" name="treatmentInsurance" min="0" placeholder="" autocomplete="off" class="layui-input">
+										<input type="number" name="treatmentInsurance" min="0" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
 								</div>
 								<div class="layui-form-item" id="pensionInsurance-div">
 									<label class="layui-form-label">养老保险</label>
 									<div class="layui-input-block">
-										<input type="number"  name="pensionInsurance" min="0" placeholder="" autocomplete="off" class="layui-input">
+										<input type="number"  name="pensionInsurance" min="0" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
 								</div>
 								<div class="layui-form-item" id="occupationalAnnuities-div" >
 									<label class="layui-form-label">预扣职业年金</label>
 									<div class="layui-input-block">
-										<input type="number" name="occupationalAnnuities" min="0" placeholder="" autocomplete="off" class="layui-input">
+										<input type="number" name="occupationalAnnuities" min="0" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
 								</div>
 								<div class="layui-form-item">
@@ -480,7 +483,6 @@
 					},
 					// 点击回调
 					click: function(d){
-
 						if(d.current.isParent){
 							$("#"+id+" .tree2-div .layui-treeSelect.layui-unselect.layui-form-select").addClass("layui-form-selected");
 							$("#"+id+" .tree2-div .layui-treeSelect .layui-select-title input").val("");
@@ -514,16 +516,19 @@
 				studentCal();
 			}
 			if(partyType != lastType){//切换tab清空数据
-				$(".layui-form-item input[name='basicSalary']").val("")
-				$(".layui-form-item input[name='levelSalary']").val("");
-				$(".layui-form-item input[name='wageReform']").val("");
-				$(".layui-form-item input[name='housingFund']").val("");
-				$(".layui-form-item input[name='unemployedInsurance']").val("");
-				$(".layui-form-item input[name='treatmentInsurance']").val("");
-				$(".layui-form-item input[name='pensionInsurance']").val("");
-				$(".layui-form-item input[name='birthInsurance']").val("");
-				$(".layui-form-item input[name='employmentInjuryInsurance']").val("");
-				$(".layui-form-item input[name='occupationalAnnuities']").val("");
+				$(".layui-form-item input[name='basicSalary']").val(0)
+				$(".layui-form-item input[name='levelSalary']").val(0);
+				$(".layui-form-item input[name='wageReform']").val(0);
+				$(".layui-form-item input[name='housingFund']").val(0);
+				$(".layui-form-item input[name='unemployedInsurance']").val(0);
+				$(".layui-form-item input[name='treatmentInsurance']").val(0);
+				$(".layui-form-item input[name='pensionInsurance']").val(0);
+				$(".layui-form-item input[name='birthInsurance']").val(0);
+				$(".layui-form-item input[name='employmentInjuryInsurance']").val(0);
+				$(".layui-form-item input[name='occupationalAnnuities']").val(0);
+				$(".layui-form-item input[name='occupationalAnnuities']").val(0);
+				$(".tree2-div .layui-treeSelect .layui-select-title input").val("");
+				$(".layui-form-item input[name='performance']").val(0);
 			}
 		})
 		//月薪党费计算

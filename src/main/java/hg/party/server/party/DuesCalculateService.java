@@ -14,14 +14,14 @@ import  hg.party.entity.party.DuesResult;
 public class DuesCalculateService {
     /**
      * 月薪党员
-     * @return
+     * @return DuesResult
      */
     public DuesResult monthSalaryCal(DuesCal duesCal) {
         return monthSalaryCalculate(duesCal);
     }
     /**
      * 年薪党员
-     * @return
+     * @return DuesResult
      */
     public DuesResult yearSalaryCal(DuesCal duesCal) {
         return yearCalculate(duesCal);
@@ -29,7 +29,7 @@ public class DuesCalculateService {
 
     /**
      * 企业员工/其他协议工资党员
-     * @return
+     * @return DuesResult
      */
     public DuesResult companyMemberCal(DuesCal duesCal) {
         return companyCalculate(duesCal);
@@ -37,7 +37,7 @@ public class DuesCalculateService {
     
     /**
      * 离退休教职工党员
-     * @return
+     * @return DuesResult
      */
     public DuesResult retireEmployeeCal(DuesCal duesCal) {
         return retireEmployeeCalculate(duesCal);
@@ -45,7 +45,7 @@ public class DuesCalculateService {
     
     /**
      * 学生党员
-     * @return
+     * @return DuesResult
      */
     public DuesResult studentCal() {
         return new DuesResult(0,0,0,0.2);
@@ -53,7 +53,7 @@ public class DuesCalculateService {
     
     /**
      * 在职就读硕士/博士党员
-     * @return
+     * @return DuesResult
      */
     public DuesResult masterJobCal(DuesCal duesCal) {
         return masterCalculate(duesCal);
@@ -73,17 +73,17 @@ public class DuesCalculateService {
                 .subtract(personTax);
         double duesBasicNum  = duesBasic.doubleValue();//党费基数
         BigDecimal duesPercent;//党费比例
-        BigDecimal duesMoney =  new BigDecimal(0);//每月党费
+        BigDecimal duesMoney;//每月党费
         if(duesBasicNum <= 0){
-            duesPercent = new BigDecimal(0.00);
+            duesPercent = new BigDecimal("0.00");
         }else if(duesBasicNum <= 3000){
-            duesPercent = new BigDecimal(0.005);
+            duesPercent = new BigDecimal("0.005");
         }else if(duesBasicNum <= 5000){
-            duesPercent = new BigDecimal(0.010);
+            duesPercent = new BigDecimal("0.010");
         }else if(duesBasicNum <= 10000){
-            duesPercent = new BigDecimal(0.015);
+            duesPercent = new BigDecimal("0.015");
         }else{
-            duesPercent = new BigDecimal(0.020);
+            duesPercent = new BigDecimal("0.020");
         }
         duesMoney = duesBasic.multiply(duesPercent);
         return new DuesResult(personTax.doubleValue(),duesBasicNum,duesPercent.doubleValue(),duesMoney.doubleValue());
@@ -100,17 +100,17 @@ public class DuesCalculateService {
                 .subtract(personTax);
         double duesBasicNum  = duesBasic.doubleValue();//党费基数
         BigDecimal duesPercent;//党费比例
-        BigDecimal duesMoney =  new BigDecimal(0);//每月党费
+        BigDecimal duesMoney;//每月党费
         if(duesBasicNum <= 0){
-            duesPercent = new BigDecimal(0.00);
+            duesPercent = new BigDecimal("0.00");
         }else if(duesBasicNum <= 3000){
-            duesPercent = new BigDecimal(0.005);
+            duesPercent = new BigDecimal("0.005");
         }else if(duesBasicNum <= 5000){
-            duesPercent = new BigDecimal(0.010);
+            duesPercent = new BigDecimal("0.010");
         }else if(duesBasicNum <= 10000){
-            duesPercent = new BigDecimal(0.015);
+            duesPercent = new BigDecimal("0.015");
         }else{
-            duesPercent = new BigDecimal(0.020);
+            duesPercent = new BigDecimal("0.020");
         }
         duesMoney = duesBasic.multiply(duesPercent);
         return new DuesResult(personTax.doubleValue(),duesBasicNum,duesPercent.doubleValue(),duesMoney.doubleValue());
@@ -124,17 +124,17 @@ public class DuesCalculateService {
         BigDecimal duesBasic = duesCal.getBasicSalary();//党费基数
         double duesBasicNum  = duesBasic.doubleValue();
         BigDecimal duesPercent;//党费比例
-        BigDecimal duesMoney =  new BigDecimal(0);//每月党费
+        BigDecimal duesMoney;//每月党费
         if(duesBasicNum <= 0){
-            duesPercent = new BigDecimal(0.00);
+            duesPercent = new BigDecimal("0.00");
         }else if(duesBasicNum <= 3000){
-            duesPercent = new BigDecimal(0.005);
+            duesPercent = new BigDecimal("0.005");
         }else if(duesBasicNum <= 5000){
-            duesPercent = new BigDecimal(0.010);
+            duesPercent = new BigDecimal("0.010");
         }else if(duesBasicNum <= 10000){
-            duesPercent = new BigDecimal(0.015);
+            duesPercent = new BigDecimal("0.015");
         }else{
-            duesPercent = new BigDecimal(0.020);
+            duesPercent = new BigDecimal("0.020");
         }
         duesMoney = duesBasic.multiply(duesPercent);
         return new DuesResult(0,duesBasicNum,duesPercent.doubleValue(),duesMoney.doubleValue());
@@ -156,17 +156,17 @@ public class DuesCalculateService {
                 .subtract(personTax);
         double duesBasicNum  = duesBasic.doubleValue();//党费基数
         BigDecimal duesPercent;//党费比例
-        BigDecimal duesMoney =  new BigDecimal(0);//每月党费
+        BigDecimal duesMoney;//每月党费
         if(duesBasicNum <= 0){
-            duesPercent = new BigDecimal(0.00);
+            duesPercent = new BigDecimal("0.00");
         }else if(duesBasicNum <= 3000){
-            duesPercent = new BigDecimal(0.005);
+            duesPercent = new BigDecimal("0.005");
         }else if(duesBasicNum <= 5000){
-            duesPercent = new BigDecimal(0.010);
+            duesPercent = new BigDecimal("0.010");
         }else if(duesBasicNum <= 10000){
-            duesPercent = new BigDecimal(0.015);
+            duesPercent = new BigDecimal("0.015");
         }else{
-            duesPercent = new BigDecimal(0.020);
+            duesPercent = new BigDecimal("0.020");
         }
         duesMoney = duesBasic.multiply(duesPercent);
         return new DuesResult(personTax.doubleValue(),duesBasicNum,duesPercent.doubleValue(),duesMoney.doubleValue());
@@ -175,20 +175,32 @@ public class DuesCalculateService {
 
         double duesBasicNum  = duesCal.getBasicSalary().doubleValue();//党费基数
         BigDecimal duesPercent;//党费比例
-        BigDecimal duesMoney =  new BigDecimal(0);//每月党费
+        BigDecimal duesMoney;//每月党费
         if(duesBasicNum <= 0){
-            duesPercent = new BigDecimal(0.00);
+            duesPercent = new BigDecimal("0.00");
         }else if(duesBasicNum <= 5000){
-            duesPercent = new BigDecimal(0.005);
+            duesPercent = new BigDecimal("0.005");
         }else{
-            duesPercent = new BigDecimal(0.010);
+            duesPercent = new BigDecimal("0.010");
         }
         duesMoney = duesCal.getBasicSalary().multiply(duesPercent);
         return new DuesResult(0,duesBasicNum,duesPercent.doubleValue(),duesMoney.doubleValue());
     }
 
-
-    private  BigDecimal getPersonalTax(DuesCal duesCal){
+    /**
+     * 级数	应纳税所得额(X)	税率	速算扣除数
+     * 1	(0＜X≤3,000)	3%	0
+     * 2	(3,000＜X≤12,000)	10%	210
+     * 3	(12,000＜X≤25,000)	20%	1,410
+     * 4	(25,000＜X≤35,000)	25%	2,660
+     * 5	(35,000＜X≤55,000)	30%	4,410
+     * 6	(55,000＜X≤80,000)	35%	7,160
+     * 7	(X＞80,000)	45%	15,160
+     * 应纳税额 = 应纳税所得额 × 适用税率 － 速算扣除数
+     * @param duesCal 个人收入情况
+     * @return BigDecimal
+     */
+    private static BigDecimal getPersonalTax(DuesCal duesCal){
         double taxMoney = duesCal.getBasicSalary().add(duesCal.getLevelSalary())
                 .add(duesCal.getWageReform())
                 .add(duesCal.getPerformance())
@@ -203,40 +215,40 @@ public class DuesCalculateService {
                 .doubleValue();
         BigDecimal personTax = new BigDecimal(0);
         if(taxMoney > 80000){
-            personTax= new BigDecimal(taxMoney).subtract(new BigDecimal(80000)).multiply(new BigDecimal(0.45));
-            personTax = personTax .add(new BigDecimal((80000-55000)*0.35));
-            personTax = personTax .add(new BigDecimal((55000-35000)*0.30));
-            personTax = personTax .add(new BigDecimal((35000-25000)*0.25));
-            personTax = personTax .add(new BigDecimal((25000-12000)*0.20));
-            personTax = personTax .add(new BigDecimal((12000-3000)*0.10));
-            personTax = personTax .add(new BigDecimal(3000*0.03));
+            personTax= new BigDecimal(taxMoney).subtract(new BigDecimal(80000)).multiply(new BigDecimal("0.45"));
+            personTax = personTax.add(BigDecimal.valueOf((80000 - 55000) * 0.35));
+            personTax = personTax.add(BigDecimal.valueOf((55000 - 35000) * 0.30));
+            personTax = personTax.add(BigDecimal.valueOf((35000 - 25000) * 0.25));
+            personTax = personTax.add(BigDecimal.valueOf((25000 - 12000) * 0.20));
+            personTax = personTax.add(BigDecimal.valueOf((12000 - 3000) * 0.10));
+            personTax = personTax.add(BigDecimal.valueOf(3000 * 0.03));
         }else if(taxMoney>55000){
-            personTax= new BigDecimal(taxMoney).subtract(new BigDecimal(55000)).multiply(new BigDecimal(0.35));
-            personTax = personTax .add(new BigDecimal((55000-35000)*0.30));
-            personTax = personTax .add(new BigDecimal((35000-25000)*0.25));
-            personTax = personTax .add(new BigDecimal((25000-12000)*0.20));
-            personTax = personTax .add(new BigDecimal((12000-3000)*0.10));
-            personTax = personTax .add(new BigDecimal(3000*0.03));
+            personTax= new BigDecimal(taxMoney).subtract(new BigDecimal(55000)).multiply(new BigDecimal("0.35"));
+            personTax = personTax.add(BigDecimal.valueOf((55000 - 35000) * 0.30));
+            personTax = personTax.add(BigDecimal.valueOf((35000 - 25000) * 0.25));
+            personTax = personTax.add(BigDecimal.valueOf((25000 - 12000) * 0.20));
+            personTax = personTax.add(BigDecimal.valueOf((12000 - 3000) * 0.10));
+            personTax = personTax.add(BigDecimal.valueOf(3000 * 0.03));
         }else if(taxMoney>35000){
-            personTax= new BigDecimal(taxMoney).subtract(new BigDecimal(35000)).multiply(new BigDecimal(0.30));
-            personTax = personTax .add(new BigDecimal((35000-25000)*0.25));
-            personTax = personTax .add(new BigDecimal((25000-12000)*0.20));
-            personTax = personTax .add(new BigDecimal((12000-3000)*0.10));
-            personTax = personTax .add(new BigDecimal(3000*0.03));
+            personTax= new BigDecimal(taxMoney).subtract(new BigDecimal(35000)).multiply(new BigDecimal("0.30"));
+            personTax = personTax.add(BigDecimal.valueOf((35000 - 25000) * 0.25));
+            personTax = personTax.add(BigDecimal.valueOf((25000 - 12000) * 0.20));
+            personTax = personTax.add(BigDecimal.valueOf((12000 - 3000) * 0.10));
+            personTax = personTax.add(BigDecimal.valueOf(3000 * 0.03));
         }else if(taxMoney>25000){
-            personTax= new BigDecimal(taxMoney).subtract(new BigDecimal(25000)).multiply(new BigDecimal(0.25));
-            personTax = personTax .add(new BigDecimal((25000-12000)*0.20));
-            personTax = personTax .add(new BigDecimal((12000-3000)*0.10));
-            personTax = personTax .add(new BigDecimal(3000*0.03));
+            personTax= new BigDecimal(taxMoney).subtract(new BigDecimal(25000)).multiply(new BigDecimal("0.25"));
+            personTax = personTax.add(BigDecimal.valueOf((25000 - 12000) * 0.20));
+            personTax = personTax.add(BigDecimal.valueOf((12000 - 3000) * 0.10));
+            personTax = personTax.add(BigDecimal.valueOf(3000 * 0.03));
         } else if(taxMoney>12000){
-            personTax= new BigDecimal(taxMoney).subtract(new BigDecimal(12000)).multiply(new BigDecimal(0.20));
-            personTax = personTax .add(new BigDecimal((12000-3000)*0.10));
-            personTax = personTax .add(new BigDecimal(3000*0.03));
+            personTax= new BigDecimal(taxMoney).subtract(new BigDecimal(12000)).multiply(new BigDecimal("0.20"));
+            personTax = personTax.add(BigDecimal.valueOf((12000 - 3000) * 0.10));
+            personTax = personTax.add(BigDecimal.valueOf(3000 * 0.03));
         }else if(taxMoney>3000){
-            personTax= new BigDecimal(taxMoney).subtract(new BigDecimal(3000)).multiply(new BigDecimal(0.10));
-            personTax = personTax .add(new BigDecimal(3000*0.03));
+            personTax= new BigDecimal(taxMoney).subtract(new BigDecimal(3000)).multiply(new BigDecimal("0.10"));
+            personTax = personTax.add(BigDecimal.valueOf(3000 * 0.03));
         }else if(taxMoney>0){
-            personTax= new BigDecimal(taxMoney).multiply(new BigDecimal(0.03));
+            personTax= new BigDecimal(taxMoney).multiply(new BigDecimal("0.03"));
         }
         return personTax;
     }

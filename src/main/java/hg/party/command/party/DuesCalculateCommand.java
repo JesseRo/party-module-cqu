@@ -56,8 +56,8 @@ public class DuesCalculateCommand implements MVCResourceCommand{
 		float unemployedInsurance = ParamUtil.getFloat(resourceRequest, "unemployedInsurance");
 		float treatmentInsurance = ParamUtil.getFloat(resourceRequest, "treatmentInsurance");
 		float pensionInsurance = ParamUtil.getFloat(resourceRequest, "pensionInsurance");
-		float birthInsurance = ParamUtil.getFloat(resourceRequest, "pensionInsurance");
-		float employmentInjuryInsurance = ParamUtil.getFloat(resourceRequest, "pensionInsurance");
+		float birthInsurance = ParamUtil.getFloat(resourceRequest, "birthInsurance");
+		float employmentInjuryInsurance = ParamUtil.getFloat(resourceRequest, "employmentInjuryInsurance");
 		float occupationalAnnuities = ParamUtil.getFloat(resourceRequest, "occupationalAnnuities");
 		DuesCal duesCal = new DuesCal(basicSalary,levelSalary,wageReform,performance,housingFund,unemployedInsurance,treatmentInsurance,pensionInsurance,birthInsurance,employmentInjuryInsurance,occupationalAnnuities);
 		try {
