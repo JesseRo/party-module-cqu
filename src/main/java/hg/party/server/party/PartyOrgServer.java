@@ -42,6 +42,10 @@ public class PartyOrgServer {
 	public List<Map<String, Object>> branchNumber(){
 		return partyOrgDao.branchNumber();
 	}
+	//查询二级党组织下党支部个数
+	public int branchNumber(String orgId){
+		return partyOrgDao.branchNumber(orgId);
+	}
 	//查询党员人数
 	public List<Map<String, Object>> userNumber(){
 		return partyOrgDao.userNumber();
@@ -49,6 +53,14 @@ public class PartyOrgServer {
 	//查询党员人数统计
 	public UserStatistics userStatistics(){
 		return partyOrgDao.userStatistics();
+	}
+	//根据组织查询党员人数统计
+	public UserStatistics userSecondaryStatistics(String orgId){
+		return partyOrgDao.userSecondaryStatistics(orgId);
+	}
+	//根据支部统计
+	public UserStatistics userBranchStatistics(String orgId){
+		return partyOrgDao.userBranchStatistics(orgId);
 	}
 	//查询组织活动个数
 	public List<Map<String, Object>> mettingNumber(){
@@ -111,20 +123,30 @@ public class PartyOrgServer {
 		return partyOrgDao.attenEcharts();
 	}
 
-	//学院开展活动年月统计
-	public List<BaseStatistics> collegeActivitiesStatistics(int year, int month){
-		return partyOrgDao.collegeActivitiesStatistics(year,month);
+	//二级党组织开展活动年月统计
+	public List<BaseStatistics> activitiesStatistics(int year, int month){
+		return partyOrgDao.activitiesStatistics(year,month);
 	}
-	//学院开展活动起止日期统计
-	public List<BaseStatistics> searchCollegeActivitiesStatistics(Timestamp startTime, Timestamp  endTime){
-		return partyOrgDao.searchCollegeActivitiesStatistics(startTime,endTime);
+	public List<BaseStatistics> activitiesStatistics(int year, int month,String orgId){
+		return partyOrgDao.activitiesStatistics(year,month,orgId);
+	}
+	//开展活动起止日期统计
+	public List<BaseStatistics> searchActivitiesStatistics(Timestamp startTime, Timestamp  endTime){
+		return partyOrgDao.searchActivitiesStatistics(startTime,endTime);
 	}
 	//党活动分类年月统计
 	public List<BaseStatistics> activitiesTypeStatistic(int year, int month){
 		return partyOrgDao.activitiesTypeStatistic(year,month);
 	}
+	public List<BaseStatistics> activitiesTypeStatistic(int year, int month,String orgId){
+		return partyOrgDao.activitiesTypeStatistic(year,month,orgId);
+	}
 	//党活动分类起止日期统计
 	public List<BaseStatistics> searchActivitiesTypeStatistics(Timestamp startTime, Timestamp  endTime){
 		return partyOrgDao.searchActivitiesTypeStatistics(startTime,endTime);
+	}
+	//支部组织生活次数
+	public int activitiesStatisticsCount(String orgId) {
+		return partyOrgDao.activitiesStatisticsCount(orgId);
 	}
 }

@@ -93,15 +93,16 @@
 						<li partyType="5">学生党员</li>
 						<li partyType="6">在职就读硕士/博士党员</li>
 					</ul>
-					<div class="layui-tab-content">
+					<div class="layui-tab-content layui-form">
 
 						<!--月薪制算法-->
-						<div class="layui-tab-item layui-show monthCal" id="monthCal">
+						<div class="layui-tab-item layui-show monthCal"  id="monthCal">
+							<form class="layui-form" action="" onsubmit="return false;">
 							<div class="layui-form fee_form">
 								<div class="layui-form-item">
-									<label class="layui-form-label">岗位工资</label>
+									<label class="layui-form-label">岗位工资*</label>
 									<div class="layui-input-block">
-										<input type="number" name="basicSalary" min="0" placeholder="" autocomplete="off" class="layui-input" value="0" >
+										<input type="number" name="basicSalary" min="0" lay-verify="basicSalary" autocomplete="off" class="layui-input" value="0" >
 									</div>
 								</div>
 								<div class="layui-form-item">
@@ -184,17 +185,19 @@
 								</div>
 								<div class="layui-form-item">
 									<div class="layui-input-block">
-										<button class="layui-btn custom_btn" onclick="monthCal()">计算党费</button>
+										<button  class="layui-btn custom_btn" onclick="monthCal()">计算党费</button>
 										<!-- <button type="reset" class="layui-btn layui-btn-primary">重置</button> -->
 									</div>
 								</div>
 							</div>
+							</form>
 						</div>
 						<!--年薪制算法-->
 						<div class="layui-tab-item  yearCal" id="yearCal">
+							<form class="layui-form" action="" onsubmit="return false;">
 							<div class="layui-form fee_form">
 								<div class="layui-form-item">
-									<label class="layui-form-label">年薪月标准</label>
+									<label class="layui-form-label">年薪月标准*</label>
 									<div class="layui-input-block">
 										<input type="number" name="basicSalary" min="0" placeholder="" autocomplete="off" class="layui-input" >
 									</div>
@@ -260,12 +263,14 @@
 									</div>
 								</div>
 							</div>
+							</form>
 						</div>
 						<!--企业员工算法-->
 						<div class="layui-tab-item  companyCal" id="companyCal">
+							<form class="layui-form" action="" onsubmit="return false;">
 							<div class="layui-form fee_form">
 								<div class="layui-form-item">
-									<label class="layui-form-label">岗位工资</label>
+									<label class="layui-form-label">岗位工资*</label>
 									<div class="layui-input-block">
 										<input type="number" name="basicSalary" min="0" placeholder="" autocomplete="off" class="layui-input" >
 									</div>
@@ -355,13 +360,15 @@
 									</div>
 								</div>
 							</div>
+							</form>
 						</div>
 
 						<!--离退休教职工党费-->
 						<div class="layui-tab-item retireEmployeeCal" id="retireEmployeeCal">
+							<form class="layui-form" action="" onsubmit="return false;">
 							<div class="layui-form fee_form">
 								<div class="layui-form-item">
-									<label class="layui-form-label">退休工资</label>
+									<label class="layui-form-label">退休工资*</label>
 									<div class="layui-input-block">
 										<input type="number" name="basicSalary" min="0" placeholder="" autocomplete="off" class="layui-input" >
 									</div>
@@ -391,6 +398,7 @@
 									</div>
 								</div>
 							</div>
+							</form>
 						</div>
 
 						<!-- 学生党费-->
@@ -407,9 +415,10 @@
 
 						<!--硕士博士党费-->
 						<div class="layui-tab-item masterCal" id="masterCal">
+							<form class="layui-form" action="" onsubmit="return false;">
 							<div class="layui-form fee_form">
 								<div class="layui-form-item">
-									<label class="layui-form-label">实际收入工资</label>
+									<label class="layui-form-label">实际收入工资*</label>
 									<div class="layui-input-block">
 										<input type="number" name="basicSalary" min="0" placeholder="" autocomplete="off" class="layui-input" >
 									</div>
@@ -439,6 +448,7 @@
 									</div>
 								</div>
 							</div>
+							</form>
 						</div>
 
 					</div>
@@ -459,7 +469,7 @@
 			initTree('companyCal');
 		}
 		function initTree(id){
-			layui.use(['treeSelect'], function () {
+			layui.use(['treeSelect','form'], function () {
 				var treeSelect= layui.treeSelect,
 						$ = layui.jquery;
 				treeSelect.render({
@@ -499,7 +509,6 @@
 						//console.log(d);
 					}
 				});
-
 			});
 		}
 
@@ -607,19 +616,57 @@
 
 		function normalCal(id,partType){
 			var basicSalary = $("#"+id+" .layui-form-item input[name='basicSalary']").val();
-			if(basicSalary== null ||  (basicSalary!=null && basicSalary.trim()=="")){
+			if(basicSalary== null ||  (basicSalary!=null && basicSalary.trim()=="") || basicSalary <0){
 				return;
 			}
+
 			var levelSalary = $("#"+id+" .layui-form-item input[name='levelSalary']").val();
+			if(levelSalary < 0){
+				return;
+			}
+
 			var wageReform = $("#"+id+" .layui-form-item input[name='wageReform']").val();
+			if(wageReform < 0){
+				return;
+			}
 			var performance = $("#"+id+" .layui-form-item input[name='performance']").val();
+			if(performance < 0){
+				return;
+			}
+
 			var housingFund = $("#"+id+" .layui-form-item input[name='housingFund']").val();
+			if(housingFund < 0){
+				return;
+			}
+
 			var unemployedInsurance = $("#"+id+" .layui-form-item input[name='unemployedInsurance']").val();
+			if(unemployedInsurance < 0){
+				return;
+			}
+
 			var treatmentInsurance = $("#"+id+" .layui-form-item input[name='treatmentInsurance']").val();
+			if(treatmentInsurance < 0){
+				return;
+			}
+
 			var pensionInsurance = $("#"+id+" .layui-form-item input[name='pensionInsurance']").val();
+			if(pensionInsurance < 0){
+				return;
+			}
+
 			var birthInsurance = $("#"+id+" .layui-form-item input[name='birthInsurance']").val();
+			if(levelSalary < 0){
+				return;
+			}
+
 			var employmentInjuryInsurance = $("#"+id+" .layui-form-item input[name='employmentInjuryInsurance']").val();
+			if(employmentInjuryInsurance < 0){
+				return;
+			}
 			var occupationalAnnuities = $("#"+id+" .layui-form-item input[name='occupationalAnnuities']").val();
+			if(occupationalAnnuities < 0){
+				return;
+			}
 			pensionInsurance = pensionInsurance==undefined?0:pensionInsurance;
 			birthInsurance = birthInsurance==undefined?0:birthInsurance;
 			employmentInjuryInsurance = employmentInjuryInsurance==undefined?0:employmentInjuryInsurance;

@@ -35,9 +35,9 @@ import java.util.Date;
 	    },
 	    service = MVCResourceCommand.class
 )
-public class CollegeActivitiesStatisticsCommand implements MVCResourceCommand{
+public class ActivitiesStatisticsCommand implements MVCResourceCommand{
 	
-	Logger logger = Logger.getLogger(CollegeActivitiesStatisticsCommand.class);
+	Logger logger = Logger.getLogger(ActivitiesStatisticsCommand.class);
 	@Reference
 	private PartyOrgServer partyOrgServer;
 
@@ -55,7 +55,7 @@ public class CollegeActivitiesStatisticsCommand implements MVCResourceCommand{
 			Timestamp endTime = Timestamp.valueOf(formatter.format(endDate));
 			PrintWriter printWriter=resourceResponse.getWriter();
 			logger.info("查询党支部活动日期统计");
-			List<BaseStatistics> collegeActivitiesStatistics = partyOrgServer.searchCollegeActivitiesStatistics(startTime,endTime);
+			List<BaseStatistics> collegeActivitiesStatistics = partyOrgServer.searchActivitiesStatistics(startTime,endTime);
 			printWriter.write(JSON.toJSONString(ResultUtil.success(collegeActivitiesStatistics)));
 
 		} catch (ParseException e) {

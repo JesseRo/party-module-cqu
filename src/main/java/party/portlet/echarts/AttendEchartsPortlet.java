@@ -58,7 +58,7 @@ public class AttendEchartsPortlet extends MVCPortlet{
 		Timestamp startTime = Timestamp.valueOf(formatter.format(calendar.getTime()));
 		calendar.set(year,month+1,1);//选择的截止月份计算在内
 		Timestamp endTime = Timestamp.valueOf(formatter.format(calendar.getTime()));
-		List<BaseStatistics> collegeActivitiesStatisticsList = partyOrgServer.searchCollegeActivitiesStatistics(startTime,endTime);
+		List<BaseStatistics> collegeActivitiesStatisticsList = partyOrgServer.searchActivitiesStatistics(startTime,endTime);
 		renderRequest.setAttribute("collegeActivitiesStatisticsList",JSON.toJSONString(collegeActivitiesStatisticsList));
 		//页面起止日期格式：2020-01 - 2020-01
 		String dateStr = new StringBuffer().append(year-1).append("-").append(month).append(" - ").append(year).append("-").append(month+1).toString();

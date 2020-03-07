@@ -44,51 +44,46 @@
 	<div class="outer_content_container">
 		<div class="summary_page" style="height: 83.4vh;margin-left: 2vw;margin-top: 2vh;">
 			<ul class="total_account_group">
-				<li>
-					<p class="title_group">
-						<img class="title_icon" src="../images/account-icon1.png"></span>
-						<span>全校二级党组织数目</span>
-					</p>
-					<p class="total_num">
-						<span>${orgNumber}</span>个
-					</p>
-				</li>
-				<li>
-					<p class="title_group">
-						<img class="title_icon" src="../images/account-icon2.png"></span>
-						<span>全校党支部数目</span>
-					</p>
-					<p class="total_num">
-						<span>${branchNumber}</span>个
-					</p>
-				</li>
-				<li>
-					<p class="title_group">
-						<img class="title_icon" src="../images/account-icon3.png"></span>
-						<span>全校党员数目</span>
-					</p>
-					<p class="total_num">
-						<span>${userStatistics.count}</span>个
-					</p>
-				</li>
+					<li>
+						<p class="title_group">
+							<img class="title_icon" src="../images/account-icon1.png"></span>
+							<span>全校二级党组织总数</span>
+						</p>
+						<p class="total_num">
+							<span>${orgNumber}</span>个
+						</p>
+					</li>
+					<li>
+						<p class="title_group">
+							<img class="title_icon" src="../images/account-icon2.png"></span>
+							<span>全校党支部总数</span>
+						</p>
+						<p class="total_num">
+							<span>${branchNumber}</span>个
+						</p>
+					</li>
+					<li>
+						<p class="title_group">
+							<img class="title_icon" src="../images/account-icon3.png"></span>
+							<span>全校党员总数</span>
+						</p>
+						<p class="total_num">
+							<span>${userStatistics.count}</span>个
+						</p>
+					</li>
 			</ul>
 			<div class="attend_views_activity">
 				<div class="attend_views_group">
 					<div class="attend_rate_group">
 						<div class="operate_container">
-							<p>
-								党支部活动开展情况
-							</p>
+							<p>二级党组织组织生活开展次数</p>
 						</div>
 						<div class="attend_rate_container" id="brunch_meeting_container"></div>
-						<p class="desc_text"><a href="javascript:;" onclick="window.location.href='/attend_charts?year=0&month=1'">查看更多</a></p>
+						<p class="desc_text"><a id="collegeMore" href="/attend_charts">查看更多</a></p>
 					</div>
 					<div class="views_group">
 						<div class="text_container">
-							<p class="title">
-								党员性别分布情况
-								<%--								<img src="../images/charts-title2.png"/>--%>
-							</p>
+							<p class="title">党员性别分布</p>
 							<div class="sub_text_container">
 								<div class="sub_text current_view">
 									<p class="sub_title">男性党员</p>
@@ -106,14 +101,11 @@
 				</div>
 				<div class="activity_plan_group">
 					<div class="operate_container">
-						<p>
-							<%--							<img src="${basePath}/cqu/images/charts-title3.png"/>--%>
-							组织生活类型分布情况
-						</p>
+						<p>组织生活类型分布</p>
 					</div>
 					<div class="activity_plan_conteiner" id="activity_conteiner">
 					</div>
-					<p class="desc_text"><a href="/activitiesTypeStatisticDetail'">查看更多</a></p>
+<%--					<p class="desc_text"><a href="/activitiesTypeStatisticDetail'">查看更多</a></p>--%>
 				</div>
 			</div>
 		</div>
@@ -124,7 +116,7 @@
 			$(document).ready(function () {
 				showCollegeCharts();
 				renderViewCharts();
-				showActivityCharts()
+				showActivityCharts();
 			});
 			//表单
 			layui.use('form', function(){
@@ -153,7 +145,7 @@
 
 
 			function showCollegeCharts(){
-				var arr = JSON.parse('${collegeActivitiesStatisticsList}');
+				var arr = JSON.parse('${activitiesStatisticsList}');
 				var colData = new Array();
 				var rowData =new Array();
 				if(arr != null && arr.length>0){
@@ -298,6 +290,10 @@
 			}
 			//渲染党组织活动类型统计
 			function renderActivityCharts(data){
+				if(data.length<1){
+					$("#activity_conteiner").text("暂无数据。");
+					return
+				}
 				var ViewChart = echarts.init(document.getElementById('activity_conteiner'));
 				var option = {
 					tooltip: {
@@ -314,7 +310,7 @@
 					// color: ["#FF523A", "#FFAA17"],
 					series: [
 						{
-							name: "党支部组织生活分布情况",
+							name: "党支部组织生活类型分布",
 							type: "pie",
 							avoidLabelOverlap: false,
 							label: {

@@ -102,7 +102,7 @@
 					$.ajax({
 						url:url,
 						data:{"<portlet:namespace/>changType":"changeRole",
-								  "<portlet:namespace/>role":ro } ,
+								  "<portlet:namespace/>role":ro=='学校'?'组织部':ro } ,
 						 /*   type:"post", */
 							dataType:"text",
 							async:false,
@@ -138,7 +138,7 @@
 			<a href="javascript:;">[${role}]</a>
 		</c:when>
 		<c:otherwise>
-			<a href="javascript:;">[${role}管理员]</a>
+			<a href="javascript:;">[${role=='组织部'?'学校':role}管理员]</a>
 		</c:otherwise>
 	</c:choose>
 	<dl class="layui-nav-child" id="role-list"> <!-- 二级菜单 -->
@@ -146,10 +146,10 @@
 		<c:if test="${r != role}">
 			<c:choose>
 				<c:when test="${r == '普通党员'}">
-					<dd><a href="javascript:;">${r}</a> </dd>
+					<dd><a href="javascript:;" value="${r}">${r}</a> </dd>
 				</c:when>
 				<c:otherwise>
-					<dd><a href="javascript:;">${r}管理员</a></dd>
+					<dd><a href="javascript:;" value="${r}">${r=='组织部'?'学校':r}管理员</a></dd>
 				</c:otherwise>
 			</c:choose>
 		</c:if>
