@@ -10,7 +10,14 @@
     <link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/common.min.css" />
 <%--    <link rel="stylesheet" href="${basePath}/css/jquery.dropdown.css"/>--%>
 <%--    <script type="text/javascript" src="${basePath}/js/jquery.dropdown.js?v=11"></script>--%>
-
+    <style>
+        .organ_relation_container .organ_relation_page .form_content .custom_form{
+            width: 36.24%;
+        }
+        .organ_relation_container .organ_relation_page .form_content .tips_container{
+            width: 60%;
+        }
+    </style>
     <style type="text/css">
     </style>
     <script type="text/javascript" >
@@ -27,7 +34,6 @@
                 });
                 form.on('select(transport_type)', function(data){
                     var type = data.value;
-                    $('#reason_title').text("留在本单位原因：");
                     if(type === '0'){
                         $('#org_name').hide();
                         $('#org_all').hide();
@@ -86,8 +92,11 @@
                 var reason = $('[name=transport_reason]').val();
                 $.post('${save}', {type: type, org: org, form: form, title: title, reason: reason}, function (res) {
                     if(res.result){
-                        alert('提交成功');
-                        window.location.reload();
+                        layuiModal.alert('提交成功', function () {
+                            window.location.reload();
+                        });
+                    }else {
+                        layuiModal.alert("失败");
                     }
                 })
             });
@@ -136,7 +145,7 @@
             </div>
             <input name="isResubmit" value="${isResubmit}" type="hidden">
             <div class="layui-form-item">
-                <label class="layui-form-label">转出单位：</label>
+                <label class="layui-form-label">去往单位：</label>
                 <div class="layui-input-block" id="org_name">
                     <input type="text" id="org" placeholder="按照转入单位要求填转入往单位" maxlength="20" name="org" autocomplete="off" class="layui-input">
                 </div>
@@ -184,7 +193,7 @@
                 </div>
             </div>
             <div class="layui-form-item layui-form-text">
-                <label class="layui-form-label" id="reason_title">转接原因：</label>
+                <label class="layui-form-label" id="reason_title">转出原因：</label>
                 <div class="layui-input-block">
                     <select name="transport_reason" lay-filter="organRelaForm">
                         <option value="升学"  selected="">升学</option>
@@ -193,23 +202,13 @@
                     </select>
                 </div>
             </div>
-            <div class="layui-form-item btn_group">
-                <div class="layui-input-block">
-                    <c:choose>
-                        <c:when test="${already > 0 }">
-                            <button type="button" disabled class="layui-btn _submit" lay-submit="" lay-filter="organRelaForm">提交</button>
-                        </c:when>
-                        <c:otherwise>
-                            <button type="button" class="layui-btn _submit" lay-submit="" lay-filter="organRelaForm">提交</button>
-                        </c:otherwise>
-                    </c:choose>
-<%--                    <c:if test="${transport.type eq 3 and transport.status eq 1}">--%>
-<%--                        <button type="button" class="layui-btn layui-btn-primary" id="printLetter">打印介绍信</button>--%>
-
-<%--                    </c:if>--%>
-
+            <c:if test="${already == 0 }">
+                <div class="layui-form-item btn_group">
+                    <div class="layui-input-block">
+                        <button type="button" class="layui-btn _submit" lay-submit="" lay-filter="organRelaForm">提交</button>
+                    </div>
                 </div>
-            </div>
+            </c:if>
             <c:if test="${already > 0 }">
                 <div class="layui-form-item layui-form-text">
                     <label class="layui-form-label">转出状态：</label>
@@ -239,8 +238,8 @@
             <p class="tips_title">注意事项</p>
             <p>1.请与转入单位党务工作部门（非人事）落实；</p>
             <p> 2.市外原则上需县级以上党组织，不应出现支部、街道等；</p>
-            <p>3.室外则通过12371平台进行转接，抬头需落实到支部；</p>
-            <p>4.以转入“重庆大学外国语学院”为例，【由市外转入】去往单位：重庆大学外国语学院，介绍信抬头：重庆市委教育工委；【由市内转入】去往单位：重庆大学外国语学院，介绍信抬头：市委教工委-重庆大学党委-外语学院党务-XX支部</p>
+            <p>3.市外则通过12371平台进行转接，抬头需落实到支部；</p>
+            <p>4.以转入“重庆大学外国语学院”为例，【由市外转入】去往单位：重庆大学外国语学院，介绍信抬头：重庆市委教育工委；【由市内转入】去往单位：重庆大学外国语学院，介绍信抬头：市委教工委-重庆大学党委-外语学院党委-XX支部</p>
         </div>
     </div>
 </div>

@@ -15,6 +15,7 @@ import hg.party.entity.partyMembers.JsonResponse;
 import hg.util.ConstantsKey;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+import org.springframework.util.StringUtils;
 import party.constants.PartyPortletKeys;
 import party.portlet.transport.dao.TransportDao;
 
@@ -42,7 +43,7 @@ public class TransportPageCommand implements MVCResourceCommand {
 	private OrgDao orgDao;
 	@Reference
 	private TransportDao transportDao;
-	private Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+	private Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 	@Override
 	public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws PortletException{
 		String orgId = (String)SessionManager.getAttribute(resourceRequest.getRequestedSessionId(), "department");
@@ -50,17 +51,24 @@ public class TransportPageCommand implements MVCResourceCommand {
 
 		int page = ParamUtil.getInteger(resourceRequest, "page");
 		int size = ParamUtil.getInteger(resourceRequest, "limit");
+		String type = ParamUtil.getString(resourceRequest, "type");
 		PostgresqlQueryResult<Map<String, Object>> data = null;
+		List<String> types;
+		if (!StringUtils.isEmpty(type)){
+			types = Arrays.stream(type.split(",")).collect(Collectors.toList());
+		}else {
+			types = null;
+		}
+
 		if (organization.getOrg_type().equalsIgnoreCase(ConstantsKey.ORG_TYPE_BRANCH)) {
-			data = transportDao.findBranchPage(page, size, orgId);
+			data = transportDao.findBranchPage(page, size, orgId, types);
 		} else if (organization.getOrg_type().equalsIgnoreCase(ConstantsKey.ORG_TYPE_SECONDARY)){
-			data = transportDao.findSecondaryPage(page, size, orgId);
+			data = transportDao.findSecondaryPage(page, size, orgId, types);
 		}else if (organization.getOrg_type().equalsIgnoreCase(ConstantsKey.ORG_TYPE_ROOT)){
-			data = transportDao.findRootPage(page, size);
+			data = transportDao.findRootPage(page, size, types);
 		}else {
 			data = null;
 		}
-
 
 		HttpServletResponse res = PortalUtil.getHttpServletResponse(resourceResponse);
 		res.addHeader("content-type","application/json");

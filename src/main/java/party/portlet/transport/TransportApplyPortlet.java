@@ -48,7 +48,7 @@ import java.util.stream.Collectors;
         service = Portlet.class
 )
 public class TransportApplyPortlet extends MVCPortlet {
-    private Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+    private Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 
     @Reference
     private OrgDao orgDao;

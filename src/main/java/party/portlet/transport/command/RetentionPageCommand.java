@@ -43,7 +43,7 @@ public class RetentionPageCommand implements MVCResourceCommand {
 	private OrgDao orgDao;
 	@Reference
 	private RetentionDao retentionDao;
-	private Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+	private Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 
 	@Override
 	public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws PortletException{

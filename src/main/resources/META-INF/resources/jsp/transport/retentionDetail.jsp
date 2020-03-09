@@ -29,9 +29,11 @@
                     console.log(JSON.stringify(data.field));
                     $.post("${save}", data.field, function (res) {
                         if(res.result){
-                            alert("提交成功");
+                            layuiModal.alert('提交成功', function () {
+                                window.location.reload();
+                            });
                         }else {
-                            alert("失败");
+                            layuiModal.alert("失败");
                         }
                     });
                     return false;
@@ -103,13 +105,13 @@
                     <div class="layui-inline">
                         <label class="layui-form-label">姓名：</label>
                         <div class="layui-input-inline">
-                            <input name="name" type="text" maxlength="20" lay-verify="required" autocomplete="off" class="layui-input" value="${member.member_name}">
+                            <input name="name" disabled type="text" maxlength="20" lay-verify="required" autocomplete="off" class="layui-input" value="${member.member_name}">
                         </div>
                     </div>
                     <div class="layui-inline">
                         <label class="layui-form-label">性别：</label>
                         <div class="layui-input-inline">
-                            <select name="sex" lay-filter="">
+                            <select name="sex" lay-filter="" disabled>
                                 <c:if test="${member.member_sex == '男'}">
                                     <option value="男" selected>男</option>
                                     <option value="女">女</option>
@@ -124,13 +126,13 @@
                     <div class="layui-inline">
                         <label class="layui-form-label">民族：</label>
                         <div class="layui-input-inline">
-                            <input value="${member.member_ethnicity}" name="ethnicity" type="text" maxlength="20" lay-verify="required" autocomplete="off" class="layui-input">
+                            <input disabled value="${member.member_ethnicity}" name="ethnicity" type="text" maxlength="20" lay-verify="required" autocomplete="off" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-inline">
                         <label class="layui-form-label">党员类型：</label>
                         <div class="layui-input-inline">
-                            <select name="memberType" lay-filter="">
+                            <select name="memberType" lay-filter="" disabled>
                                 <c:if test="${member.member_type == '正式党员'}">
                                     <option value="正式党员" selected="">正式党员</option>
                                     <option value="预备党员">预备党员</option>
@@ -145,97 +147,97 @@
                     <div class="layui-inline datepicker_item">
                         <label class="layui-form-label">入党日期：</label>
                         <div class="layui-input-inline">
-                            <input value="${member.member_join_date}" name="joinDate" type="text" id="date1" lay-verify="date" autocomplete="off" class="layui-input custom_input">
+                            <input disabled value="${member.member_join_date}" name="joinDate" type="text" id="date1" lay-verify="date" autocomplete="off" class="layui-input custom_input">
                         </div>
                     </div>
                     <div class="layui-inline">
                         <label class="layui-form-label">现所在支部：</label>
                         <div class="layui-input-inline">
-                            <input value="${member.org_name}" name="org_name" type="text" maxlength="20" lay-verify="required" autocomplete="off" class="layui-input">
+                            <input disabled value="${member.org_name}" name="org_name" type="text" maxlength="20" lay-verify="required" autocomplete="off" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-inline">
                         <label class="layui-form-label">编入支部名称：</label>
                         <div class="layui-input-inline">
-                            <input name="to_org_name" type="text" maxlength="20" lay-verify="required" autocomplete="off" class="layui-input">
+                            <input disabled name="to_org_name" type="text" maxlength="20" lay-verify="required" autocomplete="off" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-inline">
                         <label class="layui-form-label">编入支部联系人：</label>
                         <div class="layui-input-inline">
-                            <input name="to_org_contact" type="text" maxlength="20" lay-verify="required" autocomplete="off" class="layui-input">
+                            <input disabled name="to_org_contact" type="text" maxlength="20" lay-verify="required" autocomplete="off" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-inline datepicker_item mrt8">
                         <label class="layui-form-label">出生日期：</label>
                         <div class="layui-input-inline">
-                            <input value="${member.member_birthday}" name="birthday" type="text" id="date2" lay-verify="date" autocomplete="off" class="layui-input custom_input">
+                            <input disabled value="${member.member_birthday}" name="birthday" type="text" id="date2" lay-verify="date" autocomplete="off" class="layui-input custom_input">
                         </div>
                     </div>
                     <div class="layui-inline mrt8">
                         <label class="layui-form-label">籍贯：</label>
                         <div class="layui-input-inline">
-                            <input value="${member.member_birth_place}" name="birthplace" type="text" maxlength="20" lay-verify="required" autocomplete="off" class="layui-input">
+                            <input disabled value="${member.member_birth_place}" name="birthplace" type="text" maxlength="20" lay-verify="required" autocomplete="off" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-inline">
                         <label class="layui-form-label">联系方式：</label>
                         <div class="layui-input-inline">
-                            <input value="${member.member_phone_number}" name="contact" type="text" maxlength="20" lay-verify="required|phone" autocomplete="off" class="layui-input">
+                            <input disabled value="${member.member_phone_number}" name="contact" type="text" maxlength="20" lay-verify="required|phone" autocomplete="off" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-inline">
                         <label class="layui-form-label">QQ号码：</label>
                         <div class="layui-input-inline">
-                            <input name="qq" type="text" maxlength="20" lay-verify="required|number" autocomplete="off" class="layui-input">
+                            <input disabled name="qq" type="text" maxlength="20" lay-verify="required|number" autocomplete="off" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-inline">
                         <label class="layui-form-label">微信号：</label>
                         <div class="layui-input-inline">
-                            <input name="wechat" type="text" maxlength="20" lay-verify="required" autocomplete="off" class="layui-input">
+                            <input disabled name="wechat" type="text" maxlength="20" lay-verify="required" autocomplete="off" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-inline">
                         <label class="layui-form-label">常用邮箱：</label>
                         <div class="layui-input-inline">
-                            <input value="${member.email}" name="email" type="text" maxlength="20" lay-verify="required|email" autocomplete="off" class="layui-input">
+                            <input disabled value="${member.email}" name="email" type="text" maxlength="20" lay-verify="required|email" autocomplete="off" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-inline">
                         <label class="layui-form-label">出国期限：</label>
                         <div class="layui-input-inline">
-                            <input name="foreignLimit" type="text" maxlength="20" lay-verify="required" autocomplete="off" class="layui-input">
+                            <input disabled name="foreignLimit" type="text" maxlength="20" lay-verify="required" autocomplete="off" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-inline datepicker_item">
                         <label class="layui-form-label">出境日期：</label>
                         <div class="layui-input-inline">
-                            <input name="aboardDate" type="text" id="date3" lay-verify="date" autocomplete="off" class="layui-input custom_input">
+                            <input disabled name="aboardDate" type="text" id="date3" lay-verify="date" autocomplete="off" class="layui-input custom_input">
                         </div>
                     </div>
                     <div class="layui-inline datepicker_item">
                         <label class="layui-form-label">返境日期：</label>
                         <div class="layui-input-inline">
-                            <input name="returnDate" type="text" id="date4" lay-verify="date" autocomplete="off" class="layui-input custom_input">
+                            <input disabled name="returnDate" type="text" id="date4" lay-verify="date" autocomplete="off" class="layui-input custom_input">
                         </div>
                     </div>
                     <div class="layui-inline">
                         <label class="layui-form-label">前往国家及学习单位：</label>
                         <div class="layui-input-inline">
-                            <input name="toCountry" type="text" maxlength="20" lay-verify="required" autocomplete="off" class="layui-input">
+                            <input disabled name="toCountry" type="text" maxlength="20" lay-verify="required" autocomplete="off" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-inline">
                         <label class="layui-form-label">攻读学位：</label>
                         <div class="layui-input-inline">
-                            <input name="studyDegree" type="text" maxlength="20" lay-verify="required" autocomplete="off" class="layui-input">
+                            <input disabled name="studyDegree" type="text" maxlength="20" lay-verify="required" autocomplete="off" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-inline">
                         <label class="layui-form-label">学历：</label>
                         <div class="layui-input-inline">
-                            <select name="currentDegree" lay-filter="">
+                            <select disabled name="currentDegree" lay-filter="">
                                 <option value="本科">本科</option>
                                 <option value="研究生" selected="">研究生</option>
                             </select>
@@ -244,7 +246,7 @@
                     <div class="layui-inline">
                         <label class="layui-form-label">学习方式：</label>
                         <div class="layui-input-inline">
-                            <select name="studyType" lay-filter="">
+                            <select disabled name="studyType" lay-filter="">
                                 <option value="自费">自费</option>
                                 <option value="公派" selected="">公派</option>
                             </select>
@@ -253,47 +255,33 @@
                     <div class="layui-inline">
                         <label class="layui-form-label">国内家庭住址：</label>
                         <div class="layui-input-inline">
-                            <input name="domestic" type="text" maxlength="20" lay-verify="required" autocomplete="off" class="layui-input">
+                            <input disabled name="domestic" type="text" maxlength="20" lay-verify="required" autocomplete="off" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-inline">
                         <label class="layui-form-label">国内联系人：</label>
                         <div class="layui-input-inline">
-                            <input name="domesticContactPerson" type="text" maxlength="20" lay-verify="required" autocomplete="off" class="layui-input">
+                            <input disabled name="domesticContactPerson" type="text" maxlength="20" lay-verify="required" autocomplete="off" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-inline">
                         <label class="layui-form-label">国内联系人手机号：</label>
                         <div class="layui-input-inline">
-                            <input name="domesticContactPhone" type="text" maxlength="20" lay-verify="required" autocomplete="off" class="layui-input">
+                            <input disabled name="domesticContactPhone" type="text" maxlength="20" lay-verify="required" autocomplete="off" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-inline table_text_container">
                         <label class="layui-form-label">备注：</label>
                         <div class="layui-input-inline">
-                            <input name="extra" type="text" maxlength="20" lay-verify="required" autocomplete="off" class="layui-input">
+                            <input disabled name="extra" type="text" maxlength="20" lay-verify="required" autocomplete="off" class="layui-input">
                         </div>
                     </div>
-                    <input name="isResubmit" value="${isResubmit}" type="hidden">
                     <div class="layui-inline btn_group" style="border-bottom: none;">
-                        <label class="layui-form-label"></label>
-                        <div class="layui-input-inline" style="padding-bottom: 0;">
-                            <c:choose>
-                                <c:when test="${already}">
-                                    <c:if test="${status eq 2}">
-                                        <button type="button" class="layui-btn" id="resend">重拟申请</button>
-                                    </c:if>
-                                    <button type="button" class="layui-btn" onclick="window.history.back();">返回</button>
-                                </c:when>
-                                <c:otherwise>
-                                    <button type="submit" class="layui-btn" lay-submit="" lay-filter="retentionForm">提交</button>
-                                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
-                                </c:otherwise>
-                            </c:choose>
+                        状态：
+                        <label style="color: red; margin-top: 20px; margin-bottom: 15px;">${status}</label>
+                        <div class="layui-input-inline" style="display: block;">
+                            <button type="button" class="layui-btn layui-btn-primary" onclick="window.history.back();">返回</button>
                         </div>
-                        <c:if test="${already}">
-                            <label style="color: red;margin-top: 20px;">${status}</label>
-                        </c:if>
                     </div>
                 </form>
             </div>

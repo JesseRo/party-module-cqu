@@ -92,12 +92,14 @@
                     </div>
                 </div>
                 <ul class="charts_dots" style="color: transparent;">
-                    <c:forEach var="i" items="${memberGroups}">
-                        <c:if test="${s.index == 0}">
-                            <li class="on"></li>
-                        </c:if>
-                        <c:if test="${s.index != 0}">
-                            <li class=""></li>
+                    <c:forEach var="i" items="${memberGroups}" varStatus="s">
+                        <c:if test="${memberGroups.size() > 1}">
+                            <c:if test="${s.index == 0}">
+                                <li class="on"></li>
+                            </c:if>
+                            <c:if test="${s.index != 0}">
+                                <li class=""></li>
+                            </c:if>
                         </c:if>
                     </c:forEach>
                 </ul>

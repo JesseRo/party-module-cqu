@@ -105,7 +105,11 @@ public class PartyPortletKeys {
 
 	public static final String TransportApplyPortlet = "TransportApplyPortlet";
 
+	public static final String TransportDetailPortlet = "TransportDetailPortlet";
+
 	public static final String RelationRetentionPortlet = "RelationRetentionPortlet";
+
+	public static final String RetentionDetailPortlet = "RetentionDetailPortlet";
 
 	public static final String TransportApproval = "TransportApproval";
 

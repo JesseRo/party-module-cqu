@@ -7,8 +7,11 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import party.portlet.report.entity.Report;
 import party.portlet.transport.entity.Transport;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component(immediate = true,service = TransportDao.class)
 public class TransportDao extends PostgresqlDaoImpl<Transport> {
@@ -37,12 +40,16 @@ public class TransportDao extends PostgresqlDaoImpl<Transport> {
 
     }
 
-    public PostgresqlQueryResult<Map<String, Object>> findSecondaryPage(int page, int size, String  orgId) {
+    public PostgresqlQueryResult<Map<String, Object>> findSecondaryPage(int page, int size, String  orgId, List<String> type) {
         String sql = "select t.*, o.org_fax, o.org_contactor_phone, o.org_address, extract(year from age(cast(m.member_birthday as date))) as age" +
                 " from hg_party_transport t " +
                 " left join hg_party_member m on m.member_identity = t.user_id" +
                 " left join hg_party_org o on o.org_id = m.member_org" +
-                " where o.org_parent = ? order by t.status asc";
+                " where o.org_parent = ?";
+        if (type != null && type.size() > 0){
+            sql += " and t.type in ('" + String.join("','", type) + "')";
+        }
+        sql += " order by t.status asc";
         if (size <= 0){
             size = 10;
         }
@@ -54,12 +61,15 @@ public class TransportDao extends PostgresqlDaoImpl<Transport> {
     }
 
 
-    public PostgresqlQueryResult<Map<String, Object>> findRootPage(int page, int size) {
+    public PostgresqlQueryResult<Map<String, Object>> findRootPage(int page, int size, List<String> type) {
         String sql = "select t.*, o.org_fax, o.org_contactor_phone, o.org_address, extract(year from age(cast(m.member_birthday as date))) as age" +
                 " from hg_party_transport t " +
                 " left join hg_party_member m on m.member_identity = t.user_id" +
-                " left join hg_party_org o on o.org_id = m.member_org" +
-                " order by t.status asc";
+                " left join hg_party_org o on o.org_id = m.member_org";
+        if (type != null && type.size() > 0){
+            sql += " where t.type in ('" + String.join("','", type) + "')";
+        }
+        sql += " order by t.status asc";
         if (size <= 0){
             size = 10;
         }
@@ -70,17 +80,21 @@ public class TransportDao extends PostgresqlDaoImpl<Transport> {
         }
     }
 
-    public PostgresqlQueryResult<Map<String, Object>> findBranchPage(int page, int size, String orgId) {
+    public PostgresqlQueryResult<Map<String, Object>> findBranchPage(int page, int size, String orgId, List<String > type) {
         String sql = "select t.*, o.org_fax, o.org_contactor_phone, o.org_address, extract(year from age(cast(m.member_birthday as date))) as age" +
                 " from hg_party_transport t " +
                 " left join hg_party_member m on t.user_id = m.member_identity" +
                 " left join hg_party_org o on o.org_id = m.member_org" +
-                " where m.member_org = ? order by t.status asc";
+                " where m.member_org = ?";
+        if (type != null && type.size() > 0){
+            sql += " and t.type in ('" + String.join("','", type) + "')";
+        }
+        sql += " order by t.status asc";
         if (size <= 0){
             size = 10;
         }
         try {
-            return postGresqlFindBySql(page, size, sql, orgId);
+            return postGresqlFindBySql(page, size, sql, orgId );
         } catch (Exception e) {
             return null;
         }

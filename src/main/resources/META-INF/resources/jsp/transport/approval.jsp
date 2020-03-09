@@ -263,7 +263,7 @@
                 });
 
 
-                table.render({
+                var transportTable = table.render({
                     elem: '#transportTable',
                     url: '${transport}', //数据接口
                     method: 'post',
@@ -287,6 +287,13 @@
                         {field: 'operate', title: '操作', width: '15%', toolbar: '#transportBtns'}
                     ]]
                 });
+
+                $('#transportType').change(function () {
+                    transportTable.reload({
+                        where: {type: $('#transportType').val()}
+                    });
+                })
+
             });
         });
 
@@ -329,6 +336,14 @@
                 </ul>
                 <div class="layui-tab-content">
                     <div class="layui-tab-item layui-show">
+                        <div class="operate_form_group">
+                            <select type="text" name="title" id="transportType" autocomplete="off" class="form-control" style="width: 15%;">
+                                <option value="">全部类型</option>
+                                <option value="0,1">校内</option>
+                                <option value="2">市内</option>
+                                <option value="3">市外</option>
+                            </select>
+                        </div>
                         <table id="transportTable" lay-filter="activityTable" class="custom_table"></table>
                     </div>
                     <div class="layui-tab-item">
@@ -343,6 +358,7 @@
 
 <script type="text/html" id="transportBtns">
     <div class="operate_btns">
+        <span class="blue_text" onclick="window.location.href='/transport_detail?id={{d.transport_id}}'">详情</span>
         {{#  if(d.type == '3'){ }}
         <span class="blue_text" lay-event="print">打印</span>
         {{#  } }}
@@ -358,6 +374,7 @@
 </script>
 <script type="text/html" id="retentionBtns">
     <div class="operate_btns">
+        <span class="blue_text" onclick="window.location.href='/retention_detail?id={{d.retention_id}}'">详情</span>
         {{#  if(d.status == 0){ }}
         <span class="blue_text" onclick="retentionApprove(this, 1);">通过</span>
         <span class="red_text" onclick="retentionApprove(this, 2);">驳回</span>
