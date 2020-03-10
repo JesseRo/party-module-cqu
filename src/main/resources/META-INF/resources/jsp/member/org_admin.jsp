@@ -38,6 +38,16 @@
         padding: 0 20px;
         line-height: 48px;
     }
+    .layui-form-label.layui-required:after{
+        content:"*";
+        color:red;
+        position: absolute;
+        top:5px;
+        left:15px;
+    }
+    .layui-input.disabled{
+        background: #f5f5f5;
+    }
 	.main_content .min_width_1200 .nav_list .party_organization_list li .dropdown_icon
 		{
 		width: 9px;
@@ -48,6 +58,27 @@
 		{
 		margin: 12px 0;
 	}
+    .search-org{
+        border: solid 1px #EAEEF5;
+    }
+    .search-org .layui-input-block{
+        float: left;
+        width: 167px;
+        margin: 0px;
+        left: 0px;
+    }
+    .search-org .layui-input-block .layui-input{
+        border-radius: 0;border: none;
+    }
+    .search-org .layui-form-label{
+        background: #ffab33;
+        height: 38px;
+        border: none;
+        width: 48px;
+        border-radius: 0;
+        cursor: pointer;
+        color:#fff;
+    }
 	/*.main_content .min_width_1200 .nav_list .party_organization_list li .second_menu>li>a*/
     /*{*/
 	/*	padding-left: 24px;*/
@@ -289,10 +320,10 @@ button.cancal.btn.btn-default {
 }
 
 button#add_submit {
-	float: right;
-	margin-top: 30px;
-	margin-right: 50px;
-}
+      float: right;
+      margin-top: 30px;
+      margin-right: 50px;
+  }
 
 .main_content .min_width_1200 .nav_list {
     float: left;
@@ -327,6 +358,10 @@ button#add_submit {
     clear: both;
     margin-left: 136px;
 }
+    .layui-layer-content form{
+        padding:20px
+    }
+
 </style>
 <script type="text/javascript">
 	$(function() {
@@ -557,27 +592,6 @@ button#add_submit {
 			})
 		})
 
-		/*添加按钮  */
-		var option = "";
-		$("#org_add").click(function() {
-			option = "post";
-			var org_type = $("#title").attr("org_type");
-			if (!org_type) {
-				alert("请选择一个节点");
-				return;
-			}
-			if ("organization" == org_type) {
-				$("#model .title").html("增加二级党委");
-				$("#model_box").show();
-			} else if ("secondary" == org_type) {
-				$("#model .title").html("增加党支部 ");
-				$("#model_box").show();
-			} else {
-				alert("请选择正确的节点");
-			}
-
-		});
-
 		$(".cancal").click(function() {
 			$("input[name='orgName']").val("");
 			$("#model_box").hide();
@@ -585,18 +599,6 @@ button#add_submit {
 		$(".close").click(function() {
 			$("input[name='orgName']").val("");
 			$("#model_box").hide();
-		});
-		/*编辑*/
-		$("#org_edit").click(function() {
-			option = "edit";
-			var org_type = $("#title").attr("org_type");
-			if (!org_type) {
-				alert("请选择一个节点");
-				return;
-			}
-			$("#model .title").html("编辑 ");
-			$("input[name='orgName']").val($("#title").text())
-			$("#model_box").show();
 		});
 		/* 删除 */
 		$("#org_delete").click(function() {
@@ -618,13 +620,17 @@ button#add_submit {
 
         $('#current_root .first_menu').click();
 
-	function _ajax(_option) {
+	function _ajax(_option,id) {
 			var url = "${orgadmin}";
-			var orgName = $("input.org_name").val()
+			var orgName = $("#"+id+" input.org_name").val();
 			if (!orgName && option != "delete") {
 				alert("请输入名称");
 				return;
 			}
+            var secondaryType='';
+			if(id == 'addSecondaryForm'){
+                secondaryType = $("#"+id+" select.secondaryType").val();
+            }
 			var org_type = $("#title").attr("org_type");
 			var orgId = $("#title").next().val();
 			$.ajax({
@@ -634,13 +640,15 @@ button#add_submit {
 					orgName : orgName,
 					org_type : org_type,
 					orgId : orgId,
-					option : _option
+					option : _option,
+                    secondaryType: secondaryType
 				},
 				dataType : "json",
 				success : function(res) {
 					alert(res.message);
 					if ("ok" == res.state) {
 						$("#model_box").hide();
+                        $("#model_box_s").hide();
 						if (_option == "delete") {
 							$(".party_organization_list li").each(function() {
 										if ($(this).attr("id") == orgId) {
@@ -700,8 +708,9 @@ button#add_submit {
         }else {
 		    $('#op_buttons').remove();
         }
-        layui.use('form', function(){
-            var form = layui.form;
+        layui.use(['layer', 'form'], function(){
+            var layer = layui.layer
+                ,form = layui.form;
             //表单提交
             form.on('submit(partyForm)', function(data){
                 // layer.alert(JSON.stringify(data.field), {
@@ -713,9 +722,9 @@ button#add_submit {
                 $.post("${edit}", postData, function (res) {
                     console.log(res.result)
                     if(res.result){
-                        alert("保存成功！");
+                        layer.msg("保存成功！");
                     }else {
-                        alert("未知错误");
+                        layer.msg("未知错误");
                     }
                 });
                 return false;
@@ -727,12 +736,111 @@ button#add_submit {
                     }
                 },
                 fax: function (value, item) {
-                    if (!/^((\d{3,4}-)|\d{3.4}-)?\d{7,8}$/.test(value)){
+                    if (value != ''&& value != null && !/^((\d{3,4}-)|\d{3.4}-)?\d{7,8}$/.test(value)){
                         return '请填入正确的传真号';
                     }
+                },
+                partyEmail: function(value, item){
+                    var reg = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+                    if(value != ''&& value != null && !reg.test(value)){
+                        return "邮箱格式正确";
+                    }
+                },
+                contactNumber: function(value, item){
+                    var regPhone = /^1\d{10}$/;
+                    var reg = /^((\d{3,4}-)|\d{3.4}-)?\d{7,8}$/;
+                    if(value != ''&& value != null && !regPhone.test(value) && !reg.test(value)){
+                        return "联系电话格式正确";
+                    }
                 }
-            })
+            });
+            $("#org_add").click(function() {
+                var org_type = $("#title").attr("org_type");
+                if (!org_type) {
+                    layer.msg("请选择一个节点");
+                    return;
+                }
+                var title='';
+                var content = '';
+                if ("organization" == org_type) {
+                    title = '增加二级党委';
+                    content = $("#addSecondaryForm")[0].innerHTML;
+                    _ajax('post','addSecondaryForm');
+                } else if ("secondary" == org_type) {
+                    title = '增加党支部';
+                    content = $("#addBranchForm")[0].innerHTML;
+                    _ajax('post','addBranchForm');
+                }else{
+                    layer.msg("请选择正确的节点");
+                    return;
+                }
+                layer.open({
+                    title:title,
+                    type: 1,
+                    content: content
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        //按钮【按钮一】的回调
+                        var org_type = $("#title").attr("org_type");
+                        if (!org_type) {
+                            layer.msg("请选择一个节点");
+                            return;
+                        }
+                        if ("organization" == org_type) {
+                            _ajax('post','addSecondaryForm');
+                        } else if ("secondary" == org_type) {
+                            _ajax('post','addBranchForm');
+                        }else{
+                            layer.msg("请选择正确的节点");
+                            return;
+                        }
+                    }
+                    ,btn2: function(index, layero){
+                        //按钮【按钮二】的回调
+                    }
+                    ,cancel: function(){
+                        //右上角关闭回调
+                        //return false 开启该代码可禁止点击该按钮关闭
+                    }
+                });
 
+            });
+            /*编辑*/
+            $("#org_edit").click(function() {
+                var org_type = $("#title").attr("org_type");
+                if (!org_type) {
+                    alert("请选择一个节点");
+                    return;
+                }
+
+                if ("organization" == org_type) {
+                    renderModal(org_Type)
+                }else{
+                    $("#model .title").html("编辑 ");
+                    $("input[name='orgName']").val($("#title").text())
+                    $("#model_box").show();
+                }
+
+            });
+            function renderModal(){
+                /*编辑*/
+                $("#org_edit").click(function() {
+                    var org_type = $("#title").attr("org_type");
+                    if (!org_type) {
+                        alert("请选择一个节点");
+                        return;
+                    }
+
+                    if ("organization" == org_type) {
+                        renderModal(org_Type)
+                    }else{
+                        $("#model .title").html("编辑 ");
+                        $("input[name='orgName']").val($("#title").text())
+                        $("#model_box").show();
+                    }
+
+                });
+            }
         });
 });
 </script>
@@ -751,6 +859,14 @@ button#add_submit {
             <div class="party_manage_content content_form content_info">
                 <div class="nav_list">
                     <ul class="party_organization_list">
+                        <form class="layui-form layui-form-pane" action="">
+                            <div class="layui-form-item search-org">
+                                <div class="layui-input-block" >
+                                    <input type="text" name="searchWords" required="" lay-verify="required" placeholder="请输入关键字" autocomplete="off" class="layui-input">
+                            </div>
+                                <label class="layui-form-label" ><i class="layui-icon layui-icon-search"></i></label>
+                            </div>
+                        </form>
                         <li id="current_root" class="root" org-id="${root.org_id}" org-type="${root.org_type}">
                             <div class="first_menu top_dropdown"
                                  style="text-decoration: none;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;color: #333;width: 100%;">
@@ -808,9 +924,9 @@ button#add_submit {
                             <div class="title_label" style="height: 286px;padding: 110px 16px;">
                                 基本信息
                             </div>
-                            <form class="layui-form custom_form" id="partyForm">
+                            <form class="layui-form custom_form" id="">
                                 <div class="layui-inline" style="border-top: 1px solid #CCC;">
-                                    <label class="layui-form-label">党组织名称：</label>
+                                    <label class="layui-form-label layui-required">党组织名称：</label>
                                     <div class="layui-input-inline">
                                         <input type="text" name="orgName" maxlength="20" lay-verify="required" autocomplete="off" class="layui-input">
                                     </div>
@@ -818,11 +934,11 @@ button#add_submit {
                                 <div class="layui-inline" style="border-top: 1px solid #CCC;">
                                     <label class="layui-form-label">党组织类型：</label>
                                     <div class="layui-input-inline">
-                                        <input type="text" name="orgType" maxlength="20" disabled autocomplete="off" class="layui-input">
+                                        <input type="text" name="orgType" maxlength="20" disabled autocomplete="off" class="layui-input disabled">
                                     </div>
                                 </div>
                                 <div class="layui-inline">
-                                    <label class="layui-form-label">联系电话（座机）：</label>
+                                    <label class="layui-form-label layui-required">联系电话（座机）：</label>
                                     <div class="layui-input-inline">
                                         <input type="text" name="contactNumber" lay-verify="zuoji" maxlength="20" autocomplete="off" class="layui-input">
                                     </div>
@@ -834,28 +950,28 @@ button#add_submit {
                                     </div>
                                 </div>
                                 <div class="layui-inline">
-                                    <label class="layui-form-label">党组织书记：</label>
+                                    <label class="layui-form-label layui-required">党组织书记：</label>
                                     <div class="layui-input-inline">
-                                        <input type="text" name="secretary" maxlength="20" autocomplete="off" class="layui-input">
+                                        <input type="text" name="secretary" lay-verify="required" maxlength="20" autocomplete="off" class="layui-input">
                                     </div>
                                 </div>
                                 <div class="layui-inline">
                                     <label class="layui-form-label">邮箱：</label>
                                     <div class="layui-input-inline">
-                                        <input type="text" name="email" maxlength="20" lay-verify="email"
+                                        <input type="text" name="email" maxlength="20" lay-verify="partyEmail"
                                                autocomplete="off" class="layui-input">
                                     </div>
                                 </div>
                                 <div class="layui-inline">
-                                    <label class="layui-form-label">联系人：</label>
+                                    <label class="layui-form-label layui-required">联系人：</label>
                                     <div class="layui-input-inline">
-                                        <input type="text" name="contactor" maxlength="20" autocomplete="off" class="layui-input">
+                                        <input type="text" name="contactor"  lay-verify="required" maxlength="20" autocomplete="off" class="layui-input">
                                     </div>
                                 </div>
                                 <div class="layui-inline">
-                                    <label class="layui-form-label">联系电话：</label>
+                                    <label class="layui-form-label">手机号码：</label>
                                     <div class="layui-input-inline">
-                                        <input type="text" name="contactorNumber" lay-verify="phone" maxlength="20" autocomplete="off" class="layui-input">
+                                        <input type="text" name="contactorNumber" lay-verify="contactNumber" maxlength="20" autocomplete="off" class="layui-input">
                                     </div>
                                 </div>
                                 <div class="layui-inline"  style="width: 100%;">
@@ -903,5 +1019,37 @@ button#add_submit {
 	     <button type="button" id="add_submit" class="btn btn_main">提交</button>
 	</form>
   </div>
+</div>
+<div style="display: none" id="addSecondaryForm">
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">名称：</label>
+            <div class="layui-input-block">
+                <input type="text" name="org_name" lay-verify="required" lay-reqtext="名称是必填项，不能为空。" placeholder="请输入名称" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">类型：</label>
+            <div class="layui-input-block">
+                <select name="secondaryType" >
+                    <option value="党委" selected>党委</option>
+                    <option value="党总支">党总支</option>
+                    <option value="党支部">党支部</option>
+                </select>
+            </div>
+        </div>
+
+    </form>
+</div>
+<div style="display: none" id="addBranchForm">
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">名称：</label>
+            <div class="layui-input-block">
+                <input type="text" name="org_name" lay-verify="required" lay-reqtext="名称是必填项，不能为空。" placeholder="请输入名称" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </form>
 </div>
 </body>
