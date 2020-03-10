@@ -6,7 +6,7 @@
 <portlet:resourceURL id="/org/detail" var="detail" />
 <portlet:resourceURL id="/org/edit" var="edit" />
 <portlet:resourceURL id="/org/admin/orgadmin" var="orgadmin" />
-
+<portlet:resourceURL id="/org/admin/orgTree" var="orgTreeUrl" />
 <head>
   <%--   <link rel="stylesheet" href="${basePath}/css/party_organization.css?v=5"/> --%>
     <link rel="stylesheet" href="${basePath}/css/account_manage_1.css"/>
@@ -29,15 +29,6 @@
 		cursor: pointer;
 		height: 40px;
 	}
-	.main_content .min_width_1200 .nav_list .party_organization_list li .first_menu
-    {
-        padding-bottom: 0;
-        border-bottom: none;
-        color: #333;
-        font-size: 16px;
-        padding: 0 20px;
-        line-height: 48px;
-    }
     .layui-form-label.layui-required:after{
         content:"*";
         color:red;
@@ -48,25 +39,11 @@
     .layui-input.disabled{
         background: #f5f5f5;
     }
-	.main_content .min_width_1200 .nav_list .party_organization_list li .dropdown_icon
-		{
-		width: 9px;
-		margin: 5px 0;
-		cursor: pointer;
-	}
 	.main_content .min_width_1200 .nav_list .party_organization_list li .second_menu>li
 		{
 		margin: 12px 0;
 	}
-    .search-org{
-        border: solid 1px #EAEEF5;
-    }
-    .search-org .layui-input-block{
-        float: left;
-        width: 167px;
-        margin: 0px;
-        left: 0px;
-    }
+
     .search-org .layui-input-block .layui-input{
         border-radius: 0;border: none;
     }
@@ -142,22 +119,8 @@
     .party_organization_list a{
         color: #333;
     }
-	/*  .main_content .min_width_1200 .nav_list .party_organization_list li .second_menu .second_menu_on > a {
-    color: #fff;
-    background-color: #ce0000;
-  }  */
-	.main_content .min_width_1200 .content_info .operation_bar {
-		height: 34px;
-		margin-top: 36px;
-		color: #333;
-	}
 	.main_content .min_width_1200 .content_info .operation_bar div {
 		display: inline-block;
-	}
-	.main_content .min_width_1200 .content_info .operation_bar .select_choice
-		{
-		cursor: pointer;
-		line-height: 34px;
 	}
 	.main_content .min_width_1200 .content_info .operation_bar .select_choice img
 		{
@@ -166,10 +129,6 @@
 	.main_content .min_width_1200 .content_info .operation_bar .btn_group button
 		{
 		margin: 0 5px;
-	}
-	.main_content .min_width_1200 .content_info .operation_bar .time_select
-		{
-		float: right;
 	}
 	.main_content .min_width_1200 .content_info .table_info tr td:nth-child(1) img
 		{
@@ -185,29 +144,12 @@
 	body {
 		background: #fff;
 	}
-	.small_header_container .mobile_header_title {
-		margin-left: -25px;
-	}
-	.form-group {
-		margin-top: 30px;
-	}
-	.select_choice {
-		padding: 0 15px;
-		height: 20px;
-		margin-bottom: 10px;
-	}
 	.main_content .min_width_1200 .nav_list .party_organization_list .height_auto
 		{
 		height: auto;
 	}
 	.main_content .min_width_1200 .nav_list .party_organization_list>li {
 		overflow: hidden;
-	}
-	.main_content .min_width_1200 .nav_list .party_organization_list li .dropdown_icon
-		{
-		width: 9px;
-		margin: 5px 0;
-		cursor: pointer;
 	}
 	.main_content .min_width_1200 .nav_list .party_organization_list li .second_menu>li
 		{
@@ -224,16 +166,6 @@
         display: inline-block;
         text-decoration: none;
 	}
-
-.main_content .min_width_1200 .nav_list .party_organization_list .dropdown_up
-{
-    transform: rotate(-90deg);
-}
-
-.main_content .min_width_1200 .nav_list .party_organization_list .dropdown_down
-	{
-    transform: none;
-}
 
 @media ( min-width : 768px) {
 	.main_content .min_width_1200 .nav_list .party_organization_list .second_menu .third_menu a
@@ -319,12 +251,6 @@ button.cancal.btn.btn-default {
 	margin: 30px;
 }
 
-button#add_submit {
-      float: right;
-      margin-top: 30px;
-      margin-right: 50px;
-  }
-
 .main_content .min_width_1200 .nav_list {
     float: left;
     width: 14.16vw;
@@ -361,10 +287,52 @@ button#add_submit {
     .layui-layer-content form{
         padding:20px
     }
-
+.layui-layer-page .layui-layer-content {
+    position: relative;
+    overflow: visible;
+}
+.layui-layer-page .layui-layer-content .layui-form-select{
+    width: 100%;
+}
+.layui-form-label.orgTree-label{
+    width: 120px;
+}
+.layui-input.orgTree{
+    width: 400px;
+}
 </style>
 <script type="text/javascript">
 	$(function() {
+        layui.config({
+            base: '${basePath}/js/layui/module/'
+        }).extend({
+            treeSelect: 'treeSelect/treeSelect'
+        });
+        layui.use(['treeSelect','form'], function () {
+            var treeSelect= layui.treeSelect;
+
+            treeSelect.render({
+                // 选择器
+                elem: '#orgTree',
+                // 数据
+                data: '${orgTreeUrl}',
+                // 异步加载方式：get/post，默认get
+                type: 'get',
+                // 占位符
+                placeholder: '请选择',
+                // 是否开启搜索功能：true/false，默认false
+                search: true,
+                // 点击回调
+                click: function(d){
+                    console.log(d);
+                    if(d.current.isParent) return false;
+                },
+                // 加载完成后的回调函数
+                success: function (d) {
+                    console.log(d);
+                }
+            });
+        });
 		/* $("#model_box").hide(); */
 		var orgId;
 		function orgMember(orgId, orgType) {
@@ -459,7 +427,7 @@ button#add_submit {
             }
             orgId = $(this).parent().attr('id');
             var orgType = $(this).parent().attr('org-type');
-            $('#second_title').show().text($(this).text());
+            $("#second_title").show().text($(this).text());
             $('#second_title').prev('span').show();
             $('#third_title').hide();
             $('#third_title').prev('span').hide();
@@ -592,115 +560,7 @@ button#add_submit {
 			})
 		})
 
-		$(".cancal").click(function() {
-			$("input[name='orgName']").val("");
-			$("#model_box").hide();
-		});
-		$(".close").click(function() {
-			$("input[name='orgName']").val("");
-			$("#model_box").hide();
-		});
-		/* 删除 */
-		$("#org_delete").click(function() {
-			var name = $("#title").text();
-			if(!name){
-				alert("请选择节点");
-				return;
-			}
-			var bool = confirm("你确定删除" + name);
-			if (bool) {
-				option = "delete";
-				_ajax(option);
-			}
-		});
-		/*提交 */
-		$("#add_submit").click(function() {
-			_ajax(option);
-		});
-
         $('#current_root .first_menu').click();
-
-	function _ajax(_option,id) {
-			var url = "${orgadmin}";
-			var orgName = $("#"+id+" input.org_name").val();
-			if (!orgName && option != "delete") {
-				alert("请输入名称");
-				return;
-			}
-            var secondaryType='';
-			if(id == 'addSecondaryForm'){
-                secondaryType = $("#"+id+" select.secondaryType").val();
-            }
-			var org_type = $("#title").attr("org_type");
-			var orgId = $("#title").next().val();
-			$.ajax({
-				type : "post",
-				url : url,
-				data : {
-					orgName : orgName,
-					org_type : org_type,
-					orgId : orgId,
-					option : _option,
-                    secondaryType: secondaryType
-				},
-				dataType : "json",
-				success : function(res) {
-					alert(res.message);
-					if ("ok" == res.state) {
-						$("#model_box").hide();
-                        $("#model_box_s").hide();
-						if (_option == "delete") {
-							$(".party_organization_list li").each(function() {
-										if ($(this).attr("id") == orgId) {
-											$(this).remove();
-											var candidates = [ {name : '没有数据',disabled : true} ];
-											$('.dropdown-sin-2').data('dropdown').changeStatus();
-											$('.dropdown-sin-2').data('dropdown').update(candidates, true);
-											$('.dropdown-sin-2').data('dropdown').choose(candidates);
-											$("#title").html('');
-											$("#title").next().val('');
-										}
-									});
-						} else if (_option == "edit") {
-							$(".party_organization_list li").each(function() {
-								if ($(this).attr("id") == orgId) {
-									var a ;
-									if(org_type=='secondary'){
-										a =$('<a href="javascript:"><span class="third_menu_icon third_menu_down"></span>'+orgName+'</a>');
-									}else{
-										a =$('<a href="javascript:">'+orgName+'</a>');
-									}
-									$(this).html(a);
-									$("#title").html(orgName);
-								}
-							});
-						} else if (_option == "post") {
-							var li;
-							if(org_type=='secondary'){
-								if($("#current_root").attr("org-type")=='secondary'){
-									 li =$('<li id="'+res.uuid+'" class="second_li" org-type="branch "> <a href="javascript:"><span class="third_menu_icon third_menu_up"></span>'+orgName+'</a> </li>');
-									 $(".second_menu").append(li);
-								}else{
-								$(".party_organization_list li").each(function() {
-									if ($(this).attr("id") == orgId) {
-										 li =$('<li title="'+orgName+'" id="'+res.uuid+'"><a href="javascript:">'+orgName+'</a></li>');
-									         $(this).find("ul").append(li)
-									}
-								  });
-								 }
-							}else{
-								 li =$('<li id="'+res.uuid+'" class="second_li" style="" org-type="secondary "> <a href="javascript:"><span class="third_menu_icon third_menu_up"></span>'+orgName+'</a> <ul class="third_menu">  </ul> </li>');
-								     $(".second_menu").append(li)
-							}																					
-							 $("#title").html(orgName);
-							 $("#title").attr("org_type",res.type);
-							 $('#title').next().val(res.uuid);
-							 orgMember(res.uuid, res.type);
-						}
-					}
-				}
-			});
-		}
 		var path = window.location.pathname;
 		if(path.indexOf('orgadmin') === -1 && path.indexOf('secondadmin') === -1){
 		    $('#admin_set').hide();
@@ -754,6 +614,8 @@ button#add_submit {
                     }
                 }
             });
+
+            //添加组织弹窗
             $("#org_add").click(function() {
                 var org_type = $("#title").attr("org_type");
                 if (!org_type) {
@@ -764,12 +626,10 @@ button#add_submit {
                 var content = '';
                 if ("organization" == org_type) {
                     title = '增加二级党委';
-                    content = $("#addSecondaryForm")[0].innerHTML;
-                    _ajax('post','addSecondaryForm');
+                    content = $("#addSecondaryForm");
                 } else if ("secondary" == org_type) {
                     title = '增加党支部';
-                    content = $("#addBranchForm")[0].innerHTML;
-                    _ajax('post','addBranchForm');
+                    content = $("#addBranchForm");
                 }else{
                     layer.msg("请选择正确的节点");
                     return;
@@ -805,40 +665,152 @@ button#add_submit {
                 });
 
             });
-            /*编辑*/
+            /*编辑组织弹窗*/
             $("#org_edit").click(function() {
                 var org_type = $("#title").attr("org_type");
-                if (!org_type) {
-                    alert("请选择一个节点");
+                if (!org_type || "organization" == org_type) {
+                    layer.msg("请选择一个节点");
                     return;
+                }else {
+                    var title = '编辑';
+                    var content = $("#addBranchForm");
+                    layer.open({
+                        title: title,
+                        type: 1,
+                        content: content
+                        , btn: ['修改', '取消']
+                        , yes: function (index, layero) {
+                            //按钮【按钮一】的回调
+                            var org_type = $("#title").attr("org_type");
+                            if (!org_type) {
+                                layer.msg("请选择一个节点");
+                                return;
+                            }
+                            if ("organization" != org_type) {
+                                _ajax('edit', 'addBranchForm');
+                            } else {
+                                layer.msg("请选择正确的节点");
+                                return;
+                            }
+                        }
+                        , btn2: function (index, layero) {
+                            //按钮【按钮二】的回调
+                        }
+                        , cancel: function () {
+                            //右上角关闭回调
+                            //return false 开启该代码可禁止点击该按钮关闭
+                        }
+                    });
                 }
-
-                if ("organization" == org_type) {
-                    renderModal(org_Type)
-                }else{
-                    $("#model .title").html("编辑 ");
-                    $("input[name='orgName']").val($("#title").text())
-                    $("#model_box").show();
-                }
-
             });
-            function renderModal(){
-                /*编辑*/
-                $("#org_edit").click(function() {
-                    var org_type = $("#title").attr("org_type");
-                    if (!org_type) {
-                        alert("请选择一个节点");
+            /* 删除组织弹窗 */
+            $("#org_delete").click(function() {
+                var name = $("#title").text();
+                if(!name){
+                    layer.msg("请选择节点");
+                    return;
+                }else {
+                    var content = '你确定删除组织“'+name+'”吗？';
+                    layer.confirm(content, {
+                        btn: ['确定','取消'] //按钮
+                    }, function(){
+                        var org_type = $("#title").attr("org_type");
+                        if (!org_type) {
+                            layer.msg("请选择一个节点");
+                            return;
+                        }
+                        if ("organization" != org_type) {//根节点不可删除
+                            _ajax('delete', null);
+                        } else {
+                            layer.msg("请选择正确的节点");
+                            return;
+                        }
+                    }, function(){
+                    });
+                }
+            });
+            function _ajax(_option,id) {
+                var url = "${orgadmin}";
+                var secondaryType='';
+                var orgName = '';
+                var org_type = $("#title").attr("org_type");
+                var orgId = $("#title").next().val();
+                if(id != null && id != ''){
+                    orgName = $("#"+id+" input.org_name").val();
+                    if (!orgName) {
+                        layer.msg("请输入名称");
                         return;
                     }
-
-                    if ("organization" == org_type) {
-                        renderModal(org_Type)
-                    }else{
-                        $("#model .title").html("编辑 ");
-                        $("input[name='orgName']").val($("#title").text())
-                        $("#model_box").show();
+                    if(id == 'addSecondaryForm'){
+                        secondaryType = $("#"+id+" select.secondaryType").val();
                     }
-
+                }
+                $.ajax({
+                    type : "post",
+                    url : url,
+                    data : {
+                        orgName : orgName,
+                        org_type : org_type,
+                        orgId : orgId,
+                        option : _option,
+                        secondaryType: secondaryType
+                    },
+                    dataType : "json",
+                    success : function(res) {
+                        alert(res.message);
+                        if ("ok" == res.state) {
+                            $("#model_box").hide();
+                            $("#model_box_s").hide();
+                            if (_option == "delete") {
+                                $(".party_organization_list li").each(function() {
+                                    if ($(this).attr("id") == orgId) {
+                                        $(this).remove();
+                                        var candidates = [ {name : '没有数据',disabled : true} ];
+                                        $('.dropdown-sin-2').data('dropdown').changeStatus();
+                                        $('.dropdown-sin-2').data('dropdown').update(candidates, true);
+                                        $('.dropdown-sin-2').data('dropdown').choose(candidates);
+                                        $("#title").html('');
+                                        $("#title").next().val('');
+                                    }
+                                });
+                            } else if (_option == "edit") {
+                                $(".party_organization_list li").each(function() {
+                                    if ($(this).attr("id") == orgId) {
+                                        var a ;
+                                        if(org_type=='secondary'){
+                                            a =$('<a href="javascript:"><span class="third_menu_icon third_menu_down"></span>'+orgName+'</a>');
+                                        }else{
+                                            a =$('<a href="javascript:">'+orgName+'</a>');
+                                        }
+                                        $(this).html(a);
+                                        $("#title").html(orgName);
+                                    }
+                                });
+                            } else if (_option == "post") {
+                                var li;
+                                if(org_type=='secondary'){
+                                    if($("#current_root").attr("org-type")=='secondary'){
+                                        li =$('<li id="'+res.uuid+'" class="second_li" org-type="branch "> <a href="javascript:"><span class="third_menu_icon third_menu_up"></span>'+orgName+'</a> </li>');
+                                        $(".second_menu").append(li);
+                                    }else{
+                                        $(".party_organization_list li").each(function() {
+                                            if ($(this).attr("id") == orgId) {
+                                                li =$('<li title="'+orgName+'" id="'+res.uuid+'"><a href="javascript:">'+orgName+'</a></li>');
+                                                $(this).find("ul").append(li)
+                                            }
+                                        });
+                                    }
+                                }else{
+                                    li =$('<li id="'+res.uuid+'" class="second_li" style="" org-type="secondary "> <a href="javascript:"><span class="third_menu_icon third_menu_up"></span>'+orgName+'</a> <ul class="third_menu">  </ul> </li>');
+                                    $(".second_menu").append(li)
+                                }
+                                $("#title").html(orgName);
+                                $("#title").attr("org_type",res.type);
+                                $('#title').next().val(res.uuid);
+                                orgMember(res.uuid, res.type);
+                            }
+                        }
+                    }
                 });
             }
         });
@@ -857,48 +829,17 @@ button#add_submit {
                     </span>
             </div>
             <div class="party_manage_content content_form content_info">
-                <div class="nav_list">
-                    <ul class="party_organization_list">
-                        <form class="layui-form layui-form-pane" action="">
-                            <div class="layui-form-item search-org">
-                                <div class="layui-input-block" >
-                                    <input type="text" name="searchWords" required="" lay-verify="required" placeholder="请输入关键字" autocomplete="off" class="layui-input">
+                <div id="partySearchForm" class="party-search-form">
+                    <form class="layui-form" >
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label orgTree-label">请选择组织:</label>
+                                <div class="layui-input-inline" style="width: 200px;">
+                                    <input type="text" name="orgTree" id="orgTree" placeholder="请选择组织" class="layui-input orgTree">
+                                </div>
                             </div>
-                                <label class="layui-form-label" ><i class="layui-icon layui-icon-search"></i></label>
-                            </div>
-                        </form>
-                        <li id="current_root" class="root" org-id="${root.org_id}" org-type="${root.org_type}">
-                            <div class="first_menu top_dropdown"
-                                 style="text-decoration: none;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;color: #333;width: 100%;">
-                                <img class="right dropdown_icon dropdown_up" style="width: auto" src="${basePath}/images/tree-arrow.png"/>
-                                <span style="font-size: 16px;font-weight: 600;color: #333;">${root.org_name }</span>
-                            </div>
-                            <ul class="second_menu" id="current">
-                                <c:forEach var="second" items="${tree[root.org_id]}" varStatus="status">
-                                    <c:choose>
-                                        <c:when test="${status.index le 4}">
-                                            <li id="${second.org_id}" class="second_li" org-type="${second.org_type} ">
-                                        </c:when>
-                                        <c:otherwise>
-                                            <li id="${second.org_id}" class="second_li" style="display: none;" org-type="${second.org_type} ">
-                                        </c:otherwise>
-                                    </c:choose><a href="javascript:"><span
-                                        class="third_menu_icon third_menu_up"></span>${second.org_name}</a>
-                                    <c:if test="${not empty tree[second.org_id]}">
-                                        <ul class="third_menu">
-                                            <c:forEach var="third" items="${tree[second.org_id]}">
-                                                <li title="${third.org_name}" id="${third.org_id}"><a
-                                                        href="javascript:">${third.org_name}</a></li>
-                                            </c:forEach>
-                                        </ul>
-                                    </c:if>
-                                    </li>
-                                </c:forEach>
-                            </ul>
-                            <div class="silde_more">展开更多</div>
-                        </li>
-
-                    </ul>
+                        </div>
+                    </form>
                 </div>
                 <div class="content_form content_info content_table_container party_table_container party_manage_container" style="padding-top: 0;">
                     <div class="breadcrumb_group">
@@ -1007,19 +948,6 @@ button#add_submit {
     </div>
 </div>
 <!-- 弹窗 -->
-<div id="model_box">
-  <div id="model">
-	 <form action="">
-	   <div class ="title_box"><span class="title"></span> <span class="close">×</span></div>
-	   <div class="name_box">
-	       <span>名称：</span>
-	       <input type="text" class="org_name" name="orgName" style="width: 70%;height: 50%;">
-	    </div>
-	     <button type="button" class="cancal btn btn-default">取消</button>
-	     <button type="button" id="add_submit" class="btn btn_main">提交</button>
-	</form>
-  </div>
-</div>
 <div style="display: none" id="addSecondaryForm">
     <form class="layui-form" action="">
         <div class="layui-form-item">

@@ -6,6 +6,7 @@ import hg.party.entity.login.User;
 import hg.party.entity.organization.Organization;
 import org.osgi.service.component.annotations.Component;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import party.constants.PartyOrgAdminTypeEnum;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -22,6 +23,10 @@ public class OrgDao extends PostgresqlDaoImpl<Organization>{
 	public List<Organization> findAll() {
 		String sql = "select * from hg_party_org where historic is false";
 		return jdbcTemplate.query(sql,  BeanPropertyRowMapper.newInstance(Organization.class));
+	}
+	public List<Organization> findChildren(String parentId) {
+		String sql = "select * from hg_party_org where historic is false and org_parent = ?";
+		return jdbcTemplate.query(sql,  BeanPropertyRowMapper.newInstance(Organization.class),parentId);
 	}
 
 	public int deleteAdmin(String userId) {
@@ -471,5 +476,10 @@ public class OrgDao extends PostgresqlDaoImpl<Organization>{
 				organization.getOrg_phone_number(), organization.getOrg_fax(), organization.getOrg_secretary(),
 				organization.getOrg_email(), organization.getOrg_contactor(), organization.getOrg_contactor_phone(),
 				organization.getId());
+	}
+
+	public List<Organization> findOrgByOrgType(PartyOrgAdminTypeEnum partyOrgAdminTypeEnum) {
+		String sql = "select * from hg_party_org where historic is false and org_type = ?";
+		return jdbcTemplate.query(sql,  BeanPropertyRowMapper.newInstance(Organization.class),partyOrgAdminTypeEnum.getType());
 	}
 }

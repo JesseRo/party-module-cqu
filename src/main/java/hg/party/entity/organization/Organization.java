@@ -25,6 +25,7 @@ public class Organization{
 	private String org_fax;
 	private String org_email;
 	private String org_contactor_phone;
+	private String desc_type;
 
 	public String getOrg_code() {
 		return org_code;
@@ -32,6 +33,14 @@ public class Organization{
 
 	public void setOrg_code(String org_code) {
 		this.org_code = org_code;
+	}
+
+	public String getDesc_type() {
+		return desc_type;
+	}
+
+	public void setDesc_type(String desc_type) {
+		this.desc_type = desc_type;
 	}
 
 	@Override
@@ -158,16 +167,6 @@ public class Organization{
 		this.id = id;
 	}
 
-	@Override
-	public String toString() {
-		return "Organization [id=" + id + ", org_id=" + org_id + ", org_name=" + org_name + ", org_type=" + org_type
-				+ ", org_secretary=" + org_secretary + ", org_contactor=" + org_contactor + ", org_phone_number="
-				+ org_phone_number + ", org_unit_situation=" + org_unit_situation + ", org_unit_name=" + org_unit_name
-				+ ", org_unit_type=" + org_unit_type + ", org_unit_party_situation=" + org_unit_party_situation
-				+ ", org_unit_code=" + org_unit_code + ", org_relation=" + org_relation + ", org_parent=" + org_parent
-				+ ", org_code=" + org_code + ", historic=" + historic + "]";
-	}
-
 	public String getOrg_address() {
 		return org_address;
 	}
@@ -198,5 +197,31 @@ public class Organization{
 
 	public void setOrg_contactor_phone(String org_contactor_phone) {
 		this.org_contactor_phone = org_contactor_phone;
+	}
+	@Override
+	public String toString() {
+		return "Organization{" +
+				"id=" + id +
+				", org_id='" + org_id + '\'' +
+				", org_name='" + org_name + '\'' +
+				", org_type='" + org_type + '\'' +
+				", org_secretary='" + org_secretary + '\'' +
+				", org_contactor='" + org_contactor + '\'' +
+				", org_phone_number='" + org_phone_number + '\'' +
+				", org_unit_situation='" + org_unit_situation + '\'' +
+				", org_unit_name='" + org_unit_name + '\'' +
+				", org_unit_type='" + org_unit_type + '\'' +
+				", org_unit_party_situation='" + org_unit_party_situation + '\'' +
+				", org_unit_code='" + org_unit_code + '\'' +
+				", org_relation='" + org_relation + '\'' +
+				", org_parent='" + org_parent + '\'' +
+				", org_code='" + org_code + '\'' +
+				", org_address='" + org_address + '\'' +
+				", org_fax='" + org_fax + '\'' +
+				", org_email='" + org_email + '\'' +
+				", org_contactor_phone='" + org_contactor_phone + '\'' +
+				", desc_type='" + desc_type + '\'' +
+				", historic=" + historic +
+				'}';
 	}
 }

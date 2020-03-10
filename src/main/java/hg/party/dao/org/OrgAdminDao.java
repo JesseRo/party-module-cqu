@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.RowMapper;
 import party.constants.PartyOrgAdminTypeEnum;
 
 
+
 @Component(immediate = true,service = OrgAdminDao.class)
 public class OrgAdminDao extends PostgresqlDaoImpl<OrgAdmin>{
 
@@ -17,4 +18,5 @@ public class OrgAdminDao extends PostgresqlDaoImpl<OrgAdmin>{
 		RowMapper<OrgAdmin> rowMapper = BeanPropertyRowMapper.newInstance(OrgAdmin.class);
 		return jdbcTemplate.queryForObject(sql,rowMapper,userId,partyOrgAdminTypeEnum.getType());
 	}
+
 }

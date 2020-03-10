@@ -16,5 +16,4 @@ public class OrgAdminService {
 	public OrgAdmin findOrgAdmin(String userId, PartyOrgAdminTypeEnum partyOrgAdminTypeEnum){
 		return orgAdminDao.findOrgAdmin(userId,partyOrgAdminTypeEnum);
 	}
-
 }

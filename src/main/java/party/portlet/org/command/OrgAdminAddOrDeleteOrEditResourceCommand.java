@@ -53,6 +53,7 @@ public class OrgAdminAddOrDeleteOrEditResourceCommand implements MVCResourceComm
 		String orgId = ParamUtil.getString(resourceRequest, "orgId");
 		String org_type = ParamUtil.getString(resourceRequest, "org_type");
 		String orgName = ParamUtil.getString(resourceRequest, "orgName");
+		String secondaryType = ParamUtil.getString(resourceRequest, "secondaryType");
 		String uuid = UUID.randomUUID().toString();
 		String type = "";
 		int n = 0;
@@ -68,8 +69,11 @@ public class OrgAdminAddOrDeleteOrEditResourceCommand implements MVCResourceComm
 				boolean b = isDoubleName(orgId, orgName);
 				if (!b) {
 					String code = getCode(orgId);
-					String sql = "INSERT INTO hg_party_org (\"org_id\", \"org_name\",\"org_type\", \"org_parent\", \"historic\", \"org_code\") VALUES ('"
-							+ uuid + "', '" + orgName + "', '" + type + "','" + orgId + "', '" + false + "', '" + code
+					if(StringUtils.isEmpty(secondaryType)){
+						secondaryType = null;
+					}
+					String sql = "INSERT INTO hg_party_org (\"org_id\", \"org_name\",\"org_type\", \"org_parent\", \"historic\", \"org_code\", \"secondary_type\") VALUES ('"
+							+ uuid + "', '" + orgName + "', '" + type + "','" + orgId + "', '" + false + "', '" + code+ "', '" + secondaryType
 							+ "')";
 					n = orgDao.insert(sql);
 					map.put("state", "ok");
