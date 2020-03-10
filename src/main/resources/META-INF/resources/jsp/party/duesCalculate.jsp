@@ -60,7 +60,7 @@
 				overflow-y: auto;
 			}
 			.party_fee_container .party_fee_content .fee_main_content{
-				background-color: #fff;
+				background-color: #f7f7f7;
 				height: 100%;
 				margin: 0;
 			}
@@ -70,6 +70,13 @@
 			}
 			.layui-treeSelect .ztree li .ico_docu {
 				display: none;
+			}
+			.layui-form-label.layui-required:after{
+				content:"*";
+				color:red;
+				position: absolute;
+				top:15px;
+				left:3px;
 			}
 		</style>
 	</head>
@@ -97,66 +104,66 @@
 
 						<!--月薪制算法-->
 						<div class="layui-tab-item layui-show monthCal"  id="monthCal">
-							<form class="layui-form" action="" onsubmit="return false;">
+							<form class="layui-form" >
 							<div class="layui-form fee_form">
 								<div class="layui-form-item">
-									<label class="layui-form-label">岗位工资*</label>
+									<label class="layui-form-label layui-required">岗位工资</label>
 									<div class="layui-input-block">
-										<input type="number" name="basicSalary" min="0" lay-verify="basicSalary" autocomplete="off" class="layui-input" value="0" >
+										<input type="number" name="basicSalary" min="0" lay-verify="inputNumber" autocomplete="off" class="layui-input" value="0" >
 									</div>
 								</div>
 								<div class="layui-form-item">
-									<label class="layui-form-label">薪级工资</label>
+									<label class="layui-form-label layui-required">薪级工资</label>
 									<div class="layui-input-block">
-										<input type="number" name="levelSalary" min="0" placeholder="" autocomplete="off" class="layui-input" value="0">
+										<input type="number" name="levelSalary" min="0" lay-verify="inputNumber" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
 								</div>
 								<div class="layui-form-item">
-									<label class="layui-form-label">工 改</label>
+									<label class="layui-form-label layui-required">工 改</label>
 									<div class="layui-input-block">
-										<input type="number" name="wageReform" min="0" placeholder="" autocomplete="off" class="layui-input" value="0">
+										<input type="number" name="wageReform" min="0" lay-verify="inputNumber" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
 								</div>
 								<div class="layui-form-item">
 									<label  class="layui-form-label">岗位名称</label>
 									<div class="layui-input-block tree2-div">
-										<input type="text" class="tree2" lay-filter="jobLevelPerformance" class="layui-input">
+										<input type="text" class="tree2"  lay-filter="jobLevelPerformance" class="layui-input">
 									</div>
 								</div>
 								<div class="layui-form-item">
-									<label class="layui-form-label">绩效工资理论值</label>
+									<label class="layui-form-label layui-required">绩效工资理论值</label>
 									<div class="layui-input-block">
-										<input type="number" name="performance" min="0" placeholder="" autocomplete="off" class="layui-input" value="0">
+										<input type="number" name="performance" min="0" lay-verify="inputNumber" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
 								</div>
 								<div class="layui-form-item">
-									<label class="layui-form-label">住房公积金</label>
+									<label class="layui-form-label layui-required">住房公积金</label>
 									<div class="layui-input-block">
-										<input type="number" name="housingFund" min="0" placeholder="" autocomplete="off" class="layui-input" value="0">
+										<input type="number" name="housingFund" min="0" lay-verify="inputNumber" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
 								</div>
 								<div class="layui-form-item">
-									<label class="layui-form-label">失业保险</label>
+									<label class="layui-form-label layui-required">失业保险</label>
 									<div class="layui-input-block">
-										<input type="number" name="unemployedInsurance" min="0" placeholder="" autocomplete="off" class="layui-input" value="0">
+										<input type="number" name="unemployedInsurance" min="0" lay-verify="inputNumber" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
 								</div>
 								<div class="layui-form-item">
-									<label class="layui-form-label">医疗保险</label>
+									<label class="layui-form-label layui-required">医疗保险</label>
 									<div class="layui-input-block">
-										<input type="number" name="treatmentInsurance" min="0" placeholder="" autocomplete="off" class="layui-input" value="0">
+										<input type="number" name="treatmentInsurance" min="0"  lay-verify="inputNumber" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
 								</div>
 								<div class="layui-form-item" id="pensionInsurance-div">
-									<label class="layui-form-label">养老保险</label>
+									<label class="layui-form-label layui-required">养老保险</label>
 									<div class="layui-input-block">
-										<input type="number"  name="pensionInsurance" min="0" placeholder="" autocomplete="off" class="layui-input" value="0">
+										<input type="number"  name="pensionInsurance"  min="0"  lay-verify="inputNumber" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
 								</div>
 								<div class="layui-form-item" id="occupationalAnnuities-div" >
-									<label class="layui-form-label">预扣职业年金</label>
+									<label class="layui-form-label layui-required">预扣职业年金</label>
 									<div class="layui-input-block">
-										<input type="number" name="occupationalAnnuities" min="0" placeholder="" autocomplete="off" class="layui-input" value="0">
+										<input type="number" name="occupationalAnnuities"  min="0"  lay-verify="inputNumber" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
 								</div>
 								<div class="layui-form-item">
@@ -185,7 +192,7 @@
 								</div>
 								<div class="layui-form-item">
 									<div class="layui-input-block">
-										<button  class="layui-btn custom_btn" onclick="monthCal()">计算党费</button>
+										<button type="submit" class="layui-btn custom_btn" lay-submit="" lay-filter="monthCalForm">计算党费</button>
 										<!-- <button type="reset" class="layui-btn layui-btn-primary">重置</button> -->
 									</div>
 								</div>
@@ -194,42 +201,42 @@
 						</div>
 						<!--年薪制算法-->
 						<div class="layui-tab-item  yearCal" id="yearCal">
-							<form class="layui-form" action="" onsubmit="return false;">
+							<form class="layui-form">
 							<div class="layui-form fee_form">
 								<div class="layui-form-item">
-									<label class="layui-form-label">年薪月标准*</label>
+									<label class="layui-form-label layui-required">年薪月标准</label>
 									<div class="layui-input-block">
-										<input type="number" name="basicSalary" min="0" placeholder="" autocomplete="off" class="layui-input" >
+										<input type="number" name="basicSalary"  min="0"  lay-verify="inputNumber" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
 								</div>
 								<div class="layui-form-item">
-									<label class="layui-form-label">住房公积金</label>
+									<label class="layui-form-label layui-required">住房公积金</label>
 									<div class="layui-input-block">
-										<input type="number" name="housingFund" min="0" placeholder="" autocomplete="off" class="layui-input">
+										<input type="number" name="housingFund"  min="0"  lay-verify="inputNumber" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
 								</div>
 								<div class="layui-form-item">
-									<label class="layui-form-label">失业保险</label>
+									<label class="layui-form-label layui-required">失业保险</label>
 									<div class="layui-input-block">
-										<input type="number" name="unemployedInsurance" min="0" placeholder="" autocomplete="off" class="layui-input">
+										<input type="number" name="unemployedInsurance"  min="0"  lay-verify="inputNumber" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
 								</div>
 								<div class="layui-form-item">
-									<label class="layui-form-label">医疗保险</label>
+									<label class="layui-form-label layui-required">医疗保险</label>
 									<div class="layui-input-block">
-										<input type="number" name="treatmentInsurance" min="0" placeholder="" autocomplete="off" class="layui-input">
+										<input type="number" name="treatmentInsurance"  min="0"  lay-verify="inputNumber" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
 								</div>
 								<div class="layui-form-item" >
-									<label class="layui-form-label">养老保险</label>
+									<label class="layui-form-label layui-required">养老保险</label>
 									<div class="layui-input-block">
-										<input type="number"  name="pensionInsurance" min="0" placeholder="" autocomplete="off" class="layui-input">
+										<input type="number"  name="pensionInsurance"  min="0"  lay-verify="inputNumber" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
 								</div>
 								<div class="layui-form-item" >
-									<label class="layui-form-label">预扣职业年金</label>
+									<label class="layui-form-label layui-required">预扣职业年金</label>
 									<div class="layui-input-block">
-										<input type="number" name="occupationalAnnuities" min="0" placeholder="" autocomplete="off" class="layui-input">
+										<input type="number" name="occupationalAnnuities"  min="0"  lay-verify="inputNumber" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
 								</div>
 								<div class="layui-form-item">
@@ -258,8 +265,7 @@
 								</div>
 								<div class="layui-form-item">
 									<div class="layui-input-block">
-										<button class="layui-btn custom_btn" onclick="yearCal()">计算党费</button>
-										<!-- <button type="reset" class="layui-btn layui-btn-primary">重置</button> -->
+										<button type="submit" class="layui-btn custom_btn" lay-submit="" lay-filter="yearCalForm">计算党费</button>
 									</div>
 								</div>
 							</div>
@@ -267,66 +273,66 @@
 						</div>
 						<!--企业员工算法-->
 						<div class="layui-tab-item  companyCal" id="companyCal">
-							<form class="layui-form" action="" onsubmit="return false;">
+							<form class="layui-form" >
 							<div class="layui-form fee_form">
 								<div class="layui-form-item">
-									<label class="layui-form-label">岗位工资*</label>
+									<label class="layui-form-label layui-required">岗位工资</label>
 									<div class="layui-input-block">
-										<input type="number" name="basicSalary" min="0" placeholder="" autocomplete="off" class="layui-input" >
+										<input type="number" name="basicSalary"  min="0"  lay-verify="inputNumber" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
 								</div>
 								<div class="layui-form-item">
-									<label class="layui-form-label">薪级工资</label>
+									<label class="layui-form-label layui-required">薪级工资</label>
 									<div class="layui-input-block">
-										<input type="number" name="levelSalary" min="0" placeholder="" autocomplete="off" class="layui-input">
+										<input type="number" name="levelSalary"  min="0"  lay-verify="inputNumber" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
 								</div>
 								<div class="layui-form-item">
-									<label class="layui-form-label">工 改</label>
+									<label class="layui-form-label layui-required">工 改</label>
 									<div class="layui-input-block">
-										<input type="number" name="wageReform" min="0" placeholder="" autocomplete="off" class="layui-input">
+										<input type="number" name="wageReform"  min="0"  lay-verify="inputNumber" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
 								</div>
 								<div class="layui-form-item">
 									<label  class="layui-form-label">岗位名称</label>
 									<div class="layui-input-block tree2-div">
-										<input type="text" class="tree2" lay-filter="jobLevelPerformance" class="layui-input">
+										<input type="text" class="tree2"  lay-filter="jobLevelPerformance" class="layui-input">
 									</div>
 								</div>
 								<div class="layui-form-item">
-									<label class="layui-form-label">绩效工资理论值</label>
+									<label class="layui-form-label layui-required">绩效工资理论值</label>
 									<div class="layui-input-block">
-										<input type="number" name="performance" min="0" placeholder="" autocomplete="off" class="layui-input">
+										<input type="number" name="performance"  min="0"  lay-verify="inputNumber" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
 								</div>
 								<div class="layui-form-item">
-									<label class="layui-form-label">住房公积金</label>
+									<label class="layui-form-label layui-required">住房公积金</label>
 									<div class="layui-input-block">
-										<input type="number" name="housingFund" min="0" placeholder="" autocomplete="off" class="layui-input">
+										<input type="number" name="housingFund"  min="0"  lay-verify="inputNumber" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
 								</div>
 								<div class="layui-form-item">
-									<label class="layui-form-label">失业保险</label>
+									<label class="layui-form-label layui-required">失业保险</label>
 									<div class="layui-input-block">
-										<input type="number" name="unemployedInsurance" min="0" placeholder="" autocomplete="off" class="layui-input">
+										<input type="number" name="unemployedInsurance"  min="0"  lay-verify="inputNumber" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
 								</div>
 								<div class="layui-form-item">
-									<label class="layui-form-label">医疗保险</label>
+									<label class="layui-form-label layui-required">医疗保险</label>
 									<div class="layui-input-block">
-										<input type="number" name="treatmentInsurance" min="0" placeholder="" autocomplete="off" class="layui-input">
+										<input type="number" name="treatmentInsurance"  min="0"  lay-verify="inputNumber" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
 								</div>
 								<div class="layui-form-item" id="birthInsurance-div">
-									<label class="layui-form-label">生育保险</label>
+									<label class="layui-form-label layui-required">生育保险</label>
 									<div class="layui-input-block">
-										<input type="number"  name="birthInsurance" min="0" placeholder="" autocomplete="off" class="layui-input">
+										<input type="number"  name="birthInsurance"  min="0"  lay-verify="inputNumber" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
 								</div>
 								<div class="layui-form-item" id="employmentInjuryInsurance-div">
-									<label class="layui-form-label">工伤保险</label>
+									<label class="layui-form-label layui-required">工伤保险</label>
 									<div class="layui-input-block">
-										<input type="number"  name="employmentInjuryInsurance" min="0" placeholder="" autocomplete="off" class="layui-input">
+										<input type="number"  name="employmentInjuryInsurance"  min="0"  lay-verify="inputNumber" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
 								</div>
 								<div class="layui-form-item">
@@ -355,8 +361,7 @@
 								</div>
 								<div class="layui-form-item">
 									<div class="layui-input-block">
-										<button class="layui-btn custom_btn" onclick="companyCal()">计算党费</button>
-										<!-- <button type="reset" class="layui-btn layui-btn-primary">重置</button> -->
+										<button type="submit" class="layui-btn custom_btn" lay-submit="" lay-filter="companyCalForm">计算党费</button>
 									</div>
 								</div>
 							</div>
@@ -365,12 +370,12 @@
 
 						<!--离退休教职工党费-->
 						<div class="layui-tab-item retireEmployeeCal" id="retireEmployeeCal">
-							<form class="layui-form" action="" onsubmit="return false;">
+							<form class="layui-form">
 							<div class="layui-form fee_form">
 								<div class="layui-form-item">
-									<label class="layui-form-label">退休工资*</label>
+									<label class="layui-form-label layui-required">退休工资</label>
 									<div class="layui-input-block">
-										<input type="number" name="basicSalary" min="0" placeholder="" autocomplete="off" class="layui-input" >
+										<input type="number" name="basicSalary"  min="0"  lay-verify="inputNumber" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
 								</div>
 								<div class="layui-form-item">
@@ -393,7 +398,7 @@
 								</div>
 								<div class="layui-form-item">
 									<div class="layui-input-block">
-										<button class="layui-btn custom_btn" onclick="retireEmployeeCal()">计算党费</button>
+										<button type="submit" class="layui-btn custom_btn" lay-submit="" lay-filter="retireEmployeeCalForm">计算党费</button>
 										<!-- <button type="reset" class="layui-btn layui-btn-primary">重置</button> -->
 									</div>
 								</div>
@@ -415,12 +420,12 @@
 
 						<!--硕士博士党费-->
 						<div class="layui-tab-item masterCal" id="masterCal">
-							<form class="layui-form" action="" onsubmit="return false;">
+							<form class="layui-form">
 							<div class="layui-form fee_form">
 								<div class="layui-form-item">
-									<label class="layui-form-label">实际收入工资*</label>
+									<label class="layui-form-label layui-required">实际收入工资</label>
 									<div class="layui-input-block">
-										<input type="number" name="basicSalary" min="0" placeholder="" autocomplete="off" class="layui-input" >
+										<input type="number" name="basicSalary"  min="0"  lay-verify="inputNumber" placeholder="" autocomplete="off" class="layui-input" value="0" >
 									</div>
 								</div>
 								<div class="layui-form-item">
@@ -443,7 +448,7 @@
 								</div>
 								<div class="layui-form-item">
 									<div class="layui-input-block">
-										<button class="layui-btn custom_btn" onclick="masterCal()">计算党费</button>
+										<button type="submit" class="layui-btn custom_btn" lay-submit="" lay-filter="masterCalForm">计算党费</button>
 										<!-- <button type="reset" class="layui-btn layui-btn-primary">重置</button> -->
 									</div>
 								</div>
@@ -463,13 +468,48 @@
 		}).extend({
 			treeSelect: 'treeSelect/treeSelect'
 		});
+		layui.use(['form'],function(){
+			var form = layui.form;
+			//表单提交
+			form.on('submit(monthCalForm)', function(data){
+				monthCal();
+				return false;
+			});
+			form.on('submit(yearCalForm)', function(data){
+				yearCal();
+				return false;
+			});
+			form.on('submit(companyCalForm)', function(data){
+				companyCal();
+				return false;
+			});
+			form.on('submit(retireEmployeeCalForm)', function(data){
+				retireEmployeeCal();
+				return false;
+			});
+			form.on('submit(masterCalForm)', function(data){
+				masterCal();
+				return false;
+			});
+			form.verify({
+				inputNumber: function (value, item) {
+					if(value == '' ||value == null ){
+						return '必填项不能为空哦....';
+					}
+					if (!/^\d+(\.\d+)?$/.test(value)){
+						return '请输入>0或0的数值';
+					}
+				},
+			});
+
+		})
 		initAllTree();
 		function initAllTree(){
 			initTree('monthCal');
 			initTree('companyCal');
 		}
 		function initTree(id){
-			layui.use(['treeSelect','form'], function () {
+			layui.use(['treeSelect'], function () {
 				var treeSelect= layui.treeSelect,
 						$ = layui.jquery;
 				treeSelect.render({
