@@ -169,7 +169,14 @@
             window.location.href = "${turnTo}";
         })
         autoScroll();
-
+        setTimeout(function (){
+            window.onresize = function () {
+                var chartsList = [inspectorEchart, mapEchart, attendChart1, attendChart2, attendChart3, activityEchart, viewEchart];
+                chartsList.map(function(i){
+                    i.resize();
+                });
+            }
+        },200)
     });
     //渲染活动督察情况
     function renderInspectorChart(){
@@ -294,6 +301,7 @@
             ]
         };
         inspectorEchart.setOption(inspectorOption);
+        window.onresize = inspectorEchart.resize();
     };
     //渲染地图 动画效果
     function renderMap(){
@@ -341,6 +349,7 @@
             }]
         };
         mapEchart.setOption(option);
+        window.onresize = mapEchart.resize();
     };
     //数据上报
     function renderReportList(){
@@ -448,6 +457,7 @@
                 }]
             };
             attendChart.setOption(option);
+            window.onresize = attendChart.resize();
         })
 
     }
@@ -503,6 +513,7 @@
             }]
         };
         activityEchart.setOption(option);
+        window.onresize = activityEchart.resize();
     }
     //渲染访问量
     function renderViewChart(){
@@ -575,6 +586,7 @@
             }]
         };
         viewEchart.setOption(option);
+        window.onresize = viewEchart.resize();
     };
 </script>
 </html>
