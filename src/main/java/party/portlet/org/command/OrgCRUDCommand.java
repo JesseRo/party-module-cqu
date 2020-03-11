@@ -13,8 +13,11 @@ import javax.portlet.PortletException;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
+import com.alibaba.fastjson.serializer.JSONSerializer;
+import hg.party.entity.organization.Organization;
+import hg.party.server.organization.OrgService;
+import hg.util.result.ResultUtil;
 import org.apache.log4j.Logger;
-import org.apache.log4j.lf5.Log4JLogRecord;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.springframework.util.StringUtils;
@@ -27,20 +30,23 @@ import dt.session.SessionManager;
 import hg.party.dao.org.OrgDao;
 import hg.util.ConstantsKey;
 import hg.util.TransactionUtil;
+import party.constants.DataOperationEnum;
 import party.constants.PartyPortletKeys;
 
 @Component(
 		immediate = true,
 		property = {
 				"javax.portlet.name=" + PartyPortletKeys.OrgAdmin,
-				"mvc.command.name=/org/admin/orgadmin"
+				"mvc.command.name=/org/admin/manage"
 	    },
 	    service = MVCResourceCommand.class
 )
-public class OrgAdminAddOrDeleteOrEditResourceCommand implements MVCResourceCommand{
-	 Logger log = Logger.getLogger(OrgAdminAddOrDeleteOrEditResourceCommand.class);
+public class OrgCRUDCommand implements MVCResourceCommand{
+	 Logger log = Logger.getLogger(OrgCRUDCommand.class);
 	@Reference
 	private OrgDao orgDao;
+	@Reference
+	private OrgService orgService;
 	@Reference
 	TransactionUtil transactionUtil;
 	@Override
@@ -57,6 +63,13 @@ public class OrgAdminAddOrDeleteOrEditResourceCommand implements MVCResourceComm
 		String uuid = UUID.randomUUID().toString();
 		String type = "";
 		int n = 0;
+		DataOperationEnum dataOperationEnum = DataOperationEnum.getEnum(option);
+		switch(dataOperationEnum){
+			case READ:findOrg(resourceRequest,resourceResponse);break;
+			case UPDATE:updateOrg(resourceRequest,resourceResponse);break;
+			case CREATE:addOrg(resourceRequest,resourceResponse);break;
+			case DELETE:deleteOrg(resourceRequest,resourceResponse);break;
+		}
 		try {
 			transactionUtil.startTransaction();
 			if ("post".equals(option)) {
@@ -160,6 +173,89 @@ public class OrgAdminAddOrDeleteOrEditResourceCommand implements MVCResourceComm
 			e.printStackTrace();
 		}
 		return false;
+	}
+
+	/**
+	 * 查询组织
+	 * @param resourceRequest
+	 * @param resourceResponse
+	 */
+	private void findOrg(ResourceRequest resourceRequest,ResourceResponse resourceResponse){
+		String id = ParamUtil.getString(resourceRequest, "id");
+		try{
+			PrintWriter printWriter = resourceResponse.getWriter();
+			if(!StringUtils.isEmpty(id)){
+				Organization organization = orgService.findOrgById(Integer.parseInt(id));
+				printWriter.write(JSON.toJSONString(ResultUtil.success(organization)));
+			}else{
+				printWriter.write(JSON.toJSONString(ResultUtil.fail("组织id不能为空！")));
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 添加组织
+	 * @param resourceRequest
+	 * @param resourceResponse
+	 */
+	private void addOrg(ResourceRequest resourceRequest,ResourceResponse resourceResponse){
+		String id = ParamUtil.getString(resourceRequest, "id");
+		try{
+			PrintWriter printWriter = resourceResponse.getWriter();
+			if(!StringUtils.isEmpty(id)){
+				log.info("id:"+id);
+				Organization organization = orgService.findOrgById(Integer.parseInt(id));
+				printWriter.write(JSON.toJSONString(ResultUtil.success(organization)));
+			}else{
+				printWriter.write(JSON.toJSONString(ResultUtil.fail("组织id不能为空！")));
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 更新组织
+	 * @param resourceRequest
+	 * @param resourceResponse
+	 */
+	private void updateOrg(ResourceRequest resourceRequest,ResourceResponse resourceResponse){
+		String id = ParamUtil.getString(resourceRequest, "id");
+		try{
+			PrintWriter printWriter = resourceResponse.getWriter();
+			if(!StringUtils.isEmpty(id)){
+				log.info("id:"+id);
+				Organization organization = orgService.findOrgById(Integer.getInteger(id));
+				printWriter.write(JSON.toJSONString(ResultUtil.success(organization)));
+			}else{
+				printWriter.write(JSON.toJSONString(ResultUtil.fail("组织id不能为空！")));
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 删除组织 逻辑删除
+	 * @param resourceRequest
+	 * @param resourceResponse
+	 */
+	private void deleteOrg(ResourceRequest resourceRequest,ResourceResponse resourceResponse){
+		String id = ParamUtil.getString(resourceRequest, "id");
+		try{
+			PrintWriter printWriter = resourceResponse.getWriter();
+			if(!StringUtils.isEmpty(id)){
+				log.info("id:"+id);
+				Organization organization = orgService.findOrgById(Integer.getInteger(id));
+				printWriter.write(JSON.toJSONString(ResultUtil.success(organization)));
+			}else{
+				printWriter.write(JSON.toJSONString(ResultUtil.fail("组织id不能为空！")));
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**

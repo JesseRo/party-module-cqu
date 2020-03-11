@@ -5,7 +5,7 @@
 <portlet:resourceURL id="/org/adminSave" var="adminSave" />
 <portlet:resourceURL id="/org/detail" var="detail" />
 <portlet:resourceURL id="/org/edit" var="edit" />
-<portlet:resourceURL id="/org/admin/orgadmin" var="orgadmin" />
+<portlet:resourceURL id="/org/admin/manage" var="manage" />
 <portlet:resourceURL id="/org/admin/orgTree" var="orgTreeUrl" />
 <head>
   <%--   <link rel="stylesheet" href="${basePath}/css/party_organization.css?v=5"/> --%>
@@ -13,7 +13,6 @@
     <link rel="stylesheet" href="${basePath}/css/jquery.dropdown.css"/>
     <script type="text/javascript" src="${basePath}/js/jquery.dropdown.js?v=11"></script>
     <link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/party-info-manage.min.css"/>
-    <link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/common.min.css"/>
       <link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/change-party-member.min.css" />
 
 <style>
@@ -284,9 +283,9 @@ button.cancal.btn.btn-default {
     clear: both;
     margin-left: 136px;
 }
-    .layui-layer-content form{
-        padding:20px
-    }
+ .layui-layer-content form{
+     padding:20px
+ }
 .layui-layer-page .layui-layer-content {
     position: relative;
     overflow: visible;
@@ -297,7 +296,7 @@ button.cancal.btn.btn-default {
 .layui-form-label.orgTree-label{
     width: 120px;
 }
-.layui-input.orgTree{
+.layui-input-inline.orgTree{
     width: 400px;
 }
 </style>
@@ -308,8 +307,10 @@ button.cancal.btn.btn-default {
         }).extend({
             treeSelect: 'treeSelect/treeSelect'
         });
-        layui.use(['treeSelect','form'], function () {
-            var treeSelect= layui.treeSelect;
+        layui.use(['treeSelect','form','layer',], function () {
+            var treeSelect= layui.treeSelect,
+                layer = layui.layer,
+                form = layui.form;
 
             treeSelect.render({
                 // 选择器
@@ -324,253 +325,39 @@ button.cancal.btn.btn-default {
                 search: true,
                 // 点击回调
                 click: function(d){
-                    console.log(d);
-                    if(d.current.isParent) return false;
+                    $("#org-path").empty();
+                    $("#org-path").append(getPathHtml(d.current));
+                    renderOrgInfo(d.current.id);
                 },
                 // 加载完成后的回调函数
                 success: function (d) {
-                    console.log(d);
+                    treeSelect.checkNode('orgTree', d.data[0].id);
+                    var root = '<a  href="javascript:;" >'+d.data[0].name+'</a>';
+                    $("#org-path").append(root);
                 }
             });
-        });
-		/* $("#model_box").hide(); */
-		var orgId;
-		function orgMember(orgId, orgType) {
-			var rootType = $('#current_root').attr('org-type');
-			$('#save').attr('disabled', false);
-			refresh(orgId);
-            // console.log(rootType + ',' + orgType);
-            // $('#save').attr('disabled', true);
-            // setTimeout(function() {
-            //     $('.dropdown-sin-2').data('dropdown').changeStatus(
-            //             "readonly");
-            // }, 0);
-
-		}
-        var orgTypes = {
-		    "branch": "党支部",
-            "secondary": "党总支",
-            "organization": "党委"
-		}
-		function orgDetail(){
-
-		    $.post('${detail}', {id:$('#title').next().val()}, function (res) {
-                if(res.result){
-                    $('input[name="orgName"]').val(res.data.org_name);
-                    $('input[name="orgType"]').val(orgTypes[res.data.org_type]);
-                    $('input[name="address"]').val(res.data.org_address);
-                    $('input[name="contactNumber"]').val(res.data.org_phone_number);
-                    $('input[name="fax"]').val(res.data.org_fax);
-                    $('input[name="secretary"]').val(res.data.org_secretary);
-                    $('input[name="email"]').val(res.data.org_email);
-                    $('input[name="contactor"]').val(res.data.org_contactor);
-                    $('input[name="contactorNumber"]').val(res.data.org_contactor_phone);
-                }else {
-                    alert("未知错误");
+            function getPathHtml(node) {
+                var pathHtml = '<a  href="javascript:;" >'+node.name+'</a>';
+                if(node.parentTId != null){
+                    var pNode = node.getParentNode();
+                    pathHtml = getPathHtml(pNode)+'<span lay-separator="">></span>'+pathHtml;
                 }
-            })
-        }
-
-		$(".first_menu").click(function() {
-			$(this).parents("li").toggleClass("height_auto");
-			var _target = $(this).find("img");
-			if (_target.hasClass("dropdown_up")) {
-				_target.removeClass("dropdown_up").addClass("dropdown_down");
-				<%--_target.attr("src", "${basePath}/images/dropdown_icon.png");--%>
-			} else {
-				_target.removeClass("dropdown_down").addClass("dropdown_up");
-				<%--_target.attr("src", "${basePath}/images/second_menu_up.png");--%>
-			}
-			orgId = $(this).parent().attr('org-id');
-			var orgType = $(this).parent().attr('org-type');
-
-            $('#second_title').hide();
-            $('#second_title').prev('span').hide();
-            $('#third_title').hide();
-            $('#third_title').prev('span').hide();
-            $('#first_title').show().text($(this).text());
-
-			$('#title').text($(this).text());
-			$('#title').next().val(orgId);
-			$('#title').attr("org_type", orgType);
-			console.log("一级党委选中" + orgId);
-			$(".btn_group").show();
-			$("#org_add").show();
-			$("#org_edit").hide();
-			$("#org_delete").hide();
-			orgMember(orgId, orgType);
-			orgDetail();
-		});
-		//二级菜单下拉
-		$(".second_menu").on("click",">li>a",function() {
-            if ($(this).siblings("ul").length == 0) {
-                $(".third_menu li").removeClass("third_menu_on");
-                $(".second_menu>li").removeClass("second_menu_on");
-                $(this).parent("li").addClass("second_menu_on");
-                $(this).parent("li").siblings("li").removeClass("second_menu_on");
+                return pathHtml;
             }
-            if ($(this).parent("li").hasClass("height_auto")) {
-                $(this).parent("li").removeClass("height_auto")
-                        .removeClass("second_menu_on");
-            } else if ($(this).siblings("ul").length > 0) {
-                $(this).parent("li").addClass("height_auto").addClass(
-                        "second_menu_on");
-                $(this).parent("li").siblings("li").removeClass("second_menu_on");
+            function renderOrgInfo(id){
+                $.ajax({
+                    type : "post",
+                    url : "${manage}",
+                    data : {
+                        id : id,
+                        option : 'read',
+                    },
+                    dataType : "json",
+                    success : function(res) {
+                        layer.msg(res);
+                    }
+                });
             }
-            var _target = $(this).find(".third_menu_icon");
-            if (_target.hasClass("third_menu_up")) {
-                _target.removeClass("third_menu_up").addClass(
-                        "third_menu_down");
-            } else {
-                _target.removeClass("third_menu_down").addClass(
-                        "third_menu_up");
-            }
-            orgId = $(this).parent().attr('id');
-            var orgType = $(this).parent().attr('org-type');
-            $("#second_title").show().text($(this).text());
-            $('#second_title').prev('span').show();
-            $('#third_title').hide();
-            $('#third_title').prev('span').hide();
-
-            $('#title').text($(this).text());
-            $('#title').next().val(orgId);
-            $('#title').attr("org_type", orgType.trim());
-            console.log("二级党委选中" + orgId);
-            if ($("#current_root").attr("org-type") == 'secondary') {
-                $(".second_menu").find(".add_class").removeClass(
-                        "add_class");
-                $(this).parent("li").addClass("add_class");
-            }
-            $(".btn_group").show();
-            $("#org_add").show();
-            $("#org_edit").show();
-            $("#org_delete").show();
-            orgMember(orgId, orgType);
-            orgDetail();
-
-        });
-
-		//三级菜单选中
-		$(".second_menu").on("click", ".third_menu li", function() {
-			$(".third_menu li").removeClass("third_menu_on");
-			$(this).addClass("third_menu_on");
-			$(".second_menu li").removeClass("second_menu_on");
-			$(this).parent().parent().addClass("height_auto second_menu_on");
-			orgId = $(this).attr('id');
-
-            $('#second_title').show().text($(this).parent().parent().children('a').text());
-            $('#second_title').prev('span').show();
-            $('#third_title').text($(this).children('a').text()).show();
-            $('#third_title').prev('span').show();
-
-			$('#title').text($(this).children('a').text());
-			$('#title').next().val(orgId);
-			$('#title').attr("org_type", 'branch');
-			console.log("三级党委选中" + $(this).attr('id'));
-			$(".btn_group").show();
-		    $("#org_add").hide();
-		    $("#org_edit").show();
-			$("#org_delete").show()
-			orgMember(orgId, 'branch');
-            orgDetail();
-        });
-
-		//点击展开更多
-		$(".slide_more").click(function() {
-			//向后台请求更多数据
-			$('.second_li').show();
-		});
-
-		//搜索回车事件
-		$("#search").keydown(function(event) {
-			if (event.keyCode === 13) {
-				if ($(event.target).val()) {
-					//执行搜索逻辑
-					console.log($(event.target).val())
-				}
-			}
-		});
-		$('#upload-block [type="file"]').change(function() {
-			$('#upload-block [type="submit"]').click();
-		});
-
-		var admin_dropdown = $('.dropdown-sin-2').dropdown({
-			data : [ {
-				name : '没有数据',
-				disabled : true
-			} ],
-			input : '<input type="text" maxLength="20" placeholder="请输入搜索">',
-			choice : function() {
-			}
-		});
-
-		function refresh(org) {
-			$.get('${candidate}', {
-				orgId : org
-			}, function(res) {
-				if (res.result) {
-					var admins = res.data.admins;
-					var candidatesGroup = res.data.candidates;
-					var candidates = [];
-					var _admin = {};
-					for ( var i in admins) {
-						_admin[admins[i]] = admins[i];
-					}
-					for ( var group in candidatesGroup) {
-						for ( var j in candidatesGroup[group]) {
-							var member = candidatesGroup[group][j];
-							candidates.push({
-								id : member.member_identity,
-								disabled : false,
-								groupId : group,
-								groupName : group,
-								name : member.member_name,
-								selected : false
-							});
-						}
-					}
-					if (candidates.length === 0) {
-						candidates = [ {
-							name : '没有数据',
-							disabled : true
-						} ];
-					}
-					$('.dropdown-sin-2').data('dropdown').changeStatus();
-					$('.dropdown-sin-2').data('dropdown').update(candidates,true);
-					$('.dropdown-sin-2').data('dropdown').choose(admins);
-				}
-			});
-		}
-
-		$('#save').on('click', function() {
-			var admins = $('#admin').val();
-			var adminStr = '';
-			if (admins) {
-				adminStr = admins.join(',')
-			}
-			$.post('${adminSave}', {
-				orgId : orgId,
-				admin : adminStr
-			}, function(res) {
-				if (res.result) {
-					alert('保存成功');
-				} else {
-					alert(res.message);
-				}
-			})
-		})
-
-        $('#current_root .first_menu').click();
-		var path = window.location.pathname;
-		if(path.indexOf('orgadmin') === -1 && path.indexOf('secondadmin') === -1){
-		    $('#admin_set').hide();
-		    $('#save').hide();
-        }else {
-		    $('#op_buttons').remove();
-        }
-        layui.use(['layer', 'form'], function(){
-            var layer = layui.layer
-                ,form = layui.form;
             //表单提交
             form.on('submit(partyForm)', function(data){
                 // layer.alert(JSON.stringify(data.field), {
@@ -729,91 +516,15 @@ button.cancal.btn.btn-default {
                     });
                 }
             });
-            function _ajax(_option,id) {
-                var url = "${orgadmin}";
-                var secondaryType='';
-                var orgName = '';
-                var org_type = $("#title").attr("org_type");
-                var orgId = $("#title").next().val();
-                if(id != null && id != ''){
-                    orgName = $("#"+id+" input.org_name").val();
-                    if (!orgName) {
-                        layer.msg("请输入名称");
-                        return;
-                    }
-                    if(id == 'addSecondaryForm'){
-                        secondaryType = $("#"+id+" select.secondaryType").val();
-                    }
-                }
-                $.ajax({
-                    type : "post",
-                    url : url,
-                    data : {
-                        orgName : orgName,
-                        org_type : org_type,
-                        orgId : orgId,
-                        option : _option,
-                        secondaryType: secondaryType
-                    },
-                    dataType : "json",
-                    success : function(res) {
-                        alert(res.message);
-                        if ("ok" == res.state) {
-                            $("#model_box").hide();
-                            $("#model_box_s").hide();
-                            if (_option == "delete") {
-                                $(".party_organization_list li").each(function() {
-                                    if ($(this).attr("id") == orgId) {
-                                        $(this).remove();
-                                        var candidates = [ {name : '没有数据',disabled : true} ];
-                                        $('.dropdown-sin-2').data('dropdown').changeStatus();
-                                        $('.dropdown-sin-2').data('dropdown').update(candidates, true);
-                                        $('.dropdown-sin-2').data('dropdown').choose(candidates);
-                                        $("#title").html('');
-                                        $("#title").next().val('');
-                                    }
-                                });
-                            } else if (_option == "edit") {
-                                $(".party_organization_list li").each(function() {
-                                    if ($(this).attr("id") == orgId) {
-                                        var a ;
-                                        if(org_type=='secondary'){
-                                            a =$('<a href="javascript:"><span class="third_menu_icon third_menu_down"></span>'+orgName+'</a>');
-                                        }else{
-                                            a =$('<a href="javascript:">'+orgName+'</a>');
-                                        }
-                                        $(this).html(a);
-                                        $("#title").html(orgName);
-                                    }
-                                });
-                            } else if (_option == "post") {
-                                var li;
-                                if(org_type=='secondary'){
-                                    if($("#current_root").attr("org-type")=='secondary'){
-                                        li =$('<li id="'+res.uuid+'" class="second_li" org-type="branch "> <a href="javascript:"><span class="third_menu_icon third_menu_up"></span>'+orgName+'</a> </li>');
-                                        $(".second_menu").append(li);
-                                    }else{
-                                        $(".party_organization_list li").each(function() {
-                                            if ($(this).attr("id") == orgId) {
-                                                li =$('<li title="'+orgName+'" id="'+res.uuid+'"><a href="javascript:">'+orgName+'</a></li>');
-                                                $(this).find("ul").append(li)
-                                            }
-                                        });
-                                    }
-                                }else{
-                                    li =$('<li id="'+res.uuid+'" class="second_li" style="" org-type="secondary "> <a href="javascript:"><span class="third_menu_icon third_menu_up"></span>'+orgName+'</a> <ul class="third_menu">  </ul> </li>');
-                                    $(".second_menu").append(li)
-                                }
-                                $("#title").html(orgName);
-                                $("#title").attr("org_type",res.type);
-                                $('#title').next().val(res.uuid);
-                                orgMember(res.uuid, res.type);
-                            }
-                        }
-                    }
-                });
-            }
         });
+        var orgTypes = {
+		    "branch": "党支部",
+            "secondary": "党总支",
+            "organization": "党委"
+		}
+
+
+
 });
 </script>
 </head>
@@ -834,8 +545,8 @@ button.cancal.btn.btn-default {
                         <div class="layui-form-item">
                             <div class="layui-inline">
                                 <label class="layui-form-label orgTree-label">请选择组织:</label>
-                                <div class="layui-input-inline" style="width: 200px;">
-                                    <input type="text" name="orgTree" id="orgTree" placeholder="请选择组织" class="layui-input orgTree">
+                                <div class="layui-input-inline orgTree">
+                                    <input type="text" name="orgTree" id="orgTree" lay-filter="orgTree" placeholder="请选择组织" class="layui-input">
                                 </div>
                             </div>
                         </div>
@@ -844,13 +555,8 @@ button.cancal.btn.btn-default {
                 <div class="content_form content_info content_table_container party_table_container party_manage_container" style="padding-top: 0;">
                     <div class="breadcrumb_group">
                         当前组织：
-                        <span class="layui-breadcrumb" lay-separator=">" style="visibility: visible;">
-                            <a id="first_title" href="javascript:;" style="display: none;">重庆大学党委</a>
-                            <a href="javascript:;" id="second_title" style="display: none;">机关党委</a>
-                            <a href="javascript:;" id="third_title" style="display: none;">机关党委</a>
+                        <span class="layui-breadcrumb"  style="visibility: visible;" id="org-path">
                         </span>
-                        <span id="title" org_type="branch" style="display: none;">中共重庆大学某学科第一支部委员会</span>
-                        <input type="hidden">
                     </div>
                     <div class="table_content" id="op_buttons">
 

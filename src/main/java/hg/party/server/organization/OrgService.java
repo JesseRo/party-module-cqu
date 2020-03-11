@@ -21,6 +21,9 @@ public class OrgService {
 	public List<Organization> findAll(){
 		return orgDao.findAll();
 	}
+	public Organization findOrgById(int id){
+		return orgDao.findOrgById(id);
+	}
 
 	public List<Organization> findOrgByOrgType(PartyOrgAdminTypeEnum partyOrgAdminTypeEnum) {
 		return orgDao.findOrgByOrgType(partyOrgAdminTypeEnum);

@@ -37,25 +37,9 @@ import party.constants.PartyPortletKeys;
         service = Portlet.class
 )
 public class OrgAdminPortlet extends MVCPortlet {
-
-    @Reference
-    OrgDao orgDao;
     @Override
     public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
             throws IOException, PortletException {
-        String orgId = (String) SessionManager.getAttribute(renderRequest.getRequestedSessionId(), "department");
-
-        List<Organization> tree = orgDao.findTree(orgId, true, false);
-
-
-        //以上级组织进行分组
-        Map<String, List<Organization>> orgTree = tree.stream()
-                .filter(p->!p.getOrg_id().equals(orgId))
-                .collect(Collectors.groupingBy(Organization::getOrg_parent));
-        Organization root = tree.stream().findFirst().orElse(null);
-        renderRequest.setAttribute("root", root);
-        renderRequest.setAttribute("tree", orgTree);
-
         super.doView(renderRequest, renderResponse);
     }
 
