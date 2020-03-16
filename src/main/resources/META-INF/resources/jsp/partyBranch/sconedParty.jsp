@@ -618,8 +618,7 @@
                                 <span class="control-label form-label-required">开始时间：</span>
                             </div>
                             <div class="col-sm-9 col-xs-9">
-                                <input class="datetime form-control" name="timeDuring" value=""
-                                       onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',onpicked:function(){$(this).change()}})">
+                                <input type="text" name="timeDuring" id="timeDuring" autocomplete="off" class="datetime form-control layui-input">
                             </div>
                         </div>
                         <div class="col-sm-6 col-xs-12">
@@ -836,6 +835,20 @@
     </div>
 </script>
 <script type="text/javascript">
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+        laydate.render({
+            elem: '#timeDuring'
+            ,type: 'datetime'
+            ,isInitValue: true
+            //,trigger: 'click'
+            ,done: function(value, date, endDate){
+            }
+            ,change: function(value, date, endDate){
+                this.elem.val(value)
+            }
+        });
+    })
     var memberTable, groupTable, table;
     function addPlace() {
         var campus = $('[name="campus"]').val();

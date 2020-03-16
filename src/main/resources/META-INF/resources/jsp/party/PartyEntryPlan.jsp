@@ -272,13 +272,13 @@
 			<%--	                            <td data-label="联系人电话">${info.contact_phone }</td>--%>
 										<td data-label="任务状态" style="width: 120px;">
 											<c:if test="${info.task_st == '1'}">
-												 已提交
+												 待审核
 											</c:if>
 											<c:if test="${info.task_st == '2'}">
 												 已撤回
 											</c:if>
 											<c:if test="${info.task_st == '3'}">
-												 被驳回
+												 已驳回
 											</c:if>
 											<c:if test="${info.task_st == '4'}">
 												 已通过
