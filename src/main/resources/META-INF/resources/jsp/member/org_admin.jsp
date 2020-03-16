@@ -1,11 +1,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ include file="/init.jsp" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
-<portlet:resourceURL id="/org/memberGroup" var="candidate" />
 <portlet:resourceURL id="/org/adminSave" var="adminSave" />
-<portlet:resourceURL id="/org/detail" var="detail" />
-<portlet:resourceURL id="/org/edit" var="edit" />
-<portlet:resourceURL id="/org/admin/manage" var="manage" />
+<portlet:resourceURL id="/org/admin/query" var="findOrgAdmin" />
 <portlet:resourceURL id="/org/admin/orgTree" var="orgTreeUrl" />
 <head>
   <%--   <link rel="stylesheet" href="${basePath}/css/party_organization.css?v=5"/> --%>
@@ -16,6 +13,46 @@
       <link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/change-party-member.min.css" />
 
 <style>
+    /* 下拉多选样式 需要引用*/
+    /* 多选样式开始*/
+    select[multiple].layui-form-select>.layui-select-title>input.layui-input{ border-bottom: 0}
+    select[multiple].layui-form-select dd{ padding:0;}
+    select[multiple].layui-form-select .layui-form-checkbox[lay-skin=primary]{ margin:0 !important; display:block; line-height:36px !important; position:relative; padding-left:26px;}
+    select[multiple].layui-form-select .layui-form-checkbox[lay-skin=primary] span{line-height:36px !important;padding-left: 10px; float:none;}
+    select[multiple].layui-form-select .layui-form-checkbox[lay-skin=primary] i{ position:absolute; left:10px; top:0; margin-top:9px;}
+    .multiSelect{ line-height:normal; height:auto; padding:4px 10px; overflow:hidden;min-height:38px; margin-top:-38px; left:0; z-index:99;position:relative;background:none;}
+    .multiSelect a{ padding:2px 5px; background:#FFB800; border-radius:2px; color:#fff; display:block; line-height:20px; height:20px; margin:2px 5px 2px 0; float:left;}
+    .multiSelect a span{ float:left;}
+    .multiSelect a i {float:left;display:block;margin:2px 0 0 2px;border-radius:2px;width:8px;height:8px;padding:4px;position:relative;-webkit-transition:all .3s;transition:all .3s}
+    .multiSelect a i:before, .multiSelect a i:after {position:absolute;left:8px;top:2px;content:'';height:12px;width:1px;background-color:#fff}
+    .multiSelect a i:before {-webkit-transform:rotate(45deg);transform:rotate(45deg)}
+    .multiSelect a i:after {-webkit-transform:rotate(-45deg);transform:rotate(-45deg)}
+    .multiSelect a i:hover{ background-color:#545556;}
+    .multiOption{display: inline-block; padding: 0 5px;cursor: pointer; color: #999;}
+    .multiOption:hover{color: #5FB878}
+
+    @font-face {font-family: "iconfont"; src: url('data:application/x-font-woff;charset=utf-8;base64,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') format('woff')}
+    .iconfont {font-family:"iconfont" !important;font-size:16px;font-style:normal;-webkit-font-smoothing: antialiased;-moz-osx-font-smoothing: grayscale;}
+    .icon-fanxuan:before { content: "\e837"; }
+    .icon-quanxuan:before { content: "\e623"; }
+    .icon-qingkong:before { content: "\e63e"; }
+    .layui-form-checked[lay-skin="primary"] i {
+        border-color: #FFB800 !important;
+        background-color: #FFB800;
+        color: #fff;
+    }
+    .multiSelect a {
+        line-height: 32px;
+        height: 32px;
+        margin-left: 5px;
+    }
+    .layui-form-select .layui-select-title .layui-anim div::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+        background: #FFB800;
+    }
+    /* 多选样式结束*/
+
 @media ( min-width : 768px) {
 	.main_content .min_width_1200 .nav_list .party_organization_list .height_auto
 		{
@@ -35,9 +72,6 @@
         top:5px;
         left:15px;
     }
-    .layui-input.disabled{
-        background: #f5f5f5;
-    }
 	.main_content .min_width_1200 .nav_list .party_organization_list li .second_menu>li
 		{
 		margin: 12px 0;
@@ -54,6 +88,20 @@
         border-radius: 0;
         cursor: pointer;
         color:#fff;
+    }
+    .no-authority  .layui-form.custom_form{
+        display: table;
+        margin: 0 auto;
+        height: 286px;
+    }
+    .no-authority  .layui-form.custom_form .no-authority-msg{
+        display: table-cell;
+        vertical-align: middle;
+        text-align: center;
+    }
+    .no-authority  .layui-form.custom_form .no-authority-msg i{
+        font-size: 30px;
+        color: #f93c3c;
     }
 	/*.main_content .min_width_1200 .nav_list .party_organization_list li .second_menu>li>a*/
     /*{*/
@@ -182,10 +230,6 @@
 	}
 }
 
-.add_class {
-    color: #333;
-    background-color: #fff;
-}
 
 .add_class a {
 	color: #333;
@@ -198,49 +242,10 @@
     background-color: #fff;
 }
 
-#model {
-	background: #5cb85c;
-	WIDTH: 500PX;
-	HEIGHT: 300PX;
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	background: white;
-}
 
-#model_box {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background: rgba(0, 0, 0, 0.3);
-	display: none;
-}
 
-.title_box {
-	margin: 30px;
-	border-bottom: 1px solid #e0dada;
-}
 
-.title {
-	font-size: 30px;
-}
 
-.close {
-	color: red;
-	float: right;
-	/*  border: 1px solid; */
-	background: #d6c7c7;
-	width: 50px;
-	text-align: center;
-}
-
-.name_box {
-	height: 100px;
-	margin-left: 30px;
-}
 
 .name_box span {
 	font-size: 25px;
@@ -299,234 +304,35 @@ button.cancal.btn.btn-default {
 .layui-input-inline.orgTree{
     width: 400px;
 }
+.party_member_container.form_content .custom_form .layui-inline:last-child{
+    border-bottom: 1px solid #CCC;
+}
+.layui-treeSelect .ztree li span.button.root_close:before {
+    content: "\e623";
+}
+.layui-treeSelect .ztree li span.button.root_open:before {
+    content: "\e625";
+}
+.party_manage_page .party_manage_content .party_table_container {
+    width: calc(100% - 8px);
+}
+.party_manage_container .layui-form-item{
+    width:640px
+}
+.party_manage_container .layui-form .layui-form-label{
+    width:120px;
+}
+.party_manage_container .layui-form .layui-input-inline{
+    width:480px;
+}
+.party_manage_container .layui-form .layui-form-item.btn-save{
+   text-align: center;
+}
+.party_manage_container .layui-form .layui-form-item.btn-save .layui-btn {
+    width: 160px;
+}
+
 </style>
-<script type="text/javascript">
-	$(function() {
-        layui.config({
-            base: '${basePath}/js/layui/module/'
-        }).extend({
-            treeSelect: 'treeSelect/treeSelect'
-        });
-        layui.use(['treeSelect','form','layer',], function () {
-            var treeSelect= layui.treeSelect,
-                layer = layui.layer,
-                form = layui.form;
-
-            treeSelect.render({
-                // 选择器
-                elem: '#orgTree',
-                // 数据
-                data: '${orgTreeUrl}',
-                // 异步加载方式：get/post，默认get
-                type: 'get',
-                // 占位符
-                placeholder: '请选择',
-                // 是否开启搜索功能：true/false，默认false
-                search: true,
-                // 点击回调
-                click: function(d){
-                    $("#org-path").empty();
-                    $("#org-path").append(getPathHtml(d.current));
-                    renderOrgInfo(d.current.id);
-                },
-                // 加载完成后的回调函数
-                success: function (d) {
-                    treeSelect.checkNode('orgTree', d.data[0].id);
-                    var root = '<a  href="javascript:;" >'+d.data[0].name+'</a>';
-                    $("#org-path").append(root);
-                }
-            });
-            function getPathHtml(node) {
-                var pathHtml = '<a  href="javascript:;" >'+node.name+'</a>';
-                if(node.parentTId != null){
-                    var pNode = node.getParentNode();
-                    pathHtml = getPathHtml(pNode)+'<span lay-separator="">></span>'+pathHtml;
-                }
-                return pathHtml;
-            }
-            function renderOrgInfo(id){
-                $.ajax({
-                    type : "post",
-                    url : "${manage}",
-                    data : {
-                        id : id,
-                        option : 'read',
-                    },
-                    dataType : "json",
-                    success : function(res) {
-                        layer.msg(res);
-                    }
-                });
-            }
-            //表单提交
-            form.on('submit(partyForm)', function(data){
-                // layer.alert(JSON.stringify(data.field), {
-                //     title: '最终的提交信息'
-                // });
-                console.log(JSON.stringify(data.field));
-                var postData = data.field;
-                postData['orgId'] = $('#title').next().val();
-                $.post("${edit}", postData, function (res) {
-                    console.log(res.result)
-                    if(res.result){
-                        layer.msg("保存成功！");
-                    }else {
-                        layer.msg("未知错误");
-                    }
-                });
-                return false;
-            });
-            form.verify({
-                zuoji: function (value, item) {
-                    if (!/^((\d{3,4}-)|\d{3.4}-)?\d{7,8}$/.test(value)){
-                        return '请填入正确的座机号';
-                    }
-                },
-                fax: function (value, item) {
-                    if (value != ''&& value != null && !/^((\d{3,4}-)|\d{3.4}-)?\d{7,8}$/.test(value)){
-                        return '请填入正确的传真号';
-                    }
-                },
-                partyEmail: function(value, item){
-                    var reg = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-                    if(value != ''&& value != null && !reg.test(value)){
-                        return "邮箱格式正确";
-                    }
-                },
-                contactNumber: function(value, item){
-                    var regPhone = /^1\d{10}$/;
-                    var reg = /^((\d{3,4}-)|\d{3.4}-)?\d{7,8}$/;
-                    if(value != ''&& value != null && !regPhone.test(value) && !reg.test(value)){
-                        return "联系电话格式正确";
-                    }
-                }
-            });
-
-            //添加组织弹窗
-            $("#org_add").click(function() {
-                var org_type = $("#title").attr("org_type");
-                if (!org_type) {
-                    layer.msg("请选择一个节点");
-                    return;
-                }
-                var title='';
-                var content = '';
-                if ("organization" == org_type) {
-                    title = '增加二级党委';
-                    content = $("#addSecondaryForm");
-                } else if ("secondary" == org_type) {
-                    title = '增加党支部';
-                    content = $("#addBranchForm");
-                }else{
-                    layer.msg("请选择正确的节点");
-                    return;
-                }
-                layer.open({
-                    title:title,
-                    type: 1,
-                    content: content
-                    ,btn: ['确定', '取消']
-                    ,yes: function(index, layero){
-                        //按钮【按钮一】的回调
-                        var org_type = $("#title").attr("org_type");
-                        if (!org_type) {
-                            layer.msg("请选择一个节点");
-                            return;
-                        }
-                        if ("organization" == org_type) {
-                            _ajax('post','addSecondaryForm');
-                        } else if ("secondary" == org_type) {
-                            _ajax('post','addBranchForm');
-                        }else{
-                            layer.msg("请选择正确的节点");
-                            return;
-                        }
-                    }
-                    ,btn2: function(index, layero){
-                        //按钮【按钮二】的回调
-                    }
-                    ,cancel: function(){
-                        //右上角关闭回调
-                        //return false 开启该代码可禁止点击该按钮关闭
-                    }
-                });
-
-            });
-            /*编辑组织弹窗*/
-            $("#org_edit").click(function() {
-                var org_type = $("#title").attr("org_type");
-                if (!org_type || "organization" == org_type) {
-                    layer.msg("请选择一个节点");
-                    return;
-                }else {
-                    var title = '编辑';
-                    var content = $("#addBranchForm");
-                    layer.open({
-                        title: title,
-                        type: 1,
-                        content: content
-                        , btn: ['修改', '取消']
-                        , yes: function (index, layero) {
-                            //按钮【按钮一】的回调
-                            var org_type = $("#title").attr("org_type");
-                            if (!org_type) {
-                                layer.msg("请选择一个节点");
-                                return;
-                            }
-                            if ("organization" != org_type) {
-                                _ajax('edit', 'addBranchForm');
-                            } else {
-                                layer.msg("请选择正确的节点");
-                                return;
-                            }
-                        }
-                        , btn2: function (index, layero) {
-                            //按钮【按钮二】的回调
-                        }
-                        , cancel: function () {
-                            //右上角关闭回调
-                            //return false 开启该代码可禁止点击该按钮关闭
-                        }
-                    });
-                }
-            });
-            /* 删除组织弹窗 */
-            $("#org_delete").click(function() {
-                var name = $("#title").text();
-                if(!name){
-                    layer.msg("请选择节点");
-                    return;
-                }else {
-                    var content = '你确定删除组织“'+name+'”吗？';
-                    layer.confirm(content, {
-                        btn: ['确定','取消'] //按钮
-                    }, function(){
-                        var org_type = $("#title").attr("org_type");
-                        if (!org_type) {
-                            layer.msg("请选择一个节点");
-                            return;
-                        }
-                        if ("organization" != org_type) {//根节点不可删除
-                            _ajax('delete', null);
-                        } else {
-                            layer.msg("请选择正确的节点");
-                            return;
-                        }
-                    }, function(){
-                    });
-                }
-            });
-        });
-        var orgTypes = {
-		    "branch": "党支部",
-            "secondary": "党总支",
-            "organization": "党委"
-		}
-
-
-
-});
-</script>
 </head>
 <body>
 <div>
@@ -535,12 +341,12 @@ button.cancal.btn.btn-default {
             <div class="breadcrumb_group">
                 当前位置：
                 <span class="layui-breadcrumb" lay-separator=">">
-                        <a href="javascript:;">基础数据管理</a>
-                        <a href="javascript:;">党组信息管理</a>
+                        <a href="javascript:;">系统管理</a>
+                        <a href="javascript:;">组织管理员设置</a>
                     </span>
             </div>
             <div class="party_manage_content content_form content_info">
-                <div id="partySearchForm" class="party-search-form">
+                <div class="content_form content_info content_table_container party_table_container party_manage_container" style="padding-top: 0;">
                     <form class="layui-form" >
                         <div class="layui-form-item">
                             <div class="layui-inline">
@@ -551,139 +357,113 @@ button.cancal.btn.btn-default {
                             </div>
                         </div>
                     </form>
-                </div>
-                <div class="content_form content_info content_table_container party_table_container party_manage_container" style="padding-top: 0;">
                     <div class="breadcrumb_group">
                         当前组织：
                         <span class="layui-breadcrumb"  style="visibility: visible;" id="org-path">
                         </span>
                     </div>
-                    <div class="table_content" id="op_buttons">
+                    <form class="layui-form" action=""  id="orgManager">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">管理员：</label>
+                                <div class="layui-input-inline">
+                                    <select name="admin" multiple lay-search>
+                                        <option value="">请选择管理员</option>
+                                        <c:forEach var="user" items="${userList}">
+                                            <option value="${user.user_id}">${user.user_name}(${user.user_id})</option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item btn-save">
+                            <button  type="button" class="layui-btn layui-btn-radius layui-btn-warm" lay-submit="" lay-filter="orgManager" id="org_manager_save">保 存</button>
+                        </div>
+                    </form>
 
-                        <div class="btn_group table_btns" >
-                            <c:if test="${root.org_type != 'branch'}">
-                                <button id="org_add" class="btn btn-default">添加组织</button>
-                            </c:if>
-                            <button id="org_edit" class="btn btn-default">编辑组织</button>
-                            <button id="org_delete" class="btn btn-default">删除组织</button>
-                        </div>
-                        <div class="form_content party_member_container">
-                            <div class="title_label" style="height: 286px;padding: 110px 16px;">
-                                基本信息
-                            </div>
-                            <form class="layui-form custom_form" id="">
-                                <div class="layui-inline" style="border-top: 1px solid #CCC;">
-                                    <label class="layui-form-label layui-required">党组织名称：</label>
-                                    <div class="layui-input-inline">
-                                        <input type="text" name="orgName" maxlength="20" lay-verify="required" autocomplete="off" class="layui-input">
-                                    </div>
-                                </div>
-                                <div class="layui-inline" style="border-top: 1px solid #CCC;">
-                                    <label class="layui-form-label">党组织类型：</label>
-                                    <div class="layui-input-inline">
-                                        <input type="text" name="orgType" maxlength="20" disabled autocomplete="off" class="layui-input disabled">
-                                    </div>
-                                </div>
-                                <div class="layui-inline">
-                                    <label class="layui-form-label layui-required">联系电话（座机）：</label>
-                                    <div class="layui-input-inline">
-                                        <input type="text" name="contactNumber" lay-verify="zuoji" maxlength="20" autocomplete="off" class="layui-input">
-                                    </div>
-                                </div>
-                                <div class="layui-inline">
-                                    <label class="layui-form-label">传真：</label>
-                                    <div class="layui-input-inline">
-                                        <input type="text" name="fax" lay-verify="fax" maxlength="20" autocomplete="off" class="layui-input">
-                                    </div>
-                                </div>
-                                <div class="layui-inline">
-                                    <label class="layui-form-label layui-required">党组织书记：</label>
-                                    <div class="layui-input-inline">
-                                        <input type="text" name="secretary" lay-verify="required" maxlength="20" autocomplete="off" class="layui-input">
-                                    </div>
-                                </div>
-                                <div class="layui-inline">
-                                    <label class="layui-form-label">邮箱：</label>
-                                    <div class="layui-input-inline">
-                                        <input type="text" name="email" maxlength="20" lay-verify="partyEmail"
-                                               autocomplete="off" class="layui-input">
-                                    </div>
-                                </div>
-                                <div class="layui-inline">
-                                    <label class="layui-form-label layui-required">联系人：</label>
-                                    <div class="layui-input-inline">
-                                        <input type="text" name="contactor"  lay-verify="required" maxlength="20" autocomplete="off" class="layui-input">
-                                    </div>
-                                </div>
-                                <div class="layui-inline">
-                                    <label class="layui-form-label">手机号码：</label>
-                                    <div class="layui-input-inline">
-                                        <input type="text" name="contactorNumber" lay-verify="contactNumber" maxlength="20" autocomplete="off" class="layui-input">
-                                    </div>
-                                </div>
-                                <div class="layui-inline"  style="width: 100%;">
-                                    <label class="layui-form-label" style="width: 25%;">地址：</label>
-                                    <div class="layui-input-inline" style="width: 75%;">
-                                        <input type="text" name="address" maxlength="20" autocomplete="off" class="layui-input">
-                                    </div>
-                                </div>
-                                <div class="layui-inline btn_group">
-                                    <label class="layui-form-label"></label>
-                                    <div class="layui-input-inline">
-                                        <button type="submit" class="layui-btn" lay-submit="" lay-filter="partyForm">保存</button>
-                                        <button type="reset" class="layui-btn layui-btn-primary">取消</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="col-sm-9 admin_set" id="admin_set">
-                        <span class="control-label">管理员</span>
-                        <div class="col-sm-9">
-                            <div class="dropdown-sin-2">
-                                <select id="admin" style="display:none;" multiple placeholder="请选择"></select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="btn_container">
-                        <button id="save" class="btn btn-default" style="margin-top: 32px;">保存</button>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<!-- 弹窗 -->
-<div style="display: none" id="addSecondaryForm">
-    <form class="layui-form" action="">
-        <div class="layui-form-item">
-            <label class="layui-form-label">名称：</label>
-            <div class="layui-input-block">
-                <input type="text" name="org_name" lay-verify="required" lay-reqtext="名称是必填项，不能为空。" placeholder="请输入名称" autocomplete="off" class="layui-input">
-            </div>
-        </div>
-
-        <div class="layui-form-item">
-            <label class="layui-form-label">类型：</label>
-            <div class="layui-input-block">
-                <select name="secondaryType" >
-                    <option value="党委" selected>党委</option>
-                    <option value="党总支">党总支</option>
-                    <option value="党支部">党支部</option>
-                </select>
-            </div>
-        </div>
-
-    </form>
-</div>
-<div style="display: none" id="addBranchForm">
-    <form class="layui-form" action="">
-        <div class="layui-form-item">
-            <label class="layui-form-label">名称：</label>
-            <div class="layui-input-block">
-                <input type="text" name="org_name" lay-verify="required" lay-reqtext="名称是必填项，不能为空。" placeholder="请输入名称" autocomplete="off" class="layui-input">
-            </div>
-        </div>
-    </form>
-</div>
+<script type="text/javascript">
+    layui.config({
+        base: '${basePath}/js/layui/module/'
+    }).extend({
+        treeSelect: 'treeSelect/treeSelect'
+    });
+    layui.use(['treeSelect','form','layer'], function () {
+        var treeSelect= layui.treeSelect,
+            layer = layui.layer,
+            form = layui.form;
+        var checkedNode = null;
+        treeSelect.render({
+            // 选择器
+            elem: '#orgTree',
+            // 数据
+            data: '${orgTreeUrl}',
+            // 异步加载方式：get/post，默认get
+            type: 'get',
+            // 占位符
+            placeholder: '请选择',
+            // 是否开启搜索功能：true/false，默认false
+            search: true,
+            // 点击回调
+            click: function(d){
+                checkedNode = d.current;
+                $("#org-path").empty();
+                $("#org-path").append(getPathHtml(checkedNode));
+                renderOrgManagers();
+            },
+            // 加载完成后的回调函数
+            success: function (d) {
+                checkedNode = d.data[0];
+                treeSelect.checkNode('orgTree', checkedNode.id);
+                $("#org-path").empty();
+                $("#org-path").append(getPathHtml(checkedNode));
+                renderOrgManagers();
+            }
+        });
+        function getPathHtml(node) {
+            var pathHtml = '<a  href="javascript:;" >'+node.name+'</a>';
+            if(node.parentTId != null){
+                var pNode = node.getParentNode();
+                pathHtml = getPathHtml(pNode)+'<span lay-separator="">></span>'+pathHtml;
+            }
+            return pathHtml;
+        }
+        function renderOrgManagers(){
+            var postData = {
+                id:checkedNode.id
+            };
+            $.post("${findOrgAdmin}", postData, function (res) {
+                if(res.code=200){
+                    var  managerArr = new Array();
+                    for(var i=0;res.data.length>0 && i<res.data.length;i++){
+                        managerArr.push(res.data[i]['user_id']);
+                    }
+                    $('select[name="admin"]').val(managerArr);
+                    form.render();
+                }else {
+                    layer.msg(res.data.message);
+                }
+            },'json');
+        }
+        //表单提交
+        form.on('submit(orgManager)', function(data){
+            var postData = {
+                orgId:checkedNode.data.org_id,
+                admin:data.field.admin.join(',')
+            }
+            $.post("${adminSave}", postData, function (res) {
+                if(res.code=200){
+                    layer.msg("保存成功！");
+                }else {
+                    layer.msg(res.data.message);
+                }
+            },'json');
+            return false;
+        });
+    });
+</script>
 </body>

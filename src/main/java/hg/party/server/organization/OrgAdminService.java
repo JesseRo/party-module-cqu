@@ -16,4 +16,14 @@ public class OrgAdminService {
 	public OrgAdmin findOrgAdmin(String userId, PartyOrgAdminTypeEnum partyOrgAdminTypeEnum){
 		return orgAdminDao.findOrgAdmin(userId,partyOrgAdminTypeEnum);
 	}
+
+	/**
+	 * 根据org_id查询党组织管理人员
+	 * @param userId
+	 * @param orgId
+	 * @return
+	 */
+	public OrgAdmin findOrgAdmin(String userId, String orgId){
+		return orgAdminDao.findOrgAdmin(userId,orgId);
+	}
 }

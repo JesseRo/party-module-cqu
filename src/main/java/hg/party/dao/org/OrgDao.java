@@ -2,13 +2,20 @@ package hg.party.dao.org;
 
 import com.dt.springjdbc.dao.impl.PostgresqlDaoImpl;
 
-import hg.party.entity.login.User;
 import hg.party.entity.organization.Organization;
+import hg.party.entity.party.TreeNode;
 import org.osgi.service.component.annotations.Component;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import party.constants.PartyOrgAdminTypeEnum;
 
 import java.lang.reflect.Field;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +30,33 @@ public class OrgDao extends PostgresqlDaoImpl<Organization>{
 	public List<Organization> findAll() {
 		String sql = "select * from hg_party_org where historic is false";
 		return jdbcTemplate.query(sql,  BeanPropertyRowMapper.newInstance(Organization.class));
+	}
+	public Organization findOrgById(int id){
+		String sql = "select * from hg_party_org where historic is false and id = ?";
+		List<Organization> organizationList =  jdbcTemplate.query(sql,  BeanPropertyRowMapper.newInstance(Organization.class),id);
+		if(organizationList.size()>0){
+			return organizationList.get(0);
+		}else{
+			return null;
+		}
+	}
+	public Organization findOrgByPID(int id,String orgName){
+		String sql = "select o.* from hg_party_org o left join hg_party_org p on o.org_parent = p.org_id where o.historic is false and p.id = ? and o.org_Name = ?";
+		List<Organization> organizationList =  jdbcTemplate.query(sql,  BeanPropertyRowMapper.newInstance(Organization.class),id,orgName);
+		if(organizationList.size()>0){
+			return organizationList.get(0);
+		}else{
+			return null;
+		}
+	}
+	public Organization findOrgById(String orgId){
+		String sql = "select * from hg_party_org where historic is false and org_id = ?";
+		List<Organization> organizationList =  jdbcTemplate.query(sql,  BeanPropertyRowMapper.newInstance(Organization.class),orgId);
+		if(organizationList.size()>0){
+			return organizationList.get(0);
+		}else{
+			return null;
+		}
 	}
 	public List<Organization> findChildren(String parentId) {
 		String sql = "select * from hg_party_org where historic is false and org_parent = ?";
@@ -465,21 +499,81 @@ public class OrgDao extends PostgresqlDaoImpl<Organization>{
 		map.put("list",list);
 	   return map;
 	}
-
-	public void updateDetail(Organization organization) {
+	public int createOrg(final Organization org) {
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		String sql = "insert into hg_party_org (org_id,org_name,org_type,org_parent,desc_type) values (?,?,?,?,?)";
+		jdbcTemplate.update( new PreparedStatementCreator(){
+								 @Override
+								 public PreparedStatement createPreparedStatement(Connection conn) throws SQLException {
+									 PreparedStatement ps = conn.prepareStatement(sql, new String [] {"id"});
+									 ps.setString(1, org.getOrg_id());
+									 ps.setString(2, org.getOrg_name());
+									 ps.setString(3, org.getOrg_type());
+									 ps.setString(4, org.getOrg_parent());
+									 ps.setInt(5, org.getDesc_type());
+									 return ps;
+								 }
+							 },
+				keyHolder);
+		return keyHolder.getKey().intValue();
+	}
+	public int updateDetail(Organization organization) {
 		String sql = "update hg_party_org set org_name = ?," +
 				"org_address = ?, org_phone_number = ?, org_fax = ?," +
 				"org_secretary = ?, org_email = ?, org_contactor = ?," +
-				"org_contactor_phone = ? where id = ?";
+				"desc_type = ?,org_contactor_phone = ? where id = ?";
 
-		jdbcTemplate.update(sql, organization.getOrg_name(), organization.getOrg_address(),
-				organization.getOrg_phone_number(), organization.getOrg_fax(), organization.getOrg_secretary(),
-				organization.getOrg_email(), organization.getOrg_contactor(), organization.getOrg_contactor_phone(),
+		return jdbcTemplate.update(sql, organization.getOrg_name(),
+				organization.getOrg_address(), organization.getOrg_phone_number(), organization.getOrg_fax(),
+				organization.getOrg_secretary(), organization.getOrg_email(), organization.getOrg_contactor(),
+				organization.getDesc_type(),organization.getOrg_contactor_phone(),
 				organization.getId());
 	}
 
 	public List<Organization> findOrgByOrgType(PartyOrgAdminTypeEnum partyOrgAdminTypeEnum) {
 		String sql = "select * from hg_party_org where historic is false and org_type = ?";
 		return jdbcTemplate.query(sql,  BeanPropertyRowMapper.newInstance(Organization.class),partyOrgAdminTypeEnum.getType());
+	}
+
+	public int deleteOrg(int id) {
+		String sql = "update hg_party_org set historic = true where id = ?";
+		return jdbcTemplate.update(sql, id);
+	}
+
+	public List<TreeNode> getTreeData() {
+		List<Organization> organizationList = findAll();
+		return initOrgTreeData(organizationList,"-");
+	}
+
+	private List<TreeNode> initOrgTreeData(List<Organization> organizationList,String orgParent){
+		List<TreeNode> treeNodeList = new ArrayList<>();
+		if(organizationList.size()>0){
+			for(Organization organization:organizationList){
+				String pId =  organization.getOrg_parent();
+				if((orgParent==null && pId == null) ||(orgParent!=null && orgParent.equals(pId))){
+					TreeNode parentNode = new TreeNode();
+					parentNode.setChecked(false);
+					parentNode.setId(organization.getId());
+					parentNode.setName(organization.getOrg_name());
+					parentNode.setOpen(false);
+					parentNode.setData(organization);
+					List<TreeNode> children = initOrgTreeData(organizationList,organization.getOrg_id());
+					parentNode.setChildren(children);
+					treeNodeList.add(parentNode);
+				}
+
+			}
+		}
+		return treeNodeList;
+	}
+
+	public List<Map<String, Object>> findAlUsers() {
+		String sql  = "select user_id,user_name from hg_users_info";
+		return jdbcTemplate.queryForList(sql);
+	}
+
+	public List<Map<String, Object>> findOrgAdminUser(int id) {
+		String sql  = "select i.user_id,i.user_name from hg_party_org_admin a left join hg_users_info i on a.admin_id = i.user_id left join hg_party_org o on a.org_id = o.org_id where o.id=?";
+		return jdbcTemplate.queryForList(sql,id);
 	}
 }

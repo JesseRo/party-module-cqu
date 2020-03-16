@@ -36,9 +36,9 @@ public enum PartyMemberTypeEnum {
     }
     public static PartyMemberTypeEnum getEnum(String type) {
         PartyMemberTypeEnum[] partyMemberTypeEnums = values();
-        for (PartyMemberTypeEnum imageFormatType : partyMemberTypeEnums) {
-            if (imageFormatType.getType().equals(type)) {
-                return imageFormatType;
+        for (PartyMemberTypeEnum partyMemberTypeEnum : partyMemberTypeEnums) {
+            if (partyMemberTypeEnum.getType().equals(type)) {
+                return partyMemberTypeEnum;
             }
         }
         return null;

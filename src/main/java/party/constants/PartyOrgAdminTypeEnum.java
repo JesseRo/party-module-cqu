@@ -20,6 +20,16 @@ public enum PartyOrgAdminTypeEnum {
         this.desc=desc;
     }
 
+    public static PartyOrgAdminTypeEnum getEnum(String type) {
+        PartyOrgAdminTypeEnum[] partyOrgAdminTypeEnums = values();
+        for (PartyOrgAdminTypeEnum partyOrgAdminTypeEnum : partyOrgAdminTypeEnums) {
+            if (partyOrgAdminTypeEnum.getType().equals(type)) {
+                return partyOrgAdminTypeEnum;
+            }
+        }
+        return null;
+    }
+
     public String getType() {
         return type;
     }

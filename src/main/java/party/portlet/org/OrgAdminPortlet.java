@@ -12,6 +12,8 @@ import javax.portlet.RenderResponse;
 import dt.session.SessionManager;
 import hg.party.dao.org.OrgDao;
 import hg.party.entity.organization.Organization;
+import hg.party.server.organization.OrgService;
+import hg.party.server.organization.UserRoleService;
 import org.osgi.service.component.annotations.Component;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 
@@ -37,9 +39,13 @@ import party.constants.PartyPortletKeys;
         service = Portlet.class
 )
 public class OrgAdminPortlet extends MVCPortlet {
+    @Reference
+    OrgService orgService;
     @Override
     public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
             throws IOException, PortletException {
+        List<Map<String,Object>> userList = orgService.findAlUsers();
+        renderRequest.setAttribute("userList",userList);
         super.doView(renderRequest, renderResponse);
     }
 

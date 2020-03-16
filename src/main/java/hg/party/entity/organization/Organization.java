@@ -25,7 +25,7 @@ public class Organization{
 	private String org_fax;
 	private String org_email;
 	private String org_contactor_phone;
-	private String desc_type;
+	private Integer desc_type;
 
 	public String getOrg_code() {
 		return org_code;
@@ -35,11 +35,11 @@ public class Organization{
 		this.org_code = org_code;
 	}
 
-	public String getDesc_type() {
+	public Integer getDesc_type() {
 		return desc_type;
 	}
 
-	public void setDesc_type(String desc_type) {
+	public void setDesc_type(Integer desc_type) {
 		this.desc_type = desc_type;
 	}
 

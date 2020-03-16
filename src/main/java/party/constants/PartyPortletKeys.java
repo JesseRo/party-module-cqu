@@ -201,6 +201,8 @@ public class PartyPortletKeys {
 	public static final String DuesCalculate = "DuesCalculate";//党费计算
 
     public static final String MeetingPlanPortlet = "MeetingPlanPortlet";
+
+    public static  final String OrgCRUD = "OrgCRUD";//党组织CRUD
 }
 
 

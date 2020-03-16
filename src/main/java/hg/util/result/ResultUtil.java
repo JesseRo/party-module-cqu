@@ -4,13 +4,19 @@ public class ResultUtil {
     public static Result success(Object data) {
         return result(ResultCode.SUCCESS, "成功", data);
     }
-
+    public static Result success(Object data,String message) {
+        return result(ResultCode.SUCCESS, message, data);
+    }
     public static Result unauthorized(Object data) {
         return result(ResultCode.UNAUTHORIZED, "登陆认证失败", data);
     }
 
     public static Result fail(String message) {
         return result(ResultCode.FAIL, message, null);
+    }
+
+    public static Result noAuthority(String message) {
+        return result(ResultCode.NO_AUTHORITY, message, null);
     }
 
     public static Result fail(ResultCode resultCode, String message) {

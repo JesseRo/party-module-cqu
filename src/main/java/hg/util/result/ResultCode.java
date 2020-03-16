@@ -23,7 +23,11 @@ public enum ResultCode {
     /**
      * 服务器内部错误
      */
-    INTERNAL_SERVER_ERROR(500);
+    INTERNAL_SERVER_ERROR(500),
+    /**
+     * 没有权限
+     */
+    NO_AUTHORITY(402);
 
     public int code;
 
