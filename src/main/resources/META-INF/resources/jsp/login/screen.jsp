@@ -169,14 +169,6 @@
             window.location.href = "${turnTo}";
         })
         autoScroll();
-        setTimeout(function (){
-            window.onresize = function () {
-                var chartsList = [inspectorEchart, mapEchart, attendChart1, attendChart2, attendChart3, activityEchart, viewEchart];
-                chartsList.map(function(i){
-                    i.resize();
-                });
-            }
-        },200)
     });
     //渲染活动督察情况
     function renderInspectorChart(){
