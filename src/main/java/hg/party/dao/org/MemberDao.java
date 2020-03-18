@@ -287,6 +287,18 @@ public class MemberDao extends PostgresqlDaoImpl<Member> {
         }
         jdbcTemplate.execute(sqlBuilder.toString());
     }
+    public void historic(Member... members) {
+        if (members == null || members.length == 0) {
+            return;
+        }
+        StringBuilder sqlBuilder = new StringBuilder();
+        for (Member org : members) {
+            sqlBuilder.append("update hg_party_member set historic = ").append(true)
+                    .append(" where id='").append(org.getId()).append("' and historic=false;\n");
+
+        }
+        jdbcTemplate.execute(sqlBuilder.toString());
+    }
 
     @Transactional
     public void insertAll(List<Member> list) {
