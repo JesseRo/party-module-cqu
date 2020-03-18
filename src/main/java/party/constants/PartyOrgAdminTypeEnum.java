@@ -29,6 +29,15 @@ public enum PartyOrgAdminTypeEnum {
         }
         return null;
     }
+    public static PartyOrgAdminTypeEnum getEnumByRole(String role) {
+        PartyOrgAdminTypeEnum[] partyOrgAdminTypeEnums = values();
+        for (PartyOrgAdminTypeEnum partyOrgAdminTypeEnum : partyOrgAdminTypeEnums) {
+            if (partyOrgAdminTypeEnum.getRole().equals(role)) {
+                return partyOrgAdminTypeEnum;
+            }
+        }
+        return null;
+    }
 
     public String getType() {
         return type;

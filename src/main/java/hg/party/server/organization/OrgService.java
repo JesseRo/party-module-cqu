@@ -63,4 +63,23 @@ public class OrgService {
 	public List<Map<String,Object>> findOrgAdminUser(int id) {
 		return orgDao.findOrgAdminUser(id);
 	}
+
+	/**
+	 *查询用户管理的对应角色党组织
+	 * @param userId
+	 * @param partyOrgAdminTypeEnum
+	 * @return
+	 */
+    public Organization findAdminOrg(String userId, PartyOrgAdminTypeEnum partyOrgAdminTypeEnum) {
+		return orgDao.findAdminOrg(userId,partyOrgAdminTypeEnum);
+    }
+
+	/**
+	 * 通过组织查询对应组织的用户
+	 * @param orgId
+	 * @return
+	 */
+	public List<Map<String, Object>> findUsersByOrg(String orgId, PartyOrgAdminTypeEnum partyOrgAdminTypeEnum) {
+		return orgDao.findUsersByOrg(orgId,partyOrgAdminTypeEnum);
+	}
 }

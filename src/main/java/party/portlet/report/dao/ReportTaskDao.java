@@ -33,6 +33,6 @@ public class ReportTaskDao extends PostgresqlDaoImpl<ReportTask> {
         List<String > template = Stream.of(ids).map(p->"?").collect(Collectors.toList());
         String idTemplate = String.join(",", template);
         String sql = "delete from hg_party_report_task where task_id in (" + idTemplate + ")";
-        jdbcTemplate.update(sql, ids);
+        jdbcTemplate.update(sql, (Object) ids);
     }
 }

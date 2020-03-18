@@ -3,12 +3,15 @@ package hg.party.dao.org;
 import com.dt.springjdbc.dao.impl.PostgresqlDaoImpl;
 
 import hg.party.entity.organization.Organization;
+import hg.party.entity.party.OrgAdmin;
 import hg.party.entity.party.TreeNode;
 import org.osgi.service.component.annotations.Component;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.util.StringUtils;
 import party.constants.PartyOrgAdminTypeEnum;
 
 import java.lang.reflect.Field;
@@ -575,5 +578,31 @@ public class OrgDao extends PostgresqlDaoImpl<Organization>{
 	public List<Map<String, Object>> findOrgAdminUser(int id) {
 		String sql  = "select i.user_id,i.user_name from hg_party_org_admin a left join hg_users_info i on a.admin_id = i.user_id left join hg_party_org o on a.org_id = o.org_id where o.id=?";
 		return jdbcTemplate.queryForList(sql,id);
+	}
+
+    public Organization findAdminOrg(String userId, PartyOrgAdminTypeEnum partyOrgAdminTypeEnum) {
+		String sql = "select o.* from hg_party_org_admin a left join hg_party_org o on a.org_id= o.org_id where admin_id = ? and o.org_type = ? ";
+		RowMapper<Organization> rowMapper = BeanPropertyRowMapper.newInstance(Organization.class);
+		List<Organization> organizationList =  this.jdbcTemplate.query(sql,rowMapper,userId,partyOrgAdminTypeEnum.getType());
+		if(organizationList.size()>0){
+			return organizationList.get(0);
+		}else{
+			return null;
+		}
+    }
+
+	public List<Map<String, Object>> findUsersByOrg(String orgId, PartyOrgAdminTypeEnum partyOrgAdminTypeEnum) {
+		StringBuffer sb  = new StringBuffer("select i.user_id,i.user_name,b.org_id branch_id, s.org_id secondary_id,o.org_id org_id from hg_users_info i left join hg_party_org b on i.user_department_id = b.org_id left join hg_party_org s on s.org_id = b.org_parent left join hg_party_org o on o.org_id = s.org_parent");
+		if(partyOrgAdminTypeEnum !=null && !StringUtils.isEmpty(orgId)){
+			switch(partyOrgAdminTypeEnum){
+				case BRANCH:sb.append(" where b.org_id = ?");break;
+				case SECONDARY:sb.append(" where s.org_id = ?");break;
+				case ORGANIZATION:sb.append( "where o.org_id = ?");break;
+			}
+			return jdbcTemplate.queryForList(sb.toString(),orgId);
+		}else{
+			return null;
+		}
+
 	}
 }

@@ -22,6 +22,5 @@ public class PlaceDao extends PostgresqlDaoImpl<Place> {
     public Place findByPlaceId(String placeId) {
         String sql = "select * from hg_party_place where place_id = ? ";
         return jdbcTemplate.queryForObject(sql, BeanPropertyRowMapper.newInstance(Place.class), placeId);
-
     }
 }

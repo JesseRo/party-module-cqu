@@ -1,26 +1,21 @@
 package party.portlet.cqu.command;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.alibaba.fastjson.JSON;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCResourceCommand;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.PortalUtil;
 import dt.session.SessionManager;
-import hg.party.entity.partyMembers.JsonResponse;
 import hg.util.TransactionUtil;
+import hg.util.result.ResultUtil;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import party.constants.PartyPortletKeys;
-import party.portlet.cqu.dao.CheckPersonDao;
 import party.portlet.cqu.dao.PlaceDao;
-import party.portlet.cqu.entity.CheckPerson;
 import party.portlet.cqu.entity.Place;
 
 import javax.portlet.PortletException;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.util.UUID;
 
@@ -38,16 +33,17 @@ public class PlaceAddCommand implements MVCResourceCommand {
     @Reference
     TransactionUtil transactionUtil;
 
-    private Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm").create();
-
     @Override
     public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws PortletException {
         String campus = ParamUtil.getString(resourceRequest, "campus");
         String placeName = ParamUtil.getString(resourceRequest, "place");
         String org = (String) SessionManager.getAttribute(resourceRequest.getRequestedSessionId(), "department");
-
-        HttpServletResponse res = PortalUtil.getHttpServletResponse(resourceResponse);
-        res.addHeader("content-type","application/json");
+        PrintWriter printWriter = null;
+        try{
+            printWriter = resourceResponse.getWriter();
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
         try {
             Place place = new Place();
             place.setCampus(campus);
@@ -56,16 +52,16 @@ public class PlaceAddCommand implements MVCResourceCommand {
             place.setPlace_id(placeId);
             place.setAdd_time(new Timestamp(System.currentTimeMillis()));
             place.setOrg_id(org);
-            placeDao.saveOrUpdate(place);
-            place = placeDao.findByPlaceId(placeId);
-            res.getWriter().write(gson.toJson(JsonResponse.Success(place)));
-        } catch (Exception e) {
-            try {
-                e.printStackTrace();
-                res.getWriter().write(gson.toJson(JsonResponse.Failure("新增失败")));
-            } catch (IOException e1) {
-                e1.printStackTrace();
+            int res = placeDao.saveOrUpdate(place);
+            if(res > 0 ){
+                printWriter.write(JSON.toJSONString(ResultUtil.success(place)));
+            }else{
+                printWriter.write(JSON.toJSONString(ResultUtil.fail("添加失败")));
             }
+
+        } catch (Exception e) {
+            printWriter.write(JSON.toJSONString(ResultUtil.fail("访问数据出错，请联系技术人员.")));
+            e.printStackTrace();
         }
         return false;
     }

@@ -1,15 +1,13 @@
 package party.portlet.cqu.command;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.alibaba.fastjson.JSON;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCResourceCommand;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.PortalUtil;
 import dt.session.SessionManager;
-import hg.party.entity.partyMembers.JsonResponse;
-import hg.util.TransactionUtil;
+import hg.util.result.ResultUtil;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+import org.springframework.util.StringUtils;
 import party.constants.PartyPortletKeys;
 import party.portlet.cqu.dao.PlaceDao;
 import party.portlet.cqu.entity.Place;
@@ -17,8 +15,8 @@ import party.portlet.cqu.entity.Place;
 import javax.portlet.PortletException;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+
+import java.io.PrintWriter;
 import java.util.List;
 
 @Component(
@@ -32,30 +30,29 @@ import java.util.List;
 public class MeetingPlaceCommand implements MVCResourceCommand {
     @Reference
     private PlaceDao placeDao;
-    @Reference
-    TransactionUtil transactionUtil;
-
-    private Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm").create();
 
     @Override
     public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws PortletException {
-//        String orgId = ParamUtil.getString(resourceRequest, "orgId");
         String campus = ParamUtil.getString(resourceRequest, "campus");
         String orgId = (String) SessionManager.getAttribute(resourceRequest.getRequestedSessionId(), "department");
 
-        List<Place> places = placeDao.getPlace(orgId, campus);
 
-        HttpServletResponse res = PortalUtil.getHttpServletResponse(resourceResponse);
-        res.addHeader("content-type","application/json");
+        PrintWriter printWriter = null;
+        try{
+            printWriter = resourceResponse.getWriter();
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
         try {
-            res.getWriter().write(gson.toJson(JsonResponse.Success(places)));
-        } catch (Exception e) {
-            try {
-                e.printStackTrace();
-                res.getWriter().write(gson.toJson(new JsonResponse(false, null, null)));
-            } catch (IOException e1) {
-                e1.printStackTrace();
+            if(!StringUtils.isEmpty(campus)){
+                List<Place> places = placeDao.getPlace(orgId, campus);
+                printWriter.write(JSON.toJSONString(ResultUtil.success(places)));
+            }else{
+                printWriter.write(JSON.toJSONString(ResultUtil.fail("校区campus不能为空")));
             }
+        } catch (Exception e) {
+            printWriter.write(JSON.toJSONString(ResultUtil.fail("访问数据出错，请联系技术人员.")));
+            e.printStackTrace();
         }
         return false;
     }
