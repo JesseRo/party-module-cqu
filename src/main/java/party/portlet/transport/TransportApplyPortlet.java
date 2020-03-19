@@ -99,9 +99,9 @@ public class TransportApplyPortlet extends MVCPortlet {
         if (transport == null || ("1").equalsIgnoreCase(isResubmit)){
             renderRequest.setAttribute("transportJson", "null");
             renderRequest.setAttribute("already", 0);
+            renderRequest.setAttribute("isResubmit", isResubmit);
         }else {
             renderRequest.setAttribute("already", 1);
-            renderRequest.setAttribute("isResubmit", isResubmit);
             renderRequest.setAttribute("statusList", ConstantsKey.STATUS_LIST);
             renderRequest.setAttribute("transportJson", gson.toJson(transport));
             renderRequest.setAttribute("transport", transport);
