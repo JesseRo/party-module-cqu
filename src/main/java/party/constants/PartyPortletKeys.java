@@ -123,7 +123,7 @@ public class PartyPortletKeys {
 
 	public static final String SecondaryTaskReportPortlet = "SecondaryTaskReportPortlet";
 
-	public static final String sconedPartyPortlet = "sconedPartyPortlet"; 
+	public static final String SubPlanPortlet = "SubPlanPortlet";
 	//选择用户角色
 	public static final String UserRoles = "UserRoles";
 	//左侧导航权限

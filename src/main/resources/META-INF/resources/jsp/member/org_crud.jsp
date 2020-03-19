@@ -428,14 +428,14 @@ button.cancal.btn.btn-default {
                 partyEmail: function(value, item){
                     var reg = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
                     if(value != ''&& value != null && !reg.test(value)){
-                        return "邮箱格式正确";
+                        return "邮箱格式不正确";
                     }
                 },
                 contactNumber: function(value, item){
                     var regPhone = /^1\d{10}$/;
                     var reg = /^((\d{3,4}-)|\d{3.4}-)?\d{7,8}$/;
                     if(value != ''&& value != null && !regPhone.test(value) && !reg.test(value)){
-                        return "联系电话格式正确";
+                        return "联系电话格式不正确";
                     }
                 }
             });
