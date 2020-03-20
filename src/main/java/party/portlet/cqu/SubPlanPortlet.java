@@ -1,9 +1,12 @@
 package party.portlet.cqu;
 
+import com.alibaba.fastjson.JSON;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import dt.session.SessionManager;
 import hg.party.entity.organization.Organization;
+import hg.party.entity.party.MeetingPlan;
 import hg.party.server.organization.OrgService;
+import hg.party.server.partyBranch.PartyBranchService;
 import org.apache.log4j.Logger;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -15,9 +18,8 @@ import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @author jesse
@@ -47,6 +49,8 @@ public class SubPlanPortlet extends MVCPortlet {
     Logger logger = Logger.getLogger(SubPlanPortlet.class);
     @Reference
     private OrgService orgService;
+    @Reference
+    private PartyBranchService partyBranchService;
     @Override
     public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
             throws IOException, PortletException {
@@ -55,14 +59,21 @@ public class SubPlanPortlet extends MVCPortlet {
         String role =	SessionManager.getAttribute(sessionId, "role").toString();//用户选中角色
         PartyOrgAdminTypeEnum orgAdminTypeEnum = PartyOrgAdminTypeEnum.getEnumByRole(role);
         Organization organization = new Organization() ;
-        List<Map<String,Object>> userList = new ArrayList<>();
+        MeetingPlan meetingPlan = new MeetingPlan();
+        List<Map<String,Object>> members = new ArrayList<>();
         if(orgAdminTypeEnum!=null){
             organization = orgService.findAdminOrg(userId, orgAdminTypeEnum);
-            userList = orgService.findUsersByOrg(organization.getOrg_id(),orgAdminTypeEnum);
+            members = orgService.findMembersByOrg(organization.getOrg_id(),orgAdminTypeEnum);
+            //meetingPlan = partyBranchService.findNoSubmitPlan(userId,organization.getOrg_id());
         }
-        logger.info("userList size:"+userList.size());
+
+        logger.info("members size:"+members.size());
         renderRequest.setAttribute("organization",organization);
-        renderRequest.setAttribute("userList",userList);
+        renderRequest.setAttribute("memberList", JSON.toJSONString(members));
+        renderRequest.setAttribute("members", members);
+        Date now = Calendar.getInstance().getTime();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        renderRequest.setAttribute("now", sdf.format(now));
         super.doView(renderRequest, renderResponse);
     }
 }

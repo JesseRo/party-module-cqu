@@ -591,15 +591,24 @@ public class OrgDao extends PostgresqlDaoImpl<Organization>{
 		}
     }
 
-	public List<Map<String, Object>> findUsersByOrg(String orgId, PartyOrgAdminTypeEnum partyOrgAdminTypeEnum) {
-		StringBuffer sb  = new StringBuffer("select i.user_id,i.user_name,b.org_id branch_id, s.org_id secondary_id,o.org_id org_id from hg_users_info i left join hg_party_org b on i.user_department_id = b.org_id left join hg_party_org s on s.org_id = b.org_parent left join hg_party_org o on o.org_id = s.org_parent");
+	public List<Map<String, Object>> findMembersByOrg(String orgId, PartyOrgAdminTypeEnum partyOrgAdminTypeEnum) {
+		StringBuffer sb  = new StringBuffer("select i.member_identity,i.member_name,b.org_id branch_id, s.org_id secondary_id,o.org_id org_id from hg_party_member i left join hg_party_org b on i.member_org = b.org_id left join hg_party_org s on s.org_id = b.org_parent left join hg_party_org o on o.org_id = s.org_parent");
+		List<Map<String, Object>> list= null;
 		if(partyOrgAdminTypeEnum !=null && !StringUtils.isEmpty(orgId)){
 			switch(partyOrgAdminTypeEnum){
-				case BRANCH:sb.append(" where b.org_id = ?");break;
-				case SECONDARY:sb.append(" where s.org_id = ?");break;
-				case ORGANIZATION:sb.append( "where o.org_id = ?");break;
+				case BRANCH:
+					sb.append(" where b.org_id = ?");
+					list =  jdbcTemplate.queryForList(sb.toString(),orgId);
+					break;
+				case SECONDARY:
+					sb.append(" where s.org_id=? or b.org_id = ?");
+					list =  jdbcTemplate.queryForList(sb.toString(),orgId,orgId);
+					break;
+				case ORGANIZATION:;
+					list =  jdbcTemplate.queryForList(sb.toString());
+					break;
 			}
-			return jdbcTemplate.queryForList(sb.toString(),orgId);
+			return list;
 		}else{
 			return null;
 		}

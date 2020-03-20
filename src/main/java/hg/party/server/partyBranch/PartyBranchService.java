@@ -329,4 +329,8 @@ public class PartyBranchService {
                 "where g.group_id in ('" + String.join("','", groupsIds) + "')";
         return dao.getJdbcTemplate().queryForList(sql);
     }
+
+    public MeetingPlan findNoSubmitPlan(String userId, String org_id) {
+        return dao.findNoSubmitPlan(userId,org_id);
+    }
 }

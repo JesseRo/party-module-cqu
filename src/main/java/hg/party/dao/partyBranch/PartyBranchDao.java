@@ -617,4 +617,15 @@ public class PartyBranchDao extends PostgresqlDaoImpl<MeetingPlan> {
         return jdbcTemplate.queryForObject(sql, rowMapper, meetingId);
 
     }
+
+    public MeetingPlan findNoSubmitPlan(String userId, String org_id) {
+        String sql = "select * FROM  hg_party_meeting_plan_info where organization_id=?";
+        RowMapper<MeetingPlan> rowMapper = BeanPropertyRowMapper.newInstance(MeetingPlan.class);
+        List<MeetingPlan> meetingPlanList = this.jdbcTemplate.query(sql, rowMapper, org_id);
+        if(meetingPlanList.size()>0){
+            return meetingPlanList.get(0);
+        }else{
+            return null;
+        }
+    }
 }

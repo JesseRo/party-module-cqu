@@ -75,11 +75,11 @@ public class OrgService {
     }
 
 	/**
-	 * 通过组织查询对应组织的用户
+	 * 通过组织查询对应组织的党员
 	 * @param orgId
 	 * @return
 	 */
-	public List<Map<String, Object>> findUsersByOrg(String orgId, PartyOrgAdminTypeEnum partyOrgAdminTypeEnum) {
-		return orgDao.findUsersByOrg(orgId,partyOrgAdminTypeEnum);
+	public List<Map<String, Object>> findMembersByOrg(String orgId, PartyOrgAdminTypeEnum partyOrgAdminTypeEnum) {
+		return orgDao.findMembersByOrg(orgId,partyOrgAdminTypeEnum);
 	}
 }

@@ -22,45 +22,15 @@
 <html>
 <head>
     <style type="text/css">
-        /* 下拉多选样式 需要引用*/
-        /* 多选样式开始*/
-        select[multiple].layui-form-select>.layui-select-title>input.layui-input{ border-bottom: 0}
-        select[multiple].layui-form-select dd{ padding:0;}
-        select[multiple].layui-form-select .layui-form-checkbox[lay-skin=primary]{ margin:0 !important; display:block; line-height:36px !important; position:relative; padding-left:26px;}
-        select[multiple].layui-form-select .layui-form-checkbox[lay-skin=primary] span{line-height:36px !important;padding-left: 10px; float:none;}
-        select[multiple].layui-form-select .layui-form-checkbox[lay-skin=primary] i{ position:absolute; left:10px; top:0; margin-top:9px;}
-        .multiSelect{ line-height:normal; height:auto; padding:4px 10px; overflow:hidden;min-height:38px; margin-top:-38px; left:0; z-index:99;position:relative;background:none;}
-        .multiSelect a{ padding:2px 5px; background:#FFB800; border-radius:2px; color:#fff; display:block; line-height:20px; height:20px; margin:2px 5px 2px 0; float:left;}
-        .multiSelect a span{ float:left;}
-        .multiSelect a i {float:left;display:block;margin:2px 0 0 2px;border-radius:2px;width:8px;height:8px;padding:4px;position:relative;-webkit-transition:all .3s;transition:all .3s}
-        .multiSelect a i:before, .multiSelect a i:after {position:absolute;left:8px;top:2px;content:'';height:12px;width:1px;background-color:#fff}
-        .multiSelect a i:before {-webkit-transform:rotate(45deg);transform:rotate(45deg)}
-        .multiSelect a i:after {-webkit-transform:rotate(-45deg);transform:rotate(-45deg)}
-        .multiSelect a i:hover{ background-color:#545556;}
-        .multiOption{display: inline-block; padding: 0 5px;cursor: pointer; color: #999;}
-        .multiOption:hover{color: #5FB878}
+        .layui-layer-title{
+            display: none;
+        }
         .layui-layer-setwin{
             display: none;
         }
         .dropdown-display {
             height: 40px;
         }
-        .layui-form-checked[lay-skin="primary"] i {
-            border-color: #FFB800 !important;
-            background-color: #FFB800;
-            color: #fff;
-        }
-        .multiSelect a {
-            line-height: 32px;
-            height: 32px;
-            margin-left: 5px;
-        }
-        .layui-form-select .layui-select-title .layui-anim div::-webkit-scrollbar-thumb {
-            border-radius: 10px;
-            -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
-            background: #FFB800;
-        }
-        /* 多选样式结束*/
 
         input, select {
             outline: none;
@@ -389,6 +359,9 @@
         .content_info .content_form .form-group > div {
             margin-bottom: 20px;
         }
+        .layui-laydate .layui-laydate-content table tr{
+            display:flex;
+        }
 
         /*滚动条  */
         thead.first_thead th {
@@ -453,7 +426,7 @@
             vertical-align: middle;
             margin-left: 10px;
         }
-        .participat-long-input .list_container span{
+        .mult_input_container .list_container span{
             color: #FFF;
             background: #FFAB33;
             padding: 4px;
@@ -466,7 +439,7 @@
             text-overflow: ellipsis;
             white-space: nowrap;
         }
-        .participat-long-input .list_container span:hover{
+        .mult_input_container .list_container span:hover{
             background: rgba(225, 171, 51, 0.8)!important;
         }
         .mult_input_container .list_container .list_item_container{
@@ -560,32 +533,6 @@
             color: #ffab33!important;
             border: 1px solid #ffab33!important;
         }
-        #hg-form-container .layui-form-label{
-            width:140px;
-        }
-        #hg-form-container .layui-input-block{
-            margin-left:140px;
-        }
-        #hg-form-container .layui-input-inline{
-            width:320px;
-        }
-        .layui-form-label.layui-required:after{
-            content:"*";
-            color:red;
-            position: absolute;
-            top:5px;
-            left:15px;
-        }
-        .layui-input-block.long-input{
-            width:790px;
-        }
-        .layui-input-block.long-input.btn-list{
-            text-align:center;
-        }
-        .participat-long-input{
-            margin-left:140px;
-            width:790px;
-        }
     </style>
     <link rel="stylesheet" href="${basePath}/css/publish.css"/>
     <script type="text/javascript" src="${basePath}/js/My97DatePicker/WdatePicker.js"></script>
@@ -628,18 +575,26 @@
 
         <div class="bg_white_container">
             <div class="content_form" style="padding: 20px 0;">
-                <form class="layui-form" role="form" action="${submitForm }" method="post" id="hg-form-container"
+                <form class="form-horizontal" role="form" action="${submitForm }" method="post"
                       enctype="multipart/form-data" style="max-width: 960px;">
-                        <div class="layui-form-item">
-                            <label class="layui-form-label layui-required">党组织：</label>
-                            <div class="layui-input-inline">
-                                <input type="hidden" name="branch" maxlength="20" lay-verify="required" autocomplete="off" class="layui-input" disabled value="${organization.org_id}">
-                                <input type="text" name="orgName" maxlength="20" lay-verify="required" autocomplete="off" class="layui-input" disabled value="${organization.org_name}">
+                    <div id="hg-form-container" class="form-group">
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="col-sm-3 col-xs-3 ">
+                                <span class="control-label form-label-required">党组织：</span>
                             </div>
-                            <label class="layui-form-label layui-required">会议类型：</label>
-                            <div class="layui-input-inline">
-                                <select  name="conferenceType"  lay-verify="required">
-                                    <option value=""  selected>请选择</option>
+                            <div class="col-sm-9 col-xs-9">
+                                <select class="form-control ${class}" name="branch" disabled="disabled">
+                                    <option value="${organization.org_id}">${organization.org_name}</option>
+                                    <option disabled="" selected="">请选择</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="col-sm-3 col-xs-3 ">
+                                <span class="control-label form-label-required">会议类型：</span>
+                            </div>
+                            <div class="col-sm-9 col-xs-9">
+                                <select class="form-control ${class}" name="conferenceType">
                                     <option value="党委中心组学习">党委中心组学习</option>
                                     <option value="组织生活会">组织生活会</option>
                                     <option value="支委会">支委会</option>
@@ -649,24 +604,33 @@
                                     <option value="党课">党课</option>
                                     <option value="主题党日">主题党日</option>
                                     <option value="民主评议党员">民主评议党员</option>
+                                    <option disabled="" selected="">请选择</option>
                                 </select>
                             </div>
                         </div>
-                        <div class="layui-form-item">
-                            <label class=" layui-form-label layui-required">开展主题：</label>
-                            <div class="layui-input-block long-input">
-                                <input class="layui-input" name="subject" value="" lay-verify="required" autocomplete="on">
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="col-sm-3 col-xs-3 ">
+                                <span class=" control-label form-label-required">开展主题：</span>
+                            </div>
+                            <div class="col-sm-9 col-xs-9">
+                                <input class="form-control" name="subject" value="">
                             </div>
                         </div>
-                        <div class="layui-form-item">
-                            <label class="layui-form-label layui-required">开始时间：</label>
-                            <div class="layui-input-inline">
-                                <input type="text" name="timeDuring" id="timeDuring" autocomplete="off" class=" layui-input" lay-verify="required">
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="col-sm-3 col-xs-3 ">
+                                <span class="control-label form-label-required">开始时间：</span>
                             </div>
-                            <label class="layui-form-label layui-required">共计时长：</label>
-                            <div class="layui-input-inline">
-                                <select  name="timeLasts" lay-verify="required">
-                                    <option value=""  selected>请选择</option>
+                            <div class="col-sm-9 col-xs-9">
+                                <input type="text" name="timeDuring" id="timeDuring" autocomplete="off" class="datetime form-control layui-input">
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="col-sm-3 col-xs-3 ">
+                                <span class="control-label form-label-required">共计时长：</span>
+                            </div>
+                            <div class="col-sm-9 col-xs-9">
+                                <select class="form-control ${class}" name="timeLasts">
+                                    <option disabled="" selected="">请选择</option>
                                     <option value="30">0.5小时</option>
                                     <option value="60">1小时</option>
                                     <option value="90">1.5小时</option>
@@ -676,84 +640,84 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="layui-form-item">
-                            <label class="layui-form-label layui-required">开展校区：</label>
-                            <div class="layui-input-inline">
-                                <select  name="campus" lay-verify="required"  lay-filter="campus">
-                                    <option value="A区" selected>A区</option>
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="col-sm-3 col-xs-3 ">
+                                <span class="control-label form-label-required">开展校区：</span>
+                            </div>
+                            <div class="col-sm-9 col-xs-9">
+                                <select class="form-control ${class}" name="campus">
+                                    <option disabled="" selected="">请选择</option>
+                                    <option value="A区">A区</option>
                                     <option value="B区">B区</option>
                                     <option value="C区">C区</option>
                                     <option value="虎溪校区">虎溪校区</option>
                                 </select>
                             </div>
-                            <label class="layui-form-label layui-required">开展地点：</label>
-                            <div class="layui-input-inline">
-                                <select name="location"  lay-search lay-verify="required">
-                                    <option value="">请输入开展地点</option>
-                                </select>
-                            </div>
-                            <button type="button" class="layui-btn layui-btn-sm layui-btn-warm" id="addPlaceBtn">添加地点</button>
                         </div>
-                        <div class="layui-form-item">
-                            <label class="layui-form-label layui-required">主持人：</label>
-                            <div class="layui-input-inline">
-                                <select name="host"  lay-search lay-verify="required">
-                                    <c:if test="${userList.size()>0}">
-                                        <option value="">请选择主持人</option>
-                                        <c:forEach var="user" items="${userList}">
-                                            <option value="${user.user_id}">${user.user_name}</option>
-                                        </c:forEach>
-                                    </c:if>
-                                    <c:if test="${userList.size()<=0}">
-                                        <option value="">暂无可选主持人</option>
-                                    </c:if>
-                                </select>
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="col-sm-3 col-xs-3 ">
+                                <span class="control-label form-label-required">开展地点：</span>
                             </div>
-                            <label class="layui-form-label">列席人员：</label>
-                            <div class="layui-input-inline">
-                                <input class="layui-input" name="sit" value="">
-                            </div>
-                        </div>
-                        <div class="layui-form-item">
-                            <label class="layui-form-label layui-required">联系人：</label>
-                            <div class="layui-input-inline">
-                                <select name="contact"   lay-search lay-verify="required">
-                                    <c:if test="${userList.size()>0}">
-                                        <option value="">请选择联系人</option>
-                                        <c:forEach var="user" items="${userList}">
-                                            <option value="${user.user_id}">${user.user_name}</option>
-                                        </c:forEach>
-                                    </c:if>
-                                    <c:if test="${userList.size()<=0}">
-                                        <option value="">暂无可选联系人</option>
-                                    </c:if>
-
-                                </select>
-                            </div>
-                            <label class=" layui-form-label layui-required">联系人电话：</label>
-                            <div class="layui-input-inline">
-                                <input class="layui-input" name="phoneNumber" value="" lay-verify="required">
-                            </div>
-                        </div>
-                        <div class="layui-form-item">
-                            <label class=" layui-form-label layui-required">参会人员：</label>
-                            <div class="participat-long-input" >
-                                    <select name="participate" id="attend_member_select" lay-verify="required" multiple >
-                                        <c:if test="${userList.size()>0}">
-                                            <option value="">请选择联系人</option>
-                                            <c:forEach var="user" items="${userList}">
-                                                <option value="${user.user_id}">${user.user_name}</option>
-                                            </c:forEach>
-                                        </c:if>
-                                        <c:if test="${userList.size()<=0}">
-                                            <option value="">暂无可选联系人</option>
-                                        </c:if>
-
+                            <div class="col-sm-9 col-xs-9">
+                                <div class="dropdown-mul-2 dropdown-multiple">
+                                    <select style="display:none" name="location" multiple="" placeholder="请选择">
+                                        <option disabled="" value="undefined">没有数据</option>
                                     </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="col-sm-3 col-xs-3 ">
+                                <span class="control-label form-label-required">主持人：</span>
+                            </div>
+                            <div class="col-sm-9 col-xs-9">
+                                <div class="dropdown-mul-2 dropdown-multiple">
+                                    <select style="display:none" name="host" multiple="" placeholder="请选择">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="col-sm-3 col-xs-3 ">
+                                <span class="control-label form-label-required">联系人：</span>
+                            </div>
+                            <div class="col-sm-9 col-xs-9">
+                                <div class="dropdown-mul-2 dropdown-multiple">
+                                    <select style="display:none" name="contact" multiple="" placeholder="请选择">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="col-sm-3 col-xs-3 ">
+                                <span class=" control-label ${class}">列席人员：</span>
+                            </div>
+                            <div class="col-sm-9 col-xs-9">
+                                <input class="form-control" name="sit" value="">
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="col-sm-3 col-xs-3 ">
+                                <span class=" control-label form-label-required">联系人电话：</span>
+                            </div>
+                            <div class="col-sm-9 col-xs-9">
+                                <input class="form-control" name="phoneNumber" value="">
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-xs-12">
+                            <div class="col-sm-3 col-xs-3" style="width: 12.5%;margin-left: -3px;">
+                                <span class=" control-label form-label-required">参会人员：</span>
+                            </div>
+                            <div class="col-sm-9 col-xs-9 mult_input_container" style="width: 87.5%!important;" >
+                                <div class="layui-input-inline">
+                                    <select name="participate" id="attend_member_select" class="mult_input" multiple="multiple" style="display: none;">
+                                    </select>
+                                    <div class="dashboardcode-bsmultiselect"><ul class="form-control btn border" style="cursor: text; display: flex; flex-wrap: wrap; align-items: center; margin-bottom: 0px; min-height: calc(2.25rem + 2px);"></ul></div>
+                                    <i class="drop_arrow"></i>
                                     <div class="list_container">
                                         <p>
                                             常用列表
-                                            <button type="button" class="layui-btn layui-btn-sm layui-btn-warm" id="edit_group_member">编辑</button>
+                                            <span class="edit_group_member">编辑</span>
                                         </p>
                                         <p class="list_item_container">
                                             <span id="group1" title="group1人员" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="bottom">group1</span>
@@ -762,29 +726,17 @@
                                             <span id="group4" title="group4人员" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="bottom">group4</span>
                                         </p>
                                     </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="layui-form-item">
-                            <label class=" layui-form-label layui-required">计划内容：</label>
-                            <div class="layui-input-inline">
-                                <script id="new_12" name="new_12" type="text/plain"></script>
-                            </div>
-                        </div>
-                        <div class="layui-form-item">
-                            <div class="layui-input-block long-input btn-list">
-                                <button type="button" class="layui-btn layui-btn-warm" lay-submit=""
-                                        lay-filter="partyMemForm">
-                                    发布
-                                </button>
-                                <button type="button" onclick="formsubmitgraft()"
-                                        class="layui-btn layui-btn-primary">
-                                    暂存
-                                </button>
-                                <button type="button" onclick="window.history.back();"
-                                        class="layui-btn layui-btn-primary">
-
-                                    取消
-                                </button>
+                        <div class="col-sm-12 col-xs-12">
+                            <div class="col-sm-6 col-xs-12" style="padding-left: 0;">
+                                <div class="col-sm-3 col-xs-3 ">
+                                    <span class=" control-label form-label-required">计划内容：</span>
+                                </div>
+                                <div class="col-sm-9 col-xs-9">
+                                    <script id="new_12" name="new_12" type="text/plain"></script>
+                                </div>
                             </div>
                         </div>
                         <input id="content_id" type="hidden" name="content"/>
@@ -794,7 +746,30 @@
                         <input id="newAndOld" type="hidden" name="newAndOld"/>
                         <input id="meeting_id" type="hidden" name="meeting_id"/>
                         <input type="hidden" name="formId" value="${formId}"/>
-
+                        <div class="col-sm-12 col-xs-12">
+                            <div class="layui-inline btn_group"
+                                 style="width: calc(50% - 120px);margin: 0;margin-top: 10px;">
+                                <label class="layui-form-label"></label>
+                                <div class="layui-input-inline">
+                                    <button type="button" onclick="formsubmit()" class="layui-btn" lay-submit=""
+                                            lay-filter="partyMemForm"
+                                            style="padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;background-color: #FFAB33;border-radius: 4px;">
+                                        发布
+                                    </button>
+                                    <button type="button" onclick="formsubmitgraft()"
+                                            class="layui-btn layui-btn-primary"
+                                            style="background-color: transparent;color: #666;padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;border-radius: 4px;">
+                                        暂存
+                                    </button>
+                                    <button type="button" onclick="window.history.back();"
+                                            class="layui-btn layui-btn-primary"
+                                            style="background-color: transparent;color: #666;padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;border-radius: 4px;">
+                                        取消
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>
@@ -864,10 +839,8 @@
     </div>
 </script>
 <script type="text/javascript">
-    layui.use(['form',  'laydate','layer'], function(){
-        var form = layui.form,
-            layer = layui.layer,
-            laydate = layui.laydate;
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
         laydate.render({
             elem: '#timeDuring'
             ,type: 'datetime'
@@ -879,198 +852,180 @@
                 this.elem.val(value)
             }
         });
-        form.verify({
-            phoneNumber: function(value, item){
-                var regPhone = /^1\d{10}$/;
-                if(value != ''&& value != null && !regPhone.test(value)){
-                    return "请输入正确的手机号码。";
-                }
-            }
-        });
-        renderPlace();
-        var ueditor = UE.getEditor("new_12", { initialFrameWidth:821});
-        renderUE();
-
-        form.on('select(campus)', function(data){
-            renderPlace();
-        })
-
-        /*添加开展地点*/
-        $("#addPlaceBtn").on('click',function() {
-            var campus = $('#hg-form-container select[name="campus"]').val();
-            layer.prompt({title: '添加开展地点', formType: 2}, function(text, index){
-                $.post("${addPlace}", {place: text, campus: campus}, function (res) {
-                    if (res.code == 200) {
-                        $('#hg-form-container select[name="location"]').append("<option value="+res.data.id+">"+res.data.place+"</option>");
-                        form.render();
-                        layer.close(index);
-                    }else{
-                        layer.msg(res.message)
+    })
+    var memberTable, groupTable, table;
+    function addPlace() {
+        var campus = $('[name="campus"]').val();
+        var place = $('.dropdown-mul-2').eq(0).data('dropdown').$el.find('.valid').val();
+        if (!campus) {
+            layuiModal.alert("请先选择校区");
+        } else {
+            layuiModal.confirm("确定要新增名为“" + place.trim() + "”的地点吗？", function () {
+                $.post("${addPlace}", {place: place, campus: campus}, function (res) {
+                    if (res.code ==200) {
+                        getPlace(res.data.id);
                     }
                 },'json')
-            });
-        });
-
-        /*渲染开展地点*/
-        function renderPlace() {
-            var campus = $('[name="campus"]').val();
-            if (!campus) {
-                layer.msg("请先选择校区");
-            }
-            $.ajax({
-                url: '${places}',
-                type: 'POST',
-                data: {campus: campus},
-                dataType: 'json',
-                async: false,
-                success: function (res) {
-                    if (res.code == 200) {
-                        $('#hg-form-container select[name="location"]').empty();
-                        $('#hg-form-container select[name="location"]').append('<option value="">请输入开展地点</option>');
-                        for (var i=0;i<res.data.length && res.data.length>0;i++) {
-                            $('#hg-form-container select[name="location"]').append('<option value="+res.data[i].place_id+">'+res.data[i].place+'</option>');
-                        }
-                        form.render();
-                    } else {
-                        layer.msg(res.message);
-                    }
-                },
-                error: function () {
-                    layer.msg("获取数据为空");
-                }
-            });
-        }
-        function renderUE(){
-            var uploadUrls = {
-                file: '${uploadfileUrl}',
-                image: '${uploadimageUrl}',
-                video: '${uploadvideoUrl}'
-            };
-            UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
-            UE.Editor.prototype.getActionUrl = function(action) {
-                if (action == 'uploadimage' || action == 'uploadscrawl' || action == 'uploadimage') {
-                    return uploadUrls.image;
-                } else if (action == 'uploadvideo') {//视频
-                    return uploadUrls.video;
-                } else if (action == 'uploadfile') {//附件
-                    return uploadUrls.file;
-                } else {
-                    return this._bkGetActionUrl.call(this, action);
-                }
-            };
-        }
-        var memberTable, groupTable, table;
-        // 参会人员 组件
-        <portlet:resourceURL id="/hg/groupAndMember" var="groupsAndMembers"/>
-        var mockMember;
-        function groupsAndMembers(){
-            $.post('${groupsAndMembers}', function(res){
-                if(res.result){
-                    mockMember = res.data;
-                    var groupSpans = '';
-                    mockMember.forEach(function(e){
-                        groupSpans += "<span id=\"" + e.id + "\" title=\"" + e.name + "\" " +
-                            "data-container=\"body\" data-toggle=\"popover\" data-trigger=\"hover\" " +
-                            "data-placement=\"bottom\" data-content='" + e.member.map(function(m){return m.name;}).join(",")  + "'>" + e.name + "</span>";
-                    });
-                    $(".list_item_container").html(groupSpans);
-                    $("[data-toggle='popover']").popover();
-                }else {
-                    //layuiModal.alert(res.message);
-                }
             })
         }
+    }
 
-        var commonOpts = function(id, className, data, idField, nameField, toolbar){
-            return {
-                elem: id,
-                data: data,
-                page: {
-                    limit:5,
-                    prev:'&lt;上一页',
-                    next:'下一页&gt;'
-                },
-                width: '100%',
-                cols: [[ //表头
-                    {field: idField, title: 'id',  unresize:true, hide: true},
-                    {field: nameField, title: '名字', unresize:true, templet: function(d){
-                            return '<span class="'+ className +'" title="'+ d[nameField] +'" style="width:80px;display:inline-block" onclick="addMember(event)">'+ d[nameField] +'</span>'
-                        }, width: '50%'},
-                    {field: 'operate', title: '操作', toolbar: toolbar, unresize:true, width: '50%'}
-                ]]
-            };
-        };
-
-        function renderGroup() {
-            $.post('${getGroup}', function (res) {
-                if (!groupTable){
-                    groupTable = table.render(commonOpts('#groupTable', 'group_td_name', res, 'group_id', 'group_name', '#groupOperateBtns'));
-                }else {
-                    groupTable.reload({data: res})
-                }
-            })
+    function getPlace(placeId) {
+        var campus = $('[name="campus"]').val();
+        if (!campus) {
+            layuiModal.alert("请先选择校区");
         }
-
-        function renderMember() {
-            if (currentGroup){
-                $.post('${paersonAndGroupAddDelete}', {groupId: currentGroup, path: "getGroupPersons"}, function (res) {
-                    res = JSON.parse(res);
-                    if (!memberTable){
-                        memberTable = table.render(commonOpts('#memberTable', 'member_td_name', res, 'participant_id', 'member_name', '#memberOperateBtns'));
-                    }else {
-                        memberTable.reload({data: res});
-                    }
-                })
-            }else {
-                layuiModal.alert('请先选择一个常用组！');
-            }
-
-        }
-        //删除按钮
-        function deleteTd(e, type){
-            console.log(e,'e');
-            layuiModal.confirm("确认要删除吗？", function () {
-                if(type === 1){
-                    var id = $(e.target).parent().parent().parent().parent().find("[data-field='group_id']").children().text();
-                    $.ajax({
-                        url: '${paersonAndGroupAddDelete}',
-                        type: 'POST',
-                        data: {groupId: id, path: "deleteGroup"},
-                        dataType: 'json',
-                        async: false,
-                        success: function (res) {
-                            if(res){
-                                renderGroup();
-                                console.log(e,'e ');
-                            }
-                            groupsAndMembers()
-                        }
-                    });
-                }else if (type === 2){
-                    var url = "${deletePerson}";
-                    if(currentGroup) {
-                        var id = $(e.target).parent().parent().parent().parent().find("[data-field='participant_id']").children().text();
-                        var data = {groupId: currentGroup, user_id: id};
-                        layuiModal.confirm("确定删除吗?", function () {
-                            $.ajax({
-                                url: url,
-                                data: data,
-                                dataType: "json",
-                                success: function (result) {
-                                    if (result.state === "ok") {
-                                        renderMember();
-                                    } else {
-                                        showConfirm("删除失败！");
-                                    }
-                                    groupsAndMembers()
-                                }
+        $.ajax({
+            url: '${places}',
+            type: 'POST',
+            data: {campus: campus},
+            dataType: 'json',
+            async: false,
+            success: function (res) {
+                if (res.code==200) {
+                    var place = [];
+                    var places = res.data;
+                    for (var i in places) {
+                        if(res.data[i].id!=undefined){
+                            place.push({
+                                id: res.data[i].id,
+                                disabled: false,
+                                name: res.data[i].place,
+                                selected: false
                             });
+                        }
+                    }
+                    $('.dropdown-mul-2').eq(0).data('dropdown').reset();
+                    $('.dropdown-mul-2').eq(0).data('dropdown').changeStatus();
+                    if (place.length === 0) {
+                        place.push({
+                            name: "没有数据",
+                            disabled: true
                         });
                     }
+                    $('.dropdown-mul-2').eq(0).data('dropdown').update(place, true);
+                    placeId && $('.dropdown-mul-2').eq(0).data('dropdown').choose(placeId);
+
+                } else {
+                    layuiModal.alert('获取地点失败');
                 }
-            });
+            },
+            error: function () {
+                alert("获取数据为空");
+            }
+        });
+    }
+    // 参会人员 组件
+    <portlet:resourceURL id="/hg/groupAndMember" var="groupsAndMembers"/>
+    var mockMember;
+    function groupsAndMembers(){
+        $.post('${groupsAndMembers}', function(res){
+            if(res.result){
+                mockMember = res.data;
+                var groupSpans = '';
+                mockMember.forEach(function(e){
+                    groupSpans += "<span id=\"" + e.id + "\" title=\"" + e.name + "\" " +
+                        "data-container=\"body\" data-toggle=\"popover\" data-trigger=\"hover\" " +
+                        "data-placement=\"bottom\" data-content='" + e.member.map(function(m){return m.name;}).join(",")  + "'>" + e.name + "</span>";
+                });
+                $(".list_item_container").html(groupSpans);
+                $("[data-toggle='popover']").popover();
+            }else {
+                layuiModal.alert(res.message);
+            }
+        })
+    }
+
+    var commonOpts = function(id, className, data, idField, nameField, toolbar){
+        return {
+            elem: id,
+            data: data,
+            page: {
+                limit:5,
+                prev:'&lt;上一页',
+                next:'下一页&gt;'
+            },
+            width: '100%',
+            cols: [[ //表头
+                {field: idField, title: 'id',  unresize:true, hide: true},
+                {field: nameField, title: '名字', unresize:true, templet: function(d){
+                        return '<span class="'+ className +'" title="'+ d[nameField] +'" style="width:80px;display:inline-block" onclick="addMember(event)">'+ d[nameField] +'</span>'
+                    }, width: '50%'},
+                {field: 'operate', title: '操作', toolbar: toolbar, unresize:true, width: '50%'}
+            ]]
+        };
+    };
+
+    function renderGroup() {
+        $.post('${getGroup}', function (res) {
+            if (!groupTable){
+                groupTable = table.render(commonOpts('#groupTable', 'group_td_name', res, 'group_id', 'group_name', '#groupOperateBtns'));
+            }else {
+                groupTable.reload({data: res})
+            }
+        })
+    }
+
+    function renderMember() {
+        if (currentGroup){
+            $.post('${paersonAndGroupAddDelete}', {groupId: currentGroup, path: "getGroupPersons"}, function (res) {
+                res = JSON.parse(res);
+                if (!memberTable){
+                    memberTable = table.render(commonOpts('#memberTable', 'member_td_name', res, 'participant_id', 'member_name', '#memberOperateBtns'));
+                }else {
+                    memberTable.reload({data: res});
+                }
+            })
+        }else {
+            layuiModal.alert('请先选择一个常用组！');
         }
-        var currentGroup, allMember = [];
+
+    }
+    //删除按钮
+    function deleteTd(e, type){
+        console.log(e,'e');
+        layuiModal.confirm("确认要删除吗？", function () {
+            if(type === 1){
+                var id = $(e.target).parent().parent().parent().parent().find("[data-field='group_id']").children().text();
+                $.ajax({
+                    url: '${paersonAndGroupAddDelete}',
+                    type: 'POST',
+                    data: {groupId: id, path: "deleteGroup"},
+                    dataType: 'json',
+                    async: false,
+                    success: function (res) {
+                        if(res){
+                            renderGroup();
+                            console.log(e,'e ');
+                        }
+                        groupsAndMembers()
+                    }
+                });
+            }else if (type === 2){
+                var url = "${deletePerson}";
+                if(currentGroup) {
+                    var id = $(e.target).parent().parent().parent().parent().find("[data-field='participant_id']").children().text();
+                    var data = {groupId: currentGroup, user_id: id};
+                    layuiModal.confirm("确定删除吗?", function () {
+                        $.ajax({
+                            url: url,
+                            data: data,
+                            dataType: "json",
+                            success: function (result) {
+                                if (result.state === "ok") {
+                                    renderMember();
+                                } else {
+                                    showConfirm("删除失败！");
+                                }
+                                groupsAndMembers()
+                            }
+                        });
+                    });
+                }
+            }
+        });
+    }
+    var currentGroup, allMember = [];
     //点击组名 添加人员
     function addMember(e){
         //判断是否是常用列表 名字列
@@ -1084,13 +1039,132 @@
             groupsAndMembers()
         }
     }
+    $(function () {
+        var uploadUrls = {
+            file: '${uploadfileUrl}',
+            image: '${uploadimageUrl}',
+            video: '${uploadvideoUrl}'
+        };
+        var ueditor = UE.getEditor("new_12", { initialFrameWidth:821});
+
+        UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
+        UE.Editor.prototype.getActionUrl = function(action) {
+            if (action == 'uploadimage' || action == 'uploadscrawl' || action == 'uploadimage') {
+                return uploadUrls.image;
+            } else if (action == 'uploadvideo') {//视频
+                return uploadUrls.video;
+            } else if (action == 'uploadfile') {//附件
+                return uploadUrls.file;
+            } else {
+                return this._bkGetActionUrl.call(this, action);
+            }
+        };
+
+        // $("#hg-form-container").parent().validate({
+        //     submitHandler: function (form) {
+        //         form.submit();
+        //         return false;
+        //     },
+        //     rules: rules
+        // });
+
+        $("input[name='host']").blur(function () {
+            var host = $("input[name='host']").val();
+            var reg = /^[\u4E00-\u9FA5]{2,5}$/;
+            if (!reg.test(host)) {
+                layuiModal.alert("请输入正确人名");
+            } else {
+                $("input[name='contact']").focus();
+            }
+        });
 
 
+        $("input[name='contact']").blur(function () {
+            var contact = $("input[name='contact']").val();
+            var reg = /^[\u4E00-\u9FA5]{2,5}$/;
+            if (!reg.test(contact)) {
+                layuiModal.alert("请输入正确人名");
+            } else {
+                $("input[name='sit']").focus();
+            }
+        });
+
+        $("input[name='phoneNumber']").blur(function () {
+            var phoneNumber = $("input[name='phoneNumber']").val();
+            var mobile = /^1(3|4|5|7|8)\d{9}$/;
+            if (!mobile.test(phoneNumber)) {
+                layuiModal.alert("请输入正确人名");
+            }
+        });
+
+        $("input[name='phoneNumber']").blur(function () {
+            var phoneNumber = $("input[name='phoneNumber']").val();
+            var mobile = /^1(3|4|5|7|8)\d{9}$/;
+            var phone = /^0\d{2,3}\-\d{7,8}$/;
+            if (mobile.test(phoneNumber) || phone.test(phoneNumber)) {
+                console.log("输入号码类型正确");
+            } else {
+                layuiModal.alert("请输入正确电话号码");
+            }
+        });
         /*开展地点弹框  */
 
+        $('.dropdown-mul-2').eq(0).dropdown({
+            data: [{
+                name: '没有数据',
+                disabled: true
+            }],
+            searchNoData: '<li style="color:#ddd">查无数据</li>',
+            limitCount: 1,
+            choice: function () {
 
+            }
+        });
+        $($('.dropdown-mul-2 .dropdown-main .dropdown-search')[0]).after('<button class="layui-btn layui-btn-sm layui-btn-warm" style="float:right" type="button" onclick="addPlace()">新增地点</button>');
+        $('[name="campus"]').change(getPlace);
 
         var candidates = [];
+        var dropArr = [];
+        var memberArr = JSON.parse('${memberList}');
+        if(memberArr.length<1){
+            dropArr =  [{
+                name: '没有数据',
+                disabled: true
+            }]
+        }else{
+            for(var i=0;i<memberArr.length;i++){
+                dropArr.push({
+                    value:memberArr[i].member_identity,
+                    name:memberArr[i].member_name
+                })
+            }
+        }
+        $('.dropdown-mul-2').eq(1).dropdown({
+            data:dropArr,
+            input: '<input type="text" maxLength="20" placeholder="请输入搜索">',
+            limitCount: 1,
+            searchNoData: '<li style="color:#ddd">查无数据</li>',
+            choice: function () {
+
+            }
+        });
+        $('.dropdown-mul-2').eq(2).dropdown({
+            data: dropArr,
+            searchNoData: '<li style="color:#ddd">查无数据</li>',
+            input: '<input type="text" maxLength="20" placeholder="请输入搜索">',
+            limitCount: 1,
+            choice: function () {
+                var selectedContact = this.$select.val();
+                if (selectedContact && selectedContact.length > 0) {
+                    var phone = candidates
+                        .filter(function (p) {
+                            return p.id === selectedContact[0]
+                        })[0]
+                        .phone;
+                    $('[name=phoneNumber]').val(phone);
+                }
+            }
+        });
 
         function refresh(org, host, contact, participants) {
             $.get('${candidate}', {
@@ -1165,7 +1239,7 @@
             var layer = layui.layer;
         });
 
-        $('#edit_group_member').on('click', function () {
+        $('.edit_group_member').on('click', function () {
             layer.open({
                 type: 1
                 ,content: $("#memberModal")
@@ -1176,7 +1250,7 @@
         });
 
 
-        $("#hg-form-container .drop_arrow").on("click", '', function(e){
+        $(".mult_input_container .drop_arrow").on("click", '', function(e){
             $(e.target).hasClass("expand_arrow") ? $(e.target).removeClass("expand_arrow") : $(e.target).addClass("expand_arrow");
         });
 
@@ -1352,8 +1426,37 @@
 
         var branchId = $(document).data("organization_id");
 
+    });
+</script>
+<script type="text/javascript">
+    $("input[name='host']").blur(function () {
+        var host = $("input[name='host']").val();
+        var reg = /^[\u4E00-\u9FA5]{2,5}$/;
+        if (!reg.test(host)) {
+            layuiModal.alert("请输入正确人名");
+        } else {
+            $("input[name='contact']").focus();
+        }
+    });
+
+    $("input[name='phoneNumber']").blur(function () {
+        var phoneNumber = $("input[name='phoneNumber']").val();
+        var mobile = /^\d{8,11}$/;
+        if (!mobile.test(phoneNumber)) {
+            layuiModal.alert("请输入正确电话号码");
+        }
+    });
 
 
+    $("input[name='contact']").blur(function () {
+        var host = $("input[name='host']").val();
+        var reg = /^[\u4E00-\u9FA5]{2,5}$/;
+        if (!reg.test(host)) {
+            layuiModal.alert("请输入正确人名");
+        } else {
+            $("input[name='sit']").focus();
+        }
+    });
 
 
     function formsubmitgraft() {
@@ -1712,7 +1815,6 @@
         });
         $(".choice_all").attr("src", "/images/not_check_icon.png");
     });
-    })
 </script>
 </body>
 </html>
