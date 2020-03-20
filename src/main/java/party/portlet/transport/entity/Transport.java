@@ -61,6 +61,14 @@ public class Transport implements Serializable {
 
     private String receipt;
 
+    private String to_approve_list;
+
+    private String current_approve_org;
+
+    private String approved_list;
+
+    private String reject_org;
+
     public int getId() {
         return id;
     }
@@ -267,5 +275,37 @@ public class Transport implements Serializable {
 
     public void setReceipt(String receipt) {
         this.receipt = receipt;
+    }
+
+    public String getTo_approve_list() {
+        return to_approve_list;
+    }
+
+    public void setTo_approve_list(String to_approve_list) {
+        this.to_approve_list = to_approve_list;
+    }
+
+    public String getCurrent_approve_org() {
+        return current_approve_org;
+    }
+
+    public void setCurrent_approve_org(String current_approve_org) {
+        this.current_approve_org = current_approve_org;
+    }
+
+    public String getApproved_list() {
+        return approved_list;
+    }
+
+    public void setApproved_list(String approved_list) {
+        this.approved_list = approved_list;
+    }
+
+    public String getReject_org() {
+        return reject_org;
+    }
+
+    public void setReject_org(String reject_org) {
+        this.reject_org = reject_org;
     }
 }

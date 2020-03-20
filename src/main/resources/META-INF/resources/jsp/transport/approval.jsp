@@ -46,7 +46,7 @@
     </style>
     <script type="text/javascript" >
         $(function() {
-            var statusList = ["未审批", "已通过", "已驳回", "已上传回执", "已确认回执", "已重新申请"];
+            var statusList = ["审核中", "已通过", "已驳回", "已上传回执", "已确认回执", "已重新申请"];
             layui.use('table', function(){
                 var table = layui.table;
 
@@ -277,14 +277,14 @@
                     cols: [[ //表头
                         {field: 'transport_id', title: 'id', hide: true},
                         {field: 'user_name', title: '姓名', width:'10%'},
-                        {field: 'org_name', title: '所在支部', width:'20%'},
+                        {field: 'org_name', title: '所在支部', width:'15%'},
                         {field: 'to_org_name', title: '去往单位', width:'20%'},
-                        {field: 'time', title: '申请时间', width:'15%'},
+                        {field: 'time', title: '申请时间', width:'10%'},
                         {field: 'reason', title: '原因', width: '10%'},
                         {field: 'status', title: '状态', width:'10%', templet: function (d) {
                                 return statusList[d.status];
                             }},
-                        {field: 'operate', title: '操作', width: '15%', toolbar: '#transportBtns'}
+                        {field: 'operate', title: '操作', width: '25%', toolbar: '#transportBtns'}
                     ]]
                 });
 
@@ -362,12 +362,12 @@
         {{#  if(d.type == '3'){ }}
         <span class="blue_text" lay-event="print">打印</span>
         {{#  } }}
-        {{#  if(d.status == 0){ }}
+        {{#  if((d.status == 0 && (d.type == '3' || d.type == '2')) || (d.current_approve_org == '${department}' && d.status == 0 && (d.type == '0' || d.type == '1'))){ }}
         <span class="blue_text" onclick="transportApprove(this, 1);">通过</span>
         <span class="red_text" onclick="transportApprove(this, 2);">驳回</span>
         {{#  } }}
         {{#  if(d.status == 3){ }}
-        <span class="blue_text"><a href="{{d.receipt}}">查看回执</a></span>
+        <span class="blue_text" onclick="window.location.href='{{d.receipt}}'">回执</span>
         <span class="blue_text" onclick="transportApprove(this, 4);">确认</span>
         {{#  } }}
     </div>

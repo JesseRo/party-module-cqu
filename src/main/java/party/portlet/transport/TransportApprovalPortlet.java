@@ -46,7 +46,8 @@ public class TransportApprovalPortlet extends MVCPortlet {
     @Override
     public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
             throws IOException, PortletException {
-
+        String department = (String) SessionManager.getAttribute(renderRequest.getRequestedSessionId(), "department");
+        renderRequest.setAttribute("department", department);
         super.doView(renderRequest, renderResponse);
     }
 

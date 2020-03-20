@@ -34,5 +34,8 @@ public class OrgAdminDao extends PostgresqlDaoImpl<OrgAdmin>{
 			return null;
 		}
 	}
-
+	public void deleteOrgAdmin(String userId, PartyOrgAdminTypeEnum type) {
+		String sql = "delete from hg_party_org_admin where admin_id = ? and org_type = ? ";
+		this.jdbcTemplate.update(sql,userId,type.getType());
+	}
 }

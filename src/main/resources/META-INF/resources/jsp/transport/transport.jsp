@@ -38,14 +38,21 @@
                         $('#org_name').hide();
                         $('#org_all').hide();
                         $('#org_brunch').show();
+                        $('#transport_title').hide();
                     }else if(type === '1'){
                         $('#org_name').hide();
                         $('#org_brunch').hide();
                         $('#org_all').show();
+                        $('#transport_title').hide();
                     }else{
                         $('#org_name').show();
                         $('#org_brunch').hide();
                         $('#org_all').hide();
+                        if(type === '2'){
+                            $('#transport_title').hide();
+                        }else if (type === '3'){
+                            $('#transport_title').show();
+                        }
                     }
                     form.val("organRelaForm", {
                         transport_form: type === '3' ? "纸质" : "电子"
@@ -90,10 +97,11 @@
                 var form = $('[name=transport_form]').val();
                 var title = $('[name=transport_title]').val();
                 var reason = $('[name=transport_reason]').val();
-                $.post('${save}', {type: type, org: org, form: form, title: title, reason: reason}, function (res) {
+                var isResubmit = $('[name=isResubmit]').val();
+                $.post('${save}', {type: type, org: org, form: form, title: title, reason: reason, isResubmit: isResubmit}, function (res) {
                     if(res.result){
                         layuiModal.alert('提交成功', function () {
-                            window.location.reload();
+                            window.location.href = '/transport_out';
                         });
                     }else {
                         layuiModal.alert("失败");
@@ -186,7 +194,7 @@
                     </select>
                 </div>
             </div>
-            <div class="layui-form-item layui-form-text">
+            <div class="layui-form-item layui-form-text" id="transport_title">
                 <label class="layui-form-label">介绍信抬头：</label>
                 <div class="layui-input-block">
                     <textarea maxlength="200" name="transport_title" placeholder="转入/挂靠党组织名称（详见注意事项）" class="layui-textarea"></textarea>
