@@ -373,12 +373,16 @@ button.cancal.btn.btn-default {
             //根据权限展示操作按钮
             function renderBtn(permissions){
                 if(permissions.indexOf("create")>-1){
-                    $("#org_add").show();
+                    if('${role}' == 'organization' || '${role}' == 'secondary'){
+                        $("#org_add").show();
+                    }
                 }else{
                     $("#org_add").hide();
                 }
                 if(permissions.indexOf("delete")>-1){
-                    $("#org_delete").show();
+                    if('${role}' == 'organization' || '${role}' == 'secondary') {
+                        $("#org_delete").show();
+                    }
                 }else{
                     $("#org_delete").hide();
                 }
