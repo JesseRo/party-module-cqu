@@ -19,12 +19,14 @@ import java.util.List;
 		immediate = true,
 		property = {
 				"javax.portlet.name=" + PartyPortletKeys.OrgCRUD,
+				"javax.portlet.name=" + PartyPortletKeys.OrgAdmin,
+				"javax.portlet.name=" + PartyPortletKeys.Org,
 				"mvc.command.name=/org/tree"
 	    },
 	    service = MVCResourceCommand.class
 )
-public class OrgCRUDTreeCommand implements MVCResourceCommand{
-	 Logger log = Logger.getLogger(OrgCRUDTreeCommand.class);
+public class OrgTreeCommand implements MVCResourceCommand{
+	 Logger log = Logger.getLogger(OrgTreeCommand.class);
 	@Reference
 	private OrgService orgService;
 

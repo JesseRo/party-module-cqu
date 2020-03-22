@@ -2,8 +2,14 @@ package hg.party.dao.org;
 
 import com.dt.springjdbc.dao.impl.PostgresqlDaoImpl;
 import com.dt.springjdbc.dao.impl.QueryResult;
+import hg.party.entity.organization.Organization;
+import hg.party.entity.party.BaseStatistics;
 import hg.party.entity.partyMembers.Member;
 import hg.util.MD5;
+import hg.util.result.Page;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.util.StringUtils;
+import party.constants.PartyOrgAdminTypeEnum;
 import party.portlet.org.NotMatchingExcelDataException;
 
 import org.osgi.service.component.annotations.Component;
@@ -395,5 +401,62 @@ public class MemberDao extends PostgresqlDaoImpl<Member> {
     public int insertOrUpate(String sql) {
      
       return  jdbcTemplate.update(sql);
+    }
+
+    public Page pageMembersByOrg(String orgId, PartyOrgAdminTypeEnum partyOrgAdminTypeEnum,Page page,String memberType,String history,String keyword) {
+        StringBuffer sb  = new StringBuffer("hg_party_member i left join hg_party_org b on i.member_org = b.org_id left join hg_party_org s on s.org_id = b.org_parent left join hg_party_org o on o.org_id = s.org_parent");
+        sb.append(" where 1=1");
+        if(!StringUtils.isEmpty(memberType)){
+            sb.append("and i.member_type='"+memberType+"'");
+        }
+        if(!StringUtils.isEmpty(history)){
+            if(Integer.parseInt(history) == 0){
+                sb.append("and i.historic is false");
+            }else{
+                sb.append("and i.historic is true");
+            }
+        }
+        if(!StringUtils.isEmpty(keyword)){
+            sb.append("and (i.member_name like '%"+keyword+"%'");
+            sb.append(" or i.member_identity like '%"+keyword+"%')");
+            //sb.append("or i.member_name like '%"+keyword+"%')");
+        }
+        StringBuffer countSb =  new StringBuffer("SELECT count(*) num from ");
+        StringBuffer listSb =  new StringBuffer("select i.* from ");
+        RowMapper<BaseStatistics> countMapper = BeanPropertyRowMapper.newInstance(BaseStatistics.class);
+        List<Member> list= new ArrayList<>();
+        int count = 0;
+        int start = page.getPage()>0?(page.getPage()-1)*page.getPageSize():0;
+        String pageSql = " limit " + page.getPageSize() + " offset " + start;
+        Page<Member> memberPage = new Page<Member>(page.getPage(),page.getPageSize());
+        RowMapper<Member> rowMapper = BeanPropertyRowMapper.newInstance(Member.class);
+        switch(partyOrgAdminTypeEnum){
+            case BRANCH:
+                sb.append(" and b.org_id = ?");
+                listSb.append(sb.toString());
+                listSb.append(pageSql);
+                countSb.append(sb.toString());
+                list =  jdbcTemplate.query(listSb.toString(),rowMapper,orgId);
+                count = jdbcTemplate.queryForObject(countSb.toString(),countMapper,orgId).getNum();
+                break;
+            case SECONDARY:
+                sb.append(" and (s.org_id=? or b.org_id = ?)");
+                listSb.append(sb.toString());
+                listSb.append(pageSql);
+                countSb.append(sb.toString());
+                list =  jdbcTemplate.query(listSb.toString(),rowMapper,orgId,orgId);
+                count = jdbcTemplate.queryForObject(countSb.toString(),countMapper,orgId,orgId).getNum();
+                break;
+            case ORGANIZATION:;
+                listSb.append(sb.toString());
+                listSb.append(pageSql);
+                countSb.append(sb.toString());
+                list =  jdbcTemplate.query(listSb.toString(),rowMapper);
+                count = jdbcTemplate.queryForObject(countSb.toString(),countMapper).getNum();
+                break;
+        }
+        memberPage.setCount(count);
+        memberPage.setData(list);
+        return memberPage;
     }
 }

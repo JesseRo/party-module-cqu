@@ -1,5 +1,8 @@
 package hg.util.result;
 
+import hg.party.entity.partyMembers.Member;
+import org.apache.poi.ss.formula.functions.T;
+
 public class ResultUtil {
     public static Result success(Object data) {
         return result(ResultCode.SUCCESS, "成功", data);
@@ -29,5 +32,8 @@ public class ResultUtil {
 
     public static Result result(int resultCode, String message, Object data) {
         return new Result(resultCode, message, data);
+    }
+    public static PageResult resultPage(Page<T> page) {
+        return new PageResult(0, "成功", page.getData(),page.getCount());
     }
 }

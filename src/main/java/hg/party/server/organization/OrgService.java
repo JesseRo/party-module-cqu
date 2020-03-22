@@ -29,8 +29,8 @@ public class OrgService {
 	public Organization findOrgByPID(int id,String orgName){
 		return orgDao.findOrgByPID(id,orgName);
 	}
-	public Organization findOrgById(String orgId){
-		return orgDao.findOrgById(orgId);
+	public Organization findOrgByOrgId(String orgId){
+		return orgDao.findOrgByOrgId(orgId);
 	}
 
 	public List<Organization> findOrgByOrgType(PartyOrgAdminTypeEnum partyOrgAdminTypeEnum) {

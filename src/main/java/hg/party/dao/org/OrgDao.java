@@ -52,7 +52,7 @@ public class OrgDao extends PostgresqlDaoImpl<Organization>{
 			return null;
 		}
 	}
-	public Organization findOrgById(String orgId){
+	public Organization findOrgByOrgId(String orgId){
 		String sql = "select * from hg_party_org where historic is false and org_id = ?";
 		List<Organization> organizationList =  jdbcTemplate.query(sql,  BeanPropertyRowMapper.newInstance(Organization.class),orgId);
 		if(organizationList.size()>0){

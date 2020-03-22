@@ -1,7 +1,7 @@
 package party.constants;
 
 public enum  MeetingTaskEnum {
-    NO_SUBMIT("0","未提交"),
+    NO_SUBMIT("0","待提交"),
     SUBMIT("1","已提交"),
     WITHDRAWN("2","已撤回"),
     REJECT("3","被驳回"),

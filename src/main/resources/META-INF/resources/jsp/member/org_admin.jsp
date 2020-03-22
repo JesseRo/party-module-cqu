@@ -3,7 +3,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <portlet:resourceURL id="/org/adminSave" var="adminSave" />
 <portlet:resourceURL id="/org/admin/query" var="findOrgAdmin" />
-<portlet:resourceURL id="/org/admin/orgTree" var="orgTreeUrl" />
+<portlet:resourceURL id="/org/tree" var="orgTreeUrl" />
 <head>
   <%--   <link rel="stylesheet" href="${basePath}/css/party_organization.css?v=5"/> --%>
     <link rel="stylesheet" href="${basePath}/css/account_manage_1.css"/>

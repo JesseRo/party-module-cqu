@@ -169,7 +169,7 @@
 
                         <div class="col-sm-6 col-xs-12">
                             <!--  <span class="col-sm-3 col-xs-3 control-label form-label-required">转正时间</span> -->
-                            <span class="col-sm-3 col-xs-3 control-label">转正时间</span>
+                            <span class="col-sm-3 col-xs-3 control-label form-label-required">转正时间</span>
                             <div class="col-sm-9 col-xs-9">
                                 <input type="text" name="turn_Time" id="turn_labCheckEndDate" value="${info.member_fomal_date }"
                                        onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" class="form-control start_date">
@@ -268,7 +268,7 @@
                             </div>
                         </div>
                         <div class="col-sm-6 col-xs-12">
-                            <span class="col-sm-3 col-xs-3 control-label form-label-required">党费标准</span>
+                            <span class="col-sm-3 col-xs-3 control-label">党费标准</span>
                             <div class="col-sm-9 col-xs-9">
                                 <input type="text" class="form-control" name="major_title" id="major_title" onblur="check(this)"
                                        onkeyup="this.value=this.value.replace(/[^0-9.]/g,'')" placeholder="（元/月）" value="${info.member_major_title }">
