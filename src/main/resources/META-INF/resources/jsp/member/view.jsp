@@ -281,6 +281,12 @@
         .table_outer_box > table thead, tbody tr{
             width:auto;
         }
+        .table_outer_box .layui-table td .laytable-cell-checkbox input{
+            display: none;
+        }
+        .table_outer_box .layui-table td .laytable-cell-checkbox .layui-form-checkbox i{
+            font-family: -webkit-body !important;
+        }
     </style>
     <script type="text/javascript">
 
@@ -316,27 +322,27 @@
                         ,url: '${orgMember}'//数据接口
                         ,page: true //开启分页
                         ,cols: [[
-                            {field: 'member_name', title: '姓名',align:'center', width:120}
-                            ,{field: 'member_sex', title: '性别',align:'center', width:120}
-                            ,{field: 'member_identity', title: '公民身份证',align:'center', minWidth:240}
-                            ,{field: 'member_phone_number', title: '联系电话',align:'center', width:160}
-                            ,{field: 'member_type', title: '党员类型',align:'center', width:120}
-                            ,{fixed: 'right', title: '操作', width:150, align:'center', toolbar: '#tableTool'}
+                            {type: 'checkbox',fixed: 'left'}
+                            ,{field: 'member_name', title: '姓名', width:120}
+                            ,{field: 'member_sex', title: '性别', width:120}
+                            ,{field: 'member_identity', title: '公民身份证', minWidth:240}
+                            ,{field: 'member_phone_number', title: '联系电话', width:160}
+                            ,{field: 'member_type', title: '党员类型', width:120}
+                            ,{field: 'historic',fixed: 'right', title: '操作', width:150, align:'center', toolbar: '#tableTool'}
                         ]]
                     });
                     //监听事件
-                    table.on('toolbar(memberTable)', function(obj){
-                        console.log(obj)
+                    table.on('tool(memberTable)', function(obj){
                         //var checkStatus = table.checkStatus(obj.config.id);
                         switch(obj.event){
-                            case 'add':
+                            case 'detail':
                                 //layer.msg('添加');
                                 break;
                             case 'delete':
                                 //layer.msg('删除');
                                 break;
-                            case 'update':
-                                window.location.href = '/addperson?userId=' + userId;
+                            case 'edit':
+                                window.location.href = '/addperson?userId=' + obj.member_identity;
                                 break;
                         };
                     });
@@ -360,7 +366,7 @@
                             $("#org-path").empty();
                             $("#org-path").append(getPathHtml(checkedNode));
                             renderTable();
-                            //renderOrgInfo(checkedNode.id);
+                            renderButtons();
 
                         },
                         // 加载完成后的回调函数
@@ -372,8 +378,37 @@
                             $("#org-path").empty();
                             $("#org-path").append(getPathHtml(checkedNode));
                             renderTable();
+                            renderButtons();
                         }
                     });
+                }
+                function renderButtons(){
+                    var history = $("#searchForm select[name=history]").val();
+                    if(history){
+                        $("#orgImport").hide();
+                        $("#orgExport").hide();
+                        $("#addPerson").hide();
+                        $("#delete").hide();
+                        $("#memberImport").hide();
+                        $("#memberExport").hide();
+                    }else{
+                        var org_type = checkedNode.data.org_type;
+                        if ('branch' == org_type) {
+                            $("#orgImport").hide();
+                            $("#orgExport").hide();
+                            $("#addPerson").show();
+                            $("#delete").show();
+                            $("#memberImport").show();
+                            $("#memberExport").show();
+                        } else {
+                            $("#orgImport").hide();
+                            $("#orgExport").hide();
+                            $("#addPerson").hide();
+                            $("#delete").hide();
+                            $("#memberImport").show();
+                            $("#memberExport").show();
+                        }
+                    }
                 }
                 function getPathHtml(node) {
                     var pathHtml = '<a  href="javascript:;" >'+node.name+'</a>';
@@ -382,103 +417,6 @@
                         pathHtml = getPathHtml(pNode)+'<span lay-separator="">></span>'+pathHtml;
                     }
                     return pathHtml;
-                }
-                var a;
-                var root = ${root};
-                var secondaries = ${secondaries};
-                var historicSecondaries = ${historicSecondaries};
-                var branches = ${branches};
-                var historicBranches = ${historicBranches};
-                $("#addPerson").hide();
-                $(".select_choice").hide();
-                $("#delete").hide();
-                console.log(root);
-                if ('branch' == '${org_type}' || 'secondary' == '${org_type}') {
-                    $('#historic_root').hide();
-                    $('.silde_more').hide();
-                }
-
-                $("#orgImport").css("display", "none");
-                $("#orgExport").css("display", "none");
-                $("#memberImport").css("display", "none");
-                $("#memberExport").css("display", "none");
-                var orgId;
-                var ishistory;
-
-                function dd(sad) {
-
-                }
-
-                function generateOrg(secondaries, branchGroups, number) {
-                    $('#historic_root').attr('org-id', root.org_id);
-                    $("#current_root .first_menu").find("span").html(root.org_name);
-                    $('#current_root').attr('org-id', root.org_id);
-                    if (number > secondaries.length) {
-                        number = secondaries.length;
-                    }
-                    if (!number) {
-                        number = secondaries.length;
-                    }
-                    var html = "";
-                    var i;
-                    for (i = 0; i < number; i++) {
-                        var secondary = secondaries[i];
-                        var li;
-                        if (secondary.org_id in branchGroups) {
-                            li = "<li id='" + secondary.org_id + "'><a href=\"javascript:;\"><span class=\"third_menu_icon third_menu_up\"></span>" + secondary.org_name + "</a><ul class=\"third_menu\">{{branches}}</ul></li>";
-                            var branch_lis = "";
-                            for (var j in branchGroups[secondary.org_id]) {
-                                var branch = branchGroups[secondary.org_id][j];
-                                branch_lis += "<li title=" + branch.org_name + " id='{{id}}'><a href=\"javascript:;\">{{name}}</a></li>".replace('{{id}}', branch.org_id).replace('{{name}}', branch.org_name);
-                            }
-                            li = li.replace('{{branches}}', branch_lis);
-                        } else {
-                            li = "<li id='" + secondary.org_id + "'><a href=\"javascript:;\">" + secondary.org_name + "</a></li>";
-
-                        }
-                        html += li;
-                    }
-                    return html;
-                }
-
-
-                function detail(members, isHis) {
-                    var html = "<thead>\n" +
-                        "                                <tr>\n" + (isHis ? "" : (
-                            "                                    <td>\n" +
-                            "                                        <img class=\"select_all\" src=\"/images/not_check_icon.png\"/>\n" +
-                            "                                        <input type=\"hidden\"/>\n" +
-                            "                                    </td>\n")) +
-                        "                                    <td>姓名</td>\n" +
-                        "                                    <td>性别</td>\n" +
-                        "                                    <td>公民身份证</td>\n" +
-                        "                                    <td>联系电话</td>\n" +
-                        "                                    <td>党员类型</td>\n" + (isHis ? "" : (
-                            "                                    <td>操作</td>\n")) +
-                        "                                </tr>\n" +
-                        "                            </thead>\n" +
-                        "                            <tbody class=\"table_info\">\n";
-                    for (var i in members) {
-                        var member = members[i];
-                        html += " <tr>\n" + (isHis ? "" : (
-                            "                                <td style=\"text-align:left;padding-left:10px;\">" +
-                            "<input type=\"hidden\" value=\"" + member.member_identity + "\"> " +
-                            "<img class=\"clickImg\" src=\"/images/not_check_icon.png\"></td>")) +
-                            "                                <td>" + member.member_name + "</td>\n" +
-                            "                                <td>" + member.member_sex + "</td>\n" +
-                            "                                <td>" + member.member_identity + "</td>\n" +
-                            "                                <td>" + member.member_phone_number + "</td>\n" +
-                            "                                <td>" + member.member_type + "</td>\n" + (isHis ? "" : (
-                                "                                <td>\n" +
-                                "                                    <div class=\"btn_group\">\n" +
-                                "                                        <a class='changePerson' style=\"margin-right: 10%; color: #2E87FF; cursor: pointer;\">组织转移</a>\n" +
-                                "                                        <a class=\"edit\" style=\"cursor: pointer;color: #2E87FF;\">编辑</a>\n" +
-                                "                                        <input type=\"hidden\" value=\"" + member.member_org + "\"> \n" +
-                                "                                    </div>\n" +
-                                "                                </td>\n")) +
-                            "                            </tr>";
-                    }
-                    return html + "</tbody>";;
                 }
 
                 function orgMember(pageNow, orgId, history) {
@@ -514,141 +452,6 @@
                     });
                 }
 
-
-                $(".first_menu").click(function () {
-                    $(this).parents("li").toggleClass("height_auto");
-                    var _target = $(this).find("img");
-                    if (_target.hasClass("dropdown_up")) {
-                        _target.removeClass("dropdown_up").addClass("dropdown_down");
-                        <%--_target.attr("src", "${basePath}/images/dropdown_icon.png");--%>
-                    } else {
-                        _target.removeClass("dropdown_down").addClass("dropdown_up");
-                        <%--_target.attr("src", "${basePath}/images/second_menu_up.png");--%>
-                    }
-                    orgId = $(this).parent().attr('org-id');
-                    $('#second_title').hide();
-                    $('#second_title').prev('span').hide();
-                    $('#third_title').hide();
-                    $('#third_title').prev('span').hide();
-                    $('#first_title').show().text($(this).text());
-                    console.log("西南大学党委");
-                    var orgName = "西南大学党委";
-                    var history = $(this).parent().attr("id");
-                    ishistory = history;
-                    if ('branch' == '${org_type}' || 'secondary' == '${org_type}') {
-                        $("#orgImport").css("display", "none");
-                        $("#orgExport").css("display", "none");
-                        $("#memberImport").css("display", "none");
-                        $("#memberExport").css("display", "none");
-                    } else {
-                        orgMember(1, orgName, history);
-                        // $("#orgImport").css("display", "inline-block");
-                        // $("#orgExport").css("display", "inline-block");
-                        $("#orgImport").css("display", "none");
-                        $("#orgExport").css("display", "none");
-                        $("#memberImport").css("display", "inline-block");
-                        $("#memberExport").css("display", "inline-block");
-                    }
-                    $("#addPerson").hide();
-                    $(".select_choice").hide();
-                    $("#delete").hide();
-
-                });
-                //二级菜单下拉
-                $(".second_menu").on("click", ">li>a", function () {
-                    if ($(this).siblings("ul").length == 0) {
-                        $(".third_menu li").removeClass("third_menu_on");
-                        $(".second_menu>li").removeClass("second_menu_on");
-                        $(this).parent("li").addClass("second_menu_on");
-                        $(this).parent("li").siblings("li").removeClass("second_menu_on");
-                    }
-                    if ($(this).parent("li").hasClass("height_auto")) {
-                        $(this).parent("li").removeClass("height_auto").removeClass("second_menu_on");
-                    } else if ($(this).siblings("ul").length > 0) {
-                        $(this).parent("li").addClass("height_auto").addClass("second_menu_on");
-                        $(this).parent("li").siblings("li").removeClass("second_menu_on");
-                    }
-                    var _target = $(this).find(".third_menu_icon");
-                    if (_target.hasClass("third_menu_up")) {
-                        _target.removeClass("third_menu_up").addClass("third_menu_down");
-                    } else {
-                        _target.removeClass("third_menu_down").addClass("third_menu_up");
-                    }
-                    orgId = $(this).parent().attr('id');
-                    var orgName = $(this).text();
-                    console.log("orgName=" + orgName);
-                    $('#second_title').show().text($(this).text());
-                    $('#second_title').prev('span').show();
-                    $('#third_title').hide();
-                    $('#third_title').prev('span').hide();
-                    $('#first_title').show();
-                    var history = $(this).parent().parent().parent().attr("id");
-                    ishistory = history;
-                    if ('branch' == '${org_type}') {
-                        $("#memberImport").css("display", "none");
-                        $("#memberExport").css("display", "none");
-                    } else {
-                        orgMember(1, orgId, history);
-                        $("#memberImport").css("display", "inline-block");
-                        $("#memberExport").css("display", "inline-block");
-                    }
-                    $(".select_choice").hide();
-                    $("#delete").hide();
-                    $("#addPerson").hide();
-                    $("#orgImport").css("display", "none");
-                    $("#orgExport").css("display", "none");
-                    if ('secondary' == '${org_type}') {
-                        $("#memberImport").css("display", "none");
-                    }
-                });
-
-                //三级菜单选中
-                $(".second_menu").on("click", ".third_menu li", function () {
-                    $(".third_menu li").removeClass("third_menu_on");
-                    $(this).addClass("third_menu_on");
-                    $(".second_menu li").removeClass("second_menu_on");
-                    $(this).parent().parent().addClass("height_auto second_menu_on");
-                    orgId = $(this).attr('id');
-
-                    $('#second_title').show().text($(this).parent().parent().children('a').text());
-                    $('#second_title').prev('span').show();
-                    $('#third_title').text($(this).children('a').text()).show();
-                    $('#third_title').prev('span').show();
-                    $('#first_title').show();
-                    var history = $(this).parent().parent().parent().parent().attr("id");
-                    ishistory = history;
-                    orgMember(1, orgId, history);
-                    $("#addPerson").show();
-                    $(".select_choice").show();
-                    $("#delete").show();
-                    $("#orgImport").css("display", "none");
-                    $("#orgExport").css("display", "none");
-                    $("#memberImport").css("display", "inline-block");
-                    $("#memberExport").css("display", "inline-block");
-                });
-
-                //点击展开更多
-                $(".silde_more").click(function () {
-                    //向后台请求更多数据
-                    var $ul = $(this).siblings(".second_menu");
-                    if ($ul.attr('id') === 'current') {
-                        $ul.html(generateOrg(secondaries, branches));
-                    } else if ($ul.attr('id') === 'historic') {
-                        $ul.html(generateOrg(historicSecondaries, historicBranches));
-                    }
-                });
-
-                //搜索回车事件
-                $("#search").keydown(function (event) {
-                    if (event.keyCode === 13) {
-                        if ($(event.target).val()) {
-                            //执行搜索逻辑
-                            console.log($(event.target).val())
-                        } else {
-                            return
-                        }
-                    }
-                });
                 $('#upload-block [type="file"]').change(function () {
                     $('#upload-block [type="submit"]').click();
                 })
@@ -709,25 +512,6 @@
                             break;
                     }
                 });
-
-
-                var org = "${org}";
-                if (org) {
-                    $('#current').html(generateOrg(secondaries, branches));
-                    $('#current_root').addClass("height_auto");
-                    $("#current_root li").each(function () {
-                        if ($(this).attr('id') == org) {
-                            $(this).addClass('third_menu_on');
-                            $(this).parent().parent().addClass("height_auto second_menu_on");
-                            $(this).parent().parent().find('span').removeClass('third_menu_up');
-                            $(this).parent().parent().find('span').addClass('third_menu_down');
-                        }
-                    });
-                    orgMember(1, org, 'current_root');
-                } else {
-                    $('#current').html(generateOrg(secondaries, branches, 7));
-                }
-                $('#historic').html(generateOrg(historicSecondaries, historicBranches, 7));
                 /* 单击选择按钮
                 $(".clickImg").click(function(){*/
                 $("table.custom_table").on("click", ".clickImg", function () {
@@ -933,7 +717,10 @@
     </div>
 </div>
 <script type="text/html" id="tableTool">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+    {{#  if(d.historic == false){ }}
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    {{#  } }}
 </script>
 <script type="text/javascript">
     $(".custom_table").on("click", "button.delete", function () {
