@@ -265,10 +265,14 @@
         .member_container .table_outer_box{
             height: calc(100% - 118px);
         }
+
         #searchForm .layui-form-item .layui-inline .layui-form-label{
             width:120px;
         }
-        #searchForm .layui-form-item .layui-inline .orgTree{
+        #treeForm .layui-form-item .layui-inline .layui-form-label{
+            width:120px;
+        }
+        #treeForm .layui-form-item .layui-inline .orgTree{
             width:240px;
         }
         #searchForm .layui-form-item .layui-inline .memberType{
@@ -277,6 +281,14 @@
         #searchForm .layui-form-item .layui-inline .keyword{
             width:300px;
             margin-right: 0px;
+        }
+        .party_manage_page .layui-tab-content{
+            height: calc(100% - 40px);
+            overflow-y: auto;
+            background: #fff;
+        }
+        .party_manage_page .layui-tab-title{
+            margin-bottom: 0px;
         }
         .table_outer_box > table thead, tbody tr{
             width:auto;
@@ -296,14 +308,24 @@
             }).extend({
                 treeSelect: 'treeSelect/treeSelect'
             });
-            layui.use(['treeSelect','form','layer','table'], function () {
+            layui.use(['treeSelect','form','layer','table','element'], function () {
                 var treeSelect= layui.treeSelect,
                     layer = layui.layer,
                     form = layui.form,
-                    table = layui.table;
-                //第一个实例
-
+                    table = layui.table,
+                    element = layui.element;
                 var checkedNode = null;
+                var isHistory = false;
+                element.on('tab(tabMemberType)', function(elem){
+                    if(elem.index == 0){
+                        isHistory = false;
+                        renderTable();
+                    }else{
+                        isHistory = true;
+                        renderTable();
+                    }
+                });
+
                 renderTree();
                 form.on('submit(searchForm)', function(data){
                     renderTable()
@@ -312,7 +334,7 @@
                    var  where = {
                        id: checkedNode.id
                        , memberType: $("#searchForm select[name=memberType]").val()
-                       , history:$("#searchForm select[name=history]").val()
+                       , history:isHistory==false?'0':'1'
                        , keyword: $("#searchForm input[name=keyword]").val()
                    };
                     table.render({
@@ -342,7 +364,7 @@
                                 //layer.msg('删除');
                                 break;
                             case 'edit':
-                                window.location.href = '/addperson?userId=' + obj.member_identity;
+                                window.location.href = '/addperson?userId=' + obj.data.member_identity;
                                 break;
                         };
                     });
@@ -493,7 +515,7 @@
                     window.location.href = '${orgExport}&type=member&orgId=' + orgId + '&orgName=' + $('#title').text() + '&ishistory=' + ishistory;
                 }
 
-                $('.btn_group').on('click', 'button', function () {
+                $('#searchForm').on('click', 'button', function () {
                     var $button = $(this);
                     switch ($button.attr('id')) {
                         case 'memberExport':
@@ -653,71 +675,76 @@
             </div>
             <div class="party_manage_content content_form content_info">
                 <div class="content_table_container party_table_container">
-                    <form class="layui-form" id="searchForm">
-                        <div class="layui-form-item">
-                            <div class="layui-inline">
-                                <label class="layui-form-label">请选择组织:</label>
-                                <div class="layui-input-inline orgTree">
-                                    <input type="text" name="orgTree" id="orgTree" lay-filter="orgTree" placeholder="请选择组织" class="layui-input">
+                    <div class="layui-tab layui-tab-card" lay-filter="tabMemberType">
+                        <ul class="layui-tab-title">
+                            <li class="layui-this">在校党员</li>
+                            <li>历史党员</li>
+                        </ul>
+                        <div class="layui-tab-content">
+                            <form class="layui-form" id="treeForm">
+                                <div class="layui-form-item">
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label">请选择组织:</label>
+                                        <div class="layui-input-inline orgTree">
+                                            <input type="text" name="orgTree" id="orgTree" lay-filter="orgTree" placeholder="请选择组织" class="layui-input">
+                                        </div>
+                                    </div>
                                 </div>
-                                <label class="layui-form-label">党员类型:</label>
-                                <div class="layui-input-inline memberType">
-                                    <select type="text" name="memberType" >
-                                        <option value="" selected>全部</option>
-                                        <option value="正式党员">正式党员</option>
-                                        <option value="预备党员">预备党员</option>
-                                    </select>
-                                </div>
-                                <label class="layui-form-label">历史党员:</label>
-                                <div class="layui-input-inline memberType">
-                                    <select type="text" name="history" >
-                                        <option value="" selected>全部</option>
-                                        <option value="1">是</option>
-                                        <option value="0">否</option>
-                                    </select>
-                                </div>
-                                <div class="layui-input-inline keyword">
-                                    <input type="text" name="keyword"  placeholder="请输入名字、工号、身份证号关键字" class="layui-input">
-                                </div>
-                                <button type="button"  class="layui-btn layui-btn-warm"  lay-submit="" lay-filter="searchForm"><icon class="layui-icon layui-icon-search"></icon>搜索</button>
-                            </div>
-                        </div>
-                    </form>
-                    <div class="breadcrumb_group">
-                        当前组织：
-                        <span class="layui-breadcrumb"  style="visibility: visible;" id="org-path">
+                            </form>
+                            <div class="breadcrumb_group">
+                                当前组织：
+                                <span class="layui-breadcrumb"  style="visibility: visible;" id="org-path">
                         </span>
-                    </div>
-                    <div class="table_content bg_white_container member_container">
-                        <div class="btn_group table_btns" style="padding-bottom: 0;">
-                            <button id="delete" class="btn btn-default delete_graft">删除人员</button>
-                            <button id="addPerson" class="btn btn-default">添加人员</button>
-                            <button id="orgImport" class="btn btn-default">党组织导入</button>
-                            <button id="orgExport" class="btn btn-default">党组织导出</button>
-                            <button id="memberImport" class="btn btn-default">人员名册导入</button>
-                            <button id="memberExport" class="btn btn-default">人员名单导出</button>
-                            <div id="upload-block" style="display: none;">
-                                <form action="${orgImport}" method="post" target="uploadTarget"
-                                      enctype="multipart/form-data">
-                                    <input type="file" name="excel">
-                                    <input name="orgId">
-                                    <input name="type">
-                                    <input type="submit">
-                                    <iframe name="uploadTarget"></iframe>
+                            </div>
+                            <div class="table_content bg_white_container member_container">
+                                <form class="layui-form" id="searchForm">
+                                    <div class="layui-form-item">
+                                        <div class="layui-inline">
+                                            <%--                                    <label class="layui-form-label">党员类型:</label>
+                                                                                <div class="layui-input-inline memberType">
+                                                                                    <select type="text" name="memberType" >
+                                                                                        <option value="" selected>全部</option>
+                                                                                        <option value="正式党员">正式党员</option>
+                                                                                        <option value="预备党员">预备党员</option>
+                                                                                    </select>
+                                                                                </div>--%>
+                                            <div class="layui-input-inline keyword">
+                                                <input type="text" name="keyword"  placeholder="请输入名字、工号、身份证号关键字" class="layui-input">
+                                            </div>
+                                            <button type="button"  class="layui-btn layui-btn-warm"  lay-submit="" lay-filter="searchForm"><icon class="layui-icon layui-icon-search"></icon>搜索</button>
+                                                <button id="delete" class="layui-btn layui-btn layui-btn-danger">删除人员</button>
+                                                <button id="addPerson" class="layui-btn layui-btn-primary">添加人员</button>
+                                                <button id="orgImport" class="layui-btn layui-btn-primary">党组织导入</button>
+                                                <button id="orgExport" class="layui-btn layui-btn-primary">党组织导出</button>
+                                                <button id="memberImport" class="layui-btn layui-btn-primary">人员名册导入</button>
+                                                <button id="memberExport" class="layui-btn layui-btn-primary">人员名单导出</button>
+                                                <div id="upload-block" style="display: none;">
+                                                    <form action="${orgImport}" method="post" target="uploadTarget"
+                                                          enctype="multipart/form-data">
+                                                        <input type="file" name="excel">
+                                                        <input name="orgId">
+                                                        <input name="type">
+                                                        <input type="submit">
+                                                        <iframe name="uploadTarget"></iframe>
+                                                    </form>
+                                                </div>
+                                        </div>
+                                    </div>
                                 </form>
+                                <div class="table_outer_box" style="margin-top: 20px;">
+                                    <table id="memberTable" lay-filter="memberTable"></table>
+                                </div>
                             </div>
                         </div>
-                        <div class="table_outer_box" style="margin-top: 20px;">
-                            <table id="memberTable" lay-filter="memberTable"></table>
-                        </div>
                     </div>
+
                 </div>
             </div>
         </div>
     </div>
 </div>
 <script type="text/html" id="tableTool">
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+    <%--<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>--%>
     {{#  if(d.historic == false){ }}
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     {{#  } }}
