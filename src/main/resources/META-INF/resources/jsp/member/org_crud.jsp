@@ -24,13 +24,6 @@
 		cursor: pointer;
 		height: 40px;
 	}
-    .layui-form-label.layui-required:after{
-        content:"*";
-        color:red;
-        position: absolute;
-        top:5px;
-        left:15px;
-    }
 	.main_content .min_width_1200 .nav_list .party_organization_list li .second_menu>li
 		{
 		margin: 12px 0;
@@ -150,6 +143,13 @@
 	body {
 		background: #fff;
 	}
+    .layui-form-label.layui-required:after{
+        content:"*";
+        color:red;
+        position: absolute;
+        top:5px;
+        left:15px;
+    }
 	.main_content .min_width_1200 .nav_list .party_organization_list .height_auto
 		{
 		height: auto;
@@ -270,6 +270,16 @@ button.cancal.btn.btn-default {
         border: none;
         padding: 20px;
     }
+#addOrgForm .layui-form-label {
+    width: 175px;
+}
+#addOrgForm .layui-form-label.layui-required:after {
+    content: "*";
+    color: red;
+    position: absolute;
+    top: 12px;
+    right: 5px;
+}
 </style>
 <script type="text/javascript">
 	$(function() {
@@ -425,13 +435,13 @@ button.cancal.btn.btn-default {
                     }
                 },
                 fax: function (value, item) {
-                    if (value == ''|| value == null || !/^((\d{3,4}-)|\d{3.4}-)?\d{7,8}$/.test(value)){
+                    if (value != ''&& value != null && !/^((\d{3,4}-)|\d{3.4}-)?\d{7,8}$/.test(value)){
                         return '请填入正确的传真号';
                     }
                 },
                 partyEmail: function(value, item){
                     var reg = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-                    if(value == ''|| value == null || !reg.test(value)){
+                    if(value != ''&& value != null && !reg.test(value)){
                         return "邮箱格式不正确.";
                     }
                 },
@@ -477,14 +487,9 @@ button.cancal.btn.btn-default {
                     content: $("#addOrgForm")
                 });
                 form.on('submit(addOrgForm)', function(data){
-                    var descType = $('#addOrgForm .layui-form select[name="descType"]').val();
-                    var orgName = $('#addOrgForm .layui-form input[name="orgName"]').val();
-                    var postData = {
-                        option:'create',
-                        id:checkedNode.id,
-                        orgName:orgName,
-                        descType:descType
-                    }
+                    var postData = data.field;
+                    postData["option"] = 'create';
+                    postData["id"] = checkedNode.id;
                     $.post("${manage}", postData, function (res) {
                         if(res.code==200){
                             layer.msg(res.message);
@@ -687,20 +692,71 @@ button.cancal.btn.btn-default {
     <form class="layui-form" action="">
         <input type="hidden" class="layui-layer-input" value="1">
         <div class="layui-form-item">
-            <label class="layui-form-label layui-required">名称：</label>
-            <div class="layui-input-block">
-                <input type="text" name="orgName" lay-verify="required" lay-reqtext="名称是必填项，不能为空。" placeholder="请输入名称" autocomplete="off" class="layui-input">
+            <div class="layui-inline">
+                <label class="layui-form-label layui-required">名称</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="orgName" lay-verify="required" lay-reqtext="名称是必填项，不能为空。" placeholder="请输入名称" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label layui-required">类型</label>
+                <div class="layui-input-inline">
+                    <select name="descType" >
+                        <option value="1" selected>党委</option>
+                        <option value="2">党总支</option>
+                        <option value="3">党支部</option>
+                    </select>
+                </div>
             </div>
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label layui-required">类型：</label>
-            <div class="layui-input-block">
-                <select name="descType" >
-                    <option value="1" selected>党委</option>
-                    <option value="2">党总支</option>
-                    <option value="3">党支部</option>
-                </select>
+            <div class="layui-inline">
+                <label class="layui-form-label layui-required">联系电话（座机）</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="contactNumber" lay-verify="zuoji" maxlength="20" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">传真</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="fax" lay-verify="fax" maxlength="20" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label layui-required">党组织书记</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="secretary" lay-verify="required" maxlength="20" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">邮箱</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="email" maxlength="20" lay-verify="partyEmail"
+                           autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label layui-required">联系人</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="contactor"  lay-verify="required" maxlength="20" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">手机号码</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="contactorNumber" lay-verify="contactNumber" maxlength="20" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" >地址</label>
+            <div class="layui-input-inline" style="width: 580px;" >
+                <input type="text" name="address" maxlength="20" autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-layer-btn layui-layer-btn-">

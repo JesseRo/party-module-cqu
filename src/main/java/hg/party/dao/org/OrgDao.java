@@ -504,7 +504,7 @@ public class OrgDao extends PostgresqlDaoImpl<Organization>{
 	}
 	public int createOrg(final Organization org) {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
-		String sql = "insert into hg_party_org (org_id,org_name,org_type,org_parent,desc_type) values (?,?,?,?,?)";
+		String sql = "insert into hg_party_org (org_id,org_name,org_type,org_parent,desc_type,org_address,org_contactor,org_contactor_phone,org_email,org_phone_number,org_fax,org_secretary) values (?,?,?,?,?,?,?,?,?,?,?,?)";
 		jdbcTemplate.update( new PreparedStatementCreator(){
 								 @Override
 								 public PreparedStatement createPreparedStatement(Connection conn) throws SQLException {
@@ -514,6 +514,13 @@ public class OrgDao extends PostgresqlDaoImpl<Organization>{
 									 ps.setString(3, org.getOrg_type());
 									 ps.setString(4, org.getOrg_parent());
 									 ps.setInt(5, org.getDesc_type());
+									 ps.setString(6,org.getOrg_address());
+									 ps.setString(7,org.getOrg_contactor());
+									 ps.setString(8,org.getOrg_contactor_phone());
+									 ps.setString(9,org.getOrg_email());
+									 ps.setString(10,org.getOrg_phone_number());
+									 ps.setString(11,org.getOrg_fax());
+									 ps.setString(12,org.getOrg_secretary());
 									 return ps;
 								 }
 							 },

@@ -103,16 +103,23 @@ public class OrgCRUDCommand implements MVCResourceCommand{
 		String userId =	SessionManager.getAttribute(sessionId, "userName").toString();
 		String descType = ParamUtil.getString(resourceRequest, "descType");
 		String orgName = ParamUtil.getString(resourceRequest, "orgName");
+		String address = ParamUtil.getString(resourceRequest, "address");
+		String contactNumber = ParamUtil.getString(resourceRequest, "contactNumber");
+		String fax = ParamUtil.getString(resourceRequest, "fax");
+		String secretary = ParamUtil.getString(resourceRequest, "secretary");
+		String email = ParamUtil.getString(resourceRequest, "email");
+		String contactor = ParamUtil.getString(resourceRequest, "contactor");
+		String contactorNumber = ParamUtil.getString(resourceRequest, "contactorNumber");
 		PrintWriter printWriter = resourceResponse.getWriter();
 		if(!StringUtils.isEmpty(id) && !StringUtils.isEmpty(orgName) && !StringUtils.isEmpty(descType)){
 			List<String> list = getPermissions(userId,Integer.parseInt(id));
 			if(list.contains(DataOperationEnum.CREATE.getType())){
-				String uuid = UUID.randomUUID().toString();
 				Organization org = orgService.findOrgByPID(Integer.parseInt(id), orgName);
 				Organization orgP = orgService.findOrgById(Integer.parseInt(id));
 				if(org== null){
 					Organization organization = new Organization();
 					organization.setOrg_name(orgName);
+					String uuid = UUID.randomUUID().toString();
 					organization.setOrg_id(uuid);
 					if(PartyOrgAdminTypeEnum.ORGANIZATION.getType().equals(orgP.getOrg_type())){
 						organization.setOrg_type(PartyOrgAdminTypeEnum.SECONDARY.getType());
@@ -121,6 +128,13 @@ public class OrgCRUDCommand implements MVCResourceCommand{
 					}
 					organization.setOrg_parent(orgP.getOrg_id());
 					organization.setDesc_type(Integer.parseInt(descType));
+					organization.setOrg_address(address);
+					organization.setOrg_contactor(contactor);
+					organization.setOrg_contactor_phone(contactorNumber);
+					organization.setOrg_email(email);
+					organization.setOrg_phone_number(contactNumber);
+					organization.setOrg_fax(fax);
+					organization.setOrg_secretary(secretary);
 					int createId = orgService.createOrg(organization);
 					if(createId>0){
 						printWriter.write(JSON.toJSONString(ResultUtil.success(createId,"创建成功！")));

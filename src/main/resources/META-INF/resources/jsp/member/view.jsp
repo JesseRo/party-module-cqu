@@ -405,7 +405,7 @@
                     });
                 }
                 function renderButtons(){
-                    var history = $("#searchForm select[name=history]").val();
+                    var history = isHistory;
                     if(history){
                         $("#orgImport").hide();
                         $("#orgExport").hide();
