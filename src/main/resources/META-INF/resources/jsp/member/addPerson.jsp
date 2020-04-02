@@ -69,7 +69,7 @@
             color:red;
             position: absolute;
             top:5px;
-            left:10px;
+            right:2px;
         }
         .table_form_content .custom_form .layui-form-label{
             padding: 0 10px;
@@ -88,6 +88,7 @@
     <portlet:resourceURL id="/hg/getMeetingTypeAndTheme" var="getMeetingTypeAndTheme"/>
     <portlet:resourceURL id="/hg/orgCheckCountExport" var="orgCheckCountExport"/>
     <portlet:resourceURL id="/hg/org/exist" var="orgexist"/>
+    <portlet:resourceURL id="/org/add/user" var="addUser"/>
 </head>
 <body>
 <div class="table_form_content">
@@ -111,9 +112,8 @@
         </div>
         <div class="bg_white_container">
             <div class="content_form form_container">
-                <portlet:actionURL var="addUser" name="/org/add/user">
-                </portlet:actionURL>
-                <form class="layui-form custom_form" action="${addUser}" id="addPersonForm"
+
+                <form class="layui-form custom_form"  id="addPersonForm"
                       style="width: 960px;">
                     <div class="layui-form-item">
                         <div class="layui-inline">
@@ -140,20 +140,22 @@
                             <div class="layui-input-inline">
                                 <select class="layui-input sconed_party" name="ethnicity" id="ethnicity" lay-verify="required">
                                     <option value="" disabled>请选择</option>
+                                    <c:forEach var="n" items="${nationalArr }">
+                                        <option value="${n}">${n}</option>
+                                    </c:forEach>
                                 </select>
-                                <%-- <input type="text" class="layui-input"  name="ethnicity" id="ethnicity" value="${info.member_ethnicity }"> --%>
                             </div>
                         </div>
                         <div class="layui-inline">
                             <label class="layui-form-label layui-required">籍&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;贯</label>
                             <div class="layui-input-inline" style="">
                                 <div class="col-sm-6 col-xs-6" style="padding-left: 0;padding-right: 6px">
-                                    <select id="province" class="layui-input" name="province" lay-verify="select">
+                                    <select id="province" class="layui-input" name="province"  lay-ignore lay-verify="select">
                                         <option value="" disabled>-请选择-</option>
                                     </select>
                                 </div>
                                 <div class="col-sm-6 col-xs-6" style="padding-left: 6px;padding-right: 0">
-                                    <select id="city" class="layui-input" name="city" lay-verify="select">
+                                    <select id="city" class="layui-input" name="city" lay-ignore lay-verify="select">
                                         <option value="" disabled="">请选择城市</option>
                                     </select>
                                 </div>
@@ -244,7 +246,9 @@
                             <div class="layui-input-inline">
                                 <select class="layui-input" name="job" id="job" lay-verify="select">
                                     <option value="" disabled>-请选择-</option>
-
+                                    <c:forEach var="j" items="${jobArr }">
+                                        <option value="${j}">${j}</option>
+                                    </c:forEach>
                                 </select>
                                 <%--  <input type="text" class="layui-input"  name="job" id="job" value="${info.member_job }"> --%>
                             </div>
@@ -308,8 +312,6 @@
                     <input type="hidden" name="id" value="${info.id }"/>
                     <input type="hidden" name="orgId" id="org_id" value="${orgId }"/>
                     <input type="hidden" name="addPersonFormId" id="addPersonFormId" value="${addpersonformid}"/>
-                    <%--                <input class="btn btn_main" id="button1" type="button" value="取消"/>--%>
-                    <%--                <input class="btn btn_main" id="button2" type="button" value="确定" onclick="formsubmit();"/>--%>
                     <div class="layui-form-item">
                         <div class="layui-inline btn_group" style="width: 100%;margin: 0;margin-top: 10px;">
                             <label class="layui-form-label"></label>
@@ -339,6 +341,7 @@
 </div>
 <script type="text/javascript">
     $(function () {
+        console.log("${nationalArr}");
         layui.use(['form', 'laydate','layer'], function() {
             var laydate = layui.laydate,
                 layer = layui.layer,
@@ -348,6 +351,19 @@
             laydate.render({elem: '#turn_labCheckEndDate'});
             form.on('submit(addPersonForm)', function (data) {
 
+                var postData = data.field;
+                $.post("${addUser}", postData, function (res) {
+                    if(res.code==200){
+                        layer.msg(res.message);
+                    }else if(res.code == 402) {
+                        layer.msg(res.message);
+                    }else if(res){
+                        layer.msg(res.message);
+                    }else{
+                        layer.msg("请刷新后再试。", {icon:7});
+                    }
+                },"json");
+                return false;
             });
             form.verify({
                 idCard: function (value, item) {
@@ -440,14 +456,13 @@
             if (error) {
                 alert(error);
             }
+
             var sex = "${info.member_sex}";
             var myJob = "${info.member_job }";
             var partyPositior = "${info.member_party_position}";
             console.log(partyPositior);
             var role = "${role};";
-            /* var jobs=
-${jobs}; */
-            var jobs = ["本科生", "硕士研究生", "博士研究生", "行政管理人员", "专业技术人员", "其他"];
+            /* var jobs=${jobs}; */
             //var new_class=["竹一","竹二","楠","桃","李","橘","梅","杏"];
             var new_class = "${room}";
             new_class = new_class.substring(1, new_class.length - 1);
@@ -475,16 +490,6 @@ ${jobs}; */
                     option = $('<option value="' + a[i] + '">' + a[i] + '</option>');
                 }
                 $("#positior").append(option);
-            }
-            for (var p in jobs) {
-                var job = jobs[p];
-                var option;
-                if (myJob == job) {
-                    option = $('<option selected ="selected" value="' + job + '">' + job + '</option>');
-                } else {
-                    option = $('<option value="' + job + '">' + job + '</option>');
-                }
-                $("#job").append(option);
             }
             $('#marriage').val('${info.member_marriage}');
             /* if(sex){$("#ID_card").attr("readOnly",true);} */
@@ -527,22 +532,8 @@ ${jobs}; */
                 }
             });
 
-            var national = [
-                "汉族", "壮族", "满族", "回族", "苗族", "维吾尔族", "土家族", "彝族", "蒙古族", "藏族", "布依族", "侗族", "瑶族", "朝鲜族", "白族", "哈尼族",
-                "哈萨克族", "黎族", "傣族", "畲族", "傈僳族", "仡佬族", "东乡族", "高山族", "拉祜族", "水族", "佤族", "纳西族", "羌族", "土族", "仫佬族", "锡伯族",
-                "柯尔克孜族", "达斡尔族", "景颇族", "毛南族", "撒拉族", "布朗族", "塔吉克族", "阿昌族", "普米族", "鄂温克族", "怒族", "京族", "基诺族", "德昂族", "保安族",
-                "俄罗斯族", "裕固族", "乌孜别克族", "门巴族", "鄂伦春族", "独龙族", "塔塔尔族", "赫哲族", "珞巴族"
-            ];
+
             var nationa = "${info.member_ethnicity }";
-            for (var i = 0; i < national.length; i++) {
-                if (national[i] == nationa) {
-                    var option = $('<option selected="selected" value="' + national[i] + '">' + national[i] + '</option>')
-                    $("#ethnicity").append(option);
-                } else {
-                    var option = $('<option value="' + national[i] + '">' + national[i] + '</option>')
-                    $("#ethnicity").append(option);
-                }
-            }
             var education = "${info.member_degree }";
             $("#educational_level option").each(function () {
                 if ($(this).attr("value") == education) {
@@ -554,7 +545,6 @@ ${jobs}; */
                 'city': 'city', //城市ID
                 'hasSelect': function (data) {
                     $("#birth_place").val(data.province + "-" + data.city);
-                    form.render('select')
                 }//选中后回调函数
             });
             $('#province').val("${info.member_province}");
@@ -563,60 +553,6 @@ ${jobs}; */
             $('#city').change();
             $('#unit').val('${info.member_unit}');
             form.render('select')
-            function formsubmit() {
-                var isContinue = true;
-                $(".layui-required").next().find("input").each(function () {
-                    if (!$(this).val()) {
-                        isContinue = false;
-                    }
-                });
-                $(".layui-required").next().find("select").each(function () {
-                    if (!$(this).val()) {
-                        isContinue = false;
-                    }
-                });
-                if (!isContinue){
-                    alert("请完善基本信息");
-                    return
-                }
-                if ($("#ID_card").val().length !== 18) {
-                    isContinue = false;
-                    alert("请输入正确的身份证号码");
-                }else if (!/^1\d{10}$/.test($("#telephone").val())) {
-                    isContinue = false;
-                    alert("请输入正确的手机号码");
-                }else if (!/^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/.test($("#email").val())) {
-                    isContinue = false;
-                    alert("请输入正确的邮箱号码");
-                }
-                if (isContinue) {
-                    var data = {
-                        OrgId: $("#org_id").val(),
-                        UserId: $("#ID_card").val()
-                    };
-                    if ("add" == $("#state").val() || $("#ID_card").val() != "${info.member_identity }") {
-                        $.ajax({
-                            type: "post",
-                            url: "${orgexist}",
-                            data: data,
-                            dataType: "json",
-                            async: false,
-                            success: function (res) {
-                                if (true == res.state) {
-                                    isContinue = false;
-                                    alert(res.message);
-                                }
-                            }
-                        });
-                    }
-                }else {
-                    alert("请完善基本信息");
-                }
-                if (isContinue) {
-                    $("#addPersonForm").submit();
-                }
-            }
-            $('#button1').on('click', formsubmit);
         });
 
         function check(e) {

@@ -15,6 +15,7 @@ import hg.party.server.dwonlistserver.DownListServer;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.springframework.util.StringUtils;
+import party.constants.PartyConst;
 import party.constants.PartyPortletKeys;
 import party.portlet.unit.UnitDao;
 
@@ -111,6 +112,8 @@ public class PersonalInfoPortlet extends MVCPortlet {
 		renderRequest.setAttribute("orgId", orgId);
 		renderRequest.setAttribute("seconedName", seconedName);
 		renderRequest.setAttribute("jobs", JSON.toJSON(jobs));
+		renderRequest.setAttribute("jobArr", PartyConst.JOBS);
+		renderRequest.setAttribute("nationalArr", PartyConst.NATIONAL);
 		renderRequest.setAttribute("positior",po);
 		renderRequest.setAttribute("room",ro);
 		renderRequest.setAttribute("role",role);
