@@ -1,24 +1,21 @@
 package party.portlet.org.command;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
-import javax.portlet.PortletException;
+import javax.portlet.*;
 
-import hg.util.ConstantsKey;
+import com.alibaba.fastjson.JSON;
+import com.liferay.portal.kernel.portlet.bridges.mvc.MVCResourceCommand;
+import hg.util.result.ResultUtil;
 import org.apache.log4j.Logger;
-import org.apache.xmlbeans.impl.tool.Extension.Param;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-
-import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
-import com.liferay.portal.kernel.portlet.bridges.mvc.MVCResourceCommand;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 
@@ -36,9 +33,9 @@ import party.constants.PartyPortletKeys;
 		"javax.portlet.name=" + PartyPortletKeys.PersonAddPortlet,
 		"javax.portlet.name=" + PartyPortletKeys.PersonalInfoPortlet,
 		"mvc.command.name=/org/add/user"
-}, service = MVCActionCommand.class)
-public class AddPersonActionCommand implements MVCActionCommand {
-	Logger log = Logger.getLogger(AddPersonActionCommand.class);
+}, service = MVCResourceCommand.class)
+public class AddPersonResourceCommand implements MVCResourceCommand {
+	Logger log = Logger.getLogger(AddPersonResourceCommand.class);
 
 	@Reference
 	private MemberDao memberDao;
@@ -51,44 +48,49 @@ public class AddPersonActionCommand implements MVCActionCommand {
 
 	@Override
 	@Transactional
-	public boolean processAction(ActionRequest actionRequest, ActionResponse actionResponse) throws PortletException {
-		Object userId = SessionManager.getAttribute(actionRequest.getRequestedSessionId(), "userName");
-		String role = (String)SessionManager.getAttribute(actionRequest.getRequestedSessionId(), "role");
-
+	public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse) {
+		Object userId = SessionManager.getAttribute(resourceRequest.getRequestedSessionId(), "userName");
+		String role = (String)SessionManager.getAttribute(resourceRequest.getRequestedSessionId(), "role");
+		PrintWriter printWriter = null;
+		try {
+			printWriter = resourceResponse.getWriter();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		Member m = new Member();
 		User u = new User();
-		String userName = ParamUtil.getString(actionRequest, "userName");
-		String sex = ParamUtil.getString(actionRequest, "sex");
-		String ethnicity = ParamUtil.getString(actionRequest, "ethnicity");
-		String birth_place = ParamUtil.getString(actionRequest, "birth_place");
-		String province = ParamUtil.getString(actionRequest, "province");
-		String city = ParamUtil.getString(actionRequest, "city");
-		String birthday = ParamUtil.getString(actionRequest, "birthday");
-		String join_party_time = ParamUtil.getString(actionRequest, "join_party_time");
-		String turn_Time = ParamUtil.getString(actionRequest, "turn_Time");
-		String telephone = ParamUtil.getString(actionRequest, "telephone");
-		String ID_card = ParamUtil.getString(actionRequest, "ID_card");
-		String educational_level = ParamUtil.getString(actionRequest, "educational_level");
-		String party_type = ParamUtil.getString(actionRequest, "party_type");
-		String home_addrss = ParamUtil.getString(actionRequest, "home_addrss");
-		String orgId = ParamUtil.getString(actionRequest, "orgId");
-		String seconedName = ParamUtil.getString(actionRequest, "seconedName");
-		String email = ParamUtil.getString(actionRequest, "email");
-		String job = ParamUtil.getString(actionRequest, "job");
-		String positior = ParamUtil.getString(actionRequest, "positior");
-		String marriage = ParamUtil.getString(actionRequest, "marriage");
-		String id = ParamUtil.getString(actionRequest, "id");
-		String prevID_card = ParamUtil.getString(actionRequest, "prevID_card");
-		String title = ParamUtil.getString(actionRequest, "major_title");
-		String unit = ParamUtil.getString(actionRequest, "unit");
-		String isLeader = ParamUtil.getString(actionRequest, "isLeader");
-		String classnew1 = ParamUtil.getString(actionRequest, "new_class1");
-		String classnew2 = ParamUtil.getString(actionRequest, "new_class2");
-		String classnew3 = ParamUtil.getString(actionRequest, "new_class3");
+		String userName = ParamUtil.getString(resourceRequest, "userName");
+		String sex = ParamUtil.getString(resourceRequest, "sex");
+		String ethnicity = ParamUtil.getString(resourceRequest, "ethnicity");
+		String birth_place = ParamUtil.getString(resourceRequest, "birth_place");
+		String province = ParamUtil.getString(resourceRequest, "province");
+		String city = ParamUtil.getString(resourceRequest, "city");
+		String birthday = ParamUtil.getString(resourceRequest, "birthday");
+		String join_party_time = ParamUtil.getString(resourceRequest, "join_party_time");
+		String turn_Time = ParamUtil.getString(resourceRequest, "turn_Time");
+		String telephone = ParamUtil.getString(resourceRequest, "telephone");
+		String ID_card = ParamUtil.getString(resourceRequest, "ID_card");
+		String educational_level = ParamUtil.getString(resourceRequest, "educational_level");
+		String party_type = ParamUtil.getString(resourceRequest, "party_type");
+		String home_addrss = ParamUtil.getString(resourceRequest, "home_addrss");
+		String orgId = ParamUtil.getString(resourceRequest, "orgId");
+		String seconedName = ParamUtil.getString(resourceRequest, "seconedName");
+		String email = ParamUtil.getString(resourceRequest, "email");
+		String job = ParamUtil.getString(resourceRequest, "job");
+		String positior = ParamUtil.getString(resourceRequest, "positior");
+		String marriage = ParamUtil.getString(resourceRequest, "marriage");
+		String id = ParamUtil.getString(resourceRequest, "id");
+		String prevID_card = ParamUtil.getString(resourceRequest, "prevID_card");
+		String title = ParamUtil.getString(resourceRequest, "major_title");
+		String unit = ParamUtil.getString(resourceRequest, "unit");
+		String isLeader = ParamUtil.getString(resourceRequest, "isLeader");
+		String classnew1 = ParamUtil.getString(resourceRequest, "new_class1");
+		String classnew2 = ParamUtil.getString(resourceRequest, "new_class2");
+		String classnew3 = ParamUtil.getString(resourceRequest, "new_class3");
 		String classnew = classnew1 + "园区" + classnew2 + "栋" + classnew3 + "室";
 		ID_card = ID_card.toUpperCase();
 
-		String addPersonFormId = ParamUtil.getString(actionRequest, "addPersonFormId");
+		String addPersonFormId = ParamUtil.getString(resourceRequest, "addPersonFormId");
 
 		try {
 			// if (seconedName.contains("Ö")) {
@@ -135,8 +137,8 @@ public class AddPersonActionCommand implements MVCActionCommand {
 			u.setUserrole("普通党员");
 			// log.info("编辑人员:["+new Date()+"] [by "+userId+"] ID_card
 			// :["+ID_card+"]");
-			synchronized (PortalUtil.getHttpServletRequest(actionRequest).getSession()) {
-				String originalFormId = (String) SessionManager.getAttribute(actionRequest.getRequestedSessionId(),
+			synchronized (PortalUtil.getHttpServletRequest(resourceRequest).getSession()) {
+				String originalFormId = (String) SessionManager.getAttribute(resourceRequest.getRequestedSessionId(),
 						"addperson-formId");
 				if (addPersonFormId.equals(originalFormId)) {
 
@@ -158,19 +160,15 @@ public class AddPersonActionCommand implements MVCActionCommand {
 						log.info("添加人员:[" + new Date() + "] [by " + userId + "]  ID_card :[" + ID_card + "]");
 					}
 					transactionUtil.commit();
-					SessionManager.setAttribute(actionRequest.getRequestedSessionId(), "addperson-formId", "NULL");
-					if (role.equalsIgnoreCase(ConstantsKey.COMMON_PARTY)){
-						actionResponse.sendRedirect("/personal_info");
-					}else {
-						actionResponse.sendRedirect("/partyusermanager?org=" + orgId);
-					}
+					SessionManager.setAttribute(resourceRequest.getRequestedSessionId(), "addperson-formId", "NULL");
+					printWriter.write(JSON.toJSONString(ResultUtil.success(null)));
 				}
 			}
 
 		} catch (Exception e) {
 			transactionUtil.rollback();
 			log.info("异常信息:[" + new Date() + "] [by " + userId + "]  ID_card :[" + ID_card + "]");
-			actionRequest.setAttribute("error", "操作异常！");
+			printWriter.write(JSON.toJSONString(ResultUtil.fail("操作异常！")));
 			return false;
 		}
 

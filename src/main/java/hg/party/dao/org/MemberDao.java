@@ -428,12 +428,14 @@ public class MemberDao extends PostgresqlDaoImpl<Member> {
         int count = 0;
         int start = page.getPage()>0?(page.getPage()-1)*page.getPageSize():0;
         String pageSql = " limit " + page.getPageSize() + " offset " + start;
+        String orderSql = " order by i.member_identity asc";
         Page<Member> memberPage = new Page<Member>(page.getPage(),page.getPageSize());
         RowMapper<Member> rowMapper = BeanPropertyRowMapper.newInstance(Member.class);
         switch(partyOrgAdminTypeEnum){
             case BRANCH:
                 sb.append(" and b.org_id = ?");
                 listSb.append(sb.toString());
+                listSb.append(orderSql);
                 listSb.append(pageSql);
                 countSb.append(sb.toString());
                 list =  jdbcTemplate.query(listSb.toString(),rowMapper,orgId);
@@ -442,6 +444,7 @@ public class MemberDao extends PostgresqlDaoImpl<Member> {
             case SECONDARY:
                 sb.append(" and (s.org_id=? or b.org_id = ?)");
                 listSb.append(sb.toString());
+                listSb.append(orderSql);
                 listSb.append(pageSql);
                 countSb.append(sb.toString());
                 list =  jdbcTemplate.query(listSb.toString(),rowMapper,orgId,orgId);
@@ -449,6 +452,7 @@ public class MemberDao extends PostgresqlDaoImpl<Member> {
                 break;
             case ORGANIZATION:;
                 listSb.append(sb.toString());
+                listSb.append(orderSql);
                 listSb.append(pageSql);
                 countSb.append(sb.toString());
                 list =  jdbcTemplate.query(listSb.toString(),rowMapper);

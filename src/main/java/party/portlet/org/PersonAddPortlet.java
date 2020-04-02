@@ -33,6 +33,7 @@ import hg.party.entity.login.User;
 import hg.party.entity.organization.Organization;
 import hg.party.entity.party.Hg_Value_Attribute_Info;
 import hg.party.server.dwonlistserver.DownListServer;
+import party.constants.PartyConst;
 import party.constants.PartyPortletKeys;
 import party.portlet.unit.UnitDao;
 
@@ -115,6 +116,8 @@ public class PersonAddPortlet extends MVCPortlet {
 		renderRequest.setAttribute("orgId", orgId);
 		renderRequest.setAttribute("seconedName", seconedName);
 		renderRequest.setAttribute("jobs", JSON.toJSON(jobs));
+		renderRequest.setAttribute("jobArr", PartyConst.JOBS);
+		renderRequest.setAttribute("nationalArr", PartyConst.NATIONAL);
 		renderRequest.setAttribute("positior",po);
 		renderRequest.setAttribute("room",ro);
 		renderRequest.setAttribute("role",role);
