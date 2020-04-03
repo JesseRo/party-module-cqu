@@ -1,28 +1,22 @@
 package party.memberEdit;
 
-import com.dt.springjdbc.dao.impl.PostgresqlQueryResult;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCResourceCommand;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
-import hg.party.entity.partyMembers.JsonPageResponse;
-import hg.party.entity.partyMembers.JsonResponse;
+import hg.party.dao.member.MemberEditDao;
 import hg.util.ConstantsKey;
 import hg.util.TransactionUtil;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-import org.springframework.util.StringUtils;
 import party.constants.PartyPortletKeys;
-import party.portlet.report.entity.Report;
 
 import javax.portlet.PortletException;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Map;
 
 @Component(
         immediate = true,

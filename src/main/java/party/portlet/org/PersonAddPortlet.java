@@ -70,61 +70,24 @@ public class PersonAddPortlet extends MVCPortlet {
 	
 	public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
 			throws IOException, PortletException {
-		
-		//	window.location.href='/addperson?oagName'+oagName+'&orgId='+orgId+'&oagName='+oagName; 
+
 		HttpServletRequest request=PortalUtil.getHttpServletRequest(renderRequest);
-		HttpServletRequest oriRequest = PortalUtil.getOriginalServletRequest(request);
-		String orgName=PortalUtil.getOriginalServletRequest(request).getParameter("orgName");
 		String orgId=PortalUtil.getOriginalServletRequest(request).getParameter("orgId");
-		String seconedName=PortalUtil.getOriginalServletRequest(request).getParameter("seconedName");
 		String userId=PortalUtil.getOriginalServletRequest(request).getParameter("userId");
-		List<Map<String, Object>> jobs =memberDao.findMemeberJob();
-		List<Hg_Value_Attribute_Info> positior=server.positior();
-		List<Hg_Value_Attribute_Info> room=server.room();
-		List<String> po=new ArrayList<>();
-		for (int i = 0; i < positior.size(); i++) {
-			Hg_Value_Attribute_Info value=positior.get(i);
-			String p=value.getResources_value();
-			po.add(p);
-		}
-		List<String> ro=new ArrayList<>();
-		for (int i = 0; i < room.size(); i++) {
-			Hg_Value_Attribute_Info value=room.get(i);
-			String p=value.getResources_value();
-			ro.add(p);
-		}
-		String state="";
-		String sessionId=renderRequest.getRequestedSessionId();
-		String role=(String) SessionManager.getAttribute(sessionId, "role");
 		if (!StringUtils.isEmpty(userId)) {
 			List<Map<String, Object>> list = orgDao.findPersonByuserId(userId);
 			if (list!=null&&list.size()>0) {
 				User user = UserDao.findUserByEthnicity(userId);
-				 list.get(0).put("email", user.getUser_mailbox());
+				list.get(0).put("email", user.getUser_mailbox());
 				renderRequest.setAttribute("info", list.get(0));
 			}
-			orgName +=">编辑人员";
-			state = "edit";
 			orgId = (String)list.get(0).get("member_org");
-		}else {
-			orgName +=">新增人员";
-			state = "add";
 		}
-		renderRequest.setAttribute("portlet_name", "party");
-		renderRequest.setAttribute("state", state);
-		renderRequest.setAttribute("orgName", orgName);
 		renderRequest.setAttribute("orgId", orgId);
-		renderRequest.setAttribute("seconedName", seconedName);
-		renderRequest.setAttribute("jobs", JSON.toJSON(jobs));
+		renderRequest.setAttribute("userId", userId);
 		renderRequest.setAttribute("jobArr", PartyConst.JOBS);
 		renderRequest.setAttribute("nationalArr", PartyConst.NATIONAL);
-		renderRequest.setAttribute("positior",po);
-		renderRequest.setAttribute("room",ro);
-		renderRequest.setAttribute("role",role);
 		renderRequest.setAttribute("units", unitDao.findAll());
-		String uuid=UUID.randomUUID().toString();
-		SessionManager.setAttribute(sessionId, "addperson-formId", uuid);
-		renderRequest.setAttribute("addpersonformid",uuid);
 		super.doView(renderRequest, renderResponse); 
 	}
 

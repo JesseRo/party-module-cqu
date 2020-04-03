@@ -28,4 +28,12 @@ public class MemberService {
 		return memberDao.pageMembersByOrg(orgId,partyOrgAdminTypeEnum,page,memberType,history,keyword);
 	}
 
+	/**
+	 * 根据身份证号查询Member
+	 * @param identity
+	 * @return
+	 */
+	public Member findMemberByIdentity(String identity) {
+		return memberDao.findByUserId(identity);
+	}
 }

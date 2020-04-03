@@ -25,42 +25,12 @@
             font-size: 16px;
         }
 
-        /*#button1 {*/
-        /*    margin-left: 10%;*/
-        /*    margin-top: 5%*/
-        /*}*/
-
-        /*#button2 {*/
-        /*    float: right;*/
-        /*    margin-right: 10%;*/
-        /*    margin-top: 5%;*/
-        /*}*/
-
         #birth_place {
             width: 29%;
             float: right;
             height: 25px;
             vertical-align: baseline;
         }
-
-        .class_span {
-            float: left;
-            text-align: right;
-            color: #333;
-            font-size: 16px;
-            padding: 7px 0 0 0;
-        }
-
-        .class_select {
-            width: 36%;
-            float: left;
-        }
-
-        .class_input {
-            width: 20%;
-            float: left;
-        }
-
         .content_info .content_form .form-group > div {
             margin-bottom: 20px;
         }
@@ -78,17 +48,23 @@
         .layui-form-item .layui-input-inline{
             width: 260px;
         }
+        .layui-form-label-text{
+            float: left;
+            display: block;
+            padding: 0 10px;
+            width: 200px;
+            font-weight: 400;
+            line-height: 40px;
+            font-size: 16px;
+            text-align: left;
+        }
     </style>
     <script type="text/javascript" src="${basePath}/js/jquery.jqprint-0.3.js"></script>
     <script type="text/javascript" src="${basePath}/js/My97DatePicker/WdatePicker.js"></script>
     <script type="text/javascript" src="${basePath}/js/pagination.js"></script>
     <script type="text/javascript" src="${basePath}/js/ChineseCities.min.js" charset="utf-8"></script>
     <link rel="stylesheet" href="${basePath}/css/print_div.css">
-    <portlet:resourceURL id="/hg/assigned" var="assigned"/>
-    <portlet:resourceURL id="/hg/getMeetingTypeAndTheme" var="getMeetingTypeAndTheme"/>
-    <portlet:resourceURL id="/hg/orgCheckCountExport" var="orgCheckCountExport"/>
-    <portlet:resourceURL id="/hg/org/exist" var="orgexist"/>
-    <portlet:resourceURL id="/org/add/user" var="addUser"/>
+    <portlet:resourceURL id="/org/user/applyUpdate" var="applyUpdateUser"/>
 </head>
 <body>
 <div class="table_form_content">
@@ -97,18 +73,14 @@
         <div class="breadcrumb_group" style="margin-bottom: 20px;">
             当前位置：
             <span class="layui-breadcrumb" lay-separator=">">
-                        <a href="javascript:;">基础数据管理</a>
-                        <a href="javascript:;" onclick="window.location.href='/partyusermanager'">党员信息管理</a>
-                        <c:if test="${userId != null && userId !=''}"> <a href="javascript:;">党员个人信息</a></c:if>
-                        <c:if test="${userId == null || userId ==''}"> <a href="javascript:;">添加党员</a></c:if>
-
-                    </span>
-
+                        <a href="javascript:;">个人信息</a>
+            </span>
         </div>
         <div class="bg_white_container">
             <div class="content_form form_container">
                 <form class="layui-form custom_form"  id="addPersonForm"
                       style="width: 960px;">
+                    <input type="hidden" name="id" value="${info.id }"/>
                     <div class="layui-form-item">
                         <div class="layui-inline">
                             <label class="layui-form-label layui-required">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名</label>
@@ -267,10 +239,9 @@
                             </div>
                         </div>
                         <div class="layui-inline">
-                            <label class="layui-form-label">党费标准</label>
+                            <label class="layui-form-label">党费标准:</label>
                             <div class="layui-input-inline">
-                                <input type="text" class="layui-input" name="major_title" id="major_title" onblur="check(this)"
-                                       onkeyup="this.value=this.value.replace(/[^0-9.]/g,'')" placeholder="（元/月）" value="${info.member_major_title }">
+                                <label class="layui-form-label-text">${info.member_major_title } 元/月</label>
                             </div>
                         </div>
                     </div>
@@ -298,20 +269,11 @@
                             </div>
                         </div>
                     </div>
-                    <input type="hidden" name="seconedName" value="${seconedName }"/>
-                    <input type="hidden" name="prevID_card" value="${info.member_identity }"/>
-                    <input type="hidden" name="id" value="${info.id }"/>
-                    <input type="hidden" name="orgId" id="org_id" value="${orgId }"/>
-
-                    <input type="hidden" name="addPersonFormId" id="addPersonFormId" value="${addpersonformid}"/>
                     <div class="layui-form-item">
                         <div class="layui-inline btn_group" style="width: 100%;margin: 0;margin-top: 10px;">
                             <label class="layui-form-label"></label>
                             <div class="layui-input-inline">
-                                <button  type="button" class="layui-btn layui-btn-warm" lay-submit="" lay-filter="addPersonForm">保 存</button>
-                                <button onclick="window.history.back();" type="button" id="button2" class="layui-btn layui-btn-primary" style="background-color: transparent;color: #666;padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;border-radius: 4px;">
-                                    取消
-                                </button>
+                                <button  type="button" class="layui-btn layui-btn-warm" lay-submit="" lay-filter="updatePersonApply">提 交</button>
                             </div>
                         </div>
                     </div>
@@ -338,12 +300,14 @@
             laydate.render({elem: '#labCheckEndDate'});
             laydate.render({elem: '#turn_labCheckEndDate'});
             setSelect();
-            form.on('submit(addPersonForm)', function (data) {
+            form.on('submit(updatePersonApply)', function (data) {
 
                 var postData = data.field;
-                $.post("${addUser}", postData, function (res) {
+                $.post("${applyUpdateUser}", postData, function (res) {
                     if(res.code==200){
-                        layer.msg(res.message);
+                        layer.alert('提交成功',{yes:function(){
+                            window.location.href = "/personal_info";
+                            }});
                     }else if(res.code == 402) {
                         layer.msg(res.message);
                     }else if(res){
@@ -431,18 +395,6 @@
                 return res;
             }
 
-            $('#button3').on('click', function () {
-
-                $('#div_print').jqprint(
-                    {
-                        debug: false, //如果是true则可以显示iframe查看效果（iframe默认高和宽都很小，可以再源码中调大），默认是false
-                        importCSS: false, //true表示引进原来的页面的css，默认是true。（如果是true，先会找$("link[media=print]")，若没有会去找$("link")中的css文件）
-                        printContainer: true, //表示如果原来选择的对象必须被纳入打印（注意：设置为false可能会打破你的CSS规则）。
-                        operaSupport: false//表示如果插件也必须支持歌opera浏览器，在这种情况下，它提供了建立一个临时的打印选项卡。默认是true
-                    }
-                )
-            });
-
             function setSelect(){
                 $("#sex").val("${info.member_sex}");//性别
                 $('#ethnicity').val("${info.member_ethnicity }");//民族
@@ -460,52 +412,7 @@
 
         });
 
-        function check(e) {
-            var re = /^\d+(?=\.{0,1}\d+$|$)/
-            if (e.value != "") {
-                if (!re.test(e.value)) {
-                    alert("请输入正确的数字");
-                    e.value = "";
-                    e.focus();
-                } else {
-                    var va = e.value
-                    if (e.value.indexOf(".") == 0) {
-                        e.value = "0" + va.substring(0, 3);
-                    } else if (e.value.indexOf(".") < 0) {
-                        e.value = va + ".00";
-                    } else {
-                        e.value = va.substring(0, va.indexOf(".") + 3);
-                    }
-                }
-            }
-        };
-
-        function nclass3() {
-            var patrn = /^[0-9]*$/;
-            if (patrn.exec($("#new_class3").val()) == null) {
-                alert('请输入数字');
-                $("#new_class3").val("");
-
-                $("#new_class3").focus();
-            } else {
-                console.log('true');
-            }
-
-        };
-
-        function nclass2() {
-            var patrn = /^[0-9a-zA-Z]+$/;
-            if (patrn.exec($("#new_class2").val()) == null) {
-                alert('请输入数字或英文字母');
-
-                $("#new_class2").val("1");
-
-                $("#new_class2").focus();
-            } else {
-                console.log('true');
-            }
-        };
-        })
+    })
 
 
 </script>

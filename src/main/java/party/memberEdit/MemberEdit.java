@@ -52,6 +52,14 @@ public class MemberEdit {
 
 	private String reason;
 
+	private String member_unit;
+	private String member_province;
+	private String member_city;
+	//是否是干部
+	private String member_is_leader;
+	//提交人
+	private String submit_by;
+
 	public String getMember_major_title() {
 		return member_major_title;
 	}
@@ -108,7 +116,33 @@ public class MemberEdit {
 	private String member_party_committee;
 	//党内职务
 	private String member_party_position;
-	
+	public MemberEdit(){
+	}
+
+	public MemberEdit(String member_name, String member_sex, String member_ethnicity, String member_birthday, String member_identity, String member_degree, String member_job, String member_join_date, String member_fomal_date, String member_org, String member_type, String member_address, String member_phone_number,String member_birth_place, String member_mailbox, String member_major_title, String member_marriage, String member_unit, String member_province, String member_city,String member_is_leader,String submit_by) {
+		this.member_name = member_name;
+		this.member_sex = member_sex;
+		this.member_ethnicity = member_ethnicity;
+		this.member_birthday = member_birthday;
+		this.member_identity = member_identity;
+		this.member_degree = member_degree;
+		this.member_job = member_job;
+		this.member_join_date = member_join_date;
+		this.member_fomal_date = member_fomal_date;
+		this.member_org = member_org;
+		this.member_type = member_type;
+		this.member_address = member_address;
+		this.member_phone_number = member_phone_number;
+		this.member_birth_place = member_birth_place;
+		this.member_mailbox = member_mailbox;
+		this.member_major_title = member_major_title;
+		this.member_marriage = member_marriage;
+		this.member_unit = member_unit;
+		this.member_province = member_province;
+		this.member_city = member_city;
+		this.member_is_leader = member_is_leader;
+		this.submit_by = submit_by;
+	}
 	@Override
 	public boolean equals(Object obj) {
 		// TODO Auto-generated method stub
@@ -327,5 +361,45 @@ public class MemberEdit {
 
 	public void setReason(String reason) {
 		this.reason = reason;
+	}
+
+	public String getMember_unit() {
+		return member_unit;
+	}
+
+	public void setMember_unit(String member_unit) {
+		this.member_unit = member_unit;
+	}
+
+	public String getMember_province() {
+		return member_province;
+	}
+
+	public void setMember_province(String member_province) {
+		this.member_province = member_province;
+	}
+
+	public String getMember_city() {
+		return member_city;
+	}
+
+	public void setMember_city(String member_city) {
+		this.member_city = member_city;
+	}
+
+	public String getMember_is_leader() {
+		return member_is_leader;
+	}
+
+	public void setMember_is_leader(String member_is_leader) {
+		this.member_is_leader = member_is_leader;
+	}
+
+	public String getSubmit_by() {
+		return submit_by;
+	}
+
+	public void setSubmit_by(String submit_by) {
+		this.submit_by = submit_by;
 	}
 }

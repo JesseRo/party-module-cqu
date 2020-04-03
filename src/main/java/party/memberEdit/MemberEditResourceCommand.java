@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCResourceCommand;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
+import hg.party.dao.member.MemberEditDao;
 import hg.party.entity.partyMembers.JsonPageResponse;
 import hg.party.entity.partyMembers.JsonResponse;
 import hg.util.ConstantsKey;
@@ -14,7 +15,6 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.springframework.util.StringUtils;
 import party.constants.PartyPortletKeys;
-import party.log.LogDao;
 
 import javax.portlet.PortletException;
 import javax.portlet.ResourceRequest;

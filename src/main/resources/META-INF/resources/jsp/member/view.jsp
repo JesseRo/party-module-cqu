@@ -339,10 +339,15 @@
                    };
                     table.render({
                         elem: '#memberTable'
-                        ,height: 560
+                        ,height: 500
                         ,where: where
                         ,url: '${orgMember}'//数据接口
-                        ,page: true //开启分页
+                        ,page: {
+                                limit:10,   //每页条数
+                                limits:[],
+                                prev:'&lt;上一页',
+                                next:'下一页&gt;',
+                                groups:4}
                         ,cols: [[
                             {type: 'checkbox',fixed: 'left'}
                             ,{field: 'member_name', title: '姓名', width:120}
@@ -657,7 +662,36 @@
                     });
                 });
 
-                $('#current_root .first_menu').click();
+                $(".custom_table").on("click", "button.delete", function () {
+                    console.log($(this).html());
+                    var personId = $(this).parent().parent().prev().prev().prev().html()
+                    var $this = $(this);
+                    var con = confirm("你确定删除人员 ：" + personId)
+                    var userId = personId;
+                    var orgId = $(".third_menu_on").attr("id");
+                    if (con) {
+                        $.ajax({
+                            url: "${orgDeletePerson}",
+                            data: {userId: userId, orgId: orgId},
+                            dataType: "json",
+                            success: function (res) {
+                                if (res.state == true) {
+                                    $this.parent().parent().parent().remove();
+                                    alert("删除成功");
+                                } else {
+                                    alert("删除失败");
+                                }
+                            }
+                        });
+                    }
+                });
+
+                $("#addPerson").click(function () {
+                    window.location.href = '/addperson?orgId=' + checkedNode.data.org_id;
+                });
+                $("#memberImport").click(function () {
+                    alert("请先进行人员名册导出，在导出的人员信息表上进行人员信息编辑，然后再进行导入操作！");
+                });
             })
         });
     </script>
@@ -712,12 +746,12 @@
                                                 <input type="text" name="keyword"  placeholder="请输入名字、工号、身份证号关键字" class="layui-input">
                                             </div>
                                             <button type="button"  class="layui-btn layui-btn-warm"  lay-submit="" lay-filter="searchForm"><icon class="layui-icon layui-icon-search"></icon>搜索</button>
-                                                <button id="delete" class="layui-btn layui-btn layui-btn-danger">删除人员</button>
-                                                <button id="addPerson" class="layui-btn layui-btn-primary">添加人员</button>
-                                                <button id="orgImport" class="layui-btn layui-btn-primary">党组织导入</button>
-                                                <button id="orgExport" class="layui-btn layui-btn-primary">党组织导出</button>
-                                                <button id="memberImport" class="layui-btn layui-btn-primary">人员名册导入</button>
-                                                <button id="memberExport" class="layui-btn layui-btn-primary">人员名单导出</button>
+                                                <button type="button" id="delete" class="layui-btn layui-btn layui-btn-danger">删除人员</button>
+                                                <button type="button" id="addPerson" class="layui-btn layui-btn-primary">添加人员</button>
+                                                <button type="button" id="orgImport" class="layui-btn layui-btn-primary">党组织导入</button>
+                                                <button type="button" id="orgExport" class="layui-btn layui-btn-primary">党组织导出</button>
+                                                <button type="button" id="memberImport" class="layui-btn layui-btn-primary">人员名册导入</button>
+                                                <button type="button" id="memberExport" class="layui-btn layui-btn-primary">人员名单导出</button>
                                                 <div id="upload-block" style="display: none;">
                                                     <form action="${orgImport}" method="post" target="uploadTarget"
                                                           enctype="multipart/form-data">
@@ -732,7 +766,7 @@
                                     </div>
                                 </form>
                                 <div class="table_outer_box" style="margin-top: 20px;">
-                                    <table id="memberTable" lay-filter="memberTable"></table>
+                                    <table id="memberTable" lay-filter="memberTable" class="custom_table"></table>
                                 </div>
                             </div>
                         </div>
@@ -748,46 +782,6 @@
     {{#  if(d.historic == false){ }}
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     {{#  } }}
-</script>
-<script type="text/javascript">
-    $(".custom_table").on("click", "button.delete", function () {
-        console.log($(this).html());
-        var personId = $(this).parent().parent().prev().prev().prev().html()
-        var $this = $(this);
-        var con = confirm("你确定删除人员 ：" + personId)
-        var userId = personId;
-        var orgId = $(".third_menu_on").attr("id");
-        if (con) {
-            $.ajax({
-                url: "${orgDeletePerson}",
-                data: {userId: userId, orgId: orgId},
-                dataType: "json",
-                success: function (res) {
-                    if (res.state == true) {
-                        $this.parent().parent().parent().remove();
-                        alert("删除成功");
-                    } else {
-                        alert("删除失败");
-                    }
-                }
-            });
-        }
-    });
-
-    $("#addPerson").click(function () {
-        var seconedName = $(".second_menu_on > a").text();
-        var orgId = $(".third_menu_on").attr("id");
-        var orgName = $(".third_menu_on > a").text();
-        if (seconedName && orgId && orgName) {
-            window.location.href = '/addperson?seconedName=' + seconedName + '&orgId=' + orgId + '&orgName=' + orgName;
-        } else {
-            alert('必须指定一个支部结点');
-            return;
-        }
-    });
-    $("#memberImport").click(function () {
-        alert("请先进行人员名册导出，在导出的人员信息表上进行人员信息编辑，然后再进行导入操作！");
-    });
 </script>
 <!-- 弹窗 -->
 <div id="model_box">

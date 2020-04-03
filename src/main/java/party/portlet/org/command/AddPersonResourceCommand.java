@@ -50,14 +50,12 @@ public class AddPersonResourceCommand implements MVCResourceCommand {
 	@Transactional
 	public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse) {
 		Object userId = SessionManager.getAttribute(resourceRequest.getRequestedSessionId(), "userName");
-		String role = (String)SessionManager.getAttribute(resourceRequest.getRequestedSessionId(), "role");
 		PrintWriter printWriter = null;
 		try {
 			printWriter = resourceResponse.getWriter();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		Member m = new Member();
 		User u = new User();
 		String userName = ParamUtil.getString(resourceRequest, "userName");
 		String sex = ParamUtil.getString(resourceRequest, "sex");
@@ -70,11 +68,10 @@ public class AddPersonResourceCommand implements MVCResourceCommand {
 		String turn_Time = ParamUtil.getString(resourceRequest, "turn_Time");
 		String telephone = ParamUtil.getString(resourceRequest, "telephone");
 		String ID_card = ParamUtil.getString(resourceRequest, "ID_card");
-		String educational_level = ParamUtil.getString(resourceRequest, "educational_level");
+		String member_degree = ParamUtil.getString(resourceRequest, "member_degree");
 		String party_type = ParamUtil.getString(resourceRequest, "party_type");
 		String home_addrss = ParamUtil.getString(resourceRequest, "home_addrss");
 		String orgId = ParamUtil.getString(resourceRequest, "orgId");
-		String seconedName = ParamUtil.getString(resourceRequest, "seconedName");
 		String email = ParamUtil.getString(resourceRequest, "email");
 		String job = ParamUtil.getString(resourceRequest, "job");
 		String positior = ParamUtil.getString(resourceRequest, "positior");
@@ -90,13 +87,10 @@ public class AddPersonResourceCommand implements MVCResourceCommand {
 		String classnew = classnew1 + "园区" + classnew2 + "栋" + classnew3 + "室";
 		ID_card = ID_card.toUpperCase();
 
-		String addPersonFormId = ParamUtil.getString(resourceRequest, "addPersonFormId");
 
 		try {
-			// if (seconedName.contains("Ö")) {
 			List<Map<String, Object>> list = orgDao.findSecondOrgName(orgId);
-			seconedName = list.get(0).get("org_name").toString();
-			// }
+			String seconedName = list.get(0).get("org_name").toString();
 			String sql = "INSERT INTO hg_party_member (\"member_name\", \"member_sex\", \"member_ethnicity\", \"member_age\""
 					+ ", \"member_birthday\", \"member_identity\", \"member_degree\", \"member_job\", \"member_join_date\""
 					+ ", \"member_fomal_date\", \"member_org\", \"member_type\", \"member_address\", \"member_phone_number\""
@@ -104,13 +98,13 @@ public class AddPersonResourceCommand implements MVCResourceCommand {
 					+ ", \"member_flow_to\", \"member_membership_state\", \"member_mailbox\", \"historic\", \"member_party_position\", \"member_marriage\", \"member_province\", \"member_city\""
 					+ ", \"member_major_title\", \"member_new_class\", \"member_front_line\", \"member_party_committee\", \"member_birth_place\", \"member_is_leader\", \"member_unit\")"
 					+ "VALUES ('" + userName + "', '" + sex + "', '" + ethnicity + "', NULL, '" + birthday + "', '"
-					+ ID_card + "', '" + educational_level + "', '" + job + "', '" + join_party_time + "', '"
+					+ ID_card + "', '" + member_degree + "', '" + job + "', '" + join_party_time + "', '"
 					+ turn_Time + "', '" + orgId + "', '" + party_type + "', '" + home_addrss + "', '" + telephone
 					+ "', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '" + false + "', '" + positior + "','" + marriage + "','"  + province + "','"  + city + "','" + title
 					+ "','" + classnew + "', NULL, '" + seconedName + "', '" + birth_place + "', '" + isLeader + "', '" + unit + "');";
 			String Updatesql = "UPDATE hg_party_member set \"member_name\"='" + userName + "', \"member_sex\"='" + sex
 					+ "', \"member_ethnicity\"='" + ethnicity + "', \"member_birthday\"='" + birthday
-					+ "', \"member_identity\"='" + ID_card + "', \"member_degree\"='" + educational_level
+					+ "', \"member_identity\"='" + ID_card + "', \"member_degree\"='" + member_degree
 					+ "', \"member_job\"='" + job + "', \"member_join_date\"='" + join_party_time
 					+ "', \"member_fomal_date\"='" + turn_Time + "', \"member_org\"='" + orgId + "', \"member_type\"='"
 					+ party_type + "', \"member_address\"='" + home_addrss + "', \"member_phone_number\"='" + telephone
@@ -138,9 +132,7 @@ public class AddPersonResourceCommand implements MVCResourceCommand {
 			// log.info("编辑人员:["+new Date()+"] [by "+userId+"] ID_card
 			// :["+ID_card+"]");
 			synchronized (PortalUtil.getHttpServletRequest(resourceRequest).getSession()) {
-				String originalFormId = (String) SessionManager.getAttribute(resourceRequest.getRequestedSessionId(),
-						"addperson-formId");
-				if (addPersonFormId.equals(originalFormId)) {
+
 
 					transactionUtil.startTransaction();
 					if (!StringUtils.isEmpty(id)) {
@@ -163,7 +155,6 @@ public class AddPersonResourceCommand implements MVCResourceCommand {
 					SessionManager.setAttribute(resourceRequest.getRequestedSessionId(), "addperson-formId", "NULL");
 					printWriter.write(JSON.toJSONString(ResultUtil.success(null)));
 				}
-			}
 
 		} catch (Exception e) {
 			transactionUtil.rollback();
