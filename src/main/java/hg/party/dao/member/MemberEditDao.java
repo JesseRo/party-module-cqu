@@ -38,7 +38,7 @@ public class MemberEditDao extends PostgresqlDaoImpl<MemberEdit> {
 
         String sql = "insert into hg_party_member_edit (member_name,member_sex,member_ethnicity,member_birthday, member_identity," +
                 "member_degree, member_job, member_join_date,member_fomal_date, member_org, " +
-                "member_type,member_address, member_phone_number, member_birth_place, member_emailbox," +
+                "member_type,member_address, member_phone_number, member_birth_place, member_mailbox," +
                 "member_major_title, member_marriage, member_unit, member_province, member_city, " +
                 "member_is_leader,submit_by,submit_time,status)" +
                 " values " +
