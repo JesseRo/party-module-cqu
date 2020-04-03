@@ -9,8 +9,12 @@ import org.springframework.jdbc.support.KeyHolder;
 import party.memberEdit.MemberEdit;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Map;
 
 @Component(immediate = true,service = MemberEditDao.class)
@@ -35,7 +39,7 @@ public class MemberEditDao extends PostgresqlDaoImpl<MemberEdit> {
 
     public int insertMemberEdit(MemberEdit memberEdit) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
-
+        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String sql = "insert into hg_party_member_edit (member_name,member_sex,member_ethnicity,member_birthday, member_identity," +
                 "member_degree, member_job, member_join_date,member_fomal_date, member_org, " +
                 "member_type,member_address, member_phone_number, member_birth_place, member_mailbox," +
@@ -54,12 +58,20 @@ public class MemberEditDao extends PostgresqlDaoImpl<MemberEdit> {
                                      ps.setString(1, memberEdit.getMember_name());
                                      ps.setString(2, memberEdit.getMember_sex());
                                      ps.setString(3, memberEdit.getMember_ethnicity());
-                                     ps.setString(4, memberEdit.getMember_birthday());
+                                     try {
+                                         ps.setDate(4,  (Date) sdf.parse(memberEdit.getMember_birthday()));
+                                     } catch (ParseException e) {
+                                         e.printStackTrace();
+                                     }
                                      ps.setString(5, memberEdit.getMember_identity());
 
                                      ps.setString(6,memberEdit.getMember_degree());
                                      ps.setString(7,memberEdit.getMember_job());
-                                     ps.setString(8,memberEdit.getMember_join_date());
+                                     try {
+                                         ps.setDate(8, (Date) sdf.parse(memberEdit.getMember_join_date()));
+                                     } catch (ParseException e) {
+                                         e.printStackTrace();
+                                     }
                                      ps.setString(9,memberEdit.getMember_fomal_date());
                                      ps.setString(10,memberEdit.getMember_org());
 
