@@ -108,4 +108,8 @@ public class UserDao extends PostgresqlDaoImpl<User> {
 		}
 		return depId;
 	}
+
+    public int updateUser(User user) {
+		return saveOrUpdate(user);
+    }
 }

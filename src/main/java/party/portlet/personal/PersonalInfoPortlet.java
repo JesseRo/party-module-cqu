@@ -5,10 +5,12 @@ import dt.session.SessionManager;
 import hg.party.dao.login.UserDao;
 import hg.party.dao.org.OrgDao;
 import hg.party.entity.login.User;
+import hg.party.server.member.MemberEditService;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.springframework.util.StringUtils;
 import party.constants.PartyPortletKeys;
+import party.memberEdit.MemberEdit;
 import party.portlet.unit.UnitDao;
 
 import javax.portlet.Portlet;
@@ -45,6 +47,8 @@ public class PersonalInfoPortlet extends MVCPortlet {
 	 private UserDao UserDao;
 	@Reference
 	private UnitDao unitDao;
+	@Reference
+	private MemberEditService memberEditService;
 	
 	public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
 			throws IOException, PortletException {
@@ -53,8 +57,10 @@ public class PersonalInfoPortlet extends MVCPortlet {
 			List<Map<String, Object>> list = orgDao.findPersonByuserId(userId);
 			if (list!=null&&list.size()>0) {
 				User user = UserDao.findUserByEthnicity(userId);
+				MemberEdit memberEdit = memberEditService.findLatestMemberEdit(user.getId());
 				list.get(0).put("email", user.getUser_mailbox());
 				renderRequest.setAttribute("info", list.get(0));
+				renderRequest.setAttribute("memberEdit", memberEdit);
 			}
 		}
 		renderRequest.setAttribute("units", unitDao.findAll());

@@ -1,6 +1,8 @@
 package party.memberEdit;
 
 import com.dt.annotation.Table;
+import hg.party.entity.login.User;
+import hg.party.entity.partyMembers.Member;
 
 import java.lang.reflect.Field;
 import java.sql.Timestamp;
@@ -8,7 +10,7 @@ import java.util.Objects;
 
 @Table(name = "hg_party_member_edit")
 public class MemberEdit {
-	private String id;
+	private int id;
 	private String member_name;
 	private String member_sex;
 	//民族
@@ -58,7 +60,7 @@ public class MemberEdit {
 	//是否是干部
 	private String member_is_leader;
 	//提交人
-	private String submit_by;
+	private int submit_by;
 
 	public String getMember_major_title() {
 		return member_major_title;
@@ -119,7 +121,7 @@ public class MemberEdit {
 	public MemberEdit(){
 	}
 
-	public MemberEdit(String member_name, String member_sex, String member_ethnicity, String member_birthday, String member_identity, String member_degree, String member_job, String member_join_date, String member_fomal_date, String member_org, String member_type, String member_address, String member_phone_number,String member_birth_place, String member_mailbox, String member_major_title, String member_marriage, String member_unit, String member_province, String member_city,String member_is_leader,String submit_by) {
+	public MemberEdit(String member_name, String member_sex, String member_ethnicity, String member_birthday, String member_identity, String member_degree, String member_job, String member_join_date, String member_fomal_date, String member_org, String member_type, String member_address, String member_phone_number,String member_birth_place, String member_mailbox, String member_major_title, String member_marriage, String member_unit, String member_province, String member_city,String member_is_leader,int submit_by) {
 		this.member_name = member_name;
 		this.member_sex = member_sex;
 		this.member_ethnicity = member_ethnicity;
@@ -166,10 +168,10 @@ public class MemberEdit {
 		}
 	}
 
-	public String getId() {
+	public int getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 	public String getMember_name() {
@@ -395,11 +397,46 @@ public class MemberEdit {
 		this.member_is_leader = member_is_leader;
 	}
 
-	public String getSubmit_by() {
+	public int getSubmit_by() {
 		return submit_by;
 	}
 
-	public void setSubmit_by(String submit_by) {
+	public void setSubmit_by(int submit_by) {
 		this.submit_by = submit_by;
+	}
+
+    public User toUser() {
+		User user = new User();
+		user.setId(this.getSubmit_by());
+		user.setUser_id(this.getMember_identity());
+		user.setUser_mailbox(this.getMember_name());
+		user.setUser_sex(this.getMember_sex());
+		return user;
+    }
+
+	public Member toMember() {
+		Member member = new Member();
+		member.setMember_name(this.getMember_name());
+		member.setMember_sex(this.getMember_sex());
+		member.setMember_address(this.getMember_address());
+		member.setMember_unit(this.getMember_unit());
+		member.setMember_birth_place(this.getMember_birth_place());
+		member.setMember_birthday(this.getMember_birthday());
+		member.setMember_join_date(this.getMember_join_date());
+		member.setMember_identity(this.getMember_identity());
+		member.setMember_degree(this.getMember_degree());
+		member.setMember_type(this.getMember_type());
+		member.setMember_address(this.getMember_address());
+		member.setMember_fomal_date(this.getMember_fomal_date());
+		member.setMember_phone_number(this.getMember_phone_number());
+		member.setMember_mailbox(this.getMember_mailbox());
+		member.setMember_marriage(this.getMember_marriage());
+		member.setMember_province(this.getMember_province());
+		member.setMember_city(this.getMember_city());
+		member.setMember_org(this.getMember_org());
+		member.setMember_is_leader(this.getMember_is_leader());
+		member.setMember_job(this.getMember_job());
+		member.setMember_ethnicity(this.getMember_ethnicity());
+		return member;
 	}
 }

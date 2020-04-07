@@ -18,4 +18,8 @@ public class MemberEditService {
         memberEdit.setSubmit_time(new Timestamp(new Date().getTime()));
         return memberEditDao.insertMemberEdit(memberEdit);
     }
+
+    public MemberEdit findLatestMemberEdit(int id) {
+        return memberEditDao.findLatestMemberEdit(id);
+    }
 }

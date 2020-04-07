@@ -14,11 +14,9 @@
     </style>
     <script type="text/javascript" >
         $(function() {
-            var tableObj;
-            layui.use('table', function(){
+            layui.use(['table','layer'], function(){
                 var table = layui.table;
-
-                tableObj = table.render({
+                table.render({
                     elem: '#transportTable',
                     url: '${transport}', //数据接口
                     method: 'post',
@@ -39,18 +37,36 @@
                         {field: 'reason', title: '备注', width: '10%'}
                     ]]
                 });
+                //监听事件
+                table.on('tool(transportTable)', function(obj){
+                    //var checkStatus = table.checkStatus(obj.config.id);
+                    switch(obj.event){
+                        case 'pass':
+                            transportApprove(obj.data.id, 1);
+                            break;
+                        case 'reject':
+                            transportApprove(obj.data.id, 2);
+                            break;
+                    };
+                });
+                function transportApprove(id, status){
+                    var content  = status ==1?'您确认通过审批吗？':'您确认不通过审批吗？';
+                    layer.confirm(content, {
+                        btn: ['确定','取消'] //按钮
+                    }, function(){
+                        $.post("${approval}", {id: id, type: 'transport', status: status},function (res) {
+                            if (res.code == 200){
+                                var msg  = status ==1?'审批通过成功。':'审批拒绝成功。';
+                                layer.msg(msg)
+                                window.location.reload();
+                            }
+                        },"json")
+                    });
+                }
             });
         });
 
-        function transportApprove(e, status){
-            var id = $(e).parent().parent().parent().parent().find("[data-field='transport_id']").children().text();
-            $.post("${approval}", {id: id, type: 'transport', status: status},function (res) {
-                if (res.result){
-                    alert("已" + $(e).text());
-                    window.location.reload();
-                }
-            })
-        }
+
     </script>
 </head>
 <body>
@@ -67,16 +83,14 @@
             </span>
         </div>
         <div class="bg_white_container">
-            <table id="transportTable" lay-filter="activityTable" class="custom_table"></table>
+            <table id="transportTable" lay-filter="transportTable" class="custom_table"></table>
         </div>
     </div>
     <!-- 右侧盒子内容 -->
 </div>
 <script type="text/html" id="transportBtns">
-    <div class="operate_btns">
-        <span class="blue_text" onclick="transportApprove(this, 1);">通过</span>
-        <span class="red_text" onclick="transportApprove(this, 2);">驳回</span>
-    </div>
+    <a class="layui-btn layui-btn-xs" lay-event="pass">通过</a>
+    <a class="layui-btn layui-btn-xs red_text" lay-event="reject">驳回</a>
 </script>
 </body>
 </html>

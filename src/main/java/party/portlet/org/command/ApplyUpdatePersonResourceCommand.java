@@ -4,7 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCResourceCommand;
 import com.liferay.portal.kernel.util.ParamUtil;
 import dt.session.SessionManager;
+import hg.party.entity.login.User;
 import hg.party.entity.partyMembers.Member;
+import hg.party.server.login.UserService;
 import hg.party.server.member.MemberEditService;
 import hg.party.server.org.MemberService;
 import hg.util.result.ResultUtil;
@@ -32,7 +34,8 @@ public class ApplyUpdatePersonResourceCommand implements MVCResourceCommand {
 	private MemberEditService memberEditService;
 	@Reference
 	private MemberService memberService;
-
+	@Reference
+	private UserService userService;
 	@Override
 	@Transactional
 	public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse) {
@@ -68,9 +71,10 @@ public class ApplyUpdatePersonResourceCommand implements MVCResourceCommand {
 		ID_card = ID_card.toUpperCase();
 		try {
 			if(userId!= null && !StringUtils.isEmpty(id)){
+				User user= userService.findByUserId(String.valueOf(userId));
 				Member member = memberService.findMemberByIdentity(String.valueOf(userId));
 				if(member!=null){
-					MemberEdit memberEdit = new MemberEdit(userName, sex, ethnicity, birthday, prevID_card,member_degree, job, join_party_time, turn_Time, member.getMember_org(), party_type,home_addrss, telephone, birth_place, email, title, marriage, unit, province, city, isLeader,String.valueOf(userId));
+					MemberEdit memberEdit = new MemberEdit(userName, sex, ethnicity, birthday, prevID_card,member_degree, job, join_party_time, turn_Time, member.getMember_org(), party_type,home_addrss, telephone, birth_place, email, title, marriage, unit, province, city, isLeader,user.getId());
 					int ret = memberEditService.insertMemberEdit(memberEdit);
 					if(ret > 0 ){
 						log.info("成功信息:[" + new Date() + "] [by " + userId + "]  ID_card :[" + ID_card + "]");
@@ -90,7 +94,7 @@ public class ApplyUpdatePersonResourceCommand implements MVCResourceCommand {
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.info("异常信息:[" + new Date() + "] [by " + userId + "]  ID_card :[" + ID_card + "]");
-			printWriter.write(JSON.toJSONString(ResultUtil.fail("操作异常！")));
+			printWriter.write(JSON.toJSONString(ResultUtil.fail("操作异常，请联系技术人员！")));
 			return false;
 		}
 		return false;

@@ -26,4 +26,14 @@ public class OrgAdminService {
 	public OrgAdmin findOrgAdmin(String userId, String orgId){
 		return orgAdminDao.findOrgAdmin(userId,orgId);
 	}
+
+	/**
+	 * 更新用户的身份证号
+	 * @param user_id
+	 * @param member_identity
+	 * @return
+	 */
+    public int updateUserInfo(String user_id, String member_identity) {
+		return orgAdminDao.updateUserInfo(user_id,member_identity);
+    }
 }

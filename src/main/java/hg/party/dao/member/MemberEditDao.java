@@ -3,7 +3,9 @@ package hg.party.dao.member;
 import com.dt.springjdbc.dao.impl.PostgresqlDaoImpl;
 import com.dt.springjdbc.dao.impl.PostgresqlQueryResult;
 import org.osgi.service.component.annotations.Component;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import party.memberEdit.MemberEdit;
@@ -15,6 +17,7 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Map;
 
 @Component(immediate = true,service = MemberEditDao.class)
@@ -59,7 +62,7 @@ public class MemberEditDao extends PostgresqlDaoImpl<MemberEdit> {
                                      ps.setString(2, memberEdit.getMember_sex());
                                      ps.setString(3, memberEdit.getMember_ethnicity());
                                      try {
-                                         ps.setDate(4,  (Date) sdf.parse(memberEdit.getMember_birthday()));
+                                         ps.setDate(4,  new java.sql.Date(sdf.parse(memberEdit.getMember_birthday()).getTime()));
                                      } catch (ParseException e) {
                                          e.printStackTrace();
                                      }
@@ -68,7 +71,7 @@ public class MemberEditDao extends PostgresqlDaoImpl<MemberEdit> {
                                      ps.setString(6,memberEdit.getMember_degree());
                                      ps.setString(7,memberEdit.getMember_job());
                                      try {
-                                         ps.setDate(8, (Date) sdf.parse(memberEdit.getMember_join_date()));
+                                         ps.setDate(8, new java.sql.Date(sdf.parse(memberEdit.getMember_join_date()).getTime()));
                                      } catch (ParseException e) {
                                          e.printStackTrace();
                                      }
@@ -88,7 +91,7 @@ public class MemberEditDao extends PostgresqlDaoImpl<MemberEdit> {
                                      ps.setString(20,memberEdit.getMember_city());
 
                                      ps.setString(21,memberEdit.getMember_is_leader());
-                                     ps.setString(22,memberEdit.getSubmit_by());
+                                     ps.setInt(22,memberEdit.getSubmit_by());
                                      ps.setTimestamp(23,memberEdit.getSubmit_time());
                                      ps.setInt(24,memberEdit.getStatus());
 
@@ -97,5 +100,16 @@ public class MemberEditDao extends PostgresqlDaoImpl<MemberEdit> {
                              },
                 keyHolder);
         return keyHolder.getKey().intValue();
+    }
+
+    public MemberEdit findLatestMemberEdit(int id) {
+        String sql = "select * from hg_party_member_edit where submit_by = ? order by submit_time desc ";
+        RowMapper<MemberEdit> rowMapper = BeanPropertyRowMapper.newInstance(MemberEdit.class);
+        List<MemberEdit> memberEditList =  this.jdbcTemplate.query(sql,rowMapper,id);
+        if(memberEditList.size()>0){
+            return memberEditList.get(0);
+        }else{
+            return null;
+        }
     }
 }

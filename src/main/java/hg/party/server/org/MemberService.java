@@ -36,4 +36,12 @@ public class MemberService {
 	public Member findMemberByIdentity(String identity) {
 		return memberDao.findByUserId(identity);
 	}
+
+    public int updateMember(Member member) {
+		return memberDao.updateMember(member);
+    }
+
+	public Member findMemberByUser(String userId) {
+		return memberDao.findMemberByUser(userId);
+	}
 }

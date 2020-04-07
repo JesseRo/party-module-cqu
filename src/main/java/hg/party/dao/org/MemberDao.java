@@ -2,7 +2,6 @@ package hg.party.dao.org;
 
 import com.dt.springjdbc.dao.impl.PostgresqlDaoImpl;
 import com.dt.springjdbc.dao.impl.QueryResult;
-import hg.party.entity.organization.Organization;
 import hg.party.entity.party.BaseStatistics;
 import hg.party.entity.partyMembers.Member;
 import hg.util.MD5;
@@ -10,11 +9,9 @@ import hg.util.result.Page;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.util.StringUtils;
 import party.constants.PartyOrgAdminTypeEnum;
-import party.portlet.org.NotMatchingExcelDataException;
 
 import org.osgi.service.component.annotations.Component;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.object.SqlCall;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
@@ -470,4 +467,18 @@ public class MemberDao extends PostgresqlDaoImpl<Member> {
         return memberPage;
     }
 
+    public int updateMember(Member member) {
+        return saveOrUpdate(member);
+    }
+
+    public Member findMemberByUser(String userId) {
+        String sql = "select * from hg_party_member  where member_identity = ?";
+        RowMapper<Member> rowMapper = BeanPropertyRowMapper.newInstance(Member.class);
+        List<Member> memberList =  this.jdbcTemplate.query(sql,rowMapper,userId);
+        if(memberList.size()>0){
+            return memberList.get(0);
+        }else{
+            return null;
+        }
+    }
 }

@@ -62,6 +62,22 @@
         </div>
         <div class="bg_white_container">
             <div class="content_form form_container">
+                <c:if test="${memberEdit !=null}">
+                    <div class="layui-card">
+                        <div class="layui-card-header">个人信息申请修改状态：
+                            <c:if test="${memberEdit.status == 0}">
+                                <b>待审核</b>
+                            </c:if>
+                            <c:if test="${memberEdit.status == 1}">
+                                <b>已通过</b>
+                            </c:if>
+                            <c:if test="${memberEdit.status == 2}">
+                                <b>未通过</b>
+                            </c:if>
+                        </div>
+                    </div>
+
+                </c:if>
                 <div class="layui-form custom_form"  id="personInfo"
                      style="width: 960px;">
                     <div class="layui-form-item">
@@ -216,8 +232,17 @@
 
 </div>
 <script>
+    var layer;
+    layui.use(['layer'], function () {
+        layer = layui.layer;
+    });
     function applyUpdate(){
-        window.location.href='${applyUpdatePersonInfo}';
+        if("${memberEdit.status}" == "0"){
+            layer.msg("您已提交个人信息修改申请正在处理，请不要重复申请。")
+        }else{
+            window.location.href='${applyUpdatePersonInfo}';
+        }
+
     }
     function printInfo(){
         $('#div_print').jqprint(

@@ -48,8 +48,8 @@ public class OrgService {
 		return orgDao.deleteOrg(id);
 	}
 
-	public List<TreeNode> getTreeData() {
-		return orgDao.getTreeData();
+	public List<TreeNode> getTreeData(Organization organization) {
+		return orgDao.getTreeData(organization);
 	}
 
 	public List<Map<String,Object>> findAlUsers() {

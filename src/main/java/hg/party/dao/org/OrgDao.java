@@ -309,15 +309,11 @@ public class OrgDao extends PostgresqlDaoImpl<Organization>{
 	
 	public boolean changeAdmin(String org, String... admin){
 		Organization organization = findByOrgId(org);
-		if (organization == null) {
-			return false;
-		}else{
-			deleteOrgAdmin(org);
-			if (admin == null || admin.length == 0){
-				return true;
-			}
-			return saveAdmin(organization, admin);
+		deleteOrgAdmin(org);
+		if (admin == null || admin.length == 0){
+			return true;
 		}
+		return saveAdmin(organization, admin);
 	}
 	
 	public void deleteOrgAdmin(String org){
@@ -550,9 +546,24 @@ public class OrgDao extends PostgresqlDaoImpl<Organization>{
 		return jdbcTemplate.update(sql, id);
 	}
 
-	public List<TreeNode> getTreeData() {
+	public List<TreeNode> getTreeData(Organization organization) {
 		List<Organization> organizationList = findAll();
-		return initOrgTreeData(organizationList,"-");
+		if(organization == null ){
+			return initOrgTreeData(organizationList,"ddddd");
+		}else{
+			List<TreeNode> treeNodeList = new ArrayList<>();
+			TreeNode parentNode = new TreeNode();
+			parentNode.setChecked(false);
+			parentNode.setId(organization.getId());
+			parentNode.setName(organization.getOrg_name());
+			parentNode.setOpen(false);
+			parentNode.setData(organization);
+			List<TreeNode> children = initOrgTreeData(organizationList,organization.getOrg_id());
+			parentNode.setChildren(children);
+			treeNodeList.add(parentNode);
+			return treeNodeList;
+		}
+
 	}
 
 	private List<TreeNode> initOrgTreeData(List<Organization> organizationList,String orgParent){

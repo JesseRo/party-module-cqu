@@ -380,7 +380,7 @@
                         // 选择器
                         elem: '#orgTree',
                         // 数据
-                        data: '${orgTreeUrl}',
+                        data: '${orgTreeUrl}&isFilter=1',
                         // 异步加载方式：get/post，默认get
                         type: 'get',
                         // 占位符
@@ -484,40 +484,26 @@
                 })
 
                 function orgImportProc(button) {
-                    if (!orgId) {
-                        alert('必须指定一个组织结点');
-                        return;
-                    }
-                    $('#upload-block [name="orgId"]').val(orgId);
+                    $('#upload-block [name="orgId"]').val(checkedNode.data.org_id);
                     $('#upload-block [name="type"]').val('org');
                     $('#upload-block [type="file"]').click();
                 }
 
                 function orgExportProc() {
-                    if (!orgId) {
-                        alert('必须指定一个组织结点');
-                        return;
-                    }
-                    window.location.href = '${orgExport}&type=org&orgId=' + orgId + '&orgName=' + $('#title').text() + '&ishistory=' + ishistory;
+                    var ishistory = isHistory?1:0;
+                    window.location.href = '${orgExport}&type=org&orgId=' + checkedNode.data.org_id + '&orgName=' + $('#title').text() + '&ishistory=' + ishistory;
 
                 }
 
                 function memberImportProc(button) {
-                    if (!orgId) {
-                        alert('必须指定一个组织结点');
-                        return;
-                    }
-                    $('#upload-block [name="orgId"]').val(orgId);
+                    $('#upload-block [name="orgId"]').val(checkedNode.data.org_id);
                     $('#upload-block [name="type"]').val('member');
                     $('#upload-block [type="file"]').click();
                 }
 
                 function memberExportPorc() {
-                    if (!orgId) {
-                        alert('必须指定一个组织结点');
-                        return;
-                    }
-                    window.location.href = '${orgExport}&type=member&orgId=' + orgId + '&orgName=' + $('#title').text() + '&ishistory=' + ishistory;
+                    var ishistory = isHistory?1:0;
+                    window.location.href = '${orgExport}&type=member&orgId=' + checkedNode.data.org_id + '&orgName=' + $('#title').text() + '&ishistory=' + ishistory;
                 }
 
                 $('#searchForm').on('click', 'button', function () {

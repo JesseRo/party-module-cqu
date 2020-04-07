@@ -243,4 +243,8 @@ public class UserService {
 			return false;
 		}
      }
+
+    public int updateUser(User user) {
+        return userDao.updateUser(user);
+    }
 }
