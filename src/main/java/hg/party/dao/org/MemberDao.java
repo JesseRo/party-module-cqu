@@ -468,7 +468,7 @@ public class MemberDao extends PostgresqlDaoImpl<Member> {
     }
 
     public int updateMember(Member member) {
-        return saveOrUpdate(member);
+        return save(member);
     }
 
     public Member findMemberByUser(String userId) {

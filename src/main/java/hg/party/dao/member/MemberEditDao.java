@@ -112,4 +112,9 @@ public class MemberEditDao extends PostgresqlDaoImpl<MemberEdit> {
             return null;
         }
     }
+
+    public int approvalMemberEdit(int memberEditId, int status, String reason) {
+        String sql = "UPDATE hg_party_member_edit SET status=?,reason=? WHERE id=?";
+        return  this.jdbcTemplate.update(sql,status,reason,memberEditId);
+    }
 }

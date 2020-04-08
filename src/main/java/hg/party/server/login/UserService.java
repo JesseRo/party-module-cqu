@@ -244,7 +244,7 @@ public class UserService {
 		}
      }
 
-    public int updateUser(User user) {
-        return userDao.updateUser(user);
+    public int updateUserInfo(User user) {
+        return userDao.updateUserInfo(user);
     }
 }

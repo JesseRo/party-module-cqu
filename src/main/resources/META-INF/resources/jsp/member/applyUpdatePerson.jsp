@@ -220,7 +220,7 @@
                         <div class="layui-inline">
                             <label class="layui-form-label layui-required">邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;箱</label>
                             <div class="layui-input-inline">
-                                <input type="text" class="layui-input" name="email" id="email" value="${info.email }" lay-verify="partyEmail">
+                                <input type="text" class="layui-input" name="email" id="email" value="${info.member_mailbox }" lay-verify="partyEmail">
                             </div>
                         </div>
                     </div>

@@ -180,7 +180,7 @@
                         <div class="layui-inline">
                             <label class="layui-form-label">邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;箱:</label>
                             <div class="layui-input-inline">
-                                <label class="layui-form-label-text">${info.email }</label>
+                                <label class="layui-form-label-text">${info.member_mailbox }</label>
                             </div>
                         </div>
                     </div>

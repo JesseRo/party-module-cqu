@@ -6,10 +6,10 @@ import com.google.gson.GsonBuilder;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCResourceCommand;
 import com.liferay.portal.kernel.util.ParamUtil;
 import dt.session.SessionManager;
-import hg.party.dao.member.MemberEditDao;
 import hg.party.entity.login.User;
 import hg.party.entity.partyMembers.Member;
 import hg.party.server.login.UserService;
+import hg.party.server.member.MemberEditService;
 import hg.party.server.org.MemberService;
 import hg.party.server.organization.OrgAdminService;
 import hg.util.ConstantsKey;
@@ -36,7 +36,7 @@ import java.io.PrintWriter;
 )
 public class MemberEditApprovalResourceCommand implements MVCResourceCommand {
     @Reference
-    private MemberEditDao memberEditDao;
+    private MemberEditService memberEditService;
     @Reference
     TransactionUtil transactionUtil;
     @Reference
@@ -50,8 +50,8 @@ public class MemberEditApprovalResourceCommand implements MVCResourceCommand {
     private Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
 
     @Override
-    public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws PortletException {
-        String memberEditId = ParamUtil.getString(resourceRequest, "id");
+    public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse) {
+        int memberEditId = ParamUtil.getInteger(resourceRequest, "id");
         int status = ParamUtil.getInteger(resourceRequest, "status");
         Object userId = SessionManager.getAttribute(resourceRequest.getRequestedSessionId(), "userName");
         PrintWriter printWriter = null;
@@ -59,42 +59,46 @@ public class MemberEditApprovalResourceCommand implements MVCResourceCommand {
         try {
             printWriter = resourceResponse.getWriter();
             if(!StringUtils.isEmpty(memberEditId)){
-                MemberEdit memberEdit = memberEditDao.findById(memberEditId);
-                memberEdit.setStatus(status);
-                if (status == ConstantsKey.REJECTED){
-                    String reason = ParamUtil.getString(resourceRequest, "reason");
-                    memberEdit.setReason(reason);
-                }
-                int ret = memberEditDao.saveOrUpdate(memberEdit);
-                if (ret>0){
-                    if(status == 1){//审批通过，修改用户信息
-                        Member member = memberService.findMemberByUser(String.valueOf(userId));
-                        if(member!=null){
-                            Member updateMember = memberEdit.toMember();
-                            updateMember.setId(member.getId());
-                            memberService.updateMember(member);
-                        }
-                        User user = userService.findByUserId(String.valueOf(userId));
-                        if(user!=null){
-                            User updateUser = memberEdit.toUser();
-                            updateUser.setId(user.getId());
-                            userService.updateUser(updateUser);
-                        }
-                        if(!user.getUser_id().equals(memberEdit.getMember_identity())){
-                            orgAdminService.updateUserInfo(user.getUser_id(),memberEdit.getMember_identity());
-                        }
+                MemberEdit memberEdit = memberEditService.findById(memberEditId);
+                if(memberEdit == null ){
+                    printWriter.write(JSON.toJSONString(ResultUtil.fail("操作数据不存在！")));
+                }else{
+                    String reason = null;
+                    if (status == ConstantsKey.REJECTED){
+                        reason = ParamUtil.getString(resourceRequest, "reason");
                     }
-                    transactionUtil.commit();
-                    printWriter.write(JSON.toJSONString(ResultUtil.success(ret)));
-                }else {
-                    printWriter.write(JSON.toJSONString(ResultUtil.fail("失败")));
-                }
+                    int ret = memberEditService.approvalMemberEdit(memberEditId,status,reason);
+                    if (ret>0){
+                        if(status == 1){//审批通过，修改用户信息
+                            Member member = memberService.findMemberByUser(String.valueOf(userId));
+                            if(member!=null){
+                                Member updateMember = memberEdit.toMember();
+                                updateMember.setId(member.getId());
+                                memberService.updateMember(member);
+                            }
+                            User user = userService.findByUserId(String.valueOf(userId));
+                            if(user!=null){
+                                User updateUser = memberEdit.toUser();
+                                updateUser.setId(user.getId());
+                                userService.updateUserInfo(updateUser);
+                                if(!user.getUser_id().equals(memberEdit.getMember_identity())){
+                                    orgAdminService.updateUserInfo(user.getUser_id(),memberEdit.getMember_identity());
+                                }
+                            }
 
+                        }
+                        transactionUtil.commit();
+                        printWriter.write(JSON.toJSONString(ResultUtil.success(ret)));
+                    }else {
+                        transactionUtil.rollback();
+                        printWriter.write(JSON.toJSONString(ResultUtil.fail("失败")));
+                    }
+                }
 
             }else{
                 printWriter.write(JSON.toJSONString(ResultUtil.fail("id不能为空！")));
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             transactionUtil.rollback();
         }

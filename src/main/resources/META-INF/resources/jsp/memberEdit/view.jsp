@@ -29,12 +29,12 @@
                     },
                     cols: [[ //表头
                         {field: 'transport_id', title: 'member_id', hide: true},
-                        {field: 'member_name', title: '姓名', width:'20%'},
+                        {field: 'member_name', title: '姓名', width:'10%'},
                         {field: 'org_name', title: '所在支部', width:'20%'},
-                        {field: 'submit_time', title: '申请时间', width:'20%'},
-                        {field: 'status', title: '任务状态', width: '20%'},
-                        {field: 'operate', title: '操作', width: '10%', toolbar: '#transportBtns'},
-                        {field: 'reason', title: '备注', width: '10%'}
+                        {field: 'submit_time', title: '申请时间', width:'10%'},
+                        {field: 'status', title: '任务状态', width: '10%'},
+                        {field: 'status', title: '操作', width: '10%', toolbar: '#transportBtns'},
+                        {field: 'reason', title: '备注', width: '20%'}
                     ]]
                 });
                 //监听事件
@@ -50,18 +50,28 @@
                     };
                 });
                 function transportApprove(id, status){
-                    var content  = status ==1?'您确认通过审批吗？':'您确认不通过审批吗？';
-                    layer.confirm(content, {
-                        btn: ['确定','取消'] //按钮
-                    }, function(){
-                        $.post("${approval}", {id: id, type: 'transport', status: status},function (res) {
-                            if (res.code == 200){
-                                var msg  = status ==1?'审批通过成功。':'审批拒绝成功。';
-                                layer.msg(msg)
-                                window.location.reload();
-                            }
-                        },"json")
-                    });
+                    if(status ==1){
+                        layer.confirm('您确认通过审批吗？', {
+                            btn: ['确定','取消'] //按钮
+                        }, function(){
+                            $.post("${approval}", {id: id, type: 'transport', status: status},function (res) {
+                                if (res.code == 200){
+                                    layer.msg('审批通过成功。')
+                                    window.location.reload();
+                                }
+                            },"json")
+                        });
+                    }else if(status == 2){
+                        layer.prompt({title: '拒绝原因', formType: 2}, function(text, index){
+                            $.post("${approval}", {id: id, type: 'transport', status: status,reason:text},function (res) {
+                                layer.close(index);
+                                if (res.code == 200){
+                                    layer.msg('审批拒绝成功。')
+                                    window.location.reload();
+                                }
+                            },"json");
+                        });
+                    }
                 }
             });
         });
@@ -89,8 +99,10 @@
     <!-- 右侧盒子内容 -->
 </div>
 <script type="text/html" id="transportBtns">
+    {{#  if(d.status == "待审批"){ }}
     <a class="layui-btn layui-btn-xs" lay-event="pass">通过</a>
     <a class="layui-btn layui-btn-xs red_text" lay-event="reject">驳回</a>
+    {{#  } }}
 </script>
 </body>
 </html>

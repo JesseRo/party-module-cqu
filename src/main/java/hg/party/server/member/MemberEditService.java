@@ -22,4 +22,12 @@ public class MemberEditService {
     public MemberEdit findLatestMemberEdit(int id) {
         return memberEditDao.findLatestMemberEdit(id);
     }
+
+    public int approvalMemberEdit(int memberEditId,int status,String reason) {
+        return memberEditDao.approvalMemberEdit(memberEditId,status,reason);
+    }
+
+    public MemberEdit findById(int memberEditId) {
+        return memberEditDao.findById(memberEditId);
+    }
 }

@@ -64,7 +64,6 @@ public class ApplyUpdatePersonResourceCommand implements MVCResourceCommand {
 		String job = ParamUtil.getString(resourceRequest, "job");
 		String marriage = ParamUtil.getString(resourceRequest, "marriage");
 		String id = ParamUtil.getString(resourceRequest, "id");
-		String prevID_card = ParamUtil.getString(resourceRequest, "prevID_card");
 		String title = ParamUtil.getString(resourceRequest, "major_title");
 		String unit = ParamUtil.getString(resourceRequest, "unit");
 		String isLeader = ParamUtil.getString(resourceRequest, "isLeader");
@@ -74,7 +73,7 @@ public class ApplyUpdatePersonResourceCommand implements MVCResourceCommand {
 				User user= userService.findByUserId(String.valueOf(userId));
 				Member member = memberService.findMemberByIdentity(String.valueOf(userId));
 				if(member!=null){
-					MemberEdit memberEdit = new MemberEdit(userName, sex, ethnicity, birthday, prevID_card,member_degree, job, join_party_time, turn_Time, member.getMember_org(), party_type,home_addrss, telephone, birth_place, email, title, marriage, unit, province, city, isLeader,user.getId());
+					MemberEdit memberEdit = new MemberEdit(userName, sex, ethnicity, birthday, ID_card,member_degree, job, join_party_time, turn_Time, member.getMember_org(), party_type,home_addrss, telephone, birth_place, email, title, marriage, unit, province, city, isLeader,user.getId());
 					int ret = memberEditService.insertMemberEdit(memberEdit);
 					if(ret > 0 ){
 						log.info("成功信息:[" + new Date() + "] [by " + userId + "]  ID_card :[" + ID_card + "]");
