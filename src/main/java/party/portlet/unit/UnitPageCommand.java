@@ -4,6 +4,7 @@ import com.dt.springjdbc.dao.impl.PostgresqlQueryResult;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCResourceCommand;
+import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import dt.session.SessionManager;
@@ -47,7 +48,8 @@ public class UnitPageCommand implements MVCResourceCommand {
 
 		int page = ParamUtil.getInteger(resourceRequest, "page");
 		int size = ParamUtil.getInteger(resourceRequest, "limit");
-		PostgresqlQueryResult<Map<String, Object>> data = unitDao.findPage(page,size);
+		String keyword =  HtmlUtil.escape(ParamUtil.getString(resourceRequest, "keyword"));
+		PostgresqlQueryResult<Map<String, Object>> data = unitDao.findPage(keyword,page,size);
 
 		HttpServletResponse res = PortalUtil.getHttpServletResponse(resourceResponse);
 		res.addHeader("content-type","application/json");

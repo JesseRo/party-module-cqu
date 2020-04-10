@@ -32,6 +32,7 @@ import java.util.UUID;
 		immediate = true,
 		property = {
 				"javax.portlet.name=" + PartyPortletKeys.UnitNewPortlet,
+				"javax.portlet.name=" + PartyPortletKeys.UnitPortlet,
 				"mvc.command.name=/unit/save"
 	    },
 	    service = MVCResourceCommand.class

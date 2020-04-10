@@ -13,8 +13,9 @@
     </style>
     <script type="text/javascript" >
         $(function() {
-            layui.use('form', function(){
-                var form = layui.form;
+            layui.use(['form','layer'], function(){
+                var form = layui.form,
+                    layer = layui.layer;
                 //表单提交
                 form.on('submit(activityForm)', function(data){
                     // layer.alert(JSON.stringify(data.field), {
@@ -23,10 +24,10 @@
                     console.log(JSON.stringify(data.field));
                     $.post("${save}", data.field, function (res) {
                         if(res.result){
-                            alert("保存成功！");
+                            layer.msg("保存成功！");
                             window.history.back();
                         }else {
-                            alert(res.message);
+                            layer.msg(res.message);
                         }
                     });
                     return false;

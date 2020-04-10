@@ -410,17 +410,17 @@ public class MemberDao extends PostgresqlDaoImpl<Member> {
         StringBuffer sb  = new StringBuffer("hg_party_member i left join hg_party_org b on i.member_org = b.org_id left join hg_party_org s on s.org_id = b.org_parent left join hg_party_org o on o.org_id = s.org_parent");
         sb.append(" where 1=1");
         if(!StringUtils.isEmpty(memberType)){
-            sb.append("and i.member_type='"+memberType+"'");
+            sb.append(" and i.member_type='"+memberType+"'");
         }
         if(!StringUtils.isEmpty(history)){
             if(Integer.parseInt(history) == 0){
-                sb.append("and i.historic is false");
+                sb.append(" and i.historic is false");
             }else{
-                sb.append("and i.historic is true");
+                sb.append(" and i.historic is true");
             }
         }
         if(!StringUtils.isEmpty(keyword)){
-            sb.append("and (i.member_name like '%"+keyword+"%'");
+            sb.append(" and (i.member_name like '%"+keyword+"%'");
             sb.append(" or i.member_identity like '%"+keyword+"%')");
             //sb.append("or i.member_name like '%"+keyword+"%')");
         }
