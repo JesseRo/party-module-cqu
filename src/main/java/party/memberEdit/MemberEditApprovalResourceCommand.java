@@ -74,7 +74,7 @@ public class MemberEditApprovalResourceCommand implements MVCResourceCommand {
                             if(member!=null){
                                 Member updateMember = memberEdit.toMember();
                                 updateMember.setId(member.getId());
-                                memberService.updateMember(member);
+                                memberService.updateMember(updateMember);
                             }
                             User user = userService.findByUserId(String.valueOf(userId));
                             if(user!=null){

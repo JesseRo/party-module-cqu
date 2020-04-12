@@ -468,7 +468,16 @@ public class MemberDao extends PostgresqlDaoImpl<Member> {
     }
 
     public int updateMember(Member member) {
-        return save(member);
+        String sql =  "UPDATE hg_party_member SET member_name=?,member_sex=?,member_ethnicity=?,member_birthday=?,member_identity=?," +
+                "member_degree=?,member_job=?,member_join_date=?,member_fomal_date=?,member_org=?," +
+                "member_type=?,member_address=?,member_phone_number=?," +
+                "member_birth_place=?,member_mailbox=?,member_major_title=?,member_marriage=?,member_is_leader=?," +
+                "member_unit=?,member_province=?,member_city=? WHERE id=?";
+        return  this.jdbcTemplate.update(sql,member.getMember_name(),member.getMember_sex(),member.getMember_ethnicity(),member.getMember_birthday(),member.getMember_identity(),
+                member.getMember_degree(),member.getMember_job(),member.getMember_join_date(),member.getMember_fomal_date(),member.getMember_org(),
+                member.getMember_type(),member.getMember_address(),member.getMember_phone_number(),
+                member.getMember_birth_place(),member.getMember_mailbox(),member.getMember_major_title(),member.getMember_marriage(),member.getMember_is_leader(),
+                member.getMember_unit(),member.getMember_province(),member.getMember_city(),member.getId());
     }
 
     public Member findMemberByUser(String userId) {

@@ -54,7 +54,7 @@ public class PersonAddPortlet extends MVCPortlet {
 		String orgId=PortalUtil.getOriginalServletRequest(request).getParameter("orgId");
 		String userId=PortalUtil.getOriginalServletRequest(request).getParameter("userId");
 		if (!StringUtils.isEmpty(userId)) {//用户id存在为修改用户信息
-			List<Map<String, Object>> list = orgDao.findPersonByuserId(userId);
+			List<Map<String, Object>> list = orgDao.findPersonByUserId(userId);
 			if (list!=null&&list.size()>0) {
 				renderRequest.setAttribute("info", list.get(0));
 			}
