@@ -307,6 +307,9 @@
         .layui-laydate-content .layui-laydate-content thead tr {
             display: flex !important;
         }
+        .table_form_content .custom_table + .layui-table-view .layui-table-box .layui-table-body tr{
+            display:table !important;
+        }
     </style>
     <script type="text/javascript">
 
