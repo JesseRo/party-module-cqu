@@ -301,11 +301,11 @@
         .table_form_content .custom_table + .layui-table-view .layui-form-checked[lay-skin=primary] i{
             font-family: layui-icon!important;
         }
-        table .layui-form input[type=checkbox]{
-            display:none;
+        table input[type=checkbox]{
+            display:none !important;
         }
         .layui-laydate-content .layui-laydate-content thead tr {
-            display: flex;
+            display: flex !important;
         }
     </style>
     <script type="text/javascript">
