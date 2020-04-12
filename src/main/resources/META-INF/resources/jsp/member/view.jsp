@@ -298,6 +298,15 @@
         .party_manage_page .party_manage_content .party_table_container{
             width:100%;
         }
+        .table_form_content .custom_table + .layui-table-view .layui-form-checked[lay-skin=primary] i{
+            font-family: layui-icon!important;
+        }
+        table .layui-form input[type=checkbox]{
+            display:none;
+        }
+        .layui-laydate-content .layui-laydate-content thead tr {
+            display: flex;
+        }
     </style>
     <script type="text/javascript">
 
