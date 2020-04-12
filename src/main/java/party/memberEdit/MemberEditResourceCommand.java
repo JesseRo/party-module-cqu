@@ -44,12 +44,12 @@ public class MemberEditResourceCommand implements MVCResourceCommand {
     public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws PortletException {
         int page = ParamUtil.getInteger(resourceRequest, "page");
         int size = ParamUtil.getInteger(resourceRequest, "limit");
-        String search = ParamUtil.getString(resourceRequest, "search");
+        String keyword = ParamUtil.getString(resourceRequest, "keyword");
         PostgresqlQueryResult<Map<String, Object>> data;
-        if (StringUtils.isEmpty(search)){
+        if (StringUtils.isEmpty(keyword)){
             data = memberEditDao.findPage(page, size);
         }else {
-            data = memberEditDao.searchPage(page, size, search);
+            data = memberEditDao.searchPage(page, size, keyword);
         }
 
         HttpServletResponse res = PortalUtil.getHttpServletResponse(resourceResponse);

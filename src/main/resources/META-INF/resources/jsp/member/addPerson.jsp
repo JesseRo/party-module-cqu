@@ -106,6 +106,12 @@
 
         </div>
         <div class="bg_white_container">
+            <div class="layui-card">
+                <div class="layui-card-header">所属党组织：<c:if test="${organization != null}">
+                    ${organization.org_name}
+                </c:if>
+                </div>
+            </div>
             <div class="content_form form_container">
                 <form class="layui-form custom_form"  id="addPersonForm"
                       style="width: 960px;">
@@ -162,14 +168,14 @@
                         <div class="layui-inline">
                             <label class="layui-form-label layui-required">出生年月</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="birthday" id="labCheckDate" value="${info.member_birthday }" class="layui-input start_date" lay-verify="required">
+                                <input type="text" name="birthday" id="labCheckDate" value="${info.member_birthday }" class="layui-input start_date" lay-verify="required" autocomplete="off">
                             </div>
                         </div>
                         <div class="layui-inline">
                             <label class="layui-form-label layui-required">入党时间</label>
                             <div class="layui-input-inline">
                                 <input type="text" name="join_party_time" id="labCheckEndDate" value="${info.member_join_date }"
-                                       class="layui-input start_date" lay-verify="required">
+                                       class="layui-input start_date" lay-verify="required" autocomplete="off">
                             </div>
                         </div>
                     </div>
@@ -179,7 +185,7 @@
                             <label class="layui-form-label layui-required">转正时间</label>
                             <div class="layui-input-inline">
                                 <input type="text" name="turn_Time" id="turn_labCheckEndDate" value="${info.member_fomal_date }"
-                                        class="layui-input start_date" lay-verify="required">
+                                        class="layui-input start_date" lay-verify="required" autocomplete="off">
                             </div>
                         </div>
                         <div class="layui-inline">
@@ -246,18 +252,18 @@
                             </div>
                         </div>
                         <div class="layui-inline">
-                            <label class="layui-form-label layui-required">邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;箱</label>
+                            <label class="layui-form-label">邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;箱</label>
                             <div class="layui-input-inline">
-                                <input type="text" class="layui-input" name="email" id="email" value="${info.email }" lay-verify="partyEmail">
+                                <input type="text" class="layui-input" name="email" id="email" value="${info.member_mailbox }" lay-verify="partyEmail">
                             </div>
                         </div>
                     </div>
 
                     <div class="layui-form-item">
                         <div class="layui-inline">
-                            <label class="layui-form-label layui-required">婚姻状况</label>
+                            <label class="layui-form-label">婚姻状况</label>
                             <div class="layui-input-inline">
-                                <select class="layui-input" name="marriage" id="marriage" lay-verify="select">
+                                <select class="layui-input" name="marriage" id="marriage" >
                                     <option value="" disabled>-请选择-</option>
                                     <option value="已婚">已婚</option>
                                     <option value="未婚">未婚</option>
@@ -344,8 +350,13 @@
                 $.post("${addUser}", postData, function (res) {
                     if(res.code==200){
                         layer.msg(res.message);
-                    }else if(res.code == 402) {
-                        layer.msg(res.message);
+                    }else if(res.code == 501) {
+                        if(!res.data.historic){
+                            layer.msg("该身份证党员已存在在校党员中。");
+                        }else{
+                            layer.msg("该身份证党员已存在历史党员中。");
+                        }
+
                     }else if(res){
                         layer.msg(res.message);
                     }else{
@@ -362,7 +373,7 @@
                 },
                 partyEmail: function (value, item) {
                     var reg = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-                    if (value == '' || value == null || !reg.test(value)) {
+                    if (value != '' && value != null && !reg.test(value)) {//可以为空
                         return "邮箱格式不正确。";
                     }
                 },

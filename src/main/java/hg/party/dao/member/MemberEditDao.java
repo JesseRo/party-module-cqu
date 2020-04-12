@@ -36,8 +36,9 @@ public class MemberEditDao extends PostgresqlDaoImpl<MemberEdit> {
             size = 10;
         }
         search = "%" + search + "%";
-        String sql = "select * from hg_party_visit_count  where user_id like ? or type like ? or remark like ? or ip like ? order by time desc";
-        return postGresqlFindBySql(page, size, sql, search, search, search, search);
+        String sql = "select e.*, org.org_name from hg_party_member_edit e left join hg_party_org org on e.member_org = org.org_id" +
+                " where e.member_name like ? or org.org_name like ? order by status asc, submit_time desc";
+        return postGresqlFindBySql(page, size, sql,search,search);
     }
 
     public int insertMemberEdit(MemberEdit memberEdit) {

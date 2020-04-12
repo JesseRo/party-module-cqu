@@ -18,6 +18,8 @@ import org.osgi.service.component.annotations.Component;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 
 import org.osgi.service.component.annotations.Reference;
+import org.springframework.util.StringUtils;
+import party.constants.PartyOrgAdminTypeEnum;
 import party.constants.PartyPortletKeys;
 
 /**
@@ -44,8 +46,6 @@ public class OrgAdminPortlet extends MVCPortlet {
     @Override
     public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
             throws IOException, PortletException {
-        List<Map<String,Object>> userList = orgService.findAlUsers();
-        renderRequest.setAttribute("userList",userList);
         super.doView(renderRequest, renderResponse);
     }
 

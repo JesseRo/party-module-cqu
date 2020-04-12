@@ -3,6 +3,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <portlet:resourceURL id="/org/adminSave" var="adminSave" />
 <portlet:resourceURL id="/org/admin/query" var="findOrgAdmin" />
+<portlet:resourceURL id="/org/users" var="findOrgUsers" />
 <portlet:resourceURL id="/org/tree" var="orgTreeUrl" />
 <head>
   <%--   <link rel="stylesheet" href="${basePath}/css/party_organization.css?v=5"/> --%>
@@ -368,10 +369,6 @@ button.cancal.btn.btn-default {
                                 <label class="layui-form-label">管理员：</label>
                                 <div class="layui-input-inline">
                                     <select name="admin" multiple lay-search>
-                                        <option value="">请选择管理员</option>
-                                        <c:forEach var="user" items="${userList}">
-                                            <option value="${user.user_id}">${user.user_name}(${user.user_id})</option>
-                                        </c:forEach>
                                     </select>
                                 </div>
                             </div>
@@ -401,7 +398,7 @@ button.cancal.btn.btn-default {
             // 选择器
             elem: '#orgTree',
             // 数据
-            data: '${orgTreeUrl}',
+            data: '${orgTreeUrl}&isFilter=1',
             // 异步加载方式：get/post，默认get
             type: 'get',
             // 占位符
@@ -436,14 +433,26 @@ button.cancal.btn.btn-default {
             var postData = {
                 id:checkedNode.id
             };
-            $.post("${findOrgAdmin}", postData, function (res) {
+            $.post("${findOrgUsers}", postData, function (res) {
                 if(res.code=200){
-                    var  managerArr = new Array();
+                    $('select[name="admin"]').empty();
+                    $('select[name="admin"]').append("<option>请选择管理员</option>");
                     for(var i=0;res.data.length>0 && i<res.data.length;i++){
-                        managerArr.push(res.data[i]['user_id']);
+                        $('select[name="admin"]').append("<option value='"+res.data[i].user_id+"'>"+res.data[i].user_name+"</option>");
                     }
-                    $('select[name="admin"]').val(managerArr);
                     form.render();
+                    $.post("${findOrgAdmin}", postData, function (res) {
+                        if(res.code=200){
+                            var  managerArr = new Array();
+                            for(var i=0;res.data.length>0 && i<res.data.length;i++){
+                                managerArr.push(res.data[i]['user_id']);
+                            }
+                            $('select[name="admin"]').val(managerArr);
+                            form.render();
+                        }else {
+                            layer.msg(res.data.message);
+                        }
+                    },'json');
                 }else {
                     layer.msg(res.data.message);
                 }

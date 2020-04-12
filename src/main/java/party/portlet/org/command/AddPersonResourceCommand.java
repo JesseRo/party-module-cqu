@@ -10,6 +10,7 @@ import javax.portlet.*;
 
 import com.alibaba.fastjson.JSON;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCResourceCommand;
+import hg.util.result.ResultCode;
 import hg.util.result.ResultUtil;
 import org.apache.log4j.Logger;
 import org.osgi.service.component.annotations.Component;
@@ -146,10 +147,18 @@ public class AddPersonResourceCommand implements MVCResourceCommand {
 						}
 						log.info("编辑人员:[" + new Date() + "] [by " + userId + "]  ID_card :[" + ID_card + "]");
 					} else {
-						u.setUser_password(MD5.getMD5(ID_card.substring(12)));
-						memberDao.insertOrUpate(sql);
-						UserDao.save(u);
-						log.info("添加人员:[" + new Date() + "] [by " + userId + "]  ID_card :[" + ID_card + "]");
+						Member ret = memberDao.findMemberByUser(ID_card);
+						if(ret != null){
+							transactionUtil.rollback();
+							printWriter.write(JSON.toJSONString(ResultUtil.result(ResultCode.DATA_REPEAT,"身份证号已存在",ret)));
+							return false;
+						}else{
+							u.setUser_password(MD5.getMD5(ID_card.substring(12)));
+							memberDao.insertOrUpate(sql);
+							UserDao.save(u);
+							log.info("添加人员:[" + new Date() + "] [by " + userId + "]  ID_card :[" + ID_card + "]");
+						}
+
 					}
 					transactionUtil.commit();
 					SessionManager.setAttribute(resourceRequest.getRequestedSessionId(), "addperson-formId", "NULL");
@@ -158,6 +167,7 @@ public class AddPersonResourceCommand implements MVCResourceCommand {
 
 		} catch (Exception e) {
 			transactionUtil.rollback();
+			e.printStackTrace();
 			log.info("异常信息:[" + new Date() + "] [by " + userId + "]  ID_card :[" + ID_card + "]");
 			printWriter.write(JSON.toJSONString(ResultUtil.fail("操作异常！")));
 			return false;

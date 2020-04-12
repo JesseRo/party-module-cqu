@@ -53,40 +53,9 @@ public class OrgPortlet extends MVCPortlet {
 	@Override
 	public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
 			throws IOException, PortletException {
-		HttpServletRequest request=PortalUtil.getHttpServletRequest(renderRequest);
-		String org=PortalUtil.getOriginalServletRequest(request).getParameter("org");
 		String sessionId = renderRequest.getRequestedSessionId();
-	    String orgId = (String)SessionManager.getAttribute(sessionId, "department");
 	    String orgType = (String)SessionManager.getAttribute(sessionId, "orgType");
-	    Organization root = orgDao.findRoot();
-	    
-		List<Organization> secondaries = orgDao.findSecondary();
-		List<Organization> branches = orgDao.findBranch();
-		List<Organization> historicSecondaries = orgDao.findHistoricSecondary();
-		List<Organization> historicBranches = orgDao.findHistoricBranch();
-		if (ConstantsKey.ORG_TYPE_BRANCH.equals(orgType)) {
-			secondaries = orgDao.findbranchSecondary(orgId);
-			branches = orgDao.findBranch(orgId);
-		}else if (ConstantsKey.ORG_TYPE_ROOT.equals(orgType)) {
-			
-		}else if (ConstantsKey.ORG_TYPE_SECONDARY.equals(orgType)) {
-			 secondaries = orgDao.findSecondary(orgId);
-			 branches = orgDao.findsecodBranch(orgId);
-			
-		}
-		Map<String,List<Organization>> brunchGroups = branches.stream()
-				.collect(Collectors.groupingBy(Organization::getOrg_parent, Collectors.toList()));
-		Map<String,List<Organization>> historicBrunchGroups = historicBranches.stream()
-				.collect(Collectors.groupingBy(Organization::getOrg_parent, Collectors.toList()));
-		//Organization root = orgDao.findRoot();
-		Gson gson = new Gson();
-		renderRequest.setAttribute("secondaries", gson.toJson(secondaries));
-		renderRequest.setAttribute("branches", gson.toJson(brunchGroups));
-		renderRequest.setAttribute("historicSecondaries", gson.toJson(historicSecondaries));
-		renderRequest.setAttribute("historicBranches", gson.toJson(historicBrunchGroups));
-		renderRequest.setAttribute("root",  gson.toJson(root));
 		renderRequest.setAttribute("org_type", orgType);
-		renderRequest.setAttribute("org", org);
 		super.doView(renderRequest, renderResponse); 
 	}
 

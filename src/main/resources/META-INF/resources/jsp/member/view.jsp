@@ -108,10 +108,6 @@
                 width: 18px;
             }
 
-            .main_content .min_width_1200 .content_info .operation_bar .btn_group button {
-                margin: 0 5px;
-            }
-
             .main_content .min_width_1200 .content_info .operation_bar .time_select {
                 float: right;
             }
@@ -290,14 +286,17 @@
         .party_manage_page .layui-tab-title{
             margin-bottom: 0px;
         }
-        .table_outer_box > table thead, tbody tr{
-            width:auto;
+        .layui-tab.layui-tab-card{
+            height: calc(100% - 20px);
         }
-        .table_outer_box .layui-table td .laytable-cell-checkbox input{
-            display: none;
+        .table_content.bg_white_container.member_container{
+            padding-bottom: 0;
         }
-        .table_outer_box .layui-table td .laytable-cell-checkbox .layui-form-checkbox i{
-            font-family: -webkit-body !important;
+        .table_outer_box{
+            height: calc(100% - 63px);
+        }
+        .party_manage_page .party_manage_content .party_table_container{
+            width:100%;
         }
     </style>
     <script type="text/javascript">
@@ -337,9 +336,25 @@
                        , history:isHistory==false?'0':'1'
                        , keyword: $("#searchForm input[name=keyword]").val()
                    };
+                   var atSchoolCols = [[
+                       {type: 'checkbox',fixed: 'left'}
+                       ,{field: 'member_name', title: '姓名', width:160}
+                       ,{field: 'member_sex', title: '性别', width:120}
+                       ,{field: 'member_identity', title: '公民身份证', minWidth:240}
+                       ,{field: 'member_phone_number', title: '联系电话', width:160}
+                       ,{field: 'member_type', title: '党员类型', width:120}
+                       ,{field: 'historic',fixed: 'right', title: '操作', width:250, align:'center', toolbar: '#tableTool'}
+                   ]];
+                   var outOfSchoolCols = [[
+                       {field: 'member_name', title: '姓名', width:120}
+                       ,{field: 'member_sex', title: '性别', width:120}
+                       ,{field: 'member_identity', title: '公民身份证', minWidth:240}
+                       ,{field: 'member_phone_number', title: '联系电话', width:160}
+                       ,{field: 'member_type', title: '党员类型', width:120}
+                       ,{field: 'historic',fixed: 'right', title: '操作', width:250, align:'center', toolbar: '#tableTool'}
+                   ]]
                     table.render({
                         elem: '#memberTable'
-                        ,height: 500
                         ,where: where
                         ,url: '${orgMember}'//数据接口
                         ,page: {
@@ -348,25 +363,40 @@
                                 prev:'&lt;上一页',
                                 next:'下一页&gt;',
                                 groups:4}
-                        ,cols: [[
-                            {type: 'checkbox',fixed: 'left'}
-                            ,{field: 'member_name', title: '姓名', width:120}
-                            ,{field: 'member_sex', title: '性别', width:120}
-                            ,{field: 'member_identity', title: '公民身份证', minWidth:240}
-                            ,{field: 'member_phone_number', title: '联系电话', width:160}
-                            ,{field: 'member_type', title: '党员类型', width:120}
-                            ,{field: 'historic',fixed: 'right', title: '操作', width:150, align:'center', toolbar: '#tableTool'}
-                        ]]
+                        ,cols: isHistory==false?atSchoolCols:outOfSchoolCols
+                    });
+                    //监听头工具栏事件
+                    table.on('toolbar(test)', function(obj){
+                        var checkStatus = table.checkStatus(obj.config.id)
+                            ,data = checkStatus.data; //获取选中的数据
+                        switch(obj.event){
+                            case 'add':
+                                layer.msg('添加');
+                                break;
+                            case 'update':
+                                if(data.length === 0){
+                                    layer.msg('请选择一行');
+                                } else if(data.length > 1){
+                                    layer.msg('只能同时编辑一个');
+                                } else {
+                                    layer.alert('编辑 [id]：'+ checkStatus.data[0].id);
+                                }
+                                break;
+                            case 'delete':
+                                if(data.length === 0){
+                                    layer.msg('请选择一行');
+                                } else {
+                                    layer.msg('删除');
+                                }
+                                break;
+                        };
                     });
                     //监听事件
                     table.on('tool(memberTable)', function(obj){
                         //var checkStatus = table.checkStatus(obj.config.id);
                         switch(obj.event){
-                            case 'detail':
-                                //layer.msg('添加');
-                                break;
                             case 'delete':
-                                //layer.msg('删除');
+                                deleteMember(obj.data.member_identity);
                                 break;
                             case 'edit':
                                 window.location.href = '/addperson?userId=' + obj.data.member_identity;
@@ -445,6 +475,25 @@
                     }
                     return pathHtml;
                 }
+                function deleteMember(userId){
+                    layer.confirm('您确认删除吗？', {
+                        btn: ['确定','取消'] //按钮
+                    }, function(){
+                        $.ajax({
+                            url: '${orgDeletePerson}',
+                            data: {"userIds": userId},
+                            dataType: "json",
+                            success: function (succee) {
+                                if (succee.state == true) {
+                                    layer.msg("删除成功");
+                                    orgMember(1, checkedNode.data.org_id, 'current_root');
+                                } else {
+                                    layer.msg("删除失败");
+                                }
+                            }
+                        });
+                    });
+                }
 
                 function orgMember(pageNow, orgId, history) {
 
@@ -456,14 +505,6 @@
 
                             var pageTotal = parseInt(res.data.totalRow);//总页数
                             $('table.custom_table').html(trs);
-                            if (isHis) {
-                                $('.table_content > .btn_group').hide();
-                            }else{
-                                $('.table_content > .btn_group').show();
-                            }
-                            if ('secondary' != '${org_type}') {
-                                $('.changePerson').hide();
-                            }
                             $('.select_all').attr("src", "/images/not_check_icon.png");
                             new Page({
                                 num: Math.ceil(pageTotal / 10), //页码数
@@ -525,34 +566,10 @@
                             break;
                     }
                 });
-                /* 单击选择按钮
-                $(".clickImg").click(function(){*/
-                $("table.custom_table").on("click", ".clickImg", function () {
-                    var sum = 0;
-                    if ($(this).attr("src") == "/images/checked_icon.png") {
-                        $(this).attr("src", "/images/not_check_icon.png");
-                    } else {
-                        $(this).attr("src", "/images/checked_icon.png");
-                    }
-                    $(".clickImg").each(function () {
-                        if ($(this).attr("src") == "/images/checked_icon.png") {
-                            sum += 1;
-                        }
-                    })
-                    if ($(".clickImg").length == sum) {
-                        $(".select_all").attr("src", "/images/checked_icon.png");
-                    } else {
-                        $(".select_all").attr("src", "/images/not_check_icon.png");
-                    }
 
-                });
-
-                $(".custom_table").on('click', ".select_all", function () {
-                    $(this).attr("src", "/images/checked_icon.png");
-                    $(".clickImg").attr("src", "/images/checked_icon.png");
-                });
                 /* 删除*/
-                $(".delete_graft").click(function () {
+                $("#delete").click(function () {
+                    var checkStatus = table.checkStatus(obj.config.id);
                     var imgs = $(".table_info img[src='/images/checked_icon.png']");
                     var resourcesId = new Array("");
                     for (var i = 0; i < imgs.length; i++) {
@@ -588,88 +605,6 @@
 
                     })
 
-                });
-                $("table.custom_table").on("click", ".changePerson", function () {
-                    var personId = $(this).parent().parent().prev().prev().prev().html()
-                    var personName = $(this).parent().parent().prev().prev().prev().prev().prev().text()
-                    var $this = $(this);
-                    var con = confirm("你确定转移人员 ")
-                    var userId = personId;
-                    /*   var orgId = $(".third_menu_on").attr("id");   */
-                    var orgId = $(this).next().next().val();
-                    if (con) {
-                        $("#model_box").show();
-                        $(".personName").text("姓名:" + personName);
-                        $(".personName").next().val(personId);
-                        $.ajax({
-                            url: "${moveObject}",
-                            data: {"<portlet:namespace/>orgId": orgId},
-                            dataType: "json",
-                            success: function (res) {
-                                $("#objectGroup").empty();
-                                for (n in res) {
-                                    var option = $('<option value="' + res[n].org_id + '">' + res[n].org_name + '</option>');
-                                    $("#objectGroup").append(option)
-                                }
-                            }
-                        });
-                    }
-                });
-                $(".cancal").click(function () {
-                    $(".personName").text("");
-                    $(".personName").next().val("");
-                    $("#model_box").hide();
-                });
-                $(".close").click(function () {
-                    $(".personName").text("");
-                    $(".personName").next().val("");
-                    $("#model_box").hide();
-                });
-
-                $("#add_submit").click(function () {
-                    var userId = $(".personName").next().val();
-                    var moveToOrgId = $("#objectGroup").val();
-                    var orgId = $(".third_menu_on").attr("id");
-                    $.ajax({
-                        url: "${moveObjectorg}",
-                        data: {"<portlet:namespace/>moveToOrgId": moveToOrgId, userId: userId},
-                        dataType: "json",
-                        success: function (res) {
-                            if (res.state == true) {
-                                orgMember(1, orgId, 'current_root');
-                                $(".personName").text("");
-                                $(".personName").next().val("");
-                                $("#model_box").hide();
-                                alert("移动成功");
-                            } else {
-                                alert("移动失败");
-                            }
-                        }
-                    });
-                });
-
-                $(".custom_table").on("click", "button.delete", function () {
-                    console.log($(this).html());
-                    var personId = $(this).parent().parent().prev().prev().prev().html()
-                    var $this = $(this);
-                    var con = confirm("你确定删除人员 ：" + personId)
-                    var userId = personId;
-                    var orgId = $(".third_menu_on").attr("id");
-                    if (con) {
-                        $.ajax({
-                            url: "${orgDeletePerson}",
-                            data: {userId: userId, orgId: orgId},
-                            dataType: "json",
-                            success: function (res) {
-                                if (res.state == true) {
-                                    $this.parent().parent().parent().remove();
-                                    alert("删除成功");
-                                } else {
-                                    alert("删除失败");
-                                }
-                            }
-                        });
-                    }
                 });
 
                 $("#addPerson").click(function () {
@@ -714,20 +649,12 @@
                             <div class="breadcrumb_group">
                                 当前组织：
                                 <span class="layui-breadcrumb"  style="visibility: visible;" id="org-path">
-                        </span>
+                                </span>
                             </div>
                             <div class="table_content bg_white_container member_container">
                                 <form class="layui-form" id="searchForm">
                                     <div class="layui-form-item">
                                         <div class="layui-inline">
-                                            <%--                                    <label class="layui-form-label">党员类型:</label>
-                                                                                <div class="layui-input-inline memberType">
-                                                                                    <select type="text" name="memberType" >
-                                                                                        <option value="" selected>全部</option>
-                                                                                        <option value="正式党员">正式党员</option>
-                                                                                        <option value="预备党员">预备党员</option>
-                                                                                    </select>
-                                                                                </div>--%>
                                             <div class="layui-input-inline keyword">
                                                 <input type="text" name="keyword"  placeholder="请输入名字、工号、身份证号关键字" class="layui-input">
                                             </div>
@@ -762,37 +689,13 @@
             </div>
         </div>
     </div>
-</div>
-<script type="text/html" id="tableTool">
-    <%--<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>--%>
-    {{#  if(d.historic == false){ }}
-    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-    {{#  } }}
-</script>
-<!-- 弹窗 -->
-<div id="model_box">
-    <div id="model">
-        <form action="">
-            <div class="title_box">
-                <span class="title">组织关系转移</span>
-                <span class="close">×</span>
-            </div>
-            <div class="name_box">
-                <div>
-                    <span class="personName">姓名：</span>
-                    <input type="hidden">
-                </div>
-                <div>
-                    <span>转移组织：</span>
-                    <select class="form-control" name="objectGroup" id="objectGroup" style="width: 70%; height: 50%;">
-                        <option value="">-请选择-</option>
-
-                    </select>
-                </div>
-            </div>
-            <button type="button" class="cancal btn btn-default">取消</button>
-            <button type="button" id="add_submit" class="btn btn_main">提交</button>
-        </form>
-    </div>
-</div>
+<%--</div>--%>
+    <script type="text/html" id="tableTool">
+        {{#  if(d.historic == false){ }}
+        <c:if test="'branch'==${org_type}">
+            <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+        </c:if>
+        {{#  } }}
+    </script>
 </body>

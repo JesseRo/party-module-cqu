@@ -58,8 +58,10 @@ public class PersonalInfoPortlet extends MVCPortlet {
 			if (list!=null&&list.size()>0) {
 				User user = UserDao.findUserByEthnicity(userId);
 				MemberEdit memberEdit = memberEditService.findLatestMemberEdit(user.getId());
-				list.get(0).put("email", user.getUser_mailbox());
 				renderRequest.setAttribute("info", list.get(0));
+				if(StringUtils.isEmpty(memberEdit.getReason())){
+					memberEdit.setReason("无");
+				}
 				renderRequest.setAttribute("memberEdit", memberEdit);
 			}
 		}

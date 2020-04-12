@@ -45,11 +45,11 @@ public class OrgTreeCommand implements MVCResourceCommand{
 			PrintWriter printWriter=resourceResponse.getWriter();
 			Boolean isFilter = ParamUtil.getBoolean(resourceRequest, "isFilter");
 			List<TreeNode> treeNodeList = new ArrayList<>();
-			if(isFilter){
+			if(isFilter){//是否展示无权限组织树节点
 				String sessionId=resourceRequest.getRequestedSessionId();
 				Object roleObj = SessionManager.getAttribute(sessionId, "role");
 				String userId = (String)SessionManager.getAttribute(resourceRequest.getRequestedSessionId(), "userName");
-				if(roleObj != null){//是否展示无权限组织树节点
+				if(roleObj != null){
 					PartyOrgAdminTypeEnum partyOrgAdminTypeEnum =  PartyOrgAdminTypeEnum.getEnumByRole(roleObj.toString());
 					Organization organization = orgService.findAdminOrg(userId,partyOrgAdminTypeEnum);
 					if(organization!=null){

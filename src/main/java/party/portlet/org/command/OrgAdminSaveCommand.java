@@ -59,7 +59,7 @@ public class OrgAdminSaveCommand implements MVCResourceCommand {
 					String[] admins = adminStr.split(",");
 					Boolean  isUpdate = true;
 					for(String userId: admins){
-						Organization adminOrg = orgDao.findAdminOrg(userId, PartyOrgAdminTypeEnum.getEnum(organization.getOrg_unit_type()));
+						Organization adminOrg = orgDao.findAdminOrg(userId, PartyOrgAdminTypeEnum.getEnum(organization.getOrg_type()));
 						if(adminOrg !=null){
 							isUpdate = false;
 							User user = userService.findByUserId(userId);

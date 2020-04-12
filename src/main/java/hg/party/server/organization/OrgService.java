@@ -52,8 +52,8 @@ public class OrgService {
 		return orgDao.getTreeData(organization);
 	}
 
-	public List<Map<String,Object>> findAlUsers() {
-		return orgDao.findAlUsers();
+	public List<Map<String,Object>> findAllUsers(Organization organization) {
+		return orgDao.findAllUsers(organization);
 	}
 	/**
 	 *

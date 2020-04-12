@@ -27,7 +27,11 @@ public enum ResultCode {
     /**
      * 没有权限
      */
-    NO_AUTHORITY(402);
+    NO_AUTHORITY(402),
+    /**
+     * 数据重复
+     */
+    DATA_REPEAT(501);
 
     public int code;
 

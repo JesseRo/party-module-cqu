@@ -72,7 +72,7 @@
                                 <b>已通过</b>
                             </c:if>
                             <c:if test="${memberEdit.status == 2}">
-                                <b>未通过</b>
+                                <b>未通过(原因：${memberEdit.reason})</b>
                             </c:if>
                         </div>
                     </div>

@@ -549,7 +549,7 @@ public class OrgDao extends PostgresqlDaoImpl<Organization>{
 	public List<TreeNode> getTreeData(Organization organization) {
 		List<Organization> organizationList = findAll();
 		if(organization == null ){
-			return initOrgTreeData(organizationList,"ddddd");
+			return initOrgTreeData(organizationList,"-");
 		}else{
 			List<TreeNode> treeNodeList = new ArrayList<>();
 			TreeNode parentNode = new TreeNode();
@@ -588,9 +588,27 @@ public class OrgDao extends PostgresqlDaoImpl<Organization>{
 		return treeNodeList;
 	}
 
-	public List<Map<String, Object>> findAlUsers() {
-		String sql  = "select user_id,user_name from hg_users_info";
-		return jdbcTemplate.queryForList(sql);
+	public List<Map<String, Object>> findAllUsers(Organization organization) {
+		PartyOrgAdminTypeEnum partyOrgAdminTypeEnum =  PartyOrgAdminTypeEnum.getEnum(organization.getOrg_type());
+		StringBuffer sb  = new StringBuffer("select u.user_id,u.user_name from hg_users_info u");
+		List<Map<String, Object>> ret = new ArrayList<>();
+		switch(partyOrgAdminTypeEnum){
+			case ORGANIZATION:
+				sb.append(" where u.state = '1' order by u.user_name desc");
+				ret = jdbcTemplate.queryForList(sb.toString());
+				break;
+			case SECONDARY:
+				sb.append(" left join hg_party_member m on u.user_id=m.member_identity left join hg_party_org o on m.member_org =o.org_id left join hg_party_org p on o.org_parent =p.org_id");
+				sb.append(" where u.state = '1' and p.org_id=? order by u.user_name desc");
+				ret = jdbcTemplate.queryForList(sb.toString(),organization.getOrg_id());
+				break;
+			case BRANCH:
+				sb.append(" left join hg_party_member m on u.user_id=m.member_identity left join hg_party_org o on m.member_org =o.org_id");
+				sb.append(" where u.state = '1' and o.org_id=? order by u.user_name desc");
+				ret = jdbcTemplate.queryForList(sb.toString(),organization.getOrg_id());
+				break;
+		}
+		return ret;
 	}
 
 	public List<Map<String, Object>> findOrgAdminUser(int id) {
