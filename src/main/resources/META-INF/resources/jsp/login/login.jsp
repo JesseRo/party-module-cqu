@@ -11,7 +11,9 @@
 </head>
 <div class="login_page full_screen">
     <div class="user_info_container">
-        <div class="title_container"></div>
+        <div class="title_container">
+            <img src="../images/login-title.png"/>
+        </div>
         <div class="info_container">
             <p class="form-title">智慧党建云平台</p>
             <div class="info_title">
