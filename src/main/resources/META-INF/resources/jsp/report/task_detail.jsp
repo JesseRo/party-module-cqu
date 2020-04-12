@@ -132,12 +132,14 @@
         .common_member_list tr td:nth-child(2) {
             border-right: none;
         }
+
         .no-padding {
             padding-left: 0px;
             padding-right: 0px;
             margin-bottom: 20px;
         }
-        .right{
+
+        .right {
             float: right;
         }
     </style>
@@ -158,147 +160,7 @@
     <script type="text/javascript" src="${basePath}/js/validation-message-zh.js?v=2"></script>
     <script type="text/javascript">
         $(function () {
-            var div = '<div class="col-sm-6 col-xs-12 publish_obj_container">' +
-                '<div class="col-sm-3 col-xs-3">' +
-                '<span class="control-label">发布对象</span>' +
-                '</div>' +
-                '<div class="col-sm-9 col-xs-9 publish_obj">' +
-                '<div class="publish_obj_content">' +
-                '<div class="publish_obj_title">' +
-                '二级党组织' +
-                '<div class="right">' +
-                ' <div class="select_choice all_select">' +
-                ' <img src="/images/not_check_icon.png" />' +
-                ' <input type="hidden" />' +
-                ' <span>全选</span>' +
-                '</div>' +
-                ' <div class="select_choice oppsite_select">' +
-                ' <img src="/images/not_check_icon.png" />' +
-                '<input type="hidden" />' +
-                '<span>反选</span>' +
-                ' </div>' +
-                '</div>' +
-                ' </div>' +
-                '<div class="publish_obj_info container_scroll_hidden">' +
-                '<ul class="list-group">' +
-                '</ul>' +
-                '</div>' +
-                ' </div>' +
-                '</div>' +
-                '</div>' +
-                '<div class="col-sm-6 col-xs-12 has_select_div">' +
-                '<div class="has_select_container">' +
-                ' <div class="has_select_title">' +
-                ' <span>已选goo</span>' +
-                '<div class="right">' +
-                '<span>已选择</span>' +
-                '<span class="select_num"></span>' +
-                '<span>个党委</span>' +
-                '</div>' +
-                ' </div>' +
-                ' <div class="has_select_content container_scroll_hidden">' +
-                ' <ul class="has_select_list">' +
-                ' </ul>' +
-                '</div>' +
-                '</div>' +
-                '</div>';
-            var title = "${publicObjectTitle}";
-            div = div.replace("二级党组织", title);
-            div = div.replace("已选goo", title);
-            div = div.replace("个党委", title);
-            $("#hg-form-container > .no-padding").eq(3).html(div);
-            $("#hg-form-container > .no-padding").eq(3).find(".control-label").addClass("form-label-required");
-            $.ajax({
-                url: '${getPublicObject}',
-                type: 'POST',
-                data: "",
-                dataType: 'json',
-                async: false,
-                success: function (returndata) {
-                    for (var i = 0; i < returndata.length; i++) {
-                        var li = '<li class="list-group-item table_info"> ' +
-                            '<span title="马克思主义学院党委">' + returndata[i].org_name + '</span> ' +
-                            '<input type="hidden" value="' + returndata[i].org_id + '"/> ' +
-                            '<img class="right" src="/images/radio.png" /> ' +
-                            '</li>';
-                        $(".list-group").append(li);
-                    }
-                },
-                error: function (returndata) {
-                    alert("获取数据失败");
-                }
-            });
-
-            /*   二级党委的选中及取消选中 */
-            $("#hg-form-container").on("click", ".publish_obj_info li", function () {
-                $(".publish_obj_content .select_choice").find("img").attr("src", "/images/not_check_icon.png")
-                var oldSrc = $(this).find(".right").attr("src");
-                var newSrc = "";
-                if (oldSrc.indexOf("on") > 0) {
-                    newSrc = oldSrc.replace(/_on.png/, ".png");
-                } else {
-                    newSrc = oldSrc.replace(/.png/, "_on.png");
-                }
-                $(this).find(".right").attr("src", newSrc);
-                var sum = $(".publish_obj_info").find("img.right").length;
-                var imgNum = $(".publish_obj_info").find("img[src='/images/radio_on.png']").length;
-                if (sum == imgNum) {
-                    $(".all_select").find("img").attr("src", "/images/checked_icon.png");
-                    $(".oppsite_select").find("img").attr("src", "/images/not_check_icon.png");
-                } else {
-                    $(".all_select").find("img").attr("src", "/images/not_check_icon.png");
-                }
-                renderSelected();
-            })
-
-            /*   二级党委全选 */
-            $("#hg-form-container").on("click", ".all_select", function () {
-                $(this).find("img").attr("src", "/images/checked_icon.png");
-                $(this).siblings(".oppsite_select").find("img").attr("src", "/images/not_check_icon.png");
-                $(".publish_obj_info").find("img.right").each(function () {
-                    $(this).attr("src", "/images/radio_on.png");
-                })
-                renderSelected();
-            })
-
-            /*   二级党委反选 */
-            $("#hg-form-container").on("click", ".oppsite_select", function () {
-                $(this).find("img").attr("src", "/images/checked_icon.png");
-                $(this).siblings(".all_select").find("img").attr("src", "/images/not_check_icon.png");
-                $(".publish_obj_info").find("img.right").each(function () {
-                    var Src = $(this).attr("src");
-                    if (Src.indexOf("on") > 0) {
-                        $(this).attr("src", "/images/radio.png")
-                    } else {
-                        $(this).attr("src", "/images/radio_on.png");
-                    }
-                })
-                renderSelected();
-            })
-
-            /*  渲染已选中的党委 */
-            function renderSelected() {
-                console.log("test")
-                var _target = $(".publish_obj_info .list-group-item");
-                var num = 0;
-                $(".has_select_list").html("");
-                $(".has_select_div").css("display", "block");
-                _target.each(function () {
-                    var _src = $(this).find("img").attr("src");
-                    if (_src.indexOf("on") > 0) {
-                        var _text = $(this).find("span").html();
-                        var item = "<li>" + _text + "</li>";
-                        $(".has_select_list").append(item);
-                        num += 1;
-                    }
-                })
-                $(".has_select_title .select_num").html(num);
-                if (num == 0) {
-                    $(".has_select_div").css("display", "none");
-                }
-            }
-
-            var ueObj = UE.getEditor("task_content", { initialFrameWidth:821   });
+            var ueObj = UE.getEditor("task_content", {initialFrameWidth: 821});
             var uploadUrls = {
                 file: '${uploadfileUrl}',
                 image: '${uploadimageUrl}',
@@ -316,8 +178,9 @@
                     return this._bkGetActionUrl.call(this, action);
                 }
             };
-            ueObj.ready(function() {
+            ueObj.ready(function () {
                 ueObj.setContent($(".informationContent").val());
+                ueObj.setDisabled();
             });
             $('#send').on('click', function () {
                 submit();
@@ -341,6 +204,7 @@
             }
 
             var accepts = ['.xlsx', '.xls', 'doc', 'docx'];
+
             function submit() {
 
                 var imgs = $(".table_info img[src='/images/radio_on.png']");
@@ -349,15 +213,15 @@
                     var resourceId = $(imgs[i]).prev().val();
                     resourcesId.push(resourceId);
                 }
-                if (!$('[name=theme]').val()){
+                if (!$('[name=theme]').val()) {
                     layuiModal.alert("任务主题不得为空！");
                     return;
                 }
-                if (!$('[name=description]').val()){
+                if (!$('[name=description]').val()) {
                     layuiModal.alert("任务描述不得为空！");
                     return;
                 }
-                if (!$('[name=files]').val()){
+                if (!$('[name=files]').val()) {
                     layuiModal.alert("任务模版不得为空！");
                     return;
                 }
@@ -368,15 +232,15 @@
                     return;
                 }
                 var files = $('[name=files]')[0].files
-                for(var index = 0; index < files.length; index++){
+                for (var index = 0; index < files.length; index++) {
                     var filename = files[index].name;
                     filename = filename.substr(filename.lastIndexOf("."));
-                    if(accepts.indexOf(filename) == -1){
+                    if (accepts.indexOf(filename) == -1) {
                         layuiModal.alert("请上传word或excel格式的文件");
                         return;
                     }
                 }
-                var confirmCallback = function(){
+                var confirmCallback = function () {
                     $('#status').val("2");
                     $('#submit').click();
                 };
@@ -397,121 +261,114 @@
 				</span>
         </div>
         <div class="bg_white_container">
-        <div class="content_form"  style="padding: 20px 0;">
-            <form class="form-horizontal" role="form" action="${add }" method="post">
-                <div id="hg-form-container" class="form-group">
-                    <div class="col-sm-12 col-xs-12 no-padding">
-                        <div class="col-sm-6 col-xs-12">
-                            <div class="col-sm-3 col-xs-3 ">
-                                <span class="control-label form-label-required">任务主题</span>
-                            </div>
-                            <div class="col-sm-9 col-xs-9">
-                                <input class="form-control" name="theme" value="${task.theme}" style="text-indent: inherit;">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-12 col-xs-12 no-padding">
-                        <div class="col-sm-6 col-xs-12">
-                            <div class="col-sm-3 col-xs-3 ">
-                                <span class="control-label form-label-required">任务描述</span>
-                            </div>
-                            <div class="col-sm-9 col-xs-9">
-                                <textarea class="form-control" name="description">${task.description}</textarea>
+            <div class="content_form" style="padding: 20px 0;">
+                <form class="form-horizontal" role="form" action="${add }" method="post">
+                    <div id="hg-form-container" class="form-group">
+                        <div class="col-sm-12 col-xs-12 no-padding">
+                            <div class="col-sm-6 col-xs-12">
+                                <div class="col-sm-3 col-xs-3 ">
+                                    <span class="control-label form-label-required">任务主题</span>
+                                </div>
+                                <div class="col-sm-9 col-xs-9">
+                                    <input disabled class="form-control" name="theme" value="${task.theme}"
+                                           style="text-indent: inherit;">
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-sm-12 col-xs-12 no-padding">
-                        <div class="col-sm-6 col-xs-12">
-                            <div class="col-sm-3 col-xs-3 ">
-                                <span class="control-label form-label-required">任务模版</span>
-                            </div>
-                            <div class="col-sm-9 col-xs-9">
-                                <input multiple type="file" name="files" style="text-indent: inherit;"
-                                       accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+                        <div class="col-sm-12 col-xs-12 no-padding">
+                            <div class="col-sm-6 col-xs-12">
+                                <div class="col-sm-3 col-xs-3 ">
+                                    <span class="control-label form-label-required">任务描述</span>
+                                </div>
+                                <div class="col-sm-9 col-xs-9">
+                                    <textarea disabled class="form-control" name="description">${task.description}</textarea>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-sm-12 col-xs-12 no-padding">
-                        <div class="col-sm-6 col-xs-12 publish_obj_container">
-                            <div class="col-sm-3 col-xs-3">
-                                <span class="control-label">发布对象</span>
-                            </div>
-                            <div class="col-sm-9 col-xs-9 publish_obj">
-                                <div class="publish_obj_content">
-                                    <div class="publish_obj_title">
-                                        二级党组织
-                                        <div class="right">
-                                            <div class="select_choice all_select">
-                                                <img src="/images/not_check_icon.png"/>
-                                                <input type="hidden"/>
-                                                <span>全选</span>
-                                            </div>
-                                            <div class="select_choice oppsite_select">
-                                                <img src="/images/not_org%2FadminSavecheck_icon.png"/>
-                                                <input type="hidden"/>
-                                                <span>反选</span>
-                                            </div>
+<%--                        <div class="col-sm-12 col-xs-12 no-padding">--%>
+<%--                            <div class="col-sm-6 col-xs-12">--%>
+<%--                                <div class="col-sm-3 col-xs-3 ">--%>
+<%--                                    <span class="control-label form-label-required">任务模版</span>--%>
+<%--                                </div>--%>
+<%--                                <div class="col-sm-9 col-xs-9">--%>
+<%--                                    <input multiple type="file" name="files" style="text-indent: inherit;"--%>
+<%--                                           accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">--%>
+<%--                                </div>--%>
+<%--                            </div>--%>
+<%--                        </div>--%>
+                        <div class="col-sm-12 col-xs-12 no-padding">
+                            <div class="col-sm-6 col-xs-12 publish_obj_container">
+                                <div class="col-sm-3 col-xs-3">
+                                    <span class="control-label">发布对象</span>
+                                </div>
+                                <div class="col-sm-9 col-xs-12 has_select_div" style="display: block;">
+                                    <div class="has_select_container">
+                                        <div class="has_select_title" style="border-bottom: none;"><span></span>
+                                            <div class="right"><span>已选择</span><span
+                                                    class="select_num">6</span><span></span></div>
+                                        </div>
+                                        <div class="has_select_content container_scroll_hidden">
+                                            <ul class="has_select_list">
+                                                <c:forEach items="#{orgNames}" var="org">
+                                                    <li>${org}</li>
+                                                </c:forEach>
+                                            </ul>
                                         </div>
                                     </div>
-                                    <div class="publish_obj_info container_scroll_hidden">
-                                        <ul class="list-group">
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-xs-12 has_select_div">
+                                <div class="has_select_container">
+                                    <div class="has_select_title">
+                                        <span>已选goo</span>
+                                        <div class="right">
+                                            <span>已选择</span>
+                                            <span class="select_num"></span>
+                                            <span>个党委</span>
+                                        </div>
+                                    </div>
+                                    <div class="has_select_content container_scroll_hidden">
+                                        <ul class="has_select_list">
                                         </ul>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-6 col-xs-12 has_select_div">
-                            <div class="has_select_container">
-                                <div class="has_select_title">
-                                    <span>已选goo</span>
-                                    <div class="right">
-                                        <span>已选择</span>
-                                        <span class="select_num"></span>
-                                        <span>个党委</span>
-                                    </div>
+                        <div class="col-sm-12 col-xs-12 no-padding">
+                            <div class="col-sm-6 col-xs-12">
+                                <div class="col-sm-3 col-xs-3 ">
+                                    <span class="control-label">任务说明</span>
                                 </div>
-                                <div class="has_select_content container_scroll_hidden">
-                                    <ul class="has_select_list">
-                                    </ul>
+                                <div class="col-sm-9 col-xs-9">
+                                    <script id="task_content" name="task_content" type="text/plain"></script>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-sm-12 col-xs-12 no-padding">
-                        <div class="col-sm-6 col-xs-12">
-                            <div class="col-sm-3 col-xs-3 ">
-                                <span class="control-label">任务说明</span>
-                            </div>
-                            <div class="col-sm-9 col-xs-9">
-                                <script id="task_content" name="task_content" type="text/plain"></script>
-                            </div>
-                        </div>
-                    </div>
 
-                    <input id="submit" type="submit" style="display:none;"/>
-                    <input id="formId" type="hidden" name="formId" value="${formId}"/>
-                    <input id="status" type="hidden" name="status" value="1"/>
-                    <input id="taskId" type="hidden" name="taskId" value="${task.task_id}"/>
-                    <input class="informationContent" type="hidden" value='${task.content }'>
-                    <input id="hiddenPublicObject" type="hidden" name="publicObject"/>
-                    <div class="layui-inline btn_group" style="width: calc(50% - 120px);margin: 0;margin-top: 10px;">
-                        <label class="layui-form-label"></label>
-                        <div class="layui-input-inline">
-                            <button id="send" type="button" class="layui-btn" lay-submit="" lay-filter="partyMemForm" style="padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;background-color: #FFAB33;border-radius: 4px;">
-                                发布
-                            </button>
-                            <button onclick="window.history.back();" type="button" class="layui-btn layui-btn-primary" style="background-color: transparent;color: #666;padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;border-radius: 4px;">
-                                取消
-                            </button>
+                        <input id="submit" type="submit" style="display:none;"/>
+                        <input id="formId" type="hidden" name="formId" value="${formId}"/>
+                        <input id="status" type="hidden" name="status" value="1"/>
+                        <input id="taskId" type="hidden" name="taskId" value="${task.task_id}"/>
+                        <input class="informationContent" type="hidden" value='${task.content }'>
+                        <input id="hiddenPublicObject" type="hidden" name="publicObject"/>
+                        <div class="layui-inline btn_group"
+                             style="width: calc(50% - 120px);margin: 0;margin-top: 10px;">
+                            <label class="layui-form-label"></label>
+                            <div class="layui-input-inline">
+                                <button onclick="window.history.back();" type="button"
+                                        class="layui-btn layui-btn-primary"
+                                        style="background-color: transparent;color: #666;padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;border-radius: 4px;">
+                                    返回
+                                </button>
+                            </div>
                         </div>
+                        <%--                    <button id="send" type="button" class="btn btn-default col-sm-2 col-xs-4" style="margin-left: 12%; ">发布--%>
+                        <%--                    </button>--%>
+                        <%--                    <button id="draft" type="button" class="btn btn-default col-sm-2 col-xs-4" style="margin-left: 45%;">保存为草稿--%>
+                        <%--                    </button>--%>
                     </div>
-<%--                    <button id="send" type="button" class="btn btn-default col-sm-2 col-xs-4" style="margin-left: 12%; ">发布--%>
-<%--                    </button>--%>
-<%--                    <button id="draft" type="button" class="btn btn-default col-sm-2 col-xs-4" style="margin-left: 45%;">保存为草稿--%>
-<%--                    </button>--%>
-                </div>
-            </form>
-        </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>

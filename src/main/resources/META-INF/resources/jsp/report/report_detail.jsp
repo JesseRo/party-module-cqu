@@ -109,7 +109,7 @@
                     <c:forEach var="c" items="${reports }">
                         <tr id="${c.report_id }">
                             <td>
-                                <a onclick="window.location.href = '/report_task_detail'" title="查看任务详情">${c.org_name}</a>
+                                    ${c.org_name}
                             </td>
                             <td>
                                     ${c.theme }
@@ -123,9 +123,13 @@
                                 </c:if>
                             </td>
                             <td style="color: red;padding-left: 25px;">
-                                <c:forEach var="f" items="${c.fileView }">
-                                    <a href="${f.path}" target="_blank">${f.filename}</a>
-                                </c:forEach>
+                                <a style="cursor: pointer" onclick="templateDetail(this);">查看上报</a>
+                                <div class="report_template" style="display:none;">
+                                    <c:forEach var="f" items="${c.fileView }">
+                                        <li><a style="cursor: pointer;color: #1e9fff;" href="${f.path}"
+                                               target="_blank">${f.filename}</a></li>
+                                    </c:forEach>
+                                </div>
                             </td>
                             <td>
                                 <c:if test="${not empty c.time}">
@@ -178,10 +182,29 @@
                     </form>
                 </div>
             </div>
+            <div id="file_detail" style="display: none;">
+                <div style="width: 500px; ">
+                    <ul>
+                    </ul>
+                </div>
+            </div>
         </div>
         <script type="text/javascript">
-            $(document).ready(function () {
+            var layer;
 
+            function templateDetail(e) {
+                $('#file_detail').find('ul').html($(e).next().html());
+                layer.open(
+                    {
+                        title: '上报文件',
+                        content: $('#file_detail').html()
+                    });
+            }
+
+            $(document).ready(function () {
+                layui.use("layer", function () {
+                    layer = layui.layer;
+                });
                 $('.approval').on('click', function () {
                     var report = $(this).parent().parent().parent().attr("id");
                     var that = this;

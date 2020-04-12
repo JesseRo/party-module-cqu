@@ -188,7 +188,7 @@
                 '</div>' +
                 '<div class="col-sm-6 col-xs-12 has_select_div">' +
                 '<div class="has_select_container">' +
-                ' <div class="has_select_title">' +
+                ' <div class="has_select_title" style="border-bottom: none;">' +
                 ' <span>已选goo</span>' +
                 '<div class="right">' +
                 '<span>已选择</span>' +
