@@ -22,6 +22,7 @@ import party.constants.PartyPortletKeys;
 		property = {
 				"javax.portlet.name="+ PartyPortletKeys.Form,
 				"javax.portlet.name="+ PartyPortletKeys.SecondaryNewTaskPortlet,
+				"javax.portlet.name="+ PartyPortletKeys.SecondaryTaskDetailPortlet,
 			"mvc.command.name=/hg/getPublicObject"
 	    },
 	    service = MVCResourceCommand.class

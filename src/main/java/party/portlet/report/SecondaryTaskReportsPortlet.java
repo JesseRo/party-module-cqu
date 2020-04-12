@@ -79,6 +79,7 @@ public class SecondaryTaskReportsPortlet extends MVCPortlet {
         if (StringUtils.isEmpty(taskId)){
             taskPage = reportDao.findPageByStatus(ConstantsKey.INITIAL, page);
             renderRequest.setAttribute("taskId", "");
+            renderRequest.setAttribute("totalReportSize", 0);
         }else{
             if (StringUtils.isEmpty(statusStr)){
                 taskPage = reportDao.findPageByTaskId(taskId, page);
@@ -87,7 +88,9 @@ public class SecondaryTaskReportsPortlet extends MVCPortlet {
                 taskPage = reportDao.findPageByTaskIdAndStatus(taskId, status, page);
             }
             ReportTask task = reportTaskDao.findByTaskId(taskId);
+            int totalReportSize = reportTaskOrgDao.countByTaskId(taskId);
             renderRequest.setAttribute("taskId", taskId);
+            renderRequest.setAttribute("totalReportSize", totalReportSize);
             renderRequest.setAttribute("task", task);
         }
 
