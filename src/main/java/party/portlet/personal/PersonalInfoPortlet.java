@@ -54,7 +54,7 @@ public class PersonalInfoPortlet extends MVCPortlet {
 			throws IOException, PortletException {
 		String userId = (String)SessionManager.getAttribute(renderRequest.getRequestedSessionId(), "userName");
 		if (!StringUtils.isEmpty(userId)) {
-			List<Map<String, Object>> list = orgDao.findPersonByuserId(userId);
+			List<Map<String, Object>> list = orgDao.findPersonByUserId(userId);
 			if (list!=null&&list.size()>0) {
 				User user = UserDao.findUserByEthnicity(userId);
 				MemberEdit memberEdit = memberEditService.findLatestMemberEdit(user.getId());

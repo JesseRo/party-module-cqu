@@ -390,7 +390,7 @@ public class OrgDao extends PostgresqlDaoImpl<Organization>{
 		String sql  = "delete from hg_users_info where user_id = ? ";
 		return jdbcTemplate.update(sql,userId);
 	}
-	public  List<Map<String, Object>> findPersonByuserId(String userId){
+	public  List<Map<String, Object>> findPersonByUserId(String userId){
 		String sql  = "select m.*,org.org_name from hg_party_member m " +
 				"left join hg_party_org org on org.org_id = m.member_org "+
 				      " where member_identity = ? "+

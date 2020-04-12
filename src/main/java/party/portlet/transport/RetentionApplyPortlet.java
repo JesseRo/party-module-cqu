@@ -55,7 +55,7 @@ public class RetentionApplyPortlet extends MVCPortlet {
         String userId = (String)SessionManager.getAttribute(renderRequest.getRequestedSessionId(), "userName");
         String isResubmit = PortalUtil.getOriginalServletRequest(PortalUtil.getHttpServletRequest(renderRequest)).getParameter("resubmit");
 
-        List<Map<String, Object>> list = orgDao.findPersonByuserId(userId);
+        List<Map<String, Object>> list = orgDao.findPersonByUserId(userId);
         if (list!=null&&list.size()>0) {
             User user = userDao.findUserByEthnicity(userId);
             list.get(0).put("email", user.getUser_mailbox());

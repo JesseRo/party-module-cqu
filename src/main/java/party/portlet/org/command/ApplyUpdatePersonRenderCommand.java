@@ -43,7 +43,7 @@ public class ApplyUpdatePersonRenderCommand implements MVCRenderCommand {
 			throws PortletException {
 		String userId = (String)SessionManager.getAttribute(renderRequest.getRequestedSessionId(), "userName");
 		List<Map<String, Object>> jobs =memberDao.findMemeberJob();
-		List<Map<String, Object>> list = orgDao.findPersonByuserId(userId);
+		List<Map<String, Object>> list = orgDao.findPersonByUserId(userId);
 		if (list!=null&&list.size()>0) {
 			User user = UserDao.findUserByEthnicity(userId);
 			list.get(0).put("email", user.getUser_mailbox());

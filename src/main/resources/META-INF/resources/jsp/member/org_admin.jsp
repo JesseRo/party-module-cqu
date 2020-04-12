@@ -438,7 +438,7 @@ button.cancal.btn.btn-default {
                     $('select[name="admin"]').empty();
                     $('select[name="admin"]').append("<option>请选择管理员</option>");
                     for(var i=0;res.data.length>0 && i<res.data.length;i++){
-                        $('select[name="admin"]').append("<option value='"+res.data[i].user_id+"'>"+res.data[i].user_name+"</option>");
+                        $('select[name="admin"]').append("<option value='"+res.data[i].user_id+"'>"+res.data[i].user_name+"("+res.data[i].user_id+")</option>");
                     }
                     form.render();
                     $.post("${findOrgAdmin}", postData, function (res) {
