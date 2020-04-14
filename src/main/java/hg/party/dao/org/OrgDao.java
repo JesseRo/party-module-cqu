@@ -124,6 +124,15 @@ public class OrgDao extends PostgresqlDaoImpl<Organization>{
 			return null;
 		}
 	}
+	public Map<String, Object> findOrgAndPathByOrgId(String orgId) {
+		String sql = "select org.*,s.org_name s_org_name,o.org_name o_org_name from hg_party_org org  left join hg_party_org s on org.org_parent = s.org_id left join hg_party_org  o on s.org_parent =o.org_id where org.org_id =?";
+		List<Map<String, Object>>  list = jdbcTemplate.queryForList(sql,orgId);
+		if(list.size()>0){
+			return list.get(0);
+		}else{
+			return null;
+		}
+	}
 	public List<Organization> findByOrgId(List<String> orgId) {
 		String sql = "select * from hg_party_org where org_id in ('" + String.join("','", orgId) +"')";
 		try {
@@ -391,9 +400,9 @@ public class OrgDao extends PostgresqlDaoImpl<Organization>{
 		return jdbcTemplate.update(sql,userId);
 	}
 	public  List<Map<String, Object>> findPersonByUserId(String userId){
-		String sql  = "select m.*,org.org_name from hg_party_member m " +
-				"left join hg_party_org org on org.org_id = m.member_org "+
-				      " where member_identity = ? "+
+		String sql  = "select m.*,org.org_name,s.org_name s_org_name,s.org_name o_org_name from hg_party_member m " +
+				"left join hg_party_org org on org.org_id = m.member_org left join hg_party_org s on org.org_parent = s.org_id left join hg_party_org  o on s.org_parent =o.org_id "+
+				      " where m.member_identity = ? "+
 				      " and m.historic is false ";
 		return jdbcTemplate.queryForList(sql,userId);
 	}

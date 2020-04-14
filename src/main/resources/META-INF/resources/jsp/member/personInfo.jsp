@@ -44,6 +44,10 @@
         #personInfo .layui-btn-radius{
             border-radius:100px;
         }
+        .org-path{
+            background-color: #ffab33;
+            font-weight: bold;
+        }
     </style>
     <script type="text/javascript" src="${basePath}/js/jquery.jqprint-0.3.js"></script>
     <link rel="stylesheet" href="${basePath}/css/print_div.css">
@@ -62,6 +66,12 @@
         </div>
         <div class="bg_white_container">
             <div class="content_form form_container">
+                <div class="layui-card">
+                    <div class="layui-card-header org-path">所属党组织：<c:if test="${info != null}">
+                        ${info.o_org_name}>${info.s_org_name}>${info.org_name}
+                    </c:if>
+                    </div>
+                </div>
                 <c:if test="${memberEdit !=null}">
                     <div class="layui-card">
                         <div class="layui-card-header">个人信息申请修改状态：

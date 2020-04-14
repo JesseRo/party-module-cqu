@@ -9,6 +9,7 @@ import hg.party.dao.login.UserDao;
 import hg.party.dao.org.MemberDao;
 import hg.party.dao.org.OrgDao;
 import hg.party.entity.login.User;
+import hg.party.entity.organization.Organization;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import party.constants.PartyConst;

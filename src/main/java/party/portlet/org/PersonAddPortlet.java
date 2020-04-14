@@ -10,7 +10,6 @@ import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.servlet.http.HttpServletRequest;
 
-import hg.party.entity.organization.Organization;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.springframework.util.StringUtils;
@@ -60,7 +59,7 @@ public class PersonAddPortlet extends MVCPortlet {
 			}
 			orgId = (String)list.get(0).get("member_org");
 		}
-		Organization organization = orgDao.findByOrgId(orgId);
+		Map<String, Object> organization = orgDao.findOrgAndPathByOrgId(orgId);
 		renderRequest.setAttribute("organization", organization);
 		renderRequest.setAttribute("orgId", orgId);
 		renderRequest.setAttribute("userId", userId);

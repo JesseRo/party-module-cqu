@@ -13,6 +13,7 @@ import javax.portlet.RenderResponse;
 
 import com.liferay.portal.kernel.service.persistence.PortletUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
+import hg.party.dao.org.OrgDao;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.springframework.util.StringUtils;
@@ -66,6 +67,8 @@ public class TopNavigationPortlet extends MVCPortlet {
 	private NavigationPermissionsServer navigationPermissionsServer;
 	 @Reference
 	 private UserRoleService userRoleService;
+	@Reference
+	private OrgDao orgDao;
 	@Override
 	public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
 			throws IOException, PortletException {
@@ -118,6 +121,10 @@ public class TopNavigationPortlet extends MVCPortlet {
 		//String role = (String) SessionManager.getAttribute(sessionId, "role");
 		if (!StringUtils.isEmpty(userId)) {
 			List<String> roles = userRoleService.getRoles((String)userId);
+			Map<String, Object> organization = orgDao.findOrgAndPathByOrgId(orgId);
+			if(organization!=null){
+				renderRequest.setAttribute("organization",  organization);
+			}
 			renderRequest.setAttribute("roles",  roles);
 		}else{
 			PortalUtil.getHttpServletResponse(renderResponse).sendRedirect("/home");

@@ -331,9 +331,11 @@
                     if(elem.index == 0){
                         isHistory = false;
                         renderTable();
+                        renderButtons();
                     }else{
                         isHistory = true;
                         renderTable();
+                        renderButtons();
                     }
                 });
 
@@ -348,23 +350,16 @@
                        , history:isHistory==false?'0':'1'
                        , keyword: $("#searchForm input[name=keyword]").val()
                    };
-                   var atSchoolCols = [[
+                   var cols = [[
                        {type: 'checkbox',fixed: 'left'}
                        ,{field: 'member_name', title: '姓名', width:160}
                        ,{field: 'member_sex', title: '性别', width:120}
-                       ,{field: 'member_identity', title: '公民身份证', minWidth:240}
+                       ,{field: 'member_identity', title: '公民身份证', minWidth:200}
                        ,{field: 'member_phone_number', title: '联系电话', width:160}
+                       ,{field: 'member_address', title: '家庭住址', width:160}
                        ,{field: 'member_type', title: '党员类型', width:120}
-                       ,{field: 'historic',fixed: 'right', title: '操作', width:250, align:'center', toolbar: '#tableTool'}
+                       ,{field: 'historic', title: '操作', width:250, align:'center', toolbar: '#tableTool'}
                    ]];
-                   var outOfSchoolCols = [[
-                       {field: 'member_name', title: '姓名', width:120}
-                       ,{field: 'member_sex', title: '性别', width:120}
-                       ,{field: 'member_identity', title: '公民身份证', minWidth:240}
-                       ,{field: 'member_phone_number', title: '联系电话', width:160}
-                       ,{field: 'member_type', title: '党员类型', width:120}
-                       ,{field: 'historic',fixed: 'right', title: '操作', width:250, align:'center', toolbar: '#tableTool'}
-                   ]]
                     table.render({
                         elem: '#memberTable'
                         ,where: where
@@ -375,7 +370,7 @@
                                 prev:'&lt;上一页',
                                 next:'下一页&gt;',
                                 groups:4}
-                        ,cols: isHistory==false?atSchoolCols:outOfSchoolCols
+                        ,cols: cols
                     });
                     //监听头工具栏事件
                     table.on('toolbar(test)', function(obj){

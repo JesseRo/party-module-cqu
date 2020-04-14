@@ -58,6 +58,10 @@
             font-size: 16px;
             text-align: left;
         }
+        .org-path{
+            background-color: #ffab33;
+            font-weight: bold;
+        }
     </style>
     <script type="text/javascript" src="${basePath}/js/jquery.jqprint-0.3.js"></script>
     <script type="text/javascript" src="${basePath}/js/My97DatePicker/WdatePicker.js"></script>
@@ -77,6 +81,12 @@
             </span>
         </div>
         <div class="bg_white_container">
+            <div class="layui-card">
+                <div class="layui-card-header org-path">所属党组织：<c:if test="${info != null}">
+                    ${info.o_org_name}>${info.s_org_name}>${info.org_name}
+                </c:if>
+                </div>
+            </div>
             <div class="content_form form_container">
                 <form class="layui-form custom_form"  id="addPersonForm"
                       style="width: 960px;">

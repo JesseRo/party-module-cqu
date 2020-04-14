@@ -138,7 +138,7 @@
 			<a href="javascript:;">[${role}]</a>
 		</c:when>
 		<c:otherwise>
-			<a href="javascript:;">[${role=='组织部'?'学校':role}管理员]</a>
+			<a href="javascript:;">[${role=='组织部'?'学校':role}管理员-${organization.org_name}]</a>
 		</c:otherwise>
 	</c:choose>
 	<dl class="layui-nav-child" id="role-list"> <!-- 二级菜单 -->
