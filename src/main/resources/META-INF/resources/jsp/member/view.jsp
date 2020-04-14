@@ -307,9 +307,9 @@
         .layui-laydate-content .layui-laydate-content thead tr {
             display: flex !important;
         }
-        .table_form_content .custom_table + .layui-table-view .layui-table-box .layui-table-body tr{
+       /* .table_form_content .custom_table + .layui-table-view .layui-table-box .layui-table-body tr{
             display:table !important;
-        }
+        }*/
     </style>
     <script type="text/javascript">
 
@@ -704,10 +704,8 @@
 <%--</div>--%>
     <script type="text/html" id="tableTool">
         {{#  if(d.historic == false){ }}
-        <c:if test="'branch'==${org_type}">
             <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
-        </c:if>
         {{#  } }}
     </script>
 </body>
