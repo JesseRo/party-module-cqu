@@ -38,4 +38,16 @@ public class ReportTaskOrgDao extends PostgresqlDaoImpl<ReportOrgTask> {
         String sql = "select * from hg_party_report_task_org where task_id = ? and org_id = ?";
         return jdbcTemplate.queryForObject(sql, BeanPropertyRowMapper.newInstance(ReportOrgTask.class), taskId, department);
     }
+
+    public int countByTaskId(String id) {
+        String sql = "select count(id) from hg_party_report_task_org where task_id = ?";
+        return jdbcTemplate.queryForObject(sql, Integer.class, id);
+    }
+
+    public List<String> findOrgNameByTaskId(String taskId) {
+        String sql = "select org.org_name from hg_party_report_task_org task " +
+                "left join hg_party_org org on task.org_id = org.org_id and org.historic = false " +
+                "where task_id = ?";
+        return jdbcTemplate.queryForList(sql, String.class, taskId);
+    }
 }

@@ -117,6 +117,8 @@ public class PartyPortletKeys {
 
 	public static final String SecondaryNewTaskPortlet = "SecondaryNewTaskPortlet";
 
+	public static final String SecondaryTaskDetailPortlet = "SecondaryTaskDetailPortlet";
+
 	public static final String SecondaryTaskPortlet = "SecondaryTaskPortlet";
 
 	public static final String SecondaryTaskDraftPortlet = "SecondaryTaskDraftPortlet";

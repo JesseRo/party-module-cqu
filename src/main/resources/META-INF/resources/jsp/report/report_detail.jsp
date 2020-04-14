@@ -28,27 +28,33 @@
             padding: 5px 0;
             display: inline-block;
         }
-        .content_table thead tr{
+
+        .content_table thead tr {
             background: #F6F8FC;
             height: 48px;
             font-size: 16px;
         }
-        .content_table thead th{
+
+        .content_table thead th {
             padding: 5px 15px !important;
         }
+
         .content_table tr:nth-child(2n) {
             background: #FBFCFE;
         }
-        .content_table td{
+
+        .content_table td {
             min-width: 130px;
             padding: 5px 15px !important;
             height: 48px;
             font-size: 14px;
         }
-        .report_table_box.table_outer_box{
+
+        .report_table_box.table_outer_box {
             height: calc(100% - 118px);
         }
-        .table_outer_box .report_detail{
+
+        .table_outer_box .report_detail {
             position: absolute;
             top: 0;
             left: 0;
@@ -75,13 +81,15 @@
             </span>
         </div>
         <div class="bg_white_container">
-            <c:if test="${not empty taskId}">
-            <div class="operate_form_group">
-                <button id="export" type="button" class="layui-btn custom_btn publish_acti_btn" >数据汇总导出</button>
-                <c:if test="${task.type == 'excel'}">
-                    <button id="exportAsSheet" type="button" class="layui-btn custom_btn publish_acti_btn" style="margin-right: 20px">汇总为Sheet导出</button>
-                </c:if>
-            </div>
+            <c:if test="${not empty taskId }">
+                <div class="operate_form_group">
+                    <button id="export" type="button" class="layui-btn custom_btn publish_acti_btn">数据汇总导出</button>
+                    <c:if test="${task.type == 'excel'}">
+                        <button id="exportAsSheet" type="button" class="layui-btn custom_btn publish_acti_btn"
+                                style="margin-right: 20px">汇总为Sheet导出
+                        </button>
+                    </c:if>
+                </div>
             </c:if>
             <div class="table_outer_box report_table_box">
                 <table class="layui-table custom_table report_detail content_table" id="${taskId}">
@@ -101,34 +109,39 @@
                     <c:forEach var="c" items="${reports }">
                         <tr id="${c.report_id }">
                             <td>
-                                ${c.org_name}
+                                    ${c.org_name}
                             </td>
                             <td>
-                                ${c.theme }
+                                    ${c.theme }
                             </td>
                             <td>
-                                ${c.description }
+                                    ${c.description }
                             </td>
                             <td>
                                 <c:if test="${not empty c.publish_time}">
-                                    <fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${c.publish_time }" />
+                                    <fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${c.publish_time }"/>
                                 </c:if>
                             </td>
                             <td style="color: red;padding-left: 25px;">
-                                <c:forEach var="f" items="${c.fileView }">
-                                    <a href="${f.path}" target="_blank">${f.filename}</a>
-                                </c:forEach>
+                                <a style="cursor: pointer" onclick="templateDetail(this);">查看上报</a>
+                                <div class="report_template" style="display:none;">
+                                    <c:forEach var="f" items="${c.fileView }">
+                                        <li><a style="cursor: pointer;color: #1e9fff;" href="${f.path}"
+                                               target="_blank">${f.filename}</a></li>
+                                    </c:forEach>
+                                </div>
                             </td>
                             <td>
                                 <c:if test="${not empty c.time}">
-                                    <fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${c.publish_time }" />
+                                    <fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${c.publish_time }"/>
                                 </c:if>
                             </td>
                             <td>
                                 <c:choose>
                                     <c:when test="${c.status == 0}">
                                         <div>
-                                            <a class="approval" style="cursor: pointer;margin-right: 10%; color: #11D43B" >通过 </a>
+                                            <a class="approval"
+                                               style="cursor: pointer;margin-right: 10%; color: #11D43B">通过 </a>
                                             <a class="reject" style="cursor: pointer;color: #FE4D4D;">驳回</a>
                                         </div>
                                     </c:when>
@@ -141,106 +154,149 @@
                                 </c:choose>
                             </td>
                             <td>
-                                ${c.reason}
+                                    ${c.reason}
                             </td>
                         </tr>
-                　　 </c:forEach>
+                        　　 </c:forEach>
                     </tbody>
                 </table>
             </div>
-        <!--    分页              -->
-        <div class="pagination_container">
-            <ul class="pagination" id="page"></ul>
-            <div class="pageJump">
-                <input class='current_page' type="hidden" value="${pageNo}"/>
-                <p>共<span class="total_page">${totalPage }</span>页</p>
-                <portlet:actionURL name="/PageNoMVCActionCommand" var="pageNoUrl">
-                </portlet:actionURL>
-                <form action="#" id="getPageNo" method="post">
-                    <input type="hidden" id="pageNo" name="pageNo" value=""/>
-                    <input type="hidden" id="total_page_" name="total_page_" value="${totalPage}"/>
-                    <span>跳转到第</span>
-                    <input type="text" id="jumpPageNo" name="jumpPageNo"/>
-                    <span>页</span>
-                    <%--  <input label="站点id" name="Site"  value="${Site }" type="hidden"/>
-                    <input label="栏目id" name="Column"  value="${Column }" type="hidden"/> --%>
-                    <input type="hidden" id="date_date" name="date" value=""/>
-                    <button type="submit" class="button">确定</button>
-                </form>
+            <!--    分页              -->
+            <div class="pagination_container">
+                <ul class="pagination" id="page"></ul>
+                <div class="pageJump">
+                    <input class='current_page' type="hidden" value="${pageNo}"/>
+                    <p>共<span class="total_page">${totalPage }</span>页</p>
+                    <portlet:actionURL name="/PageNoMVCActionCommand" var="pageNoUrl">
+                    </portlet:actionURL>
+                    <form action="#" id="getPageNo" method="post">
+                        <input type="hidden" id="pageNo" name="pageNo" value=""/>
+                        <input type="hidden" id="total_page_" name="total_page_" value="${totalPage}"/>
+                        <span>跳转到第</span>
+                        <input type="text" id="jumpPageNo" name="jumpPageNo"/>
+                        <span>页</span>
+                        <%--  <input label="站点id" name="Site"  value="${Site }" type="hidden"/>
+                        <input label="栏目id" name="Column"  value="${Column }" type="hidden"/> --%>
+                        <input type="hidden" id="date_date" name="date" value=""/>
+                        <button type="submit" class="button">确定</button>
+                    </form>
+                </div>
+            </div>
+            <div id="file_detail" style="display: none;">
+                <div style="width: 500px; ">
+                    <ul>
+                    </ul>
+                </div>
             </div>
         </div>
-        </div>
-<script type="text/javascript">
-    $(document).ready(function () {
+        <script type="text/javascript">
+            var layer;
 
-        $('.approval').on('click', function () {
-            var report = $(this).parent().parent().parent().attr("id");
-            var that = this;
-            $.post("${approval}", {report: report, status: 1}, function (res) {
-                if (res.success) {
-                    alert("已审批");
-                    $(that).parent().parent().html("已审批");
-                }
-            })
-        });
-        $('.reject').on('click', function () {
-            var report = $(this).parent().parent().parent().attr("id");
-            var that = this;
-            var reason = prompt("驳回原因：");
-            $.post("${approval}", {report: report, status: 2, reason: reason}, function (res) {
-                if (res.success) {
-                    alert("已驳回");
-                    $(that).parent().parent().html("已驳回");
-                }
-            })
-        });
-
-        $('#export').on("click", function () {
-            window.location.href = "${download}" + "&taskId=" + $('table.content_table').attr("id");
-        });
-        $('#exportAsSheet').on("click", function () {
-            window.location.href = "${sheet}" + "&taskId=" + $('table.content_table').attr("id");
-        });
-
-        var pages = $(".total_page").html();
-        var currentPage = $('.current_page').val();
-        $("input[name='pageNo']").val($('.current_page').val());
-        if (currentPage == 1) {
-            $('.page_next').removeClass('not_allow');
-            $('.page_prev').addClass('not_allow');
-
-        } else if (currentPage == pages) {
-            $('.page_prev').removeClass('not_allow');
-            $('.page_next').addClass('not_allow');
-
-        } else {
-
-        }
-
-        $("#jumpPageNo").change(function () {
-            $("input[name='pageNo']").val($(this).val());
-        });
-        Page({
-            num: pages, //页码数
-            startnum: currentPage, //指定页码
-            elem: $('#page'), //指定的元素
-            callback: function (n) { //回调函数
-                $("input[name='pageNo']").val(n);
-                //	alert($("input[name='pageNo']").val());
-                $("#getPageNo").submit();
-                if (n == 1) {
-                    $('#page a').removeClass('not_allow');
-                    $('.page_prev').addClass('not_allow');
-                } else if (n >= $('.total_page').html()) {
-                    $('#page a').removeClass('not_allow');
-                    $('.page_next').addClass('not_allow')
-                } else {
-                    $('#page a').removeClass('not_allow');
-                }
+            function templateDetail(e) {
+                $('#file_detail').find('ul').html($(e).next().html());
+                layer.open(
+                    {
+                        title: '上报文件',
+                        content: $('#file_detail').html()
+                    });
             }
-        });
-    });
-</script>
+
+            $(document).ready(function () {
+                layui.use("layer", function () {
+                    layer = layui.layer;
+                });
+                $('.approval').on('click', function () {
+                    var report = $(this).parent().parent().parent().attr("id");
+                    var that = this;
+                    $.post("${approval}", {report: report, status: 1}, function (res) {
+                        if (res.success) {
+                            alert("已审批");
+                            $(that).parent().parent().html("已审批");
+                        }
+                    })
+                });
+                $('.reject').on('click', function () {
+                    var report = $(this).parent().parent().parent().attr("id");
+                    var that = this;
+                    var reason = prompt("驳回原因：");
+                    $.post("${approval}", {report: report, status: 2, reason: reason}, function (res) {
+                        if (res.success) {
+                            alert("已驳回");
+                            $(that).parent().parent().html("已驳回");
+                        }
+                    })
+                });
+                var currentReportSize = ${reports.size()};
+                var totalReportSize = ${totalReportSize};
+
+                $('#export').on("click", function () {
+                    if (currentReportSize > 0) {
+                        if (currentReportSize < totalReportSize) {
+                            layuiModal.confirm("还有" + (totalReportSize - currentReportSize) + "个组织没有上报，是否仍要汇总？", function () {
+                                window.location.href = "${download}" + "&taskId=" + $('table.content_table').attr("id");
+                            });
+                        } else {
+                            window.location.href = "${download}" + "&taskId=" + $('table.content_table').attr("id");
+                        }
+                    } else {
+                        layuiModal.alert("暂无报送数据，无法汇总")
+                    }
+                });
+                $('#exportAsSheet').on("click", function () {
+                    if (currentReportSize > 0) {
+                        if (currentReportSize < totalReportSize) {
+                            layuiModal.confirm("还有" + (totalReportSize - currentReportSize) + "个组织没有上报，是否仍要汇总？", function () {
+                                window.location.href = "${sheet}" + "&taskId=" + $('table.content_table').attr("id");
+                            });
+                        } else {
+                            window.location.href = "${sheet}" + "&taskId=" + $('table.content_table').attr("id");
+                        }
+                    } else {
+                        layuiModal.alert("暂无报送数据，无法汇总");
+                    }
+                })
+                ;
+
+                var pages = $(".total_page").html();
+                var currentPage = $('.current_page').val();
+                $("input[name='pageNo']").val($('.current_page').val());
+                if (currentPage == 1) {
+                    $('.page_next').removeClass('not_allow');
+                    $('.page_prev').addClass('not_allow');
+
+                } else if (currentPage == pages) {
+                    $('.page_prev').removeClass('not_allow');
+                    $('.page_next').addClass('not_allow');
+
+                } else {
+
+                }
+
+                $("#jumpPageNo").change(function () {
+                    $("input[name='pageNo']").val($(this).val());
+                });
+                Page({
+                    num: pages, //页码数
+                    startnum: currentPage, //指定页码
+                    elem: $('#page'), //指定的元素
+                    callback: function (n) { //回调函数
+                        $("input[name='pageNo']").val(n);
+                        //	alert($("input[name='pageNo']").val());
+                        $("#getPageNo").submit();
+                        if (n == 1) {
+                            $('#page a').removeClass('not_allow');
+                            $('.page_prev').addClass('not_allow');
+                        } else if (n >= $('.total_page').html()) {
+                            $('#page a').removeClass('not_allow');
+                            $('.page_next').addClass('not_allow')
+                        } else {
+                            $('#page a').removeClass('not_allow');
+                        }
+                    }
+                });
+            })
+            ;
+        </script>
     </div>
 </div>
 <!-- 分页 -->

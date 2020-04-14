@@ -188,7 +188,7 @@
                 '</div>' +
                 '<div class="col-sm-6 col-xs-12 has_select_div">' +
                 '<div class="has_select_container">' +
-                ' <div class="has_select_title">' +
+                ' <div class="has_select_title" style="border-bottom: none;">' +
                 ' <span>已选goo</span>' +
                 '<div class="right">' +
                 '<span>已选择</span>' +
@@ -349,18 +349,31 @@
                     var resourceId = $(imgs[i]).prev().val();
                     resourcesId.push(resourceId);
                 }
+                if (!$('[name=theme]').val()){
+                    layuiModal.alert("任务主题不得为空！");
+                    return;
+                }
+                if (!$('[name=description]').val()){
+                    layuiModal.alert("任务描述不得为空！");
+                    return;
+                }
+                if (!$('[name=files]').val()){
+                    layuiModal.alert("任务模版不得为空！");
+                    return;
+                }
                 var resources = resourcesId.join(",") + "";
                 $("#hiddenPublicObject").val(resources);
                 if (!$("#hiddenPublicObject").val()) {
                     layuiModal.alert("请选择发布对象！");
+                    return;
                 }
                 var files = $('[name=files]')[0].files
                 for(var index = 0; index < files.length; index++){
                     var filename = files[index].name;
                     filename = filename.substr(filename.lastIndexOf("."));
                     if(accepts.indexOf(filename) == -1){
-                        alert("请上传word或excel格式的文件");
-                        return
+                        layuiModal.alert("请上传word或excel格式的文件");
+                        return;
                     }
                 }
                 var confirmCallback = function(){
@@ -467,7 +480,7 @@
                     <div class="col-sm-12 col-xs-12 no-padding">
                         <div class="col-sm-6 col-xs-12">
                             <div class="col-sm-3 col-xs-3 ">
-                                <span class="control-label form-label-required">任务说明</span>
+                                <span class="control-label">任务说明</span>
                             </div>
                             <div class="col-sm-9 col-xs-9">
                                 <script id="task_content" name="task_content" type="text/plain"></script>

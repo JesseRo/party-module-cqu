@@ -27,18 +27,22 @@
             padding: 5px 0;
             display: inline-block;
         }
-        .content_table thead tr{
+
+        .content_table thead tr {
             background: #F6F8FC;
             height: 48px;
             font-size: 16px;
         }
-        .content_table thead th{
+
+        .content_table thead th {
             padding: 5px 15px !important;
         }
+
         .content_table tr:nth-child(2n) {
             background: #FBFCFE;
         }
-        .content_table td{
+
+        .content_table td {
             min-width: 130px;
             padding: 5px 15px !important;
             height: 48px;
@@ -58,83 +62,112 @@
         </div>
         <div class="bg_white_container">
             <div class="table_outer_box">
-            <table class="layui-table custom_table">
-                <thead>
-                <tr>
-                    <td>任务名称</td>
-                    <td>任务描述</td>
-                    <td>任务模板</td>
-                    <td>发布时间</td>
-                    <td>状态</td>
-                    <td>上报文件</td>
-                </tr>
-                </thead>
-                <tbody class="table_info">
-                <c:forEach var="c" items="${tasks }">
-                    <tr id="${c.task_id }">
-                        <td>
-                            ${c.theme }
-                        </td>
-                        <td>
-                            ${c.description }
-                        </td>
-                        <td style="color: red;padding-left: 25px;">
-                            <c:forEach var="f" items="${c.templateFileView }">
-                                <a href="${f.path}" target="_blank">${f.filename}</a>
-                            </c:forEach>
-                        </td>
-                        <td>
-                            <c:if test="${not empty c.publish_time}">
-                                <fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${c.publish_time }" />
-                            </c:if>
-                        </td>
-                        <td>
-                            <c:if test="${c.status == 1}">
-                                <a href="javascript:;" onclick="window.location.href='/brunch_report1?task=${c.task_id }'">上报</a>
-                            </c:if>
-                            <c:if test="${c.status == 2}">
-                                已上报
-                            </c:if>
-                        </td>
-                        <td>
-                            <c:if test="${c.status == 2}">
-                                <c:forEach var="u" items="${c.uploadFileView }">
-                                    <a href="${u.path}" target="_blank">${u.filename}</a>
-                                </c:forEach>
-                            </c:if>
-                        </td>
+                <table class="layui-table custom_table">
+                    <thead>
+                    <tr>
+                        <td>任务名称</td>
+                        <td>任务描述</td>
+                        <td>任务模板</td>
+                        <td>发布时间</td>
+                        <td>状态</td>
+                        <td>上报文件</td>
                     </tr>
-            　　 </c:forEach>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody class="table_info">
+                    <c:forEach var="c" items="${tasks }">
+                        <tr id="${c.task_id }">
+                            <td>
+                                    ${c.theme }
+                            </td>
+                            <td>
+                                    ${c.description }
+                            </td>
+                            <td style="color: red;padding-left: 25px;">
+                                <a style="cursor: pointer" onclick="templateDetail(this, '报送模板');">查看模板</a>
+                                <div class="report_template" style="display:none;">
+                                    <c:forEach var="f" items="${c.templateFileView }">
+                                        <li><a style="cursor: pointer;color: #1e9fff;" href="${f.path}"
+                                               target="_blank">${f.filename}</a></li>
+                                    </c:forEach>
+                                </div>
+                            </td>
+                            <td>
+                                <c:if test="${not empty c.publish_time}">
+                                    <fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${c.publish_time }"/>
+                                </c:if>
+                            </td>
+                            <td>
+                                <c:if test="${c.status == 1}">
+                                    <a href="javascript:;"
+                                       onclick="window.location.href='/brunch_report1?task=${c.task_id }'">上报</a>
+                                </c:if>
+                                <c:if test="${c.status == 2}">
+                                    已上报
+                                </c:if>
+                            </td>
+                            <td>
+                                <c:if test="${c.status == 2}">
+                                    <a style="cursor: pointer" onclick="templateDetail(this, '上报文件');">查看上报</a>
+                                    <div class="report_template" style="display:none;">
+                                        <c:forEach var="u" items="${c.uploadFileView }">
+                                            <li><a style="cursor: pointer;color: #1e9fff;" href="${u.path}"
+                                                   target="_blank">${u.filename}</a></li>
+                                        </c:forEach>
+                                    </div>
+                                </c:if>
+                            </td>
+                        </tr>
+                        　　 </c:forEach>
+                    </tbody>
+                </table>
             </div>
-<!--    分页              -->
+            <!--    分页              -->
 
-        <div class="pagination_container">
-            <ul class="pagination" id="page"></ul>
-            <div class="pageJump">
-                <input class='current_page' type="hidden" value="${pageNo}"/>
-                <p>共<span class="total_page">${totalPage }</span>页</p>
-                <portlet:actionURL name="/PageNoMVCActionCommand" var="pageNoUrl">
-                </portlet:actionURL>
-                <form action="#" id="getPageNo" method="post">
-                    <input type="hidden" id="pageNo" name="pageNo" value=""/>
-                    <input type="hidden" id="total_page_" name="total_page_" value="${totalPage}"/>
-                    <span>跳转到第</span>
-                    <input type="text" id="jumpPageNo" name="jumpPageNo"/>
-                    <span>页</span>
-                    <%--  <input label="站点id" name="Site"  value="${Site }" type="hidden"/>
-                    <input label="栏目id" name="Column"  value="${Column }" type="hidden"/> --%>
-                    <input type="hidden" id="date_date" name="date" value=""/>
-                    <button type="submit" class="button">确定</button>
-                </form>
+            <div class="pagination_container">
+                <ul class="pagination" id="page"></ul>
+                <div class="pageJump">
+                    <input class='current_page' type="hidden" value="${pageNo}"/>
+                    <p>共<span class="total_page">${totalPage }</span>页</p>
+                    <portlet:actionURL name="/PageNoMVCActionCommand" var="pageNoUrl">
+                    </portlet:actionURL>
+                    <form action="#" id="getPageNo" method="post">
+                        <input type="hidden" id="pageNo" name="pageNo" value=""/>
+                        <input type="hidden" id="total_page_" name="total_page_" value="${totalPage}"/>
+                        <span>跳转到第</span>
+                        <input type="text" id="jumpPageNo" name="jumpPageNo"/>
+                        <span>页</span>
+                        <%--  <input label="站点id" name="Site"  value="${Site }" type="hidden"/>
+                        <input label="栏目id" name="Column"  value="${Column }" type="hidden"/> --%>
+                        <input type="hidden" id="date_date" name="date" value=""/>
+                        <button type="submit" class="button">确定</button>
+                    </form>
+                </div>
             </div>
         </div>
+        <div id="file_detail" style="display: none;">
+            <div style="width: 500px; ">
+                <ul>
+                </ul>
+            </div>
         </div>
     </div>
 </div>
 <script type="text/javascript">
+    var layer;
+
+    function templateDetail(e, title) {
+        $('#file_detail').find('ul').html($(e).next().html());
+        layer.open(
+            {
+                title: title,
+                content: $('#file_detail').html()
+            });
+    }
+
     $(document).ready(function () {
+        layui.use("layer", function () {
+            layer = layui.layer;
+        });
         var pages = $(".total_page").html();
         var currentPage = $('.current_page').val();
         $("input[name='pageNo']").val($('.current_page').val());

@@ -27,21 +27,25 @@
             padding: 5px 0;
             display: inline-block;
         }
-        .content_table thead tr{
+
+        .content_table thead tr {
             background: #F6F8FC;
             height: 48px;
             font-size: 16px;
         }
+
         .content_table tr:nth-child(2n) {
             background: #FBFCFE;
         }
-        .content_table td{
+
+        .content_table td {
             min-width: 130px;
             padding: 5px 15px !important;
             height: 48px;
             font-size: 14px;
         }
-        .content_table thead th{
+
+        .content_table thead th {
             padding: 5px 15px !important;
         }
     </style>
@@ -73,56 +77,82 @@
                     <c:forEach var="c" items="${tasks }">
                         <tr id="${c.task_id }">
                             <td>
-                                    ${c.theme }
+                                <a onclick="window.location.href = '/report_task_detail?taskId=${c.task_id }'"
+                                   title="查看任务详情" style="cursor: pointer;">${c.theme}</a>
                             </td>
                             <td>
                                     ${c.description }
                             </td>
                             <td style="color: red;padding-left: 25px;">
-                                <c:forEach var="f" items="${c.fileView }">
-                                    <a href="${f.path}" target="_blank">${f.filename}</a>
-                                </c:forEach>
+                                <a style="cursor: pointer" onclick="templateDetail(this);">查看模板</a>
+                                <div class="report_template" style="display:none;">
+                                    <c:forEach var="f" items="${c.fileView }">
+                                        <li><a style="cursor: pointer;color: #1e9fff;" href="${f.path}"
+                                               target="_blank">${f.filename}</a></li>
+
+                                    </c:forEach>
+                                </div>
                             </td>
                             <td>
                                 <c:if test="${not empty c.publish_time}">
-                                    <fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${c.publish_time }" />
+                                    <fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${c.publish_time }"/>
                                 </c:if>
                             </td>
                             <td>
-                                <a onclick="window.location.href='/secondaryReportDetail?task=${c.task_id }'" href="javascript:;">查看报送情况</a>
+                                <a onclick="window.location.href='/secondaryReportDetail?task=${c.task_id }'"
+                                   href="javascript:;">查看报送情况</a>
                             </td>
                         </tr>
                         　　 </c:forEach>
                     </tbody>
                 </table>
             </div>
-        <div class="pagination_container">
-            <ul class="pagination" id="page"></ul>
-            <div class="pageJump">
-                <input class='current_page' type="hidden" value="${pageNo}"/>
-                <p>共<span class="total_page">${totalPage }</span>页</p>
-                <portlet:actionURL name="/PageNoMVCActionCommand" var="pageNoUrl">
-                </portlet:actionURL>
-                <form action="#" id="getPageNo" method="post">
-                    <input type="hidden" id="pageNo" name="pageNo" value=""/>
-                    <input type="hidden" id="total_page_" name="total_page_" value="${totalPage}"/>
-                    <span>跳转到第</span>
-                    <input type="text" id="jumpPageNo" name="jumpPageNo"/>
-                    <span>页</span>
-                    <%--  <input label="站点id" name="Site"  value="${Site }" type="hidden"/>
-                    <input label="栏目id" name="Column"  value="${Column }" type="hidden"/> --%>
-                    <input type="hidden" id="date_date" name="date" value=""/>
-                    <button type="submit" class="button">确定</button>
-                </form>
+            <div class="pagination_container">
+                <ul class="pagination" id="page"></ul>
+                <div class="pageJump">
+                    <input class='current_page' type="hidden" value="${pageNo}"/>
+                    <p>共<span class="total_page">${totalPage }</span>页</p>
+                    <portlet:actionURL name="/PageNoMVCActionCommand" var="pageNoUrl">
+                    </portlet:actionURL>
+                    <form action="#" id="getPageNo" method="post">
+                        <input type="hidden" id="pageNo" name="pageNo" value=""/>
+                        <input type="hidden" id="total_page_" name="total_page_" value="${totalPage}"/>
+                        <span>跳转到第</span>
+                        <input type="text" id="jumpPageNo" name="jumpPageNo"/>
+                        <span>页</span>
+                        <%--  <input label="站点id" name="Site"  value="${Site }" type="hidden"/>
+                        <input label="栏目id" name="Column"  value="${Column }" type="hidden"/> --%>
+                        <input type="hidden" id="date_date" name="date" value=""/>
+                        <button type="submit" class="button">确定</button>
+                    </form>
+                </div>
             </div>
         </div>
+        <div id="file_detail" style="display: none;">
+            <div style="width: 500px; ">
+                <ul>
+
+                </ul>
+            </div>
         </div>
     </div>
-
     <!--    分页              -->
-
     <script type="text/javascript">
+        var layer;
+
+        function templateDetail(e) {
+            $('#file_detail').find('ul').html($(e).next().html());
+            layer.open(
+                {
+                    title: '报送模板',
+                    content: $('#file_detail').html()
+                });
+        }
+
         $(document).ready(function () {
+            layui.use("layer", function () {
+                layer = layui.layer;
+            });
 
             $('.approval').on('click', function () {
                 var report = $(this).parent().parent().attr("id");
