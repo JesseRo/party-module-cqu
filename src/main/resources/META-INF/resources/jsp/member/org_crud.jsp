@@ -55,20 +55,6 @@
         font-size: 30px;
         color: #f93c3c;
     }
-	/*.main_content .min_width_1200 .nav_list .party_organization_list li .second_menu>li>a*/
-    /*{*/
-	/*	padding-left: 24px;*/
-	/*	box-sizing: border-box;*/
-	/*	font-size: 14px;*/
-	/*	width: 100%;*/
-	/*	height: 100%;*/
-	/*	display: inline-block;*/
-	/*	text-decoration: none;*/
-    /*    white-space: nowrap;*/
-    /*    text-overflow: ellipsis;*/
-    /*    overflow: hidden;*/
-    /*    color: #333;*/
-	/*}*/
     .main_content .min_width_1200 .nav_list .party_organization_list li .second_menu > li > a {
         padding-left: 44px;
         box-sizing: border-box;
@@ -458,14 +444,6 @@ button.cancal.btn.btn-default {
             $("#org_add").click(function() {
                 var id =checkedNode.id;
                 var org_type = checkedNode.data.org_type;
-                if (!id) {
-                    layer.msg("请选择一个组织");
-                    return;
-                }
-                if (!org_type) {
-                    layer.msg("请选择一个组织");
-                    return;
-                }
                 var title='';
                 if ("organization" == org_type) {
                     title = '增加二级党委';
@@ -653,7 +631,7 @@ button.cancal.btn.btn-default {
                                     </div>
                                 </div>
                                 <div class="layui-inline">
-                                    <label class="layui-form-label">手机号码：</label>
+                                    <label class="layui-form-label layui-required">手机号码：</label>
                                     <div class="layui-input-inline">
                                         <input type="text" name="contactorNumber" lay-verify="contactNumber" maxlength="20" autocomplete="off" class="layui-input">
                                     </div>
