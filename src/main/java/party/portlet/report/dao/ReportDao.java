@@ -41,6 +41,16 @@ public class ReportDao extends PostgresqlDaoImpl<Report> {
         }
     }
 
+    public Integer countByTaskIdAndStatus(String taskId, Integer status) {
+        String sql = "select count(*) from hg_party_report where task_id = ? and status = ?";
+
+        try {
+            return jdbcTemplate.queryForObject(sql, Integer.class, taskId, status);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     public PostgresqlQueryResult<Map<String, Object>> findPageByTaskId(String taskId, int page) {
         String sql = "select r.report_id as report_id, r.task_id as task_id, r.org_id as org_id, o.org_name as org_name, t.theme as theme, t.description as description, " +
                 "t.publish_time as publish_time, r.time as time, r.status as status, r.reason as reason, r.files as files from hg_party_report r " +

@@ -4,6 +4,7 @@
 <portlet:resourceURL id="/brunch/report/approval" var="approval"/>
 <portlet:resourceURL id="/brunch/report/download" var="download"/>
 <portlet:resourceURL id="/brunch/report/download/sheet" var="sheet"/>
+<portlet:resourceURL id="/hg/report/number" var="number"/>
 
 <!DOCTYPE html>
 <html>
@@ -226,34 +227,33 @@
                         }
                     })
                 });
-                var currentReportSize = ${reports.size()};
                 var totalReportSize = ${totalReportSize};
+                function excelExport(url){
+                    $.post('${number}', {taskId: '${taskId}'}, function (res) {
+                        if (res.result) {
+                            var currentReportSize = res.data;
+                            if (currentReportSize > 0) {
+                                if (currentReportSize < totalReportSize) {
+                                    layuiModal.confirm("还有" + (totalReportSize - currentReportSize) + "个组织没有上报或通过审核，是否仍要汇总？", function () {
+                                        window.location.href = url + "&taskId=" + $('table.content_table').attr("id");
+                                    });
+                                } else {
+                                    window.location.href = url + "&taskId=" + $('table.content_table').attr("id");
+                                }
+                            } else {
+                                layuiModal.alert("暂无审核通过的报送数据，无法汇总")
+                            }
+                        } else {
+                            layuiModal.alert("汇总出错")
+                        }
+                    });
+                }
 
                 $('#export').on("click", function () {
-                    if (currentReportSize > 0) {
-                        if (currentReportSize < totalReportSize) {
-                            layuiModal.confirm("还有" + (totalReportSize - currentReportSize) + "个组织没有上报，是否仍要汇总？", function () {
-                                window.location.href = "${download}" + "&taskId=" + $('table.content_table').attr("id");
-                            });
-                        } else {
-                            window.location.href = "${download}" + "&taskId=" + $('table.content_table').attr("id");
-                        }
-                    } else {
-                        layuiModal.alert("暂无报送数据，无法汇总")
-                    }
+                    excelExport("${download}");
                 });
                 $('#exportAsSheet').on("click", function () {
-                    if (currentReportSize > 0) {
-                        if (currentReportSize < totalReportSize) {
-                            layuiModal.confirm("还有" + (totalReportSize - currentReportSize) + "个组织没有上报，是否仍要汇总？", function () {
-                                window.location.href = "${sheet}" + "&taskId=" + $('table.content_table').attr("id");
-                            });
-                        } else {
-                            window.location.href = "${sheet}" + "&taskId=" + $('table.content_table').attr("id");
-                        }
-                    } else {
-                        layuiModal.alert("暂无报送数据，无法汇总");
-                    }
+                    excelExport("${sheet}");
                 })
                 ;
 
