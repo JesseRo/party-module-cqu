@@ -307,9 +307,15 @@
         .layui-laydate-content .layui-laydate-content thead tr {
             display: flex !important;
         }
-       /* .table_form_content .custom_table + .layui-table-view .layui-table-box .layui-table-body tr{
-            display:table !important;
-        }*/
+        .layui-table-fixed.layui-table-fixed-l{
+            height: calc(100% - 10px);
+        }
+        .layui-table-fixed.layui-table-fixed-r{
+            height: calc(100% - 10px);
+        }
+       .table_form_content .custom_table + .layui-table-view .layui-table-box .layui-table-body tr{
+            display:table-row !important;
+        }
     </style>
     <script type="text/javascript">
 
@@ -371,32 +377,6 @@
                                 next:'下一页&gt;',
                                 groups:4}
                         ,cols: cols
-                    });
-                    //监听头工具栏事件
-                    table.on('toolbar(test)', function(obj){
-                        var checkStatus = table.checkStatus(obj.config.id)
-                            ,data = checkStatus.data; //获取选中的数据
-                        switch(obj.event){
-                            case 'add':
-                                layer.msg('添加');
-                                break;
-                            case 'update':
-                                if(data.length === 0){
-                                    layer.msg('请选择一行');
-                                } else if(data.length > 1){
-                                    layer.msg('只能同时编辑一个');
-                                } else {
-                                    layer.alert('编辑 [id]：'+ checkStatus.data[0].id);
-                                }
-                                break;
-                            case 'delete':
-                                if(data.length === 0){
-                                    layer.msg('请选择一行');
-                                } else {
-                                    layer.msg('删除');
-                                }
-                                break;
-                        };
                     });
                     //监听事件
                     table.on('tool(memberTable)', function(obj){

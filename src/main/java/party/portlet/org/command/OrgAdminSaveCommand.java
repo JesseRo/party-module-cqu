@@ -45,41 +45,35 @@ public class OrgAdminSaveCommand implements MVCResourceCommand {
 		PrintWriter printWriter = null;
 		try {
 			printWriter = resourceResponse.getWriter();
-			if(!StringUtils.isEmpty(orgId)){
-				boolean suc;
-				if (StringUtils.isEmpty(adminStr)){
-					suc = orgDao.changeAdmin(orgId );
+			boolean suc;
+			if (StringUtils.isEmpty(adminStr)){
+				suc = orgDao.changeAdmin(orgId );
+				if (suc){
+					printWriter.write(JSON.toJSONString(ResultUtil.success("保存成功！")));
+				}else {
+					printWriter.write(JSON.toJSONString(ResultUtil.fail("保存失败..")));
+				}
+			}else {
+				Organization organization = orgDao.findByOrgId(orgId);
+				String[] admins = adminStr.split(",");
+				Boolean  isUpdate = true;
+				for(String userId: admins){
+					Organization adminOrg = orgDao.findAdminOrg(userId, PartyOrgAdminTypeEnum.getEnum(organization.getOrg_type()));
+					if(adminOrg !=null){
+						isUpdate = false;
+						User user = userService.findByUserId(userId);
+						printWriter.write(JSON.toJSONString(ResultUtil.fail(user.getUser_name()+" 不能同时管理两个同级组织..")));
+						break;
+					}
+				}
+				if(isUpdate == true){
+					suc = orgDao.changeAdmin(orgId, admins);
 					if (suc){
 						printWriter.write(JSON.toJSONString(ResultUtil.success("保存成功！")));
 					}else {
 						printWriter.write(JSON.toJSONString(ResultUtil.fail("保存失败..")));
 					}
-				}else {
-					Organization organization = orgDao.findByOrgId(orgId);
-					String[] admins = adminStr.split(",");
-					Boolean  isUpdate = true;
-					for(String userId: admins){
-						Organization adminOrg = orgDao.findAdminOrg(userId, PartyOrgAdminTypeEnum.getEnum(organization.getOrg_type()));
-						if(adminOrg !=null){
-							isUpdate = false;
-							User user = userService.findByUserId(userId);
-							printWriter.write(JSON.toJSONString(ResultUtil.fail(user.getUser_name()+" 不能同时管理两个同级组织..")));
-							break;
-						}
-					}
-					if(isUpdate == true){
-						suc = orgDao.changeAdmin(orgId, admins);
-						if (suc){
-							printWriter.write(JSON.toJSONString(ResultUtil.success("保存成功！")));
-						}else {
-							printWriter.write(JSON.toJSONString(ResultUtil.fail("保存失败..")));
-						}
-					}
 				}
-
-
-			}else{
-				printWriter.write(JSON.toJSONString(ResultUtil.fail("组织orgId不能为空！")));
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

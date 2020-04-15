@@ -434,7 +434,7 @@ button.cancal.btn.btn-default {
                 id:checkedNode.id
             };
             $.post("${findOrgUsers}", postData, function (res) {
-                if(res.code=200){
+                if(res.code==200){
                     $('select[name="admin"]').empty();
                     $('select[name="admin"]').append("<option>请选择管理员</option>");
                     for(var i=0;res.data.length>0 && i<res.data.length;i++){
@@ -442,7 +442,7 @@ button.cancal.btn.btn-default {
                     }
                     form.render();
                     $.post("${findOrgAdmin}", postData, function (res) {
-                        if(res.code=200){
+                        if(res.code==200){
                             var  managerArr = new Array();
                             for(var i=0;res.data.length>0 && i<res.data.length;i++){
                                 managerArr.push(res.data[i]['user_id']);
@@ -465,7 +465,7 @@ button.cancal.btn.btn-default {
                 admin:data.field.admin.join(',')
             }
             $.post("${adminSave}", postData, function (res) {
-                if(res.code=200){
+                if(res.code==200){
                     layer.msg("保存成功！");
                 }else {
                     layer.msg(res.data.message);
