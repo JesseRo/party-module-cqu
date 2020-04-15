@@ -450,11 +450,11 @@ button.cancal.btn.btn-default {
                             $('select[name="admin"]').val(managerArr);
                             form.render();
                         }else {
-                            layer.msg(res.data.message);
+                            layer.msg(res.message);
                         }
                     },'json');
                 }else {
-                    layer.msg(res.data.message);
+                    layer.msg(res.message);
                 }
             },'json');
         }
@@ -468,7 +468,7 @@ button.cancal.btn.btn-default {
                 if(res.code==200){
                     layer.msg("保存成功！");
                 }else {
-                    layer.msg(res.data.message);
+                    layer.msg(res.message);
                 }
             },'json');
             return false;
