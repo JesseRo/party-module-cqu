@@ -9,6 +9,17 @@
     <link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/activity-manage1.css?v=1" />
     <link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/common.min.css" />
     <style type="text/css">
+        .table_outer_box > table thead, tbody tr {
+            display: table-row !important;
+            width: 100%;
+            table-layout: fixed;
+        }
+        .layui-form-checked[lay-skin=primary] i {
+            border-color: #FFB800 !important;
+            background-color: #FFB800;
+            color: #fff;
+        }
+
         #unitFormModel .layui-form-label{
             float: left;
             display: block;
@@ -28,6 +39,12 @@
             top: 12px;
             right: 2px;
         }
+        th, tr{
+            text-align:center !important;
+        }
+        .layui-table-page{
+            text-align: center;
+        }
     </style>
     <script type="text/javascript" >
         $(function() {
@@ -45,40 +62,51 @@
                         where: where,
                         url: '${unitPage}', //数据接口
                         method: 'post',
+                        height:560,
                         page: {
                             limit:10,   //每页条数
-                            limits:[],
+                            limits:[10,15,20],
                             prev:'&lt;上一页',
                             next:'下一页&gt;',
+                            theme: '#FFB800',
                             groups:4,
+                            class:'layui-table-page'
                         },
                         cols: [[ //表头
                             {field: 'id', title: 'id', hide: true},
-                            {field: 'unit_name', title: '行政机构名称', width:'40%'},
-                            {field: 'update_member_name', title: '更新人员', width:'25%'},
-                            {field: 'update_time', title: '更新时间', width: '20%'},
-                            {field: 'operate', title: '操作', width: '15%', toolbar: '#unitBtns'}
+                            {field: 'unit_name', title: '行政机构名称', width:400, align:'center'},
+                            {field: 'update_member_name', title: '更新人员', align:'center'},
+                            {field: 'update_time', title: '更新时间', align:'center'},
+                            {field: 'operate', title: '操作', width: 120, toolbar: '#unitBtns', align:'center'}
                         ]]
                     });
+                    $(".layui-table-view .layui-table-page").removeClass("layui-table-page");
                     table.on('tool(unitTable)', function(obj){
                         //var checkStatus = table.checkStatus(obj.config.id);
                         switch(obj.event){
                             case 'edit':
-                                unitEdit(obj.data.id);
+                                unitEdit(obj);
                                 break;
                             case 'delete':
-                                unitDelete(obj.data.id);
+                                unitDelete(obj);
                                 break;
                         };
                     });
                 }
 
-                function unitEdit(id){
-                    renderUnitModal(id)
+                function unitEdit(obj){
+                    renderUnitModal(obj);
                 }
-                function renderUnitModal(id){
+                function renderUnitModal(obj){
+                    var title = "";
+                    if(obj.data.id==null){
+                        title = '添加行政机构';
+                    }else{
+                        title = '编辑行政机构';
+                        $("#unitFormModel input[name='unitName']").val(obj.data.unit_name);
+                    }
                     var index = layer.prompt({
-                        title:id==null?'添加行政机构':'编辑行政机构',
+                        title:title,
                         type: 1,
                         btn: 0,
                         content: $("#unitFormModel")
@@ -141,7 +169,7 @@
                 <button type="button" class="layui-btn custom_btn search_btn" id="search_btn">查询</button>
                 <button type="button" class="layui-btn custom_btn publish_acti_btn" id="createUnit">新增信息</button>
             </div>
-            <table id="unitTable" lay-filter="unitTable" class="custom_table"></table>
+            <table id="unitTable" lay-filter="unitTable" ></table>
         </div>
     </div>
     <!-- 右侧盒子内容 -->

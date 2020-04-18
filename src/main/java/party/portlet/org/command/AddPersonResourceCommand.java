@@ -139,7 +139,7 @@ public class AddPersonResourceCommand implements MVCResourceCommand {
 					if (!StringUtils.isEmpty(id)) {
 //						u.setUser_password(MD5.getMD5(ID_card.substring(12)));
 						memberDao.insertOrUpate(Updatesql);
-						UserDao.update(u);
+						UserDao.updateUserInfo(u);
 						if (!prevID_card.equals(ID_card)) {
 							String sqls = getSql(prevID_card, ID_card);
 							// memberDao.insertOrUpate(sqls);

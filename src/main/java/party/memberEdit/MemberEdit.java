@@ -54,7 +54,7 @@ public class MemberEdit {
 
 	private String reason;
 
-	private String member_unit;
+	private Integer member_unit;
 	private String member_province;
 	private String member_city;
 	//是否是干部
@@ -121,7 +121,7 @@ public class MemberEdit {
 	public MemberEdit(){
 	}
 
-	public MemberEdit(String member_name, String member_sex, String member_ethnicity, String member_birthday, String member_identity, String member_degree, String member_job, String member_join_date, String member_fomal_date, String member_org, String member_type, String member_address, String member_phone_number,String member_birth_place, String member_mailbox, String member_major_title, String member_marriage, String member_unit, String member_province, String member_city,String member_is_leader,int submit_by) {
+	public MemberEdit(String member_name, String member_sex, String member_ethnicity, String member_birthday, String member_identity, String member_degree, String member_job, String member_join_date, String member_fomal_date, String member_org, String member_type, String member_address, String member_phone_number,String member_birth_place, String member_mailbox, String member_major_title, String member_marriage, Integer member_unit, String member_province, String member_city,String member_is_leader,int submit_by) {
 		this.member_name = member_name;
 		this.member_sex = member_sex;
 		this.member_ethnicity = member_ethnicity;
@@ -365,11 +365,11 @@ public class MemberEdit {
 		this.reason = reason;
 	}
 
-	public String getMember_unit() {
+	public Integer getMember_unit() {
 		return member_unit;
 	}
 
-	public void setMember_unit(String member_unit) {
+	public void setMember_unit(Integer member_unit) {
 		this.member_unit = member_unit;
 	}
 

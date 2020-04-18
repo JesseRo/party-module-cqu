@@ -2,8 +2,10 @@
 <%@ include file="/init.jsp" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
+<portlet:resourceURL id="/org/user/applyUpdate" var="applyUpdateUser"/>
+<portlet:resourceURL id="/org/user/update/isAbleIDCard" var="isAbleIDCard"/>
 <head>
-    <title>抽查统计</title>
+    <title>党员信息申请修改</title>
     <style>
         @media (min-width: 768px) {
             .table_info .publish_time {
@@ -13,10 +15,6 @@
             .content_info .content_form {
                 padding: 0px 20px 0 20px;
             }
-        }
-
-        th, td {
-            text-align: left;
         }
 
         .content_info .content_form .form-group .control-label {
@@ -68,7 +66,6 @@
     <script type="text/javascript" src="${basePath}/js/pagination.js"></script>
     <script type="text/javascript" src="${basePath}/js/ChineseCities.min.js" charset="utf-8"></script>
     <link rel="stylesheet" href="${basePath}/css/print_div.css">
-    <portlet:resourceURL id="/org/user/applyUpdate" var="applyUpdateUser"/>
 </head>
 <body>
 <div class="table_form_content">
@@ -332,6 +329,29 @@
                 idCard: function (value, item) {
                     if (validateIdCard(value) != 1) {
                         return '请填入正确的身份证号。';
+                    }else{
+                        $.ajaxSettings.async = false;
+                        var isPass = false;
+                        var msg = '';
+                        $.post("${isAbleIDCard}", {idCard:value}, function (res) {
+                            $.ajaxSettings.async = true;
+                            if(res.code==200){
+                                if(!res.data){
+                                    msg = '身份证号码已经被他人使用，请重新输入。';
+                                }else{
+                                    isPass = true
+                                }
+                            }else if(res){
+                                layer.msg(res.message);
+                                msg = '身份证信息验证不通过。';
+                            }else{
+                                layer.msg("验证身份证信息失败，请刷新后再试。", {icon:7});
+                                msg =  '身份证信息验证不通过。';
+                            }
+                        },"json");
+                        if(!isPass){
+                            return msg;
+                        }
                     }
                 },
                 partyEmail: function (value, item) {

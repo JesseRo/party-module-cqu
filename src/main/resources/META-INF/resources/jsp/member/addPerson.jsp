@@ -15,10 +15,6 @@
             }
         }
 
-        th, td {
-            text-align: left;
-        }
-
         .content_info .content_form .form-group .control-label {
             text-align: right;
             color: #333;
@@ -93,6 +89,7 @@
     <portlet:resourceURL id="/hg/orgCheckCountExport" var="orgCheckCountExport"/>
     <portlet:resourceURL id="/hg/org/exist" var="orgexist"/>
     <portlet:resourceURL id="/org/add/user" var="addUser"/>
+    <portlet:resourceURL id="/org/user/update/isAbleIDCard" var="isAbleIDCard"/>
 </head>
 <body>
 <div class="table_form_content">
@@ -373,6 +370,29 @@
                 idCard: function (value, item) {
                     if (validateIdCard(value) != 1) {
                         return '请填入正确的身份证号。';
+                    }else{
+                        $.ajaxSettings.async = false;
+                        var isPass = false;
+                        var msg = '';
+                        $.post("${isAbleIDCard}", {idCard:value}, function (res) {
+                            $.ajaxSettings.async = true;
+                            if(res.code==200){
+                                if(!res.data){
+                                    msg = '身份证号码已经被他人使用，请重新输入。';
+                                }else{
+                                    isPass = true
+                                }
+                            }else if(res){
+                                layer.msg(res.message);
+                                msg = '身份证信息验证不通过。';
+                            }else{
+                                layer.msg("验证身份证信息失败，请刷新后再试。", {icon:7});
+                                msg =  '身份证信息验证不通过。';
+                            }
+                        },"json");
+                        if(!isPass){
+                            return msg;
+                        }
                     }
                 },
                 partyEmail: function (value, item) {

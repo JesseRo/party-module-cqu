@@ -65,7 +65,7 @@ public class ApplyUpdatePersonResourceCommand implements MVCResourceCommand {
 		String marriage = ParamUtil.getString(resourceRequest, "marriage");
 		String id = ParamUtil.getString(resourceRequest, "id");
 		String title = ParamUtil.getString(resourceRequest, "major_title");
-		String unit = ParamUtil.getString(resourceRequest, "unit");
+		Integer unit = ParamUtil.getInteger(resourceRequest, "unit");
 		String isLeader = ParamUtil.getString(resourceRequest, "isLeader");
 		ID_card = ID_card.toUpperCase();
 		try {

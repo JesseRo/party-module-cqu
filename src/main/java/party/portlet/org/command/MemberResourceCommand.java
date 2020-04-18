@@ -1,19 +1,13 @@
 package party.portlet.org.command;
 
-import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
 import javax.portlet.PortletException;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
-import javax.servlet.http.HttpServletResponse;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import hg.party.entity.organization.Organization;
 import hg.party.entity.party.OrgAdmin;
-import hg.party.entity.party.TreeNode;
 import hg.party.server.org.MemberService;
 import hg.party.server.organization.OrgAdminService;
 import hg.party.server.organization.OrgService;
@@ -22,21 +16,13 @@ import hg.util.result.ResultUtil;
 import org.apache.log4j.Logger;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-import org.springframework.util.StringUtils;
 
-import com.dt.springjdbc.dao.impl.QueryResult;
-import com.google.gson.Gson;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCResourceCommand;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.PortalUtil;
 
 import dt.session.SessionManager;
-import hg.party.dao.org.MemberDao;
-import hg.party.entity.partyMembers.JsonResponse;
-import hg.party.entity.partyMembers.Member;
-import hg.util.ConstantsKey;
-import party.constants.DataOperationEnum;
+
 import party.constants.PartyOrgAdminTypeEnum;
 import party.constants.PartyPortletKeys;
 
@@ -54,9 +40,9 @@ public class MemberResourceCommand implements MVCResourceCommand {
 	@Reference
 	private MemberService memberService;
 	@Reference
-	private OrgAdminService orgAdminService;
-	@Reference
 	private OrgService orgService;
+	@Reference
+	private OrgAdminService orgAdminService;
 
 	@Override
 	public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws PortletException{

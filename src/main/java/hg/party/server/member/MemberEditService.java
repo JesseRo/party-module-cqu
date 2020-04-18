@@ -30,4 +30,8 @@ public class MemberEditService {
     public MemberEdit findById(int memberEditId) {
         return memberEditDao.findById(memberEditId);
     }
+
+    public MemberEdit findMemberEditDetailById(int id) {
+        return memberEditDao.findMemberEditDetailById(id);
+    }
 }

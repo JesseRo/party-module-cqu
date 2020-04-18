@@ -255,12 +255,6 @@
         .party_organization_list a{
             color: #333;
         }
-        .member_container.bg_white_container{
-            overflow: hidden;
-        }
-        .member_container .table_outer_box{
-            height: calc(100% - 118px);
-        }
 
         #searchForm .layui-form-item .layui-inline .layui-form-label{
             width:120px;
@@ -289,35 +283,26 @@
         .layui-tab.layui-tab-card{
             height: calc(100% - 20px);
         }
-        .table_content.bg_white_container.member_container{
-            padding-bottom: 0;
-        }
-        .table_outer_box{
-            height: calc(100% - 63px);
-        }
         .party_manage_page .party_manage_content .party_table_container{
             width:100%;
         }
-        .table_form_content .custom_table + .layui-table-view .layui-form-checked[lay-skin=primary] i{
-            font-family: layui-icon!important;
+
+
+        .table_outer_box > table thead, tbody tr {
+            display: table-row !important;
+            width: 100%;
+            table-layout: fixed;
         }
-        table input[type=checkbox]{
-            display:none !important;
+        .layui-form-checked[lay-skin=primary] i {
+            border-color: #FFB800 !important;
+            background-color: #FFB800;
+            color: #fff;
         }
-        .layui-laydate-content .layui-laydate-content thead tr {
-            display: flex !important;
+        th, tr{
+            text-align:center !important;
         }
-        .layui-table-fixed.layui-table-fixed-l{
-            height: calc(100% - 10px);
-        }
-        .layui-table-fixed.layui-table-fixed-r{
-            height: calc(100% - 10px);
-        }
-       .table_form_content .custom_table + .layui-table-view .layui-table-box .layui-table-body tr{
-            display:table-row !important;
-        }
-        .tool-center .layui-table-cell{
-            text-align:center;
+        .layui-table-page{
+            text-align: center;
         }
     </style>
     <script type="text/javascript">
@@ -361,25 +346,28 @@
                    };
                    var cols = [[
                        {type: 'checkbox',fixed: 'left'}
-                       ,{field: 'member_name', title: '姓名', width:160}
-                       ,{field: 'member_sex', title: '性别', width:120}
-                       ,{field: 'member_identity', title: '公民身份证', minWidth:200}
-                       ,{field: 'member_phone_number', title: '联系电话', width:160}
-                       ,{field: 'member_address', title: '家庭住址', width:160}
-                       ,{field: 'member_type', title: '党员类型', width:120}
-                       ,{field: 'historic', title: '操作', width:250, align:'center', class:'tool-center',toolbar: '#tableTool'}
+                       ,{field: 'member_name', align:'center', title: '姓名',fixed: 'left'}
+                       ,{field: 'member_sex', align:'center', title: '性别',width:80}
+                       ,{field: 'member_identity', align:'center', title: '公民身份证', minWidth:200}
+                       ,{field: 'member_phone_number', align:'center', title: '联系电话'}
+                       ,{field: 'member_address', align:'center', title: '家庭住址',width:400}
+                       ,{field: 'member_type', align:'center', title: '党员类型'}
+                       ,{field: 'historic', title: '操作', width:120, align:'center',toolbar: '#tableTool'}
                    ]];
                     table.render({
                         elem: '#memberTable'
                         ,where: where
+                        ,height:450
                         ,url: '${orgMember}'//数据接口
                         ,page: {
                                 limit:10,   //每页条数
                                 limits:[10,15,20],
                                 prev:'&lt;上一页',
                                 next:'下一页&gt;',
-                                class:'',
-                                groups:4}
+                                theme: '#FFB800',
+                                groups:4,
+                                class:'layui-table-page'
+                        }
                         ,cols: cols
                     });
                     $(".layui-table-view .layui-table-page").removeClass("layui-table-page");
@@ -643,7 +631,7 @@
                                 <span class="layui-breadcrumb"  style="visibility: visible;" id="org-path">
                                 </span>
                             </div>
-                            <div class="table_content bg_white_container member_container">
+                            <div class="table_content bg_white_container">
                                 <form class="layui-form" id="searchForm">
                                     <div class="layui-form-item">
                                         <div class="layui-inline">
@@ -670,9 +658,7 @@
                                         </div>
                                     </div>
                                 </form>
-                                <div class="table_outer_box" style="margin-top: 20px;">
-                                    <table id="memberTable" lay-filter="memberTable" class="custom_table"></table>
-                                </div>
+                                <table id="memberTable" lay-filter="memberTable"></table>
                             </div>
                         </div>
                     </div>

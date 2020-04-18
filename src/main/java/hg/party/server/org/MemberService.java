@@ -44,4 +44,8 @@ public class MemberService {
 	public Member findMemberByUser(String userId) {
 		return memberDao.findMemberByUser(userId);
 	}
+
+	public Member findMemberByEditSubmitBy(int submitId) {
+		return memberDao.findMemberByEditSubmitBy(submitId);
+	}
 }

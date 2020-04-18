@@ -502,4 +502,15 @@ public class MemberDao extends PostgresqlDaoImpl<Member> {
             return null;
         }
     }
+
+    public Member findMemberByEditSubmitBy(int submitId) {
+        String sql = "select m.* from hg_party_member m left join hg_users_info u on m.member_identity= u.user_id where u.id = ?";
+        RowMapper<Member> rowMapper = BeanPropertyRowMapper.newInstance(Member.class);
+        List<Member> memberList =  this.jdbcTemplate.query(sql,rowMapper,submitId);
+        if(memberList.size()>0){
+            return memberList.get(0);
+        }else{
+            return null;
+        }
+    }
 }

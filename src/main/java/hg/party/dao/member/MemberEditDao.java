@@ -2,12 +2,17 @@ package hg.party.dao.member;
 
 import com.dt.springjdbc.dao.impl.PostgresqlDaoImpl;
 import com.dt.springjdbc.dao.impl.PostgresqlQueryResult;
+import hg.party.dao.org.OrgDao;
+import hg.party.entity.organization.Organization;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.util.StringUtils;
+import party.constants.PartyOrgAdminTypeEnum;
 import party.memberEdit.MemberEdit;
 
 import java.sql.Connection;
@@ -22,23 +27,39 @@ import java.util.Map;
 
 @Component(immediate = true,service = MemberEditDao.class)
 public class MemberEditDao extends PostgresqlDaoImpl<MemberEdit> {
-    public PostgresqlQueryResult<Map<String, Object>> findPage(int page, int size) {
-        if (size <= 0){
-            size = 10;
-        }
-        String sql = "select e.*, org.org_name from hg_party_member_edit e left join hg_party_org org on e.member_org = org.org_id" +
-                " order by status asc, submit_time desc";
-        return postGresqlFindBySql(page, size, sql);
-    }
+    @Reference
+    private OrgDao orgDao;
 
-    public PostgresqlQueryResult<Map<String, Object>> searchPage(int page, int size, String search) {
+    public PostgresqlQueryResult<Map<String, Object>> searchPage(int page, int size, String orgId, String search) {
         if (size <= 0){
             size = 10;
         }
-        search = "%" + search + "%";
-        String sql = "select e.*, org.org_name from hg_party_member_edit e left join hg_party_org org on e.member_org = org.org_id" +
-                " where e.member_name like ? or org.org_name like ? order by status asc, submit_time desc";
-        return postGresqlFindBySql(page, size, sql,search,search);
+        Organization org = orgDao.findOrgByOrgId(String.valueOf(orgId));
+        PartyOrgAdminTypeEnum partyOrgAdminTypeEnum = PartyOrgAdminTypeEnum.getEnum(org.getOrg_type());
+        StringBuffer sb = new StringBuffer("select e.*, org.org_name from hg_party_member_edit e left join hg_party_org org on e.member_org = org.org_id");
+        sb.append(" left join hg_party_org s on org.org_parent = s.org_id left join hg_party_org  o on s.org_parent =o.org_id");
+        sb.append(" where 1=1");
+        switch(partyOrgAdminTypeEnum){
+            case BRANCH:
+                sb.append(" and b.org_id = ?");
+                break;
+            case SECONDARY:
+                sb.append(" and s.org_id=? ");
+                break;
+            case ORGANIZATION:;
+                sb.append(" and o.org_id=? ");
+                break;
+            default: return null;
+        }
+        if(!StringUtils.isEmpty(search)){
+            search = "%" + search + "%";
+            sb.append(" and (e.member_name like ? or org.org_name like ?)");
+            sb.append(" order by e.status asc,e.submit_time desc");
+            return postGresqlFindBySql(page, size, sb.toString(),orgId,search,search);
+        }else{
+            sb.append(" order by e.status asc,e.submit_time desc");
+            return postGresqlFindBySql(page, size, sb.toString(),orgId);
+        }
     }
 
     public int insertMemberEdit(MemberEdit memberEdit) {
@@ -87,7 +108,7 @@ public class MemberEditDao extends PostgresqlDaoImpl<MemberEdit> {
 
                                      ps.setString(16,memberEdit.getMember_major_title());
                                      ps.setString(17,memberEdit.getMember_marriage());
-                                     ps.setString(18,memberEdit.getMember_unit());
+                                     ps.setInt(18,memberEdit.getMember_unit());
                                      ps.setString(19,memberEdit.getMember_province());
                                      ps.setString(20,memberEdit.getMember_city());
 
@@ -117,5 +138,16 @@ public class MemberEditDao extends PostgresqlDaoImpl<MemberEdit> {
     public int approvalMemberEdit(int memberEditId, int status, String reason) {
         String sql = "UPDATE hg_party_member_edit SET status=?,reason=? WHERE id=?";
         return  this.jdbcTemplate.update(sql,status,reason,memberEditId);
+    }
+
+    public MemberEdit findMemberEditDetailById(int id) {
+        String sql = "select e.*,u.unit_name from hg_party_member_edit e left join hg_party_unit u on e.member_unit = u.id where e.id = ? order by e.submit_time desc";
+        RowMapper<MemberEdit> rowMapper = BeanPropertyRowMapper.newInstance(MemberEdit.class);
+        List<MemberEdit> memberEditList =  this.jdbcTemplate.query(sql,rowMapper,id);
+        if(memberEditList.size()>0){
+            return memberEditList.get(0);
+        }else{
+            return null;
+        }
     }
 }

@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCResourceCommand;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
+import dt.session.SessionManager;
 import hg.party.dao.member.MemberEditDao;
 import hg.party.entity.partyMembers.JsonPageResponse;
 import hg.party.entity.partyMembers.JsonResponse;
@@ -45,13 +46,15 @@ public class MemberEditResourceCommand implements MVCResourceCommand {
         int page = ParamUtil.getInteger(resourceRequest, "page");
         int size = ParamUtil.getInteger(resourceRequest, "limit");
         String keyword = ParamUtil.getString(resourceRequest, "keyword");
-        PostgresqlQueryResult<Map<String, Object>> data;
-        if (StringUtils.isEmpty(keyword)){
-            data = memberEditDao.findPage(page, size);
-        }else {
-            data = memberEditDao.searchPage(page, size, keyword);
+        Object orgId = SessionManager.getAttribute(resourceRequest.getRequestedSessionId(), "department");
+        PostgresqlQueryResult<Map<String, Object>> data = null;
+        if(orgId!=null && !StringUtils.isEmpty(String.valueOf(orgId))){
+            if (StringUtils.isEmpty(keyword)){
+                data = memberEditDao.searchPage(page, size,String.valueOf(orgId),null);
+            }else {
+                data = memberEditDao.searchPage(page, size, String.valueOf(orgId),keyword);
+            }
         }
-
         HttpServletResponse res = PortalUtil.getHttpServletResponse(resourceResponse);
         res.addHeader("content-type","application/json");
         try {
