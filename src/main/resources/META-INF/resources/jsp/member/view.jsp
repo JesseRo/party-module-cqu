@@ -316,6 +316,9 @@
        .table_form_content .custom_table + .layui-table-view .layui-table-box .layui-table-body tr{
             display:table-row !important;
         }
+        .tool-center .layui-table-cell{
+            text-align:center;
+        }
     </style>
     <script type="text/javascript">
 
@@ -364,7 +367,7 @@
                        ,{field: 'member_phone_number', title: '联系电话', width:160}
                        ,{field: 'member_address', title: '家庭住址', width:160}
                        ,{field: 'member_type', title: '党员类型', width:120}
-                       ,{field: 'historic', title: '操作', width:250, align:'center', toolbar: '#tableTool'}
+                       ,{field: 'historic', title: '操作', width:250, align:'center', class:'tool-center',toolbar: '#tableTool'}
                    ]];
                     table.render({
                         elem: '#memberTable'
@@ -372,12 +375,14 @@
                         ,url: '${orgMember}'//数据接口
                         ,page: {
                                 limit:10,   //每页条数
-                                limits:[],
+                                limits:[10,15,20],
                                 prev:'&lt;上一页',
                                 next:'下一页&gt;',
+                                class:'',
                                 groups:4}
                         ,cols: cols
                     });
+                    $(".layui-table-view .layui-table-page").removeClass("layui-table-page");
                     //监听事件
                     table.on('tool(memberTable)', function(obj){
                         //var checkStatus = table.checkStatus(obj.config.id);

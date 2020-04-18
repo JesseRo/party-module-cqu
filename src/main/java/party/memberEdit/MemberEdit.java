@@ -410,6 +410,7 @@ public class MemberEdit {
 		user.setId(this.getSubmit_by());
 		user.setUser_id(this.getMember_identity());
 		user.setUser_mailbox(this.getMember_name());
+		user.setUser_department_id(this.getMember_org());
 		user.setUser_sex(this.getMember_sex());
 		return user;
     }

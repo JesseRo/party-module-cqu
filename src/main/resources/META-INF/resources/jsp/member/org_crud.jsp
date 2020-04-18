@@ -286,7 +286,7 @@ button.cancal.btn.btn-default {
                     // 选择器
                     elem: '#orgTree',
                     // 数据
-                    data: '${orgTreeUrl}',
+                    data: '${orgTreeUrl}&isFilter=1',
                     // 异步加载方式：get/post，默认get
                     type: 'get',
                     // 占位符
@@ -612,7 +612,7 @@ button.cancal.btn.btn-default {
                                     </div>
                                 </div>
                                 <div class="layui-inline">
-                                    <label class="layui-form-label layui-required">党组织管理员：</label>
+                                    <label class="layui-form-label layui-required">党组织书记：</label>
                                     <div class="layui-input-inline">
                                         <input type="text" name="secretary" lay-verify="required" maxlength="20" autocomplete="off" class="layui-input">
                                     </div>
@@ -704,7 +704,7 @@ button.cancal.btn.btn-default {
         </div>
         <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label layui-required">党组织管理员</label>
+                <label class="layui-form-label layui-required">党组织书记</label>
                 <div class="layui-input-inline">
                     <input type="text" name="secretary" lay-verify="required" maxlength="20" autocomplete="off" class="layui-input">
                 </div>

@@ -110,7 +110,7 @@ public class UserDao extends PostgresqlDaoImpl<User> {
 	}
 
     public int updateUserInfo(User user) {
-		String sql = "UPDATE hg_users_info SET user_id=?,user_mailbox=?,user_sex=? WHERE id=?";
-		return  this.jdbcTemplate.update(sql,user.getUser_id(),user.getUser_mailbox(),user.getUser_sex(),user.getId());
+		String sql = "UPDATE hg_users_info SET user_id=?,user_mailbox=?,user_sex=?,user_department_id=? WHERE id=?";
+		return  this.jdbcTemplate.update(sql,user.getUser_id(),user.getUser_mailbox(),user.getUser_sex(),user.getUser_department_id(),user.getId());
     }
 }

@@ -136,7 +136,7 @@
                     </span>
         </div>
         <div class="bg_white_container">
-            <div class="operate_form_group">
+            <div class="operate_form_group" id="searchForm">
                 <input type="text" name="keyword" placeholder="搜索条件" autocomplete="off" class="layui-input custom_input" id="keyword">
                 <button type="button" class="layui-btn custom_btn search_btn" id="search_btn">查询</button>
                 <button type="button" class="layui-btn custom_btn publish_acti_btn" id="createUnit">新增信息</button>
