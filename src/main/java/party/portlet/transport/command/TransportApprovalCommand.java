@@ -103,7 +103,8 @@ public class TransportApprovalCommand implements MVCResourceCommand {
                             user.setUser_department_id(transport.getTo_org_id());
                             userDao.saveOrUpdate(user);
                             memberDao.save(newMember);
-                            memberDao.historic(member);
+                            memberDao.historic(true, member);
+                            memberDao.historic(false, newMember);
                             if (transport.getType().equalsIgnoreCase("1")) {
                                 orgAdminDao.deleteOrgAdmin(member.getMember_identity(), PartyOrgAdminTypeEnum.SECONDARY);
                             }

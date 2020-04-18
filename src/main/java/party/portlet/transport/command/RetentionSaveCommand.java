@@ -51,7 +51,7 @@ public class RetentionSaveCommand implements MVCResourceCommand {
 	@Reference
 	private RetentionDao retentionDao;
 
-	@Autowired
+	@Reference
 	private TransactionUtil transactionUtil;
 
 
@@ -143,13 +143,12 @@ public class RetentionSaveCommand implements MVCResourceCommand {
 			retention.setStatus(ConstantsKey.INITIAL);
 			retention.setExtra(extra);
 			retentionDao.save(retention);
-
 			transactionUtil.commit();
 			res.getWriter().write(gson.toJson(JsonResponse.Success()));
 		} catch (Exception e) {
+			e.printStackTrace();
 			transactionUtil.rollback();
 			try {
-				e.printStackTrace();
 				res.getWriter().write(gson.toJson(new JsonResponse(false, null, null)));
 			} catch (IOException e1) {
 				e1.printStackTrace();
