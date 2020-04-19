@@ -45,7 +45,7 @@
         th, tr{
             text-align:center !important;
         }
-        .layui-table-page{
+        .layui-table-page-center{
             text-align: center;
         }
     </style>
@@ -76,7 +76,7 @@
                             next:'下一页&gt;',
                             theme: '#FFB800',
                             groups:4,
-                            class:'layui-table-page'
+                            class:'layui-table-page-center'
                         },
                         cols: [[ //表头
                             {field: 'member_name', align:'center', title: '姓名'},
