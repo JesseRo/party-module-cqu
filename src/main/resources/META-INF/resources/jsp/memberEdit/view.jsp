@@ -75,8 +75,7 @@
                             prev:'&lt;上一页',
                             next:'下一页&gt;',
                             theme: '#FFB800',
-                            groups:4,
-                            class:'layui-table-page-center'
+                            groups:4
                         },
                         cols: [[ //表头
                             {field: 'member_name', align:'center', title: '姓名'},
@@ -87,6 +86,7 @@
                             {field: 'reason', align:'center', title: '备注'}
                         ]]
                     });
+                    $(".layui-table-view .layui-table-page").addClass("layui-table-page-center");
                     $(".layui-table-view .layui-table-page").removeClass("layui-table-page");
                     //监听事件
                     table.on('tool(transportTable)', function(obj){

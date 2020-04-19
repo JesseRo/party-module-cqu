@@ -69,8 +69,7 @@
                             prev:'&lt;上一页',
                             next:'下一页&gt;',
                             theme: '#FFB800',
-                            groups:4,
-                            class:'layui-table-page-center'
+                            groups:4
                         },
                         cols: [[ //表头
                             {field: 'id', title: 'id', hide: true},
@@ -80,6 +79,7 @@
                             {field: 'operate', title: '操作', width: 120, toolbar: '#unitBtns', align:'center'}
                         ]]
                     });
+                    $(".layui-table-view .layui-table-page").addClass("layui-table-page-center");
                     $(".layui-table-view .layui-table-page").removeClass("layui-table-page");
                     table.on('tool(unitTable)', function(obj){
                         //var checkStatus = table.checkStatus(obj.config.id);
