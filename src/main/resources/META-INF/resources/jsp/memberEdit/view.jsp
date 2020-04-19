@@ -30,6 +30,7 @@
         }
         #personInfo .layui-form-label{
             width:140px;
+            font-weight:bold;
         }
         #personInfo .layui-form-label-text{
             float: left;
@@ -143,7 +144,7 @@
                 function renderCheckModal(obj){
                     layer.open({
                         type: 1,
-                        area: ['840px', '680px'], //宽高
+                        area: ['840px', '720px'], //宽高
                         btn: ['通过','拒绝','关闭'],
                         content: $("#personInfo"),
                         shadeClose: true,

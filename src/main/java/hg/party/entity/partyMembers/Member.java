@@ -50,7 +50,7 @@ public class Member{
 
 	private String member_is_leader;
 
-	private String member_unit;
+	private Integer member_unit;
 	private String member_province;
 	private String member_city;
 	public String getMember_major_title() {
@@ -314,11 +314,11 @@ public class Member{
 		this.member_is_leader = member_is_leader;
 	}
 
-	public String getMember_unit() {
+	public Integer getMember_unit() {
 		return member_unit;
 	}
 
-	public void setMember_unit(String member_unit) {
+	public void setMember_unit(Integer member_unit) {
 		this.member_unit = member_unit;
 	}
 
