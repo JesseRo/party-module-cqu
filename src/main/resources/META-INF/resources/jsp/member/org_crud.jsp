@@ -440,17 +440,21 @@ button.cancal.btn.btn-default {
                 }
             });
 
-            //弹出添加组织弹窗
+            //弹出添加、修改组织弹窗
             $("#org_add").click(function() {
                 var id =checkedNode.id;
                 var org_type = checkedNode.data.org_type;
                 var title='';
                 if ("organization" == org_type) {
                     title = '增加二级党委';
+                    $('#addOrgForm .layui-form select[name="descType"]').empty();
+                    $('#addOrgForm .layui-form select[name="descType"]').append(' <option value="1">党委</option><option value="2">党总支</option><option value="3">党支部</option>');
                     $('#addOrgForm .layui-form select[name="descType"]').val(1);
                     form.render('select');
                 } else if ("secondary" == org_type) {
                     title = '增加党支部';
+                    $('#addOrgForm .layui-form select[name="descType"]').empty();
+                    $('#addOrgForm .layui-form select[name="descType"]').append('<option value="2">党总支</option><option value="3">党支部</option>');
                     $('#addOrgForm .layui-form select[name="descType"]').val(3);
                     //$('#addOrgForm .layui-form select[name="descType"]').attr('disabled', 'disabled');
                     form.render('select');
@@ -680,9 +684,6 @@ button.cancal.btn.btn-default {
                 <label class="layui-form-label layui-required">类型</label>
                 <div class="layui-input-inline">
                     <select name="descType" >
-                        <option value="1" selected>党委</option>
-                        <option value="2">党总支</option>
-                        <option value="3">党支部</option>
                     </select>
                 </div>
             </div>
