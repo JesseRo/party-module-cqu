@@ -277,6 +277,20 @@
                         </div>
                     </div>
                     <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">工&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" name="jobNumber" id="jobNumber" value="${info.job_number }">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">统一身份认证号</label>
+                            <div class="layui-input-inline">
+                                <label class="layui-form-label-text">${info.auth_number }</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
                         <div class="layui-inline btn_group" style="width: 100%;margin: 0;margin-top: 10px;">
                             <label class="layui-form-label"></label>
                             <div class="layui-input-inline">
@@ -333,7 +347,7 @@
                         $.ajaxSettings.async = false;
                         var isPass = false;
                         var msg = '';
-                        $.post("${isAbleIDCard}", {idCard:value}, function (res) {
+                        $.post("${isAbleIDCard}", {idCard:value,userId:'${userId}'}, function (res) {
                             $.ajaxSettings.async = true;
                             if(res.code==200){
                                 if(!res.data){

@@ -1,5 +1,6 @@
 package party.memberEdit;
 
+import com.dt.annotation.Column;
 import com.dt.annotation.Table;
 import hg.party.entity.login.User;
 import hg.party.entity.partyMembers.Member;
@@ -59,6 +60,12 @@ public class MemberEdit {
 	private String member_city;
 	//是否是干部
 	private String member_is_leader;
+	//工号
+	@Column(javaName = "jobNumber", sqlName = "String", sqlType = "job_number")
+	private String jobNumber;
+	//统一身份认证号码
+	@Column(javaName = "authNumber", sqlName = "String", sqlType = "auth_number")
+	private String authNumber;
 	//提交人
 	private int submit_by;
 
@@ -121,7 +128,7 @@ public class MemberEdit {
 	public MemberEdit(){
 	}
 
-	public MemberEdit(String member_name, String member_sex, String member_ethnicity, String member_birthday, String member_identity, String member_degree, String member_job, String member_join_date, String member_fomal_date, String member_org, String member_type, String member_address, String member_phone_number,String member_birth_place, String member_mailbox, String member_major_title, String member_marriage, Integer member_unit, String member_province, String member_city,String member_is_leader,int submit_by) {
+	public MemberEdit(String member_name, String member_sex, String member_ethnicity, String member_birthday, String member_identity, String member_degree, String member_job, String member_join_date, String member_fomal_date, String member_org, String member_type, String member_address, String member_phone_number,String member_birth_place, String member_mailbox, String member_major_title, String member_marriage, Integer member_unit, String member_province, String member_city,String member_is_leader,String jobNumber,String authNumber,int submit_by) {
 		this.member_name = member_name;
 		this.member_sex = member_sex;
 		this.member_ethnicity = member_ethnicity;
@@ -143,6 +150,8 @@ public class MemberEdit {
 		this.member_province = member_province;
 		this.member_city = member_city;
 		this.member_is_leader = member_is_leader;
+		this.jobNumber = jobNumber;
+		this.authNumber = authNumber;
 		this.submit_by = submit_by;
 	}
 	@Override
@@ -315,24 +324,6 @@ public class MemberEdit {
 		this.member_ethnicity = member_ethnicity;
 	}
 
-	@Override
-	public String toString() {
-		return "Member [id=" + id + ", member_name=" + member_name + ", member_sex=" + member_sex
-				+ ", member_ethnicity=" + member_ethnicity + ", member_age=" + member_age + ", member_birthday="
-				+ member_birthday + ", member_identity=" + member_identity + ", member_degree=" + member_degree
-				+ ", member_job=" + member_job + ", member_join_date=" + member_join_date + ", member_fomal_date="
-				+ member_fomal_date + ", member_org=" + member_org + ", member_type=" + member_type
-				+ ", member_address=" + member_address + ", member_phone_number=" + member_phone_number
-				+ ", member_landline_number=" + member_landline_number + ", member_is_outofcontact="
-				+ member_is_outofcontact + ", member_outofcontact_date=" + member_outofcontact_date
-				+ ", member_is_flow=" + member_is_flow + ", member_flow_to=" + member_flow_to
-				+ ", member_membership_state=" + member_membership_state + ", member_birth_place=" + member_birth_place
-				+ ", historic=" + historic + ", member_mailbox=" + member_mailbox + ", member_major_title="
-				+ member_major_title + ", member_new_class=" + member_new_class + ", member_front_line="
-				+ member_front_line + ", member_party_committee=" + member_party_committee + ", member_party_position="
-				+ member_party_position + "]";
-	}
-
 	public String getMember_marriage() {
 		return member_marriage;
 	}
@@ -415,6 +406,22 @@ public class MemberEdit {
 		return user;
     }
 
+	public String getJobNumber() {
+		return jobNumber;
+	}
+
+	public void setJobNumber(String jobNumber) {
+		this.jobNumber = jobNumber;
+	}
+
+	public String getAuthNumber() {
+		return authNumber;
+	}
+
+	public void setAuthNumber(String authNumber) {
+		this.authNumber = authNumber;
+	}
+
 	public Member toMember() {
 		Member member = new Member();
 		member.setMember_name(this.getMember_name());
@@ -438,6 +445,54 @@ public class MemberEdit {
 		member.setMember_is_leader(this.getMember_is_leader());
 		member.setMember_job(this.getMember_job());
 		member.setMember_ethnicity(this.getMember_ethnicity());
+		member.setJobNumber(this.getJobNumber());
+		member.setAuthNumber(this.getAuthNumber());
 		return member;
+	}
+
+	@Override
+	public String toString() {
+		return "MemberEdit{" +
+				"id=" + id +
+				", member_name='" + member_name + '\'' +
+				", member_sex='" + member_sex + '\'' +
+				", member_ethnicity='" + member_ethnicity + '\'' +
+				", member_age=" + member_age +
+				", member_birthday='" + member_birthday + '\'' +
+				", member_identity='" + member_identity + '\'' +
+				", member_degree='" + member_degree + '\'' +
+				", member_job='" + member_job + '\'' +
+				", member_join_date='" + member_join_date + '\'' +
+				", member_fomal_date='" + member_fomal_date + '\'' +
+				", member_org='" + member_org + '\'' +
+				", member_type='" + member_type + '\'' +
+				", member_address='" + member_address + '\'' +
+				", member_phone_number='" + member_phone_number + '\'' +
+				", member_landline_number='" + member_landline_number + '\'' +
+				", member_is_outofcontact='" + member_is_outofcontact + '\'' +
+				", member_outofcontact_date='" + member_outofcontact_date + '\'' +
+				", member_is_flow='" + member_is_flow + '\'' +
+				", member_flow_to='" + member_flow_to + '\'' +
+				", member_membership_state='" + member_membership_state + '\'' +
+				", member_birth_place='" + member_birth_place + '\'' +
+				", historic=" + historic +
+				", member_mailbox='" + member_mailbox + '\'' +
+				", member_major_title='" + member_major_title + '\'' +
+				", member_marriage='" + member_marriage + '\'' +
+				", status=" + status +
+				", submit_time=" + submit_time +
+				", reason='" + reason + '\'' +
+				", member_unit=" + member_unit +
+				", member_province='" + member_province + '\'' +
+				", member_city='" + member_city + '\'' +
+				", member_is_leader='" + member_is_leader + '\'' +
+				", jobNumber='" + jobNumber + '\'' +
+				", authNumber='" + authNumber + '\'' +
+				", submit_by=" + submit_by +
+				", member_new_class='" + member_new_class + '\'' +
+				", member_front_line='" + member_front_line + '\'' +
+				", member_party_committee='" + member_party_committee + '\'' +
+				", member_party_position='" + member_party_position + '\'' +
+				'}';
 	}
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+import com.dt.annotation.Column;
 import com.dt.annotation.Table;
 
 @Table(name = "hg_party_member")
@@ -109,6 +110,13 @@ public class Member{
 	private String member_party_committee;
 	//党内职务
 	private String member_party_position;
+
+	//工号
+	@Column(javaName = "jobNumber", sqlName = "String", sqlType = "job_number")
+	private String jobNumber;
+	//统一身份认证号码
+	@Column(javaName = "authNumber", sqlName = "String", sqlType = "auth_number")
+	private String authNumber;
 	
 	@Override
 	public boolean equals(Object obj) {
@@ -280,23 +288,6 @@ public class Member{
 		this.member_ethnicity = member_ethnicity;
 	}
 
-	@Override
-	public String toString() {
-		return "Member [id=" + id + ", member_name=" + member_name + ", member_sex=" + member_sex
-				+ ", member_ethnicity=" + member_ethnicity + ", member_age=" + member_age + ", member_birthday="
-				+ member_birthday + ", member_identity=" + member_identity + ", member_degree=" + member_degree
-				+ ", member_job=" + member_job + ", member_join_date=" + member_join_date + ", member_fomal_date="
-				+ member_fomal_date + ", member_org=" + member_org + ", member_type=" + member_type
-				+ ", member_address=" + member_address + ", member_phone_number=" + member_phone_number
-				+ ", member_landline_number=" + member_landline_number + ", member_is_outofcontact="
-				+ member_is_outofcontact + ", member_outofcontact_date=" + member_outofcontact_date
-				+ ", member_is_flow=" + member_is_flow + ", member_flow_to=" + member_flow_to
-				+ ", member_membership_state=" + member_membership_state + ", member_birth_place=" + member_birth_place
-				+ ", historic=" + historic + ", member_mailbox=" + member_mailbox + ", member_major_title="
-				+ member_major_title + ", member_new_class=" + member_new_class + ", member_front_line="
-				+ member_front_line + ", member_party_committee=" + member_party_committee + ", member_party_position="
-				+ member_party_position + "]";
-	}
 
 	public String getMember_marriage() {
 		return member_marriage;
@@ -326,6 +317,22 @@ public class Member{
 		return member_city;
 	}
 
+	public String getJobNumber() {
+		return jobNumber;
+	}
+
+	public void setJobNumber(String jobNumber) {
+		this.jobNumber = jobNumber;
+	}
+
+	public String getAuthNumber() {
+		return authNumber;
+	}
+
+	public void setAuthNumber(String authNumber) {
+		this.authNumber = authNumber;
+	}
+
 	public void setMember_city(String member_city) {
 		this.member_city = member_city;
 	}
@@ -336,5 +343,47 @@ public class Member{
 
 	public void setMember_province(String member_province) {
 		this.member_province = member_province;
+	}
+
+	@Override
+	public String toString() {
+		return "Member{" +
+				"id=" + id +
+				", member_name='" + member_name + '\'' +
+				", member_sex='" + member_sex + '\'' +
+				", member_ethnicity='" + member_ethnicity + '\'' +
+				", member_age=" + member_age +
+				", member_birthday='" + member_birthday + '\'' +
+				", member_identity='" + member_identity + '\'' +
+				", member_degree='" + member_degree + '\'' +
+				", member_job='" + member_job + '\'' +
+				", member_join_date='" + member_join_date + '\'' +
+				", member_fomal_date='" + member_fomal_date + '\'' +
+				", member_org='" + member_org + '\'' +
+				", member_type='" + member_type + '\'' +
+				", member_address='" + member_address + '\'' +
+				", member_phone_number='" + member_phone_number + '\'' +
+				", member_landline_number='" + member_landline_number + '\'' +
+				", member_is_outofcontact='" + member_is_outofcontact + '\'' +
+				", member_outofcontact_date='" + member_outofcontact_date + '\'' +
+				", member_is_flow='" + member_is_flow + '\'' +
+				", member_flow_to='" + member_flow_to + '\'' +
+				", member_membership_state='" + member_membership_state + '\'' +
+				", member_birth_place='" + member_birth_place + '\'' +
+				", historic=" + historic +
+				", member_mailbox='" + member_mailbox + '\'' +
+				", member_major_title='" + member_major_title + '\'' +
+				", member_marriage='" + member_marriage + '\'' +
+				", member_is_leader='" + member_is_leader + '\'' +
+				", member_unit=" + member_unit +
+				", member_province='" + member_province + '\'' +
+				", member_city='" + member_city + '\'' +
+				", member_new_class='" + member_new_class + '\'' +
+				", member_front_line='" + member_front_line + '\'' +
+				", member_party_committee='" + member_party_committee + '\'' +
+				", member_party_position='" + member_party_position + '\'' +
+				", jobNumber='" + jobNumber + '\'' +
+				", authNumber='" + authNumber + '\'' +
+				'}';
 	}
 }

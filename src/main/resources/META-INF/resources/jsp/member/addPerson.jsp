@@ -305,6 +305,20 @@
                             </div>
                         </div>
                     </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">工&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" name="jobNumber" id="jobNumber" value="${info.job_number }">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">统一身份认证号</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" name="authNumber" id="authNumber" value="${info.auth_number }">
+                            </div>
+                        </div>
+                    </div>
                     <input type="hidden" name="seconedName" value="${seconedName }"/>
                     <input type="hidden" name="prevID_card" value="${info.member_identity }"/>
                     <input type="hidden" name="id" value="${info.id }"/>
@@ -351,6 +365,7 @@
                 $.post("${addUser}", postData, function (res) {
                     if(res.code==200){
                         layer.msg(res.message);
+                        window.history.back();
                     }else if(res.code == 501) {
                         if(!res.data.historic){
                             layer.msg("该身份证党员已存在在校党员中。");
@@ -374,7 +389,7 @@
                         $.ajaxSettings.async = false;
                         var isPass = false;
                         var msg = '';
-                        $.post("${isAbleIDCard}", {idCard:value}, function (res) {
+                        $.post("${isAbleIDCard}", {idCard:value,userId:'${userId}'}, function (res) {
                             $.ajaxSettings.async = true;
                             if(res.code==200){
                                 if(!res.data){

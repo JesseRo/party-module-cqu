@@ -69,13 +69,13 @@ public class MemberEditDao extends PostgresqlDaoImpl<MemberEdit> {
                 "member_degree, member_job, member_join_date,member_fomal_date, member_org, " +
                 "member_type,member_address, member_phone_number, member_birth_place, member_mailbox," +
                 "member_major_title, member_marriage, member_unit, member_province, member_city, " +
-                "member_is_leader,submit_by,submit_time,status)" +
+                "member_is_leader,submit_by,submit_time,status,job_number,auth_number)" +
                 " values " +
                 "(?,?,?,?,?," +
                 "?,?,?,?,?," +
                 "?,?,?,?,?," +
                 "?,?,?,?,?," +
-                "?,?,?,?)";
+                "?,?,?,?,?,?)";
         jdbcTemplate.update( new PreparedStatementCreator(){
                                  @Override
                                  public PreparedStatement createPreparedStatement(Connection conn) throws SQLException {
@@ -116,7 +116,8 @@ public class MemberEditDao extends PostgresqlDaoImpl<MemberEdit> {
                                      ps.setInt(22,memberEdit.getSubmit_by());
                                      ps.setTimestamp(23,memberEdit.getSubmit_time());
                                      ps.setInt(24,memberEdit.getStatus());
-
+                                     ps.setString(24,memberEdit.getJobNumber());
+                                     ps.setString(25,memberEdit.getAuthNumber());
                                      return ps;
                                  }
                              },

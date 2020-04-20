@@ -226,6 +226,20 @@
                             </div>
                         </div>
                     </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">工&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号:</label>
+                            <div class="layui-input-inline">
+                                <label class="layui-form-label-text">${info.job_number }</label>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">统一身份认证号:</label>
+                            <div class="layui-input-inline">
+                                <label class="layui-form-label-text">${info.auth_number }</label>
+                            </div>
+                        </div>
+                    </div>
                     <div class="layui-form-item" style="text-align: center;margin-top: 40px;">
                         <button type="button" class="layui-btn layui-btn-radius layui-btn-warm" onclick="applyUpdate()">申请修改个人信息</button>
                         <button type="button"  class="layui-btn layui-btn-radius layui-btn-warm" onclick="printInfo()">打印个人信息表</button>

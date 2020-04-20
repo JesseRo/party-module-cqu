@@ -40,21 +40,38 @@ public class IDCardCheckResourceCommand implements MVCResourceCommand {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		Object userId = SessionManager.getAttribute(resourceRequest.getRequestedSessionId(), "userName");
 		String idCard = HtmlUtil.escape(ParamUtil.getString(resourceRequest, "idCard"));
+		String userId = HtmlUtil.escape(ParamUtil.getString(resourceRequest, "userId"));
 		try {
-			if(userId!= null && !StringUtils.isEmpty(idCard)){
-				Boolean isAble = true;
-				if(!idCard.equals(userId)){
-					Member member = memberService.findMemberByIdentity(idCard);
-					User user = userService.findByUserId(idCard);
-					if(user!= null || member!= null){
-						isAble = false;
+			if(!StringUtils.isEmpty(idCard)){
+				Member member = memberService.findMemberByIdentity(idCard);
+				User user = userService.findByUserId(idCard);
+				if(user== null && member== null){
+					printWriter.write(JSON.toJSONString(ResultUtil.success(true)));
+				}else{
+					if(StringUtils.isEmpty(userId)){
+						printWriter.write(JSON.toJSONString(ResultUtil.success(false)));
+					}else{
+						User user_o = userService.findByUserId(userId);
+						if(user_o == null){
+							printWriter.write(JSON.toJSONString(ResultUtil.fail("用户信息不存在.")));
+						}else{
+							if(user_o.getId()==user.getId()){//同一个用户信息时
+								Member member_o = memberService.findMemberByIdentity(userId);
+								if(member_o!=null && member!=null && member_o.getId()!=member.getId()){//党员信息不一致
+									printWriter.write(JSON.toJSONString(ResultUtil.success(false)));
+								}else{
+									printWriter.write(JSON.toJSONString(ResultUtil.success(true)));
+								}
+							}else{//不同用户信息时
+								printWriter.write(JSON.toJSONString(ResultUtil.success(false)));
+							}
+						}
 					}
 				}
-				printWriter.write(JSON.toJSONString(ResultUtil.success(isAble)));
+
 			}else{
-				printWriter.write(JSON.toJSONString(ResultUtil.fail("缺少必要参数！")));
+				printWriter.write(JSON.toJSONString(ResultUtil.fail("缺少必要参数：idCard！")));
 			}
 
 		} catch (Exception e) {

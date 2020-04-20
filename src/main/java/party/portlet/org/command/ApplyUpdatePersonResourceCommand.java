@@ -67,13 +67,15 @@ public class ApplyUpdatePersonResourceCommand implements MVCResourceCommand {
 		String title = ParamUtil.getString(resourceRequest, "major_title");
 		Integer unit = ParamUtil.getInteger(resourceRequest, "unit");
 		String isLeader = ParamUtil.getString(resourceRequest, "isLeader");
+		String jobNumber = ParamUtil.getString(resourceRequest, "jobNumber");
+		String authNumber = ParamUtil.getString(resourceRequest, "authNumber");
 		ID_card = ID_card.toUpperCase();
 		try {
 			if(userId!= null && !StringUtils.isEmpty(id)){
 				User user= userService.findByUserId(String.valueOf(userId));
 				Member member = memberService.findMemberByIdentity(String.valueOf(userId));
 				if(member!=null){
-					MemberEdit memberEdit = new MemberEdit(userName, sex, ethnicity, birthday, ID_card,member_degree, job, join_party_time, turn_Time, member.getMember_org(), party_type,home_addrss, telephone, birth_place, email, title, marriage, unit, province, city, isLeader,user.getId());
+					MemberEdit memberEdit = new MemberEdit(userName, sex, ethnicity, birthday, ID_card,member_degree, job, join_party_time, turn_Time, member.getMember_org(), party_type,home_addrss, telephone, birth_place, email, title, marriage, unit, province, city, isLeader,jobNumber,authNumber,user.getId());
 					int ret = memberEditService.insertMemberEdit(memberEdit);
 					if(ret > 0 ){
 						log.info("成功信息:[" + new Date() + "] [by " + userId + "]  ID_card :[" + ID_card + "]");

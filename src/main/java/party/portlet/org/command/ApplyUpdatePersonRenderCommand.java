@@ -50,6 +50,7 @@ public class ApplyUpdatePersonRenderCommand implements MVCRenderCommand {
 			list.get(0).put("email", user.getUser_mailbox());
 			renderRequest.setAttribute("info", list.get(0));
 		}
+		renderRequest.setAttribute("userId", userId);
 		renderRequest.setAttribute("jobs", JSON.toJSON(jobs));
 		renderRequest.setAttribute("jobArr", PartyConst.JOBS);
 		renderRequest.setAttribute("nationalArr", PartyConst.NATIONAL);

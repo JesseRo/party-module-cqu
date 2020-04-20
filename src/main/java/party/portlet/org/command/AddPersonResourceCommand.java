@@ -81,6 +81,8 @@ public class AddPersonResourceCommand implements MVCResourceCommand {
 		String prevID_card = ParamUtil.getString(resourceRequest, "prevID_card");
 		String title = ParamUtil.getString(resourceRequest, "major_title");
 		String unit = ParamUtil.getString(resourceRequest, "unit");
+		String jobNumber = ParamUtil.getString(resourceRequest, "jobNumber");
+		String authNumber = ParamUtil.getString(resourceRequest, "authNumber");
 		String isLeader = ParamUtil.getString(resourceRequest, "isLeader");
 		String classnew1 = ParamUtil.getString(resourceRequest, "new_class1");
 		String classnew2 = ParamUtil.getString(resourceRequest, "new_class2");
@@ -97,12 +99,13 @@ public class AddPersonResourceCommand implements MVCResourceCommand {
 					+ ", \"member_fomal_date\", \"member_org\", \"member_type\", \"member_address\", \"member_phone_number\""
 					+ ", \"member_landline_number\", \"member_is_outofcontact\", \"member_outofcontact_date\", \"member_is_flow\""
 					+ ", \"member_flow_to\", \"member_membership_state\", \"member_mailbox\", \"historic\", \"member_party_position\", \"member_marriage\", \"member_province\", \"member_city\""
-					+ ", \"member_major_title\", \"member_new_class\", \"member_front_line\", \"member_party_committee\", \"member_birth_place\", \"member_is_leader\", \"member_unit\")"
+					+ ", \"member_major_title\", \"member_new_class\", \"member_front_line\", \"member_party_committee\", \"member_birth_place\", \"member_is_leader\", \"member_unit\","
+					+"job_number,authNumber)"
 					+ "VALUES ('" + userName + "', '" + sex + "', '" + ethnicity + "', NULL, '" + birthday + "', '"
 					+ ID_card + "', '" + member_degree + "', '" + job + "', '" + join_party_time + "', '"
 					+ turn_Time + "', '" + orgId + "', '" + party_type + "', '" + home_addrss + "', '" + telephone
 					+ "', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '" + false + "', '" + positior + "','" + marriage + "','"  + province + "','"  + city + "','" + title
-					+ "','" + classnew + "', NULL, '" + seconedName + "', '" + birth_place + "', '" + isLeader + "', '" + unit + "');";
+					+ "','" + classnew + "', NULL, '" + seconedName + "', '" + birth_place + "', '" + isLeader + "', '" + unit + "', '" + jobNumber+ "', '" + authNumber+ "');";
 			String Updatesql = "UPDATE hg_party_member set \"member_name\"='" + userName + "', \"member_sex\"='" + sex
 					+ "', \"member_ethnicity\"='" + ethnicity + "', \"member_birthday\"='" + birthday
 					+ "', \"member_identity\"='" + ID_card + "', \"member_degree\"='" + member_degree
@@ -117,6 +120,8 @@ public class AddPersonResourceCommand implements MVCResourceCommand {
 					+ "', \"member_major_title\"='" + title
 					+ "', \"member_is_leader\"='" + isLeader
 					+ "', \"member_unit\"='" + unit
+					+ "', \"job_number\"='" + jobNumber
+					+ "', \"auth_number\"='" + authNumber
 					+ "', \"member_new_class\"='" + classnew + "'  WHERE id='" + id + "'";
 			if (!StringUtils.isEmpty(id)) {
 				u = UserDao.findUserByEthnicity(prevID_card);

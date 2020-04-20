@@ -108,6 +108,8 @@
                         dataType : "json",
                         success : function(res) {
                             if(res.code == 200){
+                                $("#personInfo label[name='jobNumber']").text(res.data.job_number);
+                                $("#personInfo label[name='authNumber']").text(res.data.auth_number);
                                 $("#personInfo label[name='memberName']").text(res.data.member_name);
                                 $("#personInfo label[name='memberSex']").text(res.data.member_sex);
                                 $("#personInfo label[name='memberEthnicity']").text(res.data.member_ethnicity);
@@ -241,6 +243,20 @@
 <!-- 弹窗 -->
 <div style="display: none"  id="personInfo">
     <div class="layui-form custom_form">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">工&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号:</label>
+                <div class="layui-input-inline">
+                    <label class="layui-form-label-text" name="jobNumber"></label>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">统一身份认证号:</label>
+                <div class="layui-input-inline">
+                    <label class="layui-form-label-text" name="authNumber"></label>
+                </div>
+            </div>
+        </div>
         <div class="layui-form-item">
             <div class="layui-inline">
                 <label class="layui-form-label">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名:</label>
