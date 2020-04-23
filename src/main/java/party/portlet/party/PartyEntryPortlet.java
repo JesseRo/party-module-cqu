@@ -18,7 +18,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 
 import dt.session.SessionManager;
 import hg.party.server.party.PartyMeetingNoteServer;
-import hg.party.server.party.PartyMeetingPlanInfo;
+import hg.party.server.party.PartyMeetingPlanInfoService;
 import party.constants.PartyPortletKeys;
 
 /**
@@ -44,7 +44,7 @@ import party.constants.PartyPortletKeys;
 public class PartyEntryPortlet extends MVCPortlet{
 	Logger logger = Logger.getLogger(PartyEntryPortlet.class);
 	@Reference
-	private PartyMeetingPlanInfo partyMeetingPlanInfo;
+	private PartyMeetingPlanInfoService partyMeetingPlanInfoService;
 	@Reference
 	private PartyMeetingNoteServer partyMeetingNoteServer;
 	
@@ -86,7 +86,7 @@ public class PartyEntryPortlet extends MVCPortlet{
 							"AND (plan.task_status='5' "+
 							"OR plan.task_status='7') "+
 							"ORDER BY plan.id desc ";
-				Map<String, Object> postgresqlResults = partyMeetingPlanInfo.postGresqlFind(pageNo, pageSize, sql, user_id);
+				Map<String, Object> postgresqlResults = partyMeetingPlanInfoService.postGresqlFind(pageNo, pageSize, sql, user_id);
 				list = (List<Map<String, Object>>) postgresqlResults.get("list");//获取集合
 				totalPage = (int) postgresqlResults.get("totalPage");//获取总页码
 			

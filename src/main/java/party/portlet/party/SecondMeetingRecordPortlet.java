@@ -23,7 +23,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 
 import dt.session.SessionManager;
 import hg.party.command.exportexcl.ExprotUntil;
-import hg.party.server.party.PartyMeetingPlanInfo;
+import hg.party.server.party.PartyMeetingPlanInfoService;
 import party.constants.PartyPortletKeys;
 
 /**
@@ -49,7 +49,7 @@ import party.constants.PartyPortletKeys;
 public class SecondMeetingRecordPortlet extends MVCPortlet{
 	Logger logger = Logger.getLogger(SecondMeetingRecordPortlet.class);
 	@Reference
-	private PartyMeetingPlanInfo partyMeetingPlanInfo;
+	private PartyMeetingPlanInfoService partyMeetingPlanInfoService;
 	private int pageSize = 8;//每页条数
 	@Override
 	public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
@@ -76,7 +76,7 @@ public class SecondMeetingRecordPortlet extends MVCPortlet{
 		String attendance="";
 		Map<String, Object> meetingNoteMap = new HashMap<>();
 		List<Map<String, Object>> meetingNoteList =new ArrayList<>();
-		List<Map<String, Object>> list= partyMeetingPlanInfo.find(startTime,endTime, meetType, meetTheme, orgId, branchId,checkState);
+		List<Map<String, Object>> list= partyMeetingPlanInfoService.find(startTime,endTime, meetType, meetTheme, orgId, branchId,checkState);
 		//获取当前页
 		
 		 int totalCount=list.size();
@@ -91,13 +91,13 @@ public class SecondMeetingRecordPortlet extends MVCPortlet{
 			pageNo = totalPage;
 	     }
 	     List<Map<String, Object>> listResult= 
-	    	partyMeetingPlanInfo.find(startTime,endTime, meetType, meetTheme, orgId, branchId, pageSize,
+	    	partyMeetingPlanInfoService.find(startTime,endTime, meetType, meetTheme, orgId, branchId, pageSize,
 			(pageNo-1)*pageSize,checkState);
 	     for (Map<String, Object> map : listResult) {
 	    	 try {
 			String note=ExprotUntil.getNote(map);
 			map.put("note", note);
-			meetingNoteList= partyMeetingPlanInfo.findMeetingNote(map.get("meeting_id")+"");
+			meetingNoteList= partyMeetingPlanInfoService.findMeetingNote(map.get("meeting_id")+"");
 		    if (meetingNoteList!=null&&meetingNoteList.size()>0) {
 		    	meetingNoteMap = meetingNoteList.get(0);
 		    	map.put("shoule_persons",StringUtils.isEmpty(meetingNoteMap.get("shoule_persons")) ? "" :meetingNoteMap.get("shoule_persons").toString());

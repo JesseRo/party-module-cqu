@@ -14,7 +14,6 @@ import javax.portlet.ResourceResponse;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
-import org.aspectj.weaver.NewConstructorTypeMunger;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.springframework.util.StringUtils;
@@ -26,7 +25,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 
 import hg.party.entity.ExportExcelEntity.OrgMeetingConut;
-import hg.party.server.party.PartyMeetingPlanInfo;
+import hg.party.server.party.PartyMeetingPlanInfoService;
 import hg.party.unity.ExcelUtil;
 import party.constants.PartyPortletKeys;
 
@@ -42,7 +41,7 @@ import party.constants.PartyPortletKeys;
 )
 public class MeetingCount implements MVCResourceCommand {
     @Reference
-    private PartyMeetingPlanInfo partyMeetingPlanInfo;
+    private PartyMeetingPlanInfoService partyMeetingPlanInfoService;
 
     @Override
     public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
@@ -63,7 +62,7 @@ public class MeetingCount implements MVCResourceCommand {
 //		ifExportAll = HtmlUtil.escape(ifExportAll);
         try {
             //List<Map<String, Object>> list= partyMeetingPlanInfo.find("","", "", "", "", "");
-            List<Map<String, Object>> list = partyMeetingPlanInfo.find(startTime, endTime, meetType, meetTheme, seconedId, branchId, "");
+            List<Map<String, Object>> list = partyMeetingPlanInfoService.find(startTime, endTime, meetType, meetTheme, seconedId, branchId, "");
             String shoule_persons = "";
             String actual_persons = "";
             String leave_persons = "";
@@ -96,7 +95,7 @@ public class MeetingCount implements MVCResourceCommand {
                 o.setAuditor(StringUtils.isEmpty(map.get("auditor")) ? "" : map.get("auditor") + "");
                 // o.setNote(ExprotUntil.getNote(map.get("start_time")+""),map);
                 o.setNote(ExprotUntil.getNote(map));
-                meetingNoteList = partyMeetingPlanInfo.findMeetingNote(map.get("meeting_id") + "");
+                meetingNoteList = partyMeetingPlanInfoService.findMeetingNote(map.get("meeting_id") + "");
                 if (meetingNoteList != null && meetingNoteList.size() > 0) {
                     meetingNoteMap = meetingNoteList.get(0);
                     o.setShoule_persons(StringUtils.isEmpty(meetingNoteMap.get("shoule_persons")) ? "" : meetingNoteMap.get("shoule_persons").toString());

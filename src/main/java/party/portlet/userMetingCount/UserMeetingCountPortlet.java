@@ -20,7 +20,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 
 import dt.session.SessionManager;
 import hg.party.command.exportexcl.ExprotUntil;
-import hg.party.server.party.PartyMeetingPlanInfo;
+import hg.party.server.party.PartyMeetingPlanInfoService;
 import party.constants.PartyPortletKeys;
 
 /**
@@ -46,7 +46,7 @@ import party.constants.PartyPortletKeys;
 public class UserMeetingCountPortlet extends MVCPortlet{
 	Logger logger = Logger.getLogger(UserMeetingCountPortlet.class);
 	@Reference
-	private PartyMeetingPlanInfo partyMeetingPlanInfo;
+	private PartyMeetingPlanInfoService partyMeetingPlanInfoService;
 	private int pageSize = 8;//每页条数
 	@Override
 	public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
@@ -79,7 +79,7 @@ public class UserMeetingCountPortlet extends MVCPortlet{
 		
 		if(!"".equals(orgType) && null != orgType){
 			
-			int totalCount = partyMeetingPlanInfo.MeetingSun(userName,seconedId,branchId,orgType,orgId);//获取总页数
+			int totalCount = partyMeetingPlanInfoService.MeetingSun(userName,seconedId,branchId,orgType,orgId);//获取总页数
 			
 	//		 int totalCount=list.size();
 		     int pageSize =8;
@@ -92,7 +92,7 @@ public class UserMeetingCountPortlet extends MVCPortlet{
 		     }else if(pageNo > totalPage){
 				pageNo = totalPage;
 		     }
-		     List<Map<String, Object>> listResult = partyMeetingPlanInfo.userMeetingCount(userName,seconedId,branchId,pageSize,(pageNo-1)*pageSize,orgType,orgId);
+		     List<Map<String, Object>> listResult = partyMeetingPlanInfoService.userMeetingCount(userName,seconedId,branchId,pageSize,(pageNo-1)*pageSize,orgType,orgId);
 		     
 		     for (Map<String, Object> map : listResult) {
 		    	 try {

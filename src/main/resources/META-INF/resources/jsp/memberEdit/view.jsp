@@ -95,7 +95,7 @@
                                 renderDetail('check',obj);
                                 break;
                             case 'detail':
-                                renderDetail('check',obj);
+                                renderDetail('detail',obj);
                                 break;
                         };
                     });

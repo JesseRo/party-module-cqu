@@ -3,7 +3,6 @@ package hg.party.command.party;
 
 import java.io.PrintWriter;
 import java.util.List;
-import java.util.Map;
 
 import javax.portlet.PortletException;
 import javax.portlet.ResourceRequest;
@@ -24,7 +23,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 
 import dt.session.SessionManager;
 import hg.party.entity.party.MeetingPlan;
-import hg.party.server.party.PartyMeetingPlanInfo;
+import hg.party.server.party.PartyMeetingPlanInfoService;
 import party.constants.PartyPortletKeys;
 /**
  * 审批计划通过command(二级党委)
@@ -45,7 +44,7 @@ public class PartyPassCommand implements MVCResourceCommand{
 	Logger logger = Logger.getLogger(PartyPassCommand.class);
 
 	@Reference
-	private PartyMeetingPlanInfo partyMeetingPlanInfo;
+	private PartyMeetingPlanInfoService partyMeetingPlanInfoService;
 	@Reference
 	private MeetingPlanDao meetingPlanDao;
 
@@ -65,14 +64,14 @@ public class PartyPassCommand implements MVCResourceCommand{
 		transactionUtil.startTransaction();
 		try {
 			if(!"".equals(meetingId) && null != meetingId){
-				List<MeetingPlan> meetings = partyMeetingPlanInfo.meetingId(meetingId);
+				List<MeetingPlan> meetings = partyMeetingPlanInfoService.meetingId(meetingId);
 				MeetingPlan meeting = meetings.get(0);
 				meeting.setTask_status("6");
 				meeting.setTask_status_org("6");
 				meeting.setAuditor(user_id);
 
 				List<String> participants = gson.fromJson(meeting.getParticipant_group(), new TypeToken<List<String>>(){}.getType());
-				partyMeetingPlanInfo.save(meeting);
+				partyMeetingPlanInfoService.save(meeting);
 				for (String m : participants){
 					meetingPlanDao.informParty(meetingId, m);
 				}

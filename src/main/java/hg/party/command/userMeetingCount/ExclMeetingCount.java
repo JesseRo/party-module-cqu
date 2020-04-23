@@ -23,7 +23,7 @@ import com.liferay.portal.kernel.util.PortalUtil;
 
 import dt.session.SessionManager;
 import hg.party.entity.userMeetingCount.UserMeetingCount;
-import hg.party.server.party.PartyMeetingPlanInfo;
+import hg.party.server.party.PartyMeetingPlanInfoService;
 import hg.party.unity.ExcelUtil;
 import party.constants.PartyPortletKeys;
 
@@ -37,7 +37,7 @@ property = {
 )
 public class ExclMeetingCount implements MVCResourceCommand{
 	@Reference
-	private PartyMeetingPlanInfo partyMeetingPlanInfo;
+	private PartyMeetingPlanInfoService partyMeetingPlanInfoService;
 	@Override
 	public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 			throws PortletException {
@@ -57,7 +57,7 @@ public class ExclMeetingCount implements MVCResourceCommand{
 		String userName = ParamUtil.getString(resourceRequest, "userName");//人员姓名
 		userName = HtmlUtil.escape(userName);
 		try {
-			List<Map<String, Object>> list= partyMeetingPlanInfo.userMeetingCount(userName,seconedId,branchId,orgType,orgId);
+			List<Map<String, Object>> list= partyMeetingPlanInfoService.userMeetingCount(userName,seconedId,branchId,orgType,orgId);
 			
 			JSONArray jsonArray=new JSONArray();
 			for (Map<String, Object> map : list) {

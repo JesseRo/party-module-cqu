@@ -30,8 +30,6 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 
-import hg.party.entity.party.MeetingPlan;
-import hg.party.server.party.PartyMeetingPlanInfo;
 import party.constants.PartyPortletKeys;
 
 /**

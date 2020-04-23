@@ -17,7 +17,7 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.util.ParamUtil;
 
 import dt.session.SessionManager;
-import hg.party.server.party.PartyMeetingPlanInfo;
+import hg.party.server.party.PartyMeetingPlanInfoService;
 import party.constants.PartyPortletKeys;
 
 /**
@@ -44,7 +44,7 @@ public class PartyApprovalBranchPortlet extends MVCPortlet{
 	
 	Logger logger = Logger.getLogger(PartyApprovalBranchPortlet.class);
 	@Reference
-	private PartyMeetingPlanInfo partyMeetingPlanInfo;
+	private PartyMeetingPlanInfoService partyMeetingPlanInfoService;
 	
 	private int pageSize = 8;//每页条数
 	
@@ -109,7 +109,7 @@ public class PartyApprovalBranchPortlet extends MVCPortlet{
 				"ORDER BY\n" +
 				"\tplan.task_status asc";
 						
-		Map<String, Object> postgresqlResults = partyMeetingPlanInfo.postGresqlFind(pageNo, pageSize, sql,department);
+		Map<String, Object> postgresqlResults = partyMeetingPlanInfoService.postGresqlFind(pageNo, pageSize, sql,department);
 		list = (List<Map<String, Object>>) postgresqlResults.get("list");//获取集合
 		totalPage = (int) postgresqlResults.get("totalPage");//获取总页码
 		

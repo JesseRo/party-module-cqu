@@ -11,7 +11,6 @@ import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
 import org.apache.log4j.Logger;
-import org.aspectj.weaver.ast.And;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -21,7 +20,7 @@ import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 
 import hg.party.entity.party.MeetingPlan;
-import hg.party.server.party.PartyMeetingPlanInfo;
+import hg.party.server.party.PartyMeetingPlanInfoService;
 import party.constants.PartyPortletKeys;
 /**
  * 分配command 提交
@@ -39,7 +38,7 @@ public class PartyPartActionCommand implements MVCResourceCommand{
 	
 	Logger logger = Logger.getLogger(PartyPartActionCommand.class);
 	@Reference
-	private PartyMeetingPlanInfo partyMeetingPlanInfo;
+	private PartyMeetingPlanInfoService partyMeetingPlanInfoService;
 	
 	@Override
 	public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
@@ -51,13 +50,13 @@ public class PartyPartActionCommand implements MVCResourceCommand{
 		meeting_id = HtmlUtil.escape(meeting_id);
 		
 		if(!"".equals(meeting_id) && null != meeting_id){
-			List<MeetingPlan> meetingPlan = partyMeetingPlanInfo.meetingId(meeting_id);
+			List<MeetingPlan> meetingPlan = partyMeetingPlanInfoService.meetingId(meeting_id);
 			
 			if(!"".equals(orgName) && meetingPlan.size()>0){
 				MeetingPlan mPlan = meetingPlan.get(0);
 				mPlan.setAuditor(orgName);
 				mPlan.setTask_status("待审批");
-				partyMeetingPlanInfo.saveOrUpdate(mPlan);
+				partyMeetingPlanInfoService.saveOrUpdate(mPlan);
 			}
 		}
 		logger.info("orgName=="+orgName);

@@ -17,7 +17,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 
 import dt.session.SessionManager;
 import hg.party.entity.party.MeetingPlan;
-import hg.party.server.party.PartyMeetingPlanInfo;
+import hg.party.server.party.PartyMeetingPlanInfoService;
 import party.constants.PartyPortletKeys;
 
 /**
@@ -44,7 +44,7 @@ import party.constants.PartyPortletKeys;
 public class ExperienceRenderCommand implements MVCRenderCommand {
 
 	@Reference
-	private PartyMeetingPlanInfo partyMeetingPlanInfo;
+	private PartyMeetingPlanInfoService partyMeetingPlanInfoService;
 	@Override
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
 		String meetingId = ParamUtil.getString(renderRequest, "meetingId");
@@ -52,7 +52,7 @@ public class ExperienceRenderCommand implements MVCRenderCommand {
 		String userId = ParamUtil.getString(renderRequest, "userId");
 		userId = HtmlUtil.escape(userId);
 		//根据meetingId获取该会议信息
-		MeetingPlan meetingPlan=partyMeetingPlanInfo.meetingId(meetingId).get(0);
+		MeetingPlan meetingPlan= partyMeetingPlanInfoService.meetingId(meetingId).get(0);
 		//会议主题
 		String meetingTheme=meetingPlan.getMeeting_theme();
 		//会议类型 
@@ -61,8 +61,8 @@ public class ExperienceRenderCommand implements MVCRenderCommand {
 		String time=dateFormat(meetingPlan.getStart_time(),meetingPlan.getEnd_time());
 		//心得内容
 		String heart = "";
-		if(partyMeetingPlanInfo.experience(meetingId,userId).size() > 0){
-			heart = partyMeetingPlanInfo.experience(meetingId,userId).get(0).get("experience_content").toString();
+		if(partyMeetingPlanInfoService.experience(meetingId,userId).size() > 0){
+			heart = partyMeetingPlanInfoService.experience(meetingId,userId).get(0).get("experience_content").toString();
 		}
 		heart = HtmlUtil.escape(heart);
 		

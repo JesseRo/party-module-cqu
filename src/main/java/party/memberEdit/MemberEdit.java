@@ -61,10 +61,10 @@ public class MemberEdit {
 	//是否是干部
 	private String member_is_leader;
 	//工号
-	@Column(javaName = "jobNumber", sqlName = "String", sqlType = "job_number")
+	@Column(javaName = "jobNumber", sqlName="job_number",sqlType="varchar")
 	private String jobNumber;
 	//统一身份认证号码
-	@Column(javaName = "authNumber", sqlName = "String", sqlType = "auth_number")
+	@Column(javaName = "authNumber", sqlName = "auth_number", sqlType="varchar")
 	private String authNumber;
 	//提交人
 	private int submit_by;

@@ -2,7 +2,8 @@
 <%@ include file="/init.jsp" %>
 <!DOCTYPE html>
 <html>
-
+<portlet:resourceURL id="/hg/deleteGrafts" var="deleteGrafts"/>
+<portlet:resourceURL id="/party/inform/page" var="InformPage" />
 <head>
     <meta charset="utf-8">
     <meta name="viewport"
@@ -11,16 +12,6 @@
     <link rel="stylesheet" href="${basePath }/css/party_member.css"/>
     <link rel="stylesheet" href="${basePath }/css/party_organization.css"/>
     <style type="text/css">
-        .col-sm-6.col-xs-12 {
-            float: right;
-        }
-
-        .export_excel {
-            font-size: 13px;
-            /* margin: 10px 0; */
-            padding: 5px 0;
-            display: inline-block;
-        }
         .content_table thead tr{
             background: #F6F8FC;
             height: 48px;
@@ -38,20 +29,46 @@
             height: 48px;
             font-size: 14px;
         }
-        .passpublic_table_container.content_table_container{
-            height: calc(100% - 60px);
+
+        table_outer_box > table thead, tbody tr {
+            display: table-row !important;
+            width: 100%;
+            table-layout: fixed;
         }
-        .passpublic_table_container .table_scroll_box{
-            position: relative;
-        }.passpublic_table_container .table_scroll_box .content_table{
-            position: absolute;
-            top: 0;
-            left: 0;
+        #searchForm .layui-form-item .layui-inline .keyword {
+            width: 300px;
+            margin-right: 0px;
+        }
+        #personInfo .layui-form-item .layui-input-inline{
+            width:200px
+        }
+        #searchForm .layui-form-label{
+            margin-bottom: 0px;
+            width:120px;
+        }
+        #personInfo .layui-form-label{
+            width:140px;
+            font-weight:bold;
+        }
+        #personInfo .layui-form-label-text{
+            float: left;
+            display: block;
+            padding: 0 10px;
+            width: 200px;
+            font-weight: 400;
+            line-height: 40px;
+            font-size: 16px;
+            text-align: left;
+        }
+        th, tr{
+            text-align:center !important;
+        }
+        .layui-table-page-center{
+            text-align: center;
         }
     </style>
 </head>
 <body>
-<%--<div class="table_form_content activity_manage_container">--%>
     <div class="table_form_content ">
     <!-- 右侧盒子内容 -->
     <div class="activity_manage_page">
@@ -63,168 +80,124 @@
             </span>
         </div>
         <div class="bg_white_container">
-    <portlet:resourceURL id="/hg/deleteGrafts" var="deleteGrafts"/>
-    <portlet:resourceURL id="/hg/export" var="export"/>
-    <a href="javascript:;" onclick="window.location.href = '/newinfo'">
-        <button type="button" class="layui-btn custom_btn publish_acti_btn">
-             发布活动
-        </button>
-    </a>
-    <div class="col-sm-6 col-xs-12" style="margin-bottom:20px;">
-        <span class="col-sm-4 control-label col-xs-3" style="height: 34px;line-height: 34px;text-align: right;">发布时间</span>
-        <div class="col-sm-8 col-xs-9">
-            <select class="time_select form-control">
-                <option value="">请选择时间</option>
-                <option value="">全部</option>
-                <option value="nowDate">本日</option>
-                <option value="nowWeek">本周</option>
-                <option value="more">更早</option>
-            </select>
-        </div>
-    </div>
-    <div class="content_table_container passpublic_table_container">
-        <div class="table_outer_box">
-            <table class="layui-table custom_table">
-                <thead>
-                    <tr>
-                        <td>活动名称</td>
-                        <td>发布时间</td>
-                        <td>发布内容</td>
-                        <td>操作</td>
-                    </tr>
-                </thead>
-                <tbody>
-                <c:forEach var="c" items="${grafts }">
-                    <tr id="${c.inform_id }">
-                        <td style="display: none;">
-                            <input type="hidden" value="${c.inform_id }"/>
-                            <input type="hidden" value="${c.id }"/>
-                                ${c.meeting_type }
-                        </td>
-                        <td title="${c.meeting_theme }">
-        <%--                    <a href="/checkdetail?informId=${c.inform_id }">${c.meeting_theme }</a>--%>
-                            ${c.meeting_theme }
-                        </td>
-                        <td title="${c.release_time }">${c.release_time }</td>
-                        <td title="${c.content }">${c.content }</td>
-        <%--                <td>--%>
-        <%--                    <c:if test="${orgType eq 'organization'}">--%>
-        <%--                        <a href="/sconedPartyDetail?inform_id=${c.inform_id }">查看进度</a>--%>
-        <%--                    </c:if>--%>
-        <%--                    <c:if test="${orgType eq 'secondary'}">--%>
-        <%--                        <a href="/branchview?inform_id=${c.inform_id }">查看进度</a>--%>
-        <%--                    </c:if>--%>
-        <%--                </td>--%>
-                        <td>
-                            <a onclick="window.location.href='/newinfo?informId=${c.inform_id }&orgEdit=orgEdit'" href="javascript:;" style="margin-right: 10%; color: #2E87FF">编辑</a>
-                            <a class="deleteInform" style="cursor: pointer;color: #FE4D4D;">删除</a>
-                        </td>
-                    </tr>
-                    　
-                    　　 </c:forEach>
-                </tbody>
-            </table>
-        </div>
-        <!--    分页              -->
-        <div class="pagination_container">
-            <ul class="pagination" id="page"></ul>
-            <div class="pageJump">
-                <input class='current_page' type="hidden" value="${pageNo}"/>
-                <p>共<span class="total_page">${totalPage }</span>页</p>
-                <portlet:actionURL name="/PageNoMVCActionCommand" var="pageNoUrl">
-                </portlet:actionURL>
-                <form action="${pageNoUrl }" id="getPageNo" method="post">
-                    <input type="hidden" id="pageNo" name="pageNo" value=""/>
-                    <input type="hidden" id="total_page_" name="total_page_" value="${totalPage}"/>
-                    <span>跳转到第</span>
-                    <input type="text" id="jumpPageNo" name="jumpPageNo"/>
-                    <span>页</span>
-                    <%--  <input label="站点id" name="Site"  value="${Site }" type="hidden"/>
-                    <input label="栏目id" name="Column"  value="${Column }" type="hidden"/> --%>
-                    <input type="hidden" id="date_date" name="date" value="${date }"/>
-                    <button type="submit" class="button">确定</button>
-                </form>
-            </div>
-        </div>
-        </div>
+            <form class="layui-form" id="searchForm">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">发布时间</label>
+                        <div class="layui-input-inline">
+                            <select name="dateType">
+                                <option value="">全部</option>
+                                <option value="day_1">本日</option>
+                                <option value="day_7">本周</option>
+                                <option value="month_1">本月</option>
+                                <option value="more">更早</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <div class="layui-input-inline keyword">
+                            <input type="text" name="keyword"  placeholder="请输入活动关键字" class="layui-input">
+                        </div>
+                        <button type="button"  class="layui-btn layui-btn-warm"  lay-submit="" lay-filter="searchForm"><icon class="layui-icon layui-icon-search"></icon>搜索</button>
+                    </div>
+                    <div class="layui-inline">
+                        <a class="layui-btn layui-btn-warm" onclick="window.location.href = '/newinfo'">发布活动</a>
+                    </div>
+                </div>
+            </form>
+            <table id="informTable" lay-filter="informTable"></table>
      </div>
+    </div>
+</div>
+</body>
+<script type="text/html" id="informTableBtns">
+    <a class="layui-btn layui-btn-xs" href="/newinfo?informId=${d.inform_id }&orgEdit=orgEdit'" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+</script>
+<script type="text/javascript">
+    layui.use(['table','layer','form'], function() {
+        var table = layui.table,
+            layer = layui.layer,
+            form = layui.form;
+        renderTable();
+        form.on('submit(searchForm)', function (data) {
+            renderTable();
+        })
+        function renderTable(){
+            var  where = {
+                keyword: $("#searchForm input[name=keyword]").val(),
+                dateType: $("#searchForm select[name=dateType]").val()
+            };
+            table.render({
+                elem: '#informTable',
+                where: where,
+                height:560,
+                url: '${InformPage}', //数据接口
+                method: 'post',
+                page: {
+                    limit:10,   //每页条数
+                    limits:[10,15,20],
+                    prev:'&lt;上一页',
+                    next:'下一页&gt;',
+                    theme: '#FFB800',
+                    groups:4
+                },
+                cols: [[ //表头
+                    {field: 'meeting_theme', align:'center',width:320, title: '活动名称'},
+                    {field: 'content', align:'center', title: '发布内容'},
+                    {field: 'release_time', align:'center', title: '发布时间',width:180,templet: function(d){return new Date(d.release_time).format("yyyy-MM-dd hh:mm:ss");}},
+                    {field: 'operation', align:'center', title: '操作',width:120,toolbar: '#informTableBtns'}
 
-    <script type="text/javascript">
-        $(document).ready(function () {
-            var pages = $(".total_page").html();
-            var currentPage = $('.current_page').val();
-            $("input[name='pageNo']").val($('.current_page').val());
-            if (currentPage == 1) {
-                $('.page_next').removeClass('not_allow');
-                $('.page_prev').addClass('not_allow');
-
-            } else if (currentPage == pages) {
-                $('.page_prev').removeClass('not_allow');
-                $('.page_next').addClass('not_allow');
-
-            } else {
-
-            }
-            ;
-            $("#jumpPageNo").change(function () {
-                $("input[name='pageNo']").val($(this).val());
-            })
-            Page({
-                num: pages, //页码数
-                startnum: currentPage, //指定页码
-                elem: $('#page'), //指定的元素
-                callback: function (n) { //回调函数
-                    $("input[name='pageNo']").val(n);
-                    //	alert($("input[name='pageNo']").val());
-                    $("#getPageNo").submit();
-                    if (n == 1) {
-                        $('#page a').removeClass('not_allow');
-                        $('.page_prev').addClass('not_allow');
-                    } else if (n >= $('.total_page').html()) {
-                        $('#page a').removeClass('not_allow');
-                        $('.page_next').addClass('not_allow')
-                    } else {
-                        $('#page a').removeClass('not_allow');
-                    }
-                }
+                ]]
             });
-
-            $('.deleteInform').on('click',function () {
-                var $this = $(this);
-                var successFunc = function(){
-                    var id = $this.parent().parent().attr('id');
+            $(".layui-table-view .layui-table-page").addClass("layui-table-page-center");
+            $(".layui-table-view .layui-table-page").removeClass("layui-table-page");
+            //监听事件
+            table.on('tool(informTable)', function(obj){
+                switch(obj.event){
+                    case 'edit':
+                        //renderDetail('check',obj);
+                        break;
+                    case 'delete':
+                        deleteInform(obj.id);
+                        break;
+                };
+            });
+            function deleteInform(id){
+                layer.confirm('您确认删除吗？', {
+                    btn: ['确定','取消'] //按钮
+                }, function(){
                     $.ajax({
                         url: "${deleteGrafts}",
                         data:{"resourcesId":id},
                         dataType:"text",
                         success:function(succeed){
                             if("succee" === succeed){
-                                layuiModal.alert("删除成功");
+                                layer.msg("删除成功");
                                 setTimeout(function(){window.location.reload()}, 1000);
                             }else{
-                                layuiModal.alert("删除失败");
+                                layer.msg("删除失败");
                             }
                         }
                     });
-                };
-                layuiModal.confirm('', successFunc);
-            });
-        });
-    </script>
-    </div>
-</div>
-    <!-- 分页 -->
-
-
-    <script>
-        //根据时间查询
-        $(".time_select").change(function () {
-            //  alert($(".time_select").val());
-            var date = $(".time_select").val();
-            $("#date_date").val(date);
-            $("#getPageNo").submit();
-        });
-    </script>
-</body>
-
+                });
+            }
+        }
+    });
+    Date.prototype.format = function (fmt) {
+        var o = {
+            "M+": this.getMonth() + 1, //月份
+            "d+": this.getDate(), //日
+            "h+": this.getHours(), //小时
+            "m+": this.getMinutes(), //分
+            "s+": this.getSeconds(), //秒
+            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+            "S": this.getMilliseconds() //毫秒
+        };
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    }
+</script>
 </html>

@@ -21,7 +21,7 @@ import com.liferay.portal.kernel.util.PortalUtil;
 
 import dt.session.SessionManager;
 import hg.party.entity.party.MeetingPlan;
-import hg.party.server.party.PartyMeetingPlanInfo;
+import hg.party.server.party.PartyMeetingPlanInfoService;
 import party.constants.PartyPortletKeys;
 
 /**
@@ -59,7 +59,7 @@ import party.constants.PartyPortletKeys;
 public class NoticeDetailsPortlet extends MVCPortlet {
 
 	@Reference
-	private PartyMeetingPlanInfo partyMeetingPlanInfo;
+	private PartyMeetingPlanInfoService partyMeetingPlanInfoService;
 	@Override
 	public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
 			throws IOException, PortletException {
@@ -73,10 +73,10 @@ public class NoticeDetailsPortlet extends MVCPortlet {
 			if("".equals(meetingId) || null == meetingId){
 				meetingId = "aca7500c-8603-4bac-b7c3-e6404b7dd720";
 			}
-			List<MeetingPlan> listMeetingPlan = partyMeetingPlanInfo.meetingId(meetingId);
+			List<MeetingPlan> listMeetingPlan = partyMeetingPlanInfoService.meetingId(meetingId);
 			if(listMeetingPlan.size()>0){ 
 				//根据meetingId获取该会议信 息
-				MeetingPlan meetingPlan=partyMeetingPlanInfo.meetingId(meetingId).get(0);
+				MeetingPlan meetingPlan= partyMeetingPlanInfoService.meetingId(meetingId).get(0);
 				//会议主题
 				String meetingTheme=meetingPlan.getMeeting_theme();
 				//会议类型
@@ -89,14 +89,14 @@ public class NoticeDetailsPortlet extends MVCPortlet {
 				String attachment = meetingPlan.getAttachment();
 				String attName = null;
 				if("t".equals(attachment)){
-					Map<String,Object> map = partyMeetingPlanInfo.findAttachmentByMeetingid(meetingId);
+					Map<String,Object> map = partyMeetingPlanInfoService.findAttachmentByMeetingid(meetingId);
 					attachment = (String) map.get("attachment_url");
 					attName = (String) map.get("attachment_name");
 				}else{
 					attachment = "";
 				}
 				//改为已读状态
-				partyMeetingPlanInfo.findByMeetingStu(nameId,meetingId);
+				partyMeetingPlanInfoService.findByMeetingStu(nameId,meetingId);
 				
 				renderRequest.setAttribute("meetingTheme", meetingTheme);
 				renderRequest.setAttribute("type", type);

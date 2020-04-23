@@ -19,7 +19,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 
 import dt.session.SessionManager;
 import hg.party.entity.party.MeetingPlan;
-import hg.party.server.party.PartyMeetingPlanInfo;
+import hg.party.server.party.PartyMeetingPlanInfoService;
 import party.constants.PartyPortletKeys;
 /**
  * 审批计划驳回command(组织部)
@@ -39,7 +39,7 @@ public class PartyOrganizationsRejectedCommand implements MVCResourceCommand{
 	Logger logger = Logger.getLogger(PartyOrganizationsRejectedCommand.class);
 	
 	@Reference
-	private PartyMeetingPlanInfo partyMeetingPlanInfo;
+	private PartyMeetingPlanInfoService partyMeetingPlanInfoService;
 	
 	@Override
 	public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
@@ -53,12 +53,12 @@ public class PartyOrganizationsRejectedCommand implements MVCResourceCommand{
 		String user_id = (String)SessionManager.getAttribute(sessionID, "user_name");//登录用户
 		
 		if(!"".equals(meeting_id) && null != meeting_id){
-			List<MeetingPlan> meetingid = partyMeetingPlanInfo.meetingId(meeting_id);
+			List<MeetingPlan> meetingid = partyMeetingPlanInfoService.meetingId(meeting_id);
 			MeetingPlan meeting = meetingid.get(0);
 			meeting.setAuditor(user_id);
 			meeting.setTask_status("3");
 			meeting.setRemark(remark);
-			partyMeetingPlanInfo.saveOrUpdate(meeting);
+			partyMeetingPlanInfoService.saveOrUpdate(meeting);
 		}
 		
 		logger.info("被驳回");

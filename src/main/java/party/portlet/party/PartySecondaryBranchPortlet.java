@@ -20,7 +20,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 
 import dt.session.SessionManager;
-import hg.party.server.party.PartyMeetingPlanInfo;
+import hg.party.server.party.PartyMeetingPlanInfoService;
 import hg.party.server.party.PartyMemberServer;
 import hg.party.server.toDoList.EvaluationServer;
 import party.constants.PartyPortletKeys;
@@ -48,7 +48,7 @@ import party.constants.PartyPortletKeys;
 public class PartySecondaryBranchPortlet extends MVCPortlet{
 	Logger logger = Logger.getLogger(PartySecondaryBranchPortlet.class);
 	@Reference
-	private PartyMeetingPlanInfo partyMeetingPlanInfo;
+	private PartyMeetingPlanInfoService partyMeetingPlanInfoService;
 	@Reference
 	private PartyMemberServer partyMemberServer;
 	@Reference
@@ -111,7 +111,7 @@ public class PartySecondaryBranchPortlet extends MVCPortlet{
 							"ORDER BY read_status, plan.start_time DESC ) as tt "+
 							"LEFT OUTER JOIN hg_users_info as us "+
 				            "on tt.check_person_org=us.user_id ";
-				Map<String, Object> postgresqlResults = partyMeetingPlanInfo.postGresqlFind(pageNo, pageSize, sql, meeting_id, orgName);
+				Map<String, Object> postgresqlResults = partyMeetingPlanInfoService.postGresqlFind(pageNo, pageSize, sql, meeting_id, orgName);
 				list = (List<Map<String, Object>>) postgresqlResults.get("list");//获取集合
 				
 				String meeting_Id = "";

@@ -1,20 +1,22 @@
 package hg.party.dao.party;
 
 
-import com.dt.springjdbc.dao.impl.PostgresqlDaoImpl;
 import com.dt.springjdbc.dao.impl.PostgresqlQueryResult;
+import hg.party.dao.org.OrgDao;
+import hg.party.entity.organization.Organization;
 import hg.party.entity.party.MeetingPlan;
+import hg.util.postgres.HgPostgresqlDaoImpl;
+import hg.util.postgres.PostgresqlPageResult;
 import org.apache.log4j.Logger;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.util.StringUtils;
+import party.constants.PartyOrgAdminTypeEnum;
 
-import java.sql.Array;
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -23,8 +25,10 @@ import java.util.*;
  * 创建日期： 2018年1月2日下午5:21:55<br>
  */
 @Component(immediate = true, service = PartyMeetingPlanInfoDao.class)
-public class PartyMeetingPlanInfoDao extends PostgresqlDaoImpl<MeetingPlan> {
+public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
     Logger logger = Logger.getLogger(PartyMeetingPlanInfoDao.class);
+    @Reference
+    private OrgDao orgDao;
 
     //根据会议id查询
     public List<MeetingPlan> meetingId(String meetingid) {
@@ -597,39 +601,67 @@ public class PartyMeetingPlanInfoDao extends PostgresqlDaoImpl<MeetingPlan> {
         return map;
     }
 
-//    public Map<String, Object> postGresqlFind(int pageNo, int pageSize, String sql, String department) {
-//        String sql1 = sql + " limit " + pageSize + " offset " + (pageNo - 1) * pageSize;
-//        Map<String, Object> map = new HashMap<>();
-//        List<Map<String, Object>> list = this.jdbcTemplate.queryForList(sql1, department);
-//        List<Map<String, Object>> count = this.jdbcTemplate.queryForList(sql, department);
-//        int total = count.size();
-//        if (total % pageSize == 0) {
-//            map.put("totalPage", total / pageSize);
-//        } else {
-//            map.put("totalPage", total / pageSize + 1);
-//        }
-//        map.put("pageNow", pageNo);
-//        map.put("list", list);
-//        return map;
-//    }
-//
-//    public Map<String, Object> postGresqlFind(int pageNo, int pageSize, String sql) {
-//		if (pageNo <= 0){
-//			pageNo = 1;
-//		}
-//        String sql1 = sql + " limit " + pageSize + " offset " + (pageNo - 1) * pageSize;
-//        Map<String, Object> map = new HashMap<>();
-//        List<Map<String, Object>> list = this.jdbcTemplate.queryForList(sql1);
-//        List<Map<String, Object>> count = this.jdbcTemplate.queryForList(sql);
-//        int total = count.size();
-//        if (total % pageSize == 0) {
-//            map.put("totalPage", total / pageSize);
-//        } else {
-//            map.put("totalPage", total / pageSize + 1);
-//        }
-//        map.put("pageNow", pageNo);
-//        map.put("list", list);
-//        return map;
-//    }
 
+    public PostgresqlPageResult<Map<String, Object>> searchPage(int page, int size, String orgId, String search) {
+        if (size <= 0){
+            size = 10;
+        }
+        Organization org = orgDao.findOrgByOrgId(String.valueOf(orgId));
+        PartyOrgAdminTypeEnum partyOrgAdminTypeEnum = PartyOrgAdminTypeEnum.getEnum(org.getOrg_type());
+        StringBuffer sb = new StringBuffer("SELECT plan.*,org.org_name,member.member_name");
+        sb.append(" FROM hg_party_meeting_plan_info AS plan");
+        sb.append(" LEFT JOIN hg_party_meeting_notes_info AS note ON plan.meeting_id = note.meeting_id");
+        sb.append(" left join hg_party_member member on member.member_identity = plan.contact");
+        sb.append(" LEFT JOIN hg_party_org org ON org.org_id = plan.organization_id");
+        sb.append(" where 1=1");
+        sb.append(" and org.historic IS FALSE and member.historic = false AND plan.task_status in('1','3','4')");
+        switch(partyOrgAdminTypeEnum){
+            case BRANCH:
+                sb.append(" and org.org_id = ?");
+                break;
+            case SECONDARY:
+                sb.append(" and org.org_parent = ? and org.org_type ='"+PartyOrgAdminTypeEnum.BRANCH.getType()+"'");
+                break;
+            case ORGANIZATION:;
+                sb.append(" and org.org_parent = ? and org.org_type ='"+PartyOrgAdminTypeEnum.SECONDARY.getType()+"'");
+                break;
+            default: return new PostgresqlPageResult(null, 0,0);
+        }
+        if(!StringUtils.isEmpty(search)){
+            search = "%" + search + "%";
+            sb.append(" and (plan.meeting_theme like ? or org.org_name like ? or member.member_name like ?)");
+            sb.append(" ORDER BY plan.task_status asc, plan.id desc");
+            logger.info("searchPage:"+sb.toString());
+            return postGresqlFindPageBySql(page, size, sb.toString(),orgId,search,search,search);
+        }else{
+            sb.append(" ORDER BY plan.task_status asc, plan.id desc");
+            logger.info("searchPage:"+sb.toString());
+            return postGresqlFindPageBySql(page, size, sb.toString(),orgId);
+        }
+    }
+
+    public PostgresqlPageResult<Map<String, Object>> searchOrgPage(int page, int size, String orgId, String search) {
+        if (size <= 0){
+            size = 10;
+        }
+        StringBuffer sb = new StringBuffer("SELECT plan.*,org.org_name,member.member_name");
+        sb.append(" FROM hg_party_meeting_plan_info AS plan");
+        sb.append(" LEFT JOIN hg_party_meeting_notes_info AS note ON plan.meeting_id = note.meeting_id");
+        sb.append(" left join hg_party_member member on member.member_identity = plan.contact");
+        sb.append(" LEFT JOIN hg_party_org org ON org.org_id = plan.organization_id");
+        sb.append(" where 1=1");
+        sb.append(" and org.historic IS FALSE and member.historic = false AND plan.task_status in('1','3','4')");
+        sb.append(" and org.org_id = ?");
+        if(!StringUtils.isEmpty(search)){
+            search = "%" + search + "%";
+            sb.append(" and (plan.meeting_theme like ? or org.org_name like ? or member.member_name like ?)");
+            sb.append(" ORDER BY plan.task_status asc, plan.id desc");
+            logger.info("searchPage:"+sb.toString());
+            return postGresqlFindPageBySql(page, size, sb.toString(),orgId,search,search,search);
+        }else{
+            sb.append(" ORDER BY plan.task_status asc, plan.id desc");
+            logger.info("searchPage:"+sb.toString());
+            return postGresqlFindPageBySql(page, size, sb.toString(),orgId);
+        }
+    }
 }

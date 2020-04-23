@@ -8,7 +8,6 @@ import javax.portlet.Portlet;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.osgi.service.component.annotations.Component;
@@ -17,9 +16,8 @@ import org.osgi.service.component.annotations.Reference;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.PortalUtil;
 
-import hg.party.server.party.PartyMeetingPlanInfo;
+import hg.party.server.party.PartyMeetingPlanInfoService;
 import hg.party.server.party.PartyMemberServer;
 import hg.party.server.toDoList.EvaluationServer;
 import org.springframework.util.StringUtils;
@@ -48,7 +46,7 @@ import party.constants.PartyPortletKeys;
 public class PartySecondaryPortlet extends MVCPortlet{
 	Logger logger = Logger.getLogger(PartySecondaryPortlet.class);
 	@Reference
-	private PartyMeetingPlanInfo partyMeetingPlanInfo;
+	private PartyMeetingPlanInfoService partyMeetingPlanInfoService;
 	@Reference
 	private PartyMemberServer partyMemberServer;
 	@Reference
@@ -127,9 +125,9 @@ public class PartySecondaryPortlet extends MVCPortlet{
                 "\t\tplan.task_status asc";
 		Map<String, Object> postgresqlResults;
 		if (!StringUtils.isEmpty(search)) {
-			postgresqlResults = partyMeetingPlanInfo.postGresqlFind(pageNo, pageSize, sql, _search, _search);
+			postgresqlResults = partyMeetingPlanInfoService.postGresqlFind(pageNo, pageSize, sql, _search, _search);
 		}else{
-			postgresqlResults = partyMeetingPlanInfo.postGresqlFind(pageNo, pageSize, sql);
+			postgresqlResults = partyMeetingPlanInfoService.postGresqlFind(pageNo, pageSize, sql);
 		}
         list = (List<Map<String, Object>>) postgresqlResults.get("list");//获取集合
 

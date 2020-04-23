@@ -112,10 +112,10 @@ public class Member{
 	private String member_party_position;
 
 	//工号
-	@Column(javaName = "jobNumber", sqlName = "String", sqlType = "job_number")
+	@Column(javaName = "authNumber", sqlName = "job_number", sqlType="varchar")
 	private String jobNumber;
 	//统一身份认证号码
-	@Column(javaName = "authNumber", sqlName = "String", sqlType = "auth_number")
+	@Column(javaName = "authNumber", sqlName = "auth_number", sqlType="varchar")
 	private String authNumber;
 	
 	@Override

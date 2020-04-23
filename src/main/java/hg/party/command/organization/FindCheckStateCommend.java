@@ -1,35 +1,20 @@
 package hg.party.command.organization;
 
 import java.io.PrintWriter;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.IntToDoubleFunction;
 
 import javax.portlet.PortletException;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-import org.quartz.SchedulerException;
-import org.springframework.util.StringUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCResourceCommand;
-import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
-import dt.session.SessionManager;
-import hg.party.entity.party.MeetingPlan;
-import hg.party.entity.partyMembers.Member;
-import hg.party.server.organization.PublicInformationService;
-import hg.party.server.party.PartyMeetingPlanInfo;
-import hg.party.server.party.PartyMemberServer;
-import hg.party.server.sms.SmsService;
+import hg.party.server.party.PartyMeetingPlanInfoService;
 import party.constants.PartyPortletKeys;
 @Component(
 		immediate = true,
@@ -44,7 +29,7 @@ import party.constants.PartyPortletKeys;
  */
 public class FindCheckStateCommend implements MVCResourceCommand{
 	 @Reference
-	 private PartyMeetingPlanInfo partyMeetingPlanInfo;
+	 private PartyMeetingPlanInfoService partyMeetingPlanInfoService;
 	 
 	@Override
 	public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
@@ -53,7 +38,7 @@ public class FindCheckStateCommend implements MVCResourceCommand{
         Map<String, Object> map=new HashMap<>();
 	    PrintWriter printWriter=null;
 	    try {
-	    	List<Map<String, Object>> list=partyMeetingPlanInfo.findChecKStateById(id);
+	    	List<Map<String, Object>> list= partyMeetingPlanInfoService.findChecKStateById(id);
 	    	printWriter=resourceResponse.getWriter();
 			if (list!=null&&list.size()>0) {
 				map.put("state", true);

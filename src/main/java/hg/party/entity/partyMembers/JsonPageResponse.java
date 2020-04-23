@@ -40,4 +40,14 @@ public class JsonPageResponse {
 	public void setCount(int count) {
 		this.count = count;
 	}
+
+	public JsonPageResponse() {
+	}
+
+	public JsonPageResponse(int code, String msg, Object data, int count) {
+		this.code = code;
+		this.msg = msg;
+		this.data = data;
+		this.count = count;
+	}
 }

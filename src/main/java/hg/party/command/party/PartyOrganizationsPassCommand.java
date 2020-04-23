@@ -19,7 +19,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 
 import dt.session.SessionManager;
 import hg.party.entity.party.MeetingPlan;
-import hg.party.server.party.PartyMeetingPlanInfo;
+import hg.party.server.party.PartyMeetingPlanInfoService;
 import party.constants.PartyPortletKeys;
 /**
  * 审批计划通过command(组织部)
@@ -39,7 +39,7 @@ public class PartyOrganizationsPassCommand implements MVCResourceCommand{
 	Logger logger = Logger.getLogger(PartyOrganizationsPassCommand.class);
 	
 	@Reference
-	private PartyMeetingPlanInfo partyMeetingPlanInfo;
+	private PartyMeetingPlanInfoService partyMeetingPlanInfoService;
 	
 	@Override
 	public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
@@ -52,12 +52,12 @@ public class PartyOrganizationsPassCommand implements MVCResourceCommand{
 		String user_id = (String)SessionManager.getAttribute(sessionID, "user_name");//登录用户
 		
 		if(!"".equals(meeting_id) && null != meeting_id){
-			List<MeetingPlan> meetingid = partyMeetingPlanInfo.meetingId(meeting_id);
+			List<MeetingPlan> meetingid = partyMeetingPlanInfoService.meetingId(meeting_id);
 			MeetingPlan meeting = meetingid.get(0);
 			meeting.setTask_status("4");
 			meeting.setTask_status_org("6");
 			meeting.setAuditor(user_id);
-			partyMeetingPlanInfo.saveOrUpdate(meeting);
+			partyMeetingPlanInfoService.saveOrUpdate(meeting);
 		}
 		
 		logger.info("通过");

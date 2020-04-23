@@ -20,7 +20,7 @@ import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 
 import hg.party.command.exportexcl.ExprotUntil;
-import hg.party.server.party.PartyMeetingPlanInfo;
+import hg.party.server.party.PartyMeetingPlanInfoService;
 import party.constants.PartyPortletKeys;
 
 /**
@@ -46,7 +46,7 @@ import party.constants.PartyPortletKeys;
 public class OrgCheckCountPortlet extends MVCPortlet{
 	Logger logger = Logger.getLogger(OrgCheckCountPortlet.class);
 	@Reference
-	private PartyMeetingPlanInfo partyMeetingPlanInfo;
+	private PartyMeetingPlanInfoService partyMeetingPlanInfoService;
 	@SuppressWarnings("unused")
 	private int pageSize = 8;//每页条数
 	@Override
@@ -69,7 +69,7 @@ public class OrgCheckCountPortlet extends MVCPortlet{
 		checkState = HtmlUtil.escape(checkState);
 		int pageNo = ParamUtil.getInteger(renderRequest, "pageNo");
 	
-		List<Map<String, Object>> list= partyMeetingPlanInfo.find(startTime,endTime, meetType, meetTheme, seconedId, branchId,checkState);
+		List<Map<String, Object>> list= partyMeetingPlanInfoService.find(startTime,endTime, meetType, meetTheme, seconedId, branchId,checkState);
 		//获取当前页
 		
 		 int totalCount=list.size();
@@ -84,7 +84,7 @@ public class OrgCheckCountPortlet extends MVCPortlet{
 			pageNo = totalPage;
 	     }
 	     List<Map<String, Object>> listResult= 
-	    	partyMeetingPlanInfo.find(startTime,endTime, meetType, meetTheme, seconedId, branchId, pageSize,
+	    	partyMeetingPlanInfoService.find(startTime,endTime, meetType, meetTheme, seconedId, branchId, pageSize,
 			(pageNo-1)*pageSize,checkState);
 	     for (Map<String, Object> map : listResult) {
 	    	 try {

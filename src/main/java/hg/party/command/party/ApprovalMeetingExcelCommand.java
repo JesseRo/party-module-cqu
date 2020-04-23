@@ -21,7 +21,7 @@ import com.liferay.portal.kernel.util.PortalUtil;
 
 import dt.session.SessionManager;
 import hg.party.entity.party.ApprovalMeetingExecl;
-import hg.party.server.party.PartyMeetingPlanInfo;
+import hg.party.server.party.PartyMeetingPlanInfoService;
 import hg.party.unity.ExcelUtil;
 import hg.util.ConstantsKey;
 import party.constants.PartyPortletKeys;
@@ -46,7 +46,7 @@ property = {
 
 public class ApprovalMeetingExcelCommand implements MVCResourceCommand{
 	@Reference
-	private PartyMeetingPlanInfo partyMeetingPlanInfo;
+	private PartyMeetingPlanInfoService partyMeetingPlanInfoService;
 	
 	@Override
 	public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
@@ -62,7 +62,7 @@ public class ApprovalMeetingExcelCommand implements MVCResourceCommand{
 		}else if(ConstantsKey.SECOND_PARTY.equals(role)){
 			perm = "branch";
 		}
-		List<Map<String, Object>> lists = partyMeetingPlanInfo.approvalExcel(perm);
+		List<Map<String, Object>> lists = partyMeetingPlanInfoService.approvalExcel(perm);
 		try {
 			JSONArray jsonArray=new JSONArray();
 			for(Map<String, Object> map : lists){

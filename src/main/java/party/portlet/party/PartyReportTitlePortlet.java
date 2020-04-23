@@ -1,27 +1,17 @@
 package party.portlet.party;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 
 import javax.portlet.Portlet;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 
-import com.dt.springjdbc.dao.impl.PostgresqlQueryResult;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
-import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.PortalUtil;
 
-import hg.party.server.party.PartyMeetingPlanInfo;
-import hg.party.server.party.PartyMemberServer;
-import hg.party.server.toDoList.EvaluationServer;
 import party.constants.PartyPortletKeys;
 
 /**

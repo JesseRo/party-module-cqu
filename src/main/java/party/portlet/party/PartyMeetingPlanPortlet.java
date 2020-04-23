@@ -20,7 +20,7 @@ import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 
-import hg.party.server.party.PartyMeetingPlanInfo;
+import hg.party.server.party.PartyMeetingPlanInfoService;
 import hg.party.server.toDoList.EvaluationServer;
 import party.constants.PartyPortletKeys;
 
@@ -47,7 +47,7 @@ import party.constants.PartyPortletKeys;
 public class PartyMeetingPlanPortlet extends MVCPortlet{
 	Logger logger = Logger.getLogger(PartyMeetingPlanPortlet.class);
 	@Reference
-	private PartyMeetingPlanInfo partyMeetingPlanInfo;
+	private PartyMeetingPlanInfoService partyMeetingPlanInfoService;
 	@Reference
 	private EvaluationServer evaluationServer;
 	
@@ -132,7 +132,7 @@ public class PartyMeetingPlanPortlet extends MVCPortlet{
 						")\n" +
 						"ORDER BY\n" +
 						"\t\tplan.task_status asc";
-				Map<String, Object> postgresqlResults = partyMeetingPlanInfo.postGresqlFind(pageNo, pageSize, sql, org);
+				Map<String, Object> postgresqlResults = partyMeetingPlanInfoService.postGresqlFind(pageNo, pageSize, sql, org);
 				list = (List<Map<String, Object>>) postgresqlResults.get("list");//获取集合
 				
 				String meeting_Id = "";

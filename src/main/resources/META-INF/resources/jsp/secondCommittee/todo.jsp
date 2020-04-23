@@ -2,9 +2,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ include file="/init.jsp" %>
-
-<portlet:actionURL name="/PageNoMVCActionCommand" var="pageNoUrl">
-</portlet:actionURL>
 <!DOCTYPE html>
 <html>
 
@@ -15,84 +12,8 @@
     <title>二级党委-待办事项</title>
     <link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/activity-manage1.css?v=1"/>
     <link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/common.min.css"/>
-    <%--     <link rel="stylesheet" href="${basePath }/css/bootstrap.min.css" /> --%>
-    <script type="text/javascript" src="${basePath}/js/My97DatePicker/WdatePicker.js"></script>
+    <portlet:resourceURL id="/org/meeting/page" var="OrgMeetingPage" />
     <style type="text/css">
-
-
-        .content_table td {
-            min-width: 150px;
-        }
-
-        .replaytable th, td {
-            text-align: left;
-        }
-
-        /* 转派给党支部弹窗样式 */
-
-        #transmit .publish_obj_container {
-            border: 1px solid #d8d8d8;
-            padding: 10px 0;
-        }
-
-        #transmit .publish_obj_title {
-            border-bottom: 1px solid #d8d8d8;
-            padding-bottom: 10px;
-        }
-
-        #transmit .select_choice:nth-child(1) {
-            margin-right: 10px;
-        }
-
-        #transmit .publish_obj_title .right .select_choice {
-            display: inline-block;
-        }
-
-        #transmit .list-group {
-            max-height: 150px;
-            overflow-y: auto;
-            margin-top: 10px;
-            margin-bottom: 0px;
-        }
-
-        #transmit .publish_obj_info .list-group-item {
-            border: none;
-            font-size: 13px;
-            color: #666;
-            padding: 5px 10px;
-            cursor: pointer;
-        }
-
-        select.height_34 {
-            height: 34px;
-        }
-
-        /* 转派给党支部弹窗样式 */
-        td.publicDate {
-            min-width: 170px;
-        }
-
-        td, th {
-            text-align: left;
-            padding: 0;
-        }
-
-        .content_table td {
-            min-width: 160px;
-        }
-
-        select#taskStatus {
-            border: none;
-            background: #f7f7f7;
-        }
-
-        select#meetingType {
-            /* size: 20px; */
-            /* text-align: right; */
-            border: none;
-            background: #f7f7f7;
-            width: 90px;
-        }
         .content_table thead tr{
             background: #F6F8FC;
             height: 48px;
@@ -109,6 +30,39 @@
             padding: 5px 15px !important;
             height: 48px;
             font-size: 14px;
+        }
+
+        .table_outer_box > table thead, tbody tr {
+            display: table-row !important;
+            width: 100%;
+            table-layout: fixed;
+        }
+        #searchForm .layui-form-item .layui-inline .keyword {
+            width: 300px;
+            margin-right: 0px;
+        }
+        #personInfo .layui-form-item .layui-input-inline{
+            width:200px
+        }
+        #personInfo .layui-form-label{
+            width:140px;
+            font-weight:bold;
+        }
+        #personInfo .layui-form-label-text{
+            float: left;
+            display: block;
+            padding: 0 10px;
+            width: 200px;
+            font-weight: 400;
+            line-height: 40px;
+            font-size: 16px;
+            text-align: left;
+        }
+        th, tr{
+            text-align:center !important;
+        }
+        .layui-table-page-center{
+            text-align: center;
         }
     </style>
 </head>
@@ -147,115 +101,19 @@
                     </span>
         </div>
         <div class="bg_white_container">
-            <form action="${pageNoUrl }" id="searchForm" method="post">
-                <div class="publish_search_box operate_form_group" style="padding-left:0;"> <input type="hidden" name="informId" value="eca28ccf-ad61-4fc6-9084-224037aba15f">
-                    <input type="hidden" name="pageNo" value="1">
-                    <input type="hidden" name="totalPage" value="1">
-                    <div class="search_container " style="float: right;">
-                        <input type="text" name="search" value="${search}" placeholder="搜索条件" autocomplete="off" class="layui-input custom_input">
-                        <button type="button" class="layui-btn custom_btn search_btn" onclick="$('#searchForm').submit();">查询</button>
+            <form class="layui-form" id="searchForm">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <div class="layui-input-inline keyword">
+                            <input type="text" name="keyword"  placeholder="请输入姓名、组织、主题关键字" class="layui-input">
+                        </div>
+                        <button type="button"  class="layui-btn layui-btn-warm"  lay-submit="" lay-filter="searchForm"><icon class="layui-icon layui-icon-search"></icon>搜索</button>
                     </div>
                 </div>
             </form>
-            <div class="table_outer_box">
-                <table class="layui-table custom_table" >
-                    <thead>
-                        <tr>
-                            <td>会议类型</td>
-                            <td>会议主题</td>
-                            <td>发布时间</td>
-                            <td>开始时间</td>
-                            <td>时长</td>
-                            <td>任务状态</td>
-                            <td>操作</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    <c:forEach var="c" items="${informMeetingList}" varStatus="status">
-                        <tr class="oneinfo" id="${c.inform_id }">
-                            <td data-label="会议类型">${c.meeting_type}
-                            </td>
-                            <td data-label="会议主题">
-                                <a onclick="window.location.href='/approvaldetails?meetingId=${c.meeting_id}'" style="cursor: pointer;">${c.meeting_theme}</a>
-                            </td>
-                            <td data-label="发布时间">
-                                <c:if test="${not empty c.submit_time}">
-                                    <fmt:formatDate pattern="yyyy-MM-dd HH:mm" value="${c.submit_time }"/>
-                                </c:if>
-                            </td>
-                            <td data-label="开始时间">
-                                <c:if test="${not empty c.start_time}">
-                                    <fmt:formatDate pattern="yyyy-MM-dd HH:mm" value="${c.start_time }"/>
-                                </c:if>
-                            </td>
-                            <td data-label="时长">
-                                    ${c.total_time / 60}
-                            </td>
-                            <td data-label="状态">
-                                ${meetingStates[c.task_status]}
-<%--                                <c:if test="${info.task_status == '1'}">--%>
-<%--                                    已提交--%>
-<%--                                </c:if>--%>
-<%--                                <c:if test="${info.task_status == '2'}">--%>
-<%--                                    已撤回--%>
-<%--                                </c:if>--%>
-<%--                                <c:if test="${info.task_status == '3'}">--%>
-<%--                                    被驳回--%>
-<%--                                </c:if>--%>
-<%--                                <c:if test="${info.task_status == '4'}">--%>
-<%--                                    已通过--%>
-<%--                                </c:if>--%>
-<%--                                <c:if test="${info.task_status == '5'}">--%>
-<%--                                    已指派--%>
-<%--                                </c:if>--%>
-<%--                                <c:if test="${info.task_status == '6'}">--%>
-<%--                                    未检查--%>
-<%--                                </c:if>--%>
-<%--                                <c:if test="${info.task_status == '7'}">--%>
-<%--                                    已检查--%>
-<%--                                </c:if>--%>
-                            </td>
-                            <td data-label="操作">
-                                <c:if test="${c.task_status eq 2 || c.task_status eq 3}">
-                                    <a onclick="window.location.href='/sendplan?meetingId=${c.meeting_id}'" href="javascript:;">重拟计划</a>
-                                </c:if>
-                                <c:if test="${c.task_status eq 0}">
-                                    <a onclick="window.location.href='/sendplan?meetingId=${c.meeting_id}&type=edit'" href="javascript:;">编辑</a>
-                                </c:if>
-                            </td>
-<%--                            <td>--%>
-<%--                                <c:if test="${c.task_status eq 4}">--%>
-<%--                                    <a onclick="window.location.href='/uploadnotes?meetingId=${c.meeting_id}'" href="javascript:;">上传</a>--%>
-<%--                                </c:if>--%>
-<%--                            </td>--%>
-                        </tr>
-                    </c:forEach>
-
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="pagination_container">
-                <ul class="pagination" id="page"></ul>
-                <div class="pageJump">
-                    <input class='current_page' type="hidden" value="${pageNo}"/>
-                    <p>共<span class="total_page">${pages }</span>页</p>
-                    <form action="${pageNoUrl}" id="getPageNo" method="post">
-                        <input type="hidden" id="pageNo" name="pageNo"/>
-                        <input type="hidden" id="total_page_" name="total_page_" value="${pages}"/>
-                        <span>跳转到第</span>
-                        <input type="text" id="jumpPageNo" name="jumpPageNo"/>
-                        <span>页</span>
-                        <input name="search" value="${search}"/>
-
-                        <button type="submit" class="button">确定</button>
-                    </form>
-                </div>
-            </div>
+            <table id="meetingPlanTable" lay-filter="meetingPlanTable"></table>
         </div>
     </div>
-    <portlet:resourceURL id="/hg/exportseconedToDoList" var="exportseconedToDoList"/>
-    <%--           <a href="${exportseconedToDoList }">数据导出excel</a>   --%>
 </div>
 
 
@@ -378,70 +236,109 @@
 
                 </table>
             </div>
-            <!-- <div class="modal-footer">
-                <button type="button" class="btn btn_main">确定</button>
-            </div> -->
         </div>
     </div>
 </div>
 
 
 </body>
-
+<script type="text/html" id="meetingPlanTableBtns">
+    {{#  if(d.task_status == "1"){ }}
+    <%--<a class="layui-btn layui-btn-xs" lay-event="check">审核</a>--%>
+    <a class="layui-btn layui-btn-xs" onclick="Pass('${d.meeting_id }');">
+        通过</a>
+    <a  class="layui-btn layui-btn-xs" onclick="entry('${d.meeting_id }');">
+        驳回</a>
+    {{#  } }}
+    {{#  if(d.task_status == '4' || d.task_status == '5' || d.task_status == '6'){ }}
+    <a class="layui-btn layui-btn-xs" href="/sendplan?meetingId=${d.meeting_id }&orgType=secondary&type=edit"> 编辑</a>
+    <%--<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>--%>
+    {{#  } }}
+    <a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
+</script>
 <script>
-    $(document).ready(function () {
-
-        $(".deadline_time").each(function () {
-            if (new Date($(this).html()) < new Date()) {
-                $(this).css("color", "red");
-                var name = $(this).next().next().find("a").html();
-                if (name === '拟定计划' || name === "部署") {
-                    $(this).next().next().find("a").removeAttr("href");
-                }
-            }
-        });
-
-
-        var pages = $(".total_page").html();
-        var currentPage = $('.current_page').val();
-        $("input[name='pageNo']").val($('.current_page').val());
-        if (currentPage == 1) {
-            $('.page_next').removeClass('not_allow');
-            $('.page_prev').addClass('not_allow');
-
-        } else if (currentPage == pages) {
-            $('.page_prev').removeClass('not_allow');
-            $('.page_next').addClass('not_allow');
-
-        } else {
-
-        }
-        ;
-        $("#jumpPageNo").change(function () {
-            $("input[name='pageNo']").val($(this).val());
+    layui.use(['table','layer','form'], function() {
+        var table = layui.table,
+            layer = layui.layer,
+            form = layui.form;
+        renderTable();
+        form.on('submit(searchForm)', function (data) {
+            renderTable();
         })
-        Page({
-            num: pages, //页码数
-            startnum: currentPage, //指定页码
-            elem: $('#page'), //指定的元素
-            callback: function (n) { //回调函数
-                $("input[name='pageNo']").val(n);
-                $("#mt").val($("#meetingType").val());
-                $("#ts").val($("#taskStatus").val());
-                $("#getPageNo").submit();
-                if (n == 1) {
-                    $('#page a').removeClass('not_allow');
-                    $('.page_prev').addClass('not_allow');
-                } else if (n >= $('.total_page').html()) {
-                    $('#page a').removeClass('not_allow');
-                    $('.page_next').addClass('not_allow')
-                } else {
-                    $('#page a').removeClass('not_allow');
-                }
-            }
-        });
-    });
+        function renderTable(){
+            var  where = {
+                keyword: $("#searchForm input[name=keyword]").val()
+            };
+            table.render({
+                elem: '#meetingPlanTable',
+                where: where,
+                height:560,
+                url: '${OrgMeetingPage}', //数据接口
+                method: 'post',
+                page: {
+                    limit:10,   //每页条数
+                    limits:[10,15,20],
+                    prev:'&lt;上一页',
+                    next:'下一页&gt;',
+                    theme: '#FFB800',
+                    groups:4
+                },
+                cols: [[ //表头
+                    {field: 'meeting_type', align:'center', title: '活动类型'},
+                    {field: 'meeting_theme', align:'center',width:320, title: '活动主题',templet:function(d){
+                            return '<a  href="/approvaldetails?meetingId='+d.meeting_id+'&orgType=secondary">'+d.meeting_theme+'</a>';
+                        }},
+                    {field: 'start_time', align:'center', title: '开始时间',width:180,templet: function(d){return new Date(d.start_time).format("yyyy-MM-dd hh:mm:ss");}},
+                    {field: 'total_time', align:'center', title: '时长',width:100,templet: function(d){return d.total_time/60;}},
+                    {field: 'member_name', align:'center', title: '联系人'},
+                    {field: 'task_status', align:'center', title: '任务状态',width:120,templet: function(d){
+                            var status = '';
+                            switch(parseInt(d.task_status)){
+                                case 1:status = '待提交';break;
+                                case 1:status = '待审核';break;
+                                case 2:status = '已撤回';break;
+                                case 3:status = '已驳回';break;
+                                case 4:status = '已通过';break;
+                                case 5:status = '已指派';break;
+                                case 6:status = '未检查';break;
+                                case 7:status = '已检查';break;
+                            }
+                            return status;
+                        }},
+                    {field: 'operation', align:'center', title: '操作',width:200,toolbar: '#meetingPlanTableBtns'},
 
+                ]]
+            });
+            $(".layui-table-view .layui-table-page").addClass("layui-table-page-center");
+            $(".layui-table-view .layui-table-page").removeClass("layui-table-page");
+            //监听事件
+            table.on('tool(meetingPlanTable)', function(obj){
+                switch(obj.event){
+                    case 'check':
+                        //renderDetail('check',obj);
+                        break;
+                    case 'detail':
+                        // renderDetail('check',obj);
+                        break;
+                };
+            });
+        }
+    });
+    Date.prototype.format = function (fmt) {
+        var o = {
+            "M+": this.getMonth() + 1, //月份
+            "d+": this.getDate(), //日
+            "h+": this.getHours(), //小时
+            "m+": this.getMinutes(), //分
+            "s+": this.getSeconds(), //秒
+            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+            "S": this.getMilliseconds() //毫秒
+        };
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    }
     /*常用人员 添加*/
     $(".add_btn").on("click", ">.btn", function () {
         $(this).siblings("form").css("display", "inline-block");
@@ -728,18 +625,6 @@
     $(".seeExperienceDetail").click(function () {
         $("#check").modal("hide");
     });
-
-
-    /* 截止时间 */
-
-    /*  function deadline_time(){
-         $(".deadline_time").each(function(){
-                if(new Date($(this).html())>new Date()){
-                     $(this).css("color","red");
-                }
-             });
-       }
-         */
 </script>
 
 </html>

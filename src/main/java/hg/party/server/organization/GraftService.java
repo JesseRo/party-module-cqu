@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import hg.util.postgres.PostgresqlPageResult;
 import org.osgi.service.component.annotations.Component;
 import org.springframework.util.StringUtils;
 
@@ -163,11 +165,8 @@ public class GraftService {
 	public int deletePublicObject(String informId){
 		return dao.deletePublicObject(informId);
 	}
-//public static void main(String[] args) throws ParseException {
-//	GraftService service=new GraftService();
-//	//System.out.println(service.findGrafts(0,"more"));
-//	//System.out.println(service.dateParse("nowDate"));
-//	//System.out.println(service.findAlreadyPublic(1));
-//	System.out.println(service.findGraftDetail("57a6f767-e70d-4d63-b622-e08cb66d2bb9"));
-//  }
+
+	public PostgresqlPageResult<Map<String, Object>> searchPage(int page, int size, String dateType,String orgId,int publicStatus, String keyword) {
+		return dao.searchPage(page,size,dateType,orgId,publicStatus,keyword);
+	}
 }

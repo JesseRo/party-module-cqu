@@ -21,15 +21,13 @@ import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 
 import dt.session.SessionManager;
-import hg.party.entity.organization.Assign;
 import hg.party.entity.party.MeetingNote;
 import hg.party.entity.party.MeetingPlan;
 import hg.party.server.party.PartyAssignServer;
 import hg.party.server.party.PartyMeetingNoteServer;
-import hg.party.server.party.PartyMeetingPlanInfo;
+import hg.party.server.party.PartyMeetingPlanInfoService;
 import party.constants.PartyPortletKeys;
 import party.portlet.cqu.dao.CheckPersonDao;
-import party.portlet.cqu.entity.CheckPerson;
 
 /**
  * 录入提交command(二级党组织)
@@ -52,7 +50,7 @@ public class PartyWriteActionCommand implements MVCResourceCommand{
 	@Reference
 	private PartyMeetingNoteServer partyMeetingNoteServer;
 	@Reference
-	private PartyMeetingPlanInfo partyMeetingPlanInfo;
+	private PartyMeetingPlanInfoService partyMeetingPlanInfoService;
 	@Reference
 	private PartyAssignServer partyAssignServer;
 	@Reference
@@ -78,10 +76,10 @@ public class PartyWriteActionCommand implements MVCResourceCommand{
 		transactionUtil.startTransaction();
 		try {
 			if(!"".equals(meeting_id)){
-				List<MeetingPlan> meetingPlan = partyMeetingPlanInfo.meetingId(meeting_id);
+				List<MeetingPlan> meetingPlan = partyMeetingPlanInfoService.meetingId(meeting_id);
 				MeetingPlan mPlan = meetingPlan.get(0);
 				mPlan.setTask_status("7"); 
-				partyMeetingPlanInfo.saveOrUpdate(mPlan);
+				partyMeetingPlanInfoService.saveOrUpdate(mPlan);
 				
 				List<MeetingNote> meetingNote = partyMeetingNoteServer.meetingNote(meeting_id);
 				if(meetingNote.size() == 0){

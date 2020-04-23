@@ -17,7 +17,7 @@ import com.liferay.portal.kernel.util.PortalUtil;
 
 import dt.session.SessionManager;
 import hg.party.entity.toDoList.Experience;
-import hg.party.server.party.PartyMeetingPlanInfo;
+import hg.party.server.party.PartyMeetingPlanInfoService;
 import hg.party.server.toDoList.ExperienceServer;
 import party.constants.PartyPortletKeys;
 
@@ -47,7 +47,7 @@ public class ExperienceSaveActionCommand extends BaseMVCActionCommand {
 	@Reference
 	private ExperienceServer experienceServer;
 	@Reference
-	private PartyMeetingPlanInfo partyMeetingPlanInfo;
+	private PartyMeetingPlanInfoService partyMeetingPlanInfoService;
 	@Override
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
 		Experience experience = new Experience();
@@ -62,7 +62,7 @@ public class ExperienceSaveActionCommand extends BaseMVCActionCommand {
 		synchronized (PortalUtil.getHttpServletRequest(actionRequest).getSession()) {
 			String originalFormId = (String) SessionManager.getAttribute(actionRequest.getRequestedSessionId(), "formId-informParty");
             if (formId.equals(originalFormId)) {
-				int a = partyMeetingPlanInfo.experience(meetingId,userId).size();
+				int a = partyMeetingPlanInfoService.experience(meetingId,userId).size();
 				if("".equals(content) || content==null){
 					return;
 				}else{
@@ -74,7 +74,7 @@ public class ExperienceSaveActionCommand extends BaseMVCActionCommand {
 						experience.setContent(content);
 						experienceServer.save(experience);
 					}else {
-						partyMeetingPlanInfo.updateHeart(content,meetingId,userId);
+						partyMeetingPlanInfoService.updateHeart(content,meetingId,userId);
 					}
 				}
             }

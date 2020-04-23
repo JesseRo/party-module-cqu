@@ -21,10 +21,9 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.MVCResourceCommand;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
-import com.liferay.portal.kernel.xml.Entity;
 
 import hg.party.entity.ExportExcelEntity.OrgMeetingConut;
-import hg.party.server.party.PartyMeetingPlanInfo;
+import hg.party.server.party.PartyMeetingPlanInfoService;
 import hg.party.unity.ExcelUtil;
 import party.constants.PartyPortletKeys;
 
@@ -39,7 +38,7 @@ property = {
 )
 public class OrgCheckCount implements MVCResourceCommand{
 	@Reference
-	private PartyMeetingPlanInfo partyMeetingPlanInfo;
+	private PartyMeetingPlanInfoService partyMeetingPlanInfoService;
 	@Override
 	public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 			throws PortletException {
@@ -59,7 +58,7 @@ public class OrgCheckCount implements MVCResourceCommand{
 		checkState = HtmlUtil.escape(checkState);
 		try {
 			//List<Map<String, Object>> list= partyMeetingPlanInfo.find("", "", "", "", "");
-			List<Map<String, Object>> list= partyMeetingPlanInfo.find(startTime,endTime, meetType, meetTheme, seconedId, branchId,checkState);
+			List<Map<String, Object>> list= partyMeetingPlanInfoService.find(startTime,endTime, meetType, meetTheme, seconedId, branchId,checkState);
 			JSONArray jsonArray=new JSONArray();
 			for (Map<String, Object> map : list) {
 				OrgMeetingConut o=new OrgMeetingConut();

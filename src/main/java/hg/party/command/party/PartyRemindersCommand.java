@@ -20,12 +20,10 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.MVCResourceCommand;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 
-import dt.session.SessionManager;
 import hg.party.entity.login.User;
 import hg.party.entity.party.MeetingPlan;
-import hg.party.entity.partyMembers.Member;
 import hg.party.entity.unity.ResourceProperties;
-import hg.party.server.party.PartyMeetingPlanInfo;
+import hg.party.server.party.PartyMeetingPlanInfoService;
 import hg.party.server.party.PartyMemberServer;
 import hg.party.server.party.PartyUserServer;
 import hg.util.MailSend;
@@ -46,7 +44,7 @@ public class PartyRemindersCommand implements MVCResourceCommand{
 	
 	Logger logger = Logger.getLogger(PartyRemindersCommand.class);
 	@Reference
-	private PartyMeetingPlanInfo partyMeetingPlanInfo;
+	private PartyMeetingPlanInfoService partyMeetingPlanInfoService;
 	@Reference
 	private PartyMemberServer partyMemberServer;
 	@Reference
@@ -77,7 +75,7 @@ public class PartyRemindersCommand implements MVCResourceCommand{
 			StringBuffer receiveMailAccountBuf = null;//群发
 			
 			if(!"".equals(meeting_id)){
-				List<MeetingPlan> meetingPlan = partyMeetingPlanInfo.meetingId(meeting_id);
+				List<MeetingPlan> meetingPlan = partyMeetingPlanInfoService.meetingId(meeting_id);
 				auditor = meetingPlan.get(0).getAuditor();	
 //				List<Member> member_name = partyMemberServer.MemberMailbox(auditor);
 				List<User> member_name = partyUserServer.userName(auditor);

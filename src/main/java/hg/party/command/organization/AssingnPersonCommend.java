@@ -4,11 +4,9 @@ import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.function.IntToDoubleFunction;
 
 import javax.portlet.PortletException;
 import javax.portlet.ResourceRequest;
@@ -25,7 +23,7 @@ import dt.session.SessionManager;
 import hg.party.entity.party.MeetingPlan;
 import hg.party.entity.partyMembers.Member;
 import hg.party.server.organization.PublicInformationService;
-import hg.party.server.party.PartyMeetingPlanInfo;
+import hg.party.server.party.PartyMeetingPlanInfoService;
 import hg.party.server.party.PartyMemberServer;
 import hg.party.server.sms.SmsService;
 import party.constants.PartyPortletKeys;
@@ -50,7 +48,7 @@ public class AssingnPersonCommend implements MVCResourceCommand{
 	 @Reference
 	 private PartyMemberServer partyMemberServer;
 	 @Reference
-	 private PartyMeetingPlanInfo partyMeetingPlanInfo;
+	 private PartyMeetingPlanInfoService partyMeetingPlanInfoService;
 	 
 	@Override
 	public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
@@ -62,8 +60,8 @@ public class AssingnPersonCommend implements MVCResourceCommand{
 		List<Member> Member = partyMemberServer.Member(assignId);//查询电话
 		List<String> Member_phone = new ArrayList<String>();
 		Member_phone.add((String)Member.get(0).getMember_phone_number());
-		List<MeetingPlan> p = partyMeetingPlanInfo.MeetingPlan(id);//获取短信内容
-		List<Map<String, Object>> depp = partyMeetingPlanInfo.dep(dep);
+		List<MeetingPlan> p = partyMeetingPlanInfoService.MeetingPlan(id);//获取短信内容
+		List<Map<String, Object>> depp = partyMeetingPlanInfoService.dep(dep);
 		String start_time = String.valueOf(p.get(0).getStart_time()).substring(0,19); //开始时间
 		String end_time = String.valueOf(p.get(0).getEnd_time()).substring(11,19); //结束时间
 		
