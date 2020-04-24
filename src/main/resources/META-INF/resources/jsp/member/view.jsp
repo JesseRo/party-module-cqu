@@ -321,23 +321,27 @@
                     element = layui.element;
                 var checkedNode = null;
                 var isHistory = false;
+                var pageInfo = {
+                    page:1,
+                    size:10
+                };
                 element.on('tab(tabMemberType)', function(elem){
                     if(elem.index == 0){
                         isHistory = false;
-                        renderTable();
+                        renderTable(1,pageInfo.size);
                         renderButtons();
                     }else{
                         isHistory = true;
-                        renderTable();
+                       renderTable(1,pageInfo.size);
                         renderButtons();
                     }
                 });
 
                 renderTree();
                 form.on('submit(searchForm)', function(data){
-                    renderTable()
+                    renderTable(1,pageInfo.size);
                 })
-                function renderTable(){
+                function renderTable(page,size){
                    var  where = {
                        id: checkedNode.id
                        , memberType: $("#searchForm select[name=memberType]").val()
@@ -350,30 +354,38 @@
                        ,{field: 'member_sex', align:'center', title: '性别',width:80}
                        ,{field: 'member_identity', align:'center', title: '公民身份证', minWidth:200}
                        ,{field: 'member_phone_number', align:'center', title: '联系电话'}
-                       ,{field: 'member_address', align:'center', title: '家庭住址',width:400}
+                       ,{field: 'member_fomal_date', align:'center', title: '入党时间'}
                        ,{field: 'member_type', align:'center', title: '党员类型'}
                        ,{field: 'historic', title: '操作', width:120, align:'center',toolbar: '#tableTool'}
                    ]];
-                    table.render({
+                   var ins = table.render({
                         elem: '#memberTable'
                         ,where: where
                         ,height:450
                         ,url: '${orgMember}'//数据接口
+                        ,id:"queryList"
                         ,page: {
-                                limit:10,   //每页条数
+                                limit:size,   //每页条数
                                 limits:[10,15,20],
                                 prev:'&lt;上一页',
+                                curr:page,
                                 next:'下一页&gt;',
                                 theme: '#FFB800',
                                 groups:4
                         }
                         ,cols: cols
+                        ,done: function(res, curr, count){
+                            pageInfo.page = curr;
+                            pageInfo.size = ins.config.limit;
+                           if(count<(pageInfo.page-1)*pageInfo.size){
+                               renderTable(pageInfo.page-1,pageInfo.size);
+                           }
+                        }
                     });
                     $(".layui-table-view .layui-table-page").addClass("layui-table-page-center");
                     $(".layui-table-view .layui-table-page").removeClass("layui-table-page");
                     //监听事件
                     table.on('tool(memberTable)', function(obj){
-                        //var checkStatus = table.checkStatus(obj.config.id);
                         switch(obj.event){
                             case 'delete':
                                 deleteMember(obj.data.member_identity);
@@ -402,7 +414,7 @@
                             checkedNode = d.current;
                             $("#org-path").empty();
                             $("#org-path").append(getPathHtml(checkedNode));
-                            renderTable();
+                            renderTable(1,pageInfo.size);
                             renderButtons();
 
                         },
@@ -414,7 +426,7 @@
                             treeSelect.checkNode('orgTree', checkedNode.id);
                             $("#org-path").empty();
                             $("#org-path").append(getPathHtml(checkedNode));
-                            renderTable();
+                            renderTable(1,pageInfo.size);
                             renderButtons();
                         }
                     });
@@ -466,37 +478,12 @@
                             success: function (succee) {
                                 if (succee.state == true) {
                                     layer.msg("删除成功");
-                                    orgMember(1, checkedNode.data.org_id, 'current_root');
+                                    renderTable(pageInfo.page,pageInfo.size);
                                 } else {
                                     layer.msg("删除失败");
                                 }
                             }
                         });
-                    });
-                }
-
-                function orgMember(pageNow, orgId, history) {
-
-                    $.post('${orgMember}', {orgId: orgId, pageNow: pageNow, history: history}, function (res) {
-                        if (res.result) {
-                            var members = res.data.list;
-                            var isHis = 'historic_root' == history;
-                            var trs = detail(members, isHis);
-
-                            var pageTotal = parseInt(res.data.totalRow);//总页数
-                            $('table.custom_table').html(trs);
-                            $('.select_all').attr("src", "/images/not_check_icon.png");
-                            new Page({
-                                num: Math.ceil(pageTotal / 10), //页码数
-                                startnum: pageNow, //指定页码
-                                elem: $('#status-pager'), //指定的元素
-                                callback: function (n) { //回调函数
-                                    orgMember(n, orgId, history);
-                                }
-                            });
-                        } else {
-                            /* alert('!?'); */
-                        }
                     });
                 }
 
@@ -522,7 +509,7 @@
                     $('#upload-block [type="file"]').click();
                 }
 
-                function memberExportPorc() {
+                function memberExportProc() {
                     var ishistory = isHistory?1:0;
                     window.location.href = '${orgExport}&type=member&orgId=' + checkedNode.data.org_id + '&orgName=' + $('#title').text() + '&ishistory=' + ishistory;
                 }
@@ -531,7 +518,7 @@
                     var $button = $(this);
                     switch ($button.attr('id')) {
                         case 'memberExport':
-                            memberExportPorc($button);
+                            memberExportProc($button);
                             break;
                         case 'memberImport':
                             memberImportProc($button);
@@ -549,42 +536,16 @@
 
                 /* 删除*/
                 $("#delete").click(function () {
-                    var checkStatus = table.checkStatus(obj.config.id);
-                    var imgs = $(".table_info img[src='/images/checked_icon.png']");
-                    var resourcesId = new Array("");
-                    for (var i = 0; i < imgs.length; i++) {
-                        var resourceId = $(imgs[i]).prev().val();
-                        resourcesId.push(resourceId);
-                    }
-                    var resources = resourcesId.join(",").substring(1) + "";
-                    var url = "${orgDeletePerson}";
-                    if (!resources) {
-                        /* showConfirm("请选择删除对象！"); */
-                        alert("请选择删除对象！");
+                    var selectData = layui.table.checkStatus('queryList').data;
+                    if (selectData.length<1) {
+                        layer.alert("请选择删除对象！");
                         return;
                     }
-                    $.hgConfirm("提示", "确定删除吗？");
-                    $("#hg_confirm").modal("show");
-                    $("#hg_confirm .btn_main").click(function () {
-                        $("#hg_confirm").modal("hide");
-                        var orgId = $(".third_menu_on").attr("id");
-                        $.ajax({
-                            url: url,
-                            data: {"<portlet:namespace/>userIds": resources, "<portlet:namespace/>orgId": orgId},
-                            dataType: "json",
-                            success: function (succee) {
-                                if (succee.state == true) {
-                                    $(".table_info img[src='/images/checked_icon.png']").parent().parent().remove();
-                                    alert("删除成功");
-                                    orgMember(1, orgId, 'current_root');
-                                } else {
-                                    alert("删除失败");
-                                }
-                            }
-                        });
-
-                    })
-
+                    var userIds = new Array();
+                    for(var i =0;i<selectData.length;i++){
+                        userIds.push(selectData[i].member_identity);
+                    }
+                    deleteMember(userIds.join(","));
                 });
 
                 $("#addPerson").click(function () {

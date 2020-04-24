@@ -119,25 +119,31 @@
         var table = layui.table,
             layer = layui.layer,
             form = layui.form;
-        renderTable();
+        var pageInfo = {
+            page:1,
+            size:10
+        };
+        renderTable(1,pageInfo.size);
         form.on('submit(searchForm)', function (data) {
-            renderTable();
+            renderTable(1,pageInfo.size);
         })
-        function renderTable(){
+        function renderTable(page,size){
             var  where = {
                 keyword: $("#searchForm input[name=keyword]").val(),
                 dateType: $("#searchForm select[name=dateType]").val()
             };
-            table.render({
+
+            var ins = table.render({
                 elem: '#informTable',
                 where: where,
                 height:560,
                 url: '${InformPage}', //数据接口
                 method: 'post',
                 page: {
-                    limit:10,   //每页条数
+                    limit:size,   //每页条数
                     limits:[10,15,20],
                     prev:'&lt;上一页',
+                    curr:page,
                     next:'下一页&gt;',
                     theme: '#FFB800',
                     groups:4
@@ -148,7 +154,14 @@
                     {field: 'release_time', align:'center', title: '发布时间',width:180,templet: function(d){return new Date(d.release_time).format("yyyy-MM-dd hh:mm:ss");}},
                     {field: 'operation', align:'center', title: '操作',width:120,toolbar: '#informTableBtns'}
 
-                ]]
+                ]],
+                done: function(res, curr, count){
+                    pageInfo.page = curr;
+                    pageInfo.size = ins.config.limit;
+                    if(count<(pageInfo.page-1)*pageInfo.size){
+                        renderTable(pageInfo.page-1,pageInfo.size);
+                    }
+                }
             });
             $(".layui-table-view .layui-table-page").addClass("layui-table-page-center");
             $(".layui-table-view .layui-table-page").removeClass("layui-table-page");

@@ -219,12 +219,18 @@ public class OrgCRUDCommand implements MVCResourceCommand{
 			if(list.contains(DataOperationEnum.DELETE.getType())){
 				Organization organization = orgService.findOrgById(Integer.parseInt(id));
 				if (organization != null){
-					int rows = orgService.deleteOrg(Integer.parseInt(id));
-					if(rows>0){
-						printWriter.write(JSON.toJSONString(ResultUtil.success(null,"删除成功！")));
+					List<Map<String,Object>> users = orgService.findAllUsers(organization);
+					if(users.size()>0){
+						printWriter.write(JSON.toJSONString(ResultUtil.fail("删除失败！请先删除该组织下的用户。")));
 					}else{
-						printWriter.write(JSON.toJSONString(ResultUtil.fail("删除失败！")));
+						int rows = orgService.deleteOrg(Integer.parseInt(id));
+						if(rows>0){
+							printWriter.write(JSON.toJSONString(ResultUtil.success(null,"删除成功！")));
+						}else{
+							printWriter.write(JSON.toJSONString(ResultUtil.fail("删除失败！")));
+						}
 					}
+
 				} else {
 					printWriter.write(JSON.toJSONString(ResultUtil.fail("组织信息不存在！")));
 				}

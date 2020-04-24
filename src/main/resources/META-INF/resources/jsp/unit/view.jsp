@@ -52,20 +52,25 @@
                 var table = layui.table,
                     form = layui.form,
                     layer= layui.layer;
-                renderTable();
-                function renderTable(){
+                var pageInfo = {
+                    page:1,
+                    size:10
+                };
+                renderTable(1,pageInfo.size);
+                function renderTable(page,size){
                     var  where = {
                         keyword: $("#searchForm input[name=keyword]").val()
                     };
-                    table.render({
+                    var ins = table.render({
                         elem: '#unitTable',
                         where: where,
                         url: '${unitPage}', //数据接口
                         method: 'post',
                         height:560,
                         page: {
-                            limit:10,   //每页条数
+                            limit:size,   //每页条数
                             limits:[10,15,20],
+                            curr:page,
                             prev:'&lt;上一页',
                             next:'下一页&gt;',
                             theme: '#FFB800',
@@ -77,7 +82,11 @@
                             {field: 'update_member_name', title: '更新人员', align:'center'},
                             {field: 'update_time', title: '更新时间', align:'center'},
                             {field: 'operate', title: '操作', width: 120, toolbar: '#unitBtns', align:'center'}
-                        ]]
+                        ]],
+                        done: function(res, curr, count){
+                            pageInfo.page = curr;
+                            pageInfo.size = ins.config.limit;
+                        }
                     });
                     $(".layui-table-view .layui-table-page").addClass("layui-table-page-center");
                     $(".layui-table-view .layui-table-page").removeClass("layui-table-page");
@@ -118,7 +127,7 @@
                             if(res.result){
                                 var msg = id==null?'添加成功。':'修改成功。';
                                 layer.msg(msg);
-                                renderTable();
+                                renderTable(1,pageInfo.size);
                                 layer.close(index);
                             }else if(res){
                                 layer.msg(res.message);
@@ -136,13 +145,13 @@
                         $.post("${delete}", {id: id},function (res) {
                             if (res.result){
                                 layer.msg("删除成功");
-                                renderTable();
+                                renderTable(pageInfo.page,pageInfo.size);
                             }
                         })
                     });
                 }
                 $("#search_btn").on("click",function(){
-                    renderTable();
+                    renderTable(1,pageInfo.size);
                 });
                 $("#createUnit").on("click",function() {
                     renderUnitModal(null);

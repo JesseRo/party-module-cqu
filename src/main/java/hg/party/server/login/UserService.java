@@ -39,13 +39,16 @@ public class UserService {
     public User findByUserId(String id) {
         User tt = new User();
         List<Map<String, Object>> listMap = userDao.findAllByUserId(id);
-        for (Map<String, Object> map : listMap) {
+        if(listMap.size()>0){
+            Map<String, Object> map = listMap.get(0);
             tt.setId(Integer.parseInt(map.get("_id") + ""));
             tt.setUser_password((String) map.get("user_password"));
             tt.setUser_id((String) map.get("user_id"));
             tt.setUser_name((String) map.get("user_name"));
             tt.setUser_department_id((String) map.get("user_department_id"));
             tt.setState(map.get("state").toString());
+        }else{
+            tt =null;
         }
         return tt;
     }

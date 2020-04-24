@@ -1,10 +1,7 @@
 package party.portlet.cqu;
 
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
-import hg.party.server.dwonlistserver.DownListServer;
-import org.apache.log4j.Logger;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 import party.constants.PartyPortletKeys;
 
 import javax.portlet.Portlet;
@@ -24,8 +21,6 @@ import java.io.IOException;
 			"com.liferay.portlet.requires-namespaced-parameters=false",
 			"javax.portlet.portlet-mode=text/html;view,edit",
 			"javax.portlet.init-param.view-template=/jsp/check/view.jsp",
-//			"javax.portlet.init-param.edit-template=/jsp/downlist/edit.jsp",
-			
 			"javax.portlet.name=" + PartyPortletKeys.CheckPerson,
 			"javax.portlet.resource-bundle=content.Language",
 			"javax.portlet.security-role-ref=power-user,user"
@@ -33,9 +28,6 @@ import java.io.IOException;
 		service = Portlet.class
 	)
 public class CheckPersonPortlet extends MVCPortlet {
-	Logger logger = Logger.getLogger(CheckPersonPortlet.class);
-	@Reference
-	private DownListServer listServer;
 
 	public void doView(RenderRequest req, RenderResponse res) throws IOException, PortletException {
 		super.doView(req, res);

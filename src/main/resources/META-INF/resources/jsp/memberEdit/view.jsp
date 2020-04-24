@@ -55,23 +55,28 @@
                 var table = layui.table,
                     layer = layui.layer,
                     form = layui.form;
-                renderTable();
+                var pageInfo = {
+                    page:1,
+                    size:10
+                };
+                renderTable(1,pageInfo.size);
                 form.on('submit(searchForm)', function(data){
-                    renderTable()
+                    renderTable(1,pageInfo.size);
                 })
-                function renderTable(){
+                function renderTable(page,size){
                     var  where = {
                         keyword: $("#searchForm input[name=keyword]").val()
                     };
-                    table.render({
+                    var ins = table.render({
                         elem: '#transportTable',
                         where: where,
                         height:560,
                         url: '${transport}', //数据接口
                         method: 'post',
                         page: {
-                            limit:10,   //每页条数
+                            limit:size,   //每页条数
                             limits:[10,15,20],
+                            curr:page,
                             prev:'&lt;上一页',
                             next:'下一页&gt;',
                             theme: '#FFB800',
@@ -84,7 +89,11 @@
                             {field: 'status', align:'center', title: '任务状态'},
                             {field: 'status', align:'center', title: '操作',width:120,toolbar: '#transportBtns'},
                             {field: 'reason', align:'center', title: '备注'}
-                        ]]
+                        ]],
+                        done: function(res, curr, count){
+                            pageInfo.page = curr;
+                            pageInfo.size = ins.config.limit;
+                        }
                     });
                     $(".layui-table-view .layui-table-page").addClass("layui-table-page-center");
                     $(".layui-table-view .layui-table-page").removeClass("layui-table-page");
