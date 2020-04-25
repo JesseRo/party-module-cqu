@@ -49,7 +49,7 @@ public class TransportDao extends PostgresqlDaoImpl<Transport> {
                 " where ((o.org_parent = ? and t.type in ('2', '3')) or t.approved_list::jsonb @> '\"" + orgId + "\"'::jsonb" +
                 " or t.current_approve_org = ?)";
         if (!StringUtils.isEmpty(name)){
-            sql += " and m.member_name like ?";
+            sql += " and t.user_name like ?";
         }
         if (type != null && type.size() > 0) {
             sql += " and t.type in ('" + String.join("','", type) + "')";
@@ -77,7 +77,7 @@ public class TransportDao extends PostgresqlDaoImpl<Transport> {
                 " left join hg_party_org o on o.org_id = m.member_org" +
                 " where t.type in ('2', '3')";
         if (!StringUtils.isEmpty(name)){
-            sql += " and m.member_name like ?";
+            sql += " and t.user_name like ?";
         }
         if (type != null && type.size() > 0) {
             sql += " and t.type in ('" + String.join("','", type) + "')";
@@ -105,7 +105,7 @@ public class TransportDao extends PostgresqlDaoImpl<Transport> {
                 " where (m.member_org = ? or t.approved_list::jsonb @> '\"" + orgId + "\"'::jsonb " +
                 " or t.current_approve_org = ?)";
         if (!StringUtils.isEmpty(name)){
-            sql += " and m.member_name like ?";
+            sql += " and t.user_name like ?";
         }
         if (type != null && type.size() > 0) {
             sql += " and t.type in ('" + String.join("','", type) + "')";

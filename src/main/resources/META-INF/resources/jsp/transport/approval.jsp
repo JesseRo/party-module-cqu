@@ -51,7 +51,7 @@
                 var table = layui.table;
 
                 //第一个实例
-                table.render({
+                var retentionTable = table.render({
                     elem: '#retentionTable',
                     url: '${retention}', //数据接口
                     method: 'post',
@@ -297,7 +297,7 @@
                     });
                 });
                 $('#retentionSearchBtn').on('click', function () {
-                    transportTable.reload({
+                    retentionTable.reload({
                         where: {memberName : $('#retentionCondition').val()},
                         page: {
                             curr: 1 //重新从第 1 页开始
