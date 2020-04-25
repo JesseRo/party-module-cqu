@@ -143,19 +143,39 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">转出类型：</label>
                 <div class="layui-input-block">
-                    <select name="transport_type" lay-filter="transport_type" class="organRelaForm">
+                    <c:choose>
+
+                    <c:when test="${already > 0 }">
+                    <select name="transport_type" disabled lay-filter="transport_type" class="organRelaForm">
                         <option value="0">院内</option>
                         <option value="1">校内</option>
                         <option value="2">重庆市内</option>
                         <option value="3" selected="">重庆市外</option>
                     </select>
+                    </c:when>
+                    <c:otherwise>
+                        <select name="transport_type" lay-filter="transport_type" class="organRelaForm">
+                            <option value="0">院内</option>
+                            <option value="1">校内</option>
+                            <option value="2">重庆市内</option>
+                            <option value="3" selected="">重庆市外</option>
+                        </select>
+                    </c:otherwise>
+                    </c:choose>
                 </div>
             </div>
             <input name="isResubmit" value="${isResubmit}" type="hidden">
             <div class="layui-form-item">
                 <label class="layui-form-label">去往单位：</label>
                 <div class="layui-input-block" id="org_name">
-                    <input type="text" id="org" placeholder="按照转入单位要求填转入往单位" maxlength="20" name="org" autocomplete="off" class="layui-input">
+                    <c:choose>
+                    <c:when test="${already > 0 }">
+                        <input type="text" disabled id="org" placeholder="按照转入单位要求填转入往单位" maxlength="20" name="org" autocomplete="off" class="layui-input">
+                    </c:when>
+                    <c:otherwise>
+                        <input type="text" id="org" placeholder="按照转入单位要求填转入往单位" maxlength="20" name="org" autocomplete="off" class="layui-input">
+                    </c:otherwise>
+                    </c:choose>
                 </div>
 <%--                <div class="dropdown-sin-2" style="display: none;" id="org_id">--%>
 <%--                    <select name="org" style="display:none;" multiple placeholder="请选择" id="org_select"></select>--%>
@@ -197,17 +217,35 @@
             <div class="layui-form-item layui-form-text" id="transport_title">
                 <label class="layui-form-label">介绍信抬头：</label>
                 <div class="layui-input-block">
-                    <textarea maxlength="200" name="transport_title" placeholder="转入/挂靠党组织名称（详见注意事项）" class="layui-textarea"></textarea>
+                    <c:choose>
+                    <c:when test="${already > 0 }">
+                    <textarea maxlength="200" disabled name="transport_title" placeholder="转入/挂靠党组织名称（详见注意事项）" class="layui-textarea"></textarea>
+                    </c:when>
+                    <c:otherwise>
+                        <textarea maxlength="200" name="transport_title" placeholder="转入/挂靠党组织名称（详见注意事项）" class="layui-textarea"></textarea>
+                    </c:otherwise>
+                    </c:choose>
                 </div>
             </div>
             <div class="layui-form-item layui-form-text">
                 <label class="layui-form-label" id="reason_title">转出原因：</label>
                 <div class="layui-input-block">
-                    <select name="transport_reason" lay-filter="organRelaForm">
-                        <option value="升学"  selected="">升学</option>
-                        <option value="工作">工作</option>
-                        <option value="其他">其他</option>
-                    </select>
+                    <c:choose>
+                        <c:when test="${already > 0 }">
+                            <select name="transport_reason" disabled lay-filter="organRelaForm">
+                                <option value="升学"  selected="">升学</option>
+                                <option value="工作">工作</option>
+                                <option value="其他">其他</option>
+                            </select>
+                        </c:when>
+                        <c:otherwise>
+                            <select name="transport_reason" lay-filter="organRelaForm">
+                                <option value="升学"  selected="">升学</option>
+                                <option value="工作">工作</option>
+                                <option value="其他">其他</option>
+                            </select>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
             </div>
             <c:if test="${already == 0 }">

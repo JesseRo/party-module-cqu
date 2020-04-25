@@ -288,12 +288,22 @@
                     ]]
                 });
 
-                $('#transportType').change(function () {
+                $('#transportSearchBtn').on('click', function () {
                     transportTable.reload({
-                        where: {type: $('#transportType').val()}
+                        where: {type: $('#transportType').val(), memberName : $('#searchCondition').val()},
+                        page: {
+                            curr: 1 //重新从第 1 页开始
+                        }
+                    });
+                });
+                $('#retentionSearchBtn').on('click', function () {
+                    transportTable.reload({
+                        where: {memberName : $('#retentionCondition').val()},
+                        page: {
+                            curr: 1 //重新从第 1 页开始
+                        }
                     });
                 })
-
             });
         });
 
@@ -337,16 +347,22 @@
                 <div class="layui-tab-content">
                     <div class="layui-tab-item layui-show">
                         <div class="operate_form_group">
-                            <select type="text" name="title" id="transportType" autocomplete="off" class="form-control" style="width: 15%;">
-                                <option value="">全部类型</option>
+                            <select type="text" name="title" id="transportType" autocomplete="off" class="form-control" style="width: 15%;float: left;border-radius: 0;height: 40px!important;">
+                                <option value="">全部转出类型</option>
                                 <option value="0,1">校内</option>
                                 <option value="2">市内</option>
                                 <option value="3">市外</option>
                             </select>
+                            <input type="text" name="title" id="searchCondition"  placeholder="搜索党员" autocomplete="off" class="layui-input custom_input" style="margin-left: 20px;">
+                            <button type="button" id="transportSearchBtn" class="layui-btn custom_btn search_btn">查询</button>
                         </div>
                         <table id="transportTable" lay-filter="activityTable" class="custom_table"></table>
                     </div>
                     <div class="layui-tab-item">
+                        <div class="operate_form_group">
+                            <input type="text" name="title" id="retentionCondition"  placeholder="搜索党员" autocomplete="off" class="layui-input custom_input">
+                            <button type="button" id="retentionSearchBtn" class="layui-btn custom_btn search_btn">查询</button>
+                        </div>
                         <table id="retentionTable" lay-filter="retentionTable" class="custom_table"></table>
                     </div>
                 </div>

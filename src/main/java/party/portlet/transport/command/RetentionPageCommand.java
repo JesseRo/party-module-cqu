@@ -15,6 +15,7 @@ import hg.party.entity.partyMembers.JsonResponse;
 import hg.util.ConstantsKey;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+import org.springframework.util.StringUtils;
 import party.constants.PartyPortletKeys;
 import party.portlet.transport.dao.RetentionDao;
 import party.portlet.transport.dao.TransportDao;
@@ -52,13 +53,17 @@ public class RetentionPageCommand implements MVCResourceCommand {
 
 		int page = ParamUtil.getInteger(resourceRequest, "page");
 		int size = ParamUtil.getInteger(resourceRequest, "limit");
+		String name = ParamUtil.getString(resourceRequest, "memberName");
 		PostgresqlQueryResult<Map<String, Object>> data = null;
+		if (!StringUtils.isEmpty(name)){
+			name = "%" + name + "%";
+		}
 		if (organization.getOrg_type().equalsIgnoreCase(ConstantsKey.ORG_TYPE_SECONDARY)){
-			data = retentionDao.findSecondaryPage(page, size, orgId);
+			data = retentionDao.findSecondaryPage(page, size, orgId, name);
 		}else if (organization.getOrg_type().equalsIgnoreCase(ConstantsKey.ORG_TYPE_ROOT)){
-			data = retentionDao.findRootPage(page, size);
+			data = retentionDao.findRootPage(page, size, name);
 		} else if (organization.getOrg_type().equalsIgnoreCase(ConstantsKey.ORG_TYPE_BRANCH)) {
-			data = retentionDao.findBrunchPage(page, size, orgId);
+			data = retentionDao.findBrunchPage(page, size, orgId, name);
 		} else {
 			data = null;
 		}

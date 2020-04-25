@@ -52,6 +52,7 @@ public class TransportPageCommand implements MVCResourceCommand {
 		int page = ParamUtil.getInteger(resourceRequest, "page");
 		int size = ParamUtil.getInteger(resourceRequest, "limit");
 		String type = ParamUtil.getString(resourceRequest, "type");
+		String name = ParamUtil.getString(resourceRequest, "memberName");
 		PostgresqlQueryResult<Map<String, Object>> data = null;
 		List<String> types;
 		if (!StringUtils.isEmpty(type)){
@@ -60,12 +61,16 @@ public class TransportPageCommand implements MVCResourceCommand {
 			types = null;
 		}
 
+		if (!StringUtils.isEmpty(name)){
+			name = "%" + name + "%";
+		}
+
 		if (organization.getOrg_type().equalsIgnoreCase(ConstantsKey.ORG_TYPE_BRANCH)) {
-			data = transportDao.findBranchPage(page, size, orgId, types);
+			data = transportDao.findBranchPage(page, size, orgId, types, name);
 		} else if (organization.getOrg_type().equalsIgnoreCase(ConstantsKey.ORG_TYPE_SECONDARY)){
-			data = transportDao.findSecondaryPage(page, size, orgId, types);
+			data = transportDao.findSecondaryPage(page, size, orgId, types, name);
 		}else if (organization.getOrg_type().equalsIgnoreCase(ConstantsKey.ORG_TYPE_ROOT)){
-			data = transportDao.findRootPage(page, size, types);
+			data = transportDao.findRootPage(page, size, types, name);
 		}else {
 			data = null;
 		}

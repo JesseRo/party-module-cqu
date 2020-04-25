@@ -4,6 +4,7 @@ import com.dt.springjdbc.dao.impl.PostgresqlDaoImpl;
 import com.dt.springjdbc.dao.impl.PostgresqlQueryResult;
 import org.osgi.service.component.annotations.Component;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.util.StringUtils;
 import party.portlet.report.entity.Report;
 import party.portlet.transport.entity.Retention;
 import party.portlet.transport.entity.Transport;
@@ -22,28 +23,40 @@ public class RetentionDao extends PostgresqlDaoImpl<Retention> {
         }
     }
 
-    public PostgresqlQueryResult<Map<String, Object>> findSecondaryPage(int page, int size, String orgId) {
+    public PostgresqlQueryResult<Map<String, Object>> findSecondaryPage(int page, int size, String orgId, String name) {
         String sql = "select t.*, o.org_name from hg_party_retention t " +
                 "left join hg_party_org o on t.org_id = o.org_id" +
                 " where o.org_parent = ? order by t.status asc";
+        if (!StringUtils.isEmpty(name)){
+            sql += " and t.user_name like ?";
+        }
         if (size <= 0){
             size = 10;
         }
         try {
+            if (!StringUtils.isEmpty(name)){
+                return postGresqlFindBySql(page, size, sql, orgId, name);
+            }
             return postGresqlFindBySql(page, size, sql, orgId);
         } catch (Exception e) {
             return null;
         }
     }
 
-    public PostgresqlQueryResult<Map<String, Object>> findRootPage(int page, int size) {
+    public PostgresqlQueryResult<Map<String, Object>> findRootPage(int page, int size, String name) {
         String sql = "select t.*, o.org_name from hg_party_retention t " +
                 "left join hg_party_org o on t.org_id = o.org_id" +
                 " order by status asc";
+        if (!StringUtils.isEmpty(name)){
+            sql += " and t.user_name like ?";
+        }
         if (size <= 0){
             size = 10;
         }
         try {
+            if (!StringUtils.isEmpty(name)){
+                return postGresqlFindBySql(page, size, sql, name);
+            }
             return postGresqlFindBySql(page, size, sql);
         } catch (Exception e) {
             return null;
@@ -60,14 +73,20 @@ public class RetentionDao extends PostgresqlDaoImpl<Retention> {
         }
   }
 
-    public PostgresqlQueryResult<Map<String, Object>> findBrunchPage(int page, int size, String orgId) {
+    public PostgresqlQueryResult<Map<String, Object>> findBrunchPage(int page, int size, String orgId, String name) {
         String sql = "select t.*, o.org_name from hg_party_retention t " +
                 "left join hg_party_org o on t.org_id = o.org_id" +
                 " where o.org_id = ? order by t.status asc";
+        if (!StringUtils.isEmpty(name)){
+            sql += " and t.user_name like ?";
+        }
         if (size <= 0){
             size = 10;
         }
         try {
+            if (!StringUtils.isEmpty(name)){
+                return postGresqlFindBySql(page, size, sql, orgId, name);
+            }
             return postGresqlFindBySql(page, size, sql, orgId);
         } catch (Exception e) {
             return null;

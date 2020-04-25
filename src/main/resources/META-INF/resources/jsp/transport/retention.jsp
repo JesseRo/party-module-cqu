@@ -30,6 +30,7 @@
                     $.post("${save}", data.field, function (res) {
                         if(res.result){
                             alert("提交成功");
+                            window.location.reload();
                         }else {
                             alert("失败");
                         }
