@@ -60,6 +60,9 @@
             background-color: #ffab33;
             font-weight: bold;
         }
+        .layui-laydate-content table thead tr{
+            display:flex;
+        }
     </style>
     <script type="text/javascript" src="${basePath}/js/jquery.jqprint-0.3.js"></script>
     <script type="text/javascript" src="${basePath}/js/My97DatePicker/WdatePicker.js"></script>

@@ -100,7 +100,7 @@ public class AddPersonResourceCommand implements MVCResourceCommand {
 					+ ", \"member_landline_number\", \"member_is_outofcontact\", \"member_outofcontact_date\", \"member_is_flow\""
 					+ ", \"member_flow_to\", \"member_membership_state\", \"member_mailbox\", \"historic\", \"member_party_position\", \"member_marriage\", \"member_province\", \"member_city\""
 					+ ", \"member_major_title\", \"member_new_class\", \"member_front_line\", \"member_party_committee\", \"member_birth_place\", \"member_is_leader\", \"member_unit\","
-					+"job_number,authNumber)"
+					+"job_number,auth_number)"
 					+ "VALUES ('" + userName + "', '" + sex + "', '" + ethnicity + "', NULL, '" + birthday + "', '"
 					+ ID_card + "', '" + member_degree + "', '" + job + "', '" + join_party_time + "', '"
 					+ turn_Time + "', '" + orgId + "', '" + party_type + "', '" + home_addrss + "', '" + telephone
@@ -138,9 +138,13 @@ public class AddPersonResourceCommand implements MVCResourceCommand {
 			// log.info("编辑人员:["+new Date()+"] [by "+userId+"] ID_card
 			// :["+ID_card+"]");
 			synchronized (PortalUtil.getHttpServletRequest(resourceRequest).getSession()) {
-
-
-					transactionUtil.startTransaction();
+				transactionUtil.startTransaction();
+				Member ret = memberDao.findMemberByUser(ID_card);
+				if(ret != null){
+					transactionUtil.rollback();
+					printWriter.write(JSON.toJSONString(ResultUtil.result(ResultCode.DATA_REPEAT,"身份证号已存在",ret)));
+					return false;
+				}else{
 					if (!StringUtils.isEmpty(id)) {
 //						u.setUser_password(MD5.getMD5(ID_card.substring(12)));
 						memberDao.insertOrUpate(Updatesql);
@@ -152,23 +156,17 @@ public class AddPersonResourceCommand implements MVCResourceCommand {
 						}
 						log.info("编辑人员:[" + new Date() + "] [by " + userId + "]  ID_card :[" + ID_card + "]");
 					} else {
-						Member ret = memberDao.findMemberByUser(ID_card);
-						if(ret != null){
-							transactionUtil.rollback();
-							printWriter.write(JSON.toJSONString(ResultUtil.result(ResultCode.DATA_REPEAT,"身份证号已存在",ret)));
-							return false;
-						}else{
-							u.setUser_password(MD5.getMD5(ID_card.substring(12)));
-							memberDao.insertOrUpate(sql);
-							UserDao.save(u);
-							log.info("添加人员:[" + new Date() + "] [by " + userId + "]  ID_card :[" + ID_card + "]");
-						}
+						u.setUser_password(MD5.getMD5(ID_card.substring(12)));
+						memberDao.insertOrUpate(sql);
+						UserDao.save(u);
+						log.info("添加人员:[" + new Date() + "] [by " + userId + "]  ID_card :[" + ID_card + "]");
 
 					}
 					transactionUtil.commit();
 					SessionManager.setAttribute(resourceRequest.getRequestedSessionId(), "addperson-formId", "NULL");
 					printWriter.write(JSON.toJSONString(ResultUtil.success(null)));
 				}
+			}
 
 		} catch (Exception e) {
 			transactionUtil.rollback();

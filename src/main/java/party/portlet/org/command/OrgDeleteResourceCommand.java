@@ -44,6 +44,7 @@ public class OrgDeleteResourceCommand implements MVCResourceCommand {
 		//String deleteSsql = "delete from hg_party_group_member_info where participant_id='"+userId+"'";
 		try {
 			transactionUtil.startTransaction();
+			//逻辑删除，可恢复
 			int n = 0;
 			int j = 0;
 			for (int i = 0; i < userIdInfo.length; i++) {
@@ -51,9 +52,9 @@ public class OrgDeleteResourceCommand implements MVCResourceCommand {
 				String deleteSsql = "delete from hg_party_group_member_info where participant_id='"+userIdInfo[i]+"'";
 				n = orgDao.deletePersonByuserId(userIdInfo[i]);
 				j = orgDao.deleteUserByuserId(userIdInfo[i]);
-				orgDao.deleteAdmin(userIdInfo[i]);
-			    memberDao.insertOrUpate(deleteSsql);
-			 int k= memberDao.insertOrUpate(deleteAssigneSql);
+				//orgDao.deleteAdmin(userIdInfo[i]);
+			    //memberDao.insertOrUpate(deleteSsql);
+			 	//int k= memberDao.insertOrUpate(deleteAssigneSql);
 			}
 			Map<String, Object> map = new HashMap<>();
 			if (n == 1 && j == 1) {

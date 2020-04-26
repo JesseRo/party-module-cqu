@@ -606,7 +606,7 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
         if (size <= 0){
             size = 10;
         }
-        Organization org = orgDao.findOrgByOrgId(String.valueOf(orgId));
+        Organization org = orgDao.findOrgByOrgId(orgId);
         PartyOrgAdminTypeEnum partyOrgAdminTypeEnum = PartyOrgAdminTypeEnum.getEnum(org.getOrg_type());
         StringBuffer sb = new StringBuffer("SELECT plan.*,org.org_name,member.member_name");
         sb.append(" FROM hg_party_meeting_plan_info AS plan");
