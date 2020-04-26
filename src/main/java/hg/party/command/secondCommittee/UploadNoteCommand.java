@@ -46,7 +46,8 @@ import java.util.UUID;
 		immediate = true,
 		property = {
 			"javax.portlet.name="+ PartyPortletKeys.Form,
-			"mvc.command.name=/hg/uploadMeetingNotes"
+				"javax.portlet.name=" + PartyPortletKeys.NewPlan,
+				"mvc.command.name=/hg/uploadMeetingNotes"
 	    },
 	    service = MVCRenderCommand.class
 )

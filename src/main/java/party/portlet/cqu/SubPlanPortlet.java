@@ -39,7 +39,7 @@ import java.util.*;
                 "com.liferay.portlet.requires-namespaced-parameters=false",
                 "javax.portlet.portlet-mode=text/html;view,edit",
                 "javax.portlet.init-param.view-template=/jsp/partyBranch/sconedParty.jsp",
-                "javax.portlet.name=" + PartyPortletKeys.Form,
+                "javax.portlet.name=" + PartyPortletKeys.NewPlan,
                 "javax.portlet.resource-bundle=content.Language",
                 "javax.portlet.security-role-ref=power-user,user"
         },

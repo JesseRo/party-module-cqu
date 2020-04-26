@@ -48,6 +48,7 @@ import java.util.stream.Collectors;
         immediate = true,
         property = {
                 "javax.portlet.name=" + PartyPortletKeys.Form,
+                "javax.portlet.name=" + PartyPortletKeys.NewPlan,
                 "mvc.command.name=/hg/informParty"
         },
         service = MVCRenderCommand.class

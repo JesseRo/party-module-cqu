@@ -85,7 +85,7 @@
                     "                <span class=\" control-label form-label-required\">去往单位</span>\n" +
                     "            </div>\n" +
                     "            <div class=\"col-sm-9 col-xs-9 form-label\">\n" +
-                    "                <input class=\"form-control\" name=\"{toOrg}\" value=\"{toOrgTitle}\" disabled>\n" +
+                    "                <input class=\"form-control\" name=\"toOrg\" value=\"{toOrg}\" disabled>\n" +
                     "            </div>\n" +
                     "        </div>\n" +
                     "        <div class=\"col-sm-6 col-xs-12\">\n" +

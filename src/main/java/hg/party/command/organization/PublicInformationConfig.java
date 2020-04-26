@@ -30,7 +30,8 @@ import party.portlet.form.command.FormRenderCommand;
         immediate = true,
         property = {
                 "javax.portlet.name=" + PartyPortletKeys.Form,
-                "mvc.command.name=/hg/graftEdit"
+				"javax.portlet.name=" + PartyPortletKeys.NewPlan,
+				"mvc.command.name=/hg/graftEdit"
         },
         service = MVCRenderCommand.class
 )

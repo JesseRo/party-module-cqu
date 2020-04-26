@@ -37,7 +37,8 @@ import party.portlet.form.command.FormRenderCommand;
 		immediate = true,
 		property = {
 			"javax.portlet.name="+ PartyPortletKeys.Form,
-			"mvc.command.name=/hg/todoUploadNotes"
+				"javax.portlet.name=" + PartyPortletKeys.NewPlan,
+				"mvc.command.name=/hg/todoUploadNotes"
 	    },
 	    service = MVCRenderCommand.class
 )

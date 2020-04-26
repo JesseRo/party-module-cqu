@@ -29,7 +29,8 @@ import party.constants.PartyPortletKeys;
 		immediate = true,
 		property = {
 			"javax.portlet.name="+ PartyPortletKeys.Form,
-			"mvc.command.name=/hg/getBranchAllPersons"
+				"javax.portlet.name=" + PartyPortletKeys.NewPlan,
+				"mvc.command.name=/hg/getBranchAllPersons"
 	    },
 	    service =MVCResourceCommand.class
 )

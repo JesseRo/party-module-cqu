@@ -22,7 +22,7 @@ import java.util.List;
 @Component(
         immediate = true,
         property = {
-                "javax.portlet.name=" + PartyPortletKeys.Form,
+                "javax.portlet.name=" + PartyPortletKeys.NewPlan,
                 "mvc.command.name=/hg/place/list"
         },
         service = MVCResourceCommand.class

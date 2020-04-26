@@ -27,7 +27,8 @@ import party.portlet.partyBranch.partyBranchPortlet;
 		immediate = true,
 		property = {
 			"javax.portlet.name="+ PartyPortletKeys.Form,
-			"mvc.command.name=/hg/paersonAndGroupAddDelete"
+				"javax.portlet.name=" + PartyPortletKeys.NewPlan,
+				"mvc.command.name=/hg/paersonAndGroupAddDelete"
 	    },
 	    service = MVCResourceCommand.class
 )

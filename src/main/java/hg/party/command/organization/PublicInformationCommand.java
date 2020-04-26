@@ -39,6 +39,7 @@ import party.constants.PartyPortletKeys;
         immediate = true,
         property = {
                 "javax.portlet.name=" + PartyPortletKeys.Form,
+                "javax.portlet.name=" + PartyPortletKeys.NewPlan,
                 "mvc.command.name=/hg/publicInformation"
         },
         service = MVCActionCommand.class
@@ -77,27 +78,27 @@ public class PublicInformationCommand extends BaseMVCActionCommand {
         /*String content=ParamUtil.getString(actionRequest, "content");*/
         String state = ParamUtil.getString(actionRequest, "state");
         String theme = ParamUtil.getString(actionRequest, "theme");
-	/*	String note=ParamUtil.getString(actionRequest, "note");*/
+        /*	String note=ParamUtil.getString(actionRequest, "note");*/
         String end_time = ParamUtil.getString(actionRequest, "end_time");
         String deadline_time = ParamUtil.getString(actionRequest, "deadline_time");
         String content = ParamUtil.getString(actionRequest, "contentbody");
         String editState = ParamUtil.getString(actionRequest, "editState");
         String infrom_id = ParamUtil.getString(actionRequest, "infrom_id");
-        
-        
-        formId= HtmlUtil.escape(formId);
-        meetingType= HtmlUtil.escape(meetingType);
-        startDate= HtmlUtil.escape(startDate);
-        publicDate= HtmlUtil.escape(publicDate);
-        publicObject= HtmlUtil.escape(publicObject);
-        isComment= HtmlUtil.escape(isComment);
-        state= HtmlUtil.escape(state);
-        theme= HtmlUtil.escape(theme);
-        end_time= HtmlUtil.escape(end_time);
-        deadline_time= HtmlUtil.escape(deadline_time);
-     //   content= HtmlUtil.escape(content);
-        editState= HtmlUtil.escape(editState);
-        infrom_id= HtmlUtil.escape(infrom_id);
+
+
+        formId = HtmlUtil.escape(formId);
+        meetingType = HtmlUtil.escape(meetingType);
+        startDate = HtmlUtil.escape(startDate);
+        publicDate = HtmlUtil.escape(publicDate);
+        publicObject = HtmlUtil.escape(publicObject);
+        isComment = HtmlUtil.escape(isComment);
+        state = HtmlUtil.escape(state);
+        theme = HtmlUtil.escape(theme);
+        end_time = HtmlUtil.escape(end_time);
+        deadline_time = HtmlUtil.escape(deadline_time);
+        //   content= HtmlUtil.escape(content);
+        editState = HtmlUtil.escape(editState);
+        infrom_id = HtmlUtil.escape(infrom_id);
 
         String fileName = "ajaxFileName";
         UploadPortletRequest uploadPortletRequest = PortalUtil.getUploadPortletRequest(actionRequest);
@@ -110,8 +111,8 @@ public class PublicInformationCommand extends BaseMVCActionCommand {
                 transactionUtil.startTransaction();
                 OrgInform p = new OrgInform();
                 if ("orgEdit".equals(editState)) {
-                	 p=service.findByInformId(infrom_id).get(0);
-				}
+                    p = service.findByInformId(infrom_id).get(0);
+                }
                 String resourceid = UUID.randomUUID().toString();
                 String redirect;
                 try {
@@ -129,16 +130,16 @@ public class PublicInformationCommand extends BaseMVCActionCommand {
                     if ("edit".equals(editState)) {
                         resourceid = infrom_id;
                         graft.deletePublicObject(infrom_id);
-                       // String sql = "DELETE from hg_party_org_inform_info WHERE inform_id='" + infrom_id + "'";
-                       // service.saveAttachment(sql);
+                        // String sql = "DELETE from hg_party_org_inform_info WHERE inform_id='" + infrom_id + "'";
+                        // service.saveAttachment(sql);
                         service.deleteInformByInformId(infrom_id);
                     } else if ("resend".equals(editState)) {
                         p.setParent(infrom_id);
                         otherDao.updateOrgInform(orgId, infrom_id);
                         state = "2";
-                    }else if ("orgEdit".equals(editState)) {
-                    	      resourceid = infrom_id;
-					}
+                    } else if ("orgEdit".equals(editState)) {
+                        resourceid = infrom_id;
+                    }
                     p.setInform_id(resourceid);
                     p.setContent(content);
 
@@ -156,7 +157,7 @@ public class PublicInformationCommand extends BaseMVCActionCommand {
                     p.setPublisher(userName);
                     //发布人部门id
                     p.setOrg_type(orgId);
-       
+
 //                    if (uploadFiles != null && uploadFiles.length > 0 && uploadFiles[0] != null) {
 //                        p.setAttachment("t");
 //                    }
@@ -171,19 +172,19 @@ public class PublicInformationCommand extends BaseMVCActionCommand {
                             service.saveAttachment(sql);
                         }
                     }
-                   
-					if ("orgEdit".equals(editState)) {
-						service.updatePublicInformation(p);
-						service.updateFormId(paerse(startDate), paerse(end_time), paerse(deadline_time), infrom_id);
-					}else{
-						   service.savePublicInformation(p);
-						   if (!publicObject.trim().equals("") && publicObject.length() > 1) {
-					   for (int i = 0; i < str.length; i++) {
-					       String sql = "INSERT INTO hg_party_inform_group_info (\"inform_id\", \"pub_org_id\", \"has_resend\", \"read_status\") VALUES ('" + resourceid + "', '" + str[i] + "', NULL, '未读');";
-					        service.saveAttachment(sql);
-					           }
-					       }
-					}                 
+
+                    if ("orgEdit".equals(editState)) {
+                        service.updatePublicInformation(p);
+                        service.updateFormId(paerse(startDate), paerse(end_time), paerse(deadline_time), infrom_id);
+                    } else {
+                        service.savePublicInformation(p);
+                        if (!publicObject.trim().equals("") && publicObject.length() > 1) {
+                            for (int i = 0; i < str.length; i++) {
+                                String sql = "INSERT INTO hg_party_inform_group_info (\"inform_id\", \"pub_org_id\", \"has_resend\", \"read_status\") VALUES ('" + resourceid + "', '" + str[i] + "', NULL, '未读');";
+                                service.saveAttachment(sql);
+                            }
+                        }
+                    }
                     transactionUtil.commit();
                     SessionManager.setAttribute(actionRequest.getRequestedSessionId(), "formId-publicInformation", "null");
                 } catch (Exception e) {

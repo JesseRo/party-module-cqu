@@ -46,6 +46,7 @@ import party.constants.PartyPortletKeys;
 		"javax.portlet.name=" + PartyPortletKeys.Form,//AddInfo改为了ContentRelease
 		"javax.portlet.name=" + PartyPortletKeys.ToDoList,
 			"javax.portlet.name=" + PartyPortletKeys.SecondaryNewTaskPortlet,
+			"javax.portlet.name=" + PartyPortletKeys.NewPlan,
 
 			"mvc.command.name=/form/uploadVideo"
     },

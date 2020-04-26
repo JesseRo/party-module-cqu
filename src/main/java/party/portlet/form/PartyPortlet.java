@@ -37,17 +37,14 @@ import org.springframework.util.StringUtils;
 @Component(
 	immediate = true,
 	property = {
-		"com.liferay.portlet.display-category=category.sample",
+		"com.liferay.portlet.display-category=category.cqu",
 		"com.liferay.portlet.instanceable=true",
 		"javax.portlet.display-name=通用表单",
 		"javax.portlet.init-param.template-path=/",
-		
 		"javax.portlet.portlet-mode=text/html;view,edit",
-
 		"javax.portlet.init-param.view-template=/jsp/form/view.jsp",
 		"javax.portlet.init-param.edit-template=/jsp/form/edit.jsp",
 		"com.liferay.portlet.requires-namespaced-parameters=false",
-
 		"javax.portlet.name=" + PartyPortletKeys.Form,
 		"javax.portlet.resource-bundle=content.Language",
 		"javax.portlet.security-role-ref=power-user,user"

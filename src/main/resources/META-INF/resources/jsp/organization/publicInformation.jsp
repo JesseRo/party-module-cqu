@@ -79,7 +79,7 @@
 
     <script type="text/javascript">
         $(function () {
-            var form = '${design}';
+            var form = ${design};
             var uploadUrls = {
                 file: '${uploadfileUrl}',
                 image: '${uploadimageUrl}',

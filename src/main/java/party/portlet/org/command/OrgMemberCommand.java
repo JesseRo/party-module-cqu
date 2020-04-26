@@ -33,6 +33,7 @@ import java.util.stream.Collectors;
 				"javax.portlet.name=" + PartyPortletKeys.OrgAdmin,
 				"javax.portlet.name=" + PartyPortletKeys.Form,
 				"javax.portlet.name=" + PartyPortletKeys.CheckPerson,
+				"javax.portlet.name=" + PartyPortletKeys.NewPlan,
 				"mvc.command.name=/org/memberGroup"
 	    },
 	    service = MVCResourceCommand.class

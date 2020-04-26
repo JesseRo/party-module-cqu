@@ -22,7 +22,7 @@ import java.util.UUID;
 @Component(
         immediate = true,
         property = {
-                "javax.portlet.name=" + PartyPortletKeys.Form,
+                "javax.portlet.name=" + PartyPortletKeys.NewPlan,
                 "mvc.command.name=/hg/place/add"
         },
         service = MVCResourceCommand.class
