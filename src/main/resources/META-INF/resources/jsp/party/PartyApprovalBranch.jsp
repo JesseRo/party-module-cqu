@@ -139,22 +139,27 @@
 			var table = layui.table,
 					layer = layui.layer,
 					form = layui.form;
-			renderTable();
+			var pageInfo = {
+				page:1,
+				size:10
+			};
+			renderTable(1,pageInfo.size);
 			form.on('submit(searchForm)', function (data) {
-				renderTable();
+				renderTable(1,pageInfo.size);
 			})
-			function renderTable(){
+			function renderTable(page,size){
 				var  where = {
 					keyword: $("#searchForm input[name=keyword]").val()
 				};
-				table.render({
+				var ins = table.render({
 					elem: '#meetingPlanTable',
 					where: where,
 					height:560,
 					url: '${PartyMeetingPage}', //数据接口
 					method: 'post',
 					page: {
-						limit:10,   //每页条数
+						limit:size,   //每页条数
+						curr:page,
 						limits:[10,15,20],
 						prev:'&lt;上一页',
 						next:'下一页&gt;',
@@ -185,7 +190,11 @@
 							}},
 						{field: 'operation', align:'center', title: '操作',width:200,toolbar: '#meetingPlanTableBtns'},
 
-					]]
+					]],
+					done: function(res, curr, count){
+						pageInfo.page = curr;
+						pageInfo.size = ins.config.limit;
+					}
 				});
 				$(".layui-table-view .layui-table-page").addClass("layui-table-page-center");
 				$(".layui-table-view .layui-table-page").removeClass("layui-table-page");
@@ -202,6 +211,21 @@
 				});
 			}
 		});
+		Date.prototype.format = function (fmt) {
+			var o = {
+				"M+": this.getMonth() + 1, //月份
+				"d+": this.getDate(), //日
+				"h+": this.getHours(), //小时
+				"m+": this.getMinutes(), //分
+				"s+": this.getSeconds(), //秒
+				"q+": Math.floor((this.getMonth() + 3) / 3), //季度
+				"S": this.getMilliseconds() //毫秒
+			};
+			if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+			for (var k in o)
+				if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+			return fmt;
+		}
 		function Pass(meeting_id){
 			$.hgConfirm("提示","确认通过?");
 			$("#hg_confirm").modal("show");
@@ -218,21 +242,6 @@
 					}
 				});
 			})
-		}
-		Date.prototype.format = function (fmt) {
-			var o = {
-				"M+": this.getMonth() + 1, //月份
-				"d+": this.getDate(), //日
-				"h+": this.getHours(), //小时
-				"m+": this.getMinutes(), //分
-				"s+": this.getSeconds(), //秒
-				"q+": Math.floor((this.getMonth() + 3) / 3), //季度
-				"S": this.getMilliseconds() //毫秒
-			};
-			if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-			for (var k in o)
-				if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-			return fmt;
 		}
 		//点击驳回
 		function entry(meetingId){

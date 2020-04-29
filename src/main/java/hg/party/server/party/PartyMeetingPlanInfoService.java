@@ -151,8 +151,11 @@ public class PartyMeetingPlanInfoService {
         return partyMeetingPlanInfo.findMeetingNote(meetingId);
     }
 
-    public PostgresqlPageResult<Map<String, Object>> searchPage(int page, int size, String orgId, String search) {
-        return partyMeetingPlanInfo.searchPage(page, size,orgId, search);
+    public PostgresqlPageResult<Map<String, Object>> searchPlanPage(int page, int size, String orgId, String search) {
+        return partyMeetingPlanInfo.searchPlanPage(page, size,orgId, search);
+    }
+    public PostgresqlPageResult<Map<String, Object>> searchCheckPage(int page, int size, String orgId, String search) {
+        return partyMeetingPlanInfo.searchCheckPage(page, size,orgId, search);
     }
 
     public PostgresqlPageResult<Map<String, Object>> searchOrgPage(int page, int size, String orgId, String search) {

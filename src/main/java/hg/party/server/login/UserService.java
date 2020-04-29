@@ -94,6 +94,7 @@ public class UserService {
         try {
             user = findByUserId(userName);
         } catch (Exception e) {
+            e.printStackTrace();
             user = null;
         }
         //判断用户不存在

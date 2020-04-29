@@ -1,9 +1,23 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ include file="/init.jsp" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
+<portlet:resourceURL id="/part/meeting/check/Page" var="PartyMeetingCheckPage" />
 <portlet:actionURL name="/PageNoMVCActionCommand" var="pageNoUrl">
 </portlet:actionURL>
+<portlet:resourceURL id="/hg/assigned" var="assigned"/>
+<!--获取指派人员 列表 -->
+<portlet:resourceURL id="/hg/getAssignPersons" var="getAssignPersons"/>
+<!--指派人员  -->
+<portlet:resourceURL id="/hg/hg/assignPersonCheck" var="assignPersonCheck"/>
+<!--添加指派人员  -->
+<portlet:resourceURL id="/hg/assignedAddPerson" var="assignedAddPerson"/>
+<!--一键指派  -->
+<portlet:resourceURL id="/hg/assignedAddPersonAll" var="assignedAddPersonAll"/>
+
+<portlet:resourceURL id="/hg/getMeetingTypeAndTheme" var="getMeetingTypeAndTheme"/>
+
+<!-- 		下载图片 -->
+<portlet:resourceURL id="/PartyImageDownCommand" var ="download"></portlet:resourceURL>
 <script type="text/javascript" src="${basePath}/js/ajaxfileupload.js"></script>
 <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 <link rel="stylesheet" href="${ basePath}/css/assign.css" />
@@ -32,22 +46,37 @@
                     color: white;
               }
 			}
-			.content_table thead tr{
-				background: #F6F8FC;
-				height: 48px;
+			.table_outer_box > table thead, tbody tr {
+				display: table-row !important;
+				width: 100%;
+				table-layout: fixed;
+			}
+			#searchForm .layui-form-item .layui-inline .keyword {
+				width: 300px;
+				margin-right: 0px;
+			}
+			#personInfo .layui-form-item .layui-input-inline{
+				width:200px
+			}
+			#personInfo .layui-form-label{
+				width:140px;
+				font-weight:bold;
+			}
+			#personInfo .layui-form-label-text{
+				float: left;
+				display: block;
+				padding: 0 10px;
+				width: 200px;
+				font-weight: 400;
+				line-height: 40px;
 				font-size: 16px;
+				text-align: left;
 			}
-			.content_table thead th{
-				padding: 5px 15px !important;
+			th, tr{
+				text-align:center !important;
 			}
-			.content_table tr:nth-child(2n) {
-				background: #FBFCFE;
-			}
-			.content_table td{
-				min-width: 130px;
-				padding: 5px 15px !important;
-				height: 48px;
-				font-size: 14px;
+			.layui-table-page-center{
+				text-align: center;
 			}
 		</style>
 	</head>
@@ -63,245 +92,17 @@
 						</span>
 				</div>
 				<div class="bg_white_container">
-
-				<div style="height:34px;margin-bottom:20px;">
-					<form action="${pageNoUrl }" id="OrgCheckSeconed_form" method="post">
-						<div class="publish_search_box operate_form_group" style="padding-left:0;">
-							<input type="hidden" name="informId" value="${informId }">
-							<input type="hidden" name="pageNo" value="${pageNo }">
-							<input type="hidden" name="total_page_" value="${totalPage }">
-<%--							<input name="seconedName" type="text" value="${seconedName }" class="col-sm-10" placeholder="请输入搜索内容" style="text-indent:1em;height:34px;border: 1px solid #e1e1e1;border-right: none;float:left;background:#f7f7f7;"/>--%>
-<%--							<span onclick="submitOrgCheckSeconed_form();" style="background-image:url('/images/search_icon.png');background-repeat: no-repeat;background-position: center;background-color:#ce0000;display:inline-block;width:52px;height:34px;vertical-align: top;"></span>--%>
-							<div class="search_container " style="float: right;">
-								<input type="text" name="search" value="${search }" placeholder="搜索条件" autocomplete="off" class="layui-input custom_input">
-								<button type="button" class="layui-btn custom_btn search_btn" onclick="submitOrgCheckSeconed_form();">查询</button>
+					<form class="layui-form" id="searchForm">
+						<div class="layui-form-item">
+							<div class="layui-inline">
+								<div class="layui-input-inline keyword">
+									<input type="text" name="keyword"  placeholder="请输入组织名称、主题关键字" class="layui-input">
+								</div>
+								<button type="button"  class="layui-btn layui-btn-warm"  lay-submit="" lay-filter="searchForm"><icon class="layui-icon layui-icon-search"></icon>搜索</button>
 							</div>
 						</div>
-				   </form>
-				   <script type="text/javascript">
-					function submitOrgCheckSeconed_form(){
-					   $("#OrgCheckSeconed_form").submit();
-					}
-				   </script>
-				</div>
-				<div class="table_outer_box">
-					<table class="layui-table custom_table">
-						<thead>
-							<tr>
-	<%--                        	<th>已读回执</th>--%>
-								<td>党组织</td>
-								<td>开展主题</td>
-	<%--                            <th>二级党组织主题</th>--%>
-								<td>开始时间</td>
-								<td>时长</td>
-								<td>操作</td>
-								<td>开展地点</td>
-	<%--                            <th>主持人</th>--%>
-	<%--                            <th>联系人</th>--%>
-	<%--                            <th>联系人电话</th>--%>
-	<%--                            <th>任务状态</th>--%>
-								<td>抽查状态</td>
-								<td>抽查人</td>
-	<%--                            <th>审核人</th>--%>
-								<td>现场照片</td>
-	<%--                            <th>应到人数</th>--%>
-	<%--                            <th>实到人数</th>--%>
-	<%--                            <th>请假人员</th>--%>
-	<%--                            <th>出勤率</th>--%>
-<%--								<td>会议记录</td>--%>
-	<%--                            <th>评价得分</th>--%>
-	<%--                            <th>是否异常</th>--%>
-	<%--                            <th>备注</th>--%>
-							</tr>
-						</thead>
-						<tbody>
-							<c:forEach items="${list}" var="c" varStatus="status">
-								<tr>
-	<%--	                        	<td data-label="已读回执" class="receipts">${c.read_status }</td>--%>
-									<td data-label="党组织">
-										<c:if test="${c.has_resend}">
-											<a href="/orgviewbranch?inform_id=${c.meeting_id}&orgName=${c.org_namez}">${c.org_namez }</a>
-										</c:if>
-										<c:if test="${empty c.has_resend}">
-											${c.org_namez }
-										</c:if>
-									</td>
-									<td data-label="开展主题">
-										<a href="javascript:;" onclick="window.location.href='/approvaldetails?meetingId=${c.meeting_id}&orgType=secondary'">
-												${c.meeting_theme }
-										</a>
-									</td>
-	<%--	                            <td data-label="二级党组织主题" style="min-width: 175px;">${c.meeting_theme_secondary }</td>--%>
-									<td data-label="开始时间">
-										<c:if test="${not empty c.start_p}">
-											<fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${c.start_p }" />
-										</c:if>
-									</td>
-									<td data-label="开展时长">${c.total_time/60 }</td>
-									<td data-label="操作">
-										<c:if test="${not empty c.plan_id && c.task_status == '6'}">
-											<a class="td_assign_btn" href="javascript:;" style="color: #2E87FF">抽查</a>
-<%--										   	<button type="button" class="btn btn-default td_assign_btn" >抽查</button>--%>
-										   	<input class="assignAll" type="hidden" value="${c.plan_id }">
-										</c:if>
-										<c:if test="${not empty c.plan_id && c.task_status == '5'}">
-											<a class="td_assign_btn" href="javascript:;" style="color: #2E87FF">修改抽查</a>
-<%--											<button type="button" class="btn btn-default td_assign_btn" >修改抽查</button>--%>
-										   	<input class="assignAll" type="hidden" value="${c.plan_id }">
-										</c:if>
-									</td>
-									<td data-label="开展地点">${c.campus} ${c.placeName }</td>
-	<%--	                            <td data-label="主持人">${c.host }</td>--%>
-	<%--	                            <td data-label="联系人">${c.contact }</td>--%>
-	<%--	                            <td data-label="联系人电话">${c.contact_phone }</td>--%>
-	<%--	                            <td data-label="任务状态" class="TaskState">--%>
-	<%--	                            	<c:if test="${c.task_status == '1'}"> --%>
-	<%--	                            		 已提交--%>
-	<%--									</c:if>--%>
-	<%--									<c:if test="${c.task_status == '2'}"> --%>
-	<%--	                            		 已撤回--%>
-	<%--									</c:if>--%>
-	<%--									<c:if test="${c.task_status == '3'}"> --%>
-	<%--	                            		 被驳回--%>
-	<%--									</c:if>--%>
-	<%--									<c:if test="${c.task_status == '4'}"> --%>
-	<%--	                            		 已通过--%>
-	<%--									</c:if>--%>
-	<%--									<c:if test="${c.task_status == '5'}"> --%>
-	<%--	                            		 已指派--%>
-	<%--									</c:if>--%>
-	<%--									<c:if test="${c.task_status == '6'}"> --%>
-	<%--	                            		 未检查--%>
-	<%--									</c:if>--%>
-	<%--									<c:if test="${c.task_status == '7'}"> --%>
-	<%--	                            		 已检查--%>
-	<%--									</c:if>--%>
-	<%--	                            </td>--%>
-									<td data-label="抽查状态">
-										<c:if test="${c.task_status == '5'}">
-											 已指派
-										</c:if>
-										<c:if test="${c.task_status == '6'}">
-											 未抽查
-										</c:if>
-										<c:if test="${c.task_status == '7'}">
-											 已抽查
-										</c:if>
-									</td>
-									<td data-label="抽查人">${c.checker }</td>
-	<%--	                            <td data-label="审核人">${c.auditor }</td>--%>
-
-									<td data-label="现场照片" class="img_td">
-										<input type="hidden" class="imageNemeOrg" value="${c.image }" name="imageNeme"/>
-									</td>
-	<%--	                            <td data-label="应到人数">${c.shoule_persons }</td>--%>
-	<%--	                            <td data-label="实到人数">${c.actual_persons }</td>--%>
-	<%--	                            <td data-label="请假人员">${c.leave_persons }</td>--%>
-	<%--	                            <td data-label="出勤率">${c.attendance }</td>--%>
-<%--									<td data-label="上传会议记录">--%>
-<%--										<c:if test="${not empty c.attachment_n}">--%>
-<%--											<a class="meetingAnnex">${c.check_status }--%>
-<%--												<input type="hidden" class="annexName" value="${c.attachment_n }" name="annexName"/>--%>
-<%--											</a>--%>
-<%--										</c:if>--%>
-<%--										<c:if test="${empty c.attachment_n}">--%>
-<%--											 ${c.check_status }--%>
-<%--										</c:if>--%>
-<%--									</td>--%>
-	<%--	                            <td data-label="评价得分">--%>
-	<%--	                            	<a href="/gradedetail?meetingId=${c.meeting}&branchId=${c.org_id_u}">--%>
-	<%--	                            		${c.evaluation_score }--%>
-	<%--	                            	</a>--%>
-	<%--	                            </td>--%>
-	<%--	                            <td data-label="是否异常">${c.meeting_state_org }</td>--%>
-	<%--	                            <td data-label="抽查情况">${c.remarks_org }</td>--%>
-								</tr>
-							</c:forEach>
-						</tbody>
-					</table>
-				</div>
-   <!-- -----------------------分页------------------------- -->
-				<div class="pagination_container">
-			        <ul class="pagination" id="page"></ul>
-			        <div class="pageJump">
-			        	<input class='current_page' type="hidden" value="${pageNo}"/>
-			            <p>共<span class="total_page">${totalPage }</span>页</p>
-			            <form action="${pageNoUrl }" id="getPageNo" method="post">
-			                <input type="hidden" id="pageNo" name="pageNo" value=""/>
-			                <input type="hidden" id="total_page_" name="total_page_" value="${totalPage}"/>
-			                <input type="hidden" name="informId" value="${informId }"/>
-			                <input type="hidden" name="search" value="${search }"/>
-			                <span>跳转到第</span>
-			                <input type="text" id="jumpPageNo" name="jumpPageNo"/>
-			                <span>页</span>
-			                <button type="submit" class="button">确定</button>
-			            </form>
-			        </div>
-				 </div>
-		
-				 <script type="text/javascript">
-					 $(document).ready(function() {
-						 
-						 var pages = $(".total_page").html();
-						var currentPage = $('.current_page').val();
-						$("input[name='pageNo']").val($('.current_page').val());
-						if(currentPage == 1){
-							$('.page_next').removeClass('not_allow');
-							$('.page_prev').addClass('not_allow');
-							
-						}else if(currentPage == pages){
-							$('.page_prev').removeClass('not_allow');
-							$('.page_next').addClass('not_allow');
-							
-						}else{
-							
-						};
-						$("#jumpPageNo").change(function(){
-							$("input[name='pageNo']").val($(this).val());
-						})
-				     Page({
-				         num: pages, //页码数
-				         startnum: currentPage, //指定页码
-				         elem: $('#page'), //指定的元素
-				         callback: function(n) { //回调函数
-				             $("input[name='pageNo']").val(n);
-				             $("#getPageNo").submit();
-				             if (n == 1) {
-				                 $('#page a').removeClass('not_allow');
-				                 $('.page_prev').addClass('not_allow');
-				             } else if (n >= $('.total_page').html()) {
-				                 $('#page a').removeClass('not_allow');
-				                 $('.page_next').addClass('not_allow')
-				             } else {
-				                 $('#page a').removeClass('not_allow');
-				             }
-				         }
-				     });
-				  });
-					 
-				//任务状态加颜色
-				$(function(){
-						$(".TaskState").each(function(){
-							var _text = $(this).text();
-							if(_text == "被驳回"){
-								$(this).addClass("color_blue");
-							}else if(_text == "未检查"){
-								$(this).addClass("color_blue_1");
-							}else{}
-							
-						})
-			    	})
-				//回执加色
-				$(function(){
-					$(".receipts").each(function(){
-						var receipts_text = $(this).text();
-						if(receipts_text == "未读"){
-							$(this).addClass("color_blue_1");
-						}
-					})
-				})
-		    
-			 </script>
+					</form>
+					<table id="meetingCheckTable" lay-filter="meetingCheckTable"></table>
 				</div>
 			</div>
 		</div>
@@ -347,41 +148,7 @@
                                       
                                     </ul>
                                 </div>
-<%--                                <div class="outof_assign_member">--%>
-<%--                                    <span><!-- 不可指派人员： --></span>--%>
-<%--                                    <ul class="outof_assign_list member_list outof_assign_list_append">--%>
-<%--                                             --%>
-<%--                                    </ul>--%>
-<%--                                </div>--%>
                             </div>
-<%--                            <div class="operation_container">--%>
-<%--                                <div class="inner_operation">--%>
-<%--                                    <button type="button" class="btn btn-sm btn-default add_member_btn">--%>
-<%--                                        <img src="${ basePath}/images/assign_icon.png"/>--%>
-<%--                                                                                                                     添加--%>
-<%--                                    </button>--%>
-<%--                                    <button type="button" class="btn btn-sm btn-default btn_delete">--%>
-<%--                                        <img src="${ basePath}/images/assign_icon.png"/>--%>
-<%--                                                                                                                      删除--%>
-<%--                                    </button>--%>
-<%--                                    <div class="form-horizontal add_memeber_form" role="form">--%>
-<%--                                        <div class="form-group">--%>
-<%--                                            <div class="col-sm-12">--%>
-<%--                                                <input type="text" class="form-control add_member_input" placeholder="请输入姓名进行添加">--%>
-<%--                                            </div>--%>
-<%--                                        </div>--%>
-<%--                                         <div class="addPersons">--%>
-<%--                                        </div>--%>
-<%--                                        <div class="form-group">--%>
-<%--                                            <div class="col-sm-offset-2 col-sm-10 form_btn">--%>
-<%--                                                <button type="button" class="btn btn-sm btn-default form_hide_btn">取消</button>--%>
-<%--                                                <button type="button" class="btn btn-sm btn_main form_add_btn">确定</button>--%>
-<%--                                            </div>--%>
-<%--                                        </div>--%>
-<%--                                       --%>
-<%--                                    </div>--%>
-<%--                                </div>--%>
-<%--                            </div>--%>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -419,22 +186,114 @@
 	            </div>
 	        </div>
 	    </div>
-	    
-    <portlet:resourceURL id="/hg/assigned" var="assigned"/>
-    <!--获取指派人员 列表 -->
-    <portlet:resourceURL id="/hg/getAssignPersons" var="getAssignPersons"/>
-    <!--指派人员  -->
-    <portlet:resourceURL id="/hg/hg/assignPersonCheck" var="assignPersonCheck"/>
-    <!--添加指派人员  -->
-    <portlet:resourceURL id="/hg/assignedAddPerson" var="assignedAddPerson"/>
-    <!--一键指派  -->
-    <portlet:resourceURL id="/hg/assignedAddPersonAll" var="assignedAddPersonAll"/>
-    
-    <portlet:resourceURL id="/hg/getMeetingTypeAndTheme" var="getMeetingTypeAndTheme"/>
-    
-    <!-- 		下载图片 -->
-	<portlet:resourceURL id="/PartyImageDownCommand" var ="download"></portlet:resourceURL>
+		<script type="text/html" id="meetingCheckTableBtns">
+			{{#  if(d.id != '' && d.id != null && d.task_status == "6"){ }}
+			<a class="layui-btn layui-btn-xs" lay-event="check">抽查</a>
+			{{#  } }}
+			{{#  if(d.id != '' && d.id != null && d.task_status == '5'){ }}
+			<a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
+			{{#  } }}
+		</script>
     <script type="text/javascript">
+		layui.use(['table','layer','form'], function() {
+			var table = layui.table,
+					layer = layui.layer,
+					form = layui.form;
+			var pageInfo = {
+				page:1,
+				size:10
+			};
+			renderTable(1,pageInfo.size);
+			form.on('submit(searchForm)', function (data) {
+				renderTable(1,pageInfo.size);
+			})
+			function renderTable(page,size){
+				var  where = {
+					keyword: $("#searchForm input[name=keyword]").val()
+				};
+				var ins = table.render({
+					elem: '#meetingCheckTable',
+					where: where,
+					height:560,
+					url: '${PartyMeetingCheckPage}', //数据接口
+					method: 'post',
+					page: {
+						limit:size,   //每页条数
+						curr:page,
+						limits:[10,15,20],
+						prev:'&lt;上一页',
+						next:'下一页&gt;',
+						theme: '#FFB800',
+						groups:4
+					},
+					cols: [[ //表头
+						{field: 'org_name', align:'center',width:320, title: '党组织'},
+						{field: 'meeting_theme', align:'center',width:320, title: '开展主题',templet:function(d){
+								return '<a  href="/approvaldetails?meetingId='+d.meeting_id+'&orgType=secondary">'+d.meeting_theme+'</a>';
+							}},
+						{field: 'start_time', align:'center', title: '开始时间',width:180,templet: function(d){return new Date(d.start_time).format("yyyy-MM-dd hh:mm:ss");}},
+						{field: 'total_time', align:'center', title: '时长',width:100,templet: function(d){return d.total_time/60;}},
+						{field: 'campus', align:'center', title: '开展地点',templet: function(d){
+								return d.campus+" "+d.placename;
+							}},
+						{field: 'task_status', align:'center', title: '抽查状态',width:120,templet: function(d){
+								var status = '';
+								switch(parseInt(d.task_status)){
+									case 1:status = '待审核';break;
+									case 2:status = '已撤回';break;
+									case 3:status = '已驳回';break;
+									case 4:status = '已通过';break;
+									case 5:status = '已指派';break;
+									case 6:status = '未检查';break;
+									case 7:status = '已检查';break;
+								}
+								return status;
+							}},
+						{field: 'checker', align:'center', title: '抽查人'},
+						{field: 'operation', align:'center', title: '操作',width:200,toolbar: '#meetingCheckTableBtns'},
+
+					]],
+					done: function(res, curr, count){
+						pageInfo.page = curr;
+						pageInfo.size = ins.config.limit;
+					}
+				});
+				$(".layui-table-view .layui-table-page").addClass("layui-table-page-center");
+				$(".layui-table-view .layui-table-page").removeClass("layui-table-page");
+				//监听事件
+				table.on('tool(meetingCheckTable)', function(obj){
+					switch(obj.event){
+						case 'check':
+							renderCheck(obj);
+							break;
+						case 'edit':
+							renderCheck(obj);
+							break;
+					};
+				});
+			}
+		});
+		Date.prototype.format = function (fmt) {
+			var o = {
+				"M+": this.getMonth() + 1, //月份
+				"d+": this.getDate(), //日
+				"h+": this.getHours(), //小时
+				"m+": this.getMinutes(), //分
+				"s+": this.getSeconds(), //秒
+				"q+": Math.floor((this.getMonth() + 3) / 3), //季度
+				"S": this.getMilliseconds() //毫秒
+			};
+			if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+			for (var k in o)
+				if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+			return fmt;
+		}
+		//指派按钮
+		function renderCheck(obj) {
+			$("#Assign .operation_container").find(".add_memeber_form").css("display", "none");
+			$("#Assign").modal("show");
+			getAssignPerson(obj.id);
+		}
         //一键指派  弹窗 点击确定
         $(".confirm_keyAssign").click(function() {
             //  something do
@@ -490,14 +349,7 @@
             }
 
         })
-        //指派按钮
-        $(".td_assign_btn").click(function() {
-            $("#Assign .operation_container").find(".add_memeber_form").css("display", "none");
-            $("#Assign").modal("show");
-            var id=$(this).next().val();
-            getAssignPerson(id);
-           
-        })
+
 
         //表单清空选项
         $(".search_reset").click(function() {

@@ -202,6 +202,11 @@
 								color: '#666',
 								fontSize:12,
 							},
+							formatter: function (val) {
+								var newVal = '';
+								newVal = val.length >= 5 ? val.substr(0, 5) + '...' : val;
+								return newVal;
+							}
 						},
 						axisLine:{
 							lineStyle:{
@@ -263,7 +268,7 @@
 						{
 							name: "支部党员组织关系转接情况",
 							type: "pie",
-							avoidLabelOverlap: false,
+							avoidLabelOverlap: true,
 							label: {
 								show: true,
 								position: "outside"
@@ -312,7 +317,7 @@
 						{
 							name: "党支部组织生活类型分布",
 							type: "pie",
-							avoidLabelOverlap: false,
+							avoidLabelOverlap: true,
 							label: {
 								show: true,
 								position: "outside"

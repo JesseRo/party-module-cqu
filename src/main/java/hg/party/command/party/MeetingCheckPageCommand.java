@@ -6,7 +6,6 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.MVCResourceCommand;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import dt.session.SessionManager;
-import hg.party.entity.partyMembers.JsonPageResponse;
 import hg.party.server.party.PartyMeetingPlanInfoService;
 import hg.util.postgres.PostgresqlPageResult;
 import org.osgi.service.component.annotations.Component;
@@ -14,7 +13,9 @@ import org.osgi.service.component.annotations.Reference;
 import org.springframework.util.StringUtils;
 import party.constants.PartyPortletKeys;
 
-import javax.portlet.*;
+import javax.portlet.PortletException;
+import javax.portlet.ResourceRequest;
+import javax.portlet.ResourceResponse;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
@@ -24,14 +25,13 @@ import java.util.Map;
 @Component(
 		immediate = true,
 		property = {
-				"javax.portlet.name=" + PartyPortletKeys.PartyApprovalPlan,
-				"javax.portlet.name=" + PartyPortletKeys.PartyApprovalBranch,
-				"mvc.command.name=/part/meeting/page"
+				"javax.portlet.name=" + PartyPortletKeys.PartySecondary,
+				"mvc.command.name=/part/meeting/check/Page"
 		},
 		service = MVCResourceCommand.class
 	)
 
-public class MeetingPlanPageCommand implements MVCResourceCommand {
+public class MeetingCheckPageCommand implements MVCResourceCommand {
 	@Reference
 	PartyMeetingPlanInfoService partyMeetingPlanInfoService;
 	@Override
@@ -46,9 +46,9 @@ public class MeetingPlanPageCommand implements MVCResourceCommand {
 			PostgresqlPageResult<Map<String, Object>> data = new PostgresqlPageResult(null, 0,0);
 			if(orgId!=null && !StringUtils.isEmpty(String.valueOf(orgId))){
 				if (StringUtils.isEmpty(keyword)){
-					data = partyMeetingPlanInfoService.searchPlanPage(page, size,String.valueOf(orgId),null);
+					data = partyMeetingPlanInfoService.searchCheckPage(page, size,String.valueOf(orgId),null);
 				}else {
-					data = partyMeetingPlanInfoService.searchPlanPage(page, size, String.valueOf(orgId),keyword);
+					data = partyMeetingPlanInfoService.searchCheckPage(page, size, String.valueOf(orgId),keyword);
 				}
 			}
 			Gson gson = new Gson();

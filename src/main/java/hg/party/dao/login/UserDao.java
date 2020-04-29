@@ -18,7 +18,7 @@ public class UserDao extends PostgresqlDaoImpl<User> {
 	public List<Map<String, Object>> findAllByUserId(String id) {
 		String sql = "SELECT u.id as _id, * " + "FROM "
 				+ "hg_users_info u LEFT JOIN hg_party_member member on u.user_id = member.member_identity "
-				+ "WHERE (member.historic = false or member.historic is null) and " + "u.user_id=? ";
+				+ "WHERE (member.historic = false or member.historic is null) and u.state = '1' and " + "u.user_id=? ";
 
 		return this.jdbcTemplate.queryForList(sql, id);
 	}
