@@ -130,6 +130,7 @@ public class TransportApprovalCommand implements MVCResourceCommand {
                     }
                 } else {
                     transport.setStatus(status);
+                    transport.setReject_org(department);
                 }
                 transport.setOperator(userId);
                 transportDao.update(transport);
