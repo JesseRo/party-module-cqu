@@ -3,7 +3,6 @@ package hg.party.dao.toDoList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.avalon.framework.logger.Logger;
 import org.osgi.service.component.annotations.Component;
 
 import com.dt.springjdbc.dao.impl.PostgresqlDaoImpl;

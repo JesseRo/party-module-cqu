@@ -78,25 +78,25 @@ public class TransportApprovalCommand implements MVCResourceCommand {
                 Transport transport = transportDao.findById(transportId);
                 if (status == ConstantsKey.APPROVED) {
                     // 通过
-                    if ((transport.getType().equalsIgnoreCase("0")
+//
+                    if (!transport.getCurrent_approve_org().equalsIgnoreCase(department)) {
+                        throw new Exception();
+                    }
+                    List<String> toApproveList = gson.fromJson(transport.getTo_approve_list(), new TypeToken<List<String>>() {
+                    }.getType());
+                    List<String> approvedList = gson.fromJson(transport.getApproved_list(), new TypeToken<List<String>>() {
+                    }.getType());
+                    toApproveList.remove(department);
+                    approvedList.add(department);
+                    transport.setTo_approve_list(gson.toJson(toApproveList));
+                    transport.setApproved_list(gson.toJson(approvedList));
+                    if (toApproveList.size() == 0) {
+                        // 最后一道审核
+                        User user = userDao.findUserByEthnicity(transport.getUser_id());
+                        Member member = memberDao.findByUserId(transport.getUser_id());
+                        if ((transport.getType().equalsIgnoreCase("0")
                             || transport.getType().equalsIgnoreCase("1"))) {
-                        // 校内
-                        if (!transport.getCurrent_approve_org().equalsIgnoreCase(department)) {
-                            throw new Exception();
-                        }
-                        List<String> toApproveList = gson.fromJson(transport.getTo_approve_list(), new TypeToken<List<String>>() {
-                        }.getType());
-                        List<String> approvedList = gson.fromJson(transport.getApproved_list(), new TypeToken<List<String>>() {
-                        }.getType());
-                        toApproveList.remove(department);
-                        approvedList.add(department);
-                        transport.setTo_approve_list(gson.toJson(toApproveList));
-                        transport.setApproved_list(gson.toJson(approvedList));
-                        if (toApproveList.size() == 0) {
-                            // 最后一道审核
-                            User user = userDao.findUserByEthnicity(transport.getUser_id());
-                            Member member = memberDao.findByUserId(transport.getUser_id());
-
+                            // 校内
                             Member newMember = new Member();
                             BeanUtils.copyProperties(member, newMember, "id");
                             newMember.setMember_org(transport.getTo_org_id());
@@ -109,21 +109,17 @@ public class TransportApprovalCommand implements MVCResourceCommand {
                                 orgAdminDao.deleteOrgAdmin(member.getMember_identity(), PartyOrgAdminTypeEnum.SECONDARY);
                             }
                             orgAdminDao.deleteOrgAdmin(member.getMember_identity(), PartyOrgAdminTypeEnum.BRANCH);
-
-                            transport.setStatus(status);
-                        } else {
-                            transport.setCurrent_approve_org(toApproveList.get(0));
-                        }
-                    } else {
-                        transport.setStatus(status);
-                        if (transport.getType().equalsIgnoreCase("2")) {
-                            User user = userDao.findUserByEthnicity(transport.getUser_id());
-                            Member member = memberDao.findByUserId(transport.getUser_id());
+                        } else if (transport.getType().equalsIgnoreCase("2")) {
+                            //市内
                             userDao.delete(user);
                             memberDao.historic(member);
                         }
+                        transport.setStatus(status);
+                    } else {
+                        transport.setCurrent_approve_org(toApproveList.get(0));
                     }
                 } else if (status == ConstantsKey.CONFIRM) {
+                    //市外
                     if (transport.getType().equalsIgnoreCase("2")
                             || transport.getType().equalsIgnoreCase("3")) {
                         User user = userDao.findUserByEthnicity(transport.getUser_id());

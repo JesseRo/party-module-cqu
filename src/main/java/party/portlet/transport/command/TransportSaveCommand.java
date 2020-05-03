@@ -84,22 +84,27 @@ public class TransportSaveCommand implements MVCResourceCommand {
                 if (!toOrg.getOrg_type().equalsIgnoreCase(ConstantsKey.ORG_TYPE_BRANCH)) {
                     throw new Exception();
                 }
-                transport.setTo_org_id(toOrg.getOrg_id());
-                transport.setTo_org_name(toOrg.getOrg_name());
-                transport.setApproved_list("[]");
-                transport.setCurrent_approve_org(orgId);
                 List<String> toApproveList = new ArrayList<>();
                 toApproveList.add(orgId);
                 if (type.equalsIgnoreCase("1")) {
-                    // 校外
+                    // 校内
                     toApproveList.add(organization.getOrg_parent());
                     toApproveList.add(toOrg.getOrg_parent());
                 }
                 toApproveList.add(org);
                 transport.setTo_approve_list(gson.toJson(toApproveList));
+                transport.setTo_org_id(toOrg.getOrg_id());
+                transport.setTo_org_name(toOrg.getOrg_name());
             } else {
                 transport.setTo_org_name(org);
+                List<String> toApproveList = new ArrayList<>();
+                toApproveList.add(orgId);
+                toApproveList.add(organization.getOrg_parent());
+                transport.setTo_approve_list(gson.toJson(toApproveList));
             }
+            transport.setApproved_list("[]");
+            transport.setCurrent_approve_org(orgId);
+
             String form = ParamUtil.getString(resourceRequest, "form");
             String title = ParamUtil.getString(resourceRequest, "title");
             String reason = ParamUtil.getString(resourceRequest, "reason");

@@ -5,14 +5,10 @@ import com.dt.springjdbc.dao.impl.PostgresqlQueryResult;
 import org.osgi.service.component.annotations.Component;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.util.StringUtils;
-import party.portlet.report.entity.Report;
 import party.portlet.transport.entity.Transport;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Component(immediate = true, service = TransportDao.class)
 public class TransportDao extends PostgresqlDaoImpl<Transport> {
@@ -46,7 +42,9 @@ public class TransportDao extends PostgresqlDaoImpl<Transport> {
                 " from hg_party_transport t " +
                 " left join hg_party_member m on m.member_identity = t.user_id and m.historic = false" +
                 " left join hg_party_org o on o.org_id = m.member_org" +
-                " where ((o.org_parent = ? and t.type in ('2', '3')) or t.approved_list::jsonb @> '\"" + orgId + "\"'::jsonb" +
+                " where (" +
+//                "(o.org_parent = ? and t.type in ('2', '3')) or " +
+                "t.approved_list::jsonb @> '\"" + orgId + "\"'::jsonb" +
                 " or t.current_approve_org = ?)";
         if (!StringUtils.isEmpty(name)){
             sql += " and t.user_name like ?";
@@ -60,9 +58,9 @@ public class TransportDao extends PostgresqlDaoImpl<Transport> {
         }
         try {
             if (!StringUtils.isEmpty(name)){
-                return postGresqlFindBySql(page, size, sql, orgId, orgId, name);
+                return postGresqlFindBySql(page, size, sql, orgId, name);
             }
-            return postGresqlFindBySql(page, size, sql, orgId, orgId);
+            return postGresqlFindBySql(page, size, sql, orgId);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -102,7 +100,9 @@ public class TransportDao extends PostgresqlDaoImpl<Transport> {
                 " from hg_party_transport t " +
                 " left join hg_party_member m on t.user_id = m.member_identity and m.historic = false" +
                 " left join hg_party_org o on o.org_id = m.member_org" +
-                " where (m.member_org = ? or t.approved_list::jsonb @> '\"" + orgId + "\"'::jsonb " +
+                " where (" +
+//                "m.member_org = ? or " +
+                "t.approved_list::jsonb @> '\"" + orgId + "\"'::jsonb " +
                 " or t.current_approve_org = ?)";
         if (!StringUtils.isEmpty(name)){
             sql += " and t.user_name like ?";
@@ -116,9 +116,9 @@ public class TransportDao extends PostgresqlDaoImpl<Transport> {
         }
         try {
             if (!StringUtils.isEmpty(name)){
-                return postGresqlFindBySql(page, size, sql, orgId, orgId, name);
+                return postGresqlFindBySql(page, size, sql, orgId, name);
             }
-            return postGresqlFindBySql(page, size, sql, orgId, orgId);
+            return postGresqlFindBySql(page, size, sql, orgId);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
