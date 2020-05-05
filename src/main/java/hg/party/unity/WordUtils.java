@@ -4,6 +4,7 @@ import org.apache.poi.POIDocument;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hwpf.HWPFDocument;
 import org.apache.poi.hwpf.extractor.WordExtractor;
+import org.apache.poi.hwpf.model.PAPBinTable;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
@@ -16,6 +17,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class WordUtils {
     /**
@@ -25,7 +29,7 @@ public class WordUtils {
      * @param fileName 想要读取的文件名
      * @return 返回文件内容
      */
-    public static String importWordData(String fileName, FileInputStream fs){
+    public static List<String> importWordData(String fileName, FileInputStream fs){
 
         try
         {
@@ -36,16 +40,17 @@ public class WordUtils {
                 String str = doc.getDocumentText();
                 doc.close();
                 fs.close();
-                return str;
+                return Collections.singletonList(str);
             }
             else if (".docx".equals(ext))
             {
                 XWPFDocument xdoc = new XWPFDocument(fs);
                 XWPFWordExtractor extractor = new XWPFWordExtractor(xdoc);
-                String str = extractor.getText();
+                List<XWPFParagraph> paragraphs = xdoc.getParagraphs();
+                List<String> paragraphText = paragraphs.stream().map(XWPFParagraph::getText).collect(Collectors.toList());
                 extractor.close();
                 fs.close();
-                return str;
+                return paragraphText;
             }
             else
             {

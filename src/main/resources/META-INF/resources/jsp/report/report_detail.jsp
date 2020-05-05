@@ -98,7 +98,6 @@
                     <tr>
                         <td>党委</td>
                         <td>任务主题</td>
-                        <td>任务描述</td>
                         <td>发布时间</td>
                         <td>上报数据</td>
                         <td>上报时间</td>
@@ -109,18 +108,16 @@
                     <tbody>
                     <c:forEach var="c" items="${reports }">
                         <tr id="${c.report_id }">
-                            <td>
+                            <td title=" ${c.org_name}">
                                     ${c.org_name}
                             </td>
                             <td>
-                                    ${c.theme }
-                            </td>
-                            <td>
-                                    ${c.description }
+                                <a onclick="window.location.href = '/report_task_detail?taskId=${c.task_id }'"
+                                   title="查看任务详情" style="cursor: pointer;">${c.theme}</a>
                             </td>
                             <td>
                                 <c:if test="${not empty c.publish_time}">
-                                    <fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${c.publish_time }"/>
+                                    <fmt:formatDate pattern="yyyy-MM-dd" value="${c.publish_time }"/>
                                 </c:if>
                             </td>
                             <td style="color: red;padding-left: 25px;">
@@ -134,7 +131,7 @@
                             </td>
                             <td>
                                 <c:if test="${not empty c.time}">
-                                    <fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${c.publish_time }"/>
+                                    <fmt:formatDate pattern="yyyy-MM-dd" value="${c.publish_time }"/>
                                 </c:if>
                             </td>
                             <td>

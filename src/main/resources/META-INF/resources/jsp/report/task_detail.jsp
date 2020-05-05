@@ -1,3 +1,4 @@
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ include file="/init.jsp" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 
@@ -267,7 +268,7 @@
                         <div class="col-sm-12 col-xs-12 no-padding">
                             <div class="col-sm-6 col-xs-12">
                                 <div class="col-sm-3 col-xs-3 ">
-                                    <span class="control-label form-label-required">任务主题</span>
+                                    <span class="control-label">任务主题</span>
                                 </div>
                                 <div class="col-sm-9 col-xs-9">
                                     <input disabled class="form-control" name="theme" value="${task.theme}"
@@ -275,16 +276,16 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-12 col-xs-12 no-padding">
-                            <div class="col-sm-6 col-xs-12">
-                                <div class="col-sm-3 col-xs-3 ">
-                                    <span class="control-label form-label-required">任务描述</span>
-                                </div>
-                                <div class="col-sm-9 col-xs-9">
-                                    <textarea disabled class="form-control" name="description">${task.description}</textarea>
-                                </div>
-                            </div>
-                        </div>
+<%--                        <div class="col-sm-12 col-xs-12 no-padding">--%>
+<%--                            <div class="col-sm-6 col-xs-12">--%>
+<%--                                <div class="col-sm-3 col-xs-3 ">--%>
+<%--                                    <span class="control-label form-label-required">任务描述</span>--%>
+<%--                                </div>--%>
+<%--                                <div class="col-sm-9 col-xs-9">--%>
+<%--                                    <textarea disabled class="form-control" name="description">${task.description}</textarea>--%>
+<%--                                </div>--%>
+<%--                            </div>--%>
+<%--                        </div>--%>
 <%--                        <div class="col-sm-12 col-xs-12 no-padding">--%>
 <%--                            <div class="col-sm-6 col-xs-12">--%>
 <%--                                <div class="col-sm-3 col-xs-3 ">--%>
@@ -304,8 +305,8 @@
                                 <div class="col-sm-9 col-xs-12 has_select_div" style="display: block;">
                                     <div class="has_select_container">
                                         <div class="has_select_title" style="border-bottom: none;"><span></span>
-                                            <div class="right"><span>已选择</span><span
-                                                    class="select_num">6</span><span></span></div>
+                                            <div class="right"><span>已选择</span><br><span
+                                                    class="select_num">${fn:length(orgNames)}</span><span>个党委</span></div>
                                         </div>
                                         <div class="has_select_content container_scroll_hidden">
                                             <ul class="has_select_list">
@@ -314,22 +315,6 @@
                                                 </c:forEach>
                                             </ul>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6 col-xs-12 has_select_div">
-                                <div class="has_select_container">
-                                    <div class="has_select_title">
-                                        <span>已选goo</span>
-                                        <div class="right">
-                                            <span>已选择</span>
-                                            <span class="select_num"></span>
-                                            <span>个党委</span>
-                                        </div>
-                                    </div>
-                                    <div class="has_select_content container_scroll_hidden">
-                                        <ul class="has_select_list">
-                                        </ul>
                                     </div>
                                 </div>
                             </div>

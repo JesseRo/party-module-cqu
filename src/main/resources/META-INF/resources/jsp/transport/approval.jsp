@@ -375,10 +375,10 @@
 <script type="text/html" id="transportBtns">
     <div class="operate_btns">
         <span class="blue_text" onclick="window.location.href='/transport_detail?id={{d.transport_id}}'">详情</span>
-        {{#  if(d.type == '3'){ }}
+        {{#  if(d.type == '3' && d.status = 1){ }}
         <span class="blue_text" lay-event="print">打印</span>
         {{#  } }}
-        {{#  if((d.status == 0 && (d.type == '3' || d.type == '2')) || (d.current_approve_org == '${department}' && d.status == 0 && (d.type == '0' || d.type == '1'))){ }}
+        {{#  if(d.current_approve_org == '${department}' && d.status == 0){ }}
         <span class="blue_text" onclick="transportApprove(this, 1);">通过</span>
         <span class="red_text" onclick="transportApprove(this, 2);">驳回</span>
         {{#  } }}

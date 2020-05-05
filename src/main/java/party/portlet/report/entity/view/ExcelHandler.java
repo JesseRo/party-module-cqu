@@ -26,6 +26,13 @@ public class ExcelHandler extends FileHandler<ExcelHandler>{
         this.sheets = sheets;
     }
 
+    public ExcelHandler(String fileName, String path, List<String> sheetNames){
+        super();
+        this.fileName = fileName;
+        this.path = path;
+        this.sheetNames = sheetNames;
+    }
+
     public ExcelHandler(String fileName, String path, Map<String, List<Map<String, Object>>> data){
         super();
         this.fileName = fileName;

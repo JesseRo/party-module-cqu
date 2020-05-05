@@ -111,8 +111,8 @@ public class ExcelUploadResourceCommand implements MVCResourceCommand {
 							List<FileView> fileViews = saveAttachment(uploadPortletRequest, taskId, department);
 							List<ExcelHandler> excels = new ArrayList<>();
 							for (FileView fileView : fileViews) {
-								Map<String, List<Map<String, Object>>> datas = ExcelUtil.importAllSheet(fileView.getFilename(), new FileInputStream(fileView.getPath()));
-								ExcelHandler excelHandler = new ExcelHandler(fileView.getFilename(), fileView.getPath(), datas);
+								List<String> sheetNames = ExcelUtil.getAllSheetName(fileView.getFilename(), new FileInputStream(fileView.getPath()));
+								ExcelHandler excelHandler = new ExcelHandler(fileView.getFilename(), fileView.getPath(), sheetNames);
 								excels.add(excelHandler);
 							}
 							String files = gson.toJson(excels);
@@ -135,9 +135,7 @@ public class ExcelUploadResourceCommand implements MVCResourceCommand {
 							List<FileView> fileViews = saveAttachment(uploadPortletRequest, taskId, department);
 							List<WordHandler> words = new ArrayList<>();
 							for (FileView fileView : fileViews) {
-								List<String> content = new ArrayList<>();
-								String data = WordUtils.importWordData(fileView.getFilename(), new FileInputStream(fileView.getPath()));
-								content.add(data);
+								List<String> content = WordUtils.importWordData(fileView.getFilename(), new FileInputStream(fileView.getPath()));
 								WordHandler wordHandler = new WordHandler(fileView.getFilename(), fileView.getPath(), content);
 								words.add(wordHandler);
 							}

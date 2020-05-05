@@ -511,6 +511,19 @@ public class ExcelUtil
         }
         return allSheetsData;
     }
+
+    public static List<String> getAllSheetName(String fileName, InputStream inputStream)
+    {
+        Workbook wb = getWorkbook(fileName, inputStream);
+        int number = wb.getNumberOfSheets();
+        List<String> allSheetsData = new ArrayList<>();
+        for (int i = 0; i < number; i++)
+        {
+            Sheet sheet = wb.getSheetAt(i);
+            allSheetsData.add(sheet.getSheetName());
+        }
+        return allSheetsData;
+    }
     
     public static List<Map<String , Object>> importExcel(String fileName, InputStream inputStream)
     {

@@ -66,7 +66,6 @@
                     <thead>
                     <tr>
                         <td>任务名称</td>
-                        <td>任务描述</td>
                         <td>任务模板</td>
                         <td>发布时间</td>
                         <td>状态</td>
@@ -76,11 +75,9 @@
                     <tbody class="table_info">
                     <c:forEach var="c" items="${tasks }">
                         <tr id="${c.task_id }">
-                            <td>
-                                    ${c.theme }
-                            </td>
-                            <td>
-                                    ${c.description }
+                            <td title="${c.theme}">
+                                <a onclick="window.location.href = '/report_task_detail?taskId=${c.task_id }'"
+                                   title="查看任务详情" style="cursor: pointer;">${c.theme}</a>
                             </td>
                             <td style="color: red;padding-left: 25px;">
                                 <a style="cursor: pointer" onclick="templateDetail(this, '报送模板');">查看模板</a>
@@ -93,7 +90,7 @@
                             </td>
                             <td>
                                 <c:if test="${not empty c.publish_time}">
-                                    <fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${c.publish_time }"/>
+                                    <fmt:formatDate pattern="yyyy-MM-dd" value="${c.publish_time }"/>
                                 </c:if>
                             </td>
                             <td>

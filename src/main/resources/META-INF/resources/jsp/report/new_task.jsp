@@ -10,7 +10,7 @@
 <!-- 附件上传 -->
 <portlet:resourceURL id="/form/uploadFile" var="uploadfileUrl"/>
 
-<portlet:actionURL name="/secondary/task/add" var="add"/>
+<portlet:resourceURL id="/secondary/task/add" var="add"/>
 
 
 <html>
@@ -191,7 +191,7 @@
                 ' <div class="has_select_title" style="border-bottom: none;">' +
                 ' <span>已选goo</span>' +
                 '<div class="right">' +
-                '<span>已选择</span>' +
+                '<span>已选择</span><br>' +
                 '<span class="select_num"></span>' +
                 '<span>个党委</span>' +
                 '</div>' +
@@ -205,9 +205,8 @@
             var title = "${publicObjectTitle}";
             div = div.replace("二级党组织", title);
             div = div.replace("已选goo", title);
-            div = div.replace("个党委", title);
-            $("#hg-form-container > .no-padding").eq(3).html(div);
-            $("#hg-form-container > .no-padding").eq(3).find(".control-label").addClass("form-label-required");
+            $("#hg-form-container > .no-padding").eq(2).html(div);
+            $("#hg-form-container > .no-padding").eq(2).find(".control-label").addClass("form-label-required");
             $.ajax({
                 url: '${getPublicObject}',
                 type: 'POST',
@@ -340,7 +339,7 @@
                 $('#submit').click();
             }
 
-            var accepts = ['.xlsx', '.xls', 'doc', 'docx'];
+            var accepts = ['.xlsx', '.docx'];
             function submit() {
 
                 var imgs = $(".table_info img[src='/images/radio_on.png']");
@@ -351,10 +350,6 @@
                 }
                 if (!$('[name=theme]').val()){
                     layuiModal.alert("任务主题不得为空！");
-                    return;
-                }
-                if (!$('[name=description]').val()){
-                    layuiModal.alert("任务描述不得为空！");
                     return;
                 }
                 if (!$('[name=files]').val()){
@@ -372,7 +367,7 @@
                     var filename = files[index].name;
                     filename = filename.substr(filename.lastIndexOf("."));
                     if(accepts.indexOf(filename) == -1){
-                        layuiModal.alert("请上传word或excel格式的文件");
+                        layuiModal.alert("请上传07版本的word或excel格式的文件");
                         return;
                     }
                 }
@@ -398,7 +393,7 @@
         </div>
         <div class="bg_white_container">
         <div class="content_form"  style="padding: 20px 0;">
-            <form class="form-horizontal" role="form" action="${add }" method="post">
+            <form class="form-horizontal" role="form" action="${add }" method="post" target="forUpload" enctype="multipart/form-data">
                 <div id="hg-form-container" class="form-group">
                     <div class="col-sm-12 col-xs-12 no-padding">
                         <div class="col-sm-6 col-xs-12">
@@ -407,16 +402,6 @@
                             </div>
                             <div class="col-sm-9 col-xs-9">
                                 <input class="form-control" name="theme" value="${task.theme}" style="text-indent: inherit;">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-12 col-xs-12 no-padding">
-                        <div class="col-sm-6 col-xs-12">
-                            <div class="col-sm-3 col-xs-3 ">
-                                <span class="control-label form-label-required">任务描述</span>
-                            </div>
-                            <div class="col-sm-9 col-xs-9">
-                                <textarea class="form-control" name="description">${task.description}</textarea>
                             </div>
                         </div>
                     </div>
@@ -494,6 +479,7 @@
                     <input id="taskId" type="hidden" name="taskId" value="${task.task_id}"/>
                     <input class="informationContent" type="hidden" value='${task.content }'>
                     <input id="hiddenPublicObject" type="hidden" name="publicObject"/>
+                    <iframe name="forUpload" style="display: none;"></iframe>
                     <div class="layui-inline btn_group" style="width: calc(50% - 120px);margin: 0;margin-top: 10px;">
                         <label class="layui-form-label"></label>
                         <div class="layui-input-inline">

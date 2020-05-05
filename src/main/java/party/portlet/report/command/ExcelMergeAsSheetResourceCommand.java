@@ -13,8 +13,11 @@ import hg.party.unity.ResourceProperties;
 import hg.party.unity.WordUtils;
 import hg.util.CollectionUtils;
 import hg.util.ConstantsKey;
+import hg.util.ExcelOperationUtil;
 import hg.util.ExcelUtil;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -87,13 +90,21 @@ public class ExcelMergeAsSheetResourceCommand implements MVCResourceCommand {
 
         if (type.equalsIgnoreCase(FileView.EXCEL)) {
             try {
-                List<ExcelHandler> allMerged = new ArrayList<>();
+                List<Workbook> allMerged = new ArrayList<>();
+                List<String> allMergedNames = new ArrayList<>();
                 List<ExcelHandler> demoExcels = gson.fromJson(json, new TypeToken<List<ExcelHandler>>() {
                 }.getType());
                 try {
                     outer:
                     for (ExcelHandler demoExcel : demoExcels) {
-                        ExcelHandler merged = ExcelHandler.empty(demoExcel.getFileName());
+                        Workbook dest = new SXSSFWorkbook();
+                        allMerged.add(dest);
+                        String fullName = demoExcel.getFileName();
+                        if (fullName.contains(".")) {
+                            allMergedNames.add(fullName.substring(0, fullName.indexOf(".")));
+                        } else {
+                            allMergedNames.add(fullName);
+                        }
                         for (Report report : reports) {
                             if (report.getStatus() == ConstantsKey.APPROVED) {
                                 List<ExcelHandler> reportExcels =
@@ -105,20 +116,19 @@ public class ExcelMergeAsSheetResourceCommand implements MVCResourceCommand {
                                 if (curExcel == null) {
                                     throw new NotMatchingExcelDataException(String.format("%s上报文件有误。", ""));
                                 }
-                                merged = merged.mergeAsSheet(curExcel, orgMap.get(report.getOrg_id()).getOrg_name());
+                                ExcelOperationUtil.mergeByMultipleSheet(orgMap.get(report.getOrg_id()).getOrg_name(), curExcel, dest);
                             }
                         }
-                        allMerged.add(merged);
                     }
-                } catch (NotMatchingExcelDataException e) {
+                } catch (NotMatchingExcelDataException | InvalidFormatException e) {
                     e.printStackTrace();
                     return false;
                 }
                 HttpServletResponse res = PortalUtil.getHttpServletResponse(resourceResponse);
 
                 if (allMerged.size() == 1) {
-                    Workbook workbook = ExcelUtil.exportExcelX(null, allMerged.get(0).getAll(), "yyyy-MM-dd", 0);
-                    String filename = allMerged.get(0).getFileName();
+                    Workbook workbook = allMerged.get(0);
+                    String filename = allMergedNames.get(0).concat("-汇总.xlsx");;
                     res.setContentType("application/vnd.ms-excel;charset=utf-8");
                     res.addHeader("Content-Disposition",
                             "attachment; filename=" + new String(filename.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1));
@@ -134,11 +144,11 @@ public class ExcelMergeAsSheetResourceCommand implements MVCResourceCommand {
                     if (!zip.exists()) {
                         zip.createNewFile();
                     }
-                    for (ExcelHandler excel : allMerged) {
-                        Workbook workbook = ExcelUtil.exportExcelX(null, excel.getAll(), "yyyy-MM-dd", 0);
-                        String filename = excel.getFileName();
+                    for (int i = 0; i < allMerged.size(); i++) {
+                        Workbook workbook = allMerged.get(i);
+                        String filename = allMergedNames.get(i);
                         File merged = new File(folder, filename);
-                        FileOutputStream fileOutputStream = new FileOutputStream(new File(folder, excel.getFileName()));
+                        FileOutputStream fileOutputStream = new FileOutputStream(new File(folder, filename));
                         workbook.write(fileOutputStream);
                         fileOutputStream.close();
                         workbook.close();

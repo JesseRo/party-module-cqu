@@ -18,11 +18,13 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StopWatch;
+import party.portlet.report.entity.view.ExcelHandler;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
 
 
 /**
@@ -81,6 +83,40 @@ public class ExcelOperationUtil {
      */
     public static void copySheet(Sheet srcSheet, Sheet desSheet, boolean copyStyleFlag, StyleMapping mapping) {
         copySheet(srcSheet, desSheet, true, copyStyleFlag, mapping);
+    }
+
+    public static Workbook mergeByAppending(ExcelHandler template, ExcelHandler sourceHandler, Workbook dest) throws IOException, InvalidFormatException {
+        StopWatch stopwatch = new StopWatch();
+        stopwatch.start();
+        for (String name : template.getSheetNames()) {
+            if (dest.getSheet(name) == null){
+                dest.createSheet(name);
+            }
+        }
+        Workbook wb = new XSSFWorkbook(new File(sourceHandler.getPath()));
+        StyleMapping styleMapping = copyCellStyle(wb, dest);
+        for (String sheetName : sourceHandler.getSheetNames()) {
+            if (dest.getSheet(sheetName) != null){
+                copySheet(wb.getSheet(sheetName), dest.getSheet(sheetName), styleMapping);
+            }
+        }
+        stopwatch.stop();
+        logger.debug(stopwatch.prettyPrint());
+        return dest;
+    }
+
+    public static Workbook mergeByMultipleSheet(String sheetName, ExcelHandler sourceHandler, Workbook dest) throws IOException, InvalidFormatException {
+        StopWatch stopwatch = new StopWatch();
+        stopwatch.start();
+        Sheet destSheet = dest.createSheet(sheetName);
+        Workbook wb = new XSSFWorkbook(new File(sourceHandler.getPath()));
+        StyleMapping styleMapping = copyCellStyle(wb, dest);
+        copySheet(wb.getSheetAt(0), destSheet, styleMapping);
+        wb.close();
+
+        stopwatch.stop();
+        logger.debug(stopwatch.prettyPrint());
+        return dest;
     }
 
     public static void main(String[] args) throws IOException, InvalidFormatException {

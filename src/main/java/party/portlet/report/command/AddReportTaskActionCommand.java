@@ -3,6 +3,7 @@ package party.portlet.report.command;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
+import com.liferay.portal.kernel.portlet.bridges.mvc.MVCResourceCommand;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -30,9 +31,8 @@ import party.portlet.report.entity.ReportTask;
 import party.portlet.report.entity.view.FileView;
 import party.portlet.report.entity.view.WordHandler;
 
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
-import javax.portlet.PortletException;
+import javax.portlet.*;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -41,12 +41,12 @@ import java.util.*;
 
 @Component(immediate = true,
         property = {
-            "javax.portlet.name=" + PartyPortletKeys.SecondaryNewTaskPortlet,
-            "mvc.command.name=/secondary/task/add"
+                "javax.portlet.name=" + PartyPortletKeys.SecondaryNewTaskPortlet,
+                "mvc.command.name=/secondary/task/add"
         },
-        service = MVCActionCommand.class
+        service = MVCResourceCommand.class
 )
-public class AddReportTaskActionCommand implements MVCActionCommand {
+public class AddReportTaskActionCommand implements MVCResourceCommand {
     Logger log = Logger.getLogger(AddReportTaskActionCommand.class);
 
     @Reference
@@ -67,7 +67,7 @@ public class AddReportTaskActionCommand implements MVCActionCommand {
 
     @Override
     @Transactional
-    public boolean processAction(ActionRequest actionRequest, ActionResponse actionResponse) throws PortletException {
+    public boolean serveResource(ResourceRequest actionRequest, ResourceResponse actionResponse) throws PortletException {
 
         String formId = ParamUtil.getString(actionRequest, "formId");
         String orgId = (String) SessionManager.getAttribute(actionRequest.getRequestedSessionId(), "department");
@@ -76,7 +76,7 @@ public class AddReportTaskActionCommand implements MVCActionCommand {
         String theme = ParamUtil.getString(actionRequest, "theme");
         String description = ParamUtil.getString(actionRequest, "description");
         String content = ParamUtil.getString(actionRequest, "task_content");
-        Integer status =  ParamUtil.getInteger(actionRequest, "status");
+        Integer status = ParamUtil.getInteger(actionRequest, "status");
         String toOrg = ParamUtil.getString(actionRequest, "publicObject");
         String taskId = ParamUtil.getString(actionRequest, "taskId");
         ReportTask reportTask;
@@ -84,14 +84,17 @@ public class AddReportTaskActionCommand implements MVCActionCommand {
             taskId = UUID.randomUUID().toString();
             reportTask = new ReportTask();
             reportTask.setTask_id(taskId);
-        }else {
+        } else {
             reportTask = reportTaskDao.findByTaskId(taskId);
         }
         String[] toOrgs = toOrg.split(",");
+        String redirect = "";
+        String message = "发布成功";
 
         synchronized (PortalUtil.getHttpServletRequest(actionRequest).getSession()) {
             String originalFormId = (String) SessionManager.getAttribute(actionRequest.getRequestedSessionId(), "formId-report-task");
             if (formId.equals(originalFormId)) {
+                String errorMessage = "";
                 transactionUtil.startTransaction();
                 try {
                     reportTask.setContent(content);
@@ -105,26 +108,34 @@ public class AddReportTaskActionCommand implements MVCActionCommand {
                     UploadPortletRequest uploadPortletRequest = PortalUtil.getUploadPortletRequest(actionRequest);
                     List<FileView> fileViewList = saveAttachment(uploadPortletRequest, taskId);
                     String type;
-                    if (fileViewList.size() > 0){
-                        type = fileViewList.get(0).getType();
-                        reportTask.setType(type);
-                    }else {
+                    if (fileViewList.size() > 0) {
+                        type = fileViewList.stream().map(FileView::getType).findAny().get();
+                        if (!type.equals(FileView.EXCEL) && !type.equals(FileView.WORD)){
+                            errorMessage = "文件类型错误";
+                            throw new Exception();
+                        }
+                        if (fileViewList.stream().allMatch(p -> p.getType().equals(type))) {
+                            reportTask.setType(type);
+                        } else {
+                            errorMessage = "文件类型不一致";
+                            throw new Exception();
+                        }
+                    } else {
+                        errorMessage = "上传文件错误";
                         throw new Exception();
                     }
                     if (type.equalsIgnoreCase(FileView.EXCEL)) {
                         List<ExcelHandler> excels = new ArrayList<>();
                         for (FileView fileView : fileViewList) {
-                            Map<String, List<Map<String, Object>>> excelData = ExcelUtil.importAllSheet(fileView.getFilename(), new FileInputStream(fileView.getPath()));
-                            ExcelHandler excelHandler = new ExcelHandler(fileView.getFilename(), fileView.getPath(), excelData);
+                            List<String> sheetNames = ExcelUtil.getAllSheetName(fileView.getFilename(), new FileInputStream(fileView.getPath()));
+                            ExcelHandler excelHandler = new ExcelHandler(fileView.getFilename(), fileView.getPath(), sheetNames);
                             excels.add(excelHandler);
                         }
                         reportTask.setFiles(gson.toJson(excels));
-                    }else if (type.equalsIgnoreCase(FileView.WORD)){
+                    } else {
                         List<WordHandler> words = new ArrayList<>();
                         for (FileView fileView : fileViewList) {
-                            List<String> paragraph = new ArrayList<>();
-                            String wordContent = WordUtils.importWordData(fileView.getFilename(), new FileInputStream(fileView.getPath()));
-                            paragraph.add(wordContent);
+                            List<String> paragraph = WordUtils.importWordData(fileView.getFilename(), new FileInputStream(fileView.getPath()));
                             WordHandler wordHandler = new WordHandler(fileView.getFilename(), fileView.getPath(), paragraph);
                             words.add(wordHandler);
                         }
@@ -147,19 +158,31 @@ public class AddReportTaskActionCommand implements MVCActionCommand {
 
                     transactionUtil.commit();
                     SessionManager.setAttribute(actionRequest.getRequestedSessionId(), "formId-report-task", "null");
-                    if (status.equals(ConstantsKey.PUBLISHED)){
-                        actionResponse.sendRedirect("/secondary_report");
-                    }else {
-                        actionResponse.sendRedirect("/task_draft");
+                    if (status.equals(ConstantsKey.PUBLISHED)) {
+                        redirect = "window.parent.location.href='/secondary_report';";
+                    } else {
+                        redirect = "window.parent.location.href='/task_draft'";
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
+                    if (errorMessage.isEmpty()){
+                        message = "发布任务失败";
+                    }else {
+                        message = "发布任务失败: " + errorMessage;
+                    }
                     transactionUtil.rollback();
                 }
             }
         }
+        HttpServletResponse res = PortalUtil.getHttpServletResponse(actionResponse);
+        try {
+            res.getWriter().write("<script>alert('" + message + "');" + redirect + "</script>");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return false;
     }
+
     public List<FileView> saveAttachment(UploadPortletRequest uploadPortletRequest, String taskId) {
         File[] uploadFiles = uploadPortletRequest.getFiles("files");
         String[] filenames = uploadPortletRequest.getFileNames("files");
@@ -183,13 +206,11 @@ public class AddReportTaskActionCommand implements MVCActionCommand {
                     fileView.setFilename(sourceFileName);
                     fileView.setPath(filePath.getAbsolutePath());
                     String extension = sourceFileName.substring(sourceFileName.lastIndexOf("."));
-                    if (extension.equalsIgnoreCase(".doc")
-                            || extension.equalsIgnoreCase(".docx")){
+                    if (extension.equalsIgnoreCase(".docx")) {
                         fileView.setType(FileView.WORD);
-                    }else if (extension.equalsIgnoreCase(".xls")
-                            || extension.equalsIgnoreCase(".xlsx")){
+                    } else if (extension.equalsIgnoreCase(".xlsx")) {
                         fileView.setType(FileView.EXCEL);
-                    }else{
+                    } else {
                         fileView.setType("other");
                     }
                     fileViewList.add(fileView);
