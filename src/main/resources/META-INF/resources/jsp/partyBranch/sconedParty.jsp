@@ -1,6 +1,7 @@
 <%@ include file="/init.jsp" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <portlet:resourceURL id="/hg/groupAndMember" var="groupsAndMembers"/>
+<portlet:resourceURL id="/hg/group/page" var="getGroupList"/>
 <!-- 保存新增站点 -->
 <%-- <portlet:actionURL name="${submitCommand }" var="submitForm"/> --%>
 <portlet:actionURL name="/hg/postSubmissions" var="submitForm"/>
@@ -18,7 +19,11 @@
 <portlet:resourceURL id="/org/memberGroup" var="candidate"/>
 <portlet:resourceURL id="/hg/place/list" var="places"/>
 <portlet:resourceURL id="/hg/place/add" var="addPlace"/>
-
+<!-- 常用人员，组的增加，修改，删除 -->
+<portlet:resourceURL id="/hg/paersonAndGroupAddDelete" var="personAndGroupAddDelete"/>
+<portlet:resourceURL id="/hg/assignedAddPerson" var="assignedAddPerson"/>
+<portlet:resourceURL id="/hg/getBranchAllPersons" var="getBranchAllPersons"/>
+<portlet:resourceURL id="/hg/deletePerson" var="deletePerson"/>
 <html>
 <head>
     <style type="text/css">
@@ -110,15 +115,6 @@
             margin-right: 5px;
         }
 
-        .layui-table-cell {
-            text-align: left;
-        }
-
-        /*.table_container {*/
-        /*    height: 200px;*/
-        /*    overflow-y: auto;*/
-        /*    border: 1px solid #d8d8d8;*/
-        /*}*/
 
         .common_list_container .table_container {
             /* border-right: none; */
@@ -473,9 +469,7 @@
         .modal_content_container .left_list_container .custom_table+.layui-table-view .layui-table-body{
             max-height: 300px!important;
         }
-        .modal_content_container >div .layui-table-page{
-            overflow-x: auto;
-        }
+
         .modal_content_container >div .layui-laypage-count, .modal_content_container >div .layui-laypage-skip{
             display: none;
         }
@@ -555,8 +549,33 @@
         .table_form_content .custom_form .layui-input{
             height: 38px;
         }
+
         body .layui-layer {
             min-width: 0px !important;
+        }
+        #groupModal .layui-card-body{
+            height:400px;
+        }
+        #groupModal #addGroupBtn{
+            position: absolute;
+            right: 20px;
+            margin-top: 6px;
+        }
+        .table_outer_box > table thead, tbody tr {
+            display: table-row !important;
+            width: 100%;
+            table-layout: fixed;
+        }
+        .layui-form-checked[lay-skin=primary] i {
+            border-color: #FFB800 !important;
+            background-color: #FFB800;
+            color: #fff;
+        }
+        th, tr{
+            text-align:center !important;
+        }
+        .layui-table-page-center{
+            text-align: center;
         }
     </style>
     <link rel="stylesheet" href="${basePath}/js/layui/css/modules/multiSelect/multi-select.css"/>
@@ -710,13 +729,13 @@
                             <div class="layui-input-inline" style="width:40px">
                                 <a href="javascript:void(0)" memberGroup="hide" onclick="showMemberGroup(this)"><i class="layui-icon layui-icon-user"></i></a>
                             </div>
-                            <div class="layui-input-inline" style="display:none" id="memberGroup">
+                            <div class="layui-input-inline" style="width:700px;display:none" id="memberGroup">
                                 <p>
                                     常用分组:
                                     <button type="button" class="layui-btn layui-btn-xs layui-btn-warm" id="edit_group_member">编辑</button>
                                 </p>
-                                <p class="list_item_container" id="group_member_list">
-                                </p>
+                                <div class="list_item_container" id="group_member_list">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -920,30 +939,23 @@
             </div>
         </div>
     </div>
-    <div id="memberModal" >
-        <div class="left_list_container">
-            <p class="">常用列表</p>
-            <button class="layui-btn custom_btn add_group_btn" style="height: 32px;">添加</button>
-            <div class="table_container">
-                <table id="groupTable" lay-filter="groupTable" class="custom_table"></table>
-            </div>
-        </div>
-        <div class="right_member_container">
-            <p class="" id="member_title">常用人员</p>
-            <form class="layui-form" action="">
-                <div class="layui-form-item">
-                    <div class="layui-input-block">
-                        <select name="member" lay-search="" lay-filter="member" placeholder="可搜索可输入">
-                            <option value="">添加人员</option>
-                            <c:forEach var="m" items="${members}">
-                                <option value="${m.member_identity}">${m.member_name}</option>
-                            </c:forEach>
-                        </select>
+    <div id="groupModal" >
+        <div class="layui-row">
+            <div class="layui-col-md9">
+                <div class="layui-card">
+                    <div class="layui-card-header">分组列表<button type="button" id="addGroupBtn" class="layui-btn layui-btn-warm layui-btn-sm">添加分组</button></div>
+                    <div class="layui-card-body">
+                        <table id="groupTable" lay-filter="groupTable"></table>
                     </div>
                 </div>
-            </form>
-            <div class="table_container">
-                <table id="memberTable" lay-filter="memberTable" class="custom_table"></table>
+            </div>
+            <div class="layui-col-md3">
+                <div class="layui-card">
+                    <div class="layui-card-header">组内成员</div>
+                    <div class="layui-card-body">
+                        <table id="groupMemberTable" lay-filter="groupMemberTable"></table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -968,20 +980,13 @@
     </div>
 
 </div>
-<!-- 常用人员，组的增加，修改，删除 -->
-<portlet:resourceURL id="/hg/paersonAndGroupAddDelete" var="paersonAndGroupAddDelete"/>
-<portlet:resourceURL id="/hg/assignedAddPerson" var="assignedAddPerson"/>
-<portlet:resourceURL id="/hg/getBranchAllPersons" var="getBranchAllPersons"/>
-<portlet:resourceURL id="/hg/deletePerson" var="deletePerson"/>
-<script type="text/html" id="groupOperateBtns">
-    <div class="operate_btns">
-        <span class="red_text delete_td" title="删除" onclick="deleteTd(event,1)">删除</span>
-    </div>
+<script type="text/html" id="tableTool">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+    <a class="layui-btn layui-btn-xs" lay-event="addGroupMember">添加组内成员</a>
 </script>
-<script type="text/html" id="memberOperateBtns">
-    <div class="operate_btns">
-        <span class="red_text delete_td" title="删除" onclick="deleteTd(event,2)">删除</span>
-    </div>
+<script type="text/html" id="memberTableTool">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">移除</a>
 </script>
 <script type="text/javascript">
     layui.config({
@@ -989,14 +994,23 @@
     }).extend({
         checkbox: 'checkbox/checkbox'
     });
-    layui.use(['laydate','layer','form','checkbox'], function(){
+    layui.use(['laydate','layer','form','table','checkbox'], function(){
         var laydate = layui.laydate,
             form = layui.form,
             layer = layui.layer,
+            table = layui.table,
             checkbox = layui.checkbox;
+        var pageInfo = {
+            page:1,
+            size:10
+        };
         renderEditor();
         renderDateSelect();
         renderMemberGroups();
+        renderGroupTable(1,pageInfo.size);
+        renderGroupMemberTable();
+        $('#addMeetingPlanForm  select[name="campus"]').val($($('#addMeetingPlanForm  select[name="campus"] option')[0]).val());
+        form.render();
         function renderDateSelect() {
             laydate.render({
                 elem: '#timeDuring'
@@ -1070,6 +1084,76 @@
                 }
             })
         }
+        function renderGroupTable(page,size){
+            var  where = {};
+            var cols = [[
+                {field: 'id', align:'center', width:120, title: '编号'}
+                ,{field: 'group_name', align:'center', title: '分组名字'}
+                ,{field: 'id', title: '操作', width:240, align:'center',toolbar: '#tableTool'}
+            ]];
+            var ins = table.render({
+                elem: '#groupTable'
+                ,where: where
+                ,height:450
+                ,url: '${getGroupList}'//数据接口
+                ,page: {
+                    limit:size,   //每页条数
+                    limits:[10,15,20],
+                    prev:'&lt;上一页',
+                    curr:page,
+                    next:'下一页&gt;',
+                    theme: '#FFB800',
+                    groups:4
+                }
+                ,cols: cols
+                ,done: function(res, curr, count){
+                    pageInfo.page = curr;
+                    pageInfo.size = ins.config.limit;
+                    if(count<(pageInfo.page-1)*pageInfo.size){
+                        renderTable(pageInfo.page-1,pageInfo.size);
+                    }
+                }
+            });
+            $(".layui-table-view .layui-table-page").addClass("layui-table-page-center");
+            $(".layui-table-view .layui-table-page").removeClass("layui-table-page");
+            //监听事件
+            table.on('tool(groupTable)', function(obj){
+                switch(obj.event){
+                    case 'delete':
+                        deleteGroup(obj.data.group_id);
+                        break;
+                    case 'edit':
+                        editGroup(obj.data.group_id);
+                        break;
+                    case 'addGroupMember':
+                        addGroupMember(obj.data.group_id);
+                        break;
+                };
+            });
+        }
+        function renderGroupMemberTable(){
+            var cols = [[
+                {field: 'name', align:'center', title: '姓名'}
+                ,{field: 'id', title: '操作', width:80, align:'center',toolbar: '#memberTableTool'}
+            ]];
+            table.render({
+                elem: '#groupMemberTable'
+                ,height:450
+                ,page: false
+                ,data:[{'id':1,'name':'张三'},{'id':1,'name':'李四'}]
+                ,cols: cols
+            });
+            //监听事件
+            table.on('tool(groupMemberTable)', function(obj){
+                switch(obj.event){
+                    case 'delete':
+                        deleteGroupMember(obj.data.id);
+                        break;
+                    case 'edit':
+                        break;
+                };
+            });
+        }
         form.on('select(campus)', function(data){
             renderPlace();
         });
@@ -1084,8 +1168,9 @@
         $('#edit_group_member').on('click', function () {
             var index = layer.open({
                 title:'常用分组列表',
+                area: ['960px','560px'],
                 type: 1,
-                content: $("#memberModal")
+                content: $("#groupModal")
             });
         });
         $('#addPlace').on('click', function () {
@@ -1095,7 +1180,7 @@
             } else {
                 layer.open({
                     type: 1,
-                    area: ['500px','160px'],
+                    area: ['520px','160px'],
                     title:'添加开展地点',
                     content: $("#addPlaceModal"),
                     shadeClose: true
@@ -1132,6 +1217,38 @@
                     layer.msg('获取地点失败.');
                 }
             });
+        }
+        $('#addGroupBtn').on('click', function () {
+            layer.msg("功能即将开放。")
+        });
+        function deleteGroup(groupId){
+            layer.confirm('您确认删除吗？', {
+                btn: ['确定','取消'] //按钮
+            }, function(){
+                layer.msg("功能即将开放。")
+                /*$.ajax({
+                    url: '${personAndGroupAddDelete}',
+                    type: 'POST',
+                    data: {groupId: groupId, path: "deleteGroup"},
+                    dataType: 'json',
+                    async: false,
+                    success: function (res) {
+                        if(res){
+                            renderMemberGroups();
+                            renderGroupTable(pageInfo.page,pageInfo.size);
+                        }
+                    }
+                });*/
+            });
+        }
+        function editGroup(groupId){
+            layer.msg("功能即将开放。")
+        }
+        function addGroupMember(groupId){
+            layer.msg("功能即将开放。")
+        }
+        function deleteGroupMember(id){
+            layer.msg("功能即将开放。")
         }
     })
     function showMemberGroup(o){
@@ -1171,19 +1288,9 @@
         };
     };
 
-    function renderGroup() {
-        $.post('${getGroup}', function (res) {
-            if (!groupTable){
-                groupTable = table.render(commonOpts('#groupTable', 'group_td_name', res, 'group_id', 'group_name', '#groupOperateBtns'));
-            }else {
-                groupTable.reload({data: res})
-            }
-        })
-    }
-
     function renderMember() {
         if (currentGroup){
-            $.post('${paersonAndGroupAddDelete}', {groupId: currentGroup, path: "getGroupPersons"}, function (res) {
+            $.post('${personAndGroupAddDelete}', {groupId: currentGroup, path: "getGroupPersons"}, function (res) {
                 res = JSON.parse(res);
                 if (!memberTable){
                     memberTable = table.render(commonOpts('#memberTable', 'member_td_name', res, 'participant_id', 'member_name', '#memberOperateBtns'));
@@ -1203,17 +1310,16 @@
             if(type === 1){
                 var id = $(e.target).parent().parent().parent().parent().find("[data-field='group_id']").children().text();
                 $.ajax({
-                    url: '${paersonAndGroupAddDelete}',
+                    url: '${personAndGroupAddDelete}',
                     type: 'POST',
                     data: {groupId: id, path: "deleteGroup"},
                     dataType: 'json',
                     async: false,
                     success: function (res) {
                         if(res){
-                            renderGroup();
                             console.log(e,'e ');
                         }
-                        groupsAndMembers()
+
                     }
                 });
             }else if (type === 2){
@@ -1297,8 +1403,6 @@
             }
         });
         $($('.dropdown-mul-2 .dropdown-main .dropdown-search')[0]).after('<button class="layui-btn layui-btn-sm layui-btn-warm" style="float:right" type="button" onclick="addPlace()">新增地点</button>');
-        $('[name="campus"]').change(getPlace);
-
         var candidates = [];
         var dropArr = [];
         var memberArr = JSON.parse('${memberList}');
@@ -1441,20 +1545,18 @@
         //常用列表 弹窗列表
         layui.use('table', function(){
             table = layui.table;
-            renderGroup();
         });
         //常用列表添加按钮
         $(".add_group_btn").on("click", '', function(){
             layer.prompt({title: '添加列表', formType: 0}, function(text, index){
                 $.ajax({
-                    url: '${paersonAndGroupAddDelete}',
+                    url: '${personAndGroupAddDelete}',
                     type: 'POST',
                     data: {groupName: text, path: "addGroup"},
                     dataType: 'json',
                     async: false,
                     success: function (data) {
                         layuiModal.alert("已添加常用组");
-                        renderGroup();
                     }
                 });
                 layer.close(index);
@@ -1469,7 +1571,7 @@
             form.on('select(member)', function(data){
                 if(currentGroup) {
                     $.ajax({
-                        url: "${paersonAndGroupAddDelete}",
+                        url: "${personAndGroupAddDelete}",
                         data: {participant_id: data.value, groupId: currentGroup, path: "addPerson"},
                         dataType: "json",
                         success: function (result) {
@@ -1525,7 +1627,6 @@
             var participants = JSON.parse(j.participant_group);
             refresh("ddddd", [j.host], [j.contact], participants);
             $("select[name='campus']").val(j.campus);
-            getPlace(j.place);
             // $("input[name='host']").val(j.host);
             // $("input[name='contact']").val(j.contact);
             $("input[name='phoneNumber']").val(j.contact_phone);
@@ -1566,8 +1667,7 @@
             $("input[name='timeDuring']").val(j.start_time);
             $("[name='timeLasts']").val(j.total_time);
             $("select[name='campus']").val(j.campus);
-            getPlace(j.place);
-            var participants = JSON.parse(j.participant_group);
+             var participants = JSON.parse(j.participant_group);
             refresh("ddddd", [j.host], [j.contact], participants);
             // $("input[name='host']").val(j.host);
             // $("input[name='contact']").val(j.contact);
@@ -1689,7 +1789,7 @@
         $(".member_content").empty();
         var groupId = $(this).find("input").val();
         <%--$.ajax({--%>
-        <%--    url: '${paersonAndGroupAddDelete}',--%>
+        <%--    url: '${personAndGroupAddDelete}',--%>
         <%--    type: 'POST',--%>
         <%--    data: {groupId: groupId, path: "getGroupPersons"},--%>
         <%--    dataType: 'json',--%>
@@ -1718,7 +1818,7 @@
             // $("#hg_confirm").modal("hide");
             $(self).parent().parent().remove();
             $.ajax({
-                url: '${paersonAndGroupAddDelete}',
+                url: '${personAndGroupAddDelete}',
                 type: 'POST',
                 data: {groupId: groupId, path: "deleteGroup"},
                 dataType: 'json',
@@ -1745,7 +1845,7 @@
         $(this).parents(".form-horizontal").siblings("button.btn").css("display", "inline-block");
         $(this).parents(".form-horizontal").css("display", "none");
         $.ajax({
-            url: '${paersonAndGroupAddDelete}',
+            url: '${personAndGroupAddDelete}',
             type: 'POST',
             data: {groupName: groupName, branchId: branchId, path: "addGroup"},
             dataType: 'json',
@@ -1815,7 +1915,7 @@
             showConfirm("请选择人员 ！");
             return;
         }
-        var url = "${paersonAndGroupAddDelete}"
+        var url = "${personAndGroupAddDelete}"
         var data = {participant_id: assigne_user_id, groupId: groupId, path: "addPerson"};
         $.ajax({
             url: url,
