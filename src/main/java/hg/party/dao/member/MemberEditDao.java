@@ -116,8 +116,8 @@ public class MemberEditDao extends PostgresqlDaoImpl<MemberEdit> {
                                      ps.setInt(22,memberEdit.getSubmit_by());
                                      ps.setTimestamp(23,memberEdit.getSubmit_time());
                                      ps.setInt(24,memberEdit.getStatus());
-                                     ps.setString(24,memberEdit.getJobNumber());
-                                     ps.setString(25,memberEdit.getAuthNumber());
+                                     ps.setString(25,memberEdit.getJobNumber());
+                                     ps.setString(26,memberEdit.getAuthNumber());
                                      return ps;
                                  }
                              },

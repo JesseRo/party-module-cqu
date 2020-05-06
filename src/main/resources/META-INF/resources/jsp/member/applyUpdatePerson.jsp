@@ -32,12 +32,12 @@
         .content_info .content_form .form-group > div {
             margin-bottom: 20px;
         }
-        .layui-form-label.layui-required:after{
-            content:"*";
-            color:red;
-            position: absolute;
-            top:5px;
-            right:2px;
+        .layui-form-label.layui-required:before{
+            content: "*";
+            color: red;
+            top: 5px;
+            right: 2px;
+            position: relative;
         }
         .table_form_content .custom_form .layui-form-label{
             padding: 0 10px;

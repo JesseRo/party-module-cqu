@@ -1,6 +1,6 @@
 <%@ include file="/init.jsp" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
-
+<portlet:resourceURL id="/hg/groupAndMember" var="groupsAndMembers"/>
 <!-- 保存新增站点 -->
 <%-- <portlet:actionURL name="${submitCommand }" var="submitForm"/> --%>
 <portlet:actionURL name="/hg/postSubmissions" var="submitForm"/>
@@ -22,14 +22,11 @@
 <html>
 <head>
     <style type="text/css">
-        .layui-layer-title{
-            display: none;
-        }
-        .layui-layer-setwin{
-            display: none;
-        }
-        .dropdown-display {
-            height: 40px;
+        .layui-btn-xs {
+            height: 22px !important;
+            line-height: 22px!important;
+            padding: 0 5px!important;
+            font-size: 12px!important;
         }
 
         input, select {
@@ -37,13 +34,6 @@
             text-indent: 0;
         }
 
-        input#button1 {
-            float: right;
-            text-indent: 0;
-            height: 36px;
-            padding-left: 21px;
-            padding-right: 21px;
-        }
 
         textarea {
             width: 100%;
@@ -60,12 +50,6 @@
         }
 
         /* 常用人员弹窗样式 */
-
-        .member_title {
-            font-size: 14px;
-            line-height: 46px;
-            height: 46px;
-        }
 
         #commonStaff thead {
             border-bottom: 1px solid #d8d8d8;
@@ -525,36 +509,78 @@
         .layui-table-cell + .layui-table-grid-down{
             display: none;
         }
-        .list_item_container span:hover{
-            color: #fff!important;
+
+        .layui-form-label.layui-required:before {
+            content: "*";
+            color: red;
+            top: 5px;
+            right: 2px;
+            position: relative;
         }
-        .list_item_container span{
-            background: #fff!important;
-            color: #ffab33!important;
-            border: 1px solid #ffab33!important;
+        .table_form_content .custom_form .layui-form-label{
+            padding: 0 10px;
+            width: 160px;
+        }
+        #addPlaceModal .layui-form-label{
+            width: 160px;
+        }
+        .table_form_content .layui-input-block {
+            margin-left: 160px;
+        }
+        .table_form_content .custom_form .layui-form-item .layui-input-inline{
+            width: 260px;
+        }
+        #addPlaceModal .layui-input-inline{
+            width: 320px;
+        }
+        .layui-laydate-content table thead tr{
+            display:flex;
+        }
+        .layui-form-label-text{
+            float: left;
+            display: block;
+            padding: 0 10px;
+            width: 260px;
+            font-weight: 400;
+            line-height: 40px;
+            font-size: 16px;
+            text-align: left;
+        }
+        .layui-input, .layui-textarea {
+             padding-left: 10px !important;
+         }
+        .table_form_content .custom_form .meetingContent{
+            width: 700px !important;
+        }
+        .table_form_content .custom_form .layui-input{
+            height: 38px;
+        }
+        body .layui-layer {
+            min-width: 0px !important;
         }
     </style>
-    <link rel="stylesheet" href="${basePath}/css/publish.css"/>
-    <script type="text/javascript" src="${basePath}/js/My97DatePicker/WdatePicker.js"></script>
-    <script type="text/javascript" src="${basePath}/js/form.js?version=97"></script>
+    <link rel="stylesheet" href="${basePath}/js/layui/css/modules/multiSelect/multi-select.css"/>
+    <link rel="stylesheet" href="${basePath}/js/layui/css/modules/checkbox/checkbox.css?version=98"/>
+<%--    <link rel="stylesheet" href="${basePath}/css/publish.css"/>--%>
+<%--    <script type="text/javascript" src="${basePath}/js/My97DatePicker/WdatePicker.js"></script>--%>
+<%--    <script type="text/javascript" src="${basePath}/js/form.js?version=97"></script>--%>
     <script type="text/javascript" src="${basePath}/js/utf8-jsp/ueditor.config-thumb.js?v=4"></script>
     <script type="text/javascript" src="${basePath}/js/utf8-jsp/ueditor.all.js"></script>
     <script type="text/javascript" charset="utf-8" src="${ basePath }/js/utf8-jsp/lang/zh-cn/zh-cn.js"></script>
-    <link rel="stylesheet" href="${basePath }/js/utf8-jsp/third-party/codemirror/codemirror.css"/>
-    <link rel="stylesheet" href="${basePath }/js/utf8-jsp/themes/iframe.css"/>
+<%--    <link rel="stylesheet" href="${basePath }/js/utf8-jsp/third-party/codemirror/codemirror.css"/>--%>
     <link rel="stylesheet" href="${basePath }/js/utf8-jsp/themes/default/css/ueditor.css"/>
     <script type="text/javascript" charset="utf-8"
             src="${ basePath }/js/utf8-jsp/third-party/codemirror/codemirror.js"></script>
     <script type="text/javascript" charset="utf-8"
             src="${ basePath }/js/utf8-jsp/third-party/zeroclipboard/ZeroClipboard.js"></script>
-    <link rel="stylesheet" href="${basePath}/css/jquery.dropdown.css"/>
-    <link rel="stylesheet" href="${basePath}/cqu/css/multiSelect.css"/>
-    <script type="text/javascript" src="${basePath}/js/jquery.dropdown.js?v=11"></script>
-    <script type="text/javascript" src="${basePath}/js/jquery-validation.min.js"></script>
-    <script type="text/javascript" src="${basePath}/js/validation-message-zh.js?v=2"></script>
-    <script type="text/javascript" src="${basePath}/cqu/js/popper.min.js"></script>
-    <script type="text/javascript" src="${basePath}/cqu/js/polyfill.js"></script>
-    <script type="text/javascript" src="${basePath}/cqu/js/BsMultiSelect.min.js"></script>
+<%--    <link rel="stylesheet" href="${basePath}/css/jquery.dropdown.css"/>--%>
+<%--    <link rel="stylesheet" href="${basePath}/cqu/css/multiSelect.css"/>--%>
+<%--    <script type="text/javascript" src="${basePath}/js/jquery.dropdown.js?v=11"></script>--%>
+<%--    <script type="text/javascript" src="${basePath}/js/jquery-validation.min.js"></script>--%>
+<%--    <script type="text/javascript" src="${basePath}/js/validation-message-zh.js?v=2"></script>--%>
+<%--    <script type="text/javascript" src="${basePath}/cqu/js/popper.min.js"></script>--%>
+<%--    <script type="text/javascript" src="${basePath}/cqu/js/polyfill.js"></script>--%>
+<%--    <script type="text/javascript" src="${basePath}/cqu/js/BsMultiSelect.min.js"></script>--%>
 
 </head>
 <body>
@@ -574,8 +600,156 @@
         <input type="hidden" class="planContent" value='${planContent }'>
 
         <div class="bg_white_container">
-            <div class="content_form" style="padding: 20px 0;">
-                <form class="form-horizontal" role="form" action="${submitForm }" method="post"
+            <div class="content_form form_container">
+                <form class="layui-form custom_form"  id="addMeetingPlanForm"
+                      style="width: 960px;">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">党组织：</label>
+                            <div class="layui-input-inline">
+                                <label class="layui-form-label-text">${organization.org_name }</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label layui-required">会议类型：</label>
+                            <div class="layui-input-inline">
+                                <select  name="conferenceType" lay-verify="select">
+                                    <option  value="" disabled>请选择</option>
+                                    <c:forEach var="n" items="${conferenceTypes }">
+                                        <option value="${n}">${n}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label layui-required">开展主题：</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" name="subject"  lay-verify="required" autocomplete="on">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label layui-required">开始时间：</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="timeDuring" id="timeDuring" value="${info.timeDuring }"
+                                       class="layui-input start_date" lay-verify="required" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label layui-required">共计时长：</label>
+                            <div class="layui-input-inline">
+                                <select  name="timeLasts" lay-verify="select">
+                                    <option  value="" disabled>请选择</option>
+                                    <c:forEach var="n" items="${timeLasts }">
+                                        <option value="${n}">${n/60}小时</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label layui-required">开展校区：</label>
+                            <div class="layui-input-inline">
+                                <select  name="campus" lay-verify="select" lay-filter="campus">
+                                    <option  value="" disabled>请选择</option>
+                                    <c:forEach var="n" items="${campus }">
+                                        <option value="${n}">${n}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label layui-required">开展地点：</label>
+                            <div class="layui-input-inline">
+                                <select  name="location" lay-verify="select">
+                                </select>
+                            </div>
+                            <a href="javascript:void(0)" id="addPlace" ><i class="layui-icon layui-icon-addition"></i></a>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label layui-required">主持人：</label>
+                            <div class="layui-input-inline">
+                                <select name="host" lay-search="" multiple="" lay-filter="select" placeholder="可搜索可输入">
+                                    <option value="">请选择</option>
+                                    <c:forEach var="m" items="${members}">
+                                        <option value="${m.member_identity}">${m.member_name}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label layui-required">列席人员：</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" name="sit"  lay-verify="required" autocomplete="off">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label layui-required">联系人：</label>
+                            <div class="layui-input-inline">
+                                <select name="contact" lay-search="" lay-filter="select" placeholder="可搜索可输入">
+                                    <option >请选择</option>
+                                    <c:forEach var="m" items="${members}">
+                                        <option value="${m.member_identity}">${m.member_name}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label layui-required">联系电话：</label>
+                            <div class="layui-input-inline">
+                                <input name="phoneNumber" class="layui-input"  lay-verify="required" autocomplete="off">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label layui-required">参会人员：</label>
+                            <div class="layui-input-inline" style="width:700px">
+                                <select name="participate" lay-filter="participate" multiple lay-search lay-case >
+                                    <option value="">请选择</option>
+                                    <c:forEach var="m" items="${members}">
+                                        <option value="${m.member_identity}">${m.member_name}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                            <div class="layui-input-inline" style="width:40px">
+                                <a href="javascript:void(0)" memberGroup="hide" onclick="showMemberGroup(this)"><i class="layui-icon layui-icon-user"></i></a>
+                            </div>
+                            <div class="layui-input-inline" style="display:none" id="memberGroup">
+                                <p>
+                                    常用分组:
+                                    <button type="button" class="layui-btn layui-btn-xs layui-btn-warm" id="edit_group_member">编辑</button>
+                                </p>
+                                <p class="list_item_container" id="group_member_list">
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label layui-required">计划内容：</label>
+                            <div class="layui-input-inline meetingContent">
+                                <script id="meetingContent" name="meetingContent" type="text/plain"></script>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button type="submit" class="layui-btn layui-btn-warm" lay-submit="" lay-filter="meetingPlanRelease">发 布</button>
+                            <button type="submit" class="layui-btn layui-btn-warm" lay-submit="" lay-filter="meetingPlanSave">暂 存</button>
+                            <button type="button" class="layui-btn layui-btn-primary" id="meetingPlanCancle">取 消</button>
+                        </div>
+                    </div>
+                </form>
+                <%--<form class="layui-form custom_form" role="form" action="${submitForm }" method="post"
                       enctype="multipart/form-data" style="max-width: 960px;">
                     <div id="hg-form-container" class="form-group">
                         <div class="col-sm-6 col-xs-12">
@@ -608,22 +782,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-sm-6 col-xs-12">
-                            <div class="col-sm-3 col-xs-3 ">
-                                <span class=" control-label form-label-required">开展主题：</span>
-                            </div>
-                            <div class="col-sm-9 col-xs-9">
-                                <input class="form-control" name="subject" value="">
-                            </div>
-                        </div>
-                        <div class="col-sm-6 col-xs-12">
-                            <div class="col-sm-3 col-xs-3 ">
-                                <span class="control-label form-label-required">开始时间：</span>
-                            </div>
-                            <div class="col-sm-9 col-xs-9">
-                                <input type="text" name="timeDuring" id="timeDuring" autocomplete="off" class="datetime form-control layui-input">
-                            </div>
-                        </div>
+
                         <div class="col-sm-6 col-xs-12">
                             <div class="col-sm-3 col-xs-3 ">
                                 <span class="control-label form-label-required">共计时长：</span>
@@ -770,56 +929,55 @@
                             </div>
                         </div>
                     </div>
-                </form>
+                </form>--%>
             </div>
         </div>
     </div>
-    <div class="modal member_modal" id="memberModal" tabindex="-1" role="dialog" aria-labelledby="memberModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="memberModalLabel" style="height: 32px;">
-                        常用列表
-                    </h4>
-                    <button type="button" class="close close-modal" data-dismiss="modal" aria-hidden="true">
-                        &times;
-                    </button>
-                </div>
-                <div class="modal-body modal_content_container">
-                    <div class="left_list_container">
-                        <p class="">常用列表</p>
-                        <button class="layui-btn custom_btn add_group_btn" style="height: 32px;">添加</button>
-                        <div class="table_container">
-                            <table id="groupTable" lay-filter="groupTable" class="custom_table"></table>
-                        </div>
-                    </div>
-                    <div class="right_member_container">
-                        <p class="" id="member_title">常用人员</p>
-                        <form class="layui-form" action="">
-                            <div class="layui-form-item">
-                                <div class="layui-input-block">
-                                    <select name="city" lay-search="" lay-filter="member" placeholder="可搜索可输入">
-                                        <option value="" disabled>添加人员</option>
-                                        <c:forEach var="m" items="${members}">
-                                            <option value="${m.member_identity}">${m.member_name}</option>
-                                        </c:forEach>
-                                    </select>
-                                </div>
-                            </div>
-                        </form>
-                        <div class="table_container">
-                            <table id="memberTable" lay-filter="memberTable" class="custom_table"></table>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="layui-btn custom_btn close-modal" data-dismiss="modal">
-                        关闭
-                    </button>
-                </div>
+    <div id="memberModal" >
+        <div class="left_list_container">
+            <p class="">常用列表</p>
+            <button class="layui-btn custom_btn add_group_btn" style="height: 32px;">添加</button>
+            <div class="table_container">
+                <table id="groupTable" lay-filter="groupTable" class="custom_table"></table>
             </div>
         </div>
-        <!-- 右侧盒子内容 -->
+        <div class="right_member_container">
+            <p class="" id="member_title">常用人员</p>
+            <form class="layui-form" action="">
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <select name="member" lay-search="" lay-filter="member" placeholder="可搜索可输入">
+                            <option value="">添加人员</option>
+                            <c:forEach var="m" items="${members}">
+                                <option value="${m.member_identity}">${m.member_name}</option>
+                            </c:forEach>
+                        </select>
+                    </div>
+                </div>
+            </form>
+            <div class="table_container">
+                <table id="memberTable" lay-filter="memberTable" class="custom_table"></table>
+            </div>
+        </div>
+    </div>
+
+    <div id="addPlaceModal" >
+        <form class="layui-form" action="">
+            <input type="hidden" class="layui-layer-input" value="1">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label layui-required">开展地点</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="place" lay-verify="required" lay-reqtext="开展地点是必填项，不能为空。" placeholder="请输入开展地点" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-layer-btn layui-layer-btn-">
+                <a class="layui-layer-btn0" type="button"  lay-submit="" lay-filter="addPlaceForm">确定</a>
+                <a class="layui-layer-btn1">取消</a>
+            </div>
+        </form>
     </div>
 
 </div>
@@ -839,102 +997,172 @@
     </div>
 </script>
 <script type="text/javascript">
-    layui.use('laydate', function(){
-        var laydate = layui.laydate;
-        laydate.render({
-            elem: '#timeDuring'
-            ,type: 'datetime'
-            ,isInitValue: true
-            //,trigger: 'click'
-            ,done: function(value, date, endDate){
-            }
-            ,change: function(value, date, endDate){
-                this.elem.val(value)
-            }
-        });
-    })
-    var memberTable, groupTable, table;
-    function addPlace() {
-        var campus = $('[name="campus"]').val();
-        var place = $('.dropdown-mul-2').eq(0).data('dropdown').$el.find('.valid').val();
-        if (!campus) {
-            layuiModal.alert("请先选择校区");
-        } else {
-            layuiModal.confirm("确定要新增名为“" + place.trim() + "”的地点吗？", function () {
-                $.post("${addPlace}", {place: place, campus: campus}, function (res) {
-                    if (res.code ==200) {
-                        getPlace(res.data.id);
+    layui.config({
+        base: '${basePath}/js/layui/module/'
+    }).extend({
+        checkbox: 'checkbox/checkbox'
+    });
+    layui.use(['laydate','layer','form','checkbox'], function(){
+        var laydate = layui.laydate,
+            form = layui.form,
+            layer = layui.layer,
+            checkbox = layui.checkbox;
+        renderEditor();
+        renderDateSelect();
+        renderMemberGroups();
+        function renderDateSelect() {
+            laydate.render({
+                elem: '#timeDuring'
+                ,type: 'datetime'
+                ,isInitValue: true
+                //,trigger: 'click'
+                ,done: function(value, date, endDate){
+                }
+                ,change: function(value, date, endDate){
+                    this.elem.val(value)
+                }
+            });
+        }
+
+        function renderEditor(){
+            var uploadUrls = {
+                file: '${uploadfileUrl}',
+                image: '${uploadimageUrl}',
+                video: '${uploadvideoUrl}'
+            };
+            var ueditor = UE.getEditor("meetingContent", { initialFrameWidth:700,zIndex:100});
+
+            UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
+            UE.Editor.prototype.getActionUrl = function(action) {
+                if (action == 'uploadimage' || action == 'uploadscrawl' || action == 'uploadimage') {
+                    return uploadUrls.image;
+                } else if (action == 'uploadvideo') {//视频
+                    return uploadUrls.video;
+                } else if (action == 'uploadfile') {//附件
+                    return uploadUrls.file;
+                } else {
+                    return this._bkGetActionUrl.call(this, action);
+                }
+            };
+        }
+
+        function renderMemberGroups(){
+            $("#group_member_list").empty();
+            $.post('${groupsAndMembers}', function(res){
+                if(res.result){
+                    $("#group_member_list").children("li").remove();
+                    var nodes = new Array();
+                    for(var i=0;res.data.length>0 && i<res.data.length;i++){
+                        var tipsContent = '';
+                        if(res.data.member && res.data.member.length>0){
+                            tipsContent = res.data.member
+                        }
+                        var node = {
+                            id:res.data[i].id,
+                            name:res.data[i].name,
+                            type:res.data[i].id,
+                            on:false,
+                            tipsContent:tipsContent
+                        }
+                        nodes.push(node);
                     }
-                },'json')
+                    checkbox({
+                        elem: "#group_member_list"
+                        ,showDel:false
+                        ,tips:{
+                            show:true,
+                            render:true
+                        }
+                        , nodes: nodes
+                        , click: function (node) {
+                            console.log( node);
+                        }
+                    });
+                }else {
+                    layer.msg(res.message);
+                }
             })
         }
-    }
-
-    function getPlace(placeId) {
-        var campus = $('[name="campus"]').val();
-        if (!campus) {
-            layuiModal.alert("请先选择校区");
-        }
-        $.ajax({
-            url: '${places}',
-            type: 'POST',
-            data: {campus: campus},
-            dataType: 'json',
-            async: false,
-            success: function (res) {
-                if (res.code==200) {
-                    var place = [];
-                    var places = res.data;
-                    for (var i in places) {
-                        if(res.data[i].id!=undefined){
-                            place.push({
-                                id: res.data[i].id,
-                                disabled: false,
-                                name: res.data[i].place,
-                                selected: false
-                            });
-                        }
-                    }
-                    $('.dropdown-mul-2').eq(0).data('dropdown').reset();
-                    $('.dropdown-mul-2').eq(0).data('dropdown').changeStatus();
-                    if (place.length === 0) {
-                        place.push({
-                            name: "没有数据",
-                            disabled: true
-                        });
-                    }
-                    $('.dropdown-mul-2').eq(0).data('dropdown').update(place, true);
-                    placeId && $('.dropdown-mul-2').eq(0).data('dropdown').choose(placeId);
-
-                } else {
-                    layuiModal.alert('获取地点失败');
+        form.on('select(campus)', function(data){
+            renderPlace();
+        });
+        form.on('submit(addPlaceForm)', function(data){
+            $.post("${addPlace}", {place: data.field.place, campus: $('#addMeetingPlanForm  select[name="campus"]').val()}, function (res) {
+                if (res.code ==200) {
+                    renderPlace();
                 }
-            },
-            error: function () {
-                alert("获取数据为空");
+            },'json');
+        });
+
+        $('#edit_group_member').on('click', function () {
+            var index = layer.open({
+                title:'常用分组列表',
+                type: 1,
+                content: $("#memberModal")
+            });
+        });
+        $('#addPlace').on('click', function () {
+            var campus = $('#addMeetingPlanForm  select[name="campus"]').val();
+            if (!campus) {
+                layer.alert("请先选择校区");
+            } else {
+                layer.open({
+                    type: 1,
+                    area: ['500px','160px'],
+                    title:'添加开展地点',
+                    content: $("#addPlaceModal"),
+                    shadeClose: true
+                });
             }
         });
-    }
-    // 参会人员 组件
-    <portlet:resourceURL id="/hg/groupAndMember" var="groupsAndMembers"/>
-    var mockMember;
-    function groupsAndMembers(){
-        $.post('${groupsAndMembers}', function(res){
-            if(res.result){
-                mockMember = res.data;
-                var groupSpans = '';
-                mockMember.forEach(function(e){
-                    groupSpans += "<span id=\"" + e.id + "\" title=\"" + e.name + "\" " +
-                        "data-container=\"body\" data-toggle=\"popover\" data-trigger=\"hover\" " +
-                        "data-placement=\"bottom\" data-content='" + e.member.map(function(m){return m.name;}).join(",")  + "'>" + e.name + "</span>";
-                });
-                $(".list_item_container").html(groupSpans);
-                $("[data-toggle='popover']").popover();
-            }else {
-                layuiModal.alert(res.message);
+        $('#addMeetingPlanForm  select[name="campus"]').change(function(){
+            renderPlace();
+        });
+        function renderPlace() {
+            var campus = $('#addMeetingPlanForm  select[name="campus"]').val();
+            if (!campus) {
+                layer.alert("请先选择校区.");
             }
-        })
+            $.ajax({
+                url: '${places}',
+                type: 'POST',
+                data: {campus: campus},
+                dataType: 'json',
+                async: false,
+                success: function (res) {
+                    if (res.code==200) {
+                        $('#addMeetingPlanForm  select[name="location"]').empty();
+                        $('#addMeetingPlanForm  select[name="location"]').append('<option  value="" disabled>请选择</option>');
+                        for (var i=0;res.data.length>0&&i<res.data.length;i++ ) {
+                            $('#addMeetingPlanForm  select[name="location"]').append('<option  value="'+res.data[i].id+'" >'+res.data[i].place+'</option>');
+                        }
+                        form.render('select');
+                    } else {
+                        layer.msg('获取地点失败.');
+                    }
+                },
+                error: function () {
+                    layer.msg('获取地点失败.');
+                }
+            });
+        }
+    })
+    function showMemberGroup(o){
+        var memberGroup = $(o).attr("memberGroup");
+        if(memberGroup == "hide"){
+            $(o).attr("memberGroup","show");
+            $("#memberGroup").show();
+        }else{
+            $(o).attr("memberGroup","hide");
+            $("#memberGroup").hide();
+        }
     }
+
+
+
+    // 参会人员 组件
+    var mockMember;
+
 
     var commonOpts = function(id, className, data, idField, nameField, toolbar){
         return {
@@ -1045,20 +1273,20 @@
             image: '${uploadimageUrl}',
             video: '${uploadvideoUrl}'
         };
-        var ueditor = UE.getEditor("new_12", { initialFrameWidth:821});
-
-        UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
-        UE.Editor.prototype.getActionUrl = function(action) {
-            if (action == 'uploadimage' || action == 'uploadscrawl' || action == 'uploadimage') {
-                return uploadUrls.image;
-            } else if (action == 'uploadvideo') {//视频
-                return uploadUrls.video;
-            } else if (action == 'uploadfile') {//附件
-                return uploadUrls.file;
-            } else {
-                return this._bkGetActionUrl.call(this, action);
-            }
-        };
+        // var ueditor = UE.getEditor("new_12", { initialFrameWidth:821});
+        //
+        // UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
+        // UE.Editor.prototype.getActionUrl = function(action) {
+        //     if (action == 'uploadimage' || action == 'uploadscrawl' || action == 'uploadimage') {
+        //         return uploadUrls.image;
+        //     } else if (action == 'uploadvideo') {//视频
+        //         return uploadUrls.video;
+        //     } else if (action == 'uploadfile') {//附件
+        //         return uploadUrls.file;
+        //     } else {
+        //         return this._bkGetActionUrl.call(this, action);
+        //     }
+        // };
 
         // $("#hg-form-container").parent().validate({
         //     submitHandler: function (form) {
@@ -1068,45 +1296,6 @@
         //     rules: rules
         // });
 
-        $("input[name='host']").blur(function () {
-            var host = $("input[name='host']").val();
-            var reg = /^[\u4E00-\u9FA5]{2,5}$/;
-            if (!reg.test(host)) {
-                layuiModal.alert("请输入正确人名");
-            } else {
-                $("input[name='contact']").focus();
-            }
-        });
-
-
-        $("input[name='contact']").blur(function () {
-            var contact = $("input[name='contact']").val();
-            var reg = /^[\u4E00-\u9FA5]{2,5}$/;
-            if (!reg.test(contact)) {
-                layuiModal.alert("请输入正确人名");
-            } else {
-                $("input[name='sit']").focus();
-            }
-        });
-
-        $("input[name='phoneNumber']").blur(function () {
-            var phoneNumber = $("input[name='phoneNumber']").val();
-            var mobile = /^1(3|4|5|7|8)\d{9}$/;
-            if (!mobile.test(phoneNumber)) {
-                layuiModal.alert("请输入正确人名");
-            }
-        });
-
-        $("input[name='phoneNumber']").blur(function () {
-            var phoneNumber = $("input[name='phoneNumber']").val();
-            var mobile = /^1(3|4|5|7|8)\d{9}$/;
-            var phone = /^0\d{2,3}\-\d{7,8}$/;
-            if (mobile.test(phoneNumber) || phone.test(phoneNumber)) {
-                console.log("输入号码类型正确");
-            } else {
-                layuiModal.alert("请输入正确电话号码");
-            }
-        });
         /*开展地点弹框  */
 
         $('.dropdown-mul-2').eq(0).dropdown({
@@ -1239,12 +1428,7 @@
             var layer = layui.layer;
         });
 
-        $('.edit_group_member').on('click', function () {
-            layer.open({
-                type: 1
-                ,content: $("#memberModal")
-            });
-        });
+
         $('.close-modal').on('click', function () {
             layer.closeAll();
         });
@@ -1252,24 +1436,21 @@
 
         $(".mult_input_container .drop_arrow").on("click", '', function(e){
             $(e.target).hasClass("expand_arrow") ? $(e.target).removeClass("expand_arrow") : $(e.target).addClass("expand_arrow");
-        });
-
-
-        groupsAndMembers();
+        })
 
         //点击组名 默认选中人员
-        $(".list_item_container").on("click", 'span', function(e){
-            var groupId = $(e.target).attr('id');
-            var originVal = $("#attend_member_select").val();
-            var bsMultiSelect = $('#attend_member_select').BsMultiSelect();
-            $('.dashboardcode-bsmultiselect .dropdown-menu li').each(function(idx, e){
-                var val = $(e).attr("data-option-id");
-                var selected = $("#attend_member_select").val() || [];
-                (selected.indexOf(val) === -1 && mockMember
-                    .some(function(p){return p.id === groupId && p.member.map(function(m){return m.id}).indexOf(val) > -1;}))
-                && $(e).click();
-            });
-        });
+        // $(".list_item_container").on("click", 'span', function(e){
+        //     var groupId = $(e.target).attr('id');
+        //     var originVal = $("#attend_member_select").val();
+        //     var bsMultiSelect = $('#attend_member_select').BsMultiSelect();
+        //     $('.dashboardcode-bsmultiselect .dropdown-menu li').each(function(idx, e){
+        //         var val = $(e).attr("data-option-id");
+        //         var selected = $("#attend_member_select").val() || [];
+        //         (selected.indexOf(val) === -1 && mockMember
+        //             .some(function(p){return p.id === groupId && p.member.map(function(m){return m.id}).indexOf(val) > -1;}))
+        //         && $(e).click();
+        //     });
+        // });
         //常用列表 弹窗列表
         layui.use('table', function(){
             table = layui.table;
@@ -1287,7 +1468,6 @@
                     success: function (data) {
                         layuiModal.alert("已添加常用组");
                         renderGroup();
-                        groupsAndMembers()
                     }
                 });
                 layer.close(index);
@@ -1309,7 +1489,6 @@
                             if ("ok" == result.state) {
                                 layuiModal.alert("添加人员成功！");
                                 renderMember();
-                                groupsAndMembers()
                             } else {
                             }
                         }
@@ -1522,24 +1701,24 @@
         }
         $(".member_content").empty();
         var groupId = $(this).find("input").val();
-        $.ajax({
-            url: '${paersonAndGroupAddDelete}',
-            type: 'POST',
-            data: {groupId: groupId, path: "getGroupPersons"},
-            dataType: 'json',
-            async: false,
-            success: function (data) {
-                console.log("图片变换" + data);
-                /* $(".member_content").empty(); */
-                for (var i = 0; i < data.length; i++) {
-                    var c = data[i];
-                    var tr = $('<span>' + c.member_name + '<img class="delete_img" src="/images/X-icon.png"/>' +
-                        '<input type="hidden" value="' + c.participant_id + '"/> ' +
-                        '</span>');
-                    $(".member_content").append(tr);
-                }
-            }
-        });
+        <%--$.ajax({--%>
+        <%--    url: '${paersonAndGroupAddDelete}',--%>
+        <%--    type: 'POST',--%>
+        <%--    data: {groupId: groupId, path: "getGroupPersons"},--%>
+        <%--    dataType: 'json',--%>
+        <%--    async: false,--%>
+        <%--    success: function (data) {--%>
+        <%--        console.log("图片变换" + data);--%>
+        <%--        /* $(".member_content").empty(); */--%>
+        <%--        for (var i = 0; i < data.length; i++) {--%>
+        <%--            var c = data[i];--%>
+        <%--            var tr = $('<span>' + c.member_name + '<img class="delete_img" src="/images/X-icon.png"/>' +--%>
+        <%--                '<input type="hidden" value="' + c.participant_id + '"/> ' +--%>
+        <%--                '</span>');--%>
+        <%--            $(".member_content").append(tr);--%>
+        <%--        }--%>
+        <%--    }--%>
+        <%--});--%>
 
     });
 

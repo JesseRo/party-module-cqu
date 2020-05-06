@@ -129,12 +129,12 @@
 	body {
 		background: #fff;
 	}
-    .layui-form-label.layui-required:after{
-        content:"*";
-        color:red;
-        position: absolute;
-        top:5px;
-        left:15px;
+    .layui-form-label.layui-required:before{
+        content: "*";
+        color: red;
+        top: 5px;
+        right: 2px;
+        position: relative;
     }
 	.main_content .min_width_1200 .nav_list .party_organization_list .height_auto
 		{
@@ -259,12 +259,12 @@ button.cancal.btn.btn-default {
 #addOrgForm .layui-form-label {
     width: 175px;
 }
-#addOrgForm .layui-form-label.layui-required:after {
+#addOrgForm .layui-form-label.layui-required:before {
     content: "*";
     color: red;
-    position: absolute;
-    top: 12px;
-    right: 5px;
+    top: 5px;
+    right: 2px;
+    position: relative;
 }
 </style>
 <script type="text/javascript">

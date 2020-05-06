@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static party.constants.PartyMeetingConst.*;
+
 /**
  * @author jesse
  * @Filename MeetingPlanPortlet
@@ -69,6 +71,9 @@ public class SubPlanPortlet extends MVCPortlet {
 
         logger.info("members size:"+members.size());
         renderRequest.setAttribute("organization",organization);
+        renderRequest.setAttribute("conferenceTypes",CONFERENCE_TYPES);
+        renderRequest.setAttribute("timeLasts",TIME_LASTS);
+        renderRequest.setAttribute("campus",CAMPUS);
         renderRequest.setAttribute("memberList", JSON.toJSONString(members));
         renderRequest.setAttribute("members", members);
         Date now = Calendar.getInstance().getTime();

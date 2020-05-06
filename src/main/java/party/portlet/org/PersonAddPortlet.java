@@ -17,7 +17,7 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.util.PortalUtil;
 
 import hg.party.dao.org.OrgDao;
-import party.constants.PartyConst;
+import party.constants.PartyMemberConst;
 import party.constants.PartyPortletKeys;
 import party.portlet.unit.UnitDao;
 
@@ -63,8 +63,8 @@ public class PersonAddPortlet extends MVCPortlet {
 		renderRequest.setAttribute("organization", organization);
 		renderRequest.setAttribute("orgId", orgId);
 		renderRequest.setAttribute("userId", userId);
-		renderRequest.setAttribute("jobArr", PartyConst.JOBS);
-		renderRequest.setAttribute("nationalArr", PartyConst.NATIONAL);
+		renderRequest.setAttribute("jobArr", PartyMemberConst.JOBS);
+		renderRequest.setAttribute("nationalArr", PartyMemberConst.NATIONAL);
 		renderRequest.setAttribute("units", unitDao.findAll());
 		super.doView(renderRequest, renderResponse); 
 	}

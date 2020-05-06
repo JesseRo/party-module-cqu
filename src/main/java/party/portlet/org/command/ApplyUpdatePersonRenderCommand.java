@@ -9,10 +9,9 @@ import hg.party.dao.login.UserDao;
 import hg.party.dao.org.MemberDao;
 import hg.party.dao.org.OrgDao;
 import hg.party.entity.login.User;
-import hg.party.entity.organization.Organization;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-import party.constants.PartyConst;
+import party.constants.PartyMemberConst;
 import party.constants.PartyPortletKeys;
 import party.portlet.unit.UnitDao;
 
@@ -52,8 +51,8 @@ public class ApplyUpdatePersonRenderCommand implements MVCRenderCommand {
 		}
 		renderRequest.setAttribute("userId", userId);
 		renderRequest.setAttribute("jobs", JSON.toJSON(jobs));
-		renderRequest.setAttribute("jobArr", PartyConst.JOBS);
-		renderRequest.setAttribute("nationalArr", PartyConst.NATIONAL);
+		renderRequest.setAttribute("jobArr", PartyMemberConst.JOBS);
+		renderRequest.setAttribute("nationalArr", PartyMemberConst.NATIONAL);
 		renderRequest.setAttribute("units", unitDao.findAll());
 		return "/jsp/member/applyUpdatePerson.jsp";
 	}

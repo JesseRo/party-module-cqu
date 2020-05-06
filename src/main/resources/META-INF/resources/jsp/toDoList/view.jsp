@@ -15,6 +15,7 @@
                    min-width: 210px;
                    padding: 0 25px;
             }
+			}
 		</style>
 	</head>
 	<body>

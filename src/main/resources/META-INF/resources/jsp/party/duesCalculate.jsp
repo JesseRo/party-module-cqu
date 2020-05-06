@@ -71,12 +71,12 @@
 			.layui-treeSelect .ztree li .ico_docu {
 				display: none;
 			}
-			.layui-form-label.layui-required:after{
-				content:"*";
-				color:red;
-				position: absolute;
-				top:15px;
-				left:3px;
+			.layui-form-label.layui-required:before{
+				content: "*";
+				color: red;
+				top: 5px;
+				right: 2px;
+				position: relative;
 			}
 		</style>
 	</head>

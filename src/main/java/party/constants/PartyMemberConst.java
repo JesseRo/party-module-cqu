@@ -1,6 +1,6 @@
 package party.constants;
 
-public class PartyConst {
+public class PartyMemberConst {
     public final static String[] JOBS = {"在职教职工", "离退休教职工", "本科生", "硕士研究生", "博士研究生", "其他"};//党员信息人员类别
     public final static String[] NATIONAL = {
             "汉族", "壮族", "满族", "回族", "苗族", "维吾尔族", "土家族", "彝族", "蒙古族", "藏族", "布依族", "侗族", "瑶族", "朝鲜族", "白族", "哈尼族",

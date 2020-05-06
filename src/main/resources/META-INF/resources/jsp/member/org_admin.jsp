@@ -8,8 +8,6 @@
 <head>
   <%--   <link rel="stylesheet" href="${basePath}/css/party_organization.css?v=5"/> --%>
     <link rel="stylesheet" href="${basePath}/css/account_manage_1.css"/>
-    <link rel="stylesheet" href="${basePath}/css/jquery.dropdown.css"/>
-    <script type="text/javascript" src="${basePath}/js/jquery.dropdown.js?v=11"></script>
     <link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/party-info-manage.min.css"/>
       <link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/change-party-member.min.css" />
 
@@ -364,20 +362,15 @@ button.cancal.btn.btn-default {
                         </span>
                     </div>
                     <form class="layui-form" action=""  id="orgManager">
-                        <div class="layui-form-item">
-                            <div class="layui-inline">
-                                <label class="layui-form-label">管理员：</label>
-                                <div class="layui-input-inline">
-                                    <select name="admin" multiple lay-search>
-                                    </select>
-                                </div>
+                        <div class="layui-block">
+                            <label class="layui-form-label">管理员：</label>
+                            <div class="layui-input-inline" id="manager-select">
                             </div>
                         </div>
                         <div class="layui-form-item btn-save">
                             <button  type="button" class="layui-btn layui-btn-radius layui-btn-warm" lay-submit="" lay-filter="orgManager" id="org_manager_save">保 存</button>
                         </div>
                     </form>
-
                 </div>
             </div>
         </div>
@@ -435,11 +428,13 @@ button.cancal.btn.btn-default {
             };
             $.post("${findOrgUsers}", postData, function (res) {
                 if(res.code==200){
-                    $('select[name="admin"]').empty();
-                    $('select[name="admin"]').append("<option>请选择管理员</option>");
+                    $('#manager-select').empty();
+                    var selectHtml = '<select name="admin" multiple lay-search><option value="">请选择管理员</option>';
                     for(var i=0;res.data.length>0 && i<res.data.length;i++){
-                        $('select[name="admin"]').append("<option value='"+res.data[i].user_id+"'>"+res.data[i].user_name+"("+res.data[i].user_id+")</option>");
+                        selectHtml = selectHtml + "<option value='"+res.data[i].user_id+"'>"+res.data[i].user_name+"("+res.data[i].user_id+")</option>";
                     }
+                    selectHtml = selectHtml + '</select>';
+                    $('#manager-select').append(selectHtml);
                     form.render();
                     $.post("${findOrgAdmin}", postData, function (res) {
                         if(res.code==200){
