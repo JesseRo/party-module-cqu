@@ -140,32 +140,28 @@ public class AddPersonResourceCommand implements MVCResourceCommand {
 			synchronized (PortalUtil.getHttpServletRequest(resourceRequest).getSession()) {
 				transactionUtil.startTransaction();
 				Member ret = memberDao.findMemberByUser(ID_card);
-				if(ret != null){
-					transactionUtil.rollback();
-					printWriter.write(JSON.toJSONString(ResultUtil.result(ResultCode.DATA_REPEAT,"身份证号已存在",ret)));
-					return false;
-				}else{
-					if (!StringUtils.isEmpty(id)) {
-//						u.setUser_password(MD5.getMD5(ID_card.substring(12)));
-						memberDao.insertOrUpate(Updatesql);
-						UserDao.updateUserInfo(u);
-						if (!prevID_card.equals(ID_card)) {
-							String sqls = getSql(prevID_card, ID_card);
-							// memberDao.insertOrUpate(sqls);
-							memberDao.getJdbcTemplate().execute(sqls);
-						}
-						log.info("编辑人员:[" + new Date() + "] [by " + userId + "]  ID_card :[" + ID_card + "]");
-					} else {
-						u.setUser_password(MD5.getMD5(ID_card.substring(12)));
-						memberDao.insertOrUpate(sql);
-						UserDao.save(u);
-						log.info("添加人员:[" + new Date() + "] [by " + userId + "]  ID_card :[" + ID_card + "]");
-
+				if (!StringUtils.isEmpty(id)) {
+					memberDao.insertOrUpate(Updatesql);
+					UserDao.updateUserInfo(u);
+					if (!prevID_card.equals(ID_card)) {
+						String sqls = getSql(prevID_card, ID_card);
+						memberDao.getJdbcTemplate().execute(sqls);
 					}
-					transactionUtil.commit();
-					SessionManager.setAttribute(resourceRequest.getRequestedSessionId(), "addperson-formId", "NULL");
-					printWriter.write(JSON.toJSONString(ResultUtil.success(null)));
+					log.info("编辑人员:[" + new Date() + "] [by " + userId + "]  ID_card :[" + ID_card + "]");
+				} else {
+					if(ret != null && !id.equals(ret.getId())){
+						transactionUtil.rollback();
+						printWriter.write(JSON.toJSONString(ResultUtil.result(ResultCode.DATA_REPEAT,"身份证号已存在",ret)));
+						return false;
+					}
+					u.setUser_password(MD5.getMD5(ID_card.substring(12)));
+					memberDao.insertOrUpate(sql);
+					UserDao.save(u);
+					log.info("添加人员:[" + new Date() + "] [by " + userId + "]  ID_card :[" + ID_card + "]");
 				}
+				transactionUtil.commit();
+				SessionManager.setAttribute(resourceRequest.getRequestedSessionId(), "addperson-formId", "NULL");
+				printWriter.write(JSON.toJSONString(ResultUtil.success(null)));
 			}
 
 		} catch (Exception e) {

@@ -561,26 +561,14 @@
     </style>
     <link rel="stylesheet" href="${basePath}/js/layui/css/modules/multiSelect/multi-select.css"/>
     <link rel="stylesheet" href="${basePath}/js/layui/css/modules/checkbox/checkbox.css?version=98"/>
-<%--    <link rel="stylesheet" href="${basePath}/css/publish.css"/>--%>
-<%--    <script type="text/javascript" src="${basePath}/js/My97DatePicker/WdatePicker.js"></script>--%>
-<%--    <script type="text/javascript" src="${basePath}/js/form.js?version=97"></script>--%>
     <script type="text/javascript" src="${basePath}/js/utf8-jsp/ueditor.config-thumb.js?v=4"></script>
     <script type="text/javascript" src="${basePath}/js/utf8-jsp/ueditor.all.js"></script>
     <script type="text/javascript" charset="utf-8" src="${ basePath }/js/utf8-jsp/lang/zh-cn/zh-cn.js"></script>
-<%--    <link rel="stylesheet" href="${basePath }/js/utf8-jsp/third-party/codemirror/codemirror.css"/>--%>
     <link rel="stylesheet" href="${basePath }/js/utf8-jsp/themes/default/css/ueditor.css"/>
     <script type="text/javascript" charset="utf-8"
             src="${ basePath }/js/utf8-jsp/third-party/codemirror/codemirror.js"></script>
     <script type="text/javascript" charset="utf-8"
             src="${ basePath }/js/utf8-jsp/third-party/zeroclipboard/ZeroClipboard.js"></script>
-<%--    <link rel="stylesheet" href="${basePath}/css/jquery.dropdown.css"/>--%>
-<%--    <link rel="stylesheet" href="${basePath}/cqu/css/multiSelect.css"/>--%>
-<%--    <script type="text/javascript" src="${basePath}/js/jquery.dropdown.js?v=11"></script>--%>
-<%--    <script type="text/javascript" src="${basePath}/js/jquery-validation.min.js"></script>--%>
-<%--    <script type="text/javascript" src="${basePath}/js/validation-message-zh.js?v=2"></script>--%>
-<%--    <script type="text/javascript" src="${basePath}/cqu/js/popper.min.js"></script>--%>
-<%--    <script type="text/javascript" src="${basePath}/cqu/js/polyfill.js"></script>--%>
-<%--    <script type="text/javascript" src="${basePath}/cqu/js/BsMultiSelect.min.js"></script>--%>
 
 </head>
 <body>
@@ -655,7 +643,6 @@
                             <label class="layui-form-label layui-required">开展校区：</label>
                             <div class="layui-input-inline">
                                 <select  name="campus" lay-verify="select" lay-filter="campus">
-                                    <option  value="" disabled>请选择</option>
                                     <c:forEach var="n" items="${campus }">
                                         <option value="${n}">${n}</option>
                                     </c:forEach>
