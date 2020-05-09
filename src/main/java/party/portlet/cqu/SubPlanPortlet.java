@@ -74,7 +74,6 @@ public class SubPlanPortlet extends MVCPortlet {
         renderRequest.setAttribute("conferenceTypes",CONFERENCE_TYPES);
         renderRequest.setAttribute("timeLasts",TIME_LASTS);
         renderRequest.setAttribute("campus",CAMPUS);
-        renderRequest.setAttribute("memberList", JSON.toJSONString(members));
         renderRequest.setAttribute("members", members);
         Date now = Calendar.getInstance().getTime();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

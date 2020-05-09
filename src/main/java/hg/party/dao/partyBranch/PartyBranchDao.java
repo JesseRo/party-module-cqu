@@ -628,4 +628,14 @@ public class PartyBranchDao extends PostgresqlDaoImpl<MeetingPlan> {
             return null;
         }
     }
+
+    public int updateGroupNameByGroupId(String groupName, String groupId) {
+        String sql = "update hg_party_group_org_info set group_name = ? where group_id= ? and group_state='1' ";
+        return jdbcTemplate.update(sql, groupName,groupId);
+    }
+
+    public int addGroupMember(String groupId, String userIdentity) {
+        String sql="INSERT INTO hg_party_group_member_info (group_id, participant_id) VALUES (?,?)";
+        return jdbcTemplate.update(sql,groupId,userIdentity);
+    }
 }

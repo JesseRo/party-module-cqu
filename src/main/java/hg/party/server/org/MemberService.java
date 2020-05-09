@@ -48,4 +48,12 @@ public class MemberService {
 	public Member findMemberByEditSubmitBy(int submitId) {
 		return memberDao.findMemberByEditSubmitBy(submitId);
 	}
+
+    public List<Member> findMemberListByOrg(String orgId,String groupId) {
+		return memberDao.findMemberListByOrg(orgId,groupId);
+    }
+
+	public List<Member> findMemberListByOrgNotIn(String orgId, String groupId) {
+		return memberDao.findMemberListByOrgNotIn(orgId,groupId);
+	}
 }
