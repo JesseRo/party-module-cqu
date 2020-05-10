@@ -216,13 +216,14 @@
                 $('.reject').on('click', function () {
                     var report = $(this).parent().parent().parent().attr("id");
                     var that = this;
-                    var reason = prompt("驳回原因：");
-                    $.post("${approval}", {report: report, status: 2, reason: reason}, function (res) {
-                        if (res.success) {
-                            alert("已驳回");
-                            $(that).parent().parent().html("已驳回");
-                        }
-                    })
+                    var reason = layuiModal.prompt("驳回原因：", "", function () {
+                        $.post("${approval}", {report: report, status: 2, reason: reason}, function (res) {
+                            if (res.success) {
+                                alert("已驳回");
+                                $(that).parent().parent().html("已驳回");
+                            }
+                        })
+                    });
                 });
                 var totalReportSize = ${totalReportSize};
                 function excelExport(url){

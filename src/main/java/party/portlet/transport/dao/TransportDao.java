@@ -40,7 +40,7 @@ public class TransportDao extends PostgresqlDaoImpl<Transport> {
     public PostgresqlQueryResult<Map<String, Object>> findSecondaryPage(int page, int size, String orgId, List<String> type, String name) {
         String sql = "select t.*, o.org_fax, o.org_contactor_phone, o.org_address, extract(year from age(cast(m.member_birthday as date))) as age" +
                 " from hg_party_transport t " +
-                " left join hg_party_member m on m.member_identity = t.user_id and m.historic = false" +
+                " left join hg_party_member m on m.member_identity = t.user_id" +
                 " left join hg_party_org o on o.org_id = m.member_org" +
                 " where (" +
 //                "(o.org_parent = ? and t.type in ('2', '3')) or " +
@@ -71,7 +71,7 @@ public class TransportDao extends PostgresqlDaoImpl<Transport> {
     public PostgresqlQueryResult<Map<String, Object>> findRootPage(int page, int size, List<String> type, String name) {
         String sql = "select t.*, o.org_fax, o.org_contactor_phone, o.org_address, extract(year from age(cast(m.member_birthday as date))) as age" +
                 " from hg_party_transport t " +
-                " left join hg_party_member m on m.member_identity = t.user_id and m.historic = false" +
+                " left join hg_party_member m on m.member_identity = t.user_id" +
                 " left join hg_party_org o on o.org_id = m.member_org" +
                 " where t.type in ('2', '3')";
         if (!StringUtils.isEmpty(name)){
@@ -98,7 +98,7 @@ public class TransportDao extends PostgresqlDaoImpl<Transport> {
     public PostgresqlQueryResult<Map<String, Object>> findBranchPage(int page, int size, String orgId, List<String> type, String name) {
         String sql = "select t.*, o.org_fax, o.org_contactor_phone, o.org_address, extract(year from age(cast(m.member_birthday as date))) as age" +
                 " from hg_party_transport t " +
-                " left join hg_party_member m on t.user_id = m.member_identity and m.historic = false" +
+                " left join hg_party_member m on t.user_id = m.member_identity" +
                 " left join hg_party_org o on o.org_id = m.member_org" +
                 " where (" +
 //                "m.member_org = ? or " +

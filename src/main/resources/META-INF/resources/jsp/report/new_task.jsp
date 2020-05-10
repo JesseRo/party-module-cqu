@@ -367,7 +367,7 @@
                     var filename = files[index].name;
                     filename = filename.substr(filename.lastIndexOf("."));
                     if(accepts.indexOf(filename) == -1){
-                        layuiModal.alert("请上传07版本的word或excel格式的文件");
+                        layuiModal.alert("请上传Excel 2007之后的版本(.xlsx)或Word 2007之后的版本(.docx)");
                         return;
                     }
                 }

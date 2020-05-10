@@ -126,10 +126,10 @@
                     "<div  style=\"padding-top: 0.1px;\">\n" +
                     "            <h3 style=\"text-align: center;\">中国共产党组织关系介绍信</h3>\n" +
                     "        </div>\n" +
-                    "        <div style=\"height: 30px; margin-bottom: 6px;\">\n" +
-                    "            <div style=\"display: flex; margin-left: 70%;\">\n" +
-                    "                    <div style=\"width: 40%;\"><p class=\" control-label form-label-required\">编号：</p><div></div></div>\n" +
-                    "                    <div><input class=\"form-control\" name=\"subject\" value=\"\" style=\"height: 30px !important;\"><div></div></div>\n" +
+                    "        <div style=\"height: 30px; margin-bottom: 6px; display: flex;\">\n" +
+                    "            <div style=\"display: inline-block; width: 100%;\">\n" +
+                    "                    <div class=' control-label form-label-required' style=\"margin-left: 70%;display: inline-block;\">编号：</div>\n" +
+                    "                    <div style='display: inline-block;width: 13%;'><input class=\"form-control\" name=\"subject\" value=\"\" style=\"height: 30px !important;width: 120px;\"></div>\n" +
                     "            </div>" +
                     "        </div>\n" +
                     "        <div class=\"view\" style=\"overflow-y: hidden; padding: 0 20px;\">\n" +
