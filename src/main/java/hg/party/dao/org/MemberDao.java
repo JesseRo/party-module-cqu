@@ -2,10 +2,12 @@ package hg.party.dao.org;
 
 import com.dt.springjdbc.dao.impl.PostgresqlDaoImpl;
 import com.dt.springjdbc.dao.impl.QueryResult;
+import hg.party.entity.organization.Organization;
 import hg.party.entity.party.BaseStatistics;
 import hg.party.entity.partyMembers.Member;
 import hg.util.MD5;
 import hg.util.result.Page;
+import org.osgi.service.component.annotations.Reference;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.util.StringUtils;
 import party.constants.PartyOrgAdminTypeEnum;
@@ -27,7 +29,8 @@ import java.util.stream.Stream;
 @Transactional
 public class MemberDao extends PostgresqlDaoImpl<Member> {
     private static final int PAGE_SIZE = 10;
-
+    @Reference
+    private OrgDao orgDao;
     public List<Member> findAll() {
         String sql = "select * from hg_party_member where historic is false";
         return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Member.class));
@@ -512,5 +515,53 @@ public class MemberDao extends PostgresqlDaoImpl<Member> {
         }else{
             return null;
         }
+    }
+
+    public List<Member> findMemberListByOrg(String orgId,String groupId) {
+        StringBuffer sb = new StringBuffer("select m.* from  hg_party_group_member_info gm left join hg_party_group_org_info og on gm.group_id = og.group_id  left join hg_party_member m on m.member_identity= gm.participant_id left join  hg_party_org b on m.member_org = b.org_id left join hg_party_org s on s.org_id = b.org_parent left join hg_party_org o on o.org_id = s.org_parent");
+        Organization org = orgDao.findOrgByOrgId(orgId);
+        PartyOrgAdminTypeEnum partyOrgAdminTypeEnum = PartyOrgAdminTypeEnum.getEnum(org.getOrg_type());
+        sb.append(" where 1=1");
+        switch(partyOrgAdminTypeEnum){
+            case BRANCH:
+                sb.append(" and b.org_id = ?");
+                break;
+            case SECONDARY:
+                sb.append(" and s.org_id=? ");
+                break;
+            case ORGANIZATION:;
+                sb.append(" and o.org_id=? ");
+                break;
+            default: return null;
+        }
+        RowMapper<Member> rowMapper = BeanPropertyRowMapper.newInstance(Member.class);
+        if(StringUtils.isEmpty(groupId)){
+            return this.jdbcTemplate.query(sb.toString(),rowMapper,orgId);
+        }else{
+            sb.append(" and gm.group_id = ?");
+            return this.jdbcTemplate.query(sb.toString(),rowMapper,orgId,groupId);
+        }
+    }
+
+    public List<Member> findMemberListByOrgNotIn(String orgId, String groupId) {
+        StringBuffer sb = new StringBuffer("select m.* from hg_party_member m left join  hg_party_org b on m.member_org = b.org_id left join hg_party_org s on s.org_id = b.org_parent left join hg_party_org o on o.org_id = s.org_parent");
+        Organization org = orgDao.findOrgByOrgId(orgId);
+        RowMapper<Member> rowMapper = BeanPropertyRowMapper.newInstance(Member.class);
+        PartyOrgAdminTypeEnum partyOrgAdminTypeEnum = PartyOrgAdminTypeEnum.getEnum(org.getOrg_type());
+        sb.append(" where 1=1");
+        switch(partyOrgAdminTypeEnum){
+            case BRANCH:
+                sb.append(" and b.org_id = ?");
+                break;
+            case SECONDARY:
+                sb.append(" and s.org_id=? ");
+                break;
+            case ORGANIZATION:;
+                sb.append(" and o.org_id=? ");
+                break;
+            default: return null;
+        }
+        sb.append("and m.member_identity  not in (select gm.participant_id from  hg_party_group_member_info gm where gm.group_id=?)");
+        return this.jdbcTemplate.query(sb.toString(),rowMapper,orgId,groupId);
     }
 }

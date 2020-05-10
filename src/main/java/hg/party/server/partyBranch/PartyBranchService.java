@@ -333,4 +333,12 @@ public class PartyBranchService {
     public MeetingPlan findNoSubmitPlan(String userId, String org_id) {
         return dao.findNoSubmitPlan(userId,org_id);
     }
+
+    public int updateGroupNameByGroupId(String groupName, String groupId) {
+        return dao.updateGroupNameByGroupId(groupName,groupId);
+    }
+
+    public int addGroupMember(String groupId, String userIdentity) {
+        return dao.addGroupMember(groupId,userIdentity);
+    }
 }

@@ -10,7 +10,9 @@ import javax.portlet.PortletException;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
+import hg.util.TransactionUtil;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.springframework.util.StringUtils;
 
 import com.alibaba.fastjson.JSON;
@@ -33,26 +35,30 @@ import party.portlet.partyBranch.partyBranchPortlet;
 	    service = MVCResourceCommand.class
 )
 public class GroupAndPersonDeleteAdd implements MVCResourceCommand{
-	PartyBranchService service=new PartyBranchService();
+	@Reference
+	PartyBranchService service;
+	@Reference
+	TransactionUtil transactionUtil;
 	@Override
 	public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 			throws PortletException {
 		String path=ParamUtil.getString(resourceRequest, "path");
 		String groupId=ParamUtil.getString(resourceRequest, "groupId");
 		String groupName=ParamUtil.getString(resourceRequest, "groupName");
+		String groupMember=ParamUtil.getString(resourceRequest, "groupMember");
 		String orgId=(String)SessionManager.getAttribute(resourceRequest.getRequestedSessionId(), "department");
 		String participant_id=ParamUtil.getString(resourceRequest, "participant_id");
 		path = HtmlUtil.escape(path);
 		groupId = HtmlUtil.escape(groupId);
 		groupName = HtmlUtil.escape(groupName);
 		participant_id = HtmlUtil.escape(participant_id);
-		
+		groupMember = HtmlUtil.escape(groupMember);
 		PrintWriter printWriter=null;
 		try { 
 			printWriter=resourceResponse.getWriter();
-				 if (path.equals("getGroupPersons")) {
+				 if ("getGroupPersons".equals(path)) {
 					 printWriter.write(service.findGroupPersons(groupId));
-				}else if (path.equals("addGroup")) {
+				}else if ("addGroup".equals(path)) {
 					String uuid=UUID.randomUUID().toString();
 					String sql="INSERT INTO hg_party_group_org_info ( \"group_id\", \"group_name\", \"organization_id\",\"group_state\") VALUES ( '"+uuid+"', '"+groupName+"', '"+orgId+"','1');";
 					int n=	service.save(sql);
@@ -71,7 +77,16 @@ public class GroupAndPersonDeleteAdd implements MVCResourceCommand{
 						 map.put("state", "ok");
 						 printWriter.write(JSON.toJSONString(map));
 					    }
-				}else if (path.equals("addPerson")) {
+				}else if ("editGroup".equals(path)) {
+				 	if(!StringUtils.isEmpty(groupId) && !StringUtils.isEmpty(groupName)){
+						int n = service.updateGroupNameByGroupId(groupName,groupId);
+						if (n==1) {
+							Map<String, Object> map=new HashMap<>();
+							map.put("state", "ok");
+							printWriter.write(JSON.toJSONString(map));
+						}
+					}
+				 }else if ("addPerson".equals(path)) {
 					int n=0;					
 					if (!StringUtils.isEmpty(participant_id)) {
 						String []users=participant_id.split(",");
@@ -109,7 +124,26 @@ public class GroupAndPersonDeleteAdd implements MVCResourceCommand{
 							   map.put("message", "添加人员失败");
 							 printWriter.write(JSON.toJSONString(map));
 						}
-				}
+				}else if("addGroupMember".equals(path)){
+					 if (!StringUtils.isEmpty(groupMember)) {
+						 String []users=groupMember.split(",");
+						 transactionUtil.startTransaction();
+						 try{
+							 for (int i = 0; i < users.length; i++) {
+								 if (!service.isExist(groupId, users[i])) {
+									 service.addGroupMember(groupId,users[i]);
+								 }
+							 }
+							 Map<String, Object> map=new HashMap<>();
+							 map.put("state", "ok");
+							 map.put("message", "添加人员成功");
+							 printWriter.write(JSON.toJSONString(map));
+						 }catch(Exception e){
+						 	 e.printStackTrace();
+							 transactionUtil.rollback();
+						 }
+					 }
+				 }
 				  	 
 			} catch (Exception e) {
 				e.printStackTrace();
