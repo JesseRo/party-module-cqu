@@ -375,7 +375,7 @@
 <script type="text/html" id="transportBtns">
     <div class="operate_btns">
         <span class="blue_text" onclick="window.location.href='/transport_detail?id={{d.transport_id}}'">详情</span>
-        {{#  if(d.type == '3' && d.status = 1){ }}
+        {{#  if(d.type == '3' && (d.status == 1 || d.status == 3 || d.status == 4)){ }}
         <span class="blue_text" lay-event="print">打印</span>
         {{#  } }}
         {{#  if(d.current_approve_org == '${department}' && d.status == 0){ }}
