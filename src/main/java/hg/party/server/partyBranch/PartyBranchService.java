@@ -341,4 +341,15 @@ public class PartyBranchService {
     public int addGroupMember(String groupId, String userIdentity) {
         return dao.addGroupMember(groupId,userIdentity);
     }
+    public int deleteGroupMember(int groupMemberId) {
+        return dao.deleteGroupMember(groupMemberId);
+    }
+
+    public MeetingPlan findMeetingPlan(String meetingId) {
+        return dao.findMeetingPlan(meetingId);
+    }
+
+    public int update(MeetingPlan meetingPlan) {
+        return dao.update(meetingPlan);
+    }
 }

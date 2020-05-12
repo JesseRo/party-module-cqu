@@ -4,6 +4,7 @@ package hg.party.server.org;
 
 import hg.party.dao.org.MemberDao;
 
+import hg.party.entity.partyMembers.GroupMember;
 import hg.party.entity.partyMembers.Member;
 import hg.util.result.Page;
 import hg.util.result.PageResult;
@@ -49,7 +50,7 @@ public class MemberService {
 		return memberDao.findMemberByEditSubmitBy(submitId);
 	}
 
-    public List<Member> findMemberListByOrg(String orgId,String groupId) {
+    public List<GroupMember> findMemberListByOrg(String orgId, String groupId) {
 		return memberDao.findMemberListByOrg(orgId,groupId);
     }
 

@@ -47,7 +47,8 @@ import party.constants.PartyPortletKeys;
         service = MVCActionCommand.class
 )
 public class Submission extends BaseMVCActionCommand {
-    PartyBranchService service = new PartyBranchService();
+    @Reference
+    PartyBranchService service;
     @Reference
     private PartyBranchDao dao;
     private Gson gson = new Gson();

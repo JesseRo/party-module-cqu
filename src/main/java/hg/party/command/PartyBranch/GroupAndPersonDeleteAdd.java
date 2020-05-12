@@ -48,11 +48,13 @@ public class GroupAndPersonDeleteAdd implements MVCResourceCommand{
 		String groupMember=ParamUtil.getString(resourceRequest, "groupMember");
 		String orgId=(String)SessionManager.getAttribute(resourceRequest.getRequestedSessionId(), "department");
 		String participant_id=ParamUtil.getString(resourceRequest, "participant_id");
+		String groupMemberId=ParamUtil.getString(resourceRequest, "groupMemberId");
 		path = HtmlUtil.escape(path);
 		groupId = HtmlUtil.escape(groupId);
 		groupName = HtmlUtil.escape(groupName);
 		participant_id = HtmlUtil.escape(participant_id);
 		groupMember = HtmlUtil.escape(groupMember);
+		groupMemberId = HtmlUtil.escape(groupMemberId);
 		PrintWriter printWriter=null;
 		try { 
 			printWriter=resourceResponse.getWriter();
@@ -125,21 +127,40 @@ public class GroupAndPersonDeleteAdd implements MVCResourceCommand{
 							 printWriter.write(JSON.toJSONString(map));
 						}
 				}else if("addGroupMember".equals(path)){
-					 if (!StringUtils.isEmpty(groupMember)) {
-						 String []users=groupMember.split(",");
+					 String[] userArr = groupMember.split(",");
+					 if (userArr.length > 0) {
 						 transactionUtil.startTransaction();
 						 try{
-							 for (int i = 0; i < users.length; i++) {
-								 if (!service.isExist(groupId, users[i])) {
-									 service.addGroupMember(groupId,users[i]);
+							 for (int i = 0; i < userArr.length; i++) {
+								 if (!service.isExist(groupId, userArr[i])) {
+									 service.addGroupMember(groupId,userArr[i]);
 								 }
 							 }
+							 transactionUtil.commit();
 							 Map<String, Object> map=new HashMap<>();
 							 map.put("state", "ok");
 							 map.put("message", "添加人员成功");
 							 printWriter.write(JSON.toJSONString(map));
 						 }catch(Exception e){
-						 	 e.printStackTrace();
+							 e.printStackTrace();
+							 transactionUtil.rollback();
+						 }
+					 }
+				 }else if("deleteGroupMember".equals(path)){
+					 String[] memberIdArr = groupMemberId.split(",");
+					 if (memberIdArr.length > 0) {
+						 transactionUtil.startTransaction();
+						 try{
+							 for (int i = 0; i < memberIdArr.length; i++) {
+								 service.deleteGroupMember(Integer.valueOf(memberIdArr[i]));
+							 }
+							 transactionUtil.commit();
+							 Map<String, Object> map=new HashMap<>();
+							 map.put("state", "ok");
+							 map.put("message", "移除人员成功");
+							 printWriter.write(JSON.toJSONString(map));
+						 }catch(Exception e){
+							 e.printStackTrace();
 							 transactionUtil.rollback();
 						 }
 					 }
