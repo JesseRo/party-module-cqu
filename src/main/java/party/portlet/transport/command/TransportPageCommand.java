@@ -1,6 +1,5 @@
 package party.portlet.transport.command;
 
-import com.dt.springjdbc.dao.impl.PostgresqlQueryResult;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCResourceCommand;
@@ -18,13 +17,17 @@ import org.osgi.service.component.annotations.Reference;
 import org.springframework.util.StringUtils;
 import party.constants.PartyPortletKeys;
 import party.portlet.transport.dao.TransportDao;
+import party.portlet.transport.entity.PageQueryResult;
 
 import javax.portlet.PortletException;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -53,7 +56,7 @@ public class TransportPageCommand implements MVCResourceCommand {
 		int size = ParamUtil.getInteger(resourceRequest, "limit");
 		String type = ParamUtil.getString(resourceRequest, "type");
 		String name = ParamUtil.getString(resourceRequest, "memberName");
-		PostgresqlQueryResult<Map<String, Object>> data = null;
+		PageQueryResult<Map<String, Object>> data = null;
 		List<String> types;
 		if (!StringUtils.isEmpty(type)){
 			types = Arrays.stream(type.split(",")).collect(Collectors.toList());
@@ -82,7 +85,7 @@ public class TransportPageCommand implements MVCResourceCommand {
 			JsonPageResponse jsonPageResponse = new JsonPageResponse();
 			if (data != null){
 				jsonPageResponse.setCode(0);
-				jsonPageResponse.setCount(data.getTotalPage() * size);
+				jsonPageResponse.setCount(data.getCount());
 				jsonPageResponse.setData(data.getList());
 			}else {
 				jsonPageResponse.setCode(0);
@@ -100,5 +103,4 @@ public class TransportPageCommand implements MVCResourceCommand {
 		}
 		return false;
 	}
-
 }

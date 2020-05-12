@@ -146,7 +146,7 @@ public class ExcelDownloadResourceCommand implements MVCResourceCommand {
                     }
                     for (int i = 0; i < allMerged.size(); i++) {
                         Workbook workbook = allMerged.get(i);
-                        String filename = allMergedNames.get(i);
+                        String filename = allMergedNames.get(i) + ".xlsx";
                         File merged = new File(folder, filename);
                         FileOutputStream fileOutputStream = new FileOutputStream(new File(folder, filename));
                         workbook.write(fileOutputStream);

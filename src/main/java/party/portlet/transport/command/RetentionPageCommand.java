@@ -19,6 +19,7 @@ import org.springframework.util.StringUtils;
 import party.constants.PartyPortletKeys;
 import party.portlet.transport.dao.RetentionDao;
 import party.portlet.transport.dao.TransportDao;
+import party.portlet.transport.entity.PageQueryResult;
 
 import javax.portlet.PortletException;
 import javax.portlet.ResourceRequest;
@@ -54,7 +55,7 @@ public class RetentionPageCommand implements MVCResourceCommand {
 		int page = ParamUtil.getInteger(resourceRequest, "page");
 		int size = ParamUtil.getInteger(resourceRequest, "limit");
 		String name = ParamUtil.getString(resourceRequest, "memberName");
-		PostgresqlQueryResult<Map<String, Object>> data = null;
+		PageQueryResult<Map<String, Object>> data = null;
 		if (!StringUtils.isEmpty(name)){
 			name = "%" + name + "%";
 		}
@@ -74,7 +75,7 @@ public class RetentionPageCommand implements MVCResourceCommand {
 			JsonPageResponse jsonPageResponse = new JsonPageResponse();
 			if (data != null){
 				jsonPageResponse.setCode(0);
-				jsonPageResponse.setCount(data.getTotalPage() * size);
+				jsonPageResponse.setCount(data.getCount());
 				jsonPageResponse.setData(data.getList());
 			}else {
 				jsonPageResponse.setCode(0);

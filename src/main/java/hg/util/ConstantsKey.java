@@ -105,4 +105,26 @@ public class ConstantsKey {
         DROPDOWN_TYPES_MAPPING.put("positior", "党内职务");
         DROPDOWN_TYPES_MAPPING.put("room", "学生宿舍园区");
     }
+
+    public static Map<String, String> RETENTION_MAPPING = new LinkedHashMap<>();
+
+    static
+    {
+        RETENTION_MAPPING.put("user_name", "人员姓名");
+        RETENTION_MAPPING.put("org_name", "所在支部");
+        RETENTION_MAPPING.put("to_org_name", "去往单位");
+        RETENTION_MAPPING.put("time", "申请时间");
+        RETENTION_MAPPING.put("status", "状态");
+    }
+
+    public static Map<String, String> TRANSPORT_MAPPING = new LinkedHashMap<>();
+
+    static
+    {
+        TRANSPORT_MAPPING.put("user_name", "人员姓名");
+        TRANSPORT_MAPPING.put("org_name", "所在支部");
+        TRANSPORT_MAPPING.put("to_org_name", "去往单位");
+        TRANSPORT_MAPPING.put("time", "申请时间");
+        TRANSPORT_MAPPING.put("status", "状态");
+    }
 }

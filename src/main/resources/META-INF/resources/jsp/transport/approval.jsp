@@ -4,50 +4,62 @@
 <portlet:resourceURL id="/transport/page" var="transport"/>
 <portlet:resourceURL id="/transport/approval" var="approval"/>
 <portlet:resourceURL id="/retention/page" var="retention"/>
+<portlet:resourceURL id="/transport/export" var="export"/>
+
+
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/activity-manage1.css?v=1" />
-    <link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/common.min.css" />
+    <link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/activity-manage1.css?v=1"/>
+    <link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/common.min.css"/>
     <script type="text/javascript" src="${basePath}/js/jquery.jqprint-0.3.js"></script>
 
 
     <style type="text/css">
-        .bg_white_container .layui-tab .layui-tab-content .layui-show{
+        .bg_white_container .layui-tab .layui-tab-content .layui-show {
             height: 100%;
         }
-        .bg_white_container .layui-tab .layui-tab-content{
+
+        .bg_white_container .layui-tab .layui-tab-content {
             padding: 0;
             height: calc(100% - 50px);
         }
-        .bg_white_container .layui-tab{
+
+        .bg_white_container .layui-tab {
             height: 100%;
             margin: 0;
         }
-        .form-label{
+
+        .form-label {
             padding: 0 !important;
         }
-        .control-label{
+
+        .control-label {
             line-height: 36px;
         }
-        #letter_modal input, select{
+
+        #letter_modal input, select {
             height: 36px !important;
             text-indent: 0 !important;
         }
-        .form-group > div{
+
+        .form-group > div {
             margin-top: 10px;
             margin-bottom: 10px;
         }
-        #div_print p{
+
+        #div_print p {
             margin-bottom: 2px;
         }
+
         .layui-layer-dialog .layui-layer-content {
             line-height: 22px;
         }
     </style>
-    <script type="text/javascript" >
-        $(function() {
+    <script type="text/javascript">
+        $(function () {
             var statusList = ["审核中", "已通过", "已驳回", "已上传回执", "已确认回执", "已重新申请"];
-            layui.use('table', function(){
+            var retentionCount;
+            layui.use('table', function () {
                 var table = layui.table;
 
                 //第一个实例
@@ -56,23 +68,29 @@
                     url: '${retention}', //数据接口
                     method: 'post',
                     page: {
-                        limit:10,   //每页条数
-                        limits:[],
-                        prev:'&lt;上一页',
-                        next:'下一页&gt;',
-                        groups:4
+                        limit: 10,   //每页条数
+                        limits: [],
+                        prev: '&lt;上一页',
+                        next: '下一页&gt;',
+                        groups: 4
                     },
                     cols: [[ //表头
                         {field: 'retention_id', title: 'id', hide: true},
-                        {field: 'user_name', title: '姓名', width:'10%'},
-                        {field: 'org_name', title: '所在支部', width:'25%'},
-                        {field: 'to_org_name', title: '去往单位', width:'25%'},
-                        {field: 'time', title: '申请时间', width:'15%'},
-                        {field: 'status', title: '状态', width:'10%', templet: function (d) {
+                        {field: 'user_name', title: '姓名', width: '10%'},
+                        {field: 'org_name', title: '所在支部', width: '25%'},
+                        {field: 'to_org_name', title: '去往单位', width: '25%'},
+                        {field: 'time', title: '申请时间', width: '15%'},
+                        {
+                            field: 'status', title: '状态', width: '10%', templet: function (d) {
                                 return statusList[d.status];
-                            }},
+                            }
+                        },
                         {field: 'operate', title: '操作', width: '15%', toolbar: '#retentionBtns'}
-                    ]]
+                    ]] ,
+                    parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
+                        retentionCount = res.count;
+                        return res;
+                    }
                 });
 
                 var modalTemplate = "<div id=\"letter_modal\" style=\"width: 720px;\">\n" +
@@ -157,7 +175,9 @@
                     "                </span>转到\n" +
                     "                <span style=\"border-bottom: 1px solid;\">\n" +
                     "                    &nbsp; {toOrg}&nbsp;\n" +
-                    "                </span>，请转接组织关系。该同志党费已交至\n" +
+                    "                </span>，" +
+                    "           </p>" +
+                    "           <p style=\"white-space: normal;\">请转接组织关系。该同志党费已交至\n" +
                     "                <span style=\"border-bottom: 1px solid;\">\n" +
                     "                    &nbsp; 2020&nbsp;\n" +
                     "                </span>年\n" +
@@ -165,7 +185,6 @@
                     "                    &nbsp; 2&nbsp;\n" +
                     "                </span>月。" +
                     "            </p>\n" +
-
                     "            <br>\n" +
                     "            <p style=\"white-space: normal;\">有效期\n" +
                     "                <select style=\"height: 30px;text-indent: 0;\">\n" +
@@ -214,9 +233,9 @@
                     "    </div>\n" +
                     "</div>\n";
 
-                table.on('tool(activityTable)', function(obj){
+                table.on('tool(activityTable)', function (obj) {
                     var data = obj.data;
-                    if(obj.event === 'print'){
+                    if (obj.event === 'print') {
                         var today = new Date();
                         var html = modalTemplate
                             .replace(/{secondary}/g, data.org_name)
@@ -240,15 +259,15 @@
                             .replace("{orgMailCode}", data.mail_code || "");
 
                         layer.open({
-                            title:'中国共产党员组织关系介绍信'
-                            ,maxWidth: 760
-                            ,maxHeight: 707
-                            ,resize: false
-                            ,content: html
-                            ,fixed: true
-                            ,move: false
-                            ,btn: ["打印", "取消"]
-                            ,yes: function (index) {
+                            title: '中国共产党员组织关系介绍信'
+                            , maxWidth: 760
+                            , maxHeight: 707
+                            , resize: false
+                            , content: html
+                            , fixed: true
+                            , move: false
+                            , btn: ["打印", "取消"]
+                            , yes: function (index) {
                                 $('#div_print').jqprint(
                                     {
                                         debug: false, //如果是true则可以显示iframe查看效果（iframe默认高和宽都很小，可以再源码中调大），默认是false
@@ -262,35 +281,42 @@
                     }
                 });
 
+                var transportCount;
 
                 var transportTable = table.render({
                     elem: '#transportTable',
                     url: '${transport}', //数据接口
                     method: 'post',
                     page: {
-                        limit:10,   //每页条数
-                        limits:[],
-                        prev:'&lt;上一页',
-                        next:'下一页&gt;',
-                        groups:4
+                        limit: 10,   //每页条数
+                        limits: [],
+                        prev: '&lt;上一页',
+                        next: '下一页&gt;',
+                        groups: 4
                     },
                     cols: [[ //表头
                         {field: 'transport_id', title: 'id', hide: true},
-                        {field: 'user_name', title: '姓名', width:'10%'},
-                        {field: 'org_name', title: '所在支部', width:'15%'},
-                        {field: 'to_org_name', title: '去往单位', width:'20%'},
-                        {field: 'time', title: '申请时间', width:'10%'},
+                        {field: 'user_name', title: '姓名', width: '10%'},
+                        {field: 'org_name', title: '所在支部', width: '15%'},
+                        {field: 'to_org_name', title: '去往单位', width: '20%'},
+                        {field: 'time', title: '申请时间', width: '10%'},
                         {field: 'reason', title: '原因', width: '10%'},
-                        {field: 'status', title: '状态', width:'10%', templet: function (d) {
+                        {
+                            field: 'status', title: '状态', width: '10%', templet: function (d) {
                                 return statusList[d.status];
-                            }},
+                            }
+                        },
                         {field: 'operate', title: '操作', width: '25%', toolbar: '#transportBtns'}
-                    ]]
+                    ]],
+                    parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
+                        transportCount = res.count;
+                        return res;
+                    }
                 });
 
                 $('#transportSearchBtn').on('click', function () {
                     transportTable.reload({
-                        where: {type: $('#transportType').val(), memberName : $('#searchCondition').val()},
+                        where: {type: $('#transportType').val(), memberName: $('#searchCondition').val()},
                         page: {
                             curr: 1 //重新从第 1 页开始
                         }
@@ -298,28 +324,45 @@
                 });
                 $('#retentionSearchBtn').on('click', function () {
                     retentionTable.reload({
-                        where: {memberName : $('#retentionCondition').val()},
+                        where: {memberName: $('#retentionCondition').val()},
                         page: {
                             curr: 1 //重新从第 1 页开始
                         }
                     });
-                })
+                });
+                $('#transportExportBtn').on('click', function () {
+                    if (transportCount > 0) {
+                        var type = $('#transportType').val(), memberName = $('#searchCondition').val()
+                        window.location.href = "${export}&action=transport&memberName=" + memberName + "&type=" + type;
+                    } else {
+                        layuiModal.alert("没有数据，无法导出");
+                    }
+                });
+                $('#retentionExportBtn').on('click', function () {
+                    if (retentionCount > 0) {
+                        var memberName = $('#retentionCondition').val();
+                        window.location.href = "${export}&action=retention&memberName=" + memberName;
+                    } else {
+                        layuiModal.alert("没有数据，无法导出");
+                    }
+                });
             });
         });
 
-        function transportApprove(e, status){
+        function transportApprove(e, status) {
             var id = $(e).parent().parent().parent().parent().find("[data-field='transport_id']").children().text();
-            $.post("${approval}", {id: id, type: 'transport', status: status},function (res) {
-                if (res.result){
+            $.post("${approval}", {id: id, type: 'transport', status: status}, function (res) {
+                if (res.result) {
                     alert("已" + $(e).text());
                     window.location.reload();
                 }
             })
         }
+
         function retentionApprove(e, status) {
             var id = $(e).parent().parent().parent().parent().find("[data-field='retention_id']").children().text();
-            $.post("${approval}", {id: id, type: 'retention', status: status},function (res) {
-                if (res.result){
+            $.post("${approval}", {id: id, type: 'retention', status: status}, function (res) {
+                if (res.result) {
                     alert("已" + $(e).text());
                     window.location.reload();
                 }
@@ -347,21 +390,32 @@
                 <div class="layui-tab-content">
                     <div class="layui-tab-item layui-show">
                         <div class="operate_form_group">
-                            <select type="text" name="title" id="transportType" autocomplete="off" class="form-control" style="width: 15%;float: left;border-radius: 0;height: 40px!important;">
+                            <select type="text" name="title" id="transportType" autocomplete="off" class="form-control"
+                                    style="width: 15%;float: left;border-radius: 0;height: 40px!important;">
                                 <option value="">全部转出类型</option>
                                 <option value="0,1">校内</option>
                                 <option value="2">市内</option>
                                 <option value="3">市外</option>
                             </select>
-                            <input type="text" name="title" id="searchCondition"  placeholder="搜索党员" autocomplete="off" class="layui-input custom_input" style="margin-left: 20px;">
-                            <button type="button" id="transportSearchBtn" class="layui-btn custom_btn search_btn">查询</button>
+                            <input type="text" name="title" id="searchCondition" placeholder="搜索党员" autocomplete="off"
+                                   class="layui-input custom_input" style="margin-left: 20px;">
+                            <button type="button" id="transportSearchBtn" class="layui-btn custom_btn search_btn">查询
+                            </button>
+                            <button type="button" id="transportExportBtn" class="layui-btn custom_btn search_btn"
+                                    style="float: right;">导出数据
+                            </button>
                         </div>
                         <table id="transportTable" lay-filter="activityTable" class="custom_table"></table>
                     </div>
                     <div class="layui-tab-item">
                         <div class="operate_form_group">
-                            <input type="text" name="title" id="retentionCondition"  placeholder="搜索党员" autocomplete="off" class="layui-input custom_input">
-                            <button type="button" id="retentionSearchBtn" class="layui-btn custom_btn search_btn">查询</button>
+                            <input type="text" name="title" id="retentionCondition" placeholder="搜索党员"
+                                   autocomplete="off" class="layui-input custom_input">
+                            <button type="button" id="retentionSearchBtn" class="layui-btn custom_btn search_btn">查询
+                            </button>
+                            <button type="button" id="retentionExportBtn" class="layui-btn custom_btn search_btn"
+                                    style="float: right;">导出数据
+                            </button>
                         </div>
                         <table id="retentionTable" lay-filter="retentionTable" class="custom_table"></table>
                     </div>
@@ -375,26 +429,26 @@
 <script type="text/html" id="transportBtns">
     <div class="operate_btns">
         <span class="blue_text" onclick="window.location.href='/transport_detail?id={{d.transport_id}}'">详情</span>
-        {{#  if(d.type == '3' && (d.status == 1 || d.status == 3 || d.status == 4)){ }}
+        {{# if(d.type == '3' && (d.status == 1 || d.status == 3 || d.status == 4)){ }}
         <span class="blue_text" lay-event="print">打印</span>
-        {{#  } }}
-        {{#  if(d.current_approve_org == '${department}' && d.status == 0){ }}
+        {{# } }}
+        {{# if(d.current_approve_org == '${department}' && d.status == 0){ }}
         <span class="blue_text" onclick="transportApprove(this, 1);">通过</span>
         <span class="red_text" onclick="transportApprove(this, 2);">驳回</span>
-        {{#  } }}
-        {{#  if(d.status == 3){ }}
+        {{# } }}
+        {{# if(d.status == 3){ }}
         <span class="blue_text" onclick="window.location.href='{{d.receipt}}'">回执</span>
         <span class="blue_text" onclick="transportApprove(this, 4);">确认</span>
-        {{#  } }}
+        {{# } }}
     </div>
 </script>
 <script type="text/html" id="retentionBtns">
     <div class="operate_btns">
         <span class="blue_text" onclick="window.location.href='/retention_detail?id={{d.retention_id}}'">详情</span>
-        {{#  if(d.status == 0){ }}
+        {{# if(d.status == 0){ }}
         <span class="blue_text" onclick="retentionApprove(this, 1);">通过</span>
         <span class="red_text" onclick="retentionApprove(this, 2);">驳回</span>
-        {{#  } }}
+        {{# } }}
     </div>
 </script>
 </body>
