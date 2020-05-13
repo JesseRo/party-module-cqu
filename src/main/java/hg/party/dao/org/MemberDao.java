@@ -4,6 +4,7 @@ import com.dt.springjdbc.dao.impl.PostgresqlDaoImpl;
 import com.dt.springjdbc.dao.impl.QueryResult;
 import hg.party.entity.organization.Organization;
 import hg.party.entity.party.BaseStatistics;
+import hg.party.entity.partyMembers.GroupMember;
 import hg.party.entity.partyMembers.Member;
 import hg.util.MD5;
 import hg.util.result.Page;
@@ -517,8 +518,8 @@ public class MemberDao extends PostgresqlDaoImpl<Member> {
         }
     }
 
-    public List<Member> findMemberListByOrg(String orgId,String groupId) {
-        StringBuffer sb = new StringBuffer("select m.* from  hg_party_group_member_info gm left join hg_party_group_org_info og on gm.group_id = og.group_id  left join hg_party_member m on m.member_identity= gm.participant_id left join  hg_party_org b on m.member_org = b.org_id left join hg_party_org s on s.org_id = b.org_parent left join hg_party_org o on o.org_id = s.org_parent");
+    public List<GroupMember> findMemberListByOrg(String orgId,String groupId) {
+        StringBuffer sb = new StringBuffer("select m.*,gm.id group_member_id,gm.group_id from  hg_party_group_member_info gm left join hg_party_group_org_info og on gm.group_id = og.group_id  left join hg_party_member m on m.member_identity= gm.participant_id left join  hg_party_org b on m.member_org = b.org_id left join hg_party_org s on s.org_id = b.org_parent left join hg_party_org o on o.org_id = s.org_parent");
         Organization org = orgDao.findOrgByOrgId(orgId);
         PartyOrgAdminTypeEnum partyOrgAdminTypeEnum = PartyOrgAdminTypeEnum.getEnum(org.getOrg_type());
         sb.append(" where 1=1");
@@ -534,7 +535,7 @@ public class MemberDao extends PostgresqlDaoImpl<Member> {
                 break;
             default: return null;
         }
-        RowMapper<Member> rowMapper = BeanPropertyRowMapper.newInstance(Member.class);
+        RowMapper<GroupMember> rowMapper = BeanPropertyRowMapper.newInstance(GroupMember.class);
         if(StringUtils.isEmpty(groupId)){
             return this.jdbcTemplate.query(sb.toString(),rowMapper,orgId);
         }else{

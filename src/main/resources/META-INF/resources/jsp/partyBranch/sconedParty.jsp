@@ -2,29 +2,22 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <portlet:resourceURL id="/hg/groupAndMember" var="groupsAndMembers"/>
 <portlet:resourceURL id="/hg/group/page" var="getGroupList"/>
-<!-- 保存新增站点 -->
-<%-- <portlet:actionURL name="${submitCommand }" var="submitForm"/> --%>
 <portlet:actionURL name="/hg/postSubmissions" var="submitForm"/>
 
-<portlet:resourceURL id="/hg/getPublicObject" var="getPublicObject"/>
 <portlet:resourceURL id="/hg/getPlace" var="getPlace"/>
 <portlet:resourceURL id="/hg/member/getMember" var="getMember"/>
 <portlet:resourceURL id="/hg/member/list" var="memberList"/>
-<portlet:resourceURL id="/hg/getGroup" var="getGroup"/>
 <portlet:resourceURL id="/form/uploadImage" var="uploadimageUrl"/>
 <!-- 视频上传 -->
 <portlet:resourceURL id="/form/uploadVideo" var="uploadvideoUrl"/>
 <!-- 附件上传 -->
 <portlet:resourceURL id="/form/uploadFile" var="uploadfileUrl"/>
 
-<portlet:resourceURL id="/org/memberGroup" var="candidate"/>
 <portlet:resourceURL id="/hg/place/list" var="places"/>
 <portlet:resourceURL id="/hg/place/add" var="addPlace"/>
 <!-- 常用人员，组的增加，修改，删除 -->
 <portlet:resourceURL id="/hg/paersonAndGroupAddDelete" var="personAndGroupAddDelete"/>
-<portlet:resourceURL id="/hg/assignedAddPerson" var="assignedAddPerson"/>
-<portlet:resourceURL id="/hg/getBranchAllPersons" var="getBranchAllPersons"/>
-<portlet:resourceURL id="/hg/deletePerson" var="deletePerson"/>
+<portlet:resourceURL id="/hg/meetingPlan/save" var="saveMeetingPlan"/>
 <html>
 <head>
     <style type="text/css">
@@ -104,7 +97,7 @@
             width: 100%;
             table-layout: fixed;
         }
-        .layui-layer-page .layui-layer-content {
+        .layui-layer-page.addGroupMemberModal-skin .layui-layer-content {
             overflow: visible;
         }
     </style>
@@ -192,6 +185,7 @@
                             <label class="layui-form-label layui-required">开展校区：</label>
                             <div class="layui-input-inline">
                                 <select  name="campus" lay-verify="select" lay-filter="campus">
+                                    <option value="">请选择</option>
                                     <c:forEach var="n" items="${campus }">
                                         <option value="${n}">${n}</option>
                                     </c:forEach>
@@ -201,7 +195,7 @@
                         <div class="layui-inline">
                             <label class="layui-form-label layui-required">开展地点：</label>
                             <div class="layui-input-inline">
-                                <select  name="location" lay-verify="select">
+                                <select  name="location" lay-verify="select" lay-filter="location">
                                 </select>
                             </div>
                             <a href="javascript:void(0)" id="addPlace" ><i class="layui-icon layui-icon-addition"></i></a>
@@ -414,29 +408,11 @@
             page:1,
             size:10
         };
+        var checkedGroup = new Array();
         renderEditor();
         renderDateSelect();
         renderMemberGroups();
-        renderGroupTable(1,pageInfo.size);
-        renderGroupMemberTable();
-        $('#addMeetingPlanForm  select[name="campus"]').val($($('#addMeetingPlanForm  select[name="campus"] option')[0]).val());
-        form.render();
-        renderPlace();
 
-        //验证
-        form.verify({
-            select: function (value, item) {
-                if (value == '' || value == null) {
-                    return "此选项为必填项。";
-                }
-            },
-            phoneNumber: function(value, item){
-                var regPhone = /^1\d{10}$/;
-                if(value == ''&& value == null || !regPhone.test(value)) {
-                    return "请输入正确联系电话。";
-                }
-            }
-        });
         function renderDateSelect() {
             laydate.render({
                 elem: '#timeDuring'
@@ -471,6 +447,34 @@
                 }
             };
         }
+        function renderPlace() {
+            var campus = $('#addMeetingPlanForm  select[name="campus"]').val();
+            if (!campus) {
+                layer.alert("请先选择校区.");
+            }
+            $.ajax({
+                url: '${places}',
+                type: 'POST',
+                data: {campus: campus},
+                dataType: 'json',
+                async: false,
+                success: function (res) {
+                    if (res.code==200) {
+                        $('#addMeetingPlanForm  select[name="location"]').empty();
+                        $('#addMeetingPlanForm  select[name="location"]').append('<option  value="" disabled>请选择</option>');
+                        for (var i=0;res.data.length>0&&i<res.data.length;i++ ) {
+                            $('#addMeetingPlanForm  select[name="location"]').append('<option  value="'+res.data[i].id+'" >'+res.data[i].place+'</option>');
+                        }
+                        form.render();
+                    } else {
+                        layer.msg('获取地点失败.');
+                    }
+                },
+                error: function () {
+                    layer.msg('获取地点失败.');
+                }
+            });
+        }
         function renderMemberGroups(){
             $("#group_member_list").empty();
             $.post('${groupsAndMembers}', function(res){
@@ -478,16 +482,20 @@
                     $("#group_member_list").children("li").remove();
                     var nodes = new Array();
                     for(var i=0;res.data.length>0 && i<res.data.length;i++){
-                        var tipsContent = '';
-                        if(res.data.member && res.data.member.length>0){
-                            tipsContent = res.data.member
+                        var tipsContentArr = new Array();
+                        var memberArr = res.data[i].member;
+                        var memberIdArr = new Array();
+                        for(var j=0;j<memberArr.length &&memberArr.length>0;j++){
+                            tipsContentArr.push(memberArr[j].name);
+                            memberIdArr.push(memberArr[j].id);
                         }
                         var node = {
                             id:res.data[i].id,
                             name:res.data[i].name,
                             type:res.data[i].id,
-                            on:false,
-                            tipsContent:tipsContent
+                            memberIdArr:memberIdArr,
+                            on:checkedGroup.indexOf(res.data[i].id)<0?false:true,
+                            tipsContent:tipsContentArr.join(";")
                         }
                         nodes.push(node);
                     }
@@ -500,13 +508,34 @@
                         }
                         , nodes: nodes
                         , click: function (node) {
-                            console.log( node);
+                            if(node.on){
+                                checkedGroup.push(node.id);
+                            }else{
+                                var index = checkedGroup.indexOf(node.id);
+                                if (index > -1) {
+                                    checkedGroup.splice(index, 1);
+                                }
+                            }
+                            refreshParticipate(nodes);
                         }
                     });
                 }else {
                     layer.msg(res.message);
                 }
             })
+        }
+        function refreshParticipate(nodes){
+            var arr = [];
+            for(var i=0;i<nodes.length&&nodes.length>0;i++){
+                var node = nodes[i];
+                if(checkedGroup.indexOf(node.id)>=0){
+                    for(var j=0;j<node.memberIdArr.length && node.memberIdArr.length>0;j++){
+                        arr.push(node.memberIdArr[j]);
+                    }
+                }
+            }
+            $('#addMeetingPlanForm  select[name="participate"]').val(arr);
+            form.render('select');
         }
         function renderGroupTable(page,size){
             var  where = {};
@@ -555,26 +584,47 @@
                 };
             });
             table.on('row(groupTable)', function(obj){
-                console.log(obj);
+                renderGroupMemberTable(obj.data.group_id);
             });
         }
-        function renderGroupMemberTable(){
+        function renderGroupMemberTable(groupId){
             var cols = [[
-                {field: 'name', align:'center', title: '姓名'}
-                ,{field: 'id', title: '操作', width:80, align:'center',toolbar: '#memberTableTool'}
+                {field: 'member_name', align:'center', title: '姓名'}
+                ,{field: 'group_member_id', title: '操作', width:80, align:'center',toolbar: '#memberTableTool'}
             ]];
-            table.render({
-                elem: '#groupMemberTable'
-                ,height:450
-                ,page: false
-                ,data:[{'id':1,'name':'张三'},{'id':1,'name':'李四'}]
-                ,cols: cols
-            });
+            if(groupId == null){
+                table.render({
+                    elem: '#groupMemberTable'
+                    ,height:450
+                    ,page: false
+                    ,data:[]
+                    ,cols: cols
+                });
+            }else{
+                $.ajax({
+                    url: '${memberList}',
+                    type: 'POST',
+                    data: {groupId: groupId,isExist:true},
+                    dataType: 'json',
+                    async: false,
+                    success: function (res) {
+                        if(res.code==200){
+                            table.render({
+                                elem: '#groupMemberTable'
+                                ,height:450
+                                ,page: false
+                                ,cols: cols
+                                ,data:res.data
+                            });
+                        }
+                    }
+                });
+            }
             //监听事件
             table.on('tool(groupMemberTable)', function(obj){
                 switch(obj.event){
                     case 'delete':
-                        deleteGroupMember(obj.data.id);
+                        deleteGroupMember(obj.data);
                         break;
                     case 'edit':
                         break;
@@ -582,7 +632,9 @@
             });
         }
         form.on('select(campus)', function(data){
-            renderPlace();
+            if(data.value !=""){
+                renderPlace();
+            }
         });
         form.on('select(contact)', function(data){
             var phone = $('#addMeetingPlanForm  select[name="contact"] option:selected').attr("phone");
@@ -629,13 +681,57 @@
             });
         });
         form.on('submit(addGroupMemberForm)', function(data){
-            $.post("${personAndGroupAddDelete}", {groupId: data.field.groupId,groupMember:data.field.groupMember,path:'addGroupMember' }, function (res) {
+            $.post("${personAndGroupAddDelete}", {groupId: data.field.groupId,groupMember:data.field.groupMember.join(","),path:'addGroupMember' }, function (res) {
                 if (res) {
+                    renderMemberGroups();
                     layer.msg("添加成功。")
                 }
             },'json');
         });
+
+        form.on('submit(meetingPlanSave)', function(data){
+            var postData= data.field;
+            postData.graft = false;
+            postData.host =  postData.host.join(",");
+            postData.participate =  postData.participate.join(",");
+            $.post("${saveMeetingPlan}", data, function (res) {
+                if (res.code==200) {
+                    layer.msg("保存成功。");
+                    setTimeout(function(){window.location.href = res.data}, 1000);
+                }
+            },'json');
+            return false;
+        });
+        form.on('submit(meetingPlanRelease)', function(data){
+            var postData= data.field;
+            postData.graft = false;
+            postData.host =  postData.host.join(",");
+            postData.participate =  postData.participate.join(",");
+            $.post("${saveMeetingPlan}", postData, function (res) {
+                if (res.code==200) {
+                    layer.msg("发布成功。");
+                    setTimeout(function(){window.location.href = res.data}, 1000);
+                }
+            },'json');
+            return false;
+        });
+        //验证
+        form.verify({
+            select: function (value, item) {
+                if (value == '' || value == null) {
+                    return "此选项为必填项。";
+                }
+            },
+            phoneNumber: function(value, item){
+                var regPhone = /^1\d{10}$/;
+                if(value == ''&& value == null || !regPhone.test(value)) {
+                    return "请输入正确联系电话。";
+                }
+            }
+        });
         $('#edit_group_member').on('click', function () {
+            renderGroupTable(1,pageInfo.size);
+            renderGroupMemberTable(null);
             layer.open({
                 title:'常用分组列表',
                 area: ['960px','560px'],
@@ -660,34 +756,6 @@
         $('#addMeetingPlanForm  select[name="campus"]').change(function(){
             renderPlace();
         });
-        function renderPlace() {
-            var campus = $('#addMeetingPlanForm  select[name="campus"]').val();
-            if (!campus) {
-                layer.alert("请先选择校区.");
-            }
-            $.ajax({
-                url: '${places}',
-                type: 'POST',
-                data: {campus: campus},
-                dataType: 'json',
-                async: false,
-                success: function (res) {
-                    if (res.code==200) {
-                        $('#addMeetingPlanForm  select[name="location"]').empty();
-                        $('#addMeetingPlanForm  select[name="location"]').append('<option  value="" disabled>请选择</option>');
-                        for (var i=0;res.data.length>0&&i<res.data.length;i++ ) {
-                            $('#addMeetingPlanForm  select[name="location"]').append('<option  value="'+res.data[i].id+'" >'+res.data[i].place+'</option>');
-                        }
-                        form.render('select');
-                    } else {
-                        layer.msg('获取地点失败.');
-                    }
-                },
-                error: function () {
-                    layer.msg('获取地点失败.');
-                }
-            });
-        }
         $('#addGroupBtn').on('click', function () {
             layer.open({
                 type: 1,
@@ -747,6 +815,7 @@
                         form.render();
                         layer.open({
                             type: 1,
+                            skin: 'addGroupMemberModal-skin',
                             area: ['640px','300px'],
                             title:'添加分组成员',
                             content: $("#addGroupMemberModal"),
@@ -756,8 +825,24 @@
                 }
             });
         }
-        function deleteGroupMember(id){
-            layer.msg("功能即将开放。")
+        function deleteGroupMember(member){
+            layer.confirm('您确认删除吗？', {
+                btn: ['确定','取消'] //按钮
+            }, function(){
+                $.ajax({
+                    url: '${personAndGroupAddDelete}',
+                    type: 'POST',
+                    data: {groupMemberId:member.group_member_id, path: "deleteGroupMember"},
+                    dataType: 'json',
+                    async: false,
+                    success: function (res) {
+                        if(res){
+                            layer.msg("删除成功。")
+                            renderGroupMemberTable(member.group_id);
+                        }
+                    }
+                });
+            });
         }
     })
 
@@ -772,61 +857,6 @@
         }
     }
 
-</script>
-<script type="text/javascript">
-    $("input[name='host']").blur(function () {
-        var host = $("input[name='host']").val();
-        var reg = /^[\u4E00-\u9FA5]{2,5}$/;
-        if (!reg.test(host)) {
-            layuiModal.alert("请输入正确人名");
-        } else {
-            $("input[name='contact']").focus();
-        }
-    });
-
-   /* $("input[name='phoneNumber']").blur(function () {
-        var phoneNumber = $("input[name='phoneNumber']").val();
-        var mobile = /^\d{8,11}$/;
-        if (!mobile.test(phoneNumber)) {
-            layuiModal.alert("请输入正确电话号码");
-        }
-    });*/
-
-
-    $("input[name='contact']").blur(function () {
-        var host = $("input[name='host']").val();
-        var reg = /^[\u4E00-\u9FA5]{2,5}$/;
-        if (!reg.test(host)) {
-            layuiModal.alert("请输入正确人名");
-        } else {
-            $("input[name='sit']").focus();
-        }
-    });
-
-
-    function formsubmitgraft() {
-        layuiModal.confirm("确定暂存吗？", function () {
-            $("select[name='branch'],select[name='conferenceType'],select[name='subject'],select[name='participate']").removeAttr("disabled", "disabled");
-            $('#graft').val("true");
-            $('#submitFrom').click();
-        });
-    }
-
-    var _pathName = window.location.pathname;
-
-    function formsubmit() {
-        var phoneNumber = $("input[name='phoneNumber']").val();
-        var mobile = /^\d{8,11}$/;
-        if (!mobile.test(phoneNumber)) {
-            showConfirm("请输入正确电话号码。");
-            return;
-        }
-
-        layuiModal.confirm("确定发布吗？", function () {
-            $("select[name='branch'],select[name='conferenceType'],select[name='subject'],select[name='participate']").removeAttr("disabled", "disabled");
-            $('#submitFrom').click();
-        });
-    }
 </script>
 </body>
 </html>

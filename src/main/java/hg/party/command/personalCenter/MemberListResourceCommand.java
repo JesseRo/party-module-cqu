@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCResourceCommand;
 import com.liferay.portal.kernel.util.ParamUtil;
 import dt.session.SessionManager;
+import hg.party.entity.partyMembers.GroupMember;
 import hg.party.entity.partyMembers.Member;
 import hg.party.server.org.MemberService;
 import hg.util.result.ResultUtil;
@@ -40,14 +41,14 @@ public class MemberListResourceCommand implements MVCResourceCommand {
         PrintWriter printWriter = null;
         try {
             printWriter = resourceResponse.getWriter();
-            List<Member> memberList = new ArrayList<>();
             if(isExist){
-                memberList = memberService.findMemberListByOrg(orgId,groupId);
+                List<GroupMember> memberList = memberService.findMemberListByOrg(orgId,groupId);
                 printWriter.write(JSON.toJSONString(ResultUtil.success(memberList)));
             }else{
-                memberList = memberService.findMemberListByOrgNotIn(orgId,groupId);
+                List<Member> memberList = memberService.findMemberListByOrgNotIn(orgId,groupId);
                 printWriter.write(JSON.toJSONString(ResultUtil.success(memberList)));
             }
+
 
         } catch (Exception e) {
             e.printStackTrace();
