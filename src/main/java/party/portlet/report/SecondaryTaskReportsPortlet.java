@@ -97,9 +97,10 @@ public class SecondaryTaskReportsPortlet extends MVCPortlet {
 
         for (Map<String , Object> data : taskPage.getList()){
             String json = (String)data.get("files");
+            String curTaskId = (String)data.get("task_id");
             List<ExcelHandler> excelHandlers = gson.fromJson(json, new TypeToken<List<ExcelHandler>>(){}.getType());
             List<FileView> fileViews = excelHandlers.stream()
-                    .map(p->new FileView(p.getFileName(), "/ajaxFileName/" + taskId + "/" + data.get("org_id") + "/" + p.getFileName()))
+                    .map(p->new FileView(p.getFileName(), "/ajaxFileName/" + curTaskId + "/" + data.get("org_id") + "/" + p.getFileName()))
                     .collect(Collectors.toList());
             data.put("fileView", fileViews);
         }

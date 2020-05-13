@@ -101,7 +101,7 @@ public class ExcelMergeAsSheetResourceCommand implements MVCResourceCommand {
                         allMerged.add(dest);
                         String fullName = demoExcel.getFileName();
                         if (fullName.contains(".")) {
-                            allMergedNames.add(fullName.substring(0, fullName.indexOf(".")));
+                            allMergedNames.add(fullName.substring(0, fullName.lastIndexOf(".")));
                         } else {
                             allMergedNames.add(fullName);
                         }
@@ -175,7 +175,7 @@ public class ExcelMergeAsSheetResourceCommand implements MVCResourceCommand {
                     }
                     fileInputStream.close();
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

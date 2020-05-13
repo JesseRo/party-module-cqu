@@ -89,14 +89,14 @@ public class ExcelOperationUtil {
         StopWatch stopwatch = new StopWatch();
         stopwatch.start();
         for (String name : template.getSheetNames()) {
-            if (dest.getSheet(name) == null){
+            if (dest.getSheet(name) == null) {
                 dest.createSheet(name);
             }
         }
         Workbook wb = new XSSFWorkbook(new File(sourceHandler.getPath()));
         StyleMapping styleMapping = copyCellStyle(wb, dest);
         for (String sheetName : sourceHandler.getSheetNames()) {
-            if (dest.getSheet(sheetName) != null){
+            if (dest.getSheet(sheetName) != null) {
                 copySheet(wb.getSheet(sheetName), dest.getSheet(sheetName), styleMapping);
             }
         }
@@ -378,7 +378,12 @@ public class ExcelOperationUtil {
             des2src[desStyle.getIndex()] = srcStyle.getIndex();
 
             //复制样式
-            desStyle.cloneStyleFrom(srcStyle);
+            try {
+                desStyle.cloneStyleFrom(srcStyle);
+            }catch (Exception e){
+                logger.info("复制样式错误");
+                e.printStackTrace();
+            }
         }
 
 
