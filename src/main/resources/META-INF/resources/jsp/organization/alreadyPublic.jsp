@@ -151,7 +151,7 @@
                 cols: [[ //表头
                     {field: 'meeting_theme', align:'center',width:320, title: '活动名称'},
                     {field: 'content', align:'center', title: '发布内容'},
-                    {field: 'release_time', align:'center', title: '发布时间',width:180,templet: function(d){return new Date(d.release_time).format("yyyy-MM-dd hh:mm:ss");}},
+                    {field: 'release_time', align:'center', title: '开始时间',width:180,templet: function(d){return new Date(d.release_time).format("yyyy-MM-dd hh:mm:ss");}},
                     {field: 'operation', align:'center', title: '操作',width:120,toolbar: '#informTableBtns'}
 
                 ]],
@@ -172,7 +172,7 @@
                         //renderDetail('check',obj);
                         break;
                     case 'delete':
-                        deleteInform(obj.id);
+                        deleteInform(obj.data.id);
                         break;
                 };
             });

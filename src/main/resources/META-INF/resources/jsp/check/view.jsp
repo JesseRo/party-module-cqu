@@ -104,7 +104,7 @@
                 //监听事件
                 table.on('tool(checkPersonTable)', function(obj){
                     if (obj.event === 'delete') {
-                        deleteCheckPerson(obj.id);
+                        deleteCheckPerson(obj.data.id);
                     }
                 });
                 function deleteCheckPerson(id){
@@ -212,8 +212,8 @@
                             if (user && campus && type){
                                 $.post('${add}', {userId: user, campus: campus, type: type}, function (res) {
                                     if (res.result){
-                                        _reload();
                                         layer.close(index);
+                                        renderTable(1,pageInfo.size);
                                     }else {
                                         layuiModal.alert("新增失败");
                                     }

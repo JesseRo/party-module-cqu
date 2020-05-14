@@ -243,7 +243,7 @@
 
 </body>
 <script type="text/html" id="meetingPlanTableBtns">
-    {{#  if(d.task_status == "1"){ }}
+    {{#  if("branch" != "${orgType}" && d.task_status == "1"){ }}
     <%--<a class="layui-btn layui-btn-xs" lay-event="check">审核</a>--%>
     <a class="layui-btn layui-btn-xs" onclick="Pass('${d.meeting_id }');">
         通过</a>
