@@ -70,7 +70,6 @@ public class BrunchReportListPortlet extends MVCPortlet {
                         .collect(Collectors.toList());
                 data.put("uploadFileView", uploadFileViews);
             }
-
         }
         renderRequest.setAttribute("pageNo", pageData.getPageNow());
         renderRequest.setAttribute("totalPage",pageData.getTotalPage());

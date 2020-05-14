@@ -45,7 +45,7 @@ public class InformPageCommand implements MVCResourceCommand {
 		String keyword = HtmlUtil.escape(ParamUtil.getString(resourceRequest, "keyword"));
 		String orgId = (String) SessionManager.getAttribute(resourceRequest.getRequestedSessionId(), "department");
 		try {
-			PostgresqlPageResult<Map<String, Object>> data = new PostgresqlPageResult(null, 0,0);
+			PostgresqlPageResult<Map<String, Object>> data;
 			if (StringUtils.isEmpty(keyword)){
 				data = graftService.searchPage(page, size,dateType,orgId,1,null);
 			}else {

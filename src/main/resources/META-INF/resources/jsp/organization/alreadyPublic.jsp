@@ -111,7 +111,7 @@
 </div>
 </body>
 <script type="text/html" id="informTableBtns">
-    <a class="layui-btn layui-btn-xs" href="/newinfo?informId=${d.inform_id }&orgEdit=orgEdit'" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-xs" href="javascript:;" onclick="window.location.href='/newinfo?informId={{d.inform_id }}&orgEdit=orgEdit';" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
 </script>
 <script type="text/javascript">

@@ -56,6 +56,7 @@ public class BrunchReportPortlet extends MVCPortlet {
         HttpServletRequest servletRequest = PortalUtil.getOriginalServletRequest(request);
 
         String taskId = servletRequest.getParameter("task");
+        String redo = servletRequest.getParameter("redo");
         String formId = UUID.randomUUID().toString();
 
         String sessionId = renderRequest.getRequestedSessionId();
@@ -67,6 +68,7 @@ public class BrunchReportPortlet extends MVCPortlet {
         renderRequest.setAttribute("fileViews", excelHandlers);
         renderRequest.setAttribute("taskId", taskId);
         renderRequest.setAttribute("formId", formId);
+        renderRequest.setAttribute("redo", redo);
 
 
         super.doView(renderRequest, renderResponse);

@@ -27,7 +27,7 @@ public class ReportTaskOrgDao extends PostgresqlDaoImpl<ReportOrgTask> {
 
     public PostgresqlQueryResult<Map<String, Object>> findPage(String orgId, int page) {
         String sql = "select t.theme as theme, t.description as description, t.publish_time as publish_time," +
-                " t.files as templateFiles, o.status as status, t.task_id, r.files as uploadFiles" +
+                " t.files as templateFiles, o.status as status, t.task_id, r.files as uploadFiles, r.status as report_status" +
                 " from hg_party_report_task_org o inner join hg_party_report_task t on o.task_id = t.task_id" +
                 " left join hg_party_report r on o.task_id = r.task_id and o.org_id = r.org_id" +
                 " where o.org_id = ? order by o.status asc, t.publish_time desc";

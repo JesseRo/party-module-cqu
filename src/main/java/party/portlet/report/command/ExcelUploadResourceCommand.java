@@ -19,6 +19,7 @@ import hg.util.ExcelUtil;
 import hg.util.TransactionUtil;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+import org.springframework.util.StringUtils;
 import party.constants.PartyPortletKeys;
 import party.portlet.report.dao.ReportTaskOrgDao;
 import party.portlet.report.entity.ReportOrgTask;
@@ -75,6 +76,7 @@ public class ExcelUploadResourceCommand implements MVCResourceCommand {
 
 		String taskId = ParamUtil.getString(resourceRequest, "taskId");
 		String formId = ParamUtil.getString(resourceRequest, "formId");
+		String redo = ParamUtil.getString(resourceRequest, "redo");
 		String sessionId = resourceRequest.getRequestedSessionId();
 		String userName = SessionManager.getAttribute(sessionId, "userName").toString();
 		String department = SessionManager.getAttribute(sessionId, "department").toString();
@@ -85,7 +87,7 @@ public class ExcelUploadResourceCommand implements MVCResourceCommand {
 		report.setOrg_id(department);
 		String reportId = UUID.randomUUID().toString();
 		report.setReport_id(reportId);
-		report.setStatus(0);
+		report.setStatus(ConstantsKey.INITIAL);
 		report.setTime(new Timestamp(System.currentTimeMillis()));
 		report.setTask_id(taskId);
 
@@ -96,6 +98,12 @@ public class ExcelUploadResourceCommand implements MVCResourceCommand {
 			if (originalFormId.equals(formId)) {
 				transactionUtil.startTransaction();
 				try {
+					if(!StringUtils.isEmpty(redo)){
+						List<Report> reports = reportDao.findByReportIdAndOrgId(taskId, department);
+						reports.forEach(p->p.setStatus(ConstantsKey.RESUBMIT));
+						reports.forEach(p->reportDao.saveOrUpdate(p));
+					}
+
 					ReportTask task = reportTaskDao.findByTaskId(taskId);
 					String json = task.getFiles();
 					if (task.getType().equalsIgnoreCase(FileView.EXCEL)) {

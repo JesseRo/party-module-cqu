@@ -1,8 +1,11 @@
 package hg.party.dao.organization;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 import hg.util.HgDateQueryUtil;
 import hg.util.date.DateQueryVM;
 import hg.util.postgres.HgPostgresqlDaoImpl;
@@ -13,6 +16,7 @@ import org.osgi.service.component.annotations.Component;
 import hg.party.entity.organization.PublicInformation;
 import org.springframework.util.StringUtils;
 import party.constants.DateQueryEnum;
+import party.portlet.transport.entity.PageQueryResult;
 
 @Component(immediate = true, service = GraftDao.class)
 public class GraftDao extends HgPostgresqlDaoImpl<PublicInformation> {
@@ -171,6 +175,47 @@ public class GraftDao extends HgPostgresqlDaoImpl<PublicInformation> {
 		}else{
 			sb.append(" ORDER BY info.release_time desc");
 			return postGresqlFindPageBySql(page, size, sb.toString());
+		}
+	}
+
+	public PageQueryResult<Map<String, Object>> findSecondaryPage(int page, int size, String orgId) {
+		String sql = "select o.* from hg_party_inform_group_info t " +
+				" left join hg_party_org_inform_info o on t.inform_id = o.inform_id" +
+				" where t.pub_org_id = ? and o.public_status = '1' order by o.id desc";
+		if (size <= 0) {
+			size = 10;
+		}
+		try {
+			return pageBySql(page, size, sql, orgId);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+
+	public PageQueryResult<Map<String, Object>> pageBySql(int pageNow, int pageSize, String sql, Object... object) {
+		if (pageNow <= 0) {
+			pageNow = 0;
+		} else {
+			--pageNow;
+		}
+
+		List<Map<String, Object>> list = this.listBySql(pageNow, pageSize, sql, object);
+		int count = this.postGresql_countBySql(sql, object);
+		return new PageQueryResult(list, count, pageNow, pageSize);
+	}
+
+	private List<Map<String, Object>> listBySql(int pageNo, int pageSize, String sql, Object... objects) {
+		StringBuffer exeSql = new StringBuffer();
+		exeSql.append(sql);
+		exeSql.append(" LIMIT ? OFFSET ? ");
+		if (objects != null && objects.length != 0) {
+			List list = Arrays.stream(objects).collect(Collectors.toList());
+			list.add(pageSize);
+			list.add(pageNo * pageSize);
+			return this.jdbcTemplate.queryForList(exeSql.toString(), list.toArray(new Object[0]));
+		} else {
+			return this.jdbcTemplate.queryForList(exeSql.toString(), new Object[]{pageSize, pageNo * pageSize});
 		}
 	}
 }

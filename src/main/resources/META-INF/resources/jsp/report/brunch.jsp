@@ -172,6 +172,7 @@
                         <input id="taskId" type="hidden" name="taskId" value="${taskId}"/>
                         <input id="submit" type="submit" style="display:none;"/>
                         <input id="formId" type="hidden" name="formId" value="${formId}"/>
+                        <input id="formId" type="hidden" name="redo" value="${redo}"/>
 
                         <div class="layui-inline btn_group" style="width: calc(50% - 120px);margin: 0;margin-top: 10px;">
                             <label class="layui-form-label"></label>

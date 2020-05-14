@@ -70,6 +70,7 @@
                         <td>发布时间</td>
                         <td>状态</td>
                         <td>上报文件</td>
+                        <td>操作</td>
                     </tr>
                     </thead>
                     <tbody class="table_info">
@@ -95,11 +96,23 @@
                             </td>
                             <td>
                                 <c:if test="${c.status == 1}">
-                                    <a href="javascript:;"
-                                       onclick="window.location.href='/brunch_report1?task=${c.task_id }'">上报</a>
+                                    未上报
                                 </c:if>
                                 <c:if test="${c.status == 2}">
-                                    已上报
+                                    <c:choose>
+                                        <c:when test="${c.report_status == 0}">
+                                            已上报
+                                        </c:when>
+                                        <c:when test="${c.report_status == 1}">
+                                            已通过
+                                        </c:when>
+                                        <c:when test="${c.report_status == 2}">
+                                            已驳回
+                                        </c:when>
+                                        <c:when test="${c.report_status == 5}">
+                                            已重新上报
+                                        </c:when>
+                                    </c:choose>
                                 </c:if>
                             </td>
                             <td>
@@ -111,6 +124,16 @@
                                                    target="_blank">${u.filename}</a></li>
                                         </c:forEach>
                                     </div>
+                                </c:if>
+                            </td>
+                            <td>
+                                <c:if test="${c.status == 1}">
+                                    <a href="javascript:;"
+                                       onclick="window.location.href='/brunch_report1?task=${c.task_id }'">上报</a>
+                                </c:if>
+                                <c:if test="${c.status == 2 and c.report_status == 2}">
+                                    <a href="javascript:;"
+                                       onclick="window.location.href='/brunch_report1?task=${c.task_id }&redo=redo'">重新上报</a>
                                 </c:if>
                             </td>
                         </tr>
@@ -127,7 +150,7 @@
                     <p>共<span class="total_page">${totalPage }</span>页</p>
                     <portlet:actionURL name="/PageNoMVCActionCommand" var="pageNoUrl">
                     </portlet:actionURL>
-                    <form action="#" id="getPageNo" method="post">
+                    <form action="${pageNoUrl}" id="getPageNo" method="post">
                         <input type="hidden" id="pageNo" name="pageNo" value=""/>
                         <input type="hidden" id="total_page_" name="total_page_" value="${totalPage}"/>
                         <span>跳转到第</span>

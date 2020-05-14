@@ -26,6 +26,17 @@ public class ReportDao extends PostgresqlDaoImpl<Report> {
         }
     }
 
+
+    public List<Report> findByReportIdAndOrgId(String taskId, String orgId) {
+        String sql = "select * from hg_party_report where task_id = ? and org_id = ?";
+        try {
+            return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Report.class), taskId, orgId);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+
     public List<Report> findByTaskIdIn(List<String> orgIds) {
 
         return null;

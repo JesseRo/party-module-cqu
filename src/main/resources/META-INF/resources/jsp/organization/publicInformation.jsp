@@ -37,12 +37,15 @@
             font-size: 12px;
             font-weight: normal;
         }
+
         .content_info .content_form .form-group > div {
             margin-bottom: 20px;
         }
-        .right{
+
+        .right {
             float: right;
         }
+
         /* .control-label::before{
          content: "*";
          position: absolute;
@@ -54,10 +57,11 @@
      .remove_star::BEFORE {
          content: "";
        }  */
-        .release_event_form.bg_white_container form{
+        .release_event_form.bg_white_container form {
             width: 100%;
         }
-        .release_event_form.bg_white_container{
+
+        .release_event_form.bg_white_container {
             height: calc(100vh - 40px);
         }
     </style>
@@ -313,54 +317,57 @@
                     </span>
     </div>
     <div class="bg_white_container release_event_form">
-    <form class="form-horizontal new_publish_form" role="form" action="${submitForm }" method="post"
-          enctype="multipart/form-data" style="max-width: 960px;">
-        <div id="hg-form-container" class="form-group" style="padding-top: 20px;">
-            <input id="editState" type="hidden" name="editState">
-            <input id="infrom_id" type="hidden" name="infrom_id">
-            <input id="submitFrom" type="submit" style="display:none;"/>
-            <input id="hiddenstate" type="hidden" name="state"/>
-            <input id="hiddenPublicObject" type="hidden" name="publicObject"/>
-            <input type="hidden" name="formId" value="${formId}"/>
-<%--            <c:choose>--%>
-<%--                <c:when test="${resend == 'resend'}">--%>
-<%--                    <input class="btn btn-default col-sm-2 col-xs-4"  type="button" value="部署" onclick="formsubmit();" style="margin-left: 12%; "/>--%>
-<%--                </c:when>--%>
-<%--                <c:when test="${orgEdit == 'orgEdit'}">--%>
-<%--                    <input class="btn btn-default col-sm-2 col-xs-4"  type="button" value="编辑" onclick="formsubmit();" style="margin-left: 12%; "/>--%>
-<%--                </c:when>--%>
-<%--                <c:otherwise>--%>
-<%--                    &lt;%&ndash;								<input class="btn btn-default" id="button2" type="button" value="保存为草稿" onclick="formsubmitgraft();"/>&ndash;%&gt;--%>
-<%--                    <input class="btn btn-default col-sm-2 col-xs-4" type="button" value="发布" onclick="formsubmit();" style="margin-left: 12%; "/>--%>
-<%--                </c:otherwise>--%>
-<%--            </c:choose>--%>
-<%--            <input class="btn btn-default col-sm-2 col-xs-4" type="button" value="取消" onclick="formCancel();" style="margin-left: 45%;"/>--%>
-            <div class="col-sm-12 col-xs-12">
-            <div class="layui-inline btn_group" style="width: calc(50% - 120px);margin: 0;margin-top: 10px;">
-                <label class="layui-form-label"></label>
-                <div class="layui-input-inline">
-                    <button id="button1" type="button" class="layui-btn" onclick="formsubmit()" lay-submit="" lay-filter="partyMemForm" style="padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;background-color: #FFAB33;border-radius: 4px;">
-                        <c:choose>
-                            <c:when test="${resend == 'resend'}">
-                                部署
-                            </c:when>
-                            <c:when test="${orgEdit == 'orgEdit'}">
-                                编辑
-                            </c:when>
-                            <c:otherwise>
-                                <%--								<input class="btn btn-default" id="button2" type="button" value="保存为草稿" onclick="formsubmitgraft();"/>--%>
-                                发布
-                            </c:otherwise>
-                        </c:choose>
-                    </button>
-                    <button type="button" onclick="formCancel();" class="layui-btn layui-btn-primary" style="background-color: transparent;color: #666;padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;border-radius: 4px;">
-                        取消
-                    </button>
+        <form class="form-horizontal new_publish_form" role="form" action="${submitForm }" method="post"
+              enctype="multipart/form-data" style="max-width: 960px;">
+            <div id="hg-form-container" class="form-group" style="padding-top: 20px;">
+                <input id="editState" type="hidden" name="editState">
+                <input id="infrom_id" type="hidden" name="infrom_id">
+                <input id="submitFrom" type="submit" style="display:none;"/>
+                <input id="hiddenstate" type="hidden" name="state"/>
+                <input id="hiddenPublicObject" type="hidden" name="publicObject"/>
+                <input type="hidden" name="formId" value="${formId}"/>
+                <%--            <c:choose>--%>
+                <%--                <c:when test="${resend == 'resend'}">--%>
+                <%--                    <input class="btn btn-default col-sm-2 col-xs-4"  type="button" value="部署" onclick="formsubmit();" style="margin-left: 12%; "/>--%>
+                <%--                </c:when>--%>
+                <%--                <c:when test="${orgEdit == 'orgEdit'}">--%>
+                <%--                    <input class="btn btn-default col-sm-2 col-xs-4"  type="button" value="编辑" onclick="formsubmit();" style="margin-left: 12%; "/>--%>
+                <%--                </c:when>--%>
+                <%--                <c:otherwise>--%>
+                <%--                    &lt;%&ndash;								<input class="btn btn-default" id="button2" type="button" value="保存为草稿" onclick="formsubmitgraft();"/>&ndash;%&gt;--%>
+                <%--                    <input class="btn btn-default col-sm-2 col-xs-4" type="button" value="发布" onclick="formsubmit();" style="margin-left: 12%; "/>--%>
+                <%--                </c:otherwise>--%>
+                <%--            </c:choose>--%>
+                <%--            <input class="btn btn-default col-sm-2 col-xs-4" type="button" value="取消" onclick="formCancel();" style="margin-left: 45%;"/>--%>
+                <div class="col-sm-12 col-xs-12">
+                    <div class="layui-inline btn_group" style="width: calc(50% - 120px);margin: 0;margin-top: 10px;">
+                        <label class="layui-form-label"></label>
+                        <div class="layui-input-inline">
+                            <button id="button1" type="button" class="layui-btn" onclick="formsubmit()" lay-submit=""
+                                    lay-filter="partyMemForm"
+                                    style="padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;background-color: #FFAB33;border-radius: 4px;">
+                                <c:choose>
+                                    <c:when test="${resend == 'resend'}">
+                                        部署
+                                    </c:when>
+                                    <c:when test="${orgEdit == 'orgEdit'}">
+                                        编辑
+                                    </c:when>
+                                    <c:otherwise>
+                                        <%--								<input class="btn btn-default" id="button2" type="button" value="保存为草稿" onclick="formsubmitgraft();"/>--%>
+                                        发布
+                                    </c:otherwise>
+                                </c:choose>
+                            </button>
+                            <button type="button" onclick="formCancel();" class="layui-btn layui-btn-primary"
+                                    style="background-color: transparent;color: #666;padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;border-radius: 4px;">
+                                取消
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
-            </div>
-        </div>
-    </form>
+        </form>
     </div>
 </div>
 <script>
@@ -445,9 +452,12 @@
             showConfirm("请选择发布对象！");
             return;
         }
-        var hint = $("#button1").val();
+        var hint = $("#button1").text();
+        if (hint) {
+            hint = hint.trim();
+        }
 
-        var confirmCallback = function(){
+        var confirmCallback = function () {
             $('#submitFrom').click();
         };
         layuiModal.confirm("确定要" + hint + "吗?", confirmCallback);
