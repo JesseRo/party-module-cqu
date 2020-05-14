@@ -21,21 +21,21 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 /**
- * 查询本组织发布的计划
+ * 查询校组织部发布的计划
  */
 @Component(
 		immediate = true,
 		property = {
-				"javax.portlet.name=" + PartyPortletKeys.AlreadyPublic,
 				"javax.portlet.name=" + PartyPortletKeys.MeetingNotice,
-				"mvc.command.name=/party/inform/page"
+				"mvc.command.name=/party/original/inform/page"
 		},
 		service = MVCResourceCommand.class
 	)
 
-public class InformPageCommand implements MVCResourceCommand {
+public class OriginalInformPageCommand implements MVCResourceCommand {
 	@Reference
 	GraftService graftService;
+	private final static String ORIGINAL_ORG_ID = "ddddd";
 	@Override
 	public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 			throws PortletException {
@@ -44,13 +44,12 @@ public class InformPageCommand implements MVCResourceCommand {
 		int size = ParamUtil.getInteger(resourceRequest, "limit");
 		String dateType = ParamUtil.getString(resourceRequest, "dateType");
 		String keyword = HtmlUtil.escape(ParamUtil.getString(resourceRequest, "keyword"));
-		String orgId = (String) SessionManager.getAttribute(resourceRequest.getRequestedSessionId(), "department");
 		try {
 			PostgresqlPageResult<Map<String, Object>> data;
 			if (StringUtils.isEmpty(keyword)){
-				data = graftService.searchPage(page, size,dateType,orgId,1,null);
+				data = graftService.searchPage(page, size,dateType,ORIGINAL_ORG_ID,1,null);
 			}else {
-				data = graftService.searchPage(page, size,dateType,orgId,1,keyword);
+				data = graftService.searchPage(page, size,dateType,ORIGINAL_ORG_ID,1,keyword);
 			}
 			Gson gson = new Gson();
 			res.getWriter().write(gson.toJson(data.toJsonPageResponse()));
