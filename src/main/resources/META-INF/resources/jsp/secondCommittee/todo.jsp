@@ -243,16 +243,8 @@
 
 </body>
 <script type="text/html" id="meetingPlanTableBtns">
-    {{#  if("branch" != "${orgType}" && d.task_status == "1"){ }}
-    <%--<a class="layui-btn layui-btn-xs" lay-event="check">审核</a>--%>
-    <a class="layui-btn layui-btn-xs" onclick="Pass('${d.meeting_id }');">
-        通过</a>
-    <a  class="layui-btn layui-btn-xs" onclick="entry('${d.meeting_id }');">
-        驳回</a>
-    {{#  } }}
     {{#  if(d.task_status == '4' || d.task_status == '5' || d.task_status == '6'){ }}
     <a class="layui-btn layui-btn-xs" href="/sendplan?meetingId=${d.meeting_id }&orgType=secondary&type=edit"> 编辑</a>
-    <%--<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>--%>
     {{#  } }}
     <a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
 </script>
@@ -286,7 +278,7 @@
                 cols: [[ //表头
                     {field: 'meeting_type', align:'center', title: '活动类型'},
                     {field: 'meeting_theme', align:'center',width:320, title: '活动主题',templet:function(d){
-                            return '<a  href="/approvaldetails?meetingId='+d.meeting_id+'&orgType=secondary">'+d.meeting_theme+'</a>';
+                            return '<a  href="/approvaldetails?meetingId='+d.meeting_id+'">'+d.meeting_theme+'</a>';
                         }},
                     {field: 'start_time', align:'center', title: '开始时间',width:180,templet: function(d){return new Date(d.start_time).format("yyyy-MM-dd hh:mm:ss");}},
                     {field: 'total_time', align:'center', title: '时长',width:100,templet: function(d){return d.total_time/60;}},
@@ -318,7 +310,8 @@
                         //renderDetail('check',obj);
                         break;
                     case 'detail':
-                        // renderDetail('check',obj);
+                        //renderDetail('check',obj);
+                        window.location.href='/approvaldetails?meetingId='+obj.data.meeting_id;
                         break;
                 };
             });

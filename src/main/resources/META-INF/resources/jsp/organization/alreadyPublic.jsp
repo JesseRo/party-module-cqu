@@ -172,17 +172,17 @@
                         //renderDetail('check',obj);
                         break;
                     case 'delete':
-                        deleteInform(obj.data.id);
+                        deleteInform(obj.data.inform_id);
                         break;
                 };
             });
-            function deleteInform(id){
+            function deleteInform(informId){
                 layer.confirm('您确认删除吗？', {
                     btn: ['确定','取消'] //按钮
                 }, function(){
                     $.ajax({
                         url: "${deleteGrafts}",
-                        data:{"resourcesId":id},
+                        data:{"resourcesId":informId},
                         dataType:"text",
                         success:function(succeed){
                             if("succee" === succeed){

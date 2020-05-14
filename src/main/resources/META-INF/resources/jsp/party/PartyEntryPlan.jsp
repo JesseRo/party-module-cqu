@@ -256,7 +256,7 @@
 						{field: 'org_name', align:'center',width:320, title: '二级党组织'},
 						{field: 'meeting_type', align:'center', title: '活动类型'},
 						{field: 'meeting_theme', align:'center',width:320, title: '活动主题',templet:function(d){
-								return '<a  href="/approvaldetails?meetingId='+d.meeting_id+'&orgType=secondary">'+d.meeting_theme+'</a>';
+								return '<a  href="/approvaldetails?meetingId='+d.meeting_id+'">'+d.meeting_theme+'</a>';
 							}},
 						{field: 'start_time', align:'center', title: '开始时间',width:180,templet: function(d){return new Date(d.start_time).format("yyyy-MM-dd hh:mm:ss");}},
 						{field: 'total_time', align:'center', title: '时长',width:100,templet: function(d){return d.total_time/60;}},
@@ -288,6 +288,7 @@
 							break;
 						case 'detail':
 							// renderDetail('check',obj);
+							window.location.href='/approvaldetails?meetingId='+obj.data.meeting_id;
 							break;
 					};
 				});

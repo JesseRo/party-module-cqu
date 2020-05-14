@@ -17,10 +17,10 @@
 				当前位置：
 				<span class="layui-breadcrumb" lay-separator=">">
                         <a href="javascript:;">组织生活管理</a>
-					   <c:if test="${orgType == 'secondary'}" >
+					   <c:if test="${orgType == 'organization'}" >
 						   <a href="javascript:;" onclick="window.location.href='/approvalplanone'">审批计划</a>
 					   </c:if>
-						<c:if test="${orgType == 'branch'}" >
+						<c:if test="${orgType == 'secondary'}" >
 							<a href="javascript:;" onclick="window.location.href='/approvalplantwo'">审批计划</a>
 						</c:if>
                         <a href="javascript:;">详细</a>
@@ -57,30 +57,6 @@
 						<div class="details_content_info" style="word-wrap:break-word">
 							${content }
 						</div>
-<%--						<h2 style="color: #47647a;font-size:14px;">--%>
-<%--							<u>--%>
-<%--								<portlet:resourceURL id="/dowloadResourceCommand" var ="download">--%>
-<%--									<portlet:param name="attachment_url" value="${attachment }"/>--%>
-<%--								</portlet:resourceURL>--%>
-<%--								<c:if test="${ ! empty attachment }">--%>
-<%--									<span class="glyphicon glyphicon-chevron-right" style="color: #47647a;"></span>&nbsp;&nbsp;附件下载:&nbsp;--%>
-<%--									<a href="${download}">《${ attName }》</a>--%>
-<%--								</c:if>--%>
-<%--							</u>--%>
-<%--						</h2>--%>
-<%--						<div class="btn_group">--%>
-<%--							<c:if test="${orgType == 'secondary'}" >--%>
-<%--								<a onclick="window.location.href='/approvalplanone'" href="javascript:;">--%>
-<%--									<button class="btn btn-default btn-lg main_color_btn">返回</button>--%>
-<%--								</a>--%>
-<%--							</c:if>--%>
-<%--							<c:if test="${orgType == 'branch'}" >--%>
-<%--								<a onclick="window.location.href='/approvalplantwo'" href="javascript:;">--%>
-<%--									<button class="btn btn-default btn-lg main_color_btn">返回</button>--%>
-<%--								</a>--%>
-<%--							</c:if>--%>
-
-<%--						</div>--%>
 						<c:if test="${hasNote}">
 							<div class="details_content_title" style="border-bottom: 0px solid #e1e1e1;">
 								<p class="col-sm-6 col-xs-12"><span>实到人员：</span>${attendances }</p>
@@ -100,8 +76,7 @@
 								<label class="layui-form-label"></label>
 								<div class="layui-input-inline">
 									<input value="${meetingPlan.task_status == '1'}" type="hidden">
-									<input value="${isSelf}" type="hidden">
-									<c:if test="${meetingPlan.task_status == '1' && not isSelf}">
+									<c:if test="${meetingPlan.task_status == '1' && hasCheckPermission}">
 										<button type="button" onclick="Pass('${meetingPlan.meeting_id}');" class="layui-btn" style="padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;background-color: #FFAB33;border-radius: 4px;">
 											通过
 										</button>
