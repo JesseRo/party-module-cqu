@@ -691,13 +691,12 @@
 
         form.on('submit(meetingPlanSave)', function(data){
             var postData= data.field;
-            postData.graft = false;
+            postData.graft = true;
             postData.host =  postData.host.join(",");
             postData.participate =  postData.participate.join(",");
-            $.post("${saveMeetingPlan}", data, function (res) {
+            $.post("${saveMeetingPlan}", postData, function (res) {
                 if (res.code==200) {
                     layer.msg("保存成功。");
-                    setTimeout(function(){window.location.href = res.data}, 1000);
                 }
             },'json');
             return false;

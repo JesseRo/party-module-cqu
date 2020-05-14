@@ -8,6 +8,7 @@ import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import hg.party.server.partyBranch.PartyBranchService;
 import hg.util.ConstantsKey;
 import org.apache.log4j.Logger;
 import org.osgi.service.component.annotations.Component;
@@ -64,7 +65,8 @@ public class ToDoPortlet extends MVCPortlet {
 	@Reference
 	SecondCommitteeService secondCommitteeService;
 	Logger logger = Logger.getLogger(ToDoPortlet.class);
-
+	@Reference
+	PartyBranchService service;
 
 	@Override
 	@Transactional
@@ -73,7 +75,8 @@ public class ToDoPortlet extends MVCPortlet {
 		try {
 			String sessionId=request.getRequestedSessionId();
 			String orgId = SessionManager.getAttribute(sessionId, "department").toString();
-
+			//获取组织类型
+			String orgType = service.findSconedAndBranch(orgId);
 			String search = ParamUtil.getString(request, "search");
 			int pageNo = ParamUtil.getInteger(request, "pageNo");
 			int totalPage = ParamUtil.getInteger(request, "total_page_");//总页码
@@ -85,7 +88,7 @@ public class ToDoPortlet extends MVCPortlet {
 			
 			Map<String, Object>  informMeetingList = secondCommitteeService.queryInformMeetingsByOrgId(orgId, search, pageNo);
 			logger.info("informMeetingList :" + informMeetingList);
-
+			request.setAttribute("orgType", orgType);
 			request.setAttribute("search", search);
 			request.setAttribute("pageNo", informMeetingList.get("pageNow"));
 			request.setAttribute("pages", informMeetingList.get("totalPage"));
