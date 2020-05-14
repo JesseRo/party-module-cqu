@@ -157,9 +157,9 @@
 	<script type="text/html" id="meetingPlanTableBtns">
 		{{#  if(d.task_status == "1"){ }}
 		<%--<a class="layui-btn layui-btn-xs" lay-event="check">审核</a>--%>
-		<a class="layui-btn layui-btn-xs" onclick="Pass('${d.meeting_id }');">
+		<a class="layui-btn layui-btn-xs" lay-event="pass">
 			通过</a>
-		<a  class="layui-btn layui-btn-xs" onclick="entry('${d.meeting_id }');">
+		<a  class="layui-btn layui-btn-xs" lay-event="reject">
 			驳回</a>
 		{{#  } }}
 		{{#  if(d.task_status == '4' || d.task_status == '5' || d.task_status == '6'){ }}
@@ -203,9 +203,7 @@
 					cols: [[ //表头
 						{field: 'org_name', align:'center',width:320, title: '党支部'},
 						{field: 'meeting_type', align:'center', title: '活动类型'},
-						{field: 'meeting_theme', align:'center',width:320, title: '活动主题',templet:function(d){
-								return '<a  href="/approvaldetails?meetingId='+d.meeting_id+'">'+d.meeting_theme+'</a>';
-							}},
+						{field: 'meeting_theme', align:'center',width:320, title: '活动主题'},
 						{field: 'start_time', align:'center', title: '开始时间',width:180,templet: function(d){return new Date(d.start_time).format("yyyy-MM-dd hh:mm:ss");}},
 						{field: 'total_time', align:'center', title: '时长',width:100,templet: function(d){return d.total_time/60;}},
 						{field: 'member_name', align:'center', title: '联系人'},
@@ -235,14 +233,35 @@
 				//监听事件
 				table.on('tool(meetingPlanTable)', function(obj){
 					switch(obj.event){
-						case 'check':
-							//renderDetail('check',obj);
+						case 'pass':
+							//pass(obj.data.meeting_id);
+							//renderDetail('check',obj);onclick=";"
+							pass(obj.data.meeting_id);
+							break;
+						case 'reject':
+							//renderDetail('check',obj);onclick="entry('${d.meeting_id }');
+							entry(obj.data.meeting_id);
 							break;
 						case 'detail':
 							// renderDetail('check',obj);
 							window.location.href='/approvaldetails?meetingId='+obj.data.meeting_id;
 							break;
 					};
+				});
+			}
+			function pass(meeting_id){
+				layer.confirm('确认通过？', {
+					btn: ['确定','取消'] //按钮
+				}, function(){
+					$.ajax({
+						url:"${PartyPass}",
+						data:{"meeting_id":meeting_id},
+						dataType:'json',
+						success:function(){
+							layer.msg("审核成功");
+							window.location.reload();
+						}
+					});
 				});
 			}
 		});
@@ -261,23 +280,7 @@
 				if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
 			return fmt;
 		}
-		function Pass(meeting_id){
-			$.hgConfirm("提示","确认通过?");
-			$("#hg_confirm").modal("show");
-			$("#hg_confirm .btn_main").click(function(){
-				var url = "${PartyPass}";
-				$.ajax({
-					url:url,
-					data:{"meeting_id":meeting_id},
-					dataType:'json',
-					success:function(){
-						$("#hg_confirm").modal("hide");
-						$.tip("审核成功");
-						window.location.reload();
-					}
-				});
-			})
-		}
+
 		//点击驳回
 		function entry(meetingId){
 			$('#entry_id').val(meetingId);
