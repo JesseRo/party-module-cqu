@@ -45,7 +45,12 @@ public class MeetingNotesDao extends PostgresqlDaoImpl<MeetingNote>{
 	public MeetingNote findByMeetingId(String meetingId) {
 	   	String sql = "select * from hg_party_meeting_notes_info where meeting_id = ?";
 	   	try{
-			return jdbcTemplate.queryForObject(sql, BeanPropertyRowMapper.newInstance(MeetingNote.class), meetingId);
+	   		List<MeetingNote> meetingNotes = jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(MeetingNote.class), meetingId);
+			if(meetingNotes.size()>0){
+				return meetingNotes.get(0);
+			}else{
+				return null;
+			}
 		}catch (Exception e){
 	   		e.printStackTrace();
 	   		return null;

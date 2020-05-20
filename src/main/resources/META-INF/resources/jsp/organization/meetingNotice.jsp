@@ -2,8 +2,7 @@
 <%@ include file="/init.jsp" %>
 <!DOCTYPE html>
 <html>
-<portlet:resourceURL id="/hg/deleteGrafts" var="deleteGrafts"/>
-<portlet:resourceURL id="/party/inform/page" var="InformPage" />
+<portlet:resourceURL id="/party/original/inform/page" var="InformPage" />
 <head>
     <meta charset="utf-8">
     <meta name="viewport"
@@ -100,9 +99,6 @@
                         </div>
                         <button type="button"  class="layui-btn layui-btn-warm"  lay-submit="" lay-filter="searchForm"><icon class="layui-icon layui-icon-search"></icon>搜索</button>
                     </div>
-                    <div class="layui-inline">
-                        <a class="layui-btn layui-btn-warm" onclick="window.location.href = '/newinfo'">发布活动</a>
-                    </div>
                 </div>
             </form>
             <table id="informTable" lay-filter="informTable"></table>
@@ -111,8 +107,7 @@
 </div>
 </body>
 <script type="text/html" id="informTableBtns">
-    <a class="layui-btn layui-btn-xs" href="javascript:;" onclick="window.location.href='/newinfo?informId={{d.inform_id }}&orgEdit=orgEdit';" lay-event="edit">编辑</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+    <%--<a class="layui-btn layui-btn-xs" href="javascript:;" onclick="window.location.href='/newinfo?informId={{d.inform_id }}&orgEdit=orgEdit';" lay-event="edit">查看</a>--%>
 </script>
 <script type="text/javascript">
     layui.use(['table','layer','form'], function() {
@@ -150,9 +145,10 @@
                 },
                 cols: [[ //表头
                     {field: 'meeting_theme', align:'center',width:320, title: '活动名称'},
-                    {field: 'content', align:'center', title: '发布内容'},
-                    {field: 'release_time', align:'center', title: '开始时间',width:180,templet: function(d){return new Date(d.release_time).format("yyyy-MM-dd hh:mm:ss");}},
-                    {field: 'operation', align:'center', title: '操作',width:120,toolbar: '#informTableBtns'}
+                    {field: 'content', align:'center', title: '活动内容'},
+                    {field: 'release_time', align:'center', title: '开始时间',width:180,templet: function(d){return new Date(d.release_time).format("yyyy-MM-dd hh:mm:ss");}}
+/*                    {field: 'inform_status', align:'center', title: '查看状态'},
+                    {field: 'operation', align:'center', title: '操作',width:120,toolbar: '#informTableBtns'}*/
 
                 ]],
                 done: function(res, curr, count){
@@ -168,33 +164,14 @@
             //监听事件
             table.on('tool(informTable)', function(obj){
                 switch(obj.event){
-                    case 'edit':
+                    case 'detail':
                         //renderDetail('check',obj);
                         break;
                     case 'delete':
-                        deleteInform(obj.data.inform_id);
+                        //deleteInform(obj.data.inform_id);
                         break;
                 };
             });
-            function deleteInform(informId){
-                layer.confirm('您确认删除吗？', {
-                    btn: ['确定','取消'] //按钮
-                }, function(){
-                    $.ajax({
-                        url: "${deleteGrafts}",
-                        data:{"resourcesId":informId},
-                        dataType:"text",
-                        success:function(succeed){
-                            if("succee" === succeed){
-                                layer.msg("删除成功");
-                                setTimeout(function(){window.location.reload()}, 1000);
-                            }else{
-                                layer.msg("删除失败");
-                            }
-                        }
-                    });
-                });
-            }
         }
     });
     Date.prototype.format = function (fmt) {

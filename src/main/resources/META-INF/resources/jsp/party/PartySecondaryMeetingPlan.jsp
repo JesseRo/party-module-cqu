@@ -193,6 +193,7 @@
 			{{#  if(d.id != '' && d.id != null && d.task_status == '5'){ }}
 			<a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
 			{{#  } }}
+			<a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
 		</script>
     <script type="text/javascript">
 		layui.use(['table','layer','form'], function() {
@@ -228,9 +229,7 @@
 					},
 					cols: [[ //表头
 						{field: 'org_name', align:'center',width:320, title: '党组织'},
-						{field: 'meeting_theme', align:'center',width:320, title: '开展主题',templet:function(d){
-								return '<a  href="/approvaldetails?meetingId='+d.meeting_id+'&orgType=secondary">'+d.meeting_theme+'</a>';
-							}},
+						{field: 'meeting_theme', align:'center',width:320, title: '开展主题'},
 						{field: 'start_time', align:'center', title: '开始时间',width:180,templet: function(d){return new Date(d.start_time).format("yyyy-MM-dd hh:mm:ss");}},
 						{field: 'total_time', align:'center', title: '时长',width:100,templet: function(d){return d.total_time/60;}},
 						{field: 'campus', align:'center', title: '开展地点',templet: function(d){
@@ -269,6 +268,10 @@
 						case 'edit':
 							renderCheck(obj);
 							break;
+						case 'detail':
+							// renderDetail('check',obj);
+							window.location.href='/approvaldetails?meetingId='+obj.data.meeting_id;
+							break;
 					};
 				});
 			}
@@ -292,7 +295,7 @@
 		function renderCheck(obj) {
 			$("#Assign .operation_container").find(".add_memeber_form").css("display", "none");
 			$("#Assign").modal("show");
-			getAssignPerson(obj.id);
+			getAssignPerson(obj.data.id);
 		}
         //一键指派  弹窗 点击确定
         $(".confirm_keyAssign").click(function() {

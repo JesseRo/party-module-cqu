@@ -49,6 +49,7 @@ public class PartyPortletKeys {
     public static final String PublicInformation = "PublicInformation";
 
     public static final String AlreadyPublic = "AlreadyPublic";
+    public static final String MeetingNotice = "MeetingNotice";
 
     public static final String SecondaryInformList = "SecondaryInformList";
     //待办

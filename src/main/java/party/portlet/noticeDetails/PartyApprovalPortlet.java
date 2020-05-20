@@ -2,6 +2,7 @@ package party.portlet.noticeDetails;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -78,15 +79,12 @@ public class PartyApprovalPortlet extends MVCPortlet {
             HttpServletRequest request = PortalUtil.getHttpServletRequest(renderRequest);
             String meetingId = PortalUtil.getOriginalServletRequest(request).getParameter("meetingId");
             meetingId = HtmlUtil.escape(meetingId);
-            String orgType = PortalUtil.getOriginalServletRequest(request).getParameter("orgType");
-            orgType = HtmlUtil.escape(orgType);
+
             String orgId = (String) SessionManager.getAttribute(renderRequest.getRequestedSessionId(), "department");
-            if ("".equals(meetingId) || null == meetingId) {
-                meetingId = "aca7500c-8603-4bac-b7c3-e6404b7dd720";
-            }
+            String orgType = orgDao.findByOrgId(orgId).getOrg_type();
             Map<String, Object> meetingPlan = partyMeetingPlanInfo.meetingDetail(meetingId);
 
-                //根据meetingId获取该会议信息
+            //根据meetingId获取该会议信息
             Organization org = orgDao.findByOrgId((String)meetingPlan.get("organization_id"));
             //会议主题
             String meetingTheme = (String) meetingPlan.get("meeting_theme");
@@ -100,7 +98,7 @@ public class PartyApprovalPortlet extends MVCPortlet {
             String attachment = (String) meetingPlan.get("attachment");
             //参会人员
             String meetingUserId = (String) meetingPlan.get("participant_group");
-            List<String> meetingUserList = gson.fromJson(meetingUserId, new TypeToken<List<String>>(){}.getType());
+            List<String> meetingUserList =  Arrays.asList(meetingUserId.split(","));
             List<Member> participants = memberDao.findMemberByUserId(meetingUserList);
             String meetingUserName = participants.stream().map(Member::getMember_name).collect(Collectors.joining(","));
 
@@ -126,7 +124,7 @@ public class PartyApprovalPortlet extends MVCPortlet {
             renderRequest.setAttribute("meetingUserName", meetingUserName);
             renderRequest.setAttribute("orgType", orgType);
             renderRequest.setAttribute("org", org);
-            renderRequest.setAttribute("isSelf", orgId.equals(org.getOrg_id()));
+            renderRequest.setAttribute("hasCheckPermission", orgId.equals(org.getOrg_parent()));
 
 
         } catch (Exception e) {

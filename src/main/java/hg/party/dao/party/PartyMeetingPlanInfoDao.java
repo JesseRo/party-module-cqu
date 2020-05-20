@@ -616,9 +616,6 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
         sb.append(" where 1=1");
         sb.append(" and org.historic IS FALSE and member.historic = false AND plan.task_status in('1','3','4')");
         switch(partyOrgAdminTypeEnum){
-            case BRANCH:
-                sb.append(" and org.org_id = ?");
-                break;
             case SECONDARY:
                 sb.append(" and org.org_parent = ? and org.org_type ='"+PartyOrgAdminTypeEnum.BRANCH.getType()+"'");
                 break;
