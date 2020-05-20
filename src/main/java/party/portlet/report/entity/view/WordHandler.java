@@ -25,13 +25,12 @@ public class WordHandler extends FileHandler<WordHandler> {
 
     @Override
     public WordHandler merge(WordHandler other) throws NotMatchingExcelDataException {
-        String fileName = this.fileName + "-汇总.docx";
         if (this.content == null || this.content.isEmpty()){
             return other;
         }else {
             this.content.addAll(other.content);
         }
-        return new WordHandler(fileName, null, this.content);
+        return new WordHandler(this.fileName, null, this.content);
     }
 
     public List<String> getContent() {

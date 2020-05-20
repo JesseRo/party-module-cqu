@@ -18,6 +18,8 @@ public class ReportTask implements Serializable {
 
     private String files;
 
+    private String word_files;
+
     private String content;
 
     private int status;
@@ -117,5 +119,13 @@ public class ReportTask implements Serializable {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getWord_files() {
+        return word_files;
+    }
+
+    public void setWord_files(String word_files) {
+        this.word_files = word_files;
     }
 }

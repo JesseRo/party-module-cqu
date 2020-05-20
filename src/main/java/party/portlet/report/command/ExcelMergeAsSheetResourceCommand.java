@@ -84,14 +84,14 @@ public class ExcelMergeAsSheetResourceCommand implements MVCResourceCommand {
         List<Report> reports = reportDao.findByTaskId(taskId);
 
         List<Organization> organizations = orgDao.findByOrgId(reports.stream().map(Report::getOrg_id).collect(Collectors.toList()));
-        Map<String, Organization> orgMap = organizations.stream().collect(Collectors.toMap(Organization::getOrg_id, p->p));
-        String json = task.getFiles();
+        Map<String, Organization> orgMap = organizations.stream().collect(Collectors.toMap(Organization::getOrg_id, p -> p));
         String type = task.getType();
+        List<Workbook> allMerged = new ArrayList<>();
+        List<String> allMergedNames = new ArrayList<>();
 
-        if (type.equalsIgnoreCase(FileView.EXCEL)) {
-            try {
-                List<Workbook> allMerged = new ArrayList<>();
-                List<String> allMergedNames = new ArrayList<>();
+        try {
+            if (type.equalsIgnoreCase(FileView.EXCEL) || type.equalsIgnoreCase(FileView.BOTH)) {
+                String json = task.getFiles();
                 List<ExcelHandler> demoExcels = gson.fromJson(json, new TypeToken<List<ExcelHandler>>() {
                 }.getType());
                 try {
@@ -124,63 +124,118 @@ public class ExcelMergeAsSheetResourceCommand implements MVCResourceCommand {
                     e.printStackTrace();
                     return false;
                 }
-                HttpServletResponse res = PortalUtil.getHttpServletResponse(resourceResponse);
+            }
+            List<WordHandler> allMergedWord = new ArrayList<>();
+            if (type.equalsIgnoreCase(FileView.WORD) || type.equalsIgnoreCase(FileView.BOTH)) {
+                String json = task.getWord_files();
+                List<WordHandler> demoWords = gson.fromJson(json, new TypeToken<List<WordHandler>>() {
+                }.getType());
+                for (WordHandler demoWord : demoWords) {
+                    WordHandler merged = WordHandler.empty(demoWord.getFileName() + "-汇总.docx");
+                    for (Report report : reports) {
+                        if (report.getStatus() == ConstantsKey.APPROVED) {
+                            List<WordHandler> reportWords =
+                                    gson.fromJson(report.getWord_files(), new TypeToken<List<WordHandler>>() {
+                                    }.getType());
 
-                if (allMerged.size() == 1) {
+                            WordHandler curWord = reportWords.stream()
+                                    .filter(p -> p.getFileName().equals(demoWord.getFileName())).findFirst().orElse(null);
+                            if (curWord == null) {
+                                throw new NotMatchingExcelDataException(String.format("%s上报文件有误。", ""));
+                            }
+                            merged = merged.merge(curWord);
+                        }
+                    }
+                    allMergedWord.add(merged);
+                }
+            }
+            HttpServletResponse res = PortalUtil.getHttpServletResponse(resourceResponse);
+
+            if (allMerged.size() + allMergedWord.size() == 1) {
+                if (allMerged.size() > 0) {
+
                     Workbook workbook = allMerged.get(0);
-                    String filename = allMergedNames.get(0).concat("-汇总.xlsx");;
+                    String filename = allMergedNames.get(0).concat("-汇总.xlsx");
+
                     res.setContentType("application/vnd.ms-excel;charset=utf-8");
                     res.addHeader("Content-Disposition",
                             "attachment; filename=" + new String(filename.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1));
                     workbook.write(res.getOutputStream());
                     workbook.close();
                 } else {
-                    ResourceProperties resourceProperties = new ResourceProperties();
-                    Properties properties = resourceProperties.getResourceProperties();//获取配置文件
-                    String uploadPath = properties.getProperty("uploadPath");
-                    File folder = new File(uploadPath + "/ajaxFileName/" + taskId);
-                    File zip = new File(folder, "汇总.zip");
-                    ZipOutputStream zipOutputStream = new ZipOutputStream(new FileOutputStream(zip));
-                    if (!zip.exists()) {
-                        zip.createNewFile();
-                    }
-                    for (int i = 0; i < allMerged.size(); i++) {
-                        Workbook workbook = allMerged.get(i);
-                        String filename = allMergedNames.get(i) + ".xlsx";
-                        File merged = new File(folder, filename);
-                        FileOutputStream fileOutputStream = new FileOutputStream(new File(folder, filename));
-                        workbook.write(fileOutputStream);
-                        fileOutputStream.close();
-                        workbook.close();
-                        FileInputStream in = new FileInputStream(merged);
-                        zipOutputStream.putNextEntry(new ZipEntry(filename));
-                        byte[] buf = new byte[BUFFER_SIZE];
-                        int len;
-                        while ((len = in.read(buf)) != -1) {
-                            zipOutputStream.write(buf, 0, len);
-                        }
-                        zipOutputStream.closeEntry();
-                        in.close();
+                    WordHandler wordHandler = allMergedWord.get(0);
+                    XWPFDocument document = WordUtils.export(wordHandler);
+                    String fullName = wordHandler.getFileName();
+                    String filename = fullName.contains(".") ? fullName.substring(0, fullName.lastIndexOf(".")) : fullName;
+                    filename = filename.concat("-汇总.docx");
+                    res.setContentType("application/msword;charset=utf-8");
+                    res.addHeader("Content-Disposition",
+                            "attachment; filename=" + new String(filename.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1));
+                    document.write(res.getOutputStream());
+                    document.close();
+                }
+            } else {
+                res.setContentType("application/zip;charset=utf-8");
+                res.addHeader("Content-Disposition",
+                        "attachment; filename=" + new String("数据汇总.zip".getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1));
 
-                        res.setContentType("application/zip;charset=utf-8");
-                        res.addHeader("Content-Disposition",
-                                "attachment; filename=" + new String("数据汇总.zip".getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1));
-                    }
-                    zipOutputStream.close();
-                    FileInputStream fileInputStream = new FileInputStream(zip);
+                ResourceProperties resourceProperties = new ResourceProperties();
+                Properties properties = resourceProperties.getResourceProperties();//获取配置文件
+                String uploadPath = properties.getProperty("uploadPath");
+                File folder = new File(uploadPath + "/ajaxFileName/" + taskId);
+//                File zip = new File(folder, "汇总.zip");
+                ZipOutputStream zipOutputStream = new ZipOutputStream(res.getOutputStream());
+//                if (!zip.exists()) {
+//                    zip.createNewFile();
+//                }
+                for (int i = 0; i < allMerged.size(); i++) {
+                    Workbook workbook = allMerged.get(i);
+                    String filename = allMergedNames.get(i) + ".xlsx";
+                    File merged = new File(folder, filename);
+                    FileOutputStream fileOutputStream = new FileOutputStream(new File(folder, filename));
+                    workbook.write(fileOutputStream);
+                    fileOutputStream.close();
+                    workbook.close();
+                    FileInputStream in = new FileInputStream(merged);
+                    zipOutputStream.putNextEntry(new ZipEntry(filename));
                     byte[] buf = new byte[BUFFER_SIZE];
                     int len;
-                    while ((len = fileInputStream.read(buf)) != -1) {
-                        res.getOutputStream().write(buf, 0, len);
+                    while ((len = in.read(buf)) != -1) {
+                        zipOutputStream.write(buf, 0, len);
                     }
-                    fileInputStream.close();
+                    zipOutputStream.closeEntry();
+                    in.close();
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
+                for (WordHandler word : allMergedWord) {
+                    XWPFDocument document = WordUtils.export(word);
+                    String filename = word.getFileName();
+                    File merged = new File(folder, filename);
+                    FileOutputStream fileOutputStream = new FileOutputStream(new File(folder, word.getFileName()));
+                    document.write(fileOutputStream);
+                    fileOutputStream.close();
+                    document.close();
+                    FileInputStream in = new FileInputStream(merged);
+                    zipOutputStream.putNextEntry(new ZipEntry(filename));
+                    byte[] buf = new byte[BUFFER_SIZE];
+                    int len;
+                    while ((len = in.read(buf)) != -1) {
+                        zipOutputStream.write(buf, 0, len);
+                    }
+                    zipOutputStream.closeEntry();
+                    in.close();
+                }
+                zipOutputStream.close();
+//                FileInputStream fileInputStream = new FileInputStream(zip);
+//                byte[] buf = new byte[BUFFER_SIZE];
+//                int len;
+//                while ((len = fileInputStream.read(buf)) != -1) {
+//                    res.getOutputStream().write(buf, 0, len);
+//                }
+//                fileInputStream.close();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return false;
     }
-
-
 }

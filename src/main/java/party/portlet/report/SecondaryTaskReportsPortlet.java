@@ -21,6 +21,7 @@ import party.portlet.report.entity.ReportOrgTask;
 import party.portlet.report.entity.ReportTask;
 import party.portlet.report.entity.view.ExcelHandler;
 import party.portlet.report.entity.view.FileView;
+import party.portlet.report.entity.view.WordHandler;
 
 import javax.portlet.Portlet;
 import javax.portlet.PortletException;
@@ -102,6 +103,12 @@ public class SecondaryTaskReportsPortlet extends MVCPortlet {
             List<FileView> fileViews = excelHandlers.stream()
                     .map(p->new FileView(p.getFileName(), "/ajaxFileName/" + curTaskId + "/" + data.get("org_id") + "/" + p.getFileName()))
                     .collect(Collectors.toList());
+            String wordJson = (String)data.get("word_files");
+            List<WordHandler> wordHandlers = gson.fromJson(wordJson, new TypeToken<List<WordHandler>>(){}.getType());
+            List<FileView> wordFileViews = wordHandlers.stream()
+                    .map(p->new FileView(p.getFileName(), "/ajaxFileName/" + curTaskId + "/" + data.get("org_id") + "/" + p.getFileName()))
+                    .collect(Collectors.toList());
+            fileViews.addAll(wordFileViews);
             data.put("fileView", fileViews);
         }
         renderRequest.setAttribute("pageNo", taskPage.getPageNow());

@@ -15,6 +15,7 @@ import party.constants.PartyPortletKeys;
 import party.portlet.report.dao.ReportTaskDao;
 import party.portlet.report.entity.view.ExcelHandler;
 import party.portlet.report.entity.view.FileView;
+import party.portlet.report.entity.view.WordHandler;
 
 import javax.portlet.Portlet;
 import javax.portlet.PortletException;
@@ -60,10 +61,17 @@ public class SecondaryTaskPortlet extends MVCPortlet {
         PostgresqlQueryResult<Map<String, Object>> taskPage = taskDao.findPageByOrgIdAndStatus(orgId, ConstantsKey.PUBLISHED, page);
         for (Map<String , Object> data : taskPage.getList()){
             String json = (String)data.get("files");
+            String taskId = (String)data.get("task_id");
             List<ExcelHandler> excelHandlers = gson.fromJson(json, new TypeToken<List<ExcelHandler>>(){}.getType());
             List<FileView> fileViews = excelHandlers.stream()
-                    .map(p->new FileView(p.getFileName(), "/ajaxFileName/" + data.get("task_id") + "/" + p.getFileName()))
+                    .map(p->new FileView(p.getFileName(), "/ajaxFileName/" + taskId + "/" + p.getFileName()))
                     .collect(Collectors.toList());
+            String wordJson = (String)data.get("word_files");
+            List<WordHandler> wordHandlers = gson.fromJson(wordJson, new TypeToken<List<WordHandler>>(){}.getType());
+            List<FileView> wordFileViews = wordHandlers.stream()
+                    .map(p->new FileView(p.getFileName(), "/ajaxFileName/" + taskId + "/" + data.get("org_id") + "/" + p.getFileName()))
+                    .collect(Collectors.toList());
+            fileViews.addAll(wordFileViews);
             data.put("fileView", fileViews);
         }
         renderRequest.setAttribute("pageNo", taskPage.getPageNow());

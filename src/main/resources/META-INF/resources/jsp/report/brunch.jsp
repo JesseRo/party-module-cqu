@@ -160,6 +160,19 @@
                             <div class="col-sm-12 col-xs-12" style="margin-bottom: 20px;">
                                 <div class="col-sm-6 col-xs-12">
                                     <div class="col-sm-3 col-xs-3 ">
+                                        <span class="control-label form-label-required">表格${varStatus.count}：</span>
+                                    </div>
+                                    <div class="col-sm-9 col-xs-9">
+                                        <input class="form-control" name="files" type="file" style="text-indent: inherit;"
+                                               accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+                                    </div>
+                                </div>
+                            </div>
+                        </c:forEach>
+                        <c:forEach var="f" items="${wordFileViews}" varStatus="varStatus">
+                            <div class="col-sm-12 col-xs-12" style="margin-bottom: 20px;">
+                                <div class="col-sm-6 col-xs-12">
+                                    <div class="col-sm-3 col-xs-3 ">
                                         <span class="control-label form-label-required">文档${varStatus.count}：</span>
                                     </div>
                                     <div class="col-sm-9 col-xs-9">

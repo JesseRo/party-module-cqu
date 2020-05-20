@@ -3,6 +3,7 @@ package party.portlet.report.entity.view;
 public class FileView {
     public static final String WORD = "word";
     public static final String EXCEL = "excel";
+    public static final String BOTH = "both";
 
 
     private String filename;

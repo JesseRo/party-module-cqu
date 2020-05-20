@@ -14,6 +14,7 @@ import party.constants.PartyPortletKeys;
 import party.portlet.report.dao.ReportTaskOrgDao;
 import party.portlet.report.entity.view.ExcelHandler;
 import party.portlet.report.entity.view.FileView;
+import party.portlet.report.entity.view.WordHandler;
 
 import javax.portlet.Portlet;
 import javax.portlet.PortletException;
@@ -57,17 +58,30 @@ public class BrunchReportListPortlet extends MVCPortlet {
         PostgresqlQueryResult<Map<String, Object>> pageData = taskOrgDao.findPage(department, page);
         for (Map<String , Object> data : pageData.getList()){
             String json = (String)data.get("templateFiles");
+            String taskId = (String)data.get("task_id");
             List<ExcelHandler> templateExcelHandlers = gson.fromJson(json, new TypeToken<List<ExcelHandler>>(){}.getType());
             List<FileView> templateFileViews = templateExcelHandlers.stream()
-                    .map(p->new FileView(p.getFileName(), "/ajaxFileName/" + data.get("task_id") + "/" + p.getFileName()))
+                    .map(p->new FileView(p.getFileName(), "/ajaxFileName/" + taskId + "/" + p.getFileName()))
                     .collect(Collectors.toList());
+            String templateWordJson = (String)data.get("wordTemplateFiles");
+            List<WordHandler> templateWordHandlers = gson.fromJson(templateWordJson, new TypeToken<List<WordHandler>>(){}.getType());
+            List<FileView> templateWordFileViews = templateWordHandlers.stream()
+                    .map(p->new FileView(p.getFileName(), "/ajaxFileName/" + taskId + "/" + p.getFileName()))
+                    .collect(Collectors.toList());
+            templateFileViews.addAll(templateWordFileViews);
             data.put("templateFileView", templateFileViews);
             if (data.get("status").equals(ConstantsKey.REPORTED)){
                 String uploadJson = (String)data.get("uploadFiles");
                 List<ExcelHandler> uploadExcelHandlers = gson.fromJson(uploadJson, new TypeToken<List<ExcelHandler>>(){}.getType());
                 List<FileView> uploadFileViews = uploadExcelHandlers.stream()
-                        .map(p->new FileView(p.getFileName(), "/ajaxFileName/" + data.get("task_id") + "/" + p.getFileName()))
+                        .map(p->new FileView(p.getFileName(), "/ajaxFileName/" + taskId + "/" + p.getFileName()))
                         .collect(Collectors.toList());
+                String wordJson = (String)data.get("wordUploadFiles");
+                List<WordHandler> wordHandlers = gson.fromJson(wordJson, new TypeToken<List<WordHandler>>(){}.getType());
+                List<FileView> wordFileViews = wordHandlers.stream()
+                        .map(p->new FileView(p.getFileName(), "/ajaxFileName/" + taskId + "/" + p.getFileName()))
+                        .collect(Collectors.toList());
+                uploadFileViews.addAll(wordFileViews);
                 data.put("uploadFileView", uploadFileViews);
             }
         }

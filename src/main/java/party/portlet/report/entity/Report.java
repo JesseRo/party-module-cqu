@@ -19,6 +19,8 @@ public class Report implements Serializable {
 
     private String files;
 
+    private String word_files;
+
     private int status;
 
     private Timestamp time;
@@ -87,5 +89,13 @@ public class Report implements Serializable {
 
     public void setReason(String reason) {
         this.reason = reason;
+    }
+
+    public String getWord_files() {
+        return word_files;
+    }
+
+    public void setWord_files(String word_files) {
+        this.word_files = word_files;
     }
 }

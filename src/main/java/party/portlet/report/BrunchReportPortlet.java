@@ -16,6 +16,7 @@ import party.portlet.report.dao.ReportTaskOrgDao;
 import party.portlet.report.entity.ReportTask;
 import party.portlet.report.entity.view.ExcelHandler;
 import party.portlet.report.entity.view.FileView;
+import party.portlet.report.entity.view.WordHandler;
 
 import javax.portlet.Portlet;
 import javax.portlet.PortletException;
@@ -64,8 +65,10 @@ public class BrunchReportPortlet extends MVCPortlet {
 
         ReportTask task = taskDao.findByTaskId(taskId);
         List<ExcelHandler> excelHandlers = gson.fromJson(task.getFiles(), new TypeToken<List<ExcelHandler>>(){}.getType());
+        List<WordHandler> wordHandlers = gson.fromJson(task.getWord_files(), new TypeToken<List<WordHandler>>(){}.getType());
 
         renderRequest.setAttribute("fileViews", excelHandlers);
+        renderRequest.setAttribute("wordFileViews", wordHandlers);
         renderRequest.setAttribute("taskId", taskId);
         renderRequest.setAttribute("formId", formId);
         renderRequest.setAttribute("redo", redo);

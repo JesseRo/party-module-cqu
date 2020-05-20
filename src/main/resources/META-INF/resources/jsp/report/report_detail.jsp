@@ -85,7 +85,7 @@
             <c:if test="${not empty taskId }">
                 <div class="operate_form_group">
                     <button id="export" type="button" class="layui-btn custom_btn publish_acti_btn">数据汇总导出</button>
-                    <c:if test="${task.type == 'excel'}">
+                    <c:if test="${task.type == 'excel' or task.type == 'both'}">
                         <button id="exportAsSheet" type="button" class="layui-btn custom_btn publish_acti_btn"
                                 style="margin-right: 20px">汇总为Sheet导出
                         </button>
@@ -302,4 +302,4 @@
 
 </body>
 
-</html>
+</html>.

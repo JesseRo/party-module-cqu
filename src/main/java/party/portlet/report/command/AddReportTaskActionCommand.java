@@ -107,40 +107,38 @@ public class AddReportTaskActionCommand implements MVCResourceCommand {
                     reportTask.setReceivers(toOrg);
                     UploadPortletRequest uploadPortletRequest = PortalUtil.getUploadPortletRequest(actionRequest);
                     List<FileView> fileViewList = saveAttachment(uploadPortletRequest, taskId);
-                    String type;
                     if (fileViewList.size() > 0) {
-                        type = fileViewList.stream().map(FileView::getType).findAny().get();
-                        if (!type.equals(FileView.EXCEL) && !type.equals(FileView.WORD)){
-                            errorMessage = "文件类型错误";
-                            throw new Exception();
+                        List<ExcelHandler> excels = new ArrayList<>();
+                        List<WordHandler> words = new ArrayList<>();
+                        for (FileView fileView : fileViewList) {
+                            String type = fileView.getType();
+                            if (type.equalsIgnoreCase(FileView.EXCEL)) {
+                                List<String> sheetNames = ExcelUtil.getAllSheetName(fileView.getFilename(), new FileInputStream(fileView.getPath()));
+                                ExcelHandler excelHandler = new ExcelHandler(fileView.getFilename(), fileView.getPath(), sheetNames);
+                                excels.add(excelHandler);
+                            } else if (type.equals(FileView.WORD)) {
+                                List<String> paragraph = WordUtils.importWordData(fileView.getFilename(), new FileInputStream(fileView.getPath()));
+                                WordHandler wordHandler = new WordHandler(fileView.getFilename(), fileView.getPath(), paragraph);
+                                words.add(wordHandler);
+                            } else {
+                                errorMessage = "文件类型错误";
+                                throw new Exception();
+                            }
                         }
-                        if (fileViewList.stream().allMatch(p -> p.getType().equals(type))) {
-                            reportTask.setType(type);
-                        } else {
-                            errorMessage = "文件类型不一致";
-                            throw new Exception();
+                        if (!excels.isEmpty() && !words.isEmpty()) {
+                            reportTask.setType(FileView.BOTH);
+                        } else if (!excels.isEmpty()) {
+                            reportTask.setType(FileView.EXCEL);
+                        }else if (!words.isEmpty()){
+                            reportTask.setType(FileView.WORD);
                         }
+                        reportTask.setFiles(gson.toJson(excels));
+                        reportTask.setWord_files(gson.toJson(words));
                     } else {
                         errorMessage = "上传文件错误";
                         throw new Exception();
                     }
-                    if (type.equalsIgnoreCase(FileView.EXCEL)) {
-                        List<ExcelHandler> excels = new ArrayList<>();
-                        for (FileView fileView : fileViewList) {
-                            List<String> sheetNames = ExcelUtil.getAllSheetName(fileView.getFilename(), new FileInputStream(fileView.getPath()));
-                            ExcelHandler excelHandler = new ExcelHandler(fileView.getFilename(), fileView.getPath(), sheetNames);
-                            excels.add(excelHandler);
-                        }
-                        reportTask.setFiles(gson.toJson(excels));
-                    } else {
-                        List<WordHandler> words = new ArrayList<>();
-                        for (FileView fileView : fileViewList) {
-                            List<String> paragraph = WordUtils.importWordData(fileView.getFilename(), new FileInputStream(fileView.getPath()));
-                            WordHandler wordHandler = new WordHandler(fileView.getFilename(), fileView.getPath(), paragraph);
-                            words.add(wordHandler);
-                        }
-                        reportTask.setFiles(gson.toJson(words));
-                    }
+
 
                     reportTaskDao.saveOrUpdate(reportTask);
                     if (status.equals(ConstantsKey.PUBLISHED)) {
@@ -165,9 +163,9 @@ public class AddReportTaskActionCommand implements MVCResourceCommand {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    if (errorMessage.isEmpty()){
+                    if (errorMessage.isEmpty()) {
                         message = "发布任务失败";
-                    }else {
+                    } else {
                         message = "发布任务失败: " + errorMessage;
                     }
                     transactionUtil.rollback();
