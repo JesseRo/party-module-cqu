@@ -59,7 +59,7 @@ function HgDoms(form, uploadUrls, container) {
                     "                                <span class='control-label ${class}'>${name}</span>\n" +
                     "                                 </div>" +
                     "								 <div class='col-sm-9 col-xs-9'>" +
-                "                                	<input type='file' multiple name=\"${id}\" value=\"${value}\" ${extra}/>\n" +
+                "                                	<input type='file' class='form-control' style='text-indent: 0;' multiple name=\"${id}\" value=\"${value}\" ${extra}/>\n" +
                 "								 </div>" +
                 "                            </div>";
                 

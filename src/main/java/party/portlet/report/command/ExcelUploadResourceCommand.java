@@ -124,7 +124,7 @@ public class ExcelUploadResourceCommand implements MVCResourceCommand {
                     }
 
                     List<FileView> fileViews = saveAttachment(uploadPortletRequest, taskId, department);
-
+                    report.setFiles("[]");
                     if (task.getType().equalsIgnoreCase(FileView.EXCEL) || task.getType().equalsIgnoreCase(FileView.BOTH)) {
                         List<ExcelHandler> excels = new ArrayList<>();
                         for (FileView fileView : fileViews) {
@@ -137,6 +137,7 @@ public class ExcelUploadResourceCommand implements MVCResourceCommand {
                         String files = gson.toJson(excels);
                         report.setFiles(files);
                     }
+                    report.setWord_files("[]");
                     if (task.getType().equalsIgnoreCase(FileView.WORD) || task.getType().equalsIgnoreCase(FileView.BOTH)) {
                         List<WordHandler> words = new ArrayList<>();
                         for (FileView fileView : fileViews) {
