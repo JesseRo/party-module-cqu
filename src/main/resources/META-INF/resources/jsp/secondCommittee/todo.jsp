@@ -284,7 +284,7 @@
                     {field: 'task_status', align:'center', title: '任务状态',width:120,templet: function(d){
                             var status = '';
                             switch(parseInt(d.task_status)){
-                                case 1:status = '待提交';break;
+                                case 0:status = '待提交';break;
                                 case 1:status = '待审核';break;
                                 case 2:status = '已撤回';break;
                                 case 3:status = '已驳回';break;

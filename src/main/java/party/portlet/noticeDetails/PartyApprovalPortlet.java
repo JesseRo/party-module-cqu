@@ -22,8 +22,10 @@ import hg.party.dao.org.OrgDao;
 import hg.party.dao.party.PartyMeetingPlanInfoDao;
 import hg.party.dao.secondCommittee.MeetingNotesDao;
 import hg.party.entity.organization.Organization;
+import hg.party.entity.party.Hg_Value_Attribute_Info;
 import hg.party.entity.party.MeetingNote;
 import hg.party.entity.partyMembers.Member;
+import hg.party.server.dwonlistserver.DownListServer;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -60,6 +62,9 @@ public class PartyApprovalPortlet extends MVCPortlet {
 
     @Reference
     private PartyMeetingPlanInfoDao partyMeetingPlanInfo;
+
+    @Reference
+    private DownListServer downListServer;
 
     @Reference
 	private OrgDao orgDao;
@@ -125,7 +130,8 @@ public class PartyApprovalPortlet extends MVCPortlet {
             renderRequest.setAttribute("orgType", orgType);
             renderRequest.setAttribute("org", org);
             renderRequest.setAttribute("hasCheckPermission", orgId.equals(org.getOrg_parent()));
-
+            List<Hg_Value_Attribute_Info> listValue = downListServer.reasson();
+            renderRequest.setAttribute("reasonList",listValue);
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -98,6 +98,7 @@
                             <input type="text" name="keyword"  placeholder="请输入活动关键字" class="layui-input">
                         </div>
                         <button type="button"  class="layui-btn layui-btn-warm"  lay-submit="" lay-filter="searchForm"><icon class="layui-icon layui-icon-search"></icon>搜索</button>
+                        <button type="button"  class="layui-btn layui-btn-warm" id="plan">拟定计划</button>
                     </div>
                 </div>
             </form>
@@ -107,7 +108,7 @@
 </div>
 </body>
 <script type="text/html" id="informTableBtns">
-    <%--<a class="layui-btn layui-btn-xs" href="javascript:;" onclick="window.location.href='/newinfo?informId={{d.inform_id }}&orgEdit=orgEdit';" lay-event="edit">查看</a>--%>
+    <a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
 </script>
 <script type="text/javascript">
     layui.use(['table','layer','form'], function() {
@@ -147,9 +148,9 @@
                     {field: 'meeting_theme', align:'center',width:320, title: '活动名称'},
                     {field: 'content', align:'center', title: '活动内容'},
                     {field: 'release_time', align:'center', title: '开始时间',width:180,templet: function(d){return new Date(d.release_time).format("yyyy-MM-dd hh:mm:ss");}},
-/*                    {field: 'inform_status', align:'center', title: '查看状态'},
-                    {field: 'operation', align:'center', title: '操作',width:120,toolbar: '#informTableBtns'}*/
-                    {field: 'operation', align:'center', title: '附件下载',width:120,toolbar: '#informTableBtns'}
+/*                    {field: 'inform_status', align:'center', title: '查看状态'},*/
+                    {field: 'operation', align:'center', title: '操作',width:120,toolbar: '#informTableBtns'},
+                    {field: 'attachment', align:'center', title: '附件下载',width:120}
                 ]],
                 done: function(res, curr, count){
                     pageInfo.page = curr;
@@ -165,13 +166,16 @@
             table.on('tool(informTable)', function(obj){
                 switch(obj.event){
                     case 'detail':
-                        //renderDetail('check',obj);
+                        renderDetail(obj.data);
                         break;
-                    case 'delete':
+                    case 'other':
                         //deleteInform(obj.data.inform_id);
                         break;
                 };
             });
+        }
+        function renderDetail(inform){
+            layer.msg("功能完善中。。。");
         }
     });
     Date.prototype.format = function (fmt) {
@@ -189,5 +193,8 @@
             if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
         return fmt;
     }
+    $("#plan").click(function(){
+        window.location.href="/sendplan";
+    })
 </script>
 </html>
