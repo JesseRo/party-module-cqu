@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ include file="/init.jsp" %>
+<portlet:resourceURL id="/PartyReasonCommand" var="PartyReason" />
 <html>
 	<head>
 		 <link rel="stylesheet" href="${basePath }/css/details.css" />

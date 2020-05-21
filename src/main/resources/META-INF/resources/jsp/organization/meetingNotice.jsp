@@ -75,7 +75,7 @@
             当前位置：
             <span class="layui-breadcrumb" lay-separator=">">
                 <a href="javascript:;">组织生活管理</a>
-                <a href="javascript:;">活动管理</a>
+                <a href="javascript:;">通知列表</a>
             </span>
         </div>
         <div class="bg_white_container">
@@ -146,10 +146,10 @@
                 cols: [[ //表头
                     {field: 'meeting_theme', align:'center',width:320, title: '活动名称'},
                     {field: 'content', align:'center', title: '活动内容'},
-                    {field: 'release_time', align:'center', title: '开始时间',width:180,templet: function(d){return new Date(d.release_time).format("yyyy-MM-dd hh:mm:ss");}}
+                    {field: 'release_time', align:'center', title: '开始时间',width:180,templet: function(d){return new Date(d.release_time).format("yyyy-MM-dd hh:mm:ss");}},
 /*                    {field: 'inform_status', align:'center', title: '查看状态'},
                     {field: 'operation', align:'center', title: '操作',width:120,toolbar: '#informTableBtns'}*/
-
+                    {field: 'operation', align:'center', title: '附件下载',width:120,toolbar: '#informTableBtns'}
                 ]],
                 done: function(res, curr, count){
                     pageInfo.page = curr;

@@ -12,7 +12,8 @@
 <portlet:resourceURL id="/form/uploadVideo" var="uploadvideoUrl"/>
 <!-- 附件上传 -->
 <portlet:resourceURL id="/form/uploadFile" var="uploadfileUrl"/>
-
+<!-- 通用文件上传 -->
+<portlet:resourceURL id="/api/upload" var="uploadFileApi"/>
 <portlet:resourceURL id="/hg/place/list" var="places"/>
 <portlet:resourceURL id="/hg/place/add" var="addPlace"/>
 <!-- 常用人员，组的增加，修改，删除 -->
@@ -272,6 +273,18 @@
                         </div>
                     </div>
                     <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label layui-required">附件上传：</label>
+                            <div class="layui-input-block layui-upload-drag meetingContent" id="upload">
+                                <i class="layui-icon"></i>
+                                <p>点击上传，或将文件拖拽到此处</p>
+                            </div>
+                            <div class="layui-input-block  meetingContent" >
+                                <table id="fileTable" lay-filter="fileTable"></table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
                         <div class="layui-input-block">
                             <button type="submit" class="layui-btn layui-btn-warm" lay-submit="" lay-filter="meetingPlanRelease">发 布</button>
                             <button type="submit" class="layui-btn layui-btn-warm" lay-submit="" lay-filter="meetingPlanSave">暂 存</button>
@@ -392,26 +405,34 @@
 <script type="text/html" id="memberTableTool">
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">移除</a>
 </script>
+<script type="text/html" id="fileTableTool">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+</script>
 <script type="text/javascript">
     layui.config({
         base: '${basePath}/js/layui/module/'
     }).extend({
         checkbox: 'checkbox/checkbox'
     });
-    layui.use(['laydate','layer','form','table','checkbox'], function(){
+    layui.use(['laydate','layer','form','table','checkbox','upload'], function(){
         var laydate = layui.laydate,
             form = layui.form,
             layer = layui.layer,
             table = layui.table,
+            upload = layui.upload,
             checkbox = layui.checkbox;
         var pageInfo = {
             page:1,
             size:10
         };
         var checkedGroup = new Array();
+        var fileData = new Array();
         renderEditor();
+        renderUpload();
         renderDateSelect();
         renderMemberGroups();
+        renderFilesTable();
+
 
         function renderDateSelect() {
             laydate.render({
@@ -446,6 +467,31 @@
                     return this._bkGetActionUrl.call(this, action);
                 }
             };
+        }
+        function renderUpload(){
+            //拖拽上传
+            upload.render({
+                elem: '#upload'
+                ,url: '${uploadFileApi}&ableDelete=0&bucket=meetingPlanFiles' //改成您自己的上传接口
+                ,size: 204800 //最大200M
+                ,multiple: true
+                ,accept: 'file'
+                ,done: function(res){
+                    if(res.code == 200){
+                        layer.msg('上传成功');
+                        fileData.push({
+                            name:res.data.name,
+                            size:res.data.size,
+                            status:true,
+                            path:res.data.path
+                        })
+                        renderFilesTable();
+                    }else{
+                        layer.msg(res.message);
+                    }
+
+                }
+            });
         }
         function renderPlace() {
             var campus = $('#addMeetingPlanForm  select[name="campus"]').val();
@@ -536,6 +582,42 @@
             }
             $('#addMeetingPlanForm  select[name="participate"]').val(arr);
             form.render('select');
+        }
+        function renderFilesTable(){
+            var cols = [[
+                {field: 'name', align:'center', title: '文件名',templet:function(d){
+                        return '<a href="'+d.path+'">'+d.name+'</a>';
+                    }
+                }
+                ,{field: 'size', width:120, align:'center', title: '大小'}
+                ,{field: 'status', width:120, align:'center', title: '状态',templet:function(d){
+                    if(d.status){
+                        return '成功';
+                    }else{
+                        return '失败';
+                    }
+                    }
+                }
+                ,{field: 'name', title: '操作', width:240, align:'center',toolbar: '#fileTableTool'}
+            ]];
+            var ins = table.render({
+                elem: '#fileTable'
+                ,data: fileData
+                ,cols: cols
+            });
+            //监听事件
+            table.on('tool(fileTable)', function(obj){
+                switch(obj.event){
+                    case 'delete':
+                        deleteFile(obj.data);
+                        break;
+                    case 'edit':
+                        break;
+                };
+            });
+        }
+        function deleteFile(file){
+            layer.msg("功能开放中。")
         }
         function renderGroupTable(page,size){
             var  where = {};

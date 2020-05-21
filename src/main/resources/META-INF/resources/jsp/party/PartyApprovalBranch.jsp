@@ -8,6 +8,7 @@
 <portlet:resourceURL id="/PartyRejectedCommand" var="PartyRejected" />
 <portlet:resourceURL id="/PartyReasonCommand" var="PartyReason" />
 <portlet:resourceURL id="/part/meeting/page" var="PartyMeetingPage" />
+<portlet:resourceURL id="/PartyPassCommand" var="PartyPass" />
 <!DOCTYPE html>
 <html>
 	<head>
@@ -40,14 +41,14 @@
 				width: 300px;
 				margin-right: 0px;
 			}
-			#personInfo .layui-form-item .layui-input-inline{
+			#rejectModal .layui-form-item .layui-input-inline{
 				width:200px
 			}
-			#personInfo .layui-form-label{
+			#rejectModal .layui-form-label{
 				width:140px;
 				font-weight:bold;
 			}
-			#personInfo .layui-form-label-text{
+			#rejectModal .layui-form-label-text{
 				float: left;
 				display: block;
 				padding: 0 10px;
@@ -92,6 +93,30 @@
 			</div>
 		</div>
 		<!-- 模态框（Modal） -->
+		<!-- 弹窗 -->
+		<div style="display: none" id="rejectModal">
+			<form class="layui-form" action="">
+				<input type="hidden" class="layui-layer-input"  name="meetingId" value="1">
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label layui-required">驳回理由</label>
+						<div class="layui-input-inline">
+							<select name="rejectReason" lay-verify="select" >
+								<option value="">-请选择-</option>
+								<c:forEach var="reason" items="${reasonList }">
+									<option value="${reason.resources_value}">${reason.resources_value}</option>
+								</c:forEach>
+							</select>
+						</div>
+					</div>
+				</div>
+
+				<div class="layui-layer-btn layui-layer-btn-">
+					<a class="layui-layer-btn0" type="button"  lay-submit="" lay-filter="rejectForm">确定</a>
+					<a class="layui-layer-btn1">取消</a>
+				</div>
+			</form>
+		</div>
 		<div class="modal fade" id="input" tabindex="-1" role="dialog" aria-labelledby="inputLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -181,6 +206,30 @@
 			form.on('submit(searchForm)', function (data) {
 				renderTable(1,pageInfo.size);
 			})
+			form.on('submit(rejectForm)', function (data) {
+				console.log(data);
+				var url = "${PartyRejected}";
+				$.ajax({
+					url:url,
+					data:{meeting_id2:data.field.meetingId,should_:data.field.rejectReason},
+					dataType:'json',
+					async:false,
+					success:function(res){
+						if(res){
+							layer.msg("驳回成功。");
+							renderTable(pageInfo.page,pageInfo.size);
+						}
+					}
+				});
+
+			})
+			form.verify({
+				select: function (value, item) {
+					if (value == '' || value == null) {
+						return "请选择必填项。";
+					}
+				}
+			});
 			function renderTable(page,size){
 				var  where = {
 					keyword: $("#searchForm input[name=keyword]").val()
@@ -234,13 +283,10 @@
 				table.on('tool(meetingPlanTable)', function(obj){
 					switch(obj.event){
 						case 'pass':
-							//pass(obj.data.meeting_id);
-							//renderDetail('check',obj);onclick=";"
 							pass(obj.data.meeting_id);
 							break;
 						case 'reject':
-							//renderDetail('check',obj);onclick="entry('${d.meeting_id }');
-							entry(obj.data.meeting_id);
+							reject(obj.data.meeting_id);
 							break;
 						case 'detail':
 							// renderDetail('check',obj);
@@ -259,9 +305,18 @@
 						dataType:'json',
 						success:function(){
 							layer.msg("审核成功");
-							window.location.reload();
+							renderTable(pageInfo.page,pageInfo.size);
 						}
 					});
+				});
+			}
+			//点击驳回
+			function reject(meetingId){
+				$("#rejectModal input[name='meetingId']").val(meetingId);
+				layer.prompt({
+					type: 1,
+					btn: 0,
+					content: $("#rejectModal")
 				});
 			}
 		});
@@ -281,80 +336,6 @@
 			return fmt;
 		}
 
-		//点击驳回
-		function entry(meetingId){
-			$('#entry_id').val(meetingId);
-			$("#input").modal("show");
-			$("#reject_select").html("");
-			var url = "${PartyReason}";
-			$.ajax({
-				url:url,
-				data:{},
-				dataType:'json',
-				async:false,
-				success:function(res){
-					console.log(res);
-					for(var i=0;i<res.length;i++){
-						var _option = '<option data-id="'+ res[i].id +'" value="'+ res[i].resources_value +'">'+ res[i].resources_value +'</option>'
-						$("#reject_select").append(_option);
-					}
-				}
-			});
-		}
-
-		//驳回保存
-		function Write(){
-			var meeting_id2 = $('#entry_id').val();//会议id
-			var should_ = $('#_should').val(); //驳回备注
-			var url = "${PartyRejected}";
-			$.ajax({
-				url:url,
-				data:{meeting_id2:meeting_id2,should_:should_},
-				dataType:'json',
-				async:false,
-				success:function(succee){
-					$('#input').modal('hide');
-					window.location.reload();
-				}
-			});
-		}
-		//用于选择理由更换赋值给文本框
-		function getReason(){
-			var text=$("#reject_select").val();
-			$("#_should").val(text);
-		}
-
-
-		//根据table的宽度设置scrollBar的宽度
-		$(function(){
-			var _width = $(".scroll_bar").parents(".content_table_container").find("#tBody").width();
-			var _height = $(".content_table").height();
-			console.log(_width);
-			$(".scroll_bar").width(_width);
-
-			$(".outer_scroll_box").height(_height);
-			$(".content_table_container").height(_height);
-			$("#scroll_top").css("top",_height+"px");
-
-		})
-		function divScroll(scrollDiv){
-			var scrollLeft = scrollDiv.scrollLeft;
-			document.getElementById("tableDiv_body").scrollLeft = scrollLeft;
-		}
-		function onwheel(event){
-			var evt = event||window.event;
-			var bodyDivY = document.getElementById("tBody");
-			var scrollDivY = document.getElementById("scrollDiv_y");
-			if (bodyDivY.scrollHeight>bodyDivY.offsetHeight){
-				if (evt.deltaY){
-					bodyDivY.scrollTop = bodyDivY.scrollTop + evt.deltaY*7;
-					scrollDivY.scrollTop = scrollDivY.scrollTop + evt.deltaY*7;
-				}else{
-					bodyDivY.scrollTop = bodyDivY.scrollTop - evt.wheelDelta/5;
-					scrollDivY.scrollTop = scrollDivY.scrollTop - evt.wheelDelta/5;
-				}
-			}
-		}
 
 	</script>
 </html>

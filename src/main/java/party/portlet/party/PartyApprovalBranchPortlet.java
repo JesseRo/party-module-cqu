@@ -9,6 +9,8 @@ import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import hg.party.entity.party.Hg_Value_Attribute_Info;
+import hg.party.server.dwonlistserver.DownListServer;
 import org.apache.log4j.Logger;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -43,80 +45,16 @@ import party.constants.PartyPortletKeys;
 public class PartyApprovalBranchPortlet extends MVCPortlet{
 	
 	Logger logger = Logger.getLogger(PartyApprovalBranchPortlet.class);
+
 	@Reference
-	private PartyMeetingPlanInfoService partyMeetingPlanInfoService;
-	
-	private int pageSize = 8;//每页条数
+	private DownListServer downListServer;
+
 	
 	@Override
 	public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
 			throws IOException, PortletException {
-//		String meeting_id = ParamUtil.getString(renderRequest, "meeting_id");//会议id
-		String sessionID=renderRequest.getRequestedSessionId();
-		String department = (String)SessionManager.getAttribute(sessionID, "department");//登录人组织id
-		
-		List<Map<String, Object>> list = null;
-		int pageNo = 0;
-		int page = ParamUtil.getInteger(renderRequest, "pageNo"); //获取当前页
-		int totalPage = ParamUtil.getInteger(renderRequest, "total_page_");//总页码
-		if(page==0){
-			pageNo = 1;//默认当前页为1
-		}else if(page > totalPage){
-			pageNo = totalPage;
-		}else{
-			pageNo = page;
-		}
-		
-//
-//		String sql = "SELECT plan.meeting_id as meeting,plan.start_time as start_p,plan.end_time as end_p,* from "+
-//					"((hg_party_meeting_plan_info as plan "+
-//					"LEFT JOIN hg_party_meeting_notes_info as note on "+
-//					"plan.meeting_id = note.meeting_id) LEFT JOIN hg_party_org as org on "+
-//					"org.org_id = plan.organization_id) LEFT JOIN hg_users_info as usr on "+
-//					"usr.user_id = auditor "+
-//					"WHERE org.org_type='branch' "+
-//					"AND (plan.task_status='1' "+
-//					"OR plan.task_status='3' "+
-//					"OR plan.task_status='4' "+
-//					"OR plan.task_status='5' "+
-//					"OR plan.task_status='6') "+
-//					"and org.org_parent=? "+
-//					"and org.historic is false "+
-//					"ORDER BY plan.id DESC ";
-
-		String sql = "SELECT\n" +
-				"\tplan.meeting_id AS meeting,\n" +
-				"\tplan.start_time AS start_p,\n" +
-				"\tplan.end_time AS end_p,\n" +
-				"\tplan.task_status AS task_st, member.member_name as contactName, * \n" +
-				"FROM\n" +
-				"\t(\n" +
-				"\t(\n" +
-				"\thg_party_meeting_plan_info AS plan\n" +
-				"\tLEFT JOIN hg_party_meeting_notes_info AS note ON plan.meeting_id = note.meeting_id\n" +
-				"\t)\n" +
-				"\tLEFT JOIN hg_party_org AS org ON org.org_id = plan.organization_id \n" +
-				"\t)\n" +
-				"left join hg_party_member member on member.member_identity = plan.contact and member.historic = false " +
-				"WHERE\n" +
-				"\torg.org_type = 'branch' and org.org_parent = ?\n" +
-				"\tAND org.historic IS FALSE \n" +
-				"\tAND (\n" +
-				"\tplan.task_status = '1' \n" +
-				"\tOR plan.task_status = '3' \n" +
-				"\tOR plan.task_status = '4' \n" +
-				")\n" +
-				"ORDER BY\n" +
-				"\tplan.task_status asc";
-						
-		Map<String, Object> postgresqlResults = partyMeetingPlanInfoService.postGresqlFind(pageNo, pageSize, sql,department);
-		list = (List<Map<String, Object>>) postgresqlResults.get("list");//获取集合
-		totalPage = (int) postgresqlResults.get("totalPage");//获取总页码
-		
-		renderRequest.setAttribute("list", list);
-		renderRequest.setAttribute("pageNo", pageNo);
-		renderRequest.setAttribute("totalPage", totalPage);
-		
+		List<Hg_Value_Attribute_Info> listValue = downListServer.reasson();
+		renderRequest.setAttribute("reasonList",listValue);
 		super.doView(renderRequest, renderResponse);
 	}
 

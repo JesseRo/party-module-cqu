@@ -47,23 +47,14 @@ public class GroupAndMemberCommand implements MVCResourceCommand {
         HttpServletResponse res = PortalUtil.getHttpServletResponse(resourceResponse);
         res.addHeader("content-type", "application/json");
         try {
-            if (!groups.isEmpty()) {
-                List<Map<String, Object>> groupMembers = service.getGroupMembers(groupsIds);
-                Map<String, List<Map<String, Object>>> map = groupMembers.stream()
-                        .collect(Collectors.groupingBy(p -> (String) p.get("group_id")));
-
-                List<Map<String, Object>> groupMemberResponse = new ArrayList<>();
-                for (Map<String, Object> group : groups) {
-                    Map<String, Object> groupMap = new HashMap<>();
-                    groupMemberResponse.add(groupMap);
-                    groupMap.put("id", group.get("group_id"));
-                    groupMap.put("name", group.get("group_name"));
-                    groupMap.put("member", map.getOrDefault(group.get("group_id"), Collections.emptyList()));
-                }
-                res.getWriter().write(gson.toJson(JsonResponse.Success(groupMemberResponse)));
-            }else {
-                res.getWriter().write(gson.toJson(JsonResponse.Failure("失败")));
+            List<Map<String, Object>> groupMemberResponse = new ArrayList<>();
+            for (Map<String, Object> group : groups) {
+                Map<String, Object> groupMap = new HashMap<>();
+                groupMemberResponse.add(groupMap);
+                groupMap.put("id", group.get("group_id"));
+                groupMap.put("name", group.get("group_name"));
             }
+            res.getWriter().write(gson.toJson(JsonResponse.Success(groupMemberResponse)));
         } catch (Exception e) {
             try {
                 e.printStackTrace();
