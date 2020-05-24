@@ -1,16 +1,20 @@
 package party.portlet.party;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.portlet.Portlet;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import hg.party.entity.party.Hg_Value_Attribute_Info;
+import hg.party.server.dwonlistserver.DownListServer;
 import org.apache.log4j.Logger;
 import org.osgi.service.component.annotations.Component;
 
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
+import org.osgi.service.component.annotations.Reference;
 import party.constants.PartyPortletKeys;
 
 /**
@@ -36,11 +40,15 @@ import party.constants.PartyPortletKeys;
 public class PartyApprovalPlanPortlet extends MVCPortlet{
 	
 	Logger logger = Logger.getLogger(PartyApprovalPlanPortlet.class);
+	@Reference
+	private DownListServer downListServer;
 	
 	@Override
 	public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
 			throws IOException, PortletException {
 		logger.debug("page:一级党组织审批计划");
+		List<Hg_Value_Attribute_Info> listValue = downListServer.reasson();
+		renderRequest.setAttribute("reasonList",listValue);
 		super.doView(renderRequest, renderResponse);
 	}
 

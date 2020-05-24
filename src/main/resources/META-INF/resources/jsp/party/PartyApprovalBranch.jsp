@@ -6,7 +6,6 @@
 <link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/activity-manage1.css?v=1"/>
 <link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/common.min.css"/>
 <portlet:resourceURL id="/PartyRejectedCommand" var="PartyRejected" />
-<portlet:resourceURL id="/PartyReasonCommand" var="PartyReason" />
 <portlet:resourceURL id="/part/meeting/page" var="PartyMeetingPage" />
 <portlet:resourceURL id="/PartyPassCommand" var="PartyPass" />
 <!DOCTYPE html>
@@ -40,6 +39,9 @@
 			#searchForm .layui-form-item .layui-inline .keyword {
 				width: 300px;
 				margin-right: 0px;
+			}
+			.layui-layer-content{
+				overflow: visible;
 			}
 			#rejectModal .layui-form-item .layui-input-inline{
 				width:200px
@@ -92,14 +94,13 @@
 				</div>
 			</div>
 		</div>
-		<!-- 模态框（Modal） -->
 		<!-- 弹窗 -->
 		<div style="display: none" id="rejectModal">
 			<form class="layui-form" action="">
 				<input type="hidden" class="layui-layer-input"  name="meetingId" value="1">
 				<div class="layui-form-item">
 					<div class="layui-inline">
-						<label class="layui-form-label layui-required">驳回理由</label>
+						<label class="layui-form-label layui-required">驳回理由:</label>
 						<div class="layui-input-inline">
 							<select name="rejectReason" lay-verify="select" >
 								<option value="">-请选择-</option>
@@ -117,48 +118,6 @@
 				</div>
 			</form>
 		</div>
-		<div class="modal fade" id="input" tabindex="-1" role="dialog" aria-labelledby="inputLabel" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-							&times;
-						</button>
-						<h4 class="modal-title" id="inputLabel">驳回备注信息</h4>
-					</div>
-					<div class="modal-body content_form">
-						<form class="form-horizontal" role="form">
-							<div class="form-group">
-								<div class="col-sm-12 col-xs-12">
-									<span class="col-sm-3 col-xs-4 control-label">驳回理由：</span>
-									<div class="col-sm-9 col-xs-8">
-										<!-- 	                                    <input type="text" class="form-control" id="should_"/> -->
-										<div style="position:relative;">
-								            <span style="margin-left:100px;width:18px;overflow:hidden;">
-									            <select id="reject_select" style="width:235px;margin-left:-86px;height:31px;" onchange="getReason()">
-									                 <!-- <option value="m3/s">m3/s</option>
-									                 <option value="mm">mm</option>
-									                 <option value="℃">℃</option>
-									                 <option value="KV">KV</option>   -->
-									             </select>
-								             </span>
-											<input type="text" id="_should" style="width: 215px;margin-left: -239px;height: 31px;color:#000;">
-										</div>
-									</div>
-								</div>
-
-							</div>
-						</form>
-					</div>
-					<div class="modal-footer">
-						<input type="hidden" id="entry_id" value="" />
-						<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-						<button type="button" class="btn btn_main" onclick="Write()">确定</button>
-					</div>
-				</div>
-			</div>
-		</div>
-
 		<div id="editGroupModal" style="display: none;padding: 10px 0px;" >
 			<div class="layui-form custom_form"  id="personInfo"
 				 style="width: 960px;">
@@ -202,16 +161,16 @@
 				page:1,
 				size:10
 			};
+			var rejectId;
 			renderTable(1,pageInfo.size);
 			form.on('submit(searchForm)', function (data) {
 				renderTable(1,pageInfo.size);
 			})
 			form.on('submit(rejectForm)', function (data) {
-				console.log(data);
 				var url = "${PartyRejected}";
 				$.ajax({
 					url:url,
-					data:{meeting_id2:data.field.meetingId,should_:data.field.rejectReason},
+					data:{meeting_id2:rejectId,should_:data.field.rejectReason},
 					dataType:'json',
 					async:false,
 					success:function(res){
@@ -295,24 +254,26 @@
 					};
 				});
 			}
-			function pass(meeting_id){
+			function pass(meetingId){
 				layer.confirm('确认通过？', {
 					btn: ['确定','取消'] //按钮
 				}, function(){
 					$.ajax({
 						url:"${PartyPass}",
-						data:{"meeting_id":meeting_id},
+						data:{meetingId:meetingId},
 						dataType:'json',
-						success:function(){
-							layer.msg("审核成功");
-							renderTable(pageInfo.page,pageInfo.size);
+						success:function(res){
+							if(res.code == 200){
+								layer.msg("审核成功");
+								renderTable(pageInfo.page,pageInfo.size);
+							}
 						}
 					});
 				});
 			}
 			//点击驳回
 			function reject(meetingId){
-				$("#rejectModal input[name='meetingId']").val(meetingId);
+				rejectId = meetingId;
 				layer.prompt({
 					type: 1,
 					btn: 0,

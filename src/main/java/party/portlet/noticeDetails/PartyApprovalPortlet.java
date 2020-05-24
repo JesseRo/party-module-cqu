@@ -14,6 +14,7 @@ import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import com.alibaba.fastjson.JSONArray;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import dt.session.SessionManager;
@@ -22,8 +23,10 @@ import hg.party.dao.org.OrgDao;
 import hg.party.dao.party.PartyMeetingPlanInfoDao;
 import hg.party.dao.secondCommittee.MeetingNotesDao;
 import hg.party.entity.organization.Organization;
+import hg.party.entity.party.Hg_Value_Attribute_Info;
 import hg.party.entity.party.MeetingNote;
 import hg.party.entity.partyMembers.Member;
+import hg.party.server.dwonlistserver.DownListServer;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -62,6 +65,9 @@ public class PartyApprovalPortlet extends MVCPortlet {
     private PartyMeetingPlanInfoDao partyMeetingPlanInfo;
 
     @Reference
+    private DownListServer downListServer;
+
+    @Reference
 	private OrgDao orgDao;
 
     @Reference
@@ -95,7 +101,11 @@ public class PartyApprovalPortlet extends MVCPortlet {
             //会议内容
             String content = (String) meetingPlan.get("content");
             //附件
-            String attachment = (String) meetingPlan.get("attachment");
+            Object attachmentObj = meetingPlan.get("attachment");
+            if(attachmentObj!=null){
+                JSONArray jsonArray = JSONArray.parseArray((String)attachmentObj);
+                renderRequest.setAttribute("attachment", jsonArray);
+            }
             //参会人员
             String meetingUserId = (String) meetingPlan.get("participant_group");
             List<String> meetingUserList =  Arrays.asList(meetingUserId.split(","));
@@ -119,13 +129,14 @@ public class PartyApprovalPortlet extends MVCPortlet {
             renderRequest.setAttribute("time", time);
             renderRequest.setAttribute("content", content);
             renderRequest.setAttribute("meetingId", meetingId);
-            renderRequest.setAttribute("attachment", attachment);
             renderRequest.setAttribute("meetingPlan", meetingPlan);
             renderRequest.setAttribute("meetingUserName", meetingUserName);
             renderRequest.setAttribute("orgType", orgType);
             renderRequest.setAttribute("org", org);
+            renderRequest.setAttribute("orgId", orgId);
             renderRequest.setAttribute("hasCheckPermission", orgId.equals(org.getOrg_parent()));
-
+            List<Hg_Value_Attribute_Info> listValue = downListServer.reasson();
+            renderRequest.setAttribute("reasonList",listValue);
 
         } catch (Exception e) {
             e.printStackTrace();

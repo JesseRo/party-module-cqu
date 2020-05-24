@@ -6,7 +6,7 @@
 <link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/activity-manage1.css?v=1"/>
 <link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/common.min.css"/>
 <portlet:resourceURL id="/PartyOrganizationsRejectedCommand" var="PartyRejected" />
-<portlet:resourceURL id="/PartyReasonCommand" var="PartyReason" />
+<portlet:resourceURL id="/PartyPassCommand" var="PartyPass" />
 <portlet:resourceURL id="/part/meeting/page" var="PartyMeetingPage" />
 <!DOCTYPE html>
 <html>
@@ -114,14 +114,17 @@
 				width: 300px;
 				margin-right: 0px;
 			}
-			#personInfo .layui-form-item .layui-input-inline{
+			.layui-layer-content{
+				overflow: visible;
+			}
+			#rejectModal .layui-form-item .layui-input-inline{
 				width:200px
 			}
-			#personInfo .layui-form-label{
+			#rejectModal .layui-form-label{
 				width:140px;
 				font-weight:bold;
 			}
-			#personInfo .layui-form-label-text{
+			#rejectModal .layui-form-label-text{
 				float: left;
 				display: block;
 				padding: 0 10px;
@@ -167,48 +170,29 @@
 
 			</div>
 
-			<!-- 模态框（Modal） -->
-			 <div class="modal fade" id="input" tabindex="-1" role="dialog" aria-labelledby="inputLabel" aria-hidden="true">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-							&times;
-						</button>
-							<h4 class="modal-title" id="inputLabel">驳回备注信息</h4>
-						</div>
-						<div class="modal-body content_form">
-							<form class="form-horizontal" role="form">
-								<div class="form-group">
-									<div class="col-sm-12 col-xs-12">
-										<span class="col-sm-3 col-xs-4 control-label">驳回理由：</span>
-										<div class="col-sm-9 col-xs-8">
-	<!-- 	                                    <input type="text" class="form-control" id="_should"/> -->
-											<div style="position:relative;">
-												<span style="margin-left:100px;width:18px;overflow:hidden;">
-													<select id="reject_select" style="width:235px;margin-left:-86px;height:31px;" onchange="getReason()">
-														 <!-- <option value="m3/s">m3/s</option>
-														 <option value="mm">mm</option>
-														 <option value="℃">℃</option>
-														 <option value="KV">KV</option>   -->
-													 </select>
-												 </span>
-											  <input type="text" id="_should" style="width: 215px;margin-left: -239px;height: 31px;color:#000;">
-										   </div>
-										 </div>
-									</div>
-
-								</div>
-							</form>
-						</div>
-						<div class="modal-footer">
-							<input type="hidden" id="entry_id" value="" />
-							<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-							<button type="button" class="btn btn_main" onclick="Write()">确定</button>
+		</div>
+		<div style="display: none" id="rejectModal">
+			<form class="layui-form" action="">
+				<input type="hidden" class="layui-layer-input"  name="meetingId" value="1">
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label layui-required">驳回理由:</label>
+						<div class="layui-input-inline">
+							<select name="rejectReason" lay-verify="select" >
+								<option value="">-请选择-</option>
+								<c:forEach var="reason" items="${reasonList }">
+									<option value="${reason.resources_value}">${reason.resources_value}</option>
+								</c:forEach>
+							</select>
 						</div>
 					</div>
 				</div>
-			</div>
+
+				<div class="layui-layer-btn layui-layer-btn-">
+					<a class="layui-layer-btn0" type="button"  lay-submit="" lay-filter="rejectForm">确定</a>
+					<a class="layui-layer-btn1">取消</a>
+				</div>
+			</form>
 		</div>
 	</body>
 	<script type="text/html" id="meetingPlanTableBtns">
@@ -230,22 +214,51 @@
 			var table = layui.table,
 					layer = layui.layer,
 					form = layui.form;
-			renderTable();
+			var pageInfo = {
+				page:1,
+				size:10
+			};
+			var rejectId;
+			renderTable(1,pageInfo.size);
 			form.on('submit(searchForm)', function (data) {
-				renderTable();
+				renderTable(1,pageInfo.size);
 			})
-			function renderTable(){
+			form.on('submit(rejectForm)', function (data) {
+				var url = "${PartyRejected}";
+				$.ajax({
+					url:url,
+					data:{meeting_id2:rejectId,should_:data.field.rejectReason},
+					dataType:'json',
+					async:false,
+					success:function(res){
+						if(res){
+							layer.msg("驳回成功。");
+							renderTable(pageInfo.page,pageInfo.size);
+						}
+					}
+				});
+				return false;
+			})
+			form.verify({
+				select: function (value, item) {
+					if (value == '' || value == null) {
+						return "请选择必填项。";
+					}
+				}
+			});
+			function renderTable(page,size){
 				var  where = {
 					keyword: $("#searchForm input[name=keyword]").val()
 				};
-				table.render({
+				var ins = table.render({
 					elem: '#meetingPlanTable',
 					where: where,
 					height:560,
 					url: '${PartyMeetingPage}', //数据接口
 					method: 'post',
 					page: {
-						limit:10,   //每页条数
+						limit:size,   //每页条数
+						curr:page,
 						limits:[10,15,20],
 						prev:'&lt;上一页',
 						next:'下一页&gt;',
@@ -274,7 +287,11 @@
 							}},
 						{field: 'operation', align:'center', title: '操作',width:200,toolbar: '#meetingPlanTableBtns'},
 
-					]]
+					]],
+					done: function(res, curr, count){
+						pageInfo.page = curr;
+						pageInfo.size = ins.config.limit;
+					}
 				});
 				$(".layui-table-view .layui-table-page").addClass("layui-table-page-center");
 				$(".layui-table-view .layui-table-page").removeClass("layui-table-page");
@@ -282,19 +299,42 @@
 				table.on('tool(meetingPlanTable)', function(obj){
 					switch(obj.event){
 						case 'pass':
-							//pass(obj.data.meeting_id);
-							//renderDetail('check',obj);onclick=";"
-							Pass(obj.data.meeting_id);
+							pass(obj.data.meeting_id);
 							break;
 						case 'reject':
-							//renderDetail('check',obj);onclick="entry('${d.meeting_id }');
-							entry(obj.data.meeting_id);
+							reject(obj.data.meeting_id);
 							break;
 						case 'detail':
 							// renderDetail('check',obj);
 							window.location.href='/approvaldetails?meetingId='+obj.data.meeting_id;
 							break;
 					};
+				});
+			}
+			function pass(meetingId){
+				layer.confirm('确认通过？', {
+					btn: ['确定','取消'] //按钮
+				}, function(){
+					$.ajax({
+						url:"${PartyPass}",
+						data:{meetingId:meetingId},
+						dataType:'json',
+						success:function(res){
+							if(res.code == 200){
+								layer.msg("审核成功");
+								renderTable(pageInfo.page,pageInfo.size);
+							}
+						}
+					});
+				});
+			}
+			//点击驳回
+			function reject(meetingId){
+				rejectId = meetingId;
+				layer.prompt({
+					type: 1,
+					btn: 0,
+					content: $("#rejectModal")
 				});
 			}
 		});
@@ -313,65 +353,6 @@
 				if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
 			return fmt;
 		}
-		function Pass(meeting_id){
-			$.hgConfirm("提示","确认通过?");
-			$("#hg_confirm").modal("show");
-			$("#hg_confirm .btn_main").click(function(){
-				var url = "${PartyPass}";
-				$.ajax({
-					url:url,
-					data:{"meeting_id":meeting_id},
-					dataType:'json',
-					success:function(){
-						$("#hg_confirm").modal("hide");
-						$.tip("审核成功");
-						window.location.reload();
-					}
-				});
-			})
-		}
-		//点击驳回
-		function entry(meetingId){
-			$('#entry_id').val(meetingId);
-			$("#input").modal("show");
-			$("#reject_select").html("");
-			var url = "${PartyReason}";
-			$.ajax({
-				url:url,
-				data:{},
-				dataType:'json',
-				async:false,
-				success:function(res){
-					console.log(res);
-					for(var i=0;i<res.length;i++){
-						var _option = '<option data-id="'+ res[i].id +'" value="'+ res[i].resources_value +'">'+ res[i].resources_value +'</option>'
-						$("#reject_select").append(_option);
-					}
-				}
-			});
-		}
 
-		//驳回保存
-		function Write(){
-			var meeting_id2 = $('#entry_id').val();//会议id
-			var should_ = $('#_should').val(); //驳回备注
-			var url = "${PartyRejected}";
-			$.ajax({
-				url:url,
-				data:{meeting_id2:meeting_id2,should_:should_},
-				dataType:'json',
-				async:false,
-				success:function(succee){
-					$('#input').modal('hide');
-					window.location.reload();
-				}
-			});
-		}
-
-		//用于选择理由更换赋值给文本框
-		function getReason(){
-			var text=$("#reject_select").val();
-			$("#_should").val(text);
-		}
 	</script>
 </html>

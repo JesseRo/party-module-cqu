@@ -94,7 +94,7 @@
             text-align: center;
         }
         .layui-table-box table thead, .layui-table-box tbody tr{
-            display: table;
+            display: table-row;
             width: 100%;
             table-layout: fixed;
         }
@@ -268,7 +268,9 @@
                         <div class="layui-inline">
                             <label class="layui-form-label layui-required">计划内容：</label>
                             <div class="layui-input-inline meetingContent">
-                                <script id="meetingContent" name="meetingContent" type="text/plain"></script>
+                                <script id="meetingContent" name="meetingContent" type="text/plain">
+                                    ${m.content}
+                                </script>
                             </div>
                         </div>
                     </div>
@@ -425,8 +427,13 @@
             page:1,
             size:10
         };
-        var checkedGroup = new Array();
-        var fileData = new Array();
+        var checkedGroup =  new Array();
+        var fileData
+        if('${m.attachment}'==''||'${m.attachment}'=='null'){
+            fileData = new Array();
+        }else{
+            fileData =  eval("(" +'${m.attachment}' + ")");
+        }
         renderEditor();
         renderUpload();
         renderDateSelect();
@@ -478,14 +485,18 @@
                 ,accept: 'file'
                 ,done: function(res){
                     if(res.code == 200){
-                        layer.msg('上传成功');
-                        fileData.push({
-                            name:res.data.name,
-                            size:res.data.size,
-                            status:true,
-                            path:res.data.path
-                        })
-                        renderFilesTable();
+                        if(fileData.length>6){
+                            layer.msg('文件不能超过6个，如果数量过多请压缩后再上传。');
+                        }else{
+                            layer.msg('上传成功');
+                            fileData.push({
+                                name:res.data.name,
+                                size:res.data.size,
+                                status:true,
+                                path:res.data.path
+                            })
+                            renderFilesTable();
+                        }
                     }else{
                         layer.msg(res.message);
                     }
@@ -586,11 +597,13 @@
         function renderFilesTable(){
             var cols = [[
                 {field: 'name', align:'center', title: '文件名',templet:function(d){
-                        return '<a href="'+d.path+'">'+d.name+'</a>';
+                        return '<a href="'+d.path+'" download="'+d.path+'">'+d.name+'</a>';
                     }
                 }
-                ,{field: 'size', width:120, align:'center', title: '大小'}
-                ,{field: 'status', width:120, align:'center', title: '状态',templet:function(d){
+                ,{field: 'size', width:120, align:'center', title: '大小',templet:function(d){
+                        return (d.size/1024).toFixed(2)+"M";
+                    }}
+                ,{field: 'status', width:80, align:'center', title: '状态',templet:function(d){
                     if(d.status){
                         return '成功';
                     }else{
@@ -598,7 +611,7 @@
                     }
                     }
                 }
-                ,{field: 'name', title: '操作', width:240, align:'center',toolbar: '#fileTableTool'}
+                ,{field: 'name', title: '操作', width:80, align:'center',toolbar: '#fileTableTool'}
             ]];
             var ins = table.render({
                 elem: '#fileTable'
@@ -617,7 +630,14 @@
             });
         }
         function deleteFile(file){
-            layer.msg("功能开放中。")
+           var  files = new Array();
+           for(var i=0;i<fileData.length&&fileData.length>0;i++){
+               if(file.path!=fileData[i].path){
+                   files.push(fileData[i]);
+               }
+           }
+           fileData = files;
+           renderFilesTable();
         }
         function renderGroupTable(page,size){
             var  where = {};
@@ -775,6 +795,7 @@
             var postData= data.field;
             postData.graft = true;
             postData.host =  postData.host.join(",");
+            postData.attachment = JSON.stringify(fileData);
             postData.participate =  postData.participate.join(",");
             $.post("${saveMeetingPlan}", postData, function (res) {
                 if (res.code==200) {
@@ -788,6 +809,7 @@
             postData.graft = false;
             postData.host =  postData.host.join(",");
             postData.participate =  postData.participate.join(",");
+            postData.attachment = JSON.stringify(fileData);
             $.post("${saveMeetingPlan}", postData, function (res) {
                 if (res.code==200) {
                     layer.msg("发布成功。");

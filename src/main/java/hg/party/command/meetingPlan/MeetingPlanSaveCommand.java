@@ -66,7 +66,7 @@ public class MeetingPlanSaveCommand implements MVCResourceCommand {
 
         boolean graft = ParamUtil.getBoolean(resourceRequest, "graft");
         String meetingId = ParamUtil.getString(resourceRequest, "meeting_id");
-
+        String attachment = ParamUtil.getString(resourceRequest, "attachment");
         campus = HtmlUtil.escape(campus);
         startDate = HtmlUtil.escape(startDate);
         host = HtmlUtil.escape(host);
@@ -104,6 +104,7 @@ public class MeetingPlanSaveCommand implements MVCResourceCommand {
             m.setContent(content);
             m.setSit(sit);
             m.setCampus(campus);
+            m.setAttachment(attachment);
 
             LocalDateTime ldTime = LocalDateTime.now(ZoneId.of("Asia/Shanghai"));
             Timestamp t = Timestamp.valueOf(ldTime);
