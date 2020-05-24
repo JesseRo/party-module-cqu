@@ -2,6 +2,7 @@
 <%@ include file="/init.jsp" %>
 <portlet:resourceURL id="/PartyPassCommand" var="PartyPass" />
 <portlet:resourceURL id="/PartyRejectedCommand" var="PartyRejected" />
+<portlet:resourceURL id="/api/download" var="downloadUrl" />
 <html>
 	<head>
 		 <link rel="stylesheet" href="${basePath }/css/details.css" />
@@ -9,6 +10,9 @@
 		 	.details_content_title >p{
 		 		text-align:left!important;
 		 	}
+			#rejectModal{
+				overflow: visible;
+			}
 			#rejectModal .layui-form-item .layui-input-inline{
 				width:200px
 			}
@@ -76,6 +80,21 @@
 						<div class="details_content_info" style="word-wrap:break-word">
 							${content }
 						</div>
+						<div class="details_content_title" style="border-bottom: 0px solid #e1e1e1;">
+							<div class="col-sm-12 col-xs-12">
+								<span>附件内容：</span>
+								<ul>
+									<c:forEach var="file" items="${attachment }">
+										<li><a href="javascript:void(0)" path="${file.path}" name="${file.name}">${file.name}</a></li>
+									</c:forEach>
+								</ul>
+							</div>
+						</div>
+						<c:if test="${meetingPlan.status == '3'}">
+							<div class="details_content_title" style="border-bottom: 0px solid #e1e1e1;">
+								<p class="col-sm-12 col-xs-12"><span>驳回原因：</span>${meetingPlan.remark }</p>
+							</div>
+						</c:if>
 						<c:if test="${hasNote}">
 							<div class="details_content_title" style="border-bottom: 0px solid #e1e1e1;">
 								<p class="col-sm-6 col-xs-12"><span>实到人员：</span>${attendances }</p>
@@ -190,6 +209,11 @@
 					});
 				});
 			})
+			function downloadFile(){
+				var path = $(this).attr("path");
+				var name = $(this).attr("name");
+				window.location.href="${downloadUrl}&filePath="+path+"&fileName="+name;
+			}
 		</script>
 	</div>
 	</body>

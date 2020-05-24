@@ -2,9 +2,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ include file="/init.jsp" %>
+<portlet:resourceURL id="/org/meeting/page" var="OrgMeetingPage" />
+<portlet:resourceURL id="/api/download" var="downloadUrl" />
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport"
@@ -12,7 +13,6 @@
     <title>二级党委-待办事项</title>
     <link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/activity-manage1.css?v=1"/>
     <link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/common.min.css"/>
-    <portlet:resourceURL id="/org/meeting/page" var="OrgMeetingPage" />
     <style type="text/css">
         .content_table thead tr{
             background: #F6F8FC;
@@ -36,6 +36,9 @@
             display: table-row !important;
             width: 100%;
             table-layout: fixed;
+        }
+        .layui-table-body .layui-table-cell{
+            height: auto;
         }
         #searchForm .layui-form-item .layui-inline .keyword {
             width: 300px;
@@ -295,8 +298,21 @@
                             }
                             return status;
                         }},
-                    {field: 'operation', align:'center', title: '操作',width:200,toolbar: '#meetingPlanTableBtns'},
-
+                    {field: 'operation', align:'center', title: '操作',width:160,toolbar: '#meetingPlanTableBtns'},
+                    {field: 'attachment', align:'center', title: '附件',width:200,templet:function(d){
+                            var fileData;
+                            if(d.attachment==''||d.attachment==null || d.attachment == undefined ){
+                                fileData = new Array();
+                            }else{
+                                fileData =  eval("(" + d.attachment + ")");
+                            }
+                            var ul = '<ul>';
+                            for(var i=0;fileData.length>0 && i<fileData.length;i++){
+                                ul = ul +'<li><a href="javascript:void(0)" path="'+fileData[i].path+'" name="'+fileData[i].name+'" onclick="downloadFile()">'+fileData[i].name+'</a></li>';
+                            }
+                            ul = ul +'</ul>';
+                            return ul;
+                    }}
                 ]]
             });
             $(".layui-table-view .layui-table-page").addClass("layui-table-page-center");
@@ -314,7 +330,13 @@
                 };
             });
         }
+
     });
+    function downloadFile(){
+        var path = $(this).attr("path");
+        var name = $(this).attr("name");
+        window.location.href="${downloadUrl}&filePath="+path+"&fileName="+name;
+    }
     Date.prototype.format = function (fmt) {
         var o = {
             "M+": this.getMonth() + 1, //月份

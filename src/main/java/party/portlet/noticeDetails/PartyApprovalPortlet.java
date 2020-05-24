@@ -14,6 +14,7 @@ import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import com.alibaba.fastjson.JSONArray;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import dt.session.SessionManager;
@@ -100,7 +101,11 @@ public class PartyApprovalPortlet extends MVCPortlet {
             //会议内容
             String content = (String) meetingPlan.get("content");
             //附件
-            String attachment = (String) meetingPlan.get("attachment");
+            Object attachmentObj = meetingPlan.get("attachment");
+            if(attachmentObj!=null){
+                JSONArray jsonArray = JSONArray.parseArray((String)attachmentObj);
+                renderRequest.setAttribute("attachment", jsonArray);
+            }
             //参会人员
             String meetingUserId = (String) meetingPlan.get("participant_group");
             List<String> meetingUserList =  Arrays.asList(meetingUserId.split(","));
@@ -124,7 +129,6 @@ public class PartyApprovalPortlet extends MVCPortlet {
             renderRequest.setAttribute("time", time);
             renderRequest.setAttribute("content", content);
             renderRequest.setAttribute("meetingId", meetingId);
-            renderRequest.setAttribute("attachment", attachment);
             renderRequest.setAttribute("meetingPlan", meetingPlan);
             renderRequest.setAttribute("meetingUserName", meetingUserName);
             renderRequest.setAttribute("orgType", orgType);

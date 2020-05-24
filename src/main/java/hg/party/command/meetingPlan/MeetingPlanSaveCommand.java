@@ -77,7 +77,6 @@ public class MeetingPlanSaveCommand implements MVCResourceCommand {
         timeLasts = HtmlUtil.escape(timeLasts);
         sit = HtmlUtil.escape(sit);
         meetingId = HtmlUtil.escape(meetingId);
-        attachment = HtmlUtil.escape(attachment);
         PrintWriter printWriter = null;
         try {
             printWriter = resourceResponse.getWriter();

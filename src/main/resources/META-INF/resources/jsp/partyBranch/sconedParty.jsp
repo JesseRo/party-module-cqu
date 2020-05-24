@@ -428,7 +428,12 @@
             size:10
         };
         var checkedGroup =  new Array();
-        var fileData = '${m.attachment}' == ''?new Array():JSON.parse('${m.attachment}');
+        var fileData
+        if('${m.attachment}'==''||'${m.attachment}'=='null'){
+            fileData = new Array();
+        }else{
+            fileData =  eval("(" +'${m.attachment}' + ")");
+        }
         renderEditor();
         renderUpload();
         renderDateSelect();
@@ -592,7 +597,7 @@
         function renderFilesTable(){
             var cols = [[
                 {field: 'name', align:'center', title: '文件名',templet:function(d){
-                        return '<a href="'+d.path+'" download="'+d.name+'">'+d.name+'</a>';
+                        return '<a href="'+d.path+'" download="'+d.path+'">'+d.name+'</a>';
                     }
                 }
                 ,{field: 'size', width:120, align:'center', title: '大小',templet:function(d){

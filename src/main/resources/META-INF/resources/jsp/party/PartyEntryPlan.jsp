@@ -114,6 +114,9 @@
 				width: 300px;
 				margin-right: 0px;
 			}
+			#rejectModal{
+				overflow: visible;
+			}
 			#rejectModal .layui-form-item .layui-input-inline{
 				width:200px
 			}

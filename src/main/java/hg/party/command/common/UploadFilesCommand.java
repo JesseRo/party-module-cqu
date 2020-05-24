@@ -21,11 +21,8 @@ import org.springframework.util.StringUtils;
 import party.constants.PartyPortletKeys;
 
 import javax.portlet.*;
-import javax.servlet.http.HttpServletRequest;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.io.PrintWriter;
 
 /**
@@ -60,13 +57,13 @@ public class UploadFilesCommand implements MVCResourceCommand {
             // 从uploadRequest获得File对象
             File uploadedFile = uploadRequest.getFile(fileInputName);
             String tempPath = uploadedFile.getAbsolutePath();
-            String rootPath = tempPath.substring(0,tempPath.indexOf("\\temp"))+File.separator+"webapps";
+            String rootPath = tempPath.substring(0,tempPath.indexOf("\\temp"))+ File.separator+"webapps";
             String path =SAVE_PATH;
             if(ableDelete){
-                path =  path +File.separator +TEMP;
+                path =  path + File.separator +TEMP;
             }else{
                 if(!StringUtils.isEmpty(bucket)){
-                    path =  path +File.separator +REPOSITORY +File.separator +bucket;
+                    path =  path + File.separator +REPOSITORY + File.separator +bucket;
                 }else{
                     printWriter.write(JSON.toJSONString(ResultUtil.fail("不可删除文件，参数bucket不能为空。")));
                     return false;
@@ -91,7 +88,7 @@ public class UploadFilesCommand implements MVCResourceCommand {
             File file = new File(savePath);
             // 保存文件到物理路径
             FileUtils.copyFile(uploadedFile, file);
-            printWriter.write(JSON.toJSONString(ResultUtil.success(new FileVM(sourceFileName,uploadedFile.length(),path+ File.separator + sourceFileName))));
+            printWriter.write(JSON.toJSONString(ResultUtil.success(new FileVM(sourceFileName,uploadedFile.length(),path+  File.separator + sourceFileName))));
         } catch (Exception e) {
             e.printStackTrace();
         }
