@@ -10,7 +10,7 @@
 		 	.details_content_title >p{
 		 		text-align:left!important;
 		 	}
-			#rejectModal{
+			.layui-layer-content{
 				overflow: visible;
 			}
 			#rejectModal .layui-form-item .layui-input-inline{
@@ -39,14 +39,19 @@
 			<div class="breadcrumb_group" style="margin-bottom: 20px;">
 				当前位置：
 				<span class="layui-breadcrumb" lay-separator=">">
-                        <a href="javascript:;">组织生活管理</a>
-					   <c:if test="${orgType == 'organization'}" >
-						   <a href="javascript:;" onclick="window.location.href='/approvalplanone'">审批计划</a>
-					   </c:if>
+					<a href="javascript:;">组织生活管理</a>
+					<c:if test="${org == orgId}" >
+						<a href="javascript:;">已发计划</a>
+					</c:if>
+					<c:if test="${org!= orgId}" >
+						<c:if test="${orgType == 'organization'}" >
+							<a href="javascript:;" onclick="window.location.href='/approvalplanone'">审批计划</a>
+						</c:if>
 						<c:if test="${orgType == 'secondary'}" >
 							<a href="javascript:;" onclick="window.location.href='/approvalplantwo'">审批计划</a>
 						</c:if>
-                        <a href="javascript:;">计划详情</a>
+					</c:if>
+					<a href="javascript:;">计划详情</a>
                     </span>
 			</div>
 			<div class="bg_white_container">
@@ -90,7 +95,7 @@
 								</ul>
 							</div>
 						</div>
-						<c:if test="${meetingPlan.status == '3'}">
+						<c:if test="${meetingPlan.task_status == '3'}">
 							<div class="details_content_title" style="border-bottom: 0px solid #e1e1e1;">
 								<p class="col-sm-12 col-xs-12"><span>驳回原因：</span>${meetingPlan.remark }</p>
 							</div>
@@ -138,7 +143,7 @@
 					<input type="hidden" class="layui-layer-input"  name="meetingId" value="1">
 					<div class="layui-form-item">
 						<div class="layui-inline">
-							<label class="layui-form-label layui-required">驳回理由</label>
+							<label class="layui-form-label layui-required">驳回理由:</label>
 							<div class="layui-input-inline">
 								<select name="rejectReason" lay-verify="select" >
 									<option value="">-请选择-</option>

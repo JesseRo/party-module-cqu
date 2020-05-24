@@ -24,6 +24,7 @@ import javax.portlet.*;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.util.UUID;
 
 /**
  * 通用文件上传接口
@@ -56,8 +57,7 @@ public class UploadFilesCommand implements MVCResourceCommand {
             String bucket = ParamUtil.getString(uploadRequest, "bucket");
             // 从uploadRequest获得File对象
             File uploadedFile = uploadRequest.getFile(fileInputName);
-            String tempPath = uploadedFile.getAbsolutePath();
-            String rootPath = tempPath.substring(0,tempPath.indexOf("\\temp"))+ File.separator+"webapps";
+            String rootPath = System.getProperty("catalina.home")+ File.separator+"webapps";
             String path =SAVE_PATH;
             if(ableDelete){
                 path =  path + File.separator +TEMP;
@@ -84,11 +84,12 @@ public class UploadFilesCommand implements MVCResourceCommand {
                 return false;
             }
             // 最终的文件路径
-            String savePath = folder.getAbsolutePath() + File.separator + sourceFileName;
+            String uuid = UUID.randomUUID().toString();
+            String savePath = folder.getAbsolutePath() + File.separator + uuid;
             File file = new File(savePath);
             // 保存文件到物理路径
             FileUtils.copyFile(uploadedFile, file);
-            printWriter.write(JSON.toJSONString(ResultUtil.success(new FileVM(sourceFileName,uploadedFile.length(),path+  File.separator + sourceFileName))));
+            printWriter.write(JSON.toJSONString(ResultUtil.success(new FileVM(sourceFileName,uploadedFile.length(),path+  File.separator + uuid))));
         } catch (Exception e) {
             e.printStackTrace();
         }

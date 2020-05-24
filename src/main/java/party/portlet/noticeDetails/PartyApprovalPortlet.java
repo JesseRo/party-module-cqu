@@ -133,6 +133,7 @@ public class PartyApprovalPortlet extends MVCPortlet {
             renderRequest.setAttribute("meetingUserName", meetingUserName);
             renderRequest.setAttribute("orgType", orgType);
             renderRequest.setAttribute("org", org);
+            renderRequest.setAttribute("orgId", orgId);
             renderRequest.setAttribute("hasCheckPermission", orgId.equals(org.getOrg_parent()));
             List<Hg_Value_Attribute_Info> listValue = downListServer.reasson();
             renderRequest.setAttribute("reasonList",listValue);

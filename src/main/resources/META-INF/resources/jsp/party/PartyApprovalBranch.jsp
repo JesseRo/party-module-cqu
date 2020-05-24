@@ -40,7 +40,7 @@
 				width: 300px;
 				margin-right: 0px;
 			}
-			#rejectModal{
+			.layui-layer-content{
 				overflow: visible;
 			}
 			#rejectModal .layui-form-item .layui-input-inline{
@@ -100,7 +100,7 @@
 				<input type="hidden" class="layui-layer-input"  name="meetingId" value="1">
 				<div class="layui-form-item">
 					<div class="layui-inline">
-						<label class="layui-form-label layui-required">驳回理由</label>
+						<label class="layui-form-label layui-required">驳回理由:</label>
 						<div class="layui-input-inline">
 							<select name="rejectReason" lay-verify="select" >
 								<option value="">-请选择-</option>
@@ -245,7 +245,6 @@
 							pass(obj.data.meeting_id);
 							break;
 						case 'reject':
-							console.log(obj.data);
 							reject(obj.data.meeting_id);
 							break;
 						case 'detail':
