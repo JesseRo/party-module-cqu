@@ -94,7 +94,8 @@ public class RetentionDao extends PostgresqlDaoImpl<Retention> {
 
     public PageQueryResult<Map<String, Object>> findRootPage(int page, int size, String name,  boolean completed, String startDate, String endDate) {
         String sql = "select t.*, o.org_name from hg_party_retention t " +
-                "left join hg_party_org o on t.org_id = o.org_id";
+                "left join hg_party_org o on t.org_id = o.org_id " +
+                "where 1 = 1";
         List<Object> params = new ArrayList<>();
         if (!StringUtils.isEmpty(name)) {
             sql += " and (t.user_name like ? or o.org_name like ?)";
@@ -126,7 +127,8 @@ public class RetentionDao extends PostgresqlDaoImpl<Retention> {
 
     public List<Map<String, Object>> findRoot(String name, boolean completed, String startDate, String endDate) {
         String sql = "select t.*, o.org_name from hg_party_retention t " +
-                "left join hg_party_org o on t.org_id = o.org_id";
+                "left join hg_party_org o on t.org_id = o.org_id" +
+                " where 1 = 1";
         List<Object> params = new ArrayList<>();
         if (!StringUtils.isEmpty(name)) {
             sql += " and (t.user_name like ? or o.org_name like ?)";

@@ -56,16 +56,17 @@ public class RetentionPageCommand implements MVCResourceCommand {
 		String name = ParamUtil.getString(resourceRequest, "memberName");
 		String startDate = ParamUtil.getString(resourceRequest, "startDate");
 		String endDate = ParamUtil.getString(resourceRequest, "endDate");
+		boolean completed = ParamUtil.getBoolean(resourceRequest, "completed");
 		PageQueryResult<Map<String, Object>> data = null;
 		if (!StringUtils.isEmpty(name)){
 			name = "%" + name + "%";
 		}
 		if (organization.getOrg_type().equalsIgnoreCase(ConstantsKey.ORG_TYPE_SECONDARY)){
-			data = retentionDao.findSecondaryPage(page, size, orgId, name, false, startDate, endDate);
+			data = retentionDao.findSecondaryPage(page, size, orgId, name, completed, startDate, endDate);
 		}else if (organization.getOrg_type().equalsIgnoreCase(ConstantsKey.ORG_TYPE_ROOT)){
-			data = retentionDao.findRootPage(page, size, name, false, startDate, endDate);
+			data = retentionDao.findRootPage(page, size, name, completed, startDate, endDate);
 		} else if (organization.getOrg_type().equalsIgnoreCase(ConstantsKey.ORG_TYPE_BRANCH)) {
-			data = retentionDao.findBrunchPage(page, size, orgId, name, false, startDate, endDate);
+			data = retentionDao.findBrunchPage(page, size, orgId, name, completed, startDate, endDate);
 		} else {
 			data = null;
 		}

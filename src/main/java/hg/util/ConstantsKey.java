@@ -112,7 +112,6 @@ public class ConstantsKey {
     {
         RETENTION_MAPPING.put("user_name", "人员姓名");
         RETENTION_MAPPING.put("org_name", "所在支部");
-        RETENTION_MAPPING.put("to_org_name", "去往单位");
         RETENTION_MAPPING.put("time", "申请时间");
         RETENTION_MAPPING.put("status", "状态");
     }
