@@ -10,6 +10,7 @@ import party.portlet.transport.entity.PageQueryResult;
 import party.portlet.transport.entity.Retention;
 import party.portlet.transport.entity.Transport;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -27,78 +28,125 @@ public class RetentionDao extends PostgresqlDaoImpl<Retention> {
         }
     }
 
-    public PageQueryResult<Map<String, Object>> findSecondaryPage(int page, int size, String orgId, String name) {
+    public PageQueryResult<Map<String, Object>> findSecondaryPage(int page, int size, String orgId, String name, boolean completed, String startDate, String endDate) {
         String sql = "select t.*, o.org_name from hg_party_retention t " +
                 "left join hg_party_org o on t.org_id = o.org_id" +
-                " where o.org_parent = ? order by t.status asc";
+                " where o.org_parent = ?";
+        List<Object> params = new ArrayList<>();
+        params.add(orgId);
         if (!StringUtils.isEmpty(name)) {
-            sql += " and t.user_name like ?";
+            sql += " and (t.user_name like ? or o.org_name like ?)";
+            params.add(name);
+            params.add(name);
+        }
+        if (completed) {
+            sql += " and t.status = 1";
+        }
+        if (!StringUtils.isEmpty(startDate)) {
+            sql += " and time > ?::DATE ";
+            params.add(startDate);
+        }
+        if (!StringUtils.isEmpty(endDate)) {
+            sql += " and time < ?::DATE ";
+            params.add(endDate);
         }
         if (size <= 0) {
             size = 10;
         }
+        sql += " order by t.id desc";
         try {
-            if (!StringUtils.isEmpty(name)) {
-                return pageBySql(page, size, sql, orgId, name);
-            }
-            return pageBySql(page, size, sql, orgId);
+            return pageBySql(page, size, sql, params);
         } catch (Exception e) {
             return null;
         }
     }
 
 
-    public List<Map<String, Object>> findSecondary(String orgId, String name) {
+    public List<Map<String, Object>> findSecondary(String orgId, String name, boolean completed, String startDate, String endDate) {
         String sql = "select t.*, o.org_name from hg_party_retention t " +
                 "left join hg_party_org o on t.org_id = o.org_id" +
-                " where o.org_parent = ? order by t.status asc";
+                " where o.org_parent = ?";
+        List<Object> params = new ArrayList<>();
+        params.add(orgId);
         if (!StringUtils.isEmpty(name)) {
-            sql += " and t.user_name like ?";
+            sql += " and (t.user_name like ? or o.org_name like ?)";
+            params.add(name);
+            params.add(name);
+        }
+        if (completed) {
+            sql += " and t.status = 1";
+        }
+        if (!StringUtils.isEmpty(startDate)) {
+            sql += " and time > ?::DATE ";
+            params.add(startDate);
+        }
+        if (!StringUtils.isEmpty(endDate)) {
+            sql += " and time < ?::DATE ";
+            params.add(endDate);
         }
         try {
-            if (!StringUtils.isEmpty(name)) {
-                return jdbcTemplate.queryForList(sql, orgId, name);
-            }
-            return jdbcTemplate.queryForList(sql, orgId);
+            return jdbcTemplate.queryForList(sql, params.toArray(new Object[0]));
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    public PageQueryResult<Map<String, Object>> findRootPage(int page, int size, String name) {
+    public PageQueryResult<Map<String, Object>> findRootPage(int page, int size, String name,  boolean completed, String startDate, String endDate) {
         String sql = "select t.*, o.org_name from hg_party_retention t " +
-                "left join hg_party_org o on t.org_id = o.org_id" +
-                " order by status asc";
+                "left join hg_party_org o on t.org_id = o.org_id";
+        List<Object> params = new ArrayList<>();
         if (!StringUtils.isEmpty(name)) {
-            sql += " and t.user_name like ?";
+            sql += " and (t.user_name like ? or o.org_name like ?)";
+            params.add(name);
+            params.add(name);
+        }
+        if (completed) {
+            sql += " and t.status = 1";
+        }
+        if (!StringUtils.isEmpty(startDate)) {
+            sql += " and time > ?::DATE ";
+            params.add(startDate);
+        }
+        if (!StringUtils.isEmpty(endDate)) {
+            sql += " and time < ?::DATE ";
+            params.add(endDate);
         }
         if (size <= 0) {
             size = 10;
         }
+        sql += " order by t.id desc";
         try {
-            if (!StringUtils.isEmpty(name)) {
-                return pageBySql(page, size, sql, name);
-            }
-            return pageBySql(page, size, sql);
+            return pageBySql(page, size, sql, params);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    public List<Map<String, Object>> findRoot(String name) {
+    public List<Map<String, Object>> findRoot(String name, boolean completed, String startDate, String endDate) {
         String sql = "select t.*, o.org_name from hg_party_retention t " +
-                "left join hg_party_org o on t.org_id = o.org_id" +
-                " order by status asc";
+                "left join hg_party_org o on t.org_id = o.org_id";
+        List<Object> params = new ArrayList<>();
         if (!StringUtils.isEmpty(name)) {
-            sql += " and t.user_name like ?";
+            sql += " and (t.user_name like ? or o.org_name like ?)";
+            params.add(name);
+            params.add(name);
         }
+        if (completed) {
+            sql += " and t.status = 1";
+        }
+        if (!StringUtils.isEmpty(startDate)) {
+            sql += " and time > ?::DATE ";
+            params.add(startDate);
+        }
+        if (!StringUtils.isEmpty(endDate)) {
+            sql += " and time < ?::DATE ";
+            params.add(endDate);
+        }
+        sql += " order by t.id desc";
         try {
-            if (!StringUtils.isEmpty(name)) {
-                return jdbcTemplate.queryForList(sql, name);
-            }
-            return jdbcTemplate.queryForList(sql);
+            return jdbcTemplate.queryForList(sql, params.toArray(new Object[0]));
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -115,60 +163,95 @@ public class RetentionDao extends PostgresqlDaoImpl<Retention> {
         }
     }
 
-    public List<Map<String, Object>> findBrunch(String orgId, String name) {
+    public List<Map<String, Object>> findBrunch(String orgId, String name, boolean completed, String startDate, String endDate) {
         String sql = "select t.*, o.org_name from hg_party_retention t " +
                 "left join hg_party_org o on t.org_id = o.org_id" +
-                " where o.org_id = ? order by t.status asc";
+                " where o.org_id = ?";
+        List<Object> params = new ArrayList<>();
+        params.add(orgId);
         if (!StringUtils.isEmpty(name)) {
-            sql += " and t.user_name like ?";
+            sql += " and (t.user_name like ? or o.org_name like ?)";
+            params.add(name);
+            params.add(name);
         }
+        if (completed) {
+            sql += " and t.status = 1";
+        }
+        if (!StringUtils.isEmpty(startDate)) {
+            sql += " and time > ?::DATE ";
+            params.add(startDate);
+        }
+        if (!StringUtils.isEmpty(endDate)) {
+            sql += " and time < ?::DATE ";
+            params.add(endDate);
+        }
+        sql += " order by t.id desc";
         try {
-            if (!StringUtils.isEmpty(name)) {
-                return jdbcTemplate.queryForList(sql, orgId, name);
-            }
-            return jdbcTemplate.queryForList(sql, orgId);
+            return jdbcTemplate.queryForList(sql, params.toArray(new Object[0]));
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    public PageQueryResult<Map<String, Object>> findBrunchPage(int page, int size, String orgId, String name) {
+    public PageQueryResult<Map<String, Object>> findBrunchPage(int page, int size, String orgId, String name,boolean completed, String startDate, String endDate) {
         String sql = "select t.*, o.org_name from hg_party_retention t " +
                 "left join hg_party_org o on t.org_id = o.org_id" +
-                " where o.org_id = ? order by t.status asc";
+                " where o.org_id = ?";
+        List<Object> params = new ArrayList<>();
+        params.add(orgId);
         if (!StringUtils.isEmpty(name)) {
-            sql += " and t.user_name like ?";
+            sql += " and (t.user_name like ? or o.org_name like ?)";
+            params.add(name);
+            params.add(name);
+        }
+        if (completed) {
+            sql += " and t.status = 1";
+        }
+        if (!StringUtils.isEmpty(startDate)) {
+            sql += " and time > ?::DATE ";
+            params.add(startDate);
+        }
+        if (!StringUtils.isEmpty(endDate)) {
+            sql += " and time < ?::DATE ";
+            params.add(endDate);
+        }
+        sql += " order by t.id desc";
+        if (size <= 0) {
+            size = 10;
         }
         try {
-            if (!StringUtils.isEmpty(name)) {
-                return pageBySql(page, size, sql, orgId, name);
-            }
-            return pageBySql(page, size, sql, orgId);
+            return pageBySql(page, size, sql, params);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    public PageQueryResult<Map<String, Object>> pageBySql(int pageNow, int pageSize, String sql, Object... object) {
+    public PageQueryResult<Map<String, Object>> pageBySql(int pageNow, int pageSize, String sql, List<Object> objects) {
         if (pageNow <= 0) {
             pageNow = 0;
         } else {
             --pageNow;
         }
 
-        List<Map<String, Object>> list = this.listBySql(pageNow, pageSize, sql, object);
-        int count = this.postGresql_countBySql(sql, object);
+        List<Map<String, Object>> list = this.listBySql(pageNow, pageSize, sql, objects);
+        int count = this.countBySql(sql, objects);
         return new PageQueryResult(list, count, pageNow, pageSize);
     }
 
-    private List<Map<String, Object>> listBySql(int pageNo, int pageSize, String sql, Object... objects) {
+
+    public int countBySql(String sql, List<Object> objects) {
+        List<Map<String, Object>> maps = this.jdbcTemplate.queryForList(sql, objects.toArray(new Object[0]));
+        return null == maps ? 0 : maps.size();
+    }
+    private List<Map<String, Object>> listBySql(int pageNo, int pageSize, String sql, List<Object> objects) {
         StringBuffer exeSql = new StringBuffer();
         exeSql.append(sql);
         exeSql.append(" LIMIT ? OFFSET ? ");
-        if (objects != null && objects.length != 0) {
-            List list = Arrays.stream(objects).collect(Collectors.toList());
+        if (objects != null && objects.size() != 0) {
+            List list = new ArrayList();
+            list.addAll(objects);
             list.add(pageSize);
             list.add(pageNo * pageSize);
             return this.jdbcTemplate.queryForList(exeSql.toString(), list.toArray(new Object[0]));

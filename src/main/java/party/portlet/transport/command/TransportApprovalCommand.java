@@ -111,7 +111,7 @@ public class TransportApprovalCommand implements MVCResourceCommand {
                             orgAdminDao.deleteOrgAdmin(member.getMember_identity(), PartyOrgAdminTypeEnum.BRANCH);
                         } else if (transport.getType().equalsIgnoreCase("2")) {
                             //市内
-                            userDao.delete(user);
+                            userDao.logicDelete(user.getUser_id());
                             memberDao.historic(member);
                         }
                         transport.setStatus(status);
@@ -124,7 +124,7 @@ public class TransportApprovalCommand implements MVCResourceCommand {
                             || transport.getType().equalsIgnoreCase("3")) {
                         User user = userDao.findUserByEthnicity(transport.getUser_id());
                         Member member = memberDao.findByUserId(transport.getUser_id());
-                        userDao.delete(user);
+                        userDao.logicDelete(user.getUser_id());
                         memberDao.historic(member);
                         transport.setStatus(status);
                     }

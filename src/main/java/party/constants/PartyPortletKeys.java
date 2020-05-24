@@ -118,6 +118,8 @@ public class PartyPortletKeys {
 
     public static final String TransportApproval = "TransportApproval";
 
+    public static final String TransportCompleted = "TransportCompleted";
+
     public static final String PeriodPortlet = "PeriodPortlet";
 
     public static final String SecondaryNewTaskPortlet = "SecondaryNewTaskPortlet";

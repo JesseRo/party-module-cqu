@@ -60,14 +60,13 @@ public class TransportApplyPortlet extends MVCPortlet {
     public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
             throws IOException, PortletException {
 
-        String userId = (String)SessionManager.getAttribute(
+        String userId = (String) SessionManager.getAttribute(
                 renderRequest.getRequestedSessionId(), "userName");
 
 
-
-        String orgId = (String)SessionManager.getAttribute(renderRequest.getRequestedSessionId(), "orgId");
+        String orgId = (String) SessionManager.getAttribute(renderRequest.getRequestedSessionId(), "orgId");
         Organization organization = orgDao.findByOrgId(orgId);
-        if (organization.getOrg_type().equals(ConstantsKey.ORG_TYPE_BRANCH)){
+        if (organization.getOrg_type().equals(ConstantsKey.ORG_TYPE_BRANCH)) {
             organization = orgDao.findByOrgId(organization.getOrg_parent());
         }
         Organization root = orgDao.findRoot();
@@ -77,8 +76,8 @@ public class TransportApplyPortlet extends MVCPortlet {
 
         Map<String, List<Organization>> brunchGroup = new LinkedHashMap<>();
         brunchInSecondary.stream()
-                .filter(p->p.getOrg_type().equals(ConstantsKey.ORG_TYPE_SECONDARY))
-                .forEach( p-> {
+                .filter(p -> p.getOrg_type().equals(ConstantsKey.ORG_TYPE_SECONDARY))
+                .forEach(p -> {
                     List<Organization> orgs = brunchInSecondary.stream()
                             .filter(b -> b.getOrg_parent().equalsIgnoreCase(p.getOrg_id())).collect(Collectors.toList());
                     brunchGroup.put(p.getOrg_name(), orgs);
@@ -86,8 +85,8 @@ public class TransportApplyPortlet extends MVCPortlet {
 
         Map<String, List<Organization>> allBrunchGroup = new LinkedHashMap<>();
         allOrg.stream()
-                .filter(p->p.getOrg_type().equals(ConstantsKey.ORG_TYPE_SECONDARY))
-                .forEach( p-> {
+                .filter(p -> p.getOrg_type().equals(ConstantsKey.ORG_TYPE_SECONDARY))
+                .forEach(p -> {
                     List<Organization> orgs = allOrg.stream()
                             .filter(b -> b.getOrg_parent().equalsIgnoreCase(p.getOrg_id())).collect(Collectors.toList());
                     allBrunchGroup.put(p.getOrg_name(), orgs);
@@ -96,14 +95,18 @@ public class TransportApplyPortlet extends MVCPortlet {
         Transport transport = transportDao.findByUser(userId);
         String isResubmit = PortalUtil.getOriginalServletRequest(PortalUtil.getHttpServletRequest(renderRequest)).getParameter("resubmit");
 
-        if (transport == null || ("1").equalsIgnoreCase(isResubmit)){
+        if (transport == null || ("1").equalsIgnoreCase(isResubmit)) {
             renderRequest.setAttribute("transportJson", "null");
             renderRequest.setAttribute("already", 0);
             renderRequest.setAttribute("isResubmit", isResubmit);
-        }else {
+        } else {
             renderRequest.setAttribute("already", 1);
             renderRequest.setAttribute("statusList", ConstantsKey.STATUS_LIST);
+            Organization currentOrg = orgDao.findByOrgId(transport.getCurrent_approve_org());
             renderRequest.setAttribute("transportJson", gson.toJson(transport));
+            if (currentOrg != null) {
+                renderRequest.setAttribute("currentOrg", currentOrg.getOrg_name());
+            }
             renderRequest.setAttribute("transport", transport);
         }
         renderRequest.setAttribute("allBrunchGroup", allBrunchGroup);

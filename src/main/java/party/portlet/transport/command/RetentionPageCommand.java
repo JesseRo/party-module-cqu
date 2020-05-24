@@ -1,6 +1,5 @@
 package party.portlet.transport.command;
 
-import com.dt.springjdbc.dao.impl.PostgresqlQueryResult;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCResourceCommand;
@@ -18,7 +17,6 @@ import org.osgi.service.component.annotations.Reference;
 import org.springframework.util.StringUtils;
 import party.constants.PartyPortletKeys;
 import party.portlet.transport.dao.RetentionDao;
-import party.portlet.transport.dao.TransportDao;
 import party.portlet.transport.entity.PageQueryResult;
 
 import javax.portlet.PortletException;
@@ -26,14 +24,15 @@ import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Collections;
+import java.util.Map;
 
 
 @Component(
 		immediate = true,
 		property = {
 				"javax.portlet.name=" + PartyPortletKeys.TransportApproval,
+				"javax.portlet.name=" + PartyPortletKeys.TransportCompleted,
 				"mvc.command.name=/retention/page"
 	    },
 	    service = MVCResourceCommand.class
@@ -55,16 +54,18 @@ public class RetentionPageCommand implements MVCResourceCommand {
 		int page = ParamUtil.getInteger(resourceRequest, "page");
 		int size = ParamUtil.getInteger(resourceRequest, "limit");
 		String name = ParamUtil.getString(resourceRequest, "memberName");
+		String startDate = ParamUtil.getString(resourceRequest, "startDate");
+		String endDate = ParamUtil.getString(resourceRequest, "endDate");
 		PageQueryResult<Map<String, Object>> data = null;
 		if (!StringUtils.isEmpty(name)){
 			name = "%" + name + "%";
 		}
 		if (organization.getOrg_type().equalsIgnoreCase(ConstantsKey.ORG_TYPE_SECONDARY)){
-			data = retentionDao.findSecondaryPage(page, size, orgId, name);
+			data = retentionDao.findSecondaryPage(page, size, orgId, name, false, startDate, endDate);
 		}else if (organization.getOrg_type().equalsIgnoreCase(ConstantsKey.ORG_TYPE_ROOT)){
-			data = retentionDao.findRootPage(page, size, name);
+			data = retentionDao.findRootPage(page, size, name, false, startDate, endDate);
 		} else if (organization.getOrg_type().equalsIgnoreCase(ConstantsKey.ORG_TYPE_BRANCH)) {
-			data = retentionDao.findBrunchPage(page, size, orgId, name);
+			data = retentionDao.findBrunchPage(page, size, orgId, name, false, startDate, endDate);
 		} else {
 			data = null;
 		}

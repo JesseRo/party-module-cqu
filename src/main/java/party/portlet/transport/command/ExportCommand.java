@@ -39,6 +39,7 @@ import static hg.util.ConstantsKey.STATUS_LIST;
         immediate = true,
         property = {
                 "javax.portlet.name=" + PartyPortletKeys.TransportApproval,
+                "javax.portlet.name=" + PartyPortletKeys.TransportCompleted,
                 "mvc.command.name=/transport/export"
         },
         service = MVCResourceCommand.class
@@ -61,6 +62,9 @@ public class ExportCommand implements MVCResourceCommand {
         String name = ParamUtil.getString(resourceRequest, "memberName");
         String type = ParamUtil.getString(resourceRequest, "type");
         String action = ParamUtil.getString(resourceRequest, "action");
+        boolean completed = ParamUtil.getBoolean(resourceRequest, "completed");
+        String startDate = ParamUtil.getString(resourceRequest, "startDate");
+        String endDate = ParamUtil.getString(resourceRequest, "endDate");
         String datePattern = "yyyy-MM-dd";
         List<String> types;
         if (!StringUtils.isEmpty(type)) {
@@ -75,11 +79,11 @@ public class ExportCommand implements MVCResourceCommand {
         if (action.equalsIgnoreCase("retention")) {
             List<Map<String, Object>> retentions;
             if (organization.getOrg_type().equalsIgnoreCase(ConstantsKey.ORG_TYPE_SECONDARY)) {
-                retentions = retentionDao.findSecondary(orgId, name);
+                retentions = retentionDao.findSecondary(orgId, name, completed, startDate, endDate);
             } else if (organization.getOrg_type().equalsIgnoreCase(ConstantsKey.ORG_TYPE_ROOT)) {
-                retentions = retentionDao.findRoot(name);
+                retentions = retentionDao.findRoot(name, completed, startDate, endDate);
             } else if (organization.getOrg_type().equalsIgnoreCase(ConstantsKey.ORG_TYPE_BRANCH)) {
-                retentions = retentionDao.findBrunch(orgId, name);
+                retentions = retentionDao.findBrunch(orgId, name, completed, startDate, endDate);
             } else {
                 retentions = null;
             }
@@ -108,11 +112,11 @@ public class ExportCommand implements MVCResourceCommand {
         } else if (action.equalsIgnoreCase("transport")) {
             List<Map<String, Object>> transports;
             if (organization.getOrg_type().equalsIgnoreCase(ConstantsKey.ORG_TYPE_SECONDARY)) {
-                transports = transportDao.findSecondary(orgId, types, name);
+                transports = transportDao.findSecondary(orgId, types, name, completed, startDate, endDate);
             } else if (organization.getOrg_type().equalsIgnoreCase(ConstantsKey.ORG_TYPE_ROOT)) {
-                transports = transportDao.findRoot(types, name);
+                transports = transportDao.findRoot(types, name, completed, startDate, endDate);
             } else if (organization.getOrg_type().equalsIgnoreCase(ConstantsKey.ORG_TYPE_BRANCH)) {
-                transports = transportDao.findBranch(orgId, types, name);
+                transports = transportDao.findBranch(orgId, types, name, completed, startDate, endDate);
             } else {
                 transports = null;
             }

@@ -51,6 +51,11 @@ public class UserDao extends PostgresqlDaoImpl<User> {
 		return count > 0;
 	}
 
+	public void logicDelete(String userID) {
+		String sql = "update hg_users_info set state = '0' where user_id = ?";
+		jdbcTemplate.update(sql, userID);
+	}
+
 	/**
 	 * 根据公众号查询用户信息
 	 *

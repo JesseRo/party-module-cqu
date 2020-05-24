@@ -67,6 +67,7 @@
                     elem: '#retentionTable',
                     url: '${retention}', //数据接口
                     method: 'post',
+                    where: {completed: true},
                     page: {
                         limit: 10,   //每页条数
                         limits: [],
@@ -76,17 +77,16 @@
                     },
                     cols: [[ //表头
                         {field: 'retention_id', title: 'id', hide: true},
-                        {field: 'user_name', title: '姓名', width: '15%'},
-                        {field: 'org_name', title: '所在支部', width: '30%'},
-                        {field: 'time', title: '申请时间', width: '15%'},
+                        {field: 'user_name', title: '姓名', width: '20%'},
+                        {field: 'org_name', title: '所在支部', width: '40%'},
+                        {field: 'time', title: '申请时间', width: '20%'},
                         {
-                            field: 'status', title: '状态', width: '15%', templet: function (d) {
+                            field: 'status', title: '状态', width: '20%', templet: function (d) {
                                 return statusList[d.status];
                             }
                         },
-                        {field: 'operate', title: '操作', width: '25%', toolbar: '#retentionBtns'}
-                    ]] ,
-                    parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
+                    ]],
+                    parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
                         retentionCount = res.count;
                         return res;
                     }
@@ -286,6 +286,7 @@
                     elem: '#transportTable',
                     url: '${transport}', //数据接口
                     method: 'post',
+                    where: {completed: true},
                     page: {
                         limit: 10,   //每页条数
                         limits: [],
@@ -296,17 +297,15 @@
                     cols: [[ //表头
                         {field: 'transport_id', title: 'id', hide: true},
                         {field: 'user_name', title: '姓名', width: '10%'},
-                        {field: 'org_name', title: '所在支部', width: '15%'},
-                        {field: 'to_org_name', title: '去往单位', width: '15%'},
+                        {field: 'org_name', title: '所在支部', width: '25%'},
+                        {field: 'to_org_name', title: '去往单位', width: '25%'},
                         {field: 'time', title: '申请时间', width: '10%'},
-                        {field: 'reason', title: '原因', width: '10%'},
+                        {field: 'reason', title: '原因', width: '20%'},
                         {
                             field: 'status', title: '状态', width: '10%', templet: function (d) {
                                 return statusList[d.status];
                             }
                         },
-                        {field: 'current_org_name', title: '当前审核组织', width: '10%'},
-                        {field: 'operate', title: '操作', width: '20%', toolbar: '#transportBtns'}
                     ]],
                     parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
                         transportCount = res.count;
@@ -316,7 +315,13 @@
 
                 $('#transportSearchBtn').on('click', function () {
                     transportTable.reload({
-                        where: {type: $('#transportType').val(), memberName: $('#searchCondition').val()},
+                        where: {
+                            type: $('#transportType').val(),
+                            memberName: $('#searchCondition').val(),
+                            completed: true,
+                            startDate: startDate,
+                            endDate: endDate
+                        },
                         page: {
                             curr: 1 //重新从第 1 页开始
                         }
@@ -324,7 +329,12 @@
                 });
                 $('#retentionSearchBtn').on('click', function () {
                     retentionTable.reload({
-                        where: {memberName: $('#retentionCondition').val()},
+                        where: {
+                            memberName: $('#retentionCondition').val(),
+                            completed: true,
+                            startDate: rStartDate,
+                            endDate: rEndDate
+                        },
                         page: {
                             curr: 1 //重新从第 1 页开始
                         }
@@ -333,7 +343,12 @@
                 $('#transportExportBtn').on('click', function () {
                     if (transportCount > 0) {
                         var type = $('#transportType').val(), memberName = $('#searchCondition').val()
-                        window.location.href = "${export}&action=transport&memberName=" + memberName + "&type=" + type;
+                        var url = "${export}&action=transport&completed=true&memberName="
+                            + memberName + "&type=" + type;
+                        if (startDate && endDate) {
+                            url += "&startDate=" + startDate + "&endDate=" + endDate;
+                        }
+                        window.location.href = url;
                     } else {
                         layuiModal.alert("没有数据，无法导出");
                     }
@@ -341,12 +356,51 @@
                 $('#retentionExportBtn').on('click', function () {
                     if (retentionCount > 0) {
                         var memberName = $('#retentionCondition').val();
-                        window.location.href = "${export}&action=retention&memberName=" + memberName;
+                        var url = "${export}&action=retention&completed=true&memberName=" + memberName;
+                        if (startDate && endDate) {
+                            url += "&startDate=" + rStartDate + "&endDate=" + rEndDate;
+                        }
+                        window.location.href = url;
                     } else {
                         layuiModal.alert("没有数据，无法导出");
                     }
                 });
             });
+            var startDate, endDate, rStartDate, rEndDate;
+
+            function toDateStr(date){
+                if (date.year) {
+                    return date.year + '-' + date.month + '-' + date.date;
+                }else {
+                    return "";
+                }
+            }
+
+            layui.use('laydate', function () {
+                var laydate = layui.laydate;
+                laydate.render({
+                    elem: '#date_range'
+                    , range: '-',
+                    done: function (value, date, e) {
+                        console.log(value); //得到日期生成的值，如：2017-08-18
+                        console.log(date); //得到日期时间对象：{year: 2017, month: 8, date: 18, hours: 0, minutes: 0, seconds: 0}
+                        console.log(e); //得结束的日期时间对象，开启范围选择（range: true）才会返回。对象成员同上。
+                        startDate = toDateStr(date);
+                        endDate = toDateStr(e);
+                    }
+                });
+                laydate.render({
+                    elem: '#date_range2'
+                    , range: '-',
+                    done: function (value, date, e) {
+                        console.log(value); //得到日期生成的值，如：2017-08-18
+                        console.log(date); //得到日期时间对象：{year: 2017, month: 8, date: 18, hours: 0, minutes: 0, seconds: 0}
+                        console.log(e); //得结束的日期时间对象，开启范围选择（range: true）才会返回。对象成员同上。
+                        rStartDate = toDateStr(date);
+                        rEndDate = toDateStr(e);
+                    }
+                });
+            })
         });
 
         function transportApprove(e, status) {
@@ -378,7 +432,7 @@
             当前位置：
             <span class="layui-breadcrumb" lay-separator=">">
                         <a href="javascript:;">组织关系转接</a>
-                        <a href="javascript:;">审批申请</a>
+                        <a href="javascript:;">汇总查询</a>
                     </span>
         </div>
         <div class="bg_white_container">
@@ -397,9 +451,14 @@
                                 <option value="2">市内</option>
                                 <option value="3">市外</option>
                             </select>
-                            <input type="text" name="title" id="searchCondition" placeholder="搜索党员" autocomplete="off"
-                                   class="layui-input custom_input" style="margin-left: 20px;">
-                            <button type="button" id="transportSearchBtn" class="layui-btn custom_btn search_btn">查询
+                            <div class="layui-input-inline" style="margin-left: 20px;height: 40px;">
+                                <input type="text" class="layui-input" id="date_range" placeholder="日期范围">
+                            </div>
+                            <input type="text" name="title" id="searchCondition" placeholder="查询条件" autocomplete="off"
+                                   class="layui-input custom_input"
+                                   style="margin-left: 20px; float: none;height: 40px;">
+                            <button type="button" id="transportSearchBtn" class="layui-btn custom_btn search_btn"
+                                    style="float: none;">查询
                             </button>
                             <button type="button" id="transportExportBtn" class="layui-btn custom_btn search_btn"
                                     style="float: right;">导出数据
@@ -409,9 +468,13 @@
                     </div>
                     <div class="layui-tab-item">
                         <div class="operate_form_group">
-                            <input type="text" name="title" id="retentionCondition" placeholder="搜索党员"
+                            <input type="text" name="title" id="retentionCondition" placeholder="搜索条件"
                                    autocomplete="off" class="layui-input custom_input">
-                            <button type="button" id="retentionSearchBtn" class="layui-btn custom_btn search_btn">查询
+                            <div class="layui-input-inline" style="margin-left: 20px;height: 40px;">
+                                <input type="text" class="layui-input" id="date_range2" placeholder="日期范围">
+                            </div>
+                            <button type="button" id="retentionSearchBtn" class="layui-btn custom_btn search_btn"
+                            style="float: none;">查询
                             </button>
                             <button type="button" id="retentionExportBtn" class="layui-btn custom_btn search_btn"
                                     style="float: right;">导出数据
