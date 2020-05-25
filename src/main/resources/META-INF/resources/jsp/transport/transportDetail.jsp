@@ -121,11 +121,8 @@
             <div class="layui-form-item layui-form-text">
                 <label class="layui-form-label" id="reason_title">转出原因：</label>
                 <div class="layui-input-block">
-                    <select name="transport_reason" lay-filter="organRelaForm" disabled>
-                        <option value="升学"  selected="">升学</option>
-                        <option value="工作">工作</option>
-                        <option value="其他">其他</option>
-                    </select>
+                    <input type="text" disabled name="transport_reason" autocomplete="off"
+                           class="layui-input" lay-filter="transport_reason">
                 </div>
             </div>
             <div class="layui-form-item layui-form-text">

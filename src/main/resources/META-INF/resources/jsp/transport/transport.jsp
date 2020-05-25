@@ -63,10 +63,10 @@
                 form.on('select(transport_reason)', function (data) {
                     if (data.value === '其他') {
                         layuiModal.prompt("请输入原因", "", function (d) {
-
+                            $('[name=transport_reason]').next().find('input').val(d);
                         })
                     }
-                };
+                });
                 if (data != null) {
                     form.val("organRelaForm", {
                         transport_type: data.type,
@@ -90,10 +90,7 @@
             var groups = null;
 
             $('._submit').on('click', function (e) {
-                if (${already} >
-                0
-            )
-                {
+                if (${already} >0){
                     return
                 }
                 var type = $('[name=transport_type]').val();
@@ -108,6 +105,10 @@
                 var form = $('[name=transport_form]').val();
                 var title = $('[name=transport_title]').val();
                 var reason = $('[name=transport_reason]').val();
+                if(reason === '其他'){
+                    var otherReason = $('[name=transport_reason]').next().find('input').val();
+                    otherReason && (reason = otherReason);
+                }
                 var isResubmit = $('[name=isResubmit]').val();
                 $.post('${save}', {
                     type: type,
@@ -255,11 +256,7 @@
                     <div class="layui-input-block">
                         <c:choose>
                             <c:when test="${already > 0 }">
-                                <select name="transport_reason" disabled lay-filter="transport_reason">
-                                    <option value="升学" selected="">升学</option>
-                                    <option value="工作">工作</option>
-                                    <option value="其他">其他</option>
-                                </select>
+                                <input type="text" disabled name="transport_reason" autocomplete="off" class="layui-input" lay-filter="transport_reason">
                             </c:when>
                             <c:otherwise>
                                 <select name="transport_reason" lay-filter="transport_reason">
