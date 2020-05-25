@@ -153,27 +153,24 @@ public class GraftDao extends HgPostgresqlDaoImpl<PublicInformation> {
 		if (size <= 0){
 			size = 10;
 		}
-		StringBuffer sb = new StringBuffer("SELECT info.* FROM hg_party_org_inform_info info WHERE info.public_status='" + publicStatus + "'");
+		StringBuffer sb = new StringBuffer("select * from (select inform_id,read_status from hg_party_inform_group_info where pub_org_id = '"+orgId+"') s left join (SELECT a.attachment_url,a.attachment_name,info.* FROM hg_party_org_inform_info info left join hg_party_attachment a on info.inform_id = a.resource_id) i on i.inform_id = s.inform_id WHERE i.public_status='" + publicStatus + "'");
 		DateQueryVM dateQueryVM = HgDateQueryUtil.toDateQueryVM(DateQueryEnum.getEnum(dateType));
 		if(!StringUtils.isEmpty(keyword)){
 			String search = "%" + keyword + "%";
-			sb.append(" and (info.meeting_theme like '"+search+"')");
-		}
-		if(!StringUtils.isEmpty(orgId)){
-			sb.append(" and info.org_type = '"+orgId+"'");
+			sb.append(" and (i.meeting_theme like '"+search+"')");
 		}
 		if(dateQueryVM.getStartTime()!=null){
-			sb.append(" and info.release_time>=?");
+			sb.append(" and i.release_time>=?");
 			if(dateQueryVM.getEndTime()!=null){
-				sb.append(" and info.release_time<=?");
-				sb.append(" ORDER BY info.release_time desc");
+				sb.append(" and i.release_time<=?");
+				sb.append(" ORDER BY i.release_time desc");
 				return postGresqlFindPageBySql(page, size, sb.toString(),dateQueryVM.getStartTime(),dateQueryVM.getEndTime());
 			}else{
-				sb.append(" ORDER BY info.release_time desc");
+				sb.append(" ORDER BY i.release_time desc");
 				return postGresqlFindPageBySql(page, size, sb.toString(),dateQueryVM.getStartTime());
 			}
 		}else{
-			sb.append(" ORDER BY info.release_time desc");
+			sb.append(" ORDER BY i.release_time desc");
 			return postGresqlFindPageBySql(page, size, sb.toString());
 		}
 	}

@@ -352,4 +352,12 @@ public class PartyBranchService {
     public int update(MeetingPlan meetingPlan) {
         return dao.update(meetingPlan);
     }
+
+    public void deleteMeetingMember(String meetingId) {
+         dao.deleteMeetingMember(meetingId);
+    }
+
+    public int addMeetingMember(String meetingId, String userId) {
+        return dao.addMeetingMember(meetingId,userId);
+    }
 }

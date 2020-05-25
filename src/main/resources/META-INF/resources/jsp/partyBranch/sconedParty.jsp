@@ -269,7 +269,7 @@
                             <label class="layui-form-label layui-required">计划内容：</label>
                             <div class="layui-input-inline meetingContent">
                                 <script id="meetingContent" name="meetingContent" type="text/plain">
-                                    ${m.content}
+                                    ${meetingPlan.content}
                                 </script>
                             </div>
                         </div>
@@ -601,14 +601,14 @@
                     }
                 }
                 ,{field: 'size', width:120, align:'center', title: '大小',templet:function(d){
-                        return (d.size/1024).toFixed(2)+"M";
+                        return (d.size/(1024*1024)).toFixed(2)+"M";
                     }}
                 ,{field: 'status', width:80, align:'center', title: '状态',templet:function(d){
-                    if(d.status){
-                        return '成功';
-                    }else{
-                        return '失败';
-                    }
+                        if(d.status){
+                            return '成功';
+                        }else{
+                            return '失败';
+                        }
                     }
                 }
                 ,{field: 'name', title: '操作', width:80, align:'center',toolbar: '#fileTableTool'}

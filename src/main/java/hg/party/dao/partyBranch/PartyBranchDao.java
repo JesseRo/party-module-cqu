@@ -624,13 +624,13 @@ public class PartyBranchDao extends PostgresqlDaoImpl<MeetingPlan> {
     }
 
     public MeetingPlan findNoSubmitPlan(String userId, String org_id) {
-        String sql = "select * FROM  hg_party_meeting_plan_info where organization_id=?";
+        String sql = "select * FROM  hg_party_meeting_plan_info where organization_id=? and task_status='0'";
         RowMapper<MeetingPlan> rowMapper = BeanPropertyRowMapper.newInstance(MeetingPlan.class);
         List<MeetingPlan> meetingPlanList = this.jdbcTemplate.query(sql, rowMapper, org_id);
         if(meetingPlanList.size()>0){
             return meetingPlanList.get(0);
         }else{
-            return null;
+            return new MeetingPlan();
         }
     }
 
@@ -646,5 +646,15 @@ public class PartyBranchDao extends PostgresqlDaoImpl<MeetingPlan> {
     public int deleteGroupMember(int groupMemberId) {
         String sql="delete  from  hg_party_group_member_info where id=?";
         return jdbcTemplate.update(sql,groupMemberId);
+    }
+
+    public void deleteMeetingMember(String meetingId) {
+        String sql="delete  from  hg_party_meeting_member_info where meeting_id=?";
+        jdbcTemplate.update(sql,meetingId);
+    }
+
+    public int addMeetingMember(String meetingId, String userId) {
+        String sql="INSERT INTO hg_party_meeting_member_info (meeting_id, participant_id,check_status) VALUES (?,?,'未读')";
+        return jdbcTemplate.update(sql,meetingId,userId);
     }
 }

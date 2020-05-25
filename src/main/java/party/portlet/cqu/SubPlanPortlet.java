@@ -66,11 +66,12 @@ public class SubPlanPortlet extends MVCPortlet {
         if(orgAdminTypeEnum!=null){
             organization = orgService.findAdminOrg(userId, orgAdminTypeEnum);
             members = orgService.findMembersByOrg(organization.getOrg_id(),orgAdminTypeEnum);
-            //meetingPlan = partyBranchService.findNoSubmitPlan(userId,organization.getOrg_id());
+            meetingPlan = partyBranchService.findNoSubmitPlan(userId,organization.getOrg_id());
         }
 
         logger.info("members size:"+members.size());
         renderRequest.setAttribute("organization",organization);
+        renderRequest.setAttribute("meetingPlan",meetingPlan);
         renderRequest.setAttribute("conferenceTypes",CONFERENCE_TYPES);
         renderRequest.setAttribute("timeLasts",TIME_LASTS);
         renderRequest.setAttribute("campus",CAMPUS);

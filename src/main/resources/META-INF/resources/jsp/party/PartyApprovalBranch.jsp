@@ -41,7 +41,7 @@
 				margin-right: 0px;
 			}
 			.layui-layer-content{
-				overflow: visible;
+				overflow: visible !important;
 			}
 			#rejectModal .layui-form-item .layui-input-inline{
 				width:200px

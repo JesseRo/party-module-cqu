@@ -8,10 +8,10 @@
 		 <link rel="stylesheet" href="${basePath }/css/details.css" />
 		 <style type="text/css">
 		 	.details_content_title >p{
-		 		text-align:left!important;
+		 		text-align:left !important;
 		 	}
 			.layui-layer-content{
-				overflow: visible;
+				overflow: visible !important;
 			}
 			#rejectModal .layui-form-item .layui-input-inline{
 				width:200px

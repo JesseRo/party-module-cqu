@@ -44,12 +44,13 @@ public class OriginalInformPageCommand implements MVCResourceCommand {
 		int size = ParamUtil.getInteger(resourceRequest, "limit");
 		String dateType = ParamUtil.getString(resourceRequest, "dateType");
 		String keyword = HtmlUtil.escape(ParamUtil.getString(resourceRequest, "keyword"));
+		String orgId = (String) SessionManager.getAttribute(resourceRequest.getRequestedSessionId(), "department");
 		try {
 			PostgresqlPageResult<Map<String, Object>> data;
 			if (StringUtils.isEmpty(keyword)){
-				data = graftService.searchPage(page, size,dateType,ORIGINAL_ORG_ID,1,null);
+				data = graftService.searchPage(page, size,dateType,orgId,1,null);
 			}else {
-				data = graftService.searchPage(page, size,dateType,ORIGINAL_ORG_ID,1,keyword);
+				data = graftService.searchPage(page, size,dateType,orgId,1,keyword);
 			}
 			Gson gson = new Gson();
 			res.getWriter().write(gson.toJson(data.toJsonPageResponse()));

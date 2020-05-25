@@ -22,6 +22,8 @@ import java.util.Properties;
                 "javax.portlet.name=" + PartyPortletKeys.NewPlan,
                 "javax.portlet.name=" + PartyPortletKeys.SeocndCommitteeToDoList,
                 "javax.portlet.name=" + PartyPortletKeys.PartyApproval,
+                "javax.portlet.name=" + PartyPortletKeys.MeetingNotice,
+                "javax.portlet.name=" + PartyPortletKeys.MeetingNotePortlet,
                 "mvc.command.name=/api/download"
         },
         service = MVCResourceCommand.class

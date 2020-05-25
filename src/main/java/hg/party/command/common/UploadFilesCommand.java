@@ -33,6 +33,7 @@ import java.util.UUID;
         immediate = true,
         property = {
                 "javax.portlet.name=" + PartyPortletKeys.NewPlan,
+                "javax.portlet.name=" + PartyPortletKeys.MeetingNotePortlet,
                 "mvc.command.name=/api/upload"
         },
         service = MVCResourceCommand.class

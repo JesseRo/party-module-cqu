@@ -50,6 +50,7 @@ import party.constants.PartyPortletKeys;
 		"javax.portlet.name=" + PartyPortletKeys.ContentRelease,
 		"javax.portlet.name=" + PartyPortletKeys.SecondPartyContentRelease,
 		"javax.portlet.name=" + PartyPortletKeys.OrganizationContentRelease,
+		"javax.portlet.name=" + PartyPortletKeys.MeetingNotePortlet,
 		"mvc.command.name=/ueditor/uploadAjaxFile"
     },
     service = MVCResourceCommand.class

@@ -12,6 +12,7 @@ import hg.party.entity.party.MeetingPlan;
 
 import hg.party.server.partyBranch.PartyBranchService;
 
+import hg.util.TransactionUtil;
 import hg.util.result.ResultUtil;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -41,6 +42,8 @@ public class MeetingPlanSaveCommand implements MVCResourceCommand {
 
     @Reference
     PartyBranchService partyBranchService;
+    @Reference
+    private TransactionUtil transactionUtil;
     private Gson gson = new Gson();
     @Override
     public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse) {
@@ -118,13 +121,22 @@ public class MeetingPlanSaveCommand implements MVCResourceCommand {
 
             int ret = 0;
             String message = graft?"保存成功":"发布成功";
+            transactionUtil.startTransaction();
             if(StringUtils.isEmpty(meetingId)){
                 ret = partyBranchService.save(m);
             }else{
                 ret = partyBranchService.update(m);
                 message = "修改成功";
             }
-
+            if(ret>0){
+                String[] participateArr = participate.split(";");
+                partyBranchService.deleteMeetingMember(m.getMeeting_id());
+                for(int i=0;i<participateArr.length;i++){
+                    if(!StringUtils.isEmpty(participateArr[i])){
+                        partyBranchService.addMeetingMember(m.getMeeting_id(),participateArr[i]);
+                    }
+                }
+            }
             //转跳
             //获取组织类型
             String orgType = partyBranchService.findSconedAndBranch(orgId);
@@ -139,8 +151,10 @@ public class MeetingPlanSaveCommand implements MVCResourceCommand {
                 url = "/approvalplanone";
             }
             if(ret > 0){
+                transactionUtil.commit();
                 printWriter.write(JSON.toJSONString(ResultUtil.success(url,message)));
             }else{
+                transactionUtil.rollback();
                 printWriter.write(JSON.toJSONString(ResultUtil.fail("操作失败，请刷新后重试...")));
             }
 

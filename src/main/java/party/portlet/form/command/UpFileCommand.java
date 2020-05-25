@@ -47,7 +47,7 @@ import party.constants.PartyPortletKeys;
 		"javax.portlet.name=" + PartyPortletKeys.ToDoList,
 			"javax.portlet.name=" + PartyPortletKeys.SecondaryNewTaskPortlet,
 			"javax.portlet.name=" + PartyPortletKeys.NewPlan,
-
+			"javax.portlet.name=" + PartyPortletKeys.MeetingNotePortlet,
 			"mvc.command.name=/form/uploadFile"
     },
     service = MVCResourceCommand.class
