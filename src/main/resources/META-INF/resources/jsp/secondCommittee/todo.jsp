@@ -173,7 +173,6 @@
                             return status;
                         }},
                     {field: 'operation', align:'center', title: '操作',width:160,toolbar: '#meetingPlanTableBtns'},
-                    {field: 'member_name', align:'center', title: '联系人',width:120},
                     {field: 'attachment', align:'center', title: '附件',width:200,templet:function(d){
                             var fileData;
                             if(d.attachment==''||d.attachment==null || d.attachment == undefined ){

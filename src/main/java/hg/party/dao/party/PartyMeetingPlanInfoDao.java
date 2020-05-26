@@ -679,17 +679,15 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
         if (size <= 0){
             size = 10;
         }
-        StringBuffer sb = new StringBuffer("SELECT plan.*,org.org_name,member.member_name");
+        StringBuffer sb = new StringBuffer("SELECT plan.*,member.member_name");
         sb.append(" FROM hg_party_meeting_plan_info AS plan");
-        sb.append(" LEFT JOIN hg_party_meeting_notes_info AS note ON plan.meeting_id = note.meeting_id");
         sb.append(" left join hg_party_member member on member.member_identity = plan.contact");
-        sb.append(" LEFT JOIN hg_party_org org ON org.org_id = plan.organization_id");
         sb.append(" where 1=1");
-        sb.append(" and org.historic IS FALSE and member.historic = false AND plan.task_status in('1','3','4')");
-        sb.append(" and org.org_id = ?");
+        sb.append(" AND plan.task_status in('1','3','4')");
+        sb.append(" and plan.organization_id = ?");
         if(!StringUtils.isEmpty(search)){
             search = "%" + search + "%";
-            sb.append(" and (plan.meeting_theme like ? or org.org_name like ? or member.member_name like ?)");
+            sb.append(" and (plan.meeting_theme like ? or member.member_name like ?)");
             sb.append(" ORDER BY plan.task_status asc, plan.id desc");
             logger.info("searchPage:"+sb.toString());
             return postGresqlFindPageBySql(page, size, sb.toString(),orgId,search,search,search);

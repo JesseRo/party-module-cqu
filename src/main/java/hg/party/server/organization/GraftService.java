@@ -169,4 +169,8 @@ public class GraftService {
 	public PostgresqlPageResult<Map<String, Object>> searchPage(int page, int size, String dateType,String orgId,int publicStatus, String keyword) {
 		return dao.searchPage(page,size,dateType,orgId,publicStatus,keyword);
 	}
+
+	public PostgresqlPageResult<Map<String, Object>> searchSendInformPage(int page, int size,String dateType, String orgId, String keyword) {
+		return dao.searchSendInformPage(page,size,dateType,orgId,keyword);
+	}
 }

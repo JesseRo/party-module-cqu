@@ -536,7 +536,6 @@
             $("#group_member_list").empty();
             $.post('${groupsAndMembers}', function(res){
                 if(res.result){
-                    $("#group_member_list").children("li").remove();
                     var nodes = new Array();
                     for(var i=0;res.data.length>0 && i<res.data.length;i++){
                         var tipsContentArr = new Array();
