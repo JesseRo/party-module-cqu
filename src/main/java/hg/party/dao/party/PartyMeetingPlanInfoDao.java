@@ -366,19 +366,11 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
     }
 
     //bb
-    public List<Map<String, Object>> find(String starDdate, String endDate, String meetType, String theme, String seconedId, String branchId, int pageSize, int startPage, String checkState) {
-//		String sql= "select cc.*,cus.user_name as check_person_org_name from "+
-//				    "(SELECT tt.*,us.user_name as check_person_name FROM "+
-//				    "(SELECT plan.task_status as plan_state, (select org_name from hg_party_org WHERE org_id=plan.organization_id) as branch_name,"+
-//					"(select org_name from hg_party_org WHERE org_id=(SELECT org_parent FROM hg_party_org WHERE org_id=plan.organization_id) and org_type!='organization' ) as second_name,"+
-//					" plan.*,info.release_time from hg_party_meeting_plan_info  as plan ,hg_party_org_inform_info as info";
-//		    StringBuffer buffer=new StringBuffer(sql);
-//		    if (!StringUtils.isEmpty(seconedId)&&StringUtils.isEmpty(branchId)) {
-//		    	buffer.append(" ,hg_party_org as org_o");
-//			}
+    public List<Map<String, Object>> find(String starDdate, String endDate, String meetType, String theme,
+                              String seconedId, String branchId, Integer pageSize, Integer startPage, String checkState) {
         String sql = "\n" +
                 "\tSELECT\n" +
-                "\t\tplan.task_status AS plan_state,org_o.org_name AS branch_name,\n" +
+                "\t\tplan.task_status AS plan_state,org_o.org_name AS branch_name,plc.place as place_name, \n" +
                 "\t\t( SELECT org_name FROM hg_party_org WHERE org_id = ( SELECT org_parent FROM hg_party_org WHERE org_id = plan.organization_id ) AND org_type != 'organization' ) AS second_name,\n" +
                 "\t\tplan.*\n" +
                 "\tFROM\n" +
@@ -386,6 +378,7 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
                 "\t\tLEFT OUTER JOIN hg_users_info AS us ON plan.check_person = us.user_id \n" +
                 "\t\tleft outer join hg_party_org as org_o on plan.organization_id = org_o.org_id \n" +
                 "left join hg_party_org as org_p on org_o.org_parent = org_p.org_id and org_p.org_type != 'organization' " +
+                "left join hg_party_place as plc on plan.place = plc.id " +
                 "\twhere 1 = 1 ";
         StringBuffer buffer = new StringBuffer(sql);
         if (!StringUtils.isEmpty(starDdate) && StringUtils.isEmpty(endDate)) {
@@ -416,15 +409,53 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
                 buffer.append(" and plan.check_person_org is null");
             }
         }
-        buffer.append(" order by plan.id desc limit " + pageSize + " OFFSET " + startPage + "");
-//		    buffer.append(" ) as tt LEFT OUTER JOIN hg_users_info as us"+
-//		                  " on tt.check_person=us.user_id ) as cc LEFT OUTER JOIN hg_users_info as cus"+
-//		                  " on cc.check_person_org=cus.user_id");
-//		    logger.info(buffer.toString());
-//		    System.out.println(buffer.toString());
+        if (pageSize != null && startPage != null){
+            buffer.append(" order by plan.id desc limit " + pageSize + " OFFSET " + startPage + "");
+        }
         return jdbcTemplate.queryForList(buffer.toString());
     }
 
+    public int count(String startDate, String endDate, String meetType, String theme, String seconedId, String branchId, String checkState) {
+        String sql = "\n" +
+                "\tSELECT\n" +
+                " count(1) " +
+                "\tFROM\n" +
+                "\t\thg_party_meeting_plan_info AS plan\n" +
+                "\t\tLEFT OUTER JOIN hg_users_info AS us ON plan.check_person = us.user_id \n" +
+                "\t\tleft outer join hg_party_org as org_o on plan.organization_id = org_o.org_id \n" +
+                "left join hg_party_org as org_p on org_o.org_parent = org_p.org_id and org_p.org_type != 'organization' " +
+                "\twhere 1 = 1 ";
+        StringBuffer buffer = new StringBuffer(sql);
+        if (!StringUtils.isEmpty(startDate) && StringUtils.isEmpty(endDate)) {
+            buffer.append(" AND plan.start_time>'" + startDate + " 00:00:00' and plan.start_time<'" + startDate + " 24:00:00'");
+        }
+        if (!StringUtils.isEmpty(startDate) && !StringUtils.isEmpty(endDate)) {
+            buffer.append(" AND plan.start_time>'" + startDate + " 00:00:00' and plan.start_time<'" + endDate + " 24:00:00'");
+        }
+        if (StringUtils.isEmpty(startDate) && !StringUtils.isEmpty(endDate)) {
+            buffer.append(" AND plan.start_time>'" + endDate + " 00:00:00' and plan.start_time<'" + endDate + " 24:00:00'");
+        }
+        if (!StringUtils.isEmpty(meetType)) {
+            buffer.append(" and plan.meeting_type='" + meetType + "'");
+        }
+        if (!StringUtils.isEmpty(theme)) {
+            buffer.append(" and plan.meeting_theme like '%" + theme + "%'");
+        }
+        if (!StringUtils.isEmpty(seconedId) && !StringUtils.isEmpty(branchId)) {
+            buffer.append(" AND plan.organization_id='" + branchId + "'");
+        }
+        if (!StringUtils.isEmpty(seconedId) && StringUtils.isEmpty(branchId)) {
+            buffer.append(" and (org_o.org_parent='" + seconedId + "'  or org_o.org_id='" + seconedId + "') and plan.organization_id=org_o.org_id");
+        }
+        if (!StringUtils.isEmpty(checkState)) {
+            if ("t".equals(checkState)) {
+                buffer.append(" and plan.check_person_org is not null");
+            } else {
+                buffer.append(" and plan.check_person_org is null");
+            }
+        }
+        return jdbcTemplate.queryForObject(sql, Integer.class);
+    }
     //bb1
     public List<Map<String, Object>> userMeetingCount(String userName, String seconedId, String branchId, int pageSize, int startPage, String orgType, String orgId) {
         String sql = "";
@@ -699,4 +730,5 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
             return postGresqlFindPageBySql(page, size, sb.toString(),orgId);
         }
     }
+
 }
