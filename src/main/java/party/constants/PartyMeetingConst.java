@@ -9,5 +9,5 @@ public class PartyMeetingConst {
     public final static int[] TIME_LASTS = {30, 60, 90, 120, 150, 180};
 
     //校区
-    public final static String[] CAMPUS = {"A区", "B区", "C区", "虎溪校区","视频会议"};
+    public final static String[] CAMPUS = {"A区", "B区", "C区", "虎溪校区","视频会议","校外"};
 }

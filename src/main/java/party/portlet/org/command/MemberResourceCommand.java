@@ -1,16 +1,19 @@
 package party.portlet.org.command;
 
 import java.io.PrintWriter;
+import java.util.Map;
 import javax.portlet.PortletException;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
 import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
 import hg.party.entity.organization.Organization;
 import hg.party.entity.party.OrgAdmin;
 import hg.party.server.org.MemberService;
 import hg.party.server.organization.OrgAdminService;
 import hg.party.server.organization.OrgService;
+import hg.util.postgres.PostgresqlPageResult;
 import hg.util.result.Page;
 import hg.util.result.ResultUtil;
 import org.apache.log4j.Logger;
@@ -59,8 +62,9 @@ public class MemberResourceCommand implements MVCResourceCommand {
 				String memberType = HtmlUtil.escape(ParamUtil.getString(resourceRequest, "memberType"));
 				String keyword = HtmlUtil.escape(ParamUtil.getString(resourceRequest, "keyword"));
 				String history =  HtmlUtil.escape(ParamUtil.getString(resourceRequest, "history"));
-				Page memberPage = memberService.pageMembersByOrg(org.getOrg_id(),partyOrgAdminTypeEnum,pageObj,memberType,history,keyword);
-				printWriter.write(JSON.toJSONString(ResultUtil.resultPage(memberPage)));
+				PostgresqlPageResult<Map<String, Object>> data = memberService.pageMembersByOrg(org.getOrg_id(),partyOrgAdminTypeEnum,pageObj,memberType,history,keyword);
+				Gson gson = new Gson();
+				printWriter.write(gson.toJson(data.toJsonPageResponse()));
 			}else{
 				printWriter.write(JSON.toJSONString(ResultUtil.noAuthority("你没有该组织信息权限。")));
 			}

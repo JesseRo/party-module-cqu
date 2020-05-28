@@ -129,7 +129,7 @@ public class MeetingPlanSaveCommand implements MVCResourceCommand {
                 message = "修改成功";
             }
             if(ret>0){
-                String[] participateArr = participate.split(";");
+                String[] participateArr = participate.split(",");
                 partyBranchService.deleteMeetingMember(m.getMeeting_id());
                 for(int i=0;i<participateArr.length;i++){
                     if(!StringUtils.isEmpty(participateArr[i])){
