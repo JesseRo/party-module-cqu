@@ -120,7 +120,7 @@
 </div>
 </body>
 <script type="text/html" id="meetingPlanTableBtns">
-    {{#  if(d.task_status == '4' || d.task_status == '5' || d.task_status == '6'){ }}
+    {{#  if(d.task_status == '0' || d.task_status == '2' || d.task_status == '3'){ }}
     <a class="layui-btn layui-btn-xs" href="/sendplan?meetingId=${d.meeting_id }&orgType=secondary&type=edit"> 编辑</a>
     {{#  } }}
     <a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>

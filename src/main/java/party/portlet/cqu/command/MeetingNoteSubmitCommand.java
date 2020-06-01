@@ -54,16 +54,15 @@ public class MeetingNoteSubmitCommand implements MVCActionCommand {
 			}else {
 				attendances = Arrays.asList(attendance.split(","));
 			}
-			synchronized (PortalUtil.getHttpServletRequest(request).getSession()) {
-				String originalFormId = (String) SessionManager.getAttribute(request.getRequestedSessionId(), "formId-MeetingNote");
-				if(formId.equals(originalFormId)){
-					MeetingNote meetingNote = new MeetingNote();
+			if(!StringUtils.isEmpty(meetingId)){
+				MeetingNote meetingNote = meetingNotesDao.findByMeetingId(meetingId);
+				if(meetingNote == null ){
+					meetingNote = new MeetingNote();
 					meetingNote.setMeeting_id(meetingId);
-					meetingNote.setAttendance(gson.toJson(attendances));
-					meetingNote.setAttachment(content);
-					meetingNotesDao.saveOrUpdate(meetingNote);
-					SessionManager.setAttribute(request.getRequestedSessionId(), "formId-MeetingNote", "null");
 				}
+				meetingNote.setAttendance(gson.toJson(attendances));
+				meetingNote.setAttachment(content);
+				meetingNotesDao.saveOrUpdate(meetingNote);
 			}
 			response.sendRedirect("/meeting_check");
 		} catch (Exception e) {

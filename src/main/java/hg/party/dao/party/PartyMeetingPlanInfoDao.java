@@ -714,7 +714,6 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
         sb.append(" FROM hg_party_meeting_plan_info AS plan");
         sb.append(" left join hg_party_member member on member.member_identity = plan.contact");
         sb.append(" where 1=1");
-        sb.append(" AND plan.task_status in('1','3','4')");
         sb.append(" and plan.organization_id = ?");
         if(!StringUtils.isEmpty(search)){
             search = "%" + search + "%";
