@@ -90,7 +90,7 @@
                 <div class="layui-inline btn_group">
                     <label class="layui-form-label"></label>
                     <div class="layui-input-inline">
-                        <button type="button" class="layui-btn" lay-submit="" lay-filter="activityForm">确定</button>
+                        <button type="button" class="layui-btn" lay-submit="" lay-filter="activityForm">提交</button>
                         <button type="button" class="layui-btn layui-btn-primary">取消</button>
                     </div>
                 </div>

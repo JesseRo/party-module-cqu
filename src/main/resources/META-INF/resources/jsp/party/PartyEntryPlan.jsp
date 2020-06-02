@@ -204,8 +204,7 @@
 			驳回</a>
 		{{#  } }}
 		{{#  if(d.task_status == '4' || d.task_status == '5' || d.task_status == '6'){ }}
-		<a class="layui-btn layui-btn-xs" href="/sendplan?meetingId=${d.meeting_id }&orgType=secondary&type=edit"> 编辑</a>
-		<%--<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>--%>
+		<a class="layui-btn layui-btn-xs" lay-event="edit"> 编辑</a>
 		{{#  } }}
 		<a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
 	</script>
@@ -298,6 +297,9 @@
 				//监听事件
 				table.on('tool(meetingPlanTable)', function(obj){
 					switch(obj.event){
+						case 'detail':
+							window.location.href='/approvaldetails?meetingId='+obj.data.meeting_id;
+							break;
 						case 'pass':
 							pass(obj.data.meeting_id);
 							break;

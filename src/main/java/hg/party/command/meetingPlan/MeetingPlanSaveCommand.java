@@ -63,13 +63,12 @@ public class MeetingPlanSaveCommand implements MVCResourceCommand {
 
         String linkMan = ParamUtil.getString(resourceRequest, "contact");
         String linkManTelephone = ParamUtil.getString(resourceRequest, "phoneNumber");
-
         String participate = ParamUtil.getString(resourceRequest, "participate");
-        String content = ParamUtil.getString(resourceRequest, "new_12");
 
         boolean graft = ParamUtil.getBoolean(resourceRequest, "graft");
         String meetingId = ParamUtil.getString(resourceRequest, "meetingId");
         String attachment = ParamUtil.getString(resourceRequest, "attachment");
+        String content = ParamUtil.getString(resourceRequest, "meetingContent");
         campus = HtmlUtil.escape(campus);
         startDate = HtmlUtil.escape(startDate);
         host = HtmlUtil.escape(host);

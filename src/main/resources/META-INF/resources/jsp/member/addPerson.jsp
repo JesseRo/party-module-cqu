@@ -186,10 +186,10 @@
 
                     <div class="layui-form-item">
                         <div class="layui-inline">
-                            <label class="layui-form-label layui-required">转正时间</label>
+                            <label class="layui-form-label">转正时间</label>
                             <div class="layui-input-inline">
                                 <input type="text" name="turn_Time" id="turn_labCheckEndDate" value="${info.member_fomal_date }"
-                                        class="layui-input start_date" lay-verify="required" autocomplete="off">
+                                        class="layui-input start_date"  autocomplete="off">
                             </div>
                         </div>
                         <div class="layui-inline">

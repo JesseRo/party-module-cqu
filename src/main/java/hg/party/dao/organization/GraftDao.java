@@ -120,12 +120,17 @@ public class GraftDao extends HgPostgresqlDaoImpl<PublicInformation> {
 	}
 
 	//
-	public List<Map<String, Object>> findGraftDetail(String informId) {
+	public Map<String, Object> findGraftDetail(String informId) {
 	//	String sql = "SELECT * from hg_party_org_inform_info WHERE inform_id='" + informId + "'";
 		String sql2 = "SELECT info.*,att.attachment_name from hg_party_org_inform_info as info LEFT OUTER JOIN hg_party_attachment as att "
 				+ "on info.inform_id=att.resource_id " 
 				+ "where  inform_id= ? ";
-		return jdbcTemplate.queryForList(sql2, informId);
+		List<Map<String, Object>>  list =jdbcTemplate.queryForList(sql2, informId);
+		if(list.size()> 0 ){
+			return list.get(0);
+		}else{
+			return null;
+		}
 	}
 
 	public int deletePublicObject(String informId) {

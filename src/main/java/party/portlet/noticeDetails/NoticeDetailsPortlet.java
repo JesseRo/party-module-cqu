@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.util.PortalUtil;
 import dt.session.SessionManager;
 import hg.party.entity.party.MeetingPlan;
 import hg.party.server.party.PartyMeetingPlanInfoService;
+import org.springframework.util.StringUtils;
 import party.constants.PartyPortletKeys;
 
 /**
@@ -47,7 +48,7 @@ import party.constants.PartyPortletKeys;
 			
 			"com.liferay.portlet.requires-namespaced-parameters=false",
 			"javax.portlet.portlet-mode=text/html;view,edit",
-			"javax.portlet.init-param.view-template=/jsp/noticeDetails/view.jsp",
+			"javax.portlet.init-param.view-template=/jsp/noticeDetails/meetingNoticeDetail.jsp",
 //			"javax.portlet.init-param.edit-template=/jsp/search/edit.jsp",
 			
 			"javax.portlet.name=" + PartyPortletKeys.NoticeDetails,
@@ -70,42 +71,43 @@ public class NoticeDetailsPortlet extends MVCPortlet {
 			HttpServletRequest request = PortalUtil.getHttpServletRequest(renderRequest);
 			String meetingId = PortalUtil.getOriginalServletRequest(request).getParameter("meetingId");
 			meetingId = HtmlUtil.escape(meetingId);
-			if("".equals(meetingId) || null == meetingId){
-				meetingId = "aca7500c-8603-4bac-b7c3-e6404b7dd720";
-			}
-			List<MeetingPlan> listMeetingPlan = partyMeetingPlanInfoService.meetingId(meetingId);
-			if(listMeetingPlan.size()>0){ 
-				//根据meetingId获取该会议信 息
-				MeetingPlan meetingPlan= partyMeetingPlanInfoService.meetingId(meetingId).get(0);
-				//会议主题
-				String meetingTheme=meetingPlan.getMeeting_theme();
-				//会议类型
-				String type=meetingPlan.getMeeting_type();
-				//会议时间
-				String time=dateFormat(meetingPlan.getStart_time(),meetingPlan.getEnd_time());
-				//会议内容
-				String content=meetingPlan.getContent();
-				//附件
-				String attachment = meetingPlan.getAttachment();
-				String attName = null;
-				if("t".equals(attachment)){
-					Map<String,Object> map = partyMeetingPlanInfoService.findAttachmentByMeetingid(meetingId);
-					attachment = (String) map.get("attachment_url");
-					attName = (String) map.get("attachment_name");
-				}else{
-					attachment = "";
+			if(!StringUtils.isEmpty(meetingId)){
+				List<MeetingPlan> listMeetingPlan = partyMeetingPlanInfoService.meetingId(meetingId);
+				if(listMeetingPlan.size()>0){
+					//根据meetingId获取该会议信 息
+					MeetingPlan meetingPlan= listMeetingPlan.get(0);
+					//会议主题
+					String meetingTheme=meetingPlan.getMeeting_theme();
+					//会议类型
+					String type=meetingPlan.getMeeting_type();
+					//会议时间
+					String time=dateFormat(meetingPlan.getStart_time(),meetingPlan.getEnd_time());
+					//会议内容
+					String content=meetingPlan.getContent();
+					//附件
+					String attachment = meetingPlan.getAttachment();
+					String attName = null;
+					if("t".equals(attachment)){
+						Map<String,Object> map = partyMeetingPlanInfoService.findAttachmentByMeetingid(meetingId);
+						attachment = (String) map.get("attachment_url");
+						attName = (String) map.get("attachment_name");
+					}else{
+						attachment = "";
+					}
+					//改为已读状态
+					partyMeetingPlanInfoService.findByMeetingStu(nameId,meetingId);
+
+					renderRequest.setAttribute("meetingTheme", meetingTheme);
+					renderRequest.setAttribute("type", type);
+					renderRequest.setAttribute("time", time);
+					renderRequest.setAttribute("content", content);
+					renderRequest.setAttribute("meetingId", meetingId);
+					renderRequest.setAttribute("attachment", attachment);
+					renderRequest.setAttribute("attName", attName);
 				}
-				//改为已读状态
-				partyMeetingPlanInfoService.findByMeetingStu(nameId,meetingId);
-				
-				renderRequest.setAttribute("meetingTheme", meetingTheme);
-				renderRequest.setAttribute("type", type);
-				renderRequest.setAttribute("time", time);
-				renderRequest.setAttribute("content", content);
-				renderRequest.setAttribute("meetingId", meetingId);
-				renderRequest.setAttribute("attachment", attachment);
-				renderRequest.setAttribute("attName", attName);
 			}
+
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

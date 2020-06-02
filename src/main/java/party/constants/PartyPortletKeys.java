@@ -212,6 +212,7 @@ public class PartyPortletKeys {
     public static final String MeetingPlanPortlet = "MeetingPlanPortlet";
 
     public static final String OrgCRUD = "OrgCRUD";//党组织CRUD
+    public static final String MeetingNoticeDetail = "MeetingNoticeDetail";
 }
 
 

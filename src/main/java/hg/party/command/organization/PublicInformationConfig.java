@@ -54,22 +54,21 @@ public class PublicInformationConfig extends FormRenderCommand {
 		orgEdit = HtmlUtil.escape(orgEdit);
 
 		if (!StringUtils.isEmpty(informId)) {
-			List<Map<String, Object>> list = service.findGraftDetail(informId);
-			Map<String, Object> map = list.get(0);
+			Map<String, Object> map = service.findGraftDetail(informId);
 			Object informationContent = map.get("content");
 			map.put("content", null);
 			request.setAttribute("informationContent", informationContent);
 			request.setAttribute("informData", JSON.toJSON(map));
 					if (!StringUtils.isEmpty(resend)) {
-						list.get(0).put("graftEditState", "resend");
+						map.put("graftEditState", "resend");
 						request.setAttribute("resend", "resend");
 					} else if(!StringUtils.isEmpty(orgEdit)){
-						list.get(0).put("graftEditState", "orgEdit");
+						map.put("graftEditState", "orgEdit");
 						request.setAttribute("orgEdit", "orgEdit");
 					}else {
-						list.get(0).put("graftEditState", "edit");
+						map.put("graftEditState", "edit");
 					}
-			request.setAttribute("informData", JSON.toJSON(list.get(0)));
+			request.setAttribute("informData", JSON.toJSON(map));
 		} else if (StringUtils.isEmpty(informId)) {
 			request.setAttribute("informData", null);
 		}

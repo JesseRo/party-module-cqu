@@ -121,7 +121,7 @@
 </body>
 <script type="text/html" id="meetingPlanTableBtns">
     {{#  if(d.task_status == '0' || d.task_status == '2' || d.task_status == '3'){ }}
-    <a class="layui-btn layui-btn-xs" href="/sendplan?meetingId=${d.meeting_id }&orgType=secondary&type=edit"> 编辑</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit"> 编辑</a>
     {{#  } }}
     <a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
 </script>
@@ -205,8 +205,8 @@
             //监听事件
             table.on('tool(meetingPlanTable)', function(obj){
                 switch(obj.event){
-                    case 'check':
-                        //renderDetail('check',obj);
+                    case 'edit':
+                        window.location.href="/sendplan?orgType=secondary&type=edit&meetingId="+obj.data.meeting_id;
                         break;
                     case 'detail':
                         //renderDetail('check',obj);

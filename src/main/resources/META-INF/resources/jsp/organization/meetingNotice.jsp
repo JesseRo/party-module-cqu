@@ -181,7 +181,7 @@
             });
         }
         function renderDetail(inform){
-            layer.msg("功能完善中。。。");
+            window.location.href = "/noticeDetail&informId="+inform.inform_id;
         }
     });
     function downloadFile(o){

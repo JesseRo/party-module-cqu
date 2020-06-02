@@ -29,7 +29,7 @@
 		        </h2>
 		        <div class="btn_group">
 		        	<a href="/membertodolist?meetingId=${meetingId }">
-		        		<button class="btn btn-default btn-lg main_color_btn">确定</button>
+		        		<button class="btn btn-default btn-lg main_color_btn">返回</button>
 		        	</a>
 		        	
 		        </div>
