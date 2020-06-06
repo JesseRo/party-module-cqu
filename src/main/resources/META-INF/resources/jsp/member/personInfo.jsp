@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <head>
-    <title>抽查统计</title>
+    <title>党员信息</title>
     <style>
         .content_info .content_form .form-group > div {
             margin-bottom: 20px;

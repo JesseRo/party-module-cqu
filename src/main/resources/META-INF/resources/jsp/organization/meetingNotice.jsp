@@ -181,7 +181,7 @@
             });
         }
         function renderDetail(inform){
-            window.location.href = "/noticeDetail&informId="+inform.inform_id;
+            window.location.href = "/noticeDetail?informId="+inform.inform_id;
         }
     });
     function downloadFile(o){

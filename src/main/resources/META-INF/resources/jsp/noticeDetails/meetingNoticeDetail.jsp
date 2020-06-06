@@ -1,39 +1,131 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ include file="/init.jsp" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <html>
-	<head>
-		 <link rel="stylesheet" href="${basePath }/css/details.css" />
-	</head>
-	<body>
-		 <div class="content_title hidden-xs">
-		    消息详情
-		</div>
-		<div class="details_container">
-			<p class="details_title">${meetingTheme }</p>
-			<div class="details_content">
-			    <div class="details_content_title">
-			        <p class="col-sm-6 col-xs-12"><span>会议类型</span>${type }</p>
-					<p class="col-sm-6 col-xs-12"><span>开展时间</span>${time }</p>
+<title>通知信息</title>
+<style>
+	.content_info .content_form .form-group > div {
+		margin-bottom: 20px;
+	}
+	.layui-form-label.layui-required:before{
+		content: "*";
+		color: red;
+		top: 5px;
+		right: 2px;
+		position: relative;
+	}
+	.table_form_content .custom_form .layui-form-label{
+		padding: 0 10px;
+		width: 160px;
+	}
+	.layui-form-item .layui-input-inline{
+		width: 260px;
+	}
+	.layui-form-label-text{
+		float: left;
+		display: block;
+		padding: 0 10px;
+		width: 260px;
+		font-weight: 400;
+		line-height: 40px;
+		font-size: 16px;
+		text-align: left;
+	}
+	#info-detail .layui-form-item{
+		margin-bottom: 0px;
+	}
+	#info-detail .layui-inline{
+		margin-bottom: 0px;
+	}
+	#info-detail .layui-form-label{
+		font-weight: bold;
+	}
+	#info-detail .layui-btn-radius{
+		border-radius:100px;
+	}
+	#info-detail .line-fill{
+		width:720px;
+	}
+	.org-path{
+		background-color: #ffab33;
+		font-weight: bold;
+	}
+</style>
+<body>
+	<div class="table_form_content">
+		<div class="activity_manage_page">
+			<div class="breadcrumb_group" style="margin-bottom: 20px;">
+				当前位置：
+				<span class="layui-breadcrumb" lay-separator=">">
+					<a href="javascript:;">组织生活管理</a>
+					<a href="javascript:;">通知信息</a>
+            </span>
+			</div>
+			<div class="bg_white_container">
+				<div class="content_form form_container">
+					<div class="layui-form custom_form"  id="info-detail"
+						 style="width: 960px;">
+						<div class="layui-form-item">
+							<div class="layui-inline">
+								<label class="layui-form-label">会议主题:</label>
+								<div class="layui-input-inline">
+									<label class="layui-form-label-text">${informDetail.meeting_theme }</label>
+								</div>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<div class="layui-inline">
+								<label class="layui-form-label">开始时间:</label>
+								<div class="layui-input-inline">
+									<label class="layui-form-label-text">
+										<fmt:formatDate value="${informDetail.start_time }" type="both"></fmt:formatDate>
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<div class="layui-inline">
+								<label class="layui-form-label">通知组织:</label>
+								<div class="layui-input-inline">
+									<ul>
+										<c:forEach var="org" items="${orgList}">
+											<li>${org.org_name}</li>
+										</c:forEach>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<div class="layui-inline">
+								<label class="layui-form-label">附            件:</label>
+								<div class="layui-input-inline" >
+									<a href="javascript:void(0)"  path="${attachFile.attachment_url}" name="${attachFile.attachment_name}" onclick="downloadFile(this)">${attachFile.attachment_name}</a>
+								</div>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<div class="layui-inline">
+								<label class="layui-form-label">发布内容:</label>
+								<div class="layui-input-inline line-fill">
+									${informDetail.content }
+								</div>
+							</div>
+						</div>
+
+						<div class="layui-form-item" style="text-align: center;margin-top: 40px;">
+							<button type="button"  class="layui-btn layui-btn-radius layui-btn-warm" onclick="window.history.back();">返回</button>
+						</div>
+					</div>
 				</div>
-				<div class="details_content_info" style="word-wrap:break-word;padding: 15px 0 200px 0;">${content }</div>
-		        <h2 style="color: #47647a;font-size:14px;">
-		        	<u>
-		        		<portlet:resourceURL id="/dowloadResourceCommand" var ="download">  
-		     				<portlet:param name="attachment_url" value="${attachment }"/>
-		     			</portlet:resourceURL>
-		     			<c:if test="${ ! empty attachment }">
-			        		<span class="glyphicon glyphicon-chevron-right" style="color: #47647a;"></span>&nbsp;&nbsp;附件下载:&nbsp;
-			        		<a href="${download}">《${ attName }》</a>
-		        		</c:if>
-		        	</u>
-		        </h2>
-		        <div class="btn_group">
-		        	<a href="/membertodolist?meetingId=${meetingId }">
-		        		<button class="btn btn-default btn-lg main_color_btn">返回</button>
-		        	</a>
-		        	
-		        </div>
-		    </div>
+			</div>
 		</div>
-	</body>
+	</div>
+</body>
+<script>
+	function downloadFile(o){
+		var path = $(o).attr("path");
+		var name = $(o).attr("name");
+		window.location.href="${downloadUrl}&filePath="+path+"&fileName="+name;
+	}
+</script>
 </html>

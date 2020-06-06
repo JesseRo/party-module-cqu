@@ -10,6 +10,7 @@ import hg.party.server.partyBranch.PartyBranchService;
 import org.apache.log4j.Logger;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+import org.springframework.web.util.HtmlUtils;
 import party.constants.PartyOrgAdminTypeEnum;
 import party.constants.PartyPortletKeys;
 
@@ -71,6 +72,7 @@ public class SubPlanPortlet extends MVCPortlet {
 
         logger.info("members size:"+members.size());
         renderRequest.setAttribute("organization",organization);
+        meetingPlan.setContent(HtmlUtils.htmlUnescape(meetingPlan.getContent()));
         renderRequest.setAttribute("meetingPlan",meetingPlan);
         renderRequest.setAttribute("conferenceTypes",CONFERENCE_TYPES);
         renderRequest.setAttribute("timeLasts",TIME_LASTS);
