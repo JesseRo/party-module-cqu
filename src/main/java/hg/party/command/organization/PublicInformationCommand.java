@@ -163,6 +163,7 @@ public class PublicInformationCommand extends BaseMVCActionCommand {
 //                    }
                     if (uploadFiles != null && uploadFiles.length > 0 && uploadFiles[0] != null) {
                         p.setAttachment("t");
+                        otherDao.deleteAttachment(resourceid);
                         saveAttchment(uploadFiles, resourceid, uploadPortletRequest);
                     } else if ("resend".equals(editState)) {
                         Map<String, Object> attach = otherDao.findAttachment(infrom_id);
