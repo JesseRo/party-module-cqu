@@ -77,9 +77,10 @@
                     },
                     cols: [[ //表头
                         {field: 'retention_id', title: 'id', hide: true},
-                        {field: 'user_name', title: '姓名', width: '20%'},
-                        {field: 'org_name', title: '所在支部', width: '40%'},
-                        {field: 'time', title: '申请时间', width: '20%'},
+                        {field: 'user_name', title: '姓名', width: '15%'},
+                        {field: 'org_name', title: '所在支部', width: '25%'},
+                        {field: 'second_name', title: '二级党委', width: '25%'},
+                        {field: 'time', title: '申请时间', width: '15%'},
                         {
                             field: 'status', title: '状态', width: '20%', templet: function (d) {
                                 return statusList[d.status];
@@ -297,10 +298,11 @@
                     cols: [[ //表头
                         {field: 'transport_id', title: 'id', hide: true},
                         {field: 'user_name', title: '姓名', width: '10%'},
-                        {field: 'org_name', title: '所在支部', width: '25%'},
-                        {field: 'to_org_name', title: '去往单位', width: '25%'},
+                        {field: 'org_name', title: '所在支部', width: '18.33%'},
+                        {field: 'org_name', title: '所在支部', width: '18.33%'},
+                        {field: 'to_org_name', title: '去往单位', width: '18.33%'},
                         {field: 'time', title: '申请时间', width: '10%'},
-                        {field: 'reason', title: '原因', width: '20%'},
+                        {field: 'reason', title: '原因', width: '15%'},
                         {
                             field: 'status', title: '状态', width: '10%', templet: function (d) {
                                 return statusList[d.status];

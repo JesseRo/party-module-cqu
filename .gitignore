@@ -9,3 +9,4 @@ target/
 src/main/profile/dev/
 src/main/resources/META-INF/resources/cqu/css/.sass-cache/
 *.log
+src/main/resources/META-INF/resources/js/2222.html

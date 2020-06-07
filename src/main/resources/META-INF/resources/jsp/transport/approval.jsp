@@ -11,6 +11,7 @@
 <head>
     <link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/activity-manage1.css?v=1"/>
     <link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/common.min.css"/>
+    <link rel="stylesheet" type="text/css" href="${basePath}/css/print_div.css"/>
     <script type="text/javascript" src="${basePath}/js/jquery.jqprint-0.3.js"></script>
 
 
@@ -47,7 +48,7 @@
             margin-bottom: 10px;
         }
 
-        #div_print p {
+        #div_print1 p {
             margin-bottom: 2px;
         }
 
@@ -76,9 +77,13 @@
                     },
                     cols: [[ //表头
                         {field: 'retention_id', title: 'id', hide: true},
-                        {field: 'user_name', title: '姓名', width: '15%'},
-                        {field: 'org_name', title: '所在支部', width: '30%'},
-                        {field: 'time', title: '申请时间', width: '15%'},
+                        {field: 'user_name', title: '姓名', width: '10%', templet: function (d) {
+                                return "<a onclick='window.open(\"/addperson?userId=" + d.user_id + "\", \"_blank\")'>" + d.user_name+ "</a>"
+                            }
+                        },
+                        {field: 'org_name', title: '所在支部', width: '20%'},
+                        {field: 'second_name', title: '二级党委', width: '20%'},
+                        {field: 'time', title: '申请时间', width: '10%'},
                         {
                             field: 'status', title: '状态', width: '15%', templet: function (d) {
                                 return statusList[d.status];
@@ -138,7 +143,7 @@
                     "            </div>\n" +
                     "        </div>\n" +
                     "    </div>\n" +
-                    "    <div style=\"height: 400px;width: 100%;  clear: both;\" id=\"div_print\" class='letter'>\n" +
+                    "    <div style=\"height: 400px;width: 100%;  clear: both;\" id=\"div_print1\" class='letter'>\n" +
                     "        <style type=\"text/css\">@page {size: auto; margin-top:0; margin-bottom: 0;}</style>" +
                     "<div  style=\"padding-top: 0.1px;\">\n" +
                     "            <h3 style=\"text-align: center;\">中国共产党组织关系介绍信</h3>\n" +
@@ -151,42 +156,38 @@
                     "        </div>\n" +
                     "        <div class=\"view\" style=\"overflow-y: hidden; padding: 0 20px;\">\n" +
                     "            <p style=\"white-space: normal;\">\n" +
-                    "                <span style=\"border-bottom: 1px solid;\">&nbsp;{secondary} :</span>\n" +
+                    "                <span style=\"border-bottom: 1px solid;\" >&nbsp;{secondary} :</span>\n" +
                     "            </p>\n" +
                     "            <p style=\"white-space: normal;\">&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;\n" +
-                    "                <span style=\"border-bottom: 1px solid;\">&nbsp; {name}&nbsp;\n" +
+                    "                <span style=\"border-bottom: 1px solid;\" id='print_name'>&nbsp; {name}&nbsp;\n" +
                     "                </span>同志，\n" +
-                    "                <span style=\"border-bottom: 1px solid;\">&nbsp; {sex}&nbsp;\n" +
+                    "                <span style=\"border-bottom: 1px solid;\" id='print_sex'>&nbsp; {sex}&nbsp;\n" +
                     "                </span>，\n" +
-                    "                <span style=\"border-bottom: 1px solid;\">&nbsp; {age}&nbsp;\n" +
+                    "                <span style=\"border-bottom: 1px solid;\" id='print_age'>&nbsp; {age}&nbsp;\n" +
                     "                </span>岁，\n" +
-                    "                <span style=\"border-bottom: 1px solid;\">&nbsp; {ethnic}&nbsp;\n" +
+                    "                <span style=\"border-bottom: 1px solid;\" id='print_ethnic'>&nbsp; {ethnic}&nbsp;\n" +
                     "                </span>，是中共\n" +
-                    "                <span style=\"border-bottom: 1px solid;\">&nbsp; {type}&nbsp;\n" +
+                    "                <span style=\"border-bottom: 1px solid;\" id='print_type'>&nbsp; {type}&nbsp;\n" +
                     "                </span>，身份证号码<br>\n" +
                     "            </p>\n" +
                     "            <p style=\"white-space: normal;\">\n" +
-                    "                <span style=\"border-bottom: 1px solid;\">\n" +
+                    "                <span style=\"border-bottom: 1px solid;\" id='print_identity'>\n" +
                     "                    &nbsp; {identity}&nbsp;\n" +
                     "                </span>，由\n" +
-                    "                <span style=\"border-bottom: 1px solid;\">\n" +
+                    "                <span style=\"border-bottom: 1px solid;\" id='print_org'>\n" +
                     "                    &nbsp; {secondary}&nbsp;\n" +
                     "                </span>转到\n" +
-                    "                <span style=\"border-bottom: 1px solid;\">\n" +
+                    "                <span style=\"border-bottom: 1px solid;\" id='print_to_org'>\n" +
                     "                    &nbsp; {toOrg}&nbsp;\n" +
                     "                </span>，" +
                     "           </p>" +
-                    "           <p style=\"white-space: normal;\">请转接组织关系。该同志党费已交至\n" +
-                    "                <span style=\"border-bottom: 1px solid;\">\n" +
-                    "                    &nbsp; 2020&nbsp;\n" +
-                    "                </span>年\n" +
-                    "                <span style=\"border-bottom: 1px solid;\">\n" +
-                    "                    &nbsp; 2&nbsp;\n" +
-                    "                </span>月。" +
-                    "            </p>\n" +
+                    "           <p style=\"white-space: normal;\">请转接组织关系。该同志党费已交至" +
+                    "               <input id='print_fee_year' style=\"max-width: 60px;height: 20px!important;text-align: center;\" contenteditable=\"true\">" +
+                    "               年<input id='print_fee_month' style=\"max-width: 30px;height: 20px!important;text-align: center;\" contenteditable=\"true\">" +
+                    "            月</p>\n" +
                     "            <br>\n" +
                     "            <p style=\"white-space: normal;\">有效期\n" +
-                    "                <select style=\"height: 30px;text-indent: 0;\">\n" +
+                    "                <select style=\"height: 30px;text-indent: 0;\" id='print_valid_time'>\n" +
                     "                    <option>叁拾</option>\n" +
                     "                    <option>陆拾</option>\n" +
                     "                    <option>玖拾</option>\n" +
@@ -194,32 +195,29 @@
                     "                天\n" +
                     "            </p>\n" +
                     "            <p style=\"white-space: normal;text-align: right;\">\n" +
-                    "                <span style=\"border-bottom: 1px solid;\">&nbsp; {currentYear}&nbsp;\n" +
-                    "                </span>年\n" +
-                    "                <span style=\"border-bottom: 1px solid;\">&nbsp; {currentMonth}&nbsp;\n" +
-                    "                </span>月\n" +
-                    "                <span style=\"border-bottom: 1px solid;\">&nbsp; {currentDay}&nbsp;\n" +
-                    "                </span>日\n" +
+                    "                <input id='print_year' style=\"max-width: 60px;height: 20px!important;text-align: center;\">年\n" +
+                    "              <input id='print_month' style=\"max-width: 30px;height: 20px!important;text-align: center;\">月\n" +
+                    "                <input id='print_day' style=\"max-width: 30px;height: 20px!important;text-align: center;\">日\n" +
                     "            </p>\n" +
                     "            <p style=\"white-space: normal;\">\n" +
                     "                党员电话或其他联系方式：\n" +
-                    "                <span style=\"border-bottom: 1px solid;\">&nbsp; {telephone}&nbsp;\n" +
+                    "                <span style=\"border-bottom: 1px solid;\" id='print_telephone'>&nbsp; {telephone}&nbsp;\n" +
                     "                </span>\n" +
                     "            </p>\n" +
                     "            <br>\n" +
                     "            <p style=\"white-space: normal;\">\n" +
                     "                党员原所在基础党委通讯地址：\n" +
-                    "                <span style=\"border-bottom: 1px solid;\">&nbsp; {orgAddress}&nbsp;\n" +
+                    "                <span style=\"border-bottom: 1px solid;\" id='print_orgAddress'>&nbsp; {orgAddress}&nbsp;\n" +
                     "                </span>\n" +
                     "            </p>\n" +
                     "            <br>\n" +
                     "            <p style=\"white-space: normal;\">\n" +
                     "                联系电话：\n" +
-                    "                <span style=\"border-bottom: 1px solid;\">&nbsp; {orgTelephone}&nbsp;\n" +
+                    "                <span style=\"border-bottom: 1px solid;\"id='print_org_telephone'>&nbsp; {orgTelephone}&nbsp;\n" +
                     "                </span>\n" +
-                    "                &nbsp;&nbsp;传真：<span style=\"border-bottom: 1px solid;\">&nbsp; {orgFax}&nbsp;\n" +
+                    "                &nbsp;&nbsp;传真：<span style=\"border-bottom: 1px solid;\" id='print_org_fax'>&nbsp; {orgFax}&nbsp;\n" +
                     "                </span>\n" +
-                    "                &nbsp;&nbsp;邮编：<span style=\"border-bottom: 1px solid;\">&nbsp; {orgMailCode}&nbsp;\n" +
+                    "                &nbsp;&nbsp;邮编：<span style=\"border-bottom: 1px solid;\" id='print_org_mailcode'>&nbsp; {orgMailCode}&nbsp;\n" +
                     "                </span>\n" +
                     "            </p>\n" +
                     "        </div>\n" +
@@ -230,6 +228,93 @@
                     "    <div style=\"height: 20%;width: 100%; border-bottom: 1px solid #d4d4d4;\">\n" +
                     "\n" +
                     "    </div>\n" +
+                    "</div>\n" +
+                    "<div style=\"height: 297mm;width: 210mm;background-color: #9cb945; font-size: 16px;\" id=\"div_print\" class=\"letter\">\n" +
+                    "    <style type=\"text/css\">@page {\n" +
+                    "        size: auto;\n" +
+                    "        margin-top: 0;\n" +
+                    "        margin-bottom: 0;\n" +
+                    "    }\n" +
+                    "\n" +
+                    "    .line1 div {\n" +
+                    "        top: 120mm;\n" +
+                    "    }\n" +
+                    "\n" +
+                    "    .line2 div {\n" +
+                    "        top: 130mm;\n" +
+                    "    }\n" +
+                    "\n" +
+                    "    .line3 div {\n" +
+                    "        top: 140mm;\n" +
+                    "    }\n" +
+                    "\n" +
+                    "    .line4 div {\n" +
+                    "        top: 150mm;\n" +
+                    "    }\n" +
+                    "\n" +
+                    "    .line5 div {\n" +
+                    "        top: 160mm;\n" +
+                    "    }\n" +
+                    "\n" +
+                    "    .line6 div {\n" +
+                    "        top: 170mm;\n" +
+                    "    }\n" +
+                    "\n" +
+                    "    .line7 div {\n" +
+                    "        top: 190mm;\n" +
+                    "    }\n" +
+                    "\n" +
+                    "    .line8 div {\n" +
+                    "        top: 200mm;\n" +
+                    "    }\n" +
+                    "\n" +
+                    "    .line9 div {\n" +
+                    "        top: 210mm;\n" +
+                    "    }\n" +
+                    "\n" +
+                    "    .line10 div {\n" +
+                    "        top: 220mm;\n" +
+                    "    }\n" +
+                    "    </style>\n" +
+                    "    <div class=\"line1\">\n" +
+                    "        <div style=\"position: absolute;left: 21.7mm;\" class=\"org_name\">本科生第一党支部</div>\n" +
+                    "    </div>\n" +
+                    "    <div class=\"line2\">\n" +
+                    "        <div style=\"position: absolute;left: 36.7mm;\" class=\"name\">罗怀西</div>\n" +
+                    "        <div style=\"position: absolute;left: 121.7mm;\" class=\"age\">28</div>\n" +
+                    "        <div style=\"position: absolute;left: 150.7mm;\" class=\"ethnic\">汉</div>\n" +
+                    "    </div>\n" +
+                    "    <div class=\"line3\">\n" +
+                    "        <div style=\"position: absolute;left: 110.7mm;\" class=\"identity\">111111111111111111</div>\n" +
+                    "    </div>\n" +
+                    "    <div class=\"line4\">\n" +
+                    "        <div style=\"position: absolute;left: 27mm;font-size: 16px;\" class=\"org_name\"></div>\n" +
+                    "        <div style=\"position: absolute;left: 95.7mm;\" class=\"toOrg\"></div>\n" +
+                    "    </div>\n" +
+                    "    <div class=\"line5\">\n" +
+                    "        <div style=\"position: absolute;left: 110.7mm;\" class=\"feeYear\"></div>\n" +
+                    "        <div style=\"position: absolute;left: 135.7mm;\" class=\"feeMonth\"></div>\n" +
+                    "    </div>\n" +
+                    "    <div class=\"line6\">\n" +
+                    "        <div style=\"position: absolute;left: 52.7mm;\" class=\"validTime\"></div>\n" +
+                    "    </div>\n" +
+                    "    <div class=\"line7\">\n" +
+                    "        <div style=\"position: absolute;left: 125.7mm;\" class=\"currentYear\"></div>\n" +
+                    "        <div style=\"position: absolute;left: 147.7mm;\" class=\"currentMonth\"></div>\n" +
+                    "        <div style=\"position: absolute;left: 165.7mm;\" class=\"currentDay\"></div>\n" +
+                    "    </div>\n" +
+                    "    <div class=\"line8\">\n" +
+                    "        <div style=\"position: absolute;left: 95.7mm;\" class=\"telephone\"></div>\n" +
+                    "    </div>\n" +
+                    "    <div class=\"line9\">\n" +
+                    "        <div style=\"position: absolute;left: 95.7mm;font-size: 16px;\" class=\"orgAddress\"></div>\n" +
+                    "    </div>\n" +
+                    "    <div class=\"line10\">\n" +
+                    "        <div style=\"position: absolute;left: 47.7mm;\" class=\"orgTelephone\"></div>\n" +
+                    "        <div style=\"position: absolute;left: 100.7mm;\" class=\"orgFax\"></div>\n" +
+                    "        <div style=\"position: absolute;left: 155.7mm;\" class=\"orgMailCode\"></div>\n" +
+                    "    </div>\n" +
+                    "\n" +
                     "</div>\n";
 
                 table.on('tool(activityTable)', function (obj) {
@@ -267,6 +352,23 @@
                             , move: false
                             , btn: ["打印", "取消"]
                             , yes: function (index) {
+                                $('#div_print .org_name').text($('#print_org').text());
+                                $('#div_print .name').text($('#print_name').text());
+                                $('#div_print .age').text($('#print_age').text());
+                                $('#div_print .ethnic').text($('#print_ethnic').text());
+                                $('#div_print .identity').text($('#print_identity').text());
+                                $('#div_print .toOrg').text($('#print_to_org').text());
+                                $('#div_print .feeYear').text($('#print_fee_year').val());
+                                $('#div_print .feeMonth').text($('#print_fee_month').val());
+                                $('#div_print .validTime').text($('#print_valid_time').val());
+                                $('#div_print .currentYear').text($('#print_year').val());
+                                $('#div_print .currentMonth').text($('#print_month').val());
+                                $('#div_print .currentDay').text($('#print_day').val());
+                                $('#div_print .telephone').text($('#print_telephone').text());
+                                $('#div_print .orgAddress').text($('#print_orgAddress').text());
+                                $('#div_print .orgTelephone').text($('#print_org_telephone').text());
+                                $('#div_print .orgFax').text($('#print_org_fax').text());
+                                $('#div_print .orgMailCode').text($('#print_org_mailcode').text());
                                 $('#div_print').jqprint(
                                     {
                                         debug: false, //如果是true则可以显示iframe查看效果（iframe默认高和宽都很小，可以再源码中调大），默认是false
@@ -295,11 +397,15 @@
                     },
                     cols: [[ //表头
                         {field: 'transport_id', title: 'id', hide: true},
-                        {field: 'user_name', title: '姓名', width: '10%'},
-                        {field: 'org_name', title: '所在支部', width: '15%'},
-                        {field: 'to_org_name', title: '去往单位', width: '15%'},
-                        {field: 'time', title: '申请时间', width: '10%'},
-                        {field: 'reason', title: '原因', width: '10%'},
+                        {field: 'user_name', title: '姓名', width: '7%', templet: function (d) {
+                                return "<a onclick='window.open(\"/addperson?userId=" + d.user_id + "\", \"_blank\")'>" + d.user_name + "</a>"
+                            }
+                        },
+                        {field: 'org_name', title: '所在支部', width: '13.33%'},
+                        {field: 'second_name', title: '二级党委', width: '13.3%'},
+                        {field: 'to_org_name', title: '去往单位', width: '13.33%'},
+                        {field: 'time', title: '申请时间', width: '6%'},
+                        {field: 'reason', title: '原因', width: '7%'},
                         {
                             field: 'status', title: '状态', width: '10%', templet: function (d) {
                                 return statusList[d.status];
