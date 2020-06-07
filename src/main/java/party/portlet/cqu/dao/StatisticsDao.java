@@ -18,6 +18,12 @@ public class StatisticsDao extends PostgresqlDaoImpl<Place> {
         return jdbcTemplate.queryForList(sql);
     }
 
+    public List<Map<String, Object>> countOrgByDescType() {
+        String sql = "select desc_type, count(*) as count from hg_party_org " +
+                "where org_type != 'organization' and historic = false group by desc_type";
+        return jdbcTemplate.queryForList(sql);
+    }
+
     public List<Map<String, Object>> countMember() {
         String sql = "select sec.org_name as name, count(m.id) as count from hg_party_member m left join hg_party_org brunch on m.member_org = brunch.org_id left join hg_party_org sec on brunch.org_parent = sec.org_id  where m.historic = false and brunch.historic = false group by sec.org_name";
         return  jdbcTemplate.queryForList(sql);
