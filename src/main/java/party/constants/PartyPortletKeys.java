@@ -38,6 +38,8 @@ public class PartyPortletKeys {
 
     public static final String Org = "Organizations";
 
+    public static final String OrganizationStatistics = "OrganizationStatistics";
+
     public static final String Hgg_login = "Hgg_login";
 
     public static final String BigScreenPortlet = "BigScreenPortlet";

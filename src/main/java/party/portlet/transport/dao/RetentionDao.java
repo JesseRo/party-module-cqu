@@ -29,8 +29,9 @@ public class RetentionDao extends PostgresqlDaoImpl<Retention> {
     }
 
     public PageQueryResult<Map<String, Object>> findSecondaryPage(int page, int size, String orgId, String name, boolean completed, String startDate, String endDate) {
-        String sql = "select t.*, o.org_name from hg_party_retention t " +
+        String sql = "select t.*, o.org_name,p.org_name as second_name from hg_party_retention t " +
                 "left join hg_party_org o on t.org_id = o.org_id" +
+                " left join hg_party_org p on p.org_id = o.org_parent" +
                 " where o.org_parent = ?";
         List<Object> params = new ArrayList<>();
         params.add(orgId);
@@ -63,8 +64,9 @@ public class RetentionDao extends PostgresqlDaoImpl<Retention> {
 
 
     public List<Map<String, Object>> findSecondary(String orgId, String name, boolean completed, String startDate, String endDate) {
-        String sql = "select t.*, o.org_name from hg_party_retention t " +
-                "left join hg_party_org o on t.org_id = o.org_id" +
+        String sql = "select t.*, o.org_name,p.org_name as second_name from hg_party_retention t " +
+                " left join hg_party_org o on t.org_id = o.org_id" +
+                " left join hg_party_org p on p.org_id = o.org_parent" +
                 " where o.org_parent = ?";
         List<Object> params = new ArrayList<>();
         params.add(orgId);
@@ -93,8 +95,9 @@ public class RetentionDao extends PostgresqlDaoImpl<Retention> {
     }
 
     public PageQueryResult<Map<String, Object>> findRootPage(int page, int size, String name,  boolean completed, String startDate, String endDate) {
-        String sql = "select t.*, o.org_name from hg_party_retention t " +
+        String sql = "select t.*, o.org_name,p.org_name as second_name from hg_party_retention t " +
                 "left join hg_party_org o on t.org_id = o.org_id " +
+                " left join hg_party_org p on p.org_id = o.org_parent" +
                 "where 1 = 1";
         List<Object> params = new ArrayList<>();
         if (!StringUtils.isEmpty(name)) {
@@ -126,8 +129,9 @@ public class RetentionDao extends PostgresqlDaoImpl<Retention> {
     }
 
     public List<Map<String, Object>> findRoot(String name, boolean completed, String startDate, String endDate) {
-        String sql = "select t.*, o.org_name from hg_party_retention t " +
+        String sql = "select t.*, o.org_name,p.org_name as second_name from hg_party_retention t " +
                 "left join hg_party_org o on t.org_id = o.org_id" +
+                " left join hg_party_org p on p.org_id = o.org_parent" +
                 " where 1 = 1";
         List<Object> params = new ArrayList<>();
         if (!StringUtils.isEmpty(name)) {
@@ -166,8 +170,9 @@ public class RetentionDao extends PostgresqlDaoImpl<Retention> {
     }
 
     public List<Map<String, Object>> findBrunch(String orgId, String name, boolean completed, String startDate, String endDate) {
-        String sql = "select t.*, o.org_name from hg_party_retention t " +
+        String sql = "select t.*, o.org_name,p.org_name as second_name from hg_party_retention t " +
                 "left join hg_party_org o on t.org_id = o.org_id" +
+                " left join hg_party_org p on p.org_id = o.org_parent" +
                 " where o.org_id = ?";
         List<Object> params = new ArrayList<>();
         params.add(orgId);
@@ -197,8 +202,10 @@ public class RetentionDao extends PostgresqlDaoImpl<Retention> {
     }
 
     public PageQueryResult<Map<String, Object>> findBrunchPage(int page, int size, String orgId, String name,boolean completed, String startDate, String endDate) {
-        String sql = "select t.*, o.org_name from hg_party_retention t " +
+        String sql = "select t.*, o.org_name,p.org_name as second_name" +
+                " from hg_party_retention t " +
                 "left join hg_party_org o on t.org_id = o.org_id" +
+                " left join hg_party_org p on p.org_id = o.org_parent" +
                 " where o.org_id = ?";
         List<Object> params = new ArrayList<>();
         params.add(orgId);
