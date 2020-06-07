@@ -148,19 +148,8 @@ public class GraftService {
 	 * @param informId 
 	 * @return
 	 */
-	public List<Map<String, Object>> findGraftDetail( String informId){
-		  List<Map<String, Object>> list=dao.findGraftDetail(informId);
-		  Map<String, Object> map=list.get(0);
-		  try {
-			map.put("start_time", date(map.get("start_time").toString()));
-			map.put("end_time", date(map.get("end_time").toString()));
-			map.put("release_time", date(map.get("release_time").toString()));
-			String dedetime=StringUtils.isEmpty(map.get("deadline_time"))?"2018-03-13 10:27:26.379":map.get("deadline_time").toString();
-			map.put("deadline_time", date(dedetime));
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		 return list;
+	public Map<String, Object> findGraftDetail( String informId){
+		return dao.findGraftDetail(informId);
 	}
 	public int deletePublicObject(String informId){
 		return dao.deletePublicObject(informId);
@@ -168,5 +157,9 @@ public class GraftService {
 
 	public PostgresqlPageResult<Map<String, Object>> searchPage(int page, int size, String dateType,String orgId,int publicStatus, String keyword) {
 		return dao.searchPage(page,size,dateType,orgId,publicStatus,keyword);
+	}
+
+	public PostgresqlPageResult<Map<String, Object>> searchSendInformPage(int page, int size,String dateType, String orgId, String keyword) {
+		return dao.searchSendInformPage(page,size,dateType,orgId,keyword);
 	}
 }

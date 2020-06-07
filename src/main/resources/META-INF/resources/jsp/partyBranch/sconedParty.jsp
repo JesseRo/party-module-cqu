@@ -125,15 +125,11 @@
                 <a href="javascript:;">拟定计划</a>
             </span>
         </div>
-        <input type="hidden" class="mapValue" value='${mapNew }'>
-        <input type="hidden" class="mapOld" value='${mapold }'>
-        <input type="hidden" class="mapedit" value='${mapedit }'>
-        <input type="hidden" class="planContent" value='${planContent }'>
-
         <div class="bg_white_container">
             <div class="content_form form_container">
                 <form class="layui-form custom_form"  id="addMeetingPlanForm"
                       style="width: 960px;">
+                    <input type="hidden" name="meetingId" value='${meetingPlan.meeting_id }'>
                     <div class="layui-form-item">
                         <div class="layui-inline">
                             <label class="layui-form-label">党组织：</label>
@@ -157,7 +153,7 @@
                         <div class="layui-inline">
                             <label class="layui-form-label layui-required">开展主题：</label>
                             <div class="layui-input-inline">
-                                <input type="text" class="layui-input" name="subject"  lay-verify="required" autocomplete="on">
+                                <input type="text" class="layui-input" name="subject"  lay-verify="required" autocomplete="on" value="${meetingPlan.meeting_theme }">
                             </div>
                         </div>
                     </div>
@@ -165,7 +161,7 @@
                         <div class="layui-inline">
                             <label class="layui-form-label layui-required">开始时间：</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="timeDuring" id="timeDuring" value="${info.timeDuring }"
+                                <input type="text" name="timeDuring" id="timeDuring" value="${meetingPlan.start_time }"
                                        class="layui-input start_date" lay-verify="required" autocomplete="off">
                             </div>
                         </div>
@@ -175,7 +171,12 @@
                                 <select  name="timeLasts" lay-verify="select">
                                     <option  value="" disabled>请选择</option>
                                     <c:forEach var="n" items="${timeLasts }">
-                                        <option value="${n}">${n/60}小时</option>
+                                        <c:if test="${meetingPlan.total_time == n/60 }">
+                                            <option value="${n}" selected>${n/60}小时</option>
+                                        </c:if>
+                                        <c:if test="${meetingPlan.total_time != n/60 }">
+                                            <option value="${n}">${n/60}小时</option>
+                                        </c:if>
                                     </c:forEach>
                                 </select>
                             </div>
@@ -536,7 +537,6 @@
             $("#group_member_list").empty();
             $.post('${groupsAndMembers}', function(res){
                 if(res.result){
-                    $("#group_member_list").children("li").remove();
                     var nodes = new Array();
                     for(var i=0;res.data.length>0 && i<res.data.length;i++){
                         var tipsContentArr = new Array();
@@ -800,6 +800,7 @@
             $.post("${saveMeetingPlan}", postData, function (res) {
                 if (res.code==200) {
                     layer.msg("保存成功。");
+                    setTimeout(function(){window.location.href = res.data}, 1000);
                 }
             },'json');
             return false;

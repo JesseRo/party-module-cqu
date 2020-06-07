@@ -45,12 +45,21 @@ public class InformPageCommand implements MVCResourceCommand {
 		String dateType = ParamUtil.getString(resourceRequest, "dateType");
 		String keyword = HtmlUtil.escape(ParamUtil.getString(resourceRequest, "keyword"));
 		String orgId = (String) SessionManager.getAttribute(resourceRequest.getRequestedSessionId(), "department");
+		Boolean isSender = ParamUtil.getBoolean(resourceRequest, "isSender");
 		try {
 			PostgresqlPageResult<Map<String, Object>> data;
-			if (StringUtils.isEmpty(keyword)){
-				data = graftService.searchPage(page, size,dateType,orgId,1,null);
-			}else {
-				data = graftService.searchPage(page, size,dateType,orgId,1,keyword);
+			if(isSender){
+				if (StringUtils.isEmpty(keyword)){
+					data = graftService.searchSendInformPage(page, size,dateType,orgId,null);
+				}else {
+					data = graftService.searchSendInformPage(page, size,dateType,orgId,keyword);
+				}
+			}else{
+				if (StringUtils.isEmpty(keyword)){
+					data = graftService.searchPage(page, size,dateType,orgId,1,null);
+				}else {
+					data = graftService.searchPage(page, size,dateType,orgId,1,keyword);
+				}
 			}
 			Gson gson = new Gson();
 			res.getWriter().write(gson.toJson(data.toJsonPageResponse()));

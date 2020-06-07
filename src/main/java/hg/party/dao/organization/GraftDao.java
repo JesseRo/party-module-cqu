@@ -120,12 +120,17 @@ public class GraftDao extends HgPostgresqlDaoImpl<PublicInformation> {
 	}
 
 	//
-	public List<Map<String, Object>> findGraftDetail(String informId) {
+	public Map<String, Object> findGraftDetail(String informId) {
 	//	String sql = "SELECT * from hg_party_org_inform_info WHERE inform_id='" + informId + "'";
 		String sql2 = "SELECT info.*,att.attachment_name from hg_party_org_inform_info as info LEFT OUTER JOIN hg_party_attachment as att "
 				+ "on info.inform_id=att.resource_id " 
 				+ "where  inform_id= ? ";
-		return jdbcTemplate.queryForList(sql2, informId);
+		List<Map<String, Object>>  list =jdbcTemplate.queryForList(sql2, informId);
+		if(list.size()> 0 ){
+			return list.get(0);
+		}else{
+			return null;
+		}
 	}
 
 	public int deletePublicObject(String informId) {
@@ -213,6 +218,32 @@ public class GraftDao extends HgPostgresqlDaoImpl<PublicInformation> {
 			return this.jdbcTemplate.queryForList(exeSql.toString(), list.toArray(new Object[0]));
 		} else {
 			return this.jdbcTemplate.queryForList(exeSql.toString(), new Object[]{pageSize, pageNo * pageSize});
+		}
+	}
+
+	public PostgresqlPageResult<Map<String, Object>> searchSendInformPage(int page, int size,String dateType, String orgId, String keyword) {
+		if (size <= 0){
+			size = 10;
+		}
+		StringBuffer sb = new StringBuffer("SELECT a.attachment_url,a.attachment_name,i.* FROM hg_party_org_inform_info i left join hg_party_attachment a on i.inform_id = a.resource_id WHERE 1=1 and i.org_type=? and i.public_status='1'");
+		DateQueryVM dateQueryVM = HgDateQueryUtil.toDateQueryVM(DateQueryEnum.getEnum(dateType));
+		if(!StringUtils.isEmpty(keyword)){
+			String search = "%" + keyword + "%";
+			sb.append(" and (i.meeting_theme like '"+search+"')");
+		}
+		if(dateQueryVM.getStartTime()!=null){
+			sb.append(" and i.release_time>=?");
+			if(dateQueryVM.getEndTime()!=null){
+				sb.append(" and i.release_time<=?");
+				sb.append(" ORDER BY i.release_time desc");
+				return postGresqlFindPageBySql(page, size, sb.toString(),orgId,dateQueryVM.getStartTime(),dateQueryVM.getEndTime());
+			}else{
+				sb.append(" ORDER BY i.release_time desc");
+				return postGresqlFindPageBySql(page, size, sb.toString(),orgId,dateQueryVM.getStartTime());
+			}
+		}else{
+			sb.append(" ORDER BY i.release_time desc");
+			return postGresqlFindPageBySql(page, size, sb.toString(),orgId);
 		}
 	}
 }

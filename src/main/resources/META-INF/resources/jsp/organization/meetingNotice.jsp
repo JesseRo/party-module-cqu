@@ -146,18 +146,11 @@
                     groups:4
                 },
                 cols: [[ //表头
-                    {field: 'meeting_theme', align:'center',width:320, title: '活动名称',templet:function(d){
-                            if(d.read_status== "未读"){
-                                return '<a href="javascript:void(0);"><b>'+d.meeting_theme+'</b></a>';
-                            }else{
-                                return '<a href="javascript:void(0);">'+d.meeting_theme+'</a>';
-                            }
-                        }},
-                    {field: 'content', align:'center', title: '活动内容'},
+                    {field: 'meeting_theme', align:'center', title: '活动名称'},
                     {field: 'release_time', align:'center', title: '开始时间',width:180,templet: function(d){return new Date(d.release_time).format("yyyy-MM-dd hh:mm:ss");}},
 /*                    {field: 'inform_status', align:'center', title: '查看状态'},*/
                     {field: 'operation', align:'center', title: '操作',width:120,toolbar: '#informTableBtns'},
-                    {field: 'attachment', align:'center', title: '附件下载',width:120,templet: function(d){
+                    {field: 'attachment', align:'center', title: '附件下载',width:180,templet: function(d){
                             if(d.attachment == "t"){
                                 return '<a href="javascript:void(0)"  path="'+d.attachment_url+'" name="'+d.attachment_name+'" onclick="downloadFile(this)">'+d.attachment_name+'</a>';
                             }else{
@@ -188,7 +181,7 @@
             });
         }
         function renderDetail(inform){
-            layer.msg("功能完善中。。。");
+            window.location.href = "/noticeDetail&informId="+inform.inform_id;
         }
     });
     function downloadFile(o){

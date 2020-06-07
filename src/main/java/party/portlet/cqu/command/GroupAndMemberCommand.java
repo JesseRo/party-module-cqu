@@ -48,11 +48,17 @@ public class GroupAndMemberCommand implements MVCResourceCommand {
         res.addHeader("content-type", "application/json");
         try {
             List<Map<String, Object>> groupMemberResponse = new ArrayList<>();
-            for (Map<String, Object> group : groups) {
-                Map<String, Object> groupMap = new HashMap<>();
-                groupMemberResponse.add(groupMap);
-                groupMap.put("id", group.get("group_id"));
-                groupMap.put("name", group.get("group_name"));
+            if(!groups.isEmpty()){
+                List<Map<String, Object>> groupMembers = service.getGroupMembers(groupsIds);
+                Map<String, List<Map<String, Object>>> map = groupMembers.stream()
+                        .collect(Collectors.groupingBy(p -> (String) p.get("group_id")));
+                for (Map<String, Object> group : groups) {
+                    Map<String, Object> groupMap = new HashMap<>();
+                    groupMap.put("id", group.get("group_id"));
+                    groupMap.put("name", group.get("group_name"));
+                    groupMap.put("member", map.getOrDefault(group.get("group_id"), Collections.emptyList()));
+                    groupMemberResponse.add(groupMap);
+                }
             }
             res.getWriter().write(gson.toJson(JsonResponse.Success(groupMemberResponse)));
         } catch (Exception e) {

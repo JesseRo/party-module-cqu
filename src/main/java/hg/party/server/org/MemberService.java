@@ -6,6 +6,7 @@ import hg.party.dao.org.MemberDao;
 
 import hg.party.entity.partyMembers.GroupMember;
 import hg.party.entity.partyMembers.Member;
+import hg.util.postgres.PostgresqlPageResult;
 import hg.util.result.Page;
 import hg.util.result.PageResult;
 import org.osgi.service.component.annotations.Component;
@@ -13,6 +14,7 @@ import org.osgi.service.component.annotations.Reference;
 import party.constants.PartyOrgAdminTypeEnum;
 
 import java.util.List;
+import java.util.Map;
 
 
 @Component(immediate = true, service = MemberService.class)
@@ -25,7 +27,7 @@ public class MemberService {
 	 * @param orgId
 	 * @return
 	 */
-	public Page pageMembersByOrg(String orgId, PartyOrgAdminTypeEnum partyOrgAdminTypeEnum,Page page,String memberType,String history,String keyword) {
+	public PostgresqlPageResult<Map<String, Object>> pageMembersByOrg(String orgId, PartyOrgAdminTypeEnum partyOrgAdminTypeEnum, Page page, String memberType, String history, String keyword) {
 		return memberDao.pageMembersByOrg(orgId,partyOrgAdminTypeEnum,page,memberType,history,keyword);
 	}
 

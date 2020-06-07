@@ -7,6 +7,8 @@ import hg.party.entity.party.BaseStatistics;
 import hg.party.entity.partyMembers.GroupMember;
 import hg.party.entity.partyMembers.Member;
 import hg.util.MD5;
+import hg.util.postgres.HgPostgresqlDaoImpl;
+import hg.util.postgres.PostgresqlPageResult;
 import hg.util.result.Page;
 import org.osgi.service.component.annotations.Reference;
 import org.springframework.jdbc.core.RowMapper;
@@ -28,7 +30,7 @@ import java.util.stream.Stream;
 
 @Component(immediate = true, service = MemberDao.class)
 @Transactional
-public class MemberDao extends PostgresqlDaoImpl<Member> {
+public class MemberDao extends HgPostgresqlDaoImpl<Member> {
     private static final int PAGE_SIZE = 10;
     @Reference
     private OrgDao orgDao;
@@ -422,8 +424,8 @@ public class MemberDao extends PostgresqlDaoImpl<Member> {
       return  jdbcTemplate.update(sql);
     }
 
-    public Page pageMembersByOrg(String orgId, PartyOrgAdminTypeEnum partyOrgAdminTypeEnum,Page page,String memberType,String history,String keyword) {
-        StringBuffer sb  = new StringBuffer("hg_party_member i left join hg_party_org b on i.member_org = b.org_id left join hg_party_org s on s.org_id = b.org_parent left join hg_party_org o on o.org_id = s.org_parent");
+    public PostgresqlPageResult<Map<String, Object>> pageMembersByOrg(String orgId, PartyOrgAdminTypeEnum partyOrgAdminTypeEnum, Page page, String memberType, String history, String keyword) {
+        StringBuffer sb  = new StringBuffer("select i.* from hg_party_member i left join hg_party_org b on i.member_org = b.org_id left join hg_party_org s on s.org_id = b.org_parent left join hg_party_org o on o.org_id = s.org_parent");
         sb.append(" where 1=1");
         if(!StringUtils.isEmpty(memberType)){
             sb.append(" and i.member_type='"+memberType+"'");
@@ -440,47 +442,21 @@ public class MemberDao extends PostgresqlDaoImpl<Member> {
             sb.append(" or i.member_identity like '%"+keyword+"%')");
             //sb.append("or i.member_name like '%"+keyword+"%')");
         }
-        StringBuffer countSb =  new StringBuffer("SELECT count(*) num from ");
-        StringBuffer listSb =  new StringBuffer("select i.* from ");
-        RowMapper<BaseStatistics> countMapper = BeanPropertyRowMapper.newInstance(BaseStatistics.class);
-        List<Member> list= new ArrayList<>();
-        int count = 0;
-        int start = page.getPage()>0?(page.getPage()-1)*page.getPageSize():0;
-        String pageSql = " limit " + page.getPageSize() + " offset " + start;
         String orderSql = " order by i.member_identity asc";
-        Page<Member> memberPage = new Page<Member>(page.getPage(),page.getPageSize());
-        RowMapper<Member> rowMapper = BeanPropertyRowMapper.newInstance(Member.class);
         switch(partyOrgAdminTypeEnum){
             case BRANCH:
                 sb.append(" and b.org_id = ?");
-                listSb.append(sb.toString());
-                listSb.append(orderSql);
-                listSb.append(pageSql);
-                countSb.append(sb.toString());
-                list =  jdbcTemplate.query(listSb.toString(),rowMapper,orgId);
-                count = jdbcTemplate.queryForObject(countSb.toString(),countMapper,orgId).getNum();
-                break;
+                sb.append(orderSql);
+                return postGresqlFindPageBySql(page.getPage(), page.getPageSize(), sb.toString(),orgId);
             case SECONDARY:
                 sb.append(" and (s.org_id=? or b.org_id = ?)");
-                listSb.append(sb.toString());
-                listSb.append(orderSql);
-                listSb.append(pageSql);
-                countSb.append(sb.toString());
-                list =  jdbcTemplate.query(listSb.toString(),rowMapper,orgId,orgId);
-                count = jdbcTemplate.queryForObject(countSb.toString(),countMapper,orgId,orgId).getNum();
-                break;
+                sb.append(orderSql);
+                return postGresqlFindPageBySql(page.getPage(), page.getPageSize(), sb.toString(),orgId,orgId);
             case ORGANIZATION:;
-                listSb.append(sb.toString());
-                listSb.append(orderSql);
-                listSb.append(pageSql);
-                countSb.append(sb.toString());
-                list =  jdbcTemplate.query(listSb.toString(),rowMapper);
-                count = jdbcTemplate.queryForObject(countSb.toString(),countMapper).getNum();
-                break;
+                sb.append(orderSql);
+                return postGresqlFindPageBySql(page.getPage(), page.getPageSize(), sb.toString());
         }
-        memberPage.setCount(count);
-        memberPage.setData(list);
-        return memberPage;
+        return new PostgresqlPageResult(null, 0,0);
     }
 
     public int updateMember(Member member) {
