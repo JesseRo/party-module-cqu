@@ -657,4 +657,12 @@ public class PartyBranchDao extends PostgresqlDaoImpl<MeetingPlan> {
         String sql="INSERT INTO hg_party_meeting_member_info (meeting_id, participant_id,check_status) VALUES (?,?,'未读')";
         return jdbcTemplate.update(sql,meetingId,userId);
     }
+
+    public List<Map<String, Object>> findMeetingMember(String meetingId) {
+        String sql = "select u.* from hg_users_info as u JOIN hg_party_member as mb on u.user_id = mb.member_identity " +
+                "where mb.historic is false " +
+                "AND u.user_department_id= ? ";
+
+        return jdbcTemplate.queryForList(sql, meetingId);
+    }
 }

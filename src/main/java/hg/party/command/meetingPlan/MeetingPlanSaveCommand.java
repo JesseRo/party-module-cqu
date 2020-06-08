@@ -44,7 +44,7 @@ public class MeetingPlanSaveCommand implements MVCResourceCommand {
     PartyBranchService partyBranchService;
     @Reference
     private TransactionUtil transactionUtil;
-    private Gson gson = new Gson();
+
     @Override
     public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse) {
         String orgId = (String) SessionManager.getAttribute(resourceRequest.getRequestedSessionId(), "department");
@@ -69,6 +69,7 @@ public class MeetingPlanSaveCommand implements MVCResourceCommand {
         String meetingId = ParamUtil.getString(resourceRequest, "meetingId");
         String attachment = ParamUtil.getString(resourceRequest, "attachment");
         String content = ParamUtil.getString(resourceRequest, "meetingContent");
+        boolean autoPhoneMsg = ParamUtil.getBoolean(resourceRequest, "autoPhoneMsg");
         campus = HtmlUtil.escape(campus);
         startDate = HtmlUtil.escape(startDate);
         host = HtmlUtil.escape(host);
@@ -82,7 +83,7 @@ public class MeetingPlanSaveCommand implements MVCResourceCommand {
         PrintWriter printWriter = null;
         try {
             printWriter = resourceResponse.getWriter();
-            MeetingPlan m  = new MeetingPlan();;
+            MeetingPlan m  = new MeetingPlan();
             if (StringUtils.isEmpty(meetingId)) {
                 String meeting_id = UUID.randomUUID().toString();
                 m.setMeeting_id(meeting_id);
@@ -107,7 +108,7 @@ public class MeetingPlanSaveCommand implements MVCResourceCommand {
             m.setSit(sit);
             m.setCampus(campus);
             m.setAttachment(attachment);
-
+            m.setAutoPhoneMsg(autoPhoneMsg?1:0);
             LocalDateTime ldTime = LocalDateTime.now(ZoneId.of("Asia/Shanghai"));
             Timestamp t = Timestamp.valueOf(ldTime);
             m.setSubmit_time(t);

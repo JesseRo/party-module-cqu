@@ -267,6 +267,14 @@
                     </div>
                     <div class="layui-form-item">
                         <div class="layui-inline">
+                            <label class="layui-form-label">短信自动通知：</label>
+                            <div class="layui-input-block">
+                                <input type="checkbox" name="autoPhoneMsg" lay-skin="switch" lay-text="是|否">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
                             <label class="layui-form-label layui-required">计划内容：</label>
                             <div class="layui-input-inline meetingContent">
                                 <script id="meetingContent" name="meetingContent" type="text/plain">
@@ -597,7 +605,7 @@
         function renderFilesTable(){
             var cols = [[
                 {field: 'name', align:'center', title: '文件名',templet:function(d){
-                        return '<a href="'+d.path+'" download="'+d.path+'">'+d.name+'</a>';
+                        return '<a href="javascript:void(0)" path="'+d.path+'" name="'+d.name+'" onclick="downloadFile()">'+d.name+'</a>';
                     }
                 }
                 ,{field: 'size', width:120, align:'center', title: '大小',templet:function(d){
@@ -959,6 +967,11 @@
             $(o).attr("memberGroup","hide");
             $("#memberGroup").hide();
         }
+    }
+    function downloadFile(o){
+        var path = $(o).attr("path");
+        var name = $(o).attr("name");
+        window.location.href="${downloadUrl}&filePath="+path+"&fileName="+name;
     }
 
 </script>

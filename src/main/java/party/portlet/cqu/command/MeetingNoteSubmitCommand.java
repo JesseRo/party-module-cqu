@@ -44,10 +44,11 @@ public class MeetingNoteSubmitCommand implements MVCActionCommand {
 	@Override
 	public boolean processAction(ActionRequest request, ActionResponse response) throws PortletException {
 		try {
-			String formId = ParamUtil.getString(request, "formId");
+			int meetingNoteId = ParamUtil.getInteger(request, "meetingNoteId");
 			String meetingId = ParamUtil.getString(request, "meetingId");
 			String content = ParamUtil.getString(request, "meeting_content");
 			String attendance = ParamUtil.getString(request, "attendances");
+			int temp = ParamUtil.getInteger(request, "temp");
 			List<String> attendances;
 			if (StringUtils.isEmpty(attendance)){
 				attendances = Collections.emptyList();
@@ -60,6 +61,14 @@ public class MeetingNoteSubmitCommand implements MVCActionCommand {
 					meetingNote = new MeetingNote();
 					meetingNote.setMeeting_id(meetingId);
 				}
+				if( meetingNote.getStatus()== 0 || meetingNote.getStatus()== 3 || meetingNote.getStatus()== 4){
+					if(temp == 1){
+						meetingNote.setStatus(0);
+					}else{
+						meetingNote.setStatus(1);
+					}
+				}
+				meetingNote.setId(meetingNoteId);
 				meetingNote.setAttendance(gson.toJson(attendances));
 				meetingNote.setAttachment(content);
 				meetingNotesDao.saveOrUpdate(meetingNote);

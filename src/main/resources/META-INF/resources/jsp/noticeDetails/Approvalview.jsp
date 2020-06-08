@@ -34,7 +34,7 @@
 	</head>
 	<body>
 	<div class="table_form_content">
-		<%--    <div class="table_form_content activity_manage_container">--%>
+		<%--   查看计划详情  --%>
 		<div class="activity_manage_page">
 			<div class="breadcrumb_group" style="margin-bottom: 20px;">
 				当前位置：
@@ -76,7 +76,7 @@
 						</div>
 						<div class="details_content_title" style="border-bottom: 0px solid #e1e1e1;">
 							<p class="col-sm-6 col-xs-12"><span>列席人员：</span>${meetingPlan.sit }</p>
-							<p class="col-sm-6 col-xs-12"></p>
+							<p class="col-sm-6 col-xs-12"><span>短信自动通知：</span>${meetingPlan.auto_phone_msg == 1?"是":"否" }</p>
 						</div>
 						<div class="details_content_title" style="border-bottom: 0px solid #e1e1e1;">
 							<p class="col-sm-6 col-xs-12"><span>详细内容：</span></p>
@@ -90,7 +90,7 @@
 								<span>附件内容：</span>
 								<ul>
 									<c:forEach var="file" items="${attachment }">
-										<li><a href="javascript:void(0)" path="${file.path}" name="${file.name}">${file.name}</a></li>
+										<li><a href="javascript:void(0)" path="${file.path}" name="${file.name}" onclick="downloadFile()">${file.name}</a></li>
 									</c:forEach>
 								</ul>
 							</div>

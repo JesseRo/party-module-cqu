@@ -4,13 +4,14 @@
 <%@ include file="/init.jsp" %>
 <portlet:resourceURL id="/org/meeting/page" var="OrgMeetingPage" />
 <portlet:resourceURL id="/api/download" var="downloadUrl" />
+<portlet:resourceURL id="/meetingPlan/sendPhoneMsg" var="sendPhoneMsg" />
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
     <meta name="viewport"
           content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
-    <title>二级党委-待办事项</title>
+    <title>二级党委-已发计划</title>
     <link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/activity-manage1.css?v=1"/>
     <link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/common.min.css"/>
     <style type="text/css">
@@ -86,13 +87,6 @@
 <portlet:resourceURL id="/hg/taskCheckReplyState" var="taskCheckReplyState"/>
 
 
-<portlet:renderURL var="showCommentDetailUrl">
-    <portlet:param name="mvcRenderCommandName" value="/hg/showCommentDetail"/>
-</portlet:renderURL>
-<portlet:renderURL var="showExperienceDetailUrl">
-    <portlet:param name="mvcRenderCommandName" value="/hg/showExperienceDetail"/>
-</portlet:renderURL>
-
 <div class="table_form_content">
     <!-- 右侧盒子内容 -->
     <div class="activity_manage_page">
@@ -124,6 +118,9 @@
     <a class="layui-btn layui-btn-xs" lay-event="edit"> 编辑</a>
     {{#  } }}
     <a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
+    {{#  if(d.task_status != '0' && d.task_status != '1' && d.task_status != '2' && d.task_status != '3'){ }}
+    <a class="layui-btn layui-btn-xs" lay-event="sendPhoneMsg"> 短信通知</a>
+    {{#  } }}
 </script>
 <script>
     layui.use(['table','layer','form'], function() {
@@ -172,7 +169,7 @@
                             }
                             return status;
                         }},
-                    {field: 'operation', align:'center', title: '操作',width:160,toolbar: '#meetingPlanTableBtns'},
+                    {field: 'operation', align:'center', title: '操作',width:240,toolbar: '#meetingPlanTableBtns'},
                     {field: 'attachment', align:'center', title: '附件',width:200,templet:function(d){
                             var fileData;
                             if(d.attachment==''||d.attachment==null || d.attachment == undefined ){
@@ -212,11 +209,36 @@
                         //renderDetail('check',obj);
                         window.location.href='/approvaldetails?meetingId='+obj.data.meeting_id;
                         break;
+                    case 'sendPhoneMsg':
+                        sendPhoneMsg(obj.data);
+                        break;
                 };
             });
         }
 
     });
+    function sendPhoneMsg(meetingObj){
+        $.ajax({
+            type : "post",
+            url : "${sendPhoneMsg}",
+            data : {
+                meetingId : meetingObj.meeting_id
+            },
+            dataType : "json",
+            success : function(res) {
+                if(res){
+                    if(res.code == 200){
+                        layer.msg("短信通知成功。");
+                    }else{
+                        layer.msg(res.message);
+                    }
+                }else{
+                    layer.msg("短信通知失败。");
+                }
+
+            }
+        })
+    }
     function downloadFile(o){
         var path = $(o).attr("path");
         var name = $(o).attr("name");

@@ -360,4 +360,8 @@ public class PartyBranchService {
     public int addMeetingMember(String meetingId, String userId) {
         return dao.addMeetingMember(meetingId,userId);
     }
+
+    public List<Map<String, Object>> findMeetingMember(String meetingId) {
+        return dao.findMeetingMember(meetingId);
+    }
 }

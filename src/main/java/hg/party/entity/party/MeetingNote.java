@@ -38,6 +38,8 @@ public class MeetingNote {
     private String remarks_org;
     //组织部抽查结果
     private String meeting_state_org;
+	//会议纪要流程状态
+	private int status;
     
     
 	public String getImage_org() {
@@ -137,6 +139,15 @@ public class MeetingNote {
 	public void setAbsence(String absence) {
 		this.absence = absence;
 	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
 	@Override
 	public String toString() {
 		return "MeetingNote [id=" + id + ", meeting_id=" + meeting_id + ", attachment=" + attachment

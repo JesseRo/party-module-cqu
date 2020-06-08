@@ -4,7 +4,9 @@ import com.google.gson.Gson;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.util.PortalUtil;
 import dt.session.SessionManager;
+import hg.party.dao.secondCommittee.MeetingNotesDao;
 import hg.party.dao.secondCommittee.MeetingPlanDao;
+import hg.party.entity.party.MeetingNote;
 import hg.party.server.dwonlistserver.DownListServer;
 import org.apache.log4j.Logger;
 import org.osgi.service.component.annotations.Component;
@@ -44,6 +46,8 @@ public class MeetingNotePortlet extends MVCPortlet {
 
     @Reference
     private MeetingPlanDao planDao;
+    @Reference
+    private MeetingNotesDao meetingNotesDao;
 
     public void doView(RenderRequest req, RenderResponse res) throws IOException, PortletException {
         HttpServletRequest request= PortalUtil.getHttpServletRequest(req);
@@ -54,8 +58,10 @@ public class MeetingNotePortlet extends MVCPortlet {
 
         String formId = UUID.randomUUID().toString();
         SessionManager.setAttribute(request.getRequestedSessionId(), "formId-MeetingNote", formId);
+        MeetingNote meetingNote = meetingNotesDao.findByMeetingId(meetingId);
         req.setAttribute("formId", formId);
         req.setAttribute("meeting", meetingData);
+        req.setAttribute("meetingNote", meetingNote);
         req.setAttribute("participants", gson.toJson(participants));
         super.doView(req, res);
     }

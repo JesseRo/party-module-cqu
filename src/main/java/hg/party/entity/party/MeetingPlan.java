@@ -1,6 +1,8 @@
 package hg.party.entity.party;
 
 import java.sql.Timestamp;
+
+import com.dt.annotation.Column;
 import com.dt.annotation.Table;
 
 
@@ -69,6 +71,9 @@ public class MeetingPlan {
    private String meeting_theme_secondary;
 
    private String campus;
+
+   @Column(sqlName="auto_phone_msg",sqlType="int4",javaName="autoPhoneMsg")
+   private int autoPhoneMsg;
    
    
    public String getMeeting_theme_secondary() {
@@ -272,5 +277,13 @@ public class MeetingPlan {
 
 	public void setCampus(String campus) {
 		this.campus = campus;
+	}
+
+	public int getAutoPhoneMsg() {
+		return autoPhoneMsg;
+	}
+
+	public void setAutoPhoneMsg(int autoPhoneMsg) {
+		this.autoPhoneMsg = autoPhoneMsg;
 	}
 }

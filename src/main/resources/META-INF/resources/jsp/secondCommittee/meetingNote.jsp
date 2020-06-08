@@ -45,13 +45,14 @@
             当前位置：
             <span class="layui-breadcrumb" lay-separator=">">
                         <a href="javascript:;">组织生活管理</a>
-                        <a href="javascript:;">提交会议纪要</a>
+                        <a href="javascript:;">会议纪要</a>
                     </span>
         </div>
         <div class="form_container">
-            <form class="layui-form custom_form" id="activityForm" action="${uploadMeetingNotesUrl}" enctype="multipart/form-data" method="post">
+            <form class="layui-form custom_form" id="activityForm" action="" enctype="multipart/form-data" method="post">
                 <div class="layui-inline">
                     <input type="hidden" name="formId" value="${formId}">
+                    <input type="hidden" name="meetingNoteId" value="${meetingNote.id}">
                     <input type="hidden" name="meetingId" value="${meeting.meeting_id}">
                     <label class="layui-form-label">党组织：</label>
                     <div class="layui-input-inline">
@@ -90,8 +91,11 @@
                 <div class="layui-inline btn_group">
                     <label class="layui-form-label"></label>
                     <div class="layui-input-inline">
-                        <button type="button" class="layui-btn" lay-submit="" lay-filter="activityForm">提交</button>
-                        <button type="button" class="layui-btn layui-btn-primary">取消</button>
+                        <c:if test="${meetingNote.status!='1' && meetingNote.status!='2'}">
+                            <button type="button" class="layui-btn" lay-submit="" lay-filter="activityForm">提交</button>
+                            <button type="button" class="layui-btn" lay-submit="" lay-filter="activityFormTemp">暂存</button>
+                        </c:if>
+                        <button type="button" class="layui-btn layui-btn-primary" onclick="window.history.back();">返回</button>
                     </div>
                 </div>
             </form>
@@ -132,6 +136,18 @@
                 // layer.alert(JSON.stringify(data.field), {
                 //     title: '最终的提交信息'
                 // });
+                $('#attendances').action = '${uploadMeetingNotesUrl}&temp=0';
+                $('#activityForm').submit();
+                return true;
+            });
+            form.on('submit(activityFormTemp)', function(data){
+
+                $('#attendances').val(transfer.getData('attendance')
+                    .map(function(att){return att.value}).join(","));
+                // layer.alert(JSON.stringify(data.field), {
+                //     title: '最终的提交信息'
+                // });
+                $('#attendances').action = '${}&temp=1';
                 $('#activityForm').submit();
                 return true;
             });
