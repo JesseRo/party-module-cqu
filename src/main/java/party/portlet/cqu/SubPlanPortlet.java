@@ -68,6 +68,16 @@ public class SubPlanPortlet extends MVCPortlet {
             organization = orgService.findAdminOrg(userId, orgAdminTypeEnum);
             members = orgService.findMembersByOrg(organization.getOrg_id(),orgAdminTypeEnum);
             meetingPlan = partyBranchService.findNoSubmitPlan(userId,organization.getOrg_id());
+            if(meetingPlan.getMeeting_id() != null){
+                List<Map<String, Object>> memberList = partyBranchService.findMeetingMember(meetingPlan.getMeeting_id());
+                List<String> participate = new ArrayList<>();
+                if(memberList.size() > 0){
+                    for(Map<String, Object> member:memberList){
+                        participate.add((String) member.get("participant_id"));
+                    }
+                }
+                renderRequest.setAttribute("participate", Arrays.toString(participate.toArray()));
+            }
         }
 
         logger.info("members size:"+members.size());

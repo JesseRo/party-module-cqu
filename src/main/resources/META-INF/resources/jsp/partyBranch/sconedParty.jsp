@@ -218,7 +218,7 @@
                         <div class="layui-inline">
                             <label class="layui-form-label layui-required">列席人员：</label>
                             <div class="layui-input-inline">
-                                <input type="text" class="layui-input" name="sit"  lay-verify="required" autocomplete="off">
+                                <input type="text" class="layui-input" name="sit"  lay-verify="required" autocomplete="off" value="${meetingPlan.sit}">
                             </div>
                         </div>
                     </div>
@@ -237,7 +237,7 @@
                         <div class="layui-inline">
                             <label class="layui-form-label layui-required">联系电话：</label>
                             <div class="layui-input-inline">
-                                <input name="phoneNumber" class="layui-input"  lay-verify="required" autocomplete="off">
+                                <input name="phoneNumber" class="layui-input"  lay-verify="required" autocomplete="off" value="${meetingPlan.contact_phone}">
                             </div>
                         </div>
                     </div>
@@ -448,7 +448,32 @@
         renderDateSelect();
         renderMemberGroups();
         renderFilesTable();
-
+        renderSelectData();
+        function renderSelectData(){
+            var campus = '${meetingPlan.campus}';
+            if(campus != '' && campus != 'null'){
+                $('#addMeetingPlanForm  select[name="campus"]').val(campus);
+            }
+            var place = '${meetingPlan.place}';
+            if(place != '' && place != 'null'){
+                $('#addMeetingPlanForm  select[name="place"]').val(place);
+            }
+            var host= '${meetingPlan.host}';
+            if(host != '' && host != 'null'){
+                $('#addMeetingPlanForm  select[name="host"]').val(host);
+            }
+            var contact= '${meetingPlan.contact}';
+            if(contact != '' && contact != 'null'){
+                $('#addMeetingPlanForm  select[name="contact"]').val(contact);
+            }
+            var participate= '${participate}';
+            console.log(participate);
+            if(contact != '' && contact != 'null'){
+                var participateArr = participate.split(",");
+                $('#addMeetingPlanForm  select[name="participateArr"]').val(participateArr);
+            }
+            from.render();
+        }
 
         function renderDateSelect() {
             laydate.render({

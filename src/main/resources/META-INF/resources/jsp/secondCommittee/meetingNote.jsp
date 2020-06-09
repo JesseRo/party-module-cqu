@@ -147,7 +147,7 @@
                 // layer.alert(JSON.stringify(data.field), {
                 //     title: '最终的提交信息'
                 // });
-                $('#attendances').action = '${}&temp=1';
+                $('#attendances').action = '${uploadMeetingNotesUrl}&temp=1';
                 $('#activityForm').submit();
                 return true;
             });

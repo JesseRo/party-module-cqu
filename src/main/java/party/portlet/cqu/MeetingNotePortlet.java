@@ -59,6 +59,9 @@ public class MeetingNotePortlet extends MVCPortlet {
         String formId = UUID.randomUUID().toString();
         SessionManager.setAttribute(request.getRequestedSessionId(), "formId-MeetingNote", formId);
         MeetingNote meetingNote = meetingNotesDao.findByMeetingId(meetingId);
+        if(meetingNote == null){
+            meetingNote = new MeetingNote();
+        }
         req.setAttribute("formId", formId);
         req.setAttribute("meeting", meetingData);
         req.setAttribute("meetingNote", meetingNote);

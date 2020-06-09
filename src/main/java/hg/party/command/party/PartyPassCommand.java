@@ -71,12 +71,6 @@ public class PartyPassCommand implements MVCResourceCommand{
 				meeting.setTask_status("6");
 				meeting.setTask_status_org("6");
 				meeting.setAuditor(user_id);
-				if(!StringUtils.isEmpty(meeting.getParticipant_group())){
-					String[] members = meeting.getParticipant_group().split(";");
-					for(int i=0;i<members.length;i++){
-						meetingPlanDao.informParty(meetingId, members[i]);
-					}
-				}
 				partyMeetingPlanInfoService.save(meeting);
 				transactionUtil.commit();
 				logger.info("通过");
