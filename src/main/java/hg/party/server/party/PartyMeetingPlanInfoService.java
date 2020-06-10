@@ -2,10 +2,15 @@ package hg.party.server.party;
 
 import hg.party.dao.party.PartyMeetingPlanInfoDao;
 import hg.party.entity.party.MeetingPlan;
+import hg.party.entity.partyMembers.Member;
+import hg.party.server.CQUMsgService;
 import hg.util.postgres.PostgresqlPageResult;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+import party.portlet.cqu.dao.PlaceDao;
+import party.portlet.cqu.entity.Place;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +24,12 @@ import java.util.Map;
 public class PartyMeetingPlanInfoService {
     @Reference
     private PartyMeetingPlanInfoDao partyMeetingPlanInfo;
+    @Reference
+    private CQUMsgService cquMsgService;
+    @Reference
+    private PartyMemberServer partyMemberServer;
+    @Reference
+    private PlaceDao placeDao;
 
     //查询二级党委进度分页
     public Map<String, Object> postGresqlFind(int pageNo, int pageSize, String sql, String department) {
@@ -68,8 +79,8 @@ public class PartyMeetingPlanInfoService {
         }
     }
 
-    public void save(MeetingPlan meetingPlan) {
-        partyMeetingPlanInfo.saveOrUpdate(meetingPlan);
+    public int save(MeetingPlan meetingPlan) {
+        return partyMeetingPlanInfo.saveOrUpdate(meetingPlan);
     }
 
     //根据登录人id查询会议id
@@ -164,5 +175,28 @@ public class PartyMeetingPlanInfoService {
 
     public PostgresqlPageResult<Map<String, Object>> searchOrgPage(int page, int size, String orgId, String search) {
         return partyMeetingPlanInfo.searchOrgPage(page, size,orgId, search);
+    }
+
+    public void sendPhoneNoticeMsg(String meetingId) {
+        List<Member> members = partyMemberServer.findMeetingPlanMember(meetingId);
+        MeetingPlan meetingPlan = partyMeetingPlanInfo.findMeetingPlanByMeetingId(meetingId);
+        String startTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(meetingPlan.getStart_time());
+        Place place  = placeDao.findById(meetingPlan.getPlace());
+        if(meetingPlan != null){
+            for(Member member:members){
+                String msgTemplate = "{name}，您好！主题“{theme}”党组织活动于{time}在{campus}{place}举行，请您准时参加。活动联系人:{contact}{phone}";
+                String msg = msgTemplate.replace("{name}",member.getMember_name())
+                        .replace("{theme}",meetingPlan.getMeeting_theme())
+                        .replace("{time}",startTime)
+                        .replace("{campus}",meetingPlan.getCampus())
+                        .replace("{place}",place==null?"":place.getPlace())
+                        .replace("{contact}",meetingPlan.getContact())
+                        .replace("{phone}",meetingPlan.getContact_phone());
+                //cquMsgService.sendPhoneNoticeMsg(member.getMember_phone_number(),msg);
+                //测试模式短信接受者为周洪云
+                cquMsgService.sendPhoneNoticeMsg("15520069183",msg);
+            }
+        }
+
     }
 }

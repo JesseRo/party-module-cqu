@@ -71,10 +71,19 @@ public class PartyPassCommand implements MVCResourceCommand{
 				meeting.setTask_status("6");
 				meeting.setTask_status_org("6");
 				meeting.setAuditor(user_id);
-				partyMeetingPlanInfoService.save(meeting);
-				transactionUtil.commit();
-				logger.info("通过");
-				printWriter.write(JSON.toJSONString(ResultUtil.success(meetingId)));
+				int ret = partyMeetingPlanInfoService.save(meeting);
+				if(ret > 0){
+					transactionUtil.commit();
+					if(meeting.getAutoPhoneMsg() > 0){
+						partyMeetingPlanInfoService.sendPhoneNoticeMsg(meetingId);
+					}
+					logger.info("通过");
+					printWriter.write(JSON.toJSONString(ResultUtil.success(meetingId)));
+				}else{
+					transactionUtil.rollback();
+					printWriter.write(JSON.toJSONString(ResultUtil.fail("操作失败。")));
+				}
+
 			}else{
 				printWriter.write(JSON.toJSONString(ResultUtil.fail("参数meeting_id不能为空。")));
 			}

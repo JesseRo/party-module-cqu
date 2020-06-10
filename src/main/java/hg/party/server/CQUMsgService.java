@@ -2,32 +2,58 @@ package hg.party.server;
 
 
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.rmi.RemoteException;
 
+import javax.xml.namespace.QName;
+import javax.xml.rpc.ParameterMode;
+import javax.xml.rpc.ServiceException;
+
+import org.apache.axis.client.Call;
+import org.apache.axis.client.Service;
+import org.apache.axis.encoding.XMLType;
+import org.osgi.service.component.annotations.Component;
+
+@Component(immediate = true, service = CQUMsgService.class)
 public class CQUMsgService {
 
+    private static final String USER_ID = "100007";
+    private static final String PASSWORD = "zzb2395";
 
-    public void sendPhoneMSG(String msg,String phoneNumber){
-        //调用接口
-        //方法一:直接AXIS调用远程的web service
+    /**
+     * 短信通知手机
+     * @param phone
+     * @param messageContent
+     * @return
+     */
+    public static String sendPhoneNoticeMsg(String phone,String messageContent) {
+        // 远程调用路径
+        String endpoint = "http://s.cqu.edu.cn/WebService/SmsServiceCQU.asmx";
+        String result = "call failed!";
+        String method = "SmsSubmit";
+        Service service = new Service();
+        Call call;
         try {
-            String endpoint = "http://localhost:8080/platform-jxcx-service/services/settlementServiceImpl?wsdl";
-//            Service service = new Service();
-//            Call call = (Call) service.createCall();
-//            call.setTargetEndpointAddress(endpoint);
-//            String parametersName = "settle_num"; 		// 参数名//对应的是 public String printWord(@WebParam(name = "settle_num") String settle_num);
-////	            call.setOperationName("printWord");  		// 调用的方法名//当这种调用不到的时候,可以使用下面的,加入命名空间名
-//            call.setOperationName(new QName("http://jjxg_settlement.platform.bocins.com/", "printWord"));// 调用的方法名
-//            call.addParameter(parametersName, XMLType.XSD_STRING, ParameterMode.IN);//参数名//XSD_STRING:String类型//.IN入参
-//            call.setReturnType(XMLType.XSD_STRING); 	// 返回值类型：String
-//            String message = "123456789";
-//            String result = (String) call.invoke(new Object[] { message });// 远程调用
-//            System.out.println("result is " + result);
-        } catch (Exception e) {
-            System.err.println(e.toString());
+            call = (Call) service.createCall();
+            call.setTargetEndpointAddress(endpoint);
+            //new QName的URL是要指向的命名空间的名称，这个URL地址在你的wsdl打开后可以看到的，
+            //上面有写着targetNamespace="http://*.*.*/",这个就是你的命名空间值了;
+            call.setOperationName(new QName(endpoint,method));
+            // 调用的方法名
+            // 设置参数名 :参数名 ,参数类型:String, 参数模式：'IN' or 'OUT'
+            // string userID, string password, string phone, string messageContent
+            call.addParameter("userID",XMLType.XSD_STRING,ParameterMode.IN);
+            call.addParameter("password",XMLType.XSD_STRING,ParameterMode.IN);
+            call.addParameter("phone",XMLType.XSD_STRING,ParameterMode.IN);
+            call.addParameter("messageContent",XMLType.XSD_STRING,ParameterMode.IN);
+            call.setEncodingStyle("UTF-8");
+            call.setReturnType(XMLType.XSD_STRING);
+            result = (String) call.invoke(new Object[] {USER_ID,PASSWORD,phone,messageContent});// 远程调用
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        } catch (RemoteException e) {
+            e.printStackTrace();
         }
-
-
+        return result;
     }
+
 }

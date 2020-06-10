@@ -48,4 +48,7 @@ public class PartyMemberServer {
 	public List<Map<String, Object>> nameNumber(String dep){
 		return partyMemberDao.nameNumber(dep);
 	}
+	public List<Member> findMeetingPlanMember(String meetingId){
+		return partyMemberDao.findMeetingPlanMember(meetingId);
+	}
 }

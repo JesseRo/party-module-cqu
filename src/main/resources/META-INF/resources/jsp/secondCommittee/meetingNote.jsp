@@ -49,11 +49,12 @@
                     </span>
         </div>
         <div class="form_container">
-            <form class="layui-form custom_form" id="activityForm" action="" enctype="multipart/form-data" method="post">
+            <form class="layui-form custom_form" id="activityForm" action="uploadMeetingNotesUrl" enctype="multipart/form-data" method="post">
                 <div class="layui-inline">
                     <input type="hidden" name="formId" value="${formId}">
                     <input type="hidden" name="meetingNoteId" value="${meetingNote.id}">
                     <input type="hidden" name="meetingId" value="${meeting.meeting_id}">
+                    <input type="hidden" name="temp" id="isTemp">
                     <label class="layui-form-label">党组织：</label>
                     <div class="layui-input-inline">
                         <input type="text" disabled maxlength="20"
@@ -136,7 +137,7 @@
                 // layer.alert(JSON.stringify(data.field), {
                 //     title: '最终的提交信息'
                 // });
-                $('#attendances').action = '${uploadMeetingNotesUrl}&temp=0';
+                $('#isTemp').val(0);
                 $('#activityForm').submit();
                 return true;
             });
@@ -144,10 +145,7 @@
 
                 $('#attendances').val(transfer.getData('attendance')
                     .map(function(att){return att.value}).join(","));
-                // layer.alert(JSON.stringify(data.field), {
-                //     title: '最终的提交信息'
-                // });
-                $('#attendances').action = '${uploadMeetingNotesUrl}&temp=1';
+                $('#isTemp').val(1);
                 $('#activityForm').submit();
                 return true;
             });

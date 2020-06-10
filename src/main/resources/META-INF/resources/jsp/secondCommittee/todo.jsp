@@ -218,26 +218,31 @@
 
     });
     function sendPhoneMsg(meetingObj){
-        $.ajax({
-            type : "post",
-            url : "${sendPhoneMsg}",
-            data : {
-                meetingId : meetingObj.meeting_id
-            },
-            dataType : "json",
-            success : function(res) {
-                if(res){
-                    if(res.code == 200){
-                        layer.msg("短信通知成功。");
+        layer.confirm('您确认短信通知活动人员吗？', {
+            btn: ['确定','取消'] //按钮
+        }, function(){
+            $.ajax({
+                type : "post",
+                url : "${sendPhoneMsg}",
+                data : {
+                    meetingId : meetingObj.meeting_id
+                },
+                dataType : "json",
+                success : function(res) {
+                    if(res){
+                        if(res.code == 200){
+                            layer.msg("短信通知成功。");
+                        }else{
+                            layer.msg(res.message);
+                        }
                     }else{
-                        layer.msg(res.message);
+                        layer.msg("短信通知失败。");
                     }
-                }else{
-                    layer.msg("短信通知失败。");
-                }
 
-            }
-        })
+                }
+            })
+        });
+
     }
     function downloadFile(o){
         var path = $(o).attr("path");

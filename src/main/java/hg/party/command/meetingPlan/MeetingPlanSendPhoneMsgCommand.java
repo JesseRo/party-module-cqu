@@ -5,6 +5,7 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.MVCResourceCommand;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import hg.party.entity.party.MeetingPlan;
+import hg.party.server.party.PartyMeetingPlanInfoService;
 import hg.party.server.partyBranch.PartyBranchService;
 import hg.util.result.ResultUtil;
 import org.osgi.service.component.annotations.Component;
@@ -23,6 +24,7 @@ import java.util.Map;
         property = {
                 "javax.portlet.name="+ PartyPortletKeys.Form,
                 "javax.portlet.name=" + PartyPortletKeys.NewPlan,
+                "javax.portlet.name=" + PartyPortletKeys.SeocndCommitteeToDoList,
                 "mvc.command.name=/meetingPlan/sendPhoneMsg"
         },
         service = MVCResourceCommand.class
@@ -31,6 +33,8 @@ public class MeetingPlanSendPhoneMsgCommand implements MVCResourceCommand {
 
     @Reference
     PartyBranchService partyBranchService;
+    @Reference
+    PartyMeetingPlanInfoService partyMeetingPlanInfoService;
 
     @Override
     public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse) {
@@ -46,16 +50,7 @@ public class MeetingPlanSendPhoneMsgCommand implements MVCResourceCommand {
                 return false;
             }else{
                 if(Integer.parseInt(m.getTask_status())>=4){
-                    List<Map<String, Object>> members =  partyBranchService.findMeetingMember(meetingId);
-                    for(Map<String, Object> member:members){
-                        try {
-                            /*if(member.get("")){
-
-                            }*/
-                        }catch (Exception e){
-                            e.printStackTrace();
-                        }
-                    }
+                    partyMeetingPlanInfoService.sendPhoneNoticeMsg(meetingId);
                     printWriter.write(JSON.toJSONString(ResultUtil.success("通知成功。")));
                 }else{
                     printWriter.write(JSON.toJSONString(ResultUtil.fail("当前流程状态不能进行短信通知。")));

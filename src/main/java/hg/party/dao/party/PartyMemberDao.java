@@ -53,5 +53,10 @@ public class PartyMemberDao extends PostgresqlDaoImpl<Member> {
 					"AND historic is false ";
 		return jdbcTemplate.queryForList(sql,dep);
 	}
-	
+
+    public List<Member> findMeetingPlanMember(String meetingId) {
+		String sql = "select m.* from (SELECT meeting_id,participant_id from hg_party_meeting_member_info where meeting_id = ? )i left join hg_party_member m on(i.participant_id=m.member_identity)  WHERE  m.historic is false ";
+		RowMapper<Member> rowMapper = BeanPropertyRowMapper.newInstance(Member.class);
+		return this.jdbcTemplate.query(sql, rowMapper, meetingId);
+    }
 }

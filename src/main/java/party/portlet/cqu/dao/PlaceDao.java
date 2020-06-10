@@ -21,6 +21,20 @@ public class PlaceDao extends PostgresqlDaoImpl<Place> {
 
     public Place findByPlaceId(String placeId) {
         String sql = "select * from hg_party_place where place_id = ? ";
-        return jdbcTemplate.queryForObject(sql, BeanPropertyRowMapper.newInstance(Place.class), placeId);
+        List<Place> list =  jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Place.class), placeId);
+        if(list.size()>0){
+            return list.get(0);
+        }else{
+            return null;
+        }
+    }
+    public Place findById(int id) {
+        String sql = "select * from hg_party_place where id = ? ";
+        List<Place> list =  jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Place.class), id);
+        if(list.size()>0){
+            return list.get(0);
+        }else{
+            return null;
+        }
     }
 }

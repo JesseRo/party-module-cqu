@@ -37,6 +37,17 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
         RowMapper<MeetingPlan> rowMapper = BeanPropertyRowMapper.newInstance(MeetingPlan.class);
         return this.jdbcTemplate.query(sql, rowMapper, meetingid);
     }
+    //根据会议id查询
+    public MeetingPlan findMeetingPlanByMeetingId(String meetingId) {
+        String sql = "SELECT * FROM hg_party_meeting_plan_info WHERE meeting_id= ? ";
+        RowMapper<MeetingPlan> rowMapper = BeanPropertyRowMapper.newInstance(MeetingPlan.class);
+        List<MeetingPlan>  list = this.jdbcTemplate.query(sql, rowMapper, meetingId);
+        if(list.size()>0){
+            return list.get(0);
+        }else{
+            return null;
+        }
+    }
 
     public Map<String, Object> meetingDetail(String meetingId) {
         String sql = "SELECT plan.*, m.member_name as contactName, p.place as placeName, host.member_name as hostName " +

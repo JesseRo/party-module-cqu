@@ -467,12 +467,11 @@
                 $('#addMeetingPlanForm  select[name="contact"]').val(contact);
             }
             var participate= '${participate}';
-            console.log(participate);
             if(contact != '' && contact != 'null'){
                 var participateArr = participate.split(",");
                 $('#addMeetingPlanForm  select[name="participateArr"]').val(participateArr);
             }
-            from.render();
+            form.render();
         }
 
         function renderDateSelect() {
