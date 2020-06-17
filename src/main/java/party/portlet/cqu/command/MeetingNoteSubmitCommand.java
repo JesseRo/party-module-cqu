@@ -15,6 +15,7 @@ import hg.party.entity.party.MeetingNote;
 import hg.party.server.party.PartyMeetingNoteServer;
 import hg.party.server.secondCommittee.SecondCommitteeService;
 import hg.party.unity.ResourceProperties;
+import hg.util.TransactionUtil;
 import org.apache.log4j.Logger;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -41,6 +42,8 @@ public class MeetingNoteSubmitCommand implements MVCActionCommand {
 	Logger logger = Logger.getLogger(MeetingNoteSubmitCommand.class);
 	@Reference
 	private MeetingNotesDao meetingNotesDao;
+	@Reference
+	private TransactionUtil transactionUtil;
 	@Override
 	public boolean processAction(ActionRequest request, ActionResponse response) throws PortletException {
 		try {
@@ -50,6 +53,7 @@ public class MeetingNoteSubmitCommand implements MVCActionCommand {
 			String attendance = ParamUtil.getString(request, "attendances");
 			int temp = ParamUtil.getInteger(request, "temp");
 			List<String> attendances;
+			transactionUtil.startTransaction();
 			if (StringUtils.isEmpty(attendance)){
 				attendances = Collections.emptyList();
 			}else {
@@ -72,9 +76,15 @@ public class MeetingNoteSubmitCommand implements MVCActionCommand {
 				meetingNote.setAttendance(gson.toJson(attendances));
 				meetingNote.setAttachment(content);
 				meetingNotesDao.saveOrUpdate(meetingNote);
+				meetingNotesDao.deleteMember(meetingId);
+				for(String identity:attendances){
+					meetingNotesDao.addMember(meetingId,identity);
+				}
+				transactionUtil.commit();
 			}
 			response.sendRedirect("/meeting_check");
 		} catch (Exception e) {
+			transactionUtil.rollback();
 			e.printStackTrace();
 		}
 		return false;

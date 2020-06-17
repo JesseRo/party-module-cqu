@@ -230,9 +230,17 @@
                 cols: [[ //表头
                     {field: 'meeting_type', align:'center', title: '会议类型'},
                     {field: 'meeting_theme', align:'center',width:320, title: '会议主题'},
-                    {field: 'start_time', align:'center', title: '发布时间',width:180,templet: function(d){return new Date(d.start_time).format("yyyy-MM-dd hh:mm:ss");}},
                     {field: 'start_time', align:'center', title: '开始时间',width:180,templet: function(d){return new Date(d.start_time).format("yyyy-MM-dd hh:mm:ss");}},
-                    {field: 'total_time', align:'center', title: '时长',width:100,templet: function(d){return d.total_time/60;}},
+                    {field: 'note_status', align:'center', title: '会议纪要状态',width:160,templet: function(d){
+                            var status = '';
+                            switch(parseInt(d.note_status)){
+                                case 0:status = '未提交';break;
+                                case 1:status = '待审核';break;
+                                case 2:status = '已通过';break;
+                                case 3:status = '已驳回';break;
+                            }
+                            return status;
+                        }},
                     {field: 'operation', align:'center', title: '操作',width:200,toolbar: '#meetingNoteTableBtn'},
 
                 ]],
@@ -250,7 +258,11 @@
                         //renderDetail('check',obj);
                         break;
                     case 'note':
-                        window.location.href='/uploadnotes?meetingId='+obj.data.meeting_id;
+                        if(obj.data.note_status == 1 || obj.data.note_status == 2){
+                            window.location.href='/noteDetail?meetingId='+obj.data.meeting_id;
+                        }else{
+                            window.location.href='/uploadnotes?meetingId='+obj.data.meeting_id;
+                        }
                         break;
                 };
             });

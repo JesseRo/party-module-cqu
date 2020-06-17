@@ -6,6 +6,7 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.MVCResourceCommand;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import dt.session.SessionManager;
+import hg.party.server.party.PartyMeetingNoteService;
 import hg.party.server.party.PartyMeetingPlanInfoService;
 import hg.util.postgres.PostgresqlPageResult;
 import org.osgi.service.component.annotations.Component;
@@ -20,20 +21,22 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 /**
- * 组织计划审核分页查询
+ * 会议纪要审核分页查询
  */
 @Component(
 		immediate = true,
 		property = {
-				"javax.portlet.name=" + PartyPortletKeys.PartySecondary,
-				"mvc.command.name=/part/meeting/check/Page"
+				"javax.portlet.name=" + PartyPortletKeys.MeetingNoteAudit,
+				"mvc.command.name=/org/meetingNote/audit/page"
 		},
 		service = MVCResourceCommand.class
 	)
 
-public class MeetingCheckPageCommand implements MVCResourceCommand {
+public class MeetingNoteAuditPageCommand implements MVCResourceCommand {
 	@Reference
 	PartyMeetingPlanInfoService partyMeetingPlanInfoService;
+	@Reference
+	PartyMeetingNoteService partyMeetingNoteService;
 	@Override
 	public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 			throws PortletException {
@@ -46,9 +49,9 @@ public class MeetingCheckPageCommand implements MVCResourceCommand {
 			PostgresqlPageResult<Map<String, Object>> data = new PostgresqlPageResult(null, 0,0);
 			if(orgId!=null && !StringUtils.isEmpty(String.valueOf(orgId))){
 				if (StringUtils.isEmpty(keyword)){
-					data = partyMeetingPlanInfoService.searchCheckPage(page, size,String.valueOf(orgId),null);
+					data = partyMeetingNoteService.meetingNoteAuditPageAndSearch(page, size,String.valueOf(orgId),null);
 				}else {
-					data = partyMeetingPlanInfoService.searchCheckPage(page, size, String.valueOf(orgId),keyword);
+					data = partyMeetingNoteService.meetingNoteAuditPageAndSearch(page, size, String.valueOf(orgId),keyword);
 				}
 			}
 			Gson gson = new Gson();

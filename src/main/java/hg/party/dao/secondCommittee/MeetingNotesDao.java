@@ -3,6 +3,7 @@ package hg.party.dao.secondCommittee;
 import java.util.List;
 import java.util.Map;
 
+import hg.party.entity.partyMembers.Member;
 import org.apache.log4j.Logger;
 import org.osgi.service.component.annotations.Component;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -55,5 +56,21 @@ public class MeetingNotesDao extends PostgresqlDaoImpl<MeetingNote>{
 	   		e.printStackTrace();
 	   		return null;
 		}
+	}
+
+	public void deleteMember(String meetingId) {
+		String sql = "DELETE from hg_party_meeting_note_member where meeting_id= ? ";
+		jdbcTemplate.update(sql, meetingId);
+	}
+
+	public int addMember(String meetingId, String identity) {
+		String sql = "INSERT INTO hg_party_meeting_note_member(meeting_id, member_identity) VALUES (?,?)";
+		return jdbcTemplate.update(sql,meetingId,identity);
+	}
+
+	public List<Member> findAttendMember(String meetingId) {
+		String sql = "select m.* from (select * from hg_party_meeting_note_member where meeting_id=?) n left join hg_party_member m on n.member_identity = m.member_identity";
+		RowMapper<Member> rowMapper = BeanPropertyRowMapper.newInstance(Member.class);
+		return  this.jdbcTemplate.query(sql, rowMapper,meetingId);
 	}
 }

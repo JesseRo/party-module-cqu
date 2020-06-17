@@ -18,4 +18,16 @@ public class PartyMeetingNoteService {
     public PostgresqlPageResult<Map<String, Object>> meetingNotePageAndSearch(int page, int size, String orgId, String keyword) {
        return  partyMeetingNoteDao.meetingNotePageAndSearch(page,size,orgId,keyword);
     }
+
+    public PostgresqlPageResult<Map<String, Object>> meetingNoteAuditPageAndSearch(int page, int size, String orgId, String keyword) {
+        return  partyMeetingNoteDao.meetingNoteAuditPageAndSearch(page,size,orgId,keyword);
+    }
+
+    public int passMeetingNote(int noteId) {
+        return  partyMeetingNoteDao.passMeetingNote(noteId);
+    }
+
+    public int rejectMeetingNote(int noteId, String rejectReason) {
+        return  partyMeetingNoteDao.rejectMeetingNote(noteId,rejectReason);
+    }
 }

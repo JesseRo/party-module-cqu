@@ -49,7 +49,7 @@
                     </span>
         </div>
         <div class="form_container">
-            <form class="layui-form custom_form" id="activityForm" action="uploadMeetingNotesUrl" enctype="multipart/form-data" method="post">
+            <form class="layui-form custom_form" id="activityForm" action="${uploadMeetingNotesUrl}" enctype="multipart/form-data" method="post">
                 <div class="layui-inline">
                     <input type="hidden" name="formId" value="${formId}">
                     <input type="hidden" name="meetingNoteId" value="${meetingNote.id}">

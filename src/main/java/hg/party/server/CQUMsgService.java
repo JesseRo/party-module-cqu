@@ -17,7 +17,7 @@ import org.osgi.service.component.annotations.Component;
 public class CQUMsgService {
 
     private static final String USER_ID = "100007";
-    private static final String PASSWORD = "zzb2395";
+    private static final String PASSWORD = "zzb2395]";
 
     /**
      * 短信通知手机
@@ -37,7 +37,7 @@ public class CQUMsgService {
             call.setTargetEndpointAddress(endpoint);
             //new QName的URL是要指向的命名空间的名称，这个URL地址在你的wsdl打开后可以看到的，
             //上面有写着targetNamespace="http://*.*.*/",这个就是你的命名空间值了;
-            call.setOperationName(new QName(endpoint,method));
+            call.setOperationName(new QName(method));
             // 调用的方法名
             // 设置参数名 :参数名 ,参数类型:String, 参数模式：'IN' or 'OUT'
             // string userID, string password, string phone, string messageContent
@@ -45,6 +45,8 @@ public class CQUMsgService {
             call.addParameter("password",XMLType.XSD_STRING,ParameterMode.IN);
             call.addParameter("phone",XMLType.XSD_STRING,ParameterMode.IN);
             call.addParameter("messageContent",XMLType.XSD_STRING,ParameterMode.IN);
+            call.setUseSOAPAction(true);
+            call.setSOAPActionURI("http://222.198.128.75/WebService.aspx/GetSmsReport");
             call.setEncodingStyle("UTF-8");
             call.setReturnType(XMLType.XSD_STRING);
             result = (String) call.invoke(new Object[] {USER_ID,PASSWORD,phone,messageContent});// 远程调用
@@ -52,8 +54,14 @@ public class CQUMsgService {
             e.printStackTrace();
         } catch (RemoteException e) {
             e.printStackTrace();
+        } catch(Exception e){
+            e.printStackTrace();
         }
         return result;
     }
 
+    public static void main(String[] args) {
+        sendPhoneNoticeMsg("13272939619","AAA");
+        System.out.println("aa");
+    }
 }

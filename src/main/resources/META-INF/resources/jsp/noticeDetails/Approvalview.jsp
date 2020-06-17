@@ -7,7 +7,7 @@
 	<head>
 		 <link rel="stylesheet" href="${basePath }/css/details.css" />
 		 <style type="text/css">
-		 	.details_content_title >p{
+		 	.layui-form-item layui-row >p{
 		 		text-align:left !important;
 		 	}
 			.layui-layer-content{
@@ -55,38 +55,34 @@
                     </span>
 			</div>
 			<div class="bg_white_container">
-				<div class="details_container">
+				<div class="details_container ">
 					<p class="details_title">${org.org_name}--${meetingTheme }</p>
-					<div class="details_content">
-						<div class="details_content_title" style="border-bottom: 0px solid #e1e1e1;">
-							<p class="col-sm-6 col-xs-12"><span>会议类型:</span>${type }</p>
-							<p class="col-sm-6 col-xs-12"><span>开展时间:</span>${time }</p>
+					<div class="details_content  layui-form">
+						<div class="layui-form-item layui-row" >
+							<p class="layui-col-xs6 layui-col-sm6 layui-col-md4"><span>会议类型:</span>${type }</p>
+							<p class="layui-col-xs6 layui-col-sm6 layui-col-md4"><span>开展时间:</span>${time }</p>
+							<p class="layui-col-xs6 layui-col-sm6 layui-col-md4"><span>开展校区：</span>${meetingPlan.campus}</p>
 						</div>
-						<div class="details_content_title" style="border-bottom: 0px solid #e1e1e1;">
-							<p class="col-sm-6 col-xs-12"><span>开展校区：</span>${meetingPlan.campus}</p>
-							<p class="col-sm-6 col-xs-12"><span>开展地点：</span>${meetingPlan.placeName }</p>
+						<div class="layui-form-item layui-row" >
+							<p class="layui-col-xs6 layui-col-sm6 layui-col-md4"><span>开展地点：</span>${meetingPlan.placeName }</p>
+							<p class="layui-col-xs6 layui-col-sm6 layui-col-md4"><span>主持人：</span>${meetingPlan.hostName }</p>
+							<p class="layui-col-xs6 layui-col-sm6 layui-col-md4"><span>列席人员：</span>${meetingPlan.sit }</p>
 						</div>
-						<div class="details_content_title" style="border-bottom: 0px solid #e1e1e1;">
-							<p class="col-sm-6 col-xs-12"><span>参会人员：</span>${meetingUserName }</p>
-							<p class="col-sm-6 col-xs-12"><span>主持人：</span>${meetingPlan.hostName }</p>
+
+						<div class="layui-form-item layui-row" >
+							<p class="layui-col-xs6 layui-col-sm6 layui-col-md4"><span>短信自动通知：</span>${meetingPlan.auto_phone_msg == 1?"是":"否" }</p>
+							<p class="layui-col-xs6 layui-col-sm6 layui-col-md4"><span>联系人：</span>${meetingPlan.contactName }</p>
+							<p class="layui-col-xs6 layui-col-sm6 layui-col-md4"><span>联系人电话：</span>${meetingPlan.contact_phone }</p>
 						</div>
-						<div class="details_content_title" style="border-bottom: 0px solid #e1e1e1;">
-							<p class="col-sm-6 col-xs-12"><span>联系人：</span>${meetingPlan.contactName }</p>
-							<p class="col-sm-6 col-xs-12"><span>联系人电话：</span>${meetingPlan.contact_phone }</p>
+						<div class="layui-form-item layui-row" >
+							<p class="layui-col-xs12 layui-col-sm12 layui-col-md12"><span>参会人员：</span>${meetingUserName }</p>
 						</div>
-						<div class="details_content_title" style="border-bottom: 0px solid #e1e1e1;">
-							<p class="col-sm-6 col-xs-12"><span>列席人员：</span>${meetingPlan.sit }</p>
-							<p class="col-sm-6 col-xs-12"><span>短信自动通知：</span>${meetingPlan.auto_phone_msg == 1?"是":"否" }</p>
+						<div class="layui-form-item layui-row" >
+							<p class="layui-col-xs12 layui-col-sm12 layui-col-md12"><span>详细内容：</span></p>
+							<p class="layui-col-xs12 layui-col-sm12 layui-col-md12">${meetingPlan.content}</p>
 						</div>
-						<div class="details_content_title" style="border-bottom: 0px solid #e1e1e1;">
-							<p class="col-sm-6 col-xs-12"><span>详细内容：</span></p>
-							<p class="col-sm-6 col-xs-12"></p>
-						</div>
-						<div class="details_content_info" style="word-wrap:break-word">
-							${content }
-						</div>
-						<div class="details_content_title" style="border-bottom: 0px solid #e1e1e1;">
-							<div class="col-sm-12 col-xs-12">
+						<div class="layui-form-item layui-row" >
+							<div class="layui-col-xs12 layui-col-sm12 layui-col-md12">
 								<span>附件内容：</span>
 								<ul>
 									<c:forEach var="file" items="${attachment }">
@@ -96,24 +92,24 @@
 							</div>
 						</div>
 						<c:if test="${meetingPlan.task_status == '3'}">
-							<div class="details_content_title" style="border-bottom: 0px solid #e1e1e1;">
-								<p class="col-sm-12 col-xs-12"><span>驳回原因：</span>${meetingPlan.remark }</p>
+							<div class="layui-form-item layui-row" >
+								<p class="layui-col-xs12 layui-col-sm12 layui-col-md12"><span>驳回原因：</span>${meetingPlan.remark }</p>
 							</div>
 						</c:if>
 						<c:if test="${hasNote}">
-							<div class="details_content_title" style="border-bottom: 0px solid #e1e1e1;">
-								<p class="col-sm-6 col-xs-12"><span>实到人员：</span>${attendances }</p>
-								<p class="col-sm-6 col-xs-12"></p>
+							<div class="layui-form-item layui-row" >
+								<p class="layui-col-xs6 layui-col-sm6 layui-col-md4"><span>实到人员：</span>${attendances }</p>
+								<p class="layui-col-xs6 layui-col-sm6 layui-col-md4"></p>
 							</div>
-							<div class="details_content_title">
-								<p class="col-sm-6 col-xs-12"><span>会议纪要：</span></p>
-								<p class="col-sm-6 col-xs-12"></p>
+							<div class="layui-form-item layui-row">
+								<p class="layui-col-xs6 layui-col-sm6 layui-col-md4"><span>会议纪要：</span></p>
+								<p class="layui-col-xs6 layui-col-sm6 layui-col-md4"></p>
 							</div>
 							<div class="details_content_info" style="word-wrap:break-word">
 								${note.attachment }
 							</div>
 						</c:if>
-						<div class="col-sm-12 col-xs-12">
+						<div class="layui-form-item layui-row">
 							<div class="layui-inline btn_group"
 								 style="width: calc(50% - 120px);margin: 0;margin-top: 10px;">
 								<label class="layui-form-label"></label>
