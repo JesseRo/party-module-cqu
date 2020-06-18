@@ -381,12 +381,15 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
                               String seconedId, String branchId, Integer pageSize, Integer startPage, String checkState) {
         String sql = "\n" +
                 "\tSELECT\n" +
-                "\t\tplan.task_status AS plan_state,org_o.org_name AS branch_name,plc.place as place_name, \n" +
+                "\t\tplan.task_status AS plan_state,org_o.org_name AS branch_name,plc.place as place_name," +
+                " us.user_name as check_person_name, contact.user_name as contact_name, host.user_name as host_name, \n" +
                 "\t\t( SELECT org_name FROM hg_party_org WHERE org_id = ( SELECT org_parent FROM hg_party_org WHERE org_id = plan.organization_id ) AND org_type != 'organization' ) AS second_name,\n" +
                 "\t\tplan.*\n" +
                 "\tFROM\n" +
                 "\t\thg_party_meeting_plan_info AS plan\n" +
                 "\t\tLEFT OUTER JOIN hg_users_info AS us ON plan.check_person = us.user_id \n" +
+                "\t\tLEFT OUTER JOIN hg_users_info AS contact ON plan.contact = contact.user_id \n" +
+                "\t\tLEFT OUTER JOIN hg_users_info AS host ON plan.host = host.user_id \n" +
                 "\t\tleft outer join hg_party_org as org_o on plan.organization_id = org_o.org_id \n" +
                 "left join hg_party_org as org_p on org_o.org_parent = org_p.org_id and org_p.org_type != 'organization' " +
                 "left join hg_party_place as plc on plan.place = plc.id " +
