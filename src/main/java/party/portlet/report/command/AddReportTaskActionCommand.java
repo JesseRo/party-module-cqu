@@ -174,7 +174,7 @@ public class AddReportTaskActionCommand implements MVCResourceCommand {
         }
         HttpServletResponse res = PortalUtil.getHttpServletResponse(actionResponse);
         try {
-            res.getWriter().write("<script>alert('" + message + "');" + redirect + "</script>");
+            res.getWriter().write("<script>window.parent.layuiModal.alert('" + message + "');" + redirect + "</script>");
         } catch (IOException e) {
             e.printStackTrace();
         }

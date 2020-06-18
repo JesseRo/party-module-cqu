@@ -66,7 +66,8 @@ public class MeetingCount implements MVCResourceCommand {
             JSONArray jsonArray = new JSONArray();
             for (Map<String, Object> map : list) {
                 OrgMeetingConut o = new OrgMeetingConut();
-
+                o.setSecond_name((String) map.get("second_name"));
+                o.setBranch_name((String) map.get("branch_name"));
                 o.setCheck_person_name(StringUtils.isEmpty(map.get("check_person_name")) ? "" : map.get("check_person_name").toString());
                 o.setCheck_person_org_name(StringUtils.isEmpty(map.get("check_person_org_name")) ? "" : map.get("check_person_org_name").toString());
                 o.setMeeting_type((String) map.get("meeting_type"));
@@ -75,8 +76,8 @@ public class MeetingCount implements MVCResourceCommand {
                 o.setMeeting_theme_secondary((String) map.get("meeting_theme_secondary"));
                 o.setStart_time(ExprotUntil.getDateString(map.get("start_time") + ""));
                 o.setPlace( String.valueOf(map.get("campus")) + map.get("place_name"));
-                o.setHost((String) map.get("host"));
-                o.setContact((String) map.get("contact"));
+                o.setHost((String) map.get("host_name"));
+                o.setContact((String) map.get("contact_name"));
                 o.setContact_phone((String) map.get("contact_phone"));
                 String plan_state = StringUtils.isEmpty(map.get("plan_state").toString()) ? "" : map.get("plan_state").toString();
                 o.setPlan_state(ExprotUntil.getTaskState(plan_state));
@@ -91,7 +92,7 @@ public class MeetingCount implements MVCResourceCommand {
 				headMap.put("branch_name", "党支部");
 				headMap.put("meeting_type", "会议类型");
 				headMap.put("release_time", "发布时间");
-				headMap.put("meeting_theme_secondary", "开展主题");
+				headMap.put("meeting_theme", "开展主题");
 //				headMap.put("meeting_theme_secondary", "党支部主题");
 				headMap.put("start_time", "开展时间");
 				headMap.put("place", "开展地点");
@@ -112,7 +113,7 @@ public class MeetingCount implements MVCResourceCommand {
 				headMap.put("meeting_type", "会议类型");
 				headMap.put("meeting_theme_secondary", "开展主题");
 				headMap.put("start_time", "开展时间");
-				headMap.put("contact", "联系人");
+				headMap.put("contact_name", "联系人");
 				headMap.put("plan_state", "任务状态");
 			}
             String datePattern = "yyyy-MM-dd HH:ss:mm";

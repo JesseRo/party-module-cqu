@@ -702,7 +702,7 @@ public class OrgDao extends PostgresqlDaoImpl<Organization> {
         List<Object> params = new ArrayList<>();
         String sql = "SELECT T\n" +
                 "\t.*,\n" +
-                "\tl.org_name, l.org_type, l.desc_type, l.historic\n" +
+                "\tl.org_name, l.org_type, l.desc_type, l.historic,l.org_secretary \n" +
                 "FROM\n" +
                 "\t(SELECT COUNT\n" +
                 "\t\t( c.org_id ) AS C,\n" +
@@ -711,7 +711,7 @@ public class OrgDao extends PostgresqlDaoImpl<Organization> {
                 "\t\t\"hg_party_org\" o\n" +
                 "\t\tleft JOIN hg_party_org c ON o.org_id = c.org_parent and c.historic = FALSE \n" +
                 "\tWHERE \n" +
-                "\t\to.historic = false\n" +
+                "\t\to.historic = false and (o.org_type = 'organization' or o.org_type = 'secondary')\n" +
                 "\tGROUP BY\n" +
                 "\t\to.org_id\n" +
                 "\t) T LEFT JOIN hg_party_org l ON T.org_id = l.org_id";

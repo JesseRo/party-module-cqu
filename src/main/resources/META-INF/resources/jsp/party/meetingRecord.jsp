@@ -253,6 +253,7 @@ $(function(){
 									<td>开展时间</td>
 									<td>联系人</td>
 									<td>任务状态</td>
+									<td>详情</td>
 								</tr>
 							</thead>
 							<tbody>
@@ -277,11 +278,11 @@ $(function(){
 										<td data-label="会议类型" title="${info.meeting_type }">${info.meeting_type }</td>
 		<%--	                            <td data-label="发布时间" class="publish_time"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${info.release_time }" /></td>--%>
 		<%--	                            <td data-label="开展主题">${info.meeting_theme }</td>--%>
-										<td data-label="党支部主题" title="${info.meeting_theme_secondary }">${info.meeting_theme_secondary }</td>
+										<td data-label="党支部主题" title="${info.meeting_theme }">${info.meeting_theme }</td>
 										<td data-label="开展时间" title="${info.start_time }" class="publish_time start_time"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${info.start_time }" /></td>
 		<%--	                            <td data-label="开展地点">${info.place }</td>--%>
 		<%--	                            <td data-label="主持人">${info.host }</td>--%>
-										<td data-label="联系人" title="${info.contact }">${info.contact }</td>
+										<td data-label="联系人" title="${info.contact }">${info.contact_name }</td>
 		<%--	                            <td data-label="联系人电话">${info.contact_phone }</td>--%>
 										<td data-label="任务状态">
 											<c:if test="${info.plan_state == '1'}">
@@ -306,6 +307,7 @@ $(function(){
 												已检查
 											</c:if>
 										</td>
+										<td><a style="cursor: pointer;" onclick="window.location.href='/approvaldetails?meetingId=${info.meeting_id}'">查看详情</a></td>
 		<%--	                            <td data-label="审核人">${info.auditor }</td>--%>
 		<%--	                            <td data-label="检查人">${info.check_person_name }</td>--%>
 		<%--	                            <td data-label="抽查人">${info.check_person_org_name }</td>--%>

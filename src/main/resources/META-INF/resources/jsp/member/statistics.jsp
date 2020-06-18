@@ -339,18 +339,22 @@
                         where: {search: $('[name=keyword]').val()},
                         prev: '&lt;上一页',
                         next: '下一页&gt;',
-                        groups: 4
+                        groups: 4,
+                        theme: '#FFB800'
                     },
                     cols: [[ //表头
                         {field: 'retention_id', title: 'id', hide: true},
-                        {field: 'org_name', title: '组织名称', width: '30%'},
-                        {field: 'committee', title: '党委数', width: '17.5%'},
-                        {field: 'grand_branch', title: '党总支数', width: '17.5%'},
-                        {field: 'c', title: '党支部数', width: '17.5%'},
-                        {field: 'member', title: '党员数', width: '17.5%'}
+                        {field: 'org_name', title: '组织名称', width: '20%'},
+                        {field: 'org_secretary', title: '党委书记', width: '20%'},
+                        {field: 'committee', title: '党委数', width: '15%'},
+                        {field: 'grand_branch', title: '党总支数', width: '15%'},
+                        {field: 'c', title: '党支部数', width: '15%'},
+                        {field: 'member', title: '党员数', width: '15%'}
                     ]]
                 });
-            })
+                $(".layui-table-view .layui-table-page").addClass("layui-table-page-center");
+                $(".layui-table-view .layui-table-page").removeClass("layui-table-page");
+            });
             $('#transportSearchBtn').on('click', function () {
                 statisticsTable.reload({
                     where: {search: $('[name=keyword]').val()},
@@ -388,7 +392,7 @@
                                                class="layui-input">
                                     </div>
                                     <button type="button" class="layui-btn layui-btn-warm" lay-submit=""
-                                            lay-filter="searchForm">
+                                            lay-filter="searchForm" id="transportSearchBtn">
                                         <icon class="layui-icon layui-icon-search"></icon>
                                         搜索
                                     </button>
