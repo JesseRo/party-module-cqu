@@ -32,6 +32,14 @@
         .layui-card-body{
             height: 200px;
         }
+        #rejectModal .layui-form-label{
+            float: left;
+            display: block;
+            padding: 9px 0px;
+            font-weight: 400;
+            line-height: 20px;
+            text-align: left;
+        }
     </style>
 </head>
 <body>
@@ -137,7 +145,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label layui-required">驳回理由:</label>
                     <div class="layui-input-inline">
-                        rejectReason
+                        <input type="text" class="layui-input" name="rejectReason" id="rejectReason">
                     </div>
                 </div>
             </div>
