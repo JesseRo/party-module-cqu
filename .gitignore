@@ -1,12 +1,10 @@
 .gradle/
 build/
 target/
-<<<<<<< HEAD
 .idea/
-=======
 */.sass-cache/
->>>>>>> c670311365fca1b45b5091b59515ba9cbe738778
 src/main/profile/dev/
 src/main/resources/META-INF/resources/cqu/css/.sass-cache/
 *.log
 src/main/resources/META-INF/resources/js/2222.html
+.**
