@@ -323,7 +323,11 @@
 						dataType:'json',
 						success:function(res){
 							if(res.code == 200){
-								layer.msg("审核成功");
+								if(res.data != null && res.data.code != 200){
+									layer.msg("审核成功,短信自动通知失败，原因："+res.data.message);
+								}else{
+									layer.msg("审核成功");
+								}
 								renderTable(pageInfo.page,pageInfo.size);
 							}
 						}

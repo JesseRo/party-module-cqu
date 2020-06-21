@@ -2,11 +2,13 @@ package party.portlet.cqu;
 
 import com.alibaba.fastjson.JSON;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
+import com.liferay.portal.kernel.util.PortalUtil;
 import dt.session.SessionManager;
 import hg.party.entity.organization.Organization;
 import hg.party.entity.party.MeetingPlan;
 import hg.party.server.organization.OrgService;
 import hg.party.server.partyBranch.PartyBranchService;
+import org.apache.axis.utils.StringUtils;
 import org.apache.log4j.Logger;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -60,6 +62,7 @@ public class SubPlanPortlet extends MVCPortlet {
         String sessionId=renderRequest.getRequestedSessionId();
         String userId =	SessionManager.getAttribute(sessionId, "userName").toString();
         String role =	SessionManager.getAttribute(sessionId, "role").toString();//用户选中角色
+        String meetingId = PortalUtil.getOriginalServletRequest(PortalUtil.getHttpServletRequest(renderRequest)).getParameter("meetingId");
         PartyOrgAdminTypeEnum orgAdminTypeEnum = PartyOrgAdminTypeEnum.getEnumByRole(role);
         Organization organization = new Organization() ;
         MeetingPlan meetingPlan = new MeetingPlan();
@@ -67,7 +70,11 @@ public class SubPlanPortlet extends MVCPortlet {
         if(orgAdminTypeEnum!=null){
             organization = orgService.findAdminOrg(userId, orgAdminTypeEnum);
             members = orgService.findMembersByOrg(organization.getOrg_id(),orgAdminTypeEnum);
-            meetingPlan = partyBranchService.findNoSubmitPlan(userId,organization.getOrg_id());
+            if(!StringUtils.isEmpty(meetingId)){
+                meetingPlan = partyBranchService.findMeetingPlan(meetingId);
+            }else{
+                meetingPlan = partyBranchService.findNoSubmitPlan(userId,organization.getOrg_id());
+            }
             if(meetingPlan.getMeeting_id() != null){
                 List<Map<String, Object>> memberList = partyBranchService.findMeetingMember(meetingPlan.getMeeting_id());
                 List<String> participate = new ArrayList<>();

@@ -141,13 +141,9 @@ public class MeetingPlanSaveCommand implements MVCResourceCommand {
             //获取组织类型
             String orgType = partyBranchService.findSconedAndBranch(orgId);
             String url;
-            if (!StringUtils.isEmpty(meetingId) && "secondary".equals(orgType)) {
-                url = "/approvalplantwo";
-            } else if ("branch".equals(orgType)) {
+            if (!StringUtils.isEmpty(meetingId) ) {
                 url = "/backlogtwo";
-            } else if ("secondary".equals(orgType)) {
-                url = "/backlogtwo";
-            } else {
+            }  else {
                 url = "/approvalplanone";
             }
             if(ret > 0){

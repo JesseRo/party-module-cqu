@@ -126,8 +126,8 @@
                     <label class="layui-form-label"></label>
                     <div class="layui-input-inline layui-long">
                         <c:if test="${permission =='audit'}">
-                            <button type="button" class="layui-btn layui-btn-warm" onclick="pass('${meetingNote.id}')">通过</button>
-                            <button type="button" class="layui-btn layui-btn-warm" onclick="reject('${meetingNote.id}')">拒绝</button>
+                           <%-- <button type="button" class="layui-btn layui-btn-warm" onclick="pass('${meetingNote.id}')">通过</button>--%>
+                            <button type="button" class="layui-btn layui-btn-warm" onclick="reject('${meetingNote.id}')">驳回</button>
                         </c:if>
                         <button type="button" class="layui-btn layui-btn-primary" onclick="window.history.back();">返回</button>
                     </div>

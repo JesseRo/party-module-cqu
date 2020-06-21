@@ -7,6 +7,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import hg.party.entity.party.MeetingPlan;
 import hg.party.server.party.PartyMeetingPlanInfoService;
 import hg.party.server.partyBranch.PartyBranchService;
+import hg.util.result.Result;
 import hg.util.result.ResultUtil;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -50,8 +51,8 @@ public class MeetingPlanSendPhoneMsgCommand implements MVCResourceCommand {
                 return false;
             }else{
                 if(Integer.parseInt(m.getTask_status())>=4){
-                    partyMeetingPlanInfoService.sendPhoneNoticeMsg(meetingId);
-                    printWriter.write(JSON.toJSONString(ResultUtil.success("通知成功。")));
+                    Result result = partyMeetingPlanInfoService.sendPhoneNoticeMsg(meetingId);
+                    printWriter.write(JSON.toJSONString(result));
                 }else{
                     printWriter.write(JSON.toJSONString(ResultUtil.fail("当前流程状态不能进行短信通知。")));
                     return false;

@@ -368,7 +368,7 @@
                 $.post("${addUser}", postData, function (res) {
                     if(res.code==200){
                         layer.msg(res.message);
-                        window.history.back();
+                        setTimeout(function(){ window.history.back();}, 1000);
                     }else if(res.code == 501) {
                         if(!res.data.historic){
                             layer.msg("该身份证党员已存在在校党员中。");

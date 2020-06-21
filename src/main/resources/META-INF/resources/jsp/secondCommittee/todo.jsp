@@ -218,7 +218,7 @@
 
     });
     function sendPhoneMsg(meetingObj){
-        layer.confirm('您确认短信通知活动人员吗？', {
+        layer.confirm('您确认短信通知所有参会人员吗？', {
             btn: ['确定','取消'] //按钮
         }, function(){
             $.ajax({

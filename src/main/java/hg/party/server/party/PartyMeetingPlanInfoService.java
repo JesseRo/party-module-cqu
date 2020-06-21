@@ -5,6 +5,9 @@ import hg.party.entity.party.MeetingPlan;
 import hg.party.entity.partyMembers.Member;
 import hg.party.server.CQUMsgService;
 import hg.util.postgres.PostgresqlPageResult;
+import hg.util.result.Result;
+import hg.util.result.ResultCode;
+import hg.util.result.ResultUtil;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import party.portlet.cqu.dao.PlaceDao;
@@ -177,7 +180,7 @@ public class PartyMeetingPlanInfoService {
         return partyMeetingPlanInfo.searchOrgPage(page, size,orgId, search);
     }
 
-    public void sendPhoneNoticeMsg(String meetingId) {
+    public Result sendPhoneNoticeMsg(String meetingId) {
         List<Member> members = partyMemberServer.findMeetingPlanMember(meetingId);
         MeetingPlan meetingPlan = partyMeetingPlanInfo.findMeetingPlanByMeetingId(meetingId);
         String startTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(meetingPlan.getStart_time());
@@ -194,9 +197,12 @@ public class PartyMeetingPlanInfoService {
                         .replace("{phone}",meetingPlan.getContact_phone());
                 //cquMsgService.sendPhoneNoticeMsg(member.getMember_phone_number(),msg);
                 //测试模式短信接受者为周洪云
-                cquMsgService.sendPhoneNoticeMsg("15520069183",msg);
+                Result result  = cquMsgService.sendPhoneNoticeMsg("15520069183",msg);
+                if(ResultCode.INTERNAL_SERVER_ERROR.code == result.getCode() || ResultCode.NOT_FOUND.code == result.getCode()){
+                    return result;
+                }
             }
         }
-
+        return ResultUtil.success(meetingId);
     }
 }

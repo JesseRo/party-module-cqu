@@ -12,6 +12,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import hg.party.dao.secondCommittee.MeetingPlanDao;
 import hg.util.TransactionUtil;
+import hg.util.result.Result;
 import hg.util.result.ResultUtil;
 import org.apache.log4j.Logger;
 import org.osgi.service.component.annotations.Component;
@@ -74,11 +75,12 @@ public class PartyPassCommand implements MVCResourceCommand{
 				int ret = partyMeetingPlanInfoService.save(meeting);
 				if(ret > 0){
 					transactionUtil.commit();
-					if(meeting.getAutoPhoneMsg() > 0){
-						partyMeetingPlanInfoService.sendPhoneNoticeMsg(meetingId);
-					}
 					logger.info("通过");
-					printWriter.write(JSON.toJSONString(ResultUtil.success(meetingId)));
+					Result msgResult = null;
+					if(meeting.getAutoPhoneMsg() > 0){
+						msgResult = partyMeetingPlanInfoService.sendPhoneNoticeMsg(meetingId);
+					}
+					printWriter.write(JSON.toJSONString(ResultUtil.success(msgResult)));
 				}else{
 					transactionUtil.rollback();
 					printWriter.write(JSON.toJSONString(ResultUtil.fail("操作失败。")));

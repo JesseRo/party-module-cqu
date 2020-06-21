@@ -8,6 +8,9 @@ import javax.xml.namespace.QName;
 import javax.xml.rpc.ParameterMode;
 import javax.xml.rpc.ServiceException;
 
+import hg.util.result.Result;
+import hg.util.result.ResultCode;
+import hg.util.result.ResultUtil;
 import org.apache.axis.client.Call;
 import org.apache.axis.client.Service;
 import org.apache.axis.encoding.XMLType;
@@ -25,7 +28,7 @@ public class CQUMsgService {
      * @param messageContent
      * @return
      */
-    public static String sendPhoneNoticeMsg(String phone,String messageContent) {
+    public static Result sendPhoneNoticeMsg(String phone, String messageContent) {
         // 远程调用路径
         String endpoint = "http://s.cqu.edu.cn/WebService/SmsServiceCQU.asmx";
         String result = "call failed!";
@@ -53,11 +56,12 @@ public class CQUMsgService {
         } catch (ServiceException e) {
             e.printStackTrace();
         } catch (RemoteException e) {
-            e.printStackTrace();
-        } catch(Exception e){
-            e.printStackTrace();
+            if("(404)Not Found".equals(e.getMessage())){
+               return  ResultUtil.fail(ResultCode.NOT_FOUND,"短信服务无法连接。");
+            }
+            return  ResultUtil.fail(ResultCode.INTERNAL_SERVER_ERROR,"短信服务调用出现异常。");
         }
-        return result;
+        return ResultUtil.success(result);
     }
 
     public static void main(String[] args) {

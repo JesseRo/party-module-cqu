@@ -88,8 +88,11 @@
 </div>
 
 <script type="text/html" id="noteAuditTableBtns">
-	{{#  if(d.note_status == "1"){ }}
+	<%--{{#  if(d.note_status == "1"){ }}
 	<a class="layui-btn layui-btn-xs" lay-event="audit">审核</a>
+	{{#  } }}--%>
+	{{#  if(d.note_status == "2"){ }}
+	<a class="layui-btn layui-btn-xs" lay-event="audit">驳回</a>
 	{{#  } }}
 	<a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
 </script>
