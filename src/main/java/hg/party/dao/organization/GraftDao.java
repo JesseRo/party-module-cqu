@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import hg.party.dao.org.OrgDao;
+import hg.party.entity.organization.Organization;
 import hg.util.HgDateQueryUtil;
 import hg.util.date.DateQueryVM;
 import hg.util.postgres.HgPostgresqlDaoImpl;
@@ -14,14 +16,17 @@ import org.apache.log4j.Logger;
 import org.osgi.service.component.annotations.Component;
 
 import hg.party.entity.organization.PublicInformation;
+import org.osgi.service.component.annotations.Reference;
 import org.springframework.util.StringUtils;
 import party.constants.DateQueryEnum;
+import party.constants.PartyOrgAdminTypeEnum;
 import party.portlet.transport.entity.PageQueryResult;
 
 @Component(immediate = true, service = GraftDao.class)
 public class GraftDao extends HgPostgresqlDaoImpl<PublicInformation> {
 	Logger logger = Logger.getLogger(GraftDao.class);
-
+	@Reference
+	private OrgDao orgDao;
 	public List<Map<String, Object>> findGrafts(Date date) {
 		String sql = "SELECT * FROM hg_party_public_inform WHERE state='0' AND public_date>'2017-12-12'";
 		return jdbcTemplate.queryForList(sql);
@@ -157,6 +162,11 @@ public class GraftDao extends HgPostgresqlDaoImpl<PublicInformation> {
 	public PostgresqlPageResult<Map<String, Object>> searchPage(int page, int size, String dateType,String orgId,int publicStatus, String keyword) {
 		if (size <= 0){
 			size = 10;
+		}
+		Organization org = orgDao.findOrgByOrgId(orgId);
+		PartyOrgAdminTypeEnum partyOrgAdminTypeEnum = PartyOrgAdminTypeEnum.getEnum(org.getOrg_type());
+		if(PartyOrgAdminTypeEnum.BRANCH.getType().equals(partyOrgAdminTypeEnum.getType())){
+			orgId = org.getOrg_parent();
 		}
 		StringBuffer sb = new StringBuffer("select * from (select inform_id,read_status from hg_party_inform_group_info where pub_org_id = '"+orgId+"') s left join (SELECT a.attachment_url,a.attachment_name,info.* FROM hg_party_org_inform_info info left join hg_party_attachment a on info.inform_id = a.resource_id) i on i.inform_id = s.inform_id WHERE i.public_status='" + publicStatus + "'");
 		DateQueryVM dateQueryVM = HgDateQueryUtil.toDateQueryVM(DateQueryEnum.getEnum(dateType));

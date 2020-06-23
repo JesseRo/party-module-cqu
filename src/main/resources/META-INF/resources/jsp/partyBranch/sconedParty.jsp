@@ -454,7 +454,20 @@
         renderMemberGroups();
         renderFilesTable();
         renderSelectData();
-        renderPlace('${meetingPlan.place}');
+        if('${meetingPlan.place}'!='' && '${meetingPlan.place}' !='null'){
+            renderPlace('${meetingPlan.place}');
+        }
+        if('${participate}'!=''){
+            var arr = '${participate}'.split(",");
+            renderParticipate(arr);
+        }
+        if('${meetingPlan.autoPhoneMsg}'!='' && '${meetingPlan.autoPhoneMsg}' !='null'){
+            var autoMsg = '${meetingPlan.autoPhoneMsg}' == '1'?'on':'off';
+            renderAutoPhoneMsg(autoMsg);
+        }
+        function renderAutoPhoneMsg(autoMsg){
+            $("#addMeetingPlanForm input[name='autoPhoneMsg']").val(autoMsg);
+        }
         function renderSelectData(){
             var campus = '${meetingPlan.campus}';
             if(campus != '' && campus != 'null'){
@@ -624,6 +637,10 @@
                 }
             })
         }
+        function renderParticipate(arr){
+            $('#addMeetingPlanForm  select[name="participate"]').val(arr);
+            form.render('select');
+        }
         function refreshParticipate(nodes){
             var arr = [];
             for(var i=0;i<nodes.length&&nodes.length>0;i++){
@@ -634,8 +651,7 @@
                     }
                 }
             }
-            $('#addMeetingPlanForm  select[name="participate"]').val(arr);
-            form.render('select');
+            renderParticipate(arr);
         }
         function renderFilesTable(){
             var cols = [[

@@ -100,6 +100,6 @@ public class PartyMeetingNoteDao extends HgPostgresqlDaoImpl<MeetingNote> {
 
 	public int rejectMeetingNote(int noteId, String rejectReason) {
 		String sql = "UPDATE hg_party_meeting_notes_info SET status=3,reason=? WHERE id=?";
-		return  this.jdbcTemplate.update(sql,noteId,rejectReason);
+		return  this.jdbcTemplate.update(sql,rejectReason,noteId);
 	}
 }

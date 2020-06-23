@@ -351,7 +351,7 @@
                    var cols = [[
                        {type: 'checkbox'}
                        ,{field: 'member_name', align:'center', title: '姓名',templet: function(d) {
-                               return '<a href="javascript:void(0)"  path="' + d.attachment_url + '" name="' + d.attachment_name + '" onclick="downloadFile(this)">' + d.attachment_name + '</a>';
+                               return '<a href="/memberDetail?userId='+d.member_identity+'" >' + d.member_name + '</a>';
                            }
                            }
                        ,{field: 'member_sex', align:'center', title: '性别',width:80}
