@@ -454,7 +454,7 @@
         renderMemberGroups();
         renderFilesTable();
         renderSelectData();
-        if('${meetingPlan.place}'!='' && '${meetingPlan.place}' !='null'){
+        if('${meetingPlan.place}'!='' && '${meetingPlan.place}' !='null' && '${meetingPlan.place}' > '0'){
             renderPlace('${meetingPlan.place}');
         }
         if('${participate}'!=''){
@@ -488,7 +488,12 @@
             var participate= '${participate}';
             if(contact != '' && contact != 'null'){
                 var participateArr = participate.split(",");
-                $('#addMeetingPlanForm  select[name="participateArr"]').val(participateArr);
+                $('#addMeetingPlanForm  select[name="participate"]').val(participateArr);
+            }
+            if('${meetingplan.autoPhoneMsg}' == '1'){
+                $("input[name='autoPhoneMsg']").val("on");
+            }else{
+                $("input[name='autoPhoneMsg']").val("off");
             }
             form.render();
         }

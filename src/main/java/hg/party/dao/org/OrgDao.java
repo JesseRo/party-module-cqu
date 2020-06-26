@@ -415,10 +415,22 @@ public class OrgDao extends PostgresqlDaoImpl<Organization> {
 
         return jdbcTemplate.update(sql, userId);
     }
+    //恢复人员
+    public int recoveryMemberByUserId(String userId,String orgId) {
+        String sql = "update hg_party_member set historic = false,member_org=?" +
+                " where member_identity = ? " +
+                " and historic is true ";
+
+        return jdbcTemplate.update(sql, userId,orgId);
+    }
 
     public int deleteUserByuserId(String userId) {
         String sql = "update hg_users_info set state = '0' where user_id = ? ";
         return jdbcTemplate.update(sql, userId);
+    }
+    public int recoveryUserByUserId(String userId,String orgId) {
+        String sql = "update hg_users_info set state = '1',user_department_id=? where user_id = ? ";
+        return jdbcTemplate.update(sql, userId,orgId);
     }
 
     public List<Map<String, Object>> findPersonByUserId(String userId) {

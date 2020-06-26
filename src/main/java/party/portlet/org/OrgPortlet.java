@@ -25,6 +25,7 @@ import dt.session.SessionManager;
 import hg.party.dao.org.OrgDao;
 import hg.party.entity.organization.Organization;
 import hg.util.ConstantsKey;
+import party.constants.PartyOrgAdminTypeEnum;
 import party.constants.PartyPortletKeys;
 
 /**
@@ -35,7 +36,7 @@ import party.constants.PartyPortletKeys;
 	property = {
 		"com.liferay.portlet.display-category=category.sample",
 		"com.liferay.portlet.instanceable=true",
-		"javax.portlet.display-name=组织",
+		"javax.portlet.display-name=党员信息管理",
 		"javax.portlet.init-param.template-path=/",
 		"javax.portlet.init-param.view-template=/jsp/member/view.jsp",
 		"com.liferay.portlet.requires-namespaced-parameters=false",
@@ -56,6 +57,9 @@ public class OrgPortlet extends MVCPortlet {
 		String sessionId = renderRequest.getRequestedSessionId();
 	    String orgType = (String)SessionManager.getAttribute(sessionId, "orgType");
 		renderRequest.setAttribute("org_type", orgType);
+		String role =	SessionManager.getAttribute(sessionId, "role").toString();//用户选中角色
+		PartyOrgAdminTypeEnum orgAdminTypeEnum = PartyOrgAdminTypeEnum.getEnumByRole(role);
+		renderRequest.setAttribute("role",orgAdminTypeEnum.getType());
 		super.doView(renderRequest, renderResponse); 
 	}
 

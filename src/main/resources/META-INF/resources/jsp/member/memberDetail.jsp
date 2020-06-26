@@ -49,11 +49,6 @@
             font-weight: bold;
         }
     </style>
-    <script type="text/javascript" src="${basePath}/js/jquery.jqprint-0.3.js"></script>
-    <link rel="stylesheet" href="${basePath}/css/print_div.css">
-    <portlet:renderURL var="applyUpdatePersonInfo">
-        <portlet:param name="mvcRenderCommandName" value="/org/user/applyUpdate" />
-    </portlet:renderURL>
 </head>
 <body>
 <div class="table_form_content">
@@ -192,7 +187,7 @@
                             <label class="layui-form-label">党费标准:</label>
                             <div class="layui-input-inline">
                                 <label class="layui-form-label-text">
-                                    <c:if test="${info.member_major_title ==null || info.member_major_title='' }"></c:if>
+                                    <c:if test="${info.member_major_title ==null || info.member_major_title=='' }"></c:if>
                                     <c:if test="${info.member_major_title !=null && info.member_major_title!='' }">${info.member_major_title } 元/月</label></c:if>
                             </div>
                         </div>

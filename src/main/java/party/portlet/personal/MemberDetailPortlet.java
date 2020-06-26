@@ -2,16 +2,12 @@ package party.portlet.personal;
 
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.util.PortalUtil;
-import dt.session.SessionManager;
-import hg.party.dao.login.UserDao;
+
 import hg.party.dao.org.OrgDao;
-import hg.party.entity.login.User;
-import hg.party.server.member.MemberEditService;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.springframework.util.StringUtils;
 import party.constants.PartyPortletKeys;
-import party.memberEdit.MemberEdit;
 import party.portlet.unit.UnitDao;
 
 import javax.portlet.Portlet;
