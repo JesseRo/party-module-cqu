@@ -39,7 +39,7 @@ public class MemberRecoveryResourceCommand implements MVCResourceCommand {
 		try {
 			transactionUtil.startTransaction();
 			Organization org =orgDao.findByOrgId(orgId);
-			if(org!=null && org.getOrg_type()== PartyOrgAdminTypeEnum.BRANCH.getType()){
+			if(org!=null && PartyOrgAdminTypeEnum.BRANCH.getType().equals(org.getOrg_type())){
 				int n = orgDao.recoveryMemberByUserId(userId,orgId);
 				int j = orgDao.recoveryUserByUserId(userId,orgId);
 				if (n == 1 && j == 1) {

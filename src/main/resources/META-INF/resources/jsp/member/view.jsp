@@ -363,7 +363,7 @@
                     var url = "${orgRecoveryPerson}";
                     $.ajax({
                         url:url,
-                        data:{orgId:data.field.recoveryTree},
+                        data:{orgId:recoveryCheckedNode.data.org_id,userId:recoveryId},
                         dataType:'json',
                         async:false,
                         success:function(res){
@@ -564,10 +564,10 @@
                         },
                         // 加载完成后的回调函数
                         success: function (d) {
-                            if(recoveryCheckedNode == null || recoveryCheckedNode == undefined ){
+                           /* if(recoveryCheckedNode == null || recoveryCheckedNode == undefined ){
                                 recoveryCheckedNode = d.data[0];
                             }
-                            treeSelect.checkNode('recoveryTree', recoveryCheckedNode.id);
+                            treeSelect.checkNode('recoveryTree', recoveryCheckedNode.id);*/
                         }
                     });
                 }
