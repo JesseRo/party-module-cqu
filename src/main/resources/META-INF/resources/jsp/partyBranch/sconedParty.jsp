@@ -189,7 +189,12 @@
                                 <select  name="campus" lay-verify="select" lay-filter="campus">
                                     <option value="">请选择</option>
                                     <c:forEach var="n" items="${campus }">
-                                        <option value="${n}">${n}</option>
+                                        <c:if test="${meetingPlan.campus ==n }">
+                                            <option value="${n}" selected>${n}</option>
+                                        </c:if>
+                                        <c:if test="${meetingPlan.campus !=n }">
+                                            <option value="${n}" >${n}</option>
+                                        </c:if>
                                     </c:forEach>
                                 </select>
                             </div>
@@ -449,6 +454,20 @@
         renderMemberGroups();
         renderFilesTable();
         renderSelectData();
+        if('${meetingPlan.place}'!='' && '${meetingPlan.place}' !='null' && '${meetingPlan.place}' > '0'){
+            renderPlace('${meetingPlan.place}');
+        }
+        if('${participate}'!=''){
+            var arr = '${participate}'.split(",");
+            renderParticipate(arr);
+        }
+        if('${meetingPlan.autoPhoneMsg}'!='' && '${meetingPlan.autoPhoneMsg}' !='null'){
+            var autoMsg = '${meetingPlan.autoPhoneMsg}' == '1'?'on':'off';
+            renderAutoPhoneMsg(autoMsg);
+        }
+        function renderAutoPhoneMsg(autoMsg){
+            $("#addMeetingPlanForm input[name='autoPhoneMsg']").val(autoMsg);
+        }
         function renderSelectData(){
             var campus = '${meetingPlan.campus}';
             if(campus != '' && campus != 'null'){
@@ -469,7 +488,12 @@
             var participate= '${participate}';
             if(contact != '' && contact != 'null'){
                 var participateArr = participate.split(",");
-                $('#addMeetingPlanForm  select[name="participateArr"]').val(participateArr);
+                $('#addMeetingPlanForm  select[name="participate"]').val(participateArr);
+            }
+            if('${meetingplan.autoPhoneMsg}' == '1'){
+                $("input[name='autoPhoneMsg']").val("on");
+            }else{
+                $("input[name='autoPhoneMsg']").val("off");
             }
             form.render();
         }
@@ -537,7 +561,7 @@
                 }
             });
         }
-        function renderPlace() {
+        function renderPlace(placeId) {
             var campus = $('#addMeetingPlanForm  select[name="campus"]').val();
             if (!campus) {
                 layer.alert("请先选择校区.");
@@ -553,7 +577,12 @@
                         $('#addMeetingPlanForm  select[name="location"]').empty();
                         $('#addMeetingPlanForm  select[name="location"]').append('<option  value="" disabled>请选择</option>');
                         for (var i=0;res.data.length>0&&i<res.data.length;i++ ) {
-                            $('#addMeetingPlanForm  select[name="location"]').append('<option  value="'+res.data[i].id+'" >'+res.data[i].place+'</option>');
+                            if(placeId != null && parseInt(placeId)==res.data[i].id){
+                                $('#addMeetingPlanForm  select[name="location"]').append('<option  value="'+res.data[i].id+'" selected>'+res.data[i].place+'</option>');
+                            }else{
+                                $('#addMeetingPlanForm  select[name="location"]').append('<option  value="'+res.data[i].id+'" >'+res.data[i].place+'</option>');
+                            }
+
                         }
                         form.render();
                     } else {
@@ -613,6 +642,10 @@
                 }
             })
         }
+        function renderParticipate(arr){
+            $('#addMeetingPlanForm  select[name="participate"]').val(arr);
+            form.render('select');
+        }
         function refreshParticipate(nodes){
             var arr = [];
             for(var i=0;i<nodes.length&&nodes.length>0;i++){
@@ -623,8 +656,7 @@
                     }
                 }
             }
-            $('#addMeetingPlanForm  select[name="participate"]').val(arr);
-            form.render('select');
+            renderParticipate(arr);
         }
         function renderFilesTable(){
             var cols = [[
@@ -767,7 +799,7 @@
         }
         form.on('select(campus)', function(data){
             if(data.value !=""){
-                renderPlace();
+                renderPlace(null);
             }
         });
         form.on('select(contact)', function(data){
@@ -778,7 +810,7 @@
             $.post("${addPlace}", {place: data.field.place, campus: $('#addMeetingPlanForm  select[name="campus"]').val()}, function (res) {
                 if (res.code ==200) {
                     layer.msg("添加成功。")
-                    renderPlace();
+                    renderPlace(null);
                 }
             },'json');
         });
@@ -890,7 +922,7 @@
             }
         });
         $('#addMeetingPlanForm  select[name="campus"]').change(function(){
-            renderPlace();
+            renderPlace(null);
         });
         $('#addGroupBtn').on('click', function () {
             layer.open({

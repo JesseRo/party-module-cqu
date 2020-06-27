@@ -1,10 +1,14 @@
 package hg.party.server.party;
 
+import hg.party.dao.org.MemberDao;
 import hg.party.dao.party.PartyMeetingPlanInfoDao;
 import hg.party.entity.party.MeetingPlan;
 import hg.party.entity.partyMembers.Member;
 import hg.party.server.CQUMsgService;
 import hg.util.postgres.PostgresqlPageResult;
+import hg.util.result.Result;
+import hg.util.result.ResultCode;
+import hg.util.result.ResultUtil;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import party.portlet.cqu.dao.PlaceDao;
@@ -30,6 +34,8 @@ public class PartyMeetingPlanInfoService {
     private PartyMemberServer partyMemberServer;
     @Reference
     private PlaceDao placeDao;
+    @Reference
+    private MemberDao memberDao;
 
     //查询二级党委进度分页
     public Map<String, Object> postGresqlFind(int pageNo, int pageSize, String sql, String department) {
@@ -177,26 +183,30 @@ public class PartyMeetingPlanInfoService {
         return partyMeetingPlanInfo.searchOrgPage(page, size,orgId, search);
     }
 
-    public void sendPhoneNoticeMsg(String meetingId) {
+    public Result sendPhoneNoticeMsg(String meetingId) {
         List<Member> members = partyMemberServer.findMeetingPlanMember(meetingId);
         MeetingPlan meetingPlan = partyMeetingPlanInfo.findMeetingPlanByMeetingId(meetingId);
         String startTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(meetingPlan.getStart_time());
         Place place  = placeDao.findById(meetingPlan.getPlace());
+        Member contact = memberDao.findMemberByUser(meetingPlan.getContact());
         if(meetingPlan != null){
             for(Member member:members){
-                String msgTemplate = "{name}，您好！主题“{theme}”党组织活动于{time}在{campus}{place}举行，请您准时参加。活动联系人:{contact}{phone}";
+                String msgTemplate = "党员同志，您好！您参加的“{theme}”即将开始，请准时到场。会议主题：{theme} 会议时间：{time} 会议地点：{campus}{place}  联系人:{contact} 联系电话：{phone}";
                 String msg = msgTemplate.replace("{name}",member.getMember_name())
                         .replace("{theme}",meetingPlan.getMeeting_theme())
                         .replace("{time}",startTime)
                         .replace("{campus}",meetingPlan.getCampus())
                         .replace("{place}",place==null?"":place.getPlace())
-                        .replace("{contact}",meetingPlan.getContact())
+                        .replace("{contact}",contact.getMember_name())
                         .replace("{phone}",meetingPlan.getContact_phone());
                 //cquMsgService.sendPhoneNoticeMsg(member.getMember_phone_number(),msg);
                 //测试模式短信接受者为周洪云
-                cquMsgService.sendPhoneNoticeMsg("15520069183",msg);
+                Result result  = cquMsgService.sendPhoneNoticeMsg("15520069183",msg);
+                if(ResultCode.INTERNAL_SERVER_ERROR.code == result.getCode() || ResultCode.NOT_FOUND.code == result.getCode()){
+                    return result;
+                }
             }
         }
-
+        return ResultUtil.success(meetingId);
     }
 }

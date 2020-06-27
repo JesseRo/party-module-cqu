@@ -439,8 +439,8 @@ public class MemberDao extends HgPostgresqlDaoImpl<Member> {
         }
         if(!StringUtils.isEmpty(keyword)){
             sb.append(" and (i.member_name like '%"+keyword+"%'");
-            sb.append(" or i.member_identity like '%"+keyword+"%')");
-            //sb.append("or i.member_name like '%"+keyword+"%')");
+            sb.append(" or i.member_identity like '%"+keyword+"%'");
+            sb.append(" or i.job_number like '%"+keyword+"%')");
         }
         String orderSql = " order by i.member_identity asc";
         switch(partyOrgAdminTypeEnum){

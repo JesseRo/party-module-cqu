@@ -69,7 +69,8 @@ public class MeetingNoteSubmitCommand implements MVCActionCommand {
 					if(temp == 1){
 						meetingNote.setStatus(0);
 					}else{
-						meetingNote.setStatus(1);
+						//meetingNote.setStatus(1);
+						meetingNote.setStatus(2);//重大老师要求默认会议纪要通过
 					}
 				}
 				meetingNote.setId(meetingNoteId);

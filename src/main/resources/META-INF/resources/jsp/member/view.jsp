@@ -4,6 +4,7 @@
 <portlet:resourceURL id="/org/export" var="orgExport"/>
 <portlet:resourceURL id="/org/import" var="orgImport"/>
 <portlet:resourceURL id="/org/delete/user" var="orgDeletePerson"/>
+<portlet:resourceURL id="/org/user/recovery" var="orgRecoveryPerson"/>
 <portlet:resourceURL id="/hg/org/move/object" var="moveObject"/>
 <portlet:resourceURL id="/hg/org/move/org" var="moveObjectorg"/>
 <portlet:resourceURL id="/org/tree" var="orgTreeUrl" />
@@ -304,6 +305,21 @@
         .layui-table-page-center{
             text-align: center;
         }
+        #recoveryModal .layui-form-label{
+            float: left;
+            display: block;
+            padding: 9px 0px;
+            font-weight: 400;
+            line-height: 20px;
+            text-align: left;
+        }
+        #recoveryModal .layui-form-item .layui-input-inline{
+            width: 280px;
+            margin-right: 0px;
+        }
+        .layui-layer-page.recovery-modal-skin .layui-layer-content {
+            overflow: visible;
+        }
     </style>
     <script type="text/javascript">
 
@@ -320,11 +336,13 @@
                     table = layui.table,
                     element = layui.element;
                 var checkedNode = null;
+                var recoveryCheckedNode = null;
                 var isHistory = false;
                 var pageInfo = {
                     page:1,
                     size:10
                 };
+                var recoveryId;
                 element.on('tab(tabMemberType)', function(elem){
                     if(elem.index == 0){
                         isHistory = false;
@@ -341,6 +359,24 @@
                 form.on('submit(searchForm)', function(data){
                     renderTable(1,pageInfo.size);
                 })
+                form.on('submit(recoveryForm)', function (data) {
+                    var url = "${orgRecoveryPerson}";
+                    $.ajax({
+                        url:url,
+                        data:{orgId:recoveryCheckedNode.data.org_id,userId:recoveryId},
+                        dataType:'json',
+                        async:false,
+                        success:function(res){
+                            if(res && res.code == 200){
+                                layer.msg("恢复成功。");
+                                renderTable(pageInfo.page,pageInfo.size);
+                            }else{
+                                layer.msg("恢复失败。");
+                            }
+                        }
+                    });
+
+                });
                 function renderTable(page,size){
                    var  where = {
                        id: checkedNode.id
@@ -350,7 +386,10 @@
                    };
                    var cols = [[
                        {type: 'checkbox'}
-                       ,{field: 'member_name', align:'center', title: '姓名'}
+                       ,{field: 'member_name', align:'center', title: '姓名',templet: function(d) {
+                               return '<a href="/memberDetail?userId='+d.member_identity+'" >' + d.member_name + '</a>';
+                           }
+                           }
                        ,{field: 'member_sex', align:'center', title: '性别',width:80}
                        ,{field: 'member_identity', align:'center', title: '公民身份证', minWidth:200}
                        ,{field: 'member_phone_number', align:'center', title: '联系电话'}
@@ -392,6 +431,9 @@
                                 break;
                             case 'edit':
                                 window.location.href = '/addperson?userId=' + obj.data.member_identity;
+                                break;
+                            case 'recovery':
+                                recoveryMember(obj.data.member_identity);
                                 break;
                         };
                     });
@@ -486,7 +528,49 @@
                         });
                     });
                 }
-
+                function recoveryMember(userId){
+                    recoveryId = userId;
+                    renderRecoveryTree();
+                    layer.prompt({
+                        type: 1,
+                        btn: 0,
+                        skin: 'recovery-modal-skin',
+                        content: $("#recoveryModal")
+                    });
+                }
+                function renderRecoveryTree(){
+                    treeSelect.destroy('recoveryTree');
+                    treeSelect.render({
+                        // 选择器
+                        elem: '#recoveryTree',
+                        // 数据
+                        data: '${orgTreeUrl}&isFilter=1',
+                        // 异步加载方式：get/post，默认get
+                        type: 'get',
+                        // 占位符
+                        placeholder: '请选择',
+                        // 是否开启搜索功能：true/false，默认false
+                        search: true,
+                        // 点击回调
+                        click: function(d){
+                            recoveryCheckedNode = d.current;
+                            if(d.current.check_Child_State == 0){
+                                $("#recoveryTree-div .layui-treeSelect.layui-unselect.layui-form-select").addClass("layui-form-selected");
+                                $("#recoveryTree-div .layui-treeSelect .layui-select-title input").val("");
+                                $("#"+d.current.tId+"_switch").click();
+                            }else{
+                                $("#trecoveryTree-div .layui-treeSelect.layui-unselect.layui-form-select").removeClass("layui-form-selected");
+                            }
+                        },
+                        // 加载完成后的回调函数
+                        success: function (d) {
+                           /* if(recoveryCheckedNode == null || recoveryCheckedNode == undefined ){
+                                recoveryCheckedNode = d.data[0];
+                            }
+                            treeSelect.checkNode('recoveryTree', recoveryCheckedNode.id);*/
+                        }
+                    });
+                }
                 $('#upload-block [type="file"]').change(function () {
                     $('#upload-block [type="submit"]').click();
                 })
@@ -628,11 +712,33 @@
             </div>
         </div>
     </div>
-<%--</div>--%>
+    <c:if test="${role=='organization'}">
+        <div style="display: none" id="recoveryModal">
+            <form class="layui-form" action="">
+                <input type="hidden" class="layui-layer-input"  name="userID" value="1">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label layui-required">组织机构:</label>
+                        <div class="layui-input-inline orgTree" id="recoveryTree-div">
+                            <input type="text" name="recoveryTree" id="recoveryTree" lay-filter="recoveryTree" placeholder="请选择组织" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-layer-btn layui-layer-btn-">
+                    <a class="layui-layer-btn0" type="button"  lay-submit="" lay-filter="recoveryForm">确定</a>
+                    <a class="layui-layer-btn1">取消</a>
+                </div>
+            </form>
+        </div>
+    </c:if>
     <script type="text/html" id="tableTool">
         {{#  if(d.historic == false){ }}
             <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+        {{#  } }}
+        {{#  if(d.historic != false){ }}
+        <a class="layui-btn layui-btn-xs" lay-event="recovery">恢复</a>
         {{#  } }}
     </script>
 </body>
