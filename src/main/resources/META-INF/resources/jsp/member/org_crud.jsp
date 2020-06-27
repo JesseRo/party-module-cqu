@@ -600,6 +600,12 @@ button.cancal.btn.btn-default {
                                             <option value="1" selected>党委</option>
                                             <option value="2">党总支</option>
                                             <option value="3">党支部</option>
+                                            <option value="4">教工党支部</option>
+                                            <option value="5">专任教师支部</option>
+                                            <option value="6">博士生党支部</option>
+                                            <option value="7">硕士生党支部</option>
+                                            <option value="8">本科生党支部</option>
+                                            <option value="9">离退休党支部</option>
                                         </select>
                                     </div>
                                 </div>

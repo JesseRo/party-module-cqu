@@ -321,48 +321,108 @@
             text-align: center;
         }
     </style>
+    <portlet:resourceURL id="/org/tree" var="orgTreeUrl"/>
+
     <script type="text/javascript">
 
         $(function () {
             var statisticsTable;
-            layui.use('table', function () {
+            layui.use(['treeSelect', 'table'], function () {
                 var table = layui.table;
+                var treeSelect = layui.treeSelect;
 
-                //第一个实例
-                statisticsTable = table.render({
-                    elem: '#memberTable',
-                    url: '${statistics}', //数据接口
-                    method: 'post',
-                    page: {
-                        limit: 10,   //每页条数
-                        limits: [],
-                        where: {search: $('[name=keyword]').val()},
-                        prev: '&lt;上一页',
-                        next: '下一页&gt;',
-                        groups: 4,
-                        theme: '#FFB800'
-                    },
-                    cols: [[ //表头
-                        {field: 'retention_id', title: 'id', hide: true},
-                        {field: 'org_name', title: '组织名称', width: '20%'},
-                        {field: 'org_secretary', title: '党委书记', width: '20%'},
-                        {field: 'committee', title: '党委数', width: '15%'},
-                        {field: 'grand_branch', title: '党总支数', width: '15%'},
-                        {field: 'c', title: '党支部数', width: '15%'},
-                        {field: 'member', title: '党员数', width: '15%'}
-                    ]]
-                });
-                $(".layui-table-view .layui-table-page").addClass("layui-table-page-center");
-                $(".layui-table-view .layui-table-page").removeClass("layui-table-page");
+                var checkedNode = null;
+                renderTree();
+
+                function renderTree() {
+                    treeSelect.destroy('orgTree');
+                    treeSelect.render({
+                        // 选择器
+                        elem: '#orgTree',
+                        // 数据
+                        data: '${orgTreeUrl}&isFilter=1',
+                        // 异步加载方式：get/post，默认get
+                        type: 'get',
+                        // 占位符
+                        placeholder: '请选择',
+                        // 是否开启搜索功能：true/false，默认false
+                        search: true,
+                        // 点击回调
+                        click: function (d) {
+                            checkedNode = d.current;
+                            $("#org-path").empty();
+                            $("#org-path").append(getPathHtml(checkedNode));
+                            renderOrgInfo(checkedNode.id);
+
+                        },
+                        // 加载完成后的回调函数
+                        success: function (d) {
+                            if (checkedNode == null || checkedNode == undefined) {
+                                checkedNode = d.data[0];
+                            }
+                            treeSelect.checkNode('orgTree', checkedNode.id);
+                            $("#org-path").empty();
+                            $("#org-path").append(getPathHtml(checkedNode));
+                            renderOrgInfo(checkedNode.id);
+                        }
+                    });
+                }
+
+                function getPathHtml(node) {
+                    var pathHtml = '<a  href="javascript:;" >' + node.name + '</a>';
+                    if (node.parentTId != null) {
+                        var pNode = node.getParentNode();
+                        pathHtml = getPathHtml(pNode) + '<span lay-separator="">></span>' + pathHtml;
+                    }
+                    return pathHtml;
+                }
+
+                function renderOrgInfo(id) {
+                    if (!statisticsTable) {
+                        statisticsTable = table.render({
+                            elem: '#memberTable',
+                            url: '${statistics}', //数据接口
+                            method: 'post',
+                            page: {
+                                limit: 10,   //每页条数
+                                limits: [],
+                                where: {search: $('[name=keyword]').val(), orgId: id},
+                                prev: '&lt;上一页',
+                                next: '下一页&gt;',
+                                groups: 4,
+                                theme: '#FFB800'
+                            },
+                            cols: [[ //表头
+                                {field: 'retention_id', title: 'id', hide: true},
+                                {field: 'org_name', title: '组织名称', width: '15%'},
+                                {field: 'org_secretary', title: '党委书记', width: '15%'},
+                                {field: 'committee', title: '党委数', width: '14%'},
+                                {field: 'grand_branch', title: '党总支数', width: '14%'},
+                                {field: 'c', title: '党支部数', width: '14%'},
+                                {field: 'member_formal', title: '正式党员数', width: '14%'},
+                                {field: 'member_pre', title: '预备党员数', width: '14%'}
+                            ]]
+                        });
+                        $(".layui-table-view .layui-table-page").addClass("layui-table-page-center");
+                        $(".layui-table-view .layui-table-page").removeClass("layui-table-page");
+                    } else {
+                        reloadTable(id)
+                    }
+                }
             });
-            $('#transportSearchBtn').on('click', function () {
+
+            function reloadTable(id) {
                 statisticsTable.reload({
-                    where: {search: $('[name=keyword]').val()},
+                    where: {search: $('[name=keyword]').val(), orgId: id},
                     page: {
                         curr: 1 //重新从第 1 页开始
                     }
                 });
-            });
+                $(".layui-table-view .layui-table-page").addClass("layui-table-page-center");
+                $(".layui-table-view .layui-table-page").removeClass("layui-table-page");
+            }
+
+            $('#transportSearchBtn').on('click', reloadTable);
         });
     </script>
 </head>
@@ -378,10 +438,20 @@
             </div>
             <div class="party_manage_content content_form content_info">
                 <div class="content_table_container party_table_container">
+                    <div class="layui-form">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label orgTree-label">请选择组织:</label>
+                                <div class="layui-input-inline orgTree">
+                                    <input type="text" name="orgTree" id="orgTree" lay-filter="orgTree"
+                                           placeholder="请选择组织" class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="breadcrumb_group">
                         当前组织：
-                        <span class="layui-breadcrumb" style="visibility: visible;" id="org-path"><a>${org.org_name}
-                        </a></span>
+                        <span class="layui-breadcrumb" style="visibility: visible;" id="org-path"></span>
                     </div>
                     <div class="table_content bg_white_container" style="padding-top: 20px;">
                         <form class="layui-form" id="searchForm">

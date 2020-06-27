@@ -218,6 +218,7 @@ public class PartyPortletKeys {
     public static final String MeetingNoteAudit = "MeetingNoteAudit";
     public static final String MeetingNoteDetailAudit = "MeetingNoteDetailAudit";
     public static final String MeetingNoteDetail = "MeetingNoteDetail";
+    public static final String MeetingStatistics = "MeetingStatistics";
 }
 
 

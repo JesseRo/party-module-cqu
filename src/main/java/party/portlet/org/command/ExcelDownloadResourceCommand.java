@@ -108,10 +108,10 @@ public class ExcelDownloadResourceCommand implements MVCResourceCommand {
                     e.printStackTrace();
                 }
             } else {
-                List<Member> members = memberDao.findByOrg(organizations.stream().map(p -> p.getOrg_id()).collect(Collectors.toList()),ish);
-                Map<String, List<Member>> memberGroup = members.stream().collect(Collectors.groupingBy(p -> p.getMember_org()));
+                List<Member> members = memberDao.findByOrg(organizations.stream().map(Organization::getOrg_id).collect(Collectors.toList()),ish);
+                Map<String, List<Member>> memberGroup = members.stream().collect(Collectors.groupingBy(Member::getMember_org));
                 for (Map.Entry<String, List<Member>> entry : memberGroup.entrySet()) {
-                    String oName = organizations.stream().filter(p -> p.getOrg_id().equals(entry.getKey())).findAny().map(p -> p.getOrg_name()).get();
+                    String oName = organizations.stream().filter(p -> p.getOrg_id().equals(entry.getKey())).findAny().map(Organization::getOrg_name).get();
                     entry.getValue().forEach(p -> p.setMember_org(oName));
                 }
                 for (Member member : members) {
@@ -156,7 +156,8 @@ public class ExcelDownloadResourceCommand implements MVCResourceCommand {
 //                headMap.put("position", "党内职务");
 //                headMap.put("title", "党费标准（元/月）");
 //                headMap.put("class", "学生宿舍");
-                headMap.put("job", "工作岗位");
+                headMap.put("job", "人员类型");
+                headMap.put("orgDesc", "党组织类型");
                 SXSSFWorkbook workbook = ExcelUtil.exportExcelX(title, headMap, ja, null, 0, res.getOutputStream());
                 try {
                     workbook.write(res.getOutputStream());

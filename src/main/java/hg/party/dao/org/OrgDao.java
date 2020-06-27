@@ -698,7 +698,7 @@ public class OrgDao extends PostgresqlDaoImpl<Organization> {
 
     }
 
-    public PageQueryResult<Map<String, Object>> orgChildrenStatistics(int pageNow, int pageSize, String search) {
+    public PageQueryResult<Map<String, Object>> orgChildrenStatistics(int pageNow, int pageSize, String orgId, String search) {
         List<Object> params = new ArrayList<>();
         String sql = "SELECT T\n" +
                 "\t.*,\n" +
@@ -711,10 +711,12 @@ public class OrgDao extends PostgresqlDaoImpl<Organization> {
                 "\t\t\"hg_party_org\" o\n" +
                 "\t\tleft JOIN hg_party_org c ON o.org_id = c.org_parent and c.historic = FALSE \n" +
                 "\tWHERE \n" +
-                "\t\to.historic = false and (o.org_type = 'organization' or o.org_type = 'secondary')\n" +
+                "\t\to.historic = false and (o.org_id = ? or o.org_parent = ?) \n" +
                 "\tGROUP BY\n" +
                 "\t\to.org_id\n" +
                 "\t) T LEFT JOIN hg_party_org l ON T.org_id = l.org_id";
+        params.add(orgId);
+        params.add(orgId);
         if (!StringUtils.isEmpty(search)) {
             sql += " where l.org_name like ?\n";
             params.add("%" + search + "%");
@@ -734,13 +736,13 @@ public class OrgDao extends PostgresqlDaoImpl<Organization> {
                 "\t(\n" +
                 "\tSELECT COUNT\n" +
                 "\t\t( M ) AS C,\n" +
-                "\t\tP.org_id \n" +
+                "\t\tP.org_id,m.member_type \n" +
                 "\tFROM\n" +
                 "\t\thg_party_member\n" +
                 "\t\tM INNER JOIN hg_party_org o ON M.member_org = o.org_id\n" +
                 "\t\tINNER JOIN hg_party_org P ON o.org_parent = P.org_id \n" +
                 "\tGROUP BY\n" +
-                "\t\tP.org_id \n" +
+                "\t\tP.org_id, m.member_type \n" +
                 "\t)\n" +
                 "\tT LEFT JOIN hg_party_org l ON T.org_id = l.org_id" +
                 " where l.org_id in (" + suffix + ")";

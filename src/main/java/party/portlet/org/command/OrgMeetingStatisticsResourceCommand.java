@@ -5,7 +5,6 @@ import com.google.gson.GsonBuilder;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCResourceCommand;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
-import hg.party.dao.org.MemberDao;
 import hg.party.entity.partyMembers.JsonPageResponse;
 import hg.party.entity.partyMembers.JsonResponse;
 import hg.party.server.organization.OrgService;
@@ -33,12 +32,12 @@ import java.util.Map;
 @Component(
         immediate = true,
         property = {
-                "javax.portlet.name=" + PartyPortletKeys.OrganizationStatistics,
-                "mvc.command.name=/hg/org/statistics"
+                "javax.portlet.name=" + PartyPortletKeys.MeetingStatistics,
+                "mvc.command.name=/hg/org/meetingStatistics"
         },
         service = MVCResourceCommand.class
 )
-public class OrgStatisticsResourceCommand implements MVCResourceCommand  {
+public class OrgMeetingStatisticsResourceCommand implements MVCResourceCommand  {
     @Reference
     private OrgService orgService;
     private Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();

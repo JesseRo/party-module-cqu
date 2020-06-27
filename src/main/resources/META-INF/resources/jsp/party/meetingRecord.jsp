@@ -252,6 +252,7 @@ $(function(){
 									<td>上报主题</td>
 									<td>开展时间</td>
 									<td>联系人</td>
+									<td>联系电话</td>
 									<td>任务状态</td>
 									<td>详情</td>
 								</tr>
@@ -282,7 +283,8 @@ $(function(){
 										<td data-label="开展时间" title="${info.start_time }" class="publish_time start_time"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${info.start_time }" /></td>
 		<%--	                            <td data-label="开展地点">${info.place }</td>--%>
 		<%--	                            <td data-label="主持人">${info.host }</td>--%>
-										<td data-label="联系人" title="${info.contact }">${info.contact_name }</td>
+										<td data-label="联系人" title="${info.contact_name }">${info.contact_name }</td>
+										<td data-label="联系电话" title="${info.contact_phone }">${info.contact_phone }</td>
 		<%--	                            <td data-label="联系人电话">${info.contact_phone }</td>--%>
 										<td data-label="任务状态">
 											<c:if test="${info.plan_state == '1'}">

@@ -103,16 +103,16 @@ public class OrgService {
      * @param search
      * @return //
      */
-    public PageQueryResult<Map<String, Object>> orgStatisticsPage(int page, int size, String search) {
-        PageQueryResult<Map<String, Object>> childrenStati = orgDao.orgChildrenStatistics(page, size, search);
+    public PageQueryResult<Map<String, Object>> orgStatisticsPage(int page, int size, String id, String search) {
+        PageQueryResult<Map<String, Object>> childrenStati = orgDao.orgChildrenStatistics(page, size, id, search);
         List<String> orgIds = childrenStati.getList().stream()
                 .map(p -> (String) p.get("org_id")).filter(Objects::nonNull).collect(Collectors.toList());
         List<Map<String, Object>> memberStati = orgDao.orgMemberStatistics(search, orgIds);
 
         Map<String, Map<String, Object>> childrenStatiMap = childrenStati.getList().stream()
                 .collect(Collectors.toMap(p -> (String) p.get("org_id"), p -> p));
-        Map<String, Map<String, Object>> memberStatiMap = memberStati.stream()
-                .collect(Collectors.toMap(p -> (String) p.get("org_id"), p -> p));
+        Map<String, List<Map<String, Object>>> memberStatiMap = memberStati.stream()
+                .collect(Collectors.groupingBy(p -> (String) p.get("org_id")));
 
         for (String orgId : orgIds) {
             Map<String, Object> o = childrenStatiMap.get(orgId);
@@ -147,11 +147,18 @@ public class OrgService {
                 o.put("c", 1);
             }
 
-            Map<String, Object> m = memberStatiMap.get(orgId);
-            if (m != null) {
-                o.put("member", m.getOrDefault("c", 0));
+            List<Map<String, Object>> lm = memberStatiMap.get(orgId);
+            if (lm != null) {
+                for (Map<String, Object> m : lm) {
+                    if (m.get("member_type").equals("正式党员")) {
+                        o.put("member_formal", m.getOrDefault("c", 0));
+                    } else if (m.get("member_type").equals("预备党员")) {
+                        o.put("member_pre", m.getOrDefault("c", 0));
+                    }
+                }
             } else {
-                o.put("member", 0);
+                o.put("member_formal", 0);
+                o.put("member_pre", 0);
             }
         }
         return childrenStati;

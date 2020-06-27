@@ -27,6 +27,8 @@ import java.util.List;
 				"javax.portlet.name=" + PartyPortletKeys.OrgCRUD,
 				"javax.portlet.name=" + PartyPortletKeys.OrgAdmin,
 				"javax.portlet.name=" + PartyPortletKeys.Org,
+				"javax.portlet.name=" + PartyPortletKeys.OrganizationStatistics,
+				"javax.portlet.name=" + PartyPortletKeys.MeetingStatistics,
 				"mvc.command.name=/org/tree"
 	    },
 	    service = MVCResourceCommand.class
