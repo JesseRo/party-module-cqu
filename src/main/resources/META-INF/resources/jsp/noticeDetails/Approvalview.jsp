@@ -110,25 +110,19 @@
 							</div>
 						</c:if>
 						<div class="layui-form-item layui-row">
-							<div class="layui-inline btn_group"
-								 style="width: calc(50% - 120px);margin: 0;margin-top: 10px;">
-								<label class="layui-form-label"></label>
-								<div class="layui-input-inline">
-									<input value="${meetingPlan.task_status == '1'}" type="hidden">
-									<c:if test="${meetingPlan.task_status == '1' && hasCheckPermission}">
-										<button type="button" id="pass" class="layui-btn" style="padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;background-color: #FFAB33;border-radius: 4px;">
-											通过
-										</button>
-										<button type="button" id="reject" class="layui-btn layui-btn-primary" style="background-color: transparent;color: #666;padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;border-radius: 4px;">
-											驳回
-										</button>
-									</c:if>
-									<button type="button" onclick="window.history.back();"
-											class="layui-btn layui-btn-primary" style="background-color: transparent;color: #666;padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;border-radius: 4px;">
-										返回
-									</button>
-								</div>
-							</div>
+							<input value="${meetingPlan.task_status == '1'}" type="hidden">
+							<c:if test="${meetingPlan.task_status == '1' && hasCheckPermission}">
+								<button type="button" id="pass" class="layui-btn" style="padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;background-color: #FFAB33;border-radius: 4px;">
+									通过
+								</button>
+								<button type="button" id="reject" class="layui-btn layui-btn-primary" style="background-color: transparent;color: #666;padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;border-radius: 4px;">
+									驳回
+								</button>
+							</c:if>
+							<button type="button" onclick="window.history.back();"
+									class="layui-btn layui-btn-primary" style="background-color: transparent;color: #666;padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;border-radius: 4px;">
+								返回
+							</button>
 						</div>
 					</div>
 				</div>
