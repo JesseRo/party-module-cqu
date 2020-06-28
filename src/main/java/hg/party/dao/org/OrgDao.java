@@ -1,9 +1,7 @@
 package hg.party.dao.org;
 
 import com.dt.springjdbc.dao.impl.PostgresqlDaoImpl;
-
 import hg.party.entity.organization.Organization;
-import hg.party.entity.party.OrgAdmin;
 import hg.party.entity.party.TreeNode;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -21,7 +19,6 @@ import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
