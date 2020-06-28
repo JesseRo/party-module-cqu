@@ -21,7 +21,7 @@ Bundle-Activator: party.portlet.Init
 	@D:/cxm/unirest-java-1.4.8.jar,\
 	@D:/cxm/log4j-1.2.17.jar
 
-Private-Package: party.constants,\
+Export-Package: party.constants,\
 	org.apache.commons.codec.digest,\
 	com.alibaba.fastjson.*,\
 	com.baidu.ueditor.*,\
@@ -36,16 +36,18 @@ Private-Package: party.constants,\
 	org.apache.commons.fileupload.*,\
 	com.dt.annotation,\
 	com.dt.springjdbc.dao.impl,\
+	org.jasig.cas.client.authentication,\
+	org.jasig.cas.client.proxy,\
+	org.jasig.cas.client.util,\
+	org.jasig.cas.client.validation,\
 	org.opensaml,\
 	com.alibaba.druid.pool,\
 	com.alibaba.druid,\
 	com.alibaba.druid.*\
 	com.aliyun.odps.udf,\
-	org.jasig.cas.client.authentication,\
-	org.jasig.cas.client.proxy,\
-	org.jasig.cas.client.util,\
-	org.jasig.cas.client.validation,
+	oracle.sql,
 
-Import-Package: !org.quartz,!org.opensaml,!oracle.sql,*,org.postgresql
+Import-Package: *,org.postgresql
+
 
 

@@ -98,7 +98,7 @@ public class RetentionDao extends PostgresqlDaoImpl<Retention> {
         String sql = "select t.*, o.org_name,p.org_name as second_name from hg_party_retention t " +
                 "left join hg_party_org o on t.org_id = o.org_id " +
                 " left join hg_party_org p on p.org_id = o.org_parent" +
-                "where 1 = 1";
+                " where 1 = 1";
         List<Object> params = new ArrayList<>();
         if (!StringUtils.isEmpty(name)) {
             sql += " and (t.user_name like ? or o.org_name like ?)";
