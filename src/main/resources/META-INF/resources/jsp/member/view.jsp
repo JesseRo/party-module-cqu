@@ -531,12 +531,6 @@
                 function recoveryMember(userId){
                     recoveryId = userId;
                     renderRecoveryTree();
-                    layer.prompt({
-                        type: 1,
-                        btn: 0,
-                        skin: 'recovery-modal-skin',
-                        content: $("#recoveryModal")
-                    });
                 }
                 function renderRecoveryTree(){
                     treeSelect.destroy('recoveryTree');
@@ -564,6 +558,12 @@
                         },
                         // 加载完成后的回调函数
                         success: function (d) {
+                            layer.prompt({
+                                type: 1,
+                                btn: 0,
+                                skin: 'recovery-modal-skin',
+                                content: $("#recoveryModal")
+                            });
                            /* if(recoveryCheckedNode == null || recoveryCheckedNode == undefined ){
                                 recoveryCheckedNode = d.data[0];
                             }

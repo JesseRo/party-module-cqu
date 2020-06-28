@@ -168,8 +168,8 @@
         <div class="breadcrumb_group">
             当前位置：
             <span class="layui-breadcrumb" lay-separator=">">
-                        <a href="javascript:;">组织关系转接</a>
-                        <a href="javascript:;">审批申请</a>
+                        <a href="javascript:;">基础数据管理</a>
+                        <a href="javascript:;">行政机构管理</a>
                     </span>
         </div>
         <div class="bg_white_container">

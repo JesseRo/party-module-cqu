@@ -418,7 +418,7 @@ public class OrgDao extends PostgresqlDaoImpl<Organization> {
                 " where member_identity = ? " +
                 " and historic is true ";
 
-        return jdbcTemplate.update(sql, userId,orgId);
+        return jdbcTemplate.update(sql,orgId, userId);
     }
 
     public int deleteUserByuserId(String userId) {
@@ -427,7 +427,7 @@ public class OrgDao extends PostgresqlDaoImpl<Organization> {
     }
     public int recoveryUserByUserId(String userId,String orgId) {
         String sql = "update hg_users_info set state = '1',user_department_id=? where user_id = ? ";
-        return jdbcTemplate.update(sql, userId,orgId);
+        return jdbcTemplate.update(sql,orgId , userId);
     }
 
     public List<Map<String, Object>> findPersonByUserId(String userId) {

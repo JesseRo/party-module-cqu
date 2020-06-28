@@ -37,12 +37,13 @@ public class MemberRecoveryResourceCommand implements MVCResourceCommand {
 		String userId = ParamUtil.getString(resourceRequest, "userId");
 		String orgId = ParamUtil.getString(resourceRequest, "orgId");
 		try {
-			transactionUtil.startTransaction();
 			Organization org =orgDao.findByOrgId(orgId);
 			if(org!=null && PartyOrgAdminTypeEnum.BRANCH.getType().equals(org.getOrg_type())){
+				transactionUtil.startTransaction();
 				int n = orgDao.recoveryMemberByUserId(userId,orgId);
 				int j = orgDao.recoveryUserByUserId(userId,orgId);
 				if (n == 1 && j == 1) {
+					transactionUtil.commit();
 					resourceResponse.getWriter().write(JSON.toJSONString(ResultUtil.success(null)));
 				} else {
 					resourceResponse.getWriter().write(JSON.toJSONString(ResultUtil.fail("恢复党员失败。")));
@@ -52,7 +53,6 @@ public class MemberRecoveryResourceCommand implements MVCResourceCommand {
 				resourceResponse.getWriter().write(JSON.toJSONString(ResultUtil.fail("请求的组织orgId不正确")));
 			}
 		} catch (Exception e) {
-			transactionUtil.rollback();
 			e.printStackTrace();
 		}
 		return false;
