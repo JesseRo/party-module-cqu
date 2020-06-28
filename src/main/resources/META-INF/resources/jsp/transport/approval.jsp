@@ -1,7 +1,7 @@
 <%@ include file="/init.jsp" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 
-<portlet:resourceURL id="/transport/page" var="transport"/>
+<portlet:resourceURL id="/transport/page1" var="transport"/>
 <portlet:resourceURL id="/transport/approval" var="approval"/>
 <portlet:resourceURL id="/retention/page" var="retention"/>
 <portlet:resourceURL id="/transport/export" var="export"/>

@@ -326,6 +326,11 @@
     <script type="text/javascript">
 
         $(function () {
+            layui.config({
+                base: '${basePath}/js/layui/module/'
+            }).extend({
+                treeSelect: 'treeSelect/treeSelect'
+            });
             var statisticsTable;
             layui.use(['treeSelect', 'table'], function () {
                 var table = layui.table;

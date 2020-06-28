@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 		property = {
 				"javax.portlet.name=" + PartyPortletKeys.TransportApproval,
 				"javax.portlet.name=" + PartyPortletKeys.TransportCompleted,
-				"mvc.command.name=/transport/page"
+				"mvc.command.name=/transport/page1"
 	    },
 	    service = MVCResourceCommand.class
 )
