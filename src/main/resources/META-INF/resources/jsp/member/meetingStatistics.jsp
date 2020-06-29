@@ -446,7 +446,7 @@
                     <a href="javascript:;">党组织信息</a>
                 </span>
             </div>
-            <div class="party_manage_content content_form content_info">
+            <div class="party_manage_content content_form content_info" style="padding-top: 0;">
                 <div class="content_table_container party_table_container">
                     <div class="table_content bg_white_container" style="padding-top: 20px;">
                         <div class="layui-form">
