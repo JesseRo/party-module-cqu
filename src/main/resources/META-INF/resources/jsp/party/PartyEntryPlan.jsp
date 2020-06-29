@@ -217,6 +217,7 @@
 				page:1,
 				size:10
 			};
+			var rejectModal;
 			var rejectId;
 			renderTable(1,pageInfo.size);
 			form.on('submit(searchForm)', function (data) {
@@ -232,6 +233,7 @@
 					success:function(res){
 						if(res){
 							layer.msg("驳回成功。");
+							layer.close(rejectModal);
 							renderTable(pageInfo.page,pageInfo.size);
 						}
 					}
@@ -337,7 +339,7 @@
 			//点击驳回
 			function reject(meetingId){
 				rejectId = meetingId;
-				layer.prompt({
+				rejectModal = layer.prompt({
 					type: 1,
 					btn: 0,
 					content: $("#rejectModal")
