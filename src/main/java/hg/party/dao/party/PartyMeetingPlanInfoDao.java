@@ -59,8 +59,7 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
         return this.jdbcTemplate.queryForMap(sql, meetingId);
     }
 
-    public PostgresqlQueryResult<Map<String, Object>> leaderMeetingPage(int page, int size,
-                                                                        String secondId, String brunchId, String startTime, String endTime, String leader) {
+    public PostgresqlQueryResult<Map<String, Object>> leaderMeetingPage(int page, int size, String secondId, String brunchId, String startTime, String endTime, String leader,String orgId) {
         page = Math.max(page, 0);
         size = size <= 0 ? 10 : size;
         List<Object> params = new ArrayList<>();
@@ -89,6 +88,15 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
                 "\tLEFT JOIN hg_party_member leader ON participant.participant_id = leader.member_identity\n" +
                 "\tLEFT JOIN hg_party_place place ON place.\"id\" = plan.place\n" +
                 "\twhere leader.member_is_leader = '是' ";
+
+
+        if(!StringUtils.isEmpty(orgId)){
+            Organization organization =  orgDao.findByOrgId(orgId);
+            if(!organization.getOrg_type().equals(PartyOrgAdminTypeEnum.ORGANIZATION.getType())){
+                sql += "and org.org_id = ? ";
+                params.add(orgId);
+            }
+        }
         if (!StringUtils.isEmpty(brunchId)){
             sql += "and org.org_id = ? ";
             params.add(brunchId);

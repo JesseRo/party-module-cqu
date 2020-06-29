@@ -62,7 +62,7 @@ public class SecondLeaderMeetingPortlet extends MVCPortlet {
         leader = HtmlUtil.escape(leader);
 
         int pageNo = ParamUtil.getInteger(renderRequest, "pageNo");
-        PostgresqlQueryResult<Map<String, Object>> pageResult = partyMeetingPlanInfoDao.leaderMeetingPage(pageNo, pageSize, seconedId, branchId, startTime, endTime, leader);
+        PostgresqlQueryResult<Map<String, Object>> pageResult = partyMeetingPlanInfoDao.leaderMeetingPage(pageNo, pageSize, seconedId, branchId, startTime, endTime, leader,orgId);
         //获取当前页
 
         int totalPage = pageResult.getTotalPage();
