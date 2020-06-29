@@ -5,8 +5,10 @@ import com.google.gson.GsonBuilder;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCResourceCommand;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
+import hg.party.entity.party.MeetingStatistics;
 import hg.party.entity.partyMembers.JsonPageResponse;
 import hg.party.entity.partyMembers.JsonResponse;
+import hg.party.server.memberMeeting.MemberMeetingServer;
 import hg.party.server.organization.OrgService;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -39,7 +41,7 @@ import java.util.Map;
 )
 public class OrgMeetingStatisticsResourceCommand implements MVCResourceCommand  {
     @Reference
-    private OrgService orgService;
+    private MemberMeetingServer memberMeetingServer;
     private Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
     @Override
     public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
@@ -48,13 +50,13 @@ public class OrgMeetingStatisticsResourceCommand implements MVCResourceCommand  
         int page = ParamUtil.getInteger(resourceRequest, "page");
         int size = ParamUtil.getInteger(resourceRequest, "limit");
         String name = ParamUtil.getString(resourceRequest, "search");
-        String orgId = ParamUtil.getString(resourceRequest, "orgId");
+        int orgId = ParamUtil.getInteger(resourceRequest, "orgId");
 
         HttpServletResponse res = PortalUtil.getHttpServletResponse(resourceResponse);
         res.addHeader("content-type","application/json");
 
         try {
-            PageQueryResult<Map<String, Object>> data = orgService.orgStatisticsPage(page, size, orgId, name);
+            PageQueryResult<MeetingStatistics> data = memberMeetingServer.meetingStatisticsPage(page, size, orgId, name);
             JsonPageResponse jsonPageResponse = new JsonPageResponse();
             if (data != null){
                 jsonPageResponse.setCode(0);

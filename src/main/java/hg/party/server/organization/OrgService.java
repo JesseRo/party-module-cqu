@@ -103,7 +103,7 @@ public class OrgService {
      * @param search
      * @return //
      */
-    public PageQueryResult<Map<String, Object>> orgStatisticsPage(int page, int size, String id, String search) {
+    public PageQueryResult<Map<String, Object>> orgStatisticsPage(int page, int size, int id, String search) {
         PageQueryResult<Map<String, Object>> childrenStati = orgDao.orgChildrenStatistics(page, size, id, search);
         List<String> orgIds = childrenStati.getList().stream()
                 .map(p -> (String) p.get("org_id")).filter(Objects::nonNull).collect(Collectors.toList());
@@ -148,6 +148,8 @@ public class OrgService {
             }
 
             List<Map<String, Object>> lm = memberStatiMap.get(orgId);
+            o.put("member_formal", 0);
+            o.put("member_pre", 0);
             if (lm != null) {
                 for (Map<String, Object> m : lm) {
                     if (m.get("member_type").equals("正式党员")) {
@@ -156,9 +158,6 @@ public class OrgService {
                         o.put("member_pre", m.getOrDefault("c", 0));
                     }
                 }
-            } else {
-                o.put("member_formal", 0);
-                o.put("member_pre", 0);
             }
         }
         return childrenStati;

@@ -49,7 +49,7 @@ public class OrgStatisticsResourceCommand implements MVCResourceCommand  {
         int page = ParamUtil.getInteger(resourceRequest, "page");
         int size = ParamUtil.getInteger(resourceRequest, "limit");
         String name = ParamUtil.getString(resourceRequest, "search");
-        String orgId = ParamUtil.getString(resourceRequest, "orgId");
+        int orgId = ParamUtil.getInteger(resourceRequest, "orgId");
 
         HttpServletResponse res = PortalUtil.getHttpServletResponse(resourceResponse);
         res.addHeader("content-type","application/json");

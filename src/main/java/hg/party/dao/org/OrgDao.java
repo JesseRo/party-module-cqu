@@ -707,7 +707,7 @@ public class OrgDao extends PostgresqlDaoImpl<Organization> {
 
     }
 
-    public PageQueryResult<Map<String, Object>> orgChildrenStatistics(int pageNow, int pageSize, String orgId, String search) {
+    public PageQueryResult<Map<String, Object>> orgChildrenStatistics(int pageNow, int pageSize, int id, String search) {
         List<Object> params = new ArrayList<>();
         String sql = "SELECT T\n" +
                 "\t.*,\n" +
@@ -719,13 +719,14 @@ public class OrgDao extends PostgresqlDaoImpl<Organization> {
                 "\tFROM\n" +
                 "\t\t\"hg_party_org\" o\n" +
                 "\t\tleft JOIN hg_party_org c ON o.org_id = c.org_parent and c.historic = FALSE \n" +
+                "\t\tleft JOIN hg_party_org p ON o.org_parent = p.org_id\n" +
                 "\tWHERE \n" +
-                "\t\to.historic = false and (o.org_id = ? or o.org_parent = ?) \n" +
+                "\t\to.historic = false and (o.id = ? or p.id = ?) \n" +
                 "\tGROUP BY\n" +
                 "\t\to.org_id\n" +
                 "\t) T LEFT JOIN hg_party_org l ON T.org_id = l.org_id";
-        params.add(orgId);
-        params.add(orgId);
+        params.add(id);
+        params.add(id);
         if (!StringUtils.isEmpty(search)) {
             sql += " where l.org_name like ?\n";
             params.add("%" + search + "%");

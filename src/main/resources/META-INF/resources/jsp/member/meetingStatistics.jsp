@@ -1,6 +1,6 @@
 <%@ include file="/init.jsp" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
-<portlet:resourceURL id="/hg/org/statistics" var="statistics"/>
+<portlet:resourceURL id="/hg/org/meetingStatistics" var="statistics"/>
 
 
 <head>
@@ -401,11 +401,11 @@
                                 {field: 'retention_id', title: 'id', hide: true},
                                 {field: 'org_name', title: '组织名称', width: '15%'},
                                 {field: 'org_secretary', title: '党委书记', width: '15%'},
-                                {field: 'committee', title: '党委数', width: '14%'},
-                                {field: 'grand_branch', title: '党总支数', width: '14%'},
-                                {field: 'c', title: '党支部数', width: '14%'},
-                                {field: 'member_formal', title: '正式党员数', width: '14%'},
-                                {field: 'member_pre', title: '预备党员数', width: '14%'}
+                                {field: 'branch_count', title: '开展支部数', width: '14%'},
+                                {field: 'plan_count', title: '开展会议次数', width: '14%'},
+                                {field: 'member_count', title: '参数人数', width: '14%'},
+                                {field: 'leader_count', title: '参会领导', width: '14%'},
+                                {field: 'operate', title: '操作', width: '14%', toolbar: '#retentionBtns'}
                             ]]
                         });
                         $(".layui-table-view .layui-table-page").addClass("layui-table-page-center");
@@ -431,6 +431,11 @@
         });
     </script>
 </head>
+<script type="text/html" id="retentionBtns">
+    <div class="operate_btns">
+        <span class="blue_text" style="cursor: pointer;color: #5160FF; ">短信通知</span>
+    </div>
+</script>
 <div>
     <div class="party_manage_container min_width_1200">
         <div class="party_manage_page">
