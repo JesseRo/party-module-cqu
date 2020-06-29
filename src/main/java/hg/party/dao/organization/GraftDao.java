@@ -5,8 +5,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import hg.party.dao.org.OrgDao;
 import hg.party.entity.organization.Organization;
 import hg.util.HgDateQueryUtil;
 import hg.util.date.DateQueryVM;
@@ -14,9 +12,9 @@ import hg.util.postgres.HgPostgresqlDaoImpl;
 import hg.util.postgres.PostgresqlPageResult;
 import org.apache.log4j.Logger;
 import org.osgi.service.component.annotations.Component;
-
-import hg.party.entity.organization.PublicInformation;
 import org.osgi.service.component.annotations.Reference;
+import hg.party.entity.organization.PublicInformation;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.util.StringUtils;
 import party.constants.DateQueryEnum;
 import party.constants.PartyOrgAdminTypeEnum;
@@ -25,8 +23,6 @@ import party.portlet.transport.entity.PageQueryResult;
 @Component(immediate = true, service = GraftDao.class)
 public class GraftDao extends HgPostgresqlDaoImpl<PublicInformation> {
 	Logger logger = Logger.getLogger(GraftDao.class);
-	@Reference
-	private OrgDao orgDao;
 	public List<Map<String, Object>> findGrafts(Date date) {
 		String sql = "SELECT * FROM hg_party_public_inform WHERE state='0' AND public_date>'2017-12-12'";
 		return jdbcTemplate.queryForList(sql);
@@ -128,7 +124,7 @@ public class GraftDao extends HgPostgresqlDaoImpl<PublicInformation> {
 	public Map<String, Object> findGraftDetail(String informId) {
 	//	String sql = "SELECT * from hg_party_org_inform_info WHERE inform_id='" + informId + "'";
 		String sql2 = "SELECT info.*,att.attachment_name from hg_party_org_inform_info as info LEFT OUTER JOIN hg_party_attachment as att "
-				+ "on info.inform_id=att.resource_id " 
+				+ "on info.inform_id=att.resource_id "
 				+ "where  inform_id= ? ";
 		List<Map<String, Object>>  list =jdbcTemplate.queryForList(sql2, informId);
 		if(list.size()> 0 ){
@@ -163,7 +159,7 @@ public class GraftDao extends HgPostgresqlDaoImpl<PublicInformation> {
 		if (size <= 0){
 			size = 10;
 		}
-		Organization org = orgDao.findOrgByOrgId(orgId);
+		Organization org = findOrgByOrgId(orgId);
 		PartyOrgAdminTypeEnum partyOrgAdminTypeEnum = PartyOrgAdminTypeEnum.getEnum(org.getOrg_type());
 		if(PartyOrgAdminTypeEnum.BRANCH.getType().equals(partyOrgAdminTypeEnum.getType())){
 			orgId = org.getOrg_parent();
@@ -189,7 +185,15 @@ public class GraftDao extends HgPostgresqlDaoImpl<PublicInformation> {
 			return postGresqlFindPageBySql(page, size, sb.toString());
 		}
 	}
-
+	public Organization findOrgByOrgId(String orgId) {
+		String sql = "select * from hg_party_org where historic is false and org_id = ?";
+		List<Organization> organizationList = jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Organization.class), orgId);
+		if (organizationList.size() > 0) {
+			return organizationList.get(0);
+		} else {
+			return null;
+		}
+	}
 	public PageQueryResult<Map<String, Object>> findSecondaryPage(int page, int size, String orgId) {
 		String sql = "select o.* from hg_party_inform_group_info t " +
 				" left join hg_party_org_inform_info o on t.inform_id = o.inform_id" +

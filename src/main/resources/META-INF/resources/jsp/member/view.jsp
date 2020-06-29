@@ -337,6 +337,7 @@
                     element = layui.element;
                 var checkedNode = null;
                 var recoveryCheckedNode = null;
+                var recoveryModal;
                 var isHistory = false;
                 var pageInfo = {
                     page:1,
@@ -370,12 +371,13 @@
                             if(res && res.code == 200){
                                 layer.msg("恢复成功。");
                                 renderTable(pageInfo.page,pageInfo.size);
+                                layer.close(recoveryModal);
                             }else{
                                 layer.msg("恢复失败。");
                             }
                         }
                     });
-
+                    return false;
                 });
                 function renderTable(page,size){
                    var  where = {
@@ -558,11 +560,11 @@
                         },
                         // 加载完成后的回调函数
                         success: function (d) {
-                            layer.prompt({
+                          recoveryModal = layer.prompt({
                                 type: 1,
                                 btn: 0,
                                 skin: 'recovery-modal-skin',
-                                content: $("#recoveryModal")
+                                content: $("#recoveryModal"),
                             });
                            /* if(recoveryCheckedNode == null || recoveryCheckedNode == undefined ){
                                 recoveryCheckedNode = d.data[0];
