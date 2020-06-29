@@ -52,7 +52,29 @@ public class ConstantsKey {
         MEETING_STATES.put("6", MEETING_STATE_UNCHECKED);
         MEETING_STATES.put("7", MEETING_STATE_CHECKED);
     }
+    public static final String ORG_DESC_COMMITTEE = "党委";
+    public static final String ORG_DESC_GRAND_BRANCH = "党总支";
+    public static final String ORG_DESC_BRANCH = "党支部";
+    public static final String ORG_DESC_FACULTY_BRANCH = "教工党支部";
+    public static final String ORG_DESC_SPE_TEACHER_BRANCH = "专任教师支部";
+    public static final String ORG_DESC_DOCTOR_BRANCH = "博士生党支部";
+    public static final String ORG_DESC_MASTER_BRANCH = "硕士生党支部";
+    public static final String ORG_DESC_BACHELOR_BRANCH = "本科生党支部";
+    public static final String ORG_DESC_RETIRED_BRANCH = "离退休党支部";
 
+    public static final Map<Integer, String> ORG_DESC_MAP = new HashMap<>(); // 权限 - 组织类型对应
+
+    static {
+        ORG_DESC_MAP.put(1, ORG_DESC_COMMITTEE);
+        ORG_DESC_MAP.put(2, ORG_DESC_GRAND_BRANCH);
+        ORG_DESC_MAP.put(3, ORG_DESC_BRANCH);
+        ORG_DESC_MAP.put(4, ORG_DESC_FACULTY_BRANCH);
+        ORG_DESC_MAP.put(5, ORG_DESC_SPE_TEACHER_BRANCH);
+        ORG_DESC_MAP.put(6, ORG_DESC_DOCTOR_BRANCH);
+        ORG_DESC_MAP.put(7, ORG_DESC_MASTER_BRANCH);
+        ORG_DESC_MAP.put(8, ORG_DESC_BACHELOR_BRANCH);
+        ORG_DESC_MAP.put(9, ORG_DESC_RETIRED_BRANCH);
+    }
 
     public static final HashMap<String, String > PERMISSION_TO_ORGTYPE = new HashMap<>(); // 权限 - 组织类型对应
     public static final HashMap<String, String > ORGTYPE_TO_PERMISSION = new HashMap<>(); // 组织类型 - 权限对应

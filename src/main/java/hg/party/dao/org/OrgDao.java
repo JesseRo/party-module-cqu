@@ -250,6 +250,7 @@ public class OrgDao extends PostgresqlDaoImpl<Organization> {
                     "\torg_relation,\n" +
                     "\torg_parent,\n" +
                     "\torg_code,\n" +
+                    "\tdesc_type,\n" +
                     "\thistoric\n" +
                     ") AS (\n" +
                     "\tSELECT\n" +
@@ -268,6 +269,7 @@ public class OrgDao extends PostgresqlDaoImpl<Organization> {
                     "\t\t\"public\".hg_party_org.org_relation,\n" +
                     "\t\t\"public\".hg_party_org.org_parent,\n" +
                     "\t\t\"public\".hg_party_org.org_code,\n" +
+                    "\t\t\"public\".hg_party_org.desc_type,\n" +
                     "\t\t\"public\".hg_party_org.historic\n" +
                     "\tFROM\n" +
                     "\t\thg_party_org\n" +
@@ -290,6 +292,7 @@ public class OrgDao extends PostgresqlDaoImpl<Organization> {
                     "\t\t\tD.org_relation,\n" +
                     "\t\t\tD.org_parent,\n" +
                     "\t\t\tD.org_code,\n" +
+                    "\t\t\tD.desc_type,\n" +
                     "\t\t\tD.historic\n" +
                     "\t\tFROM\n" +
                     "\t\t\thg_party_org D\n" +

@@ -3,6 +3,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <portlet:resourceURL id="/org/manage" var="manage" />
 <portlet:resourceURL id="/org/tree" var="orgTreeUrl" />
+<portlet:resourceURL id="/org/export" var="orgExport" />
 <head>
   <%--   <link rel="stylesheet" href="${basePath}/css/party_organization.css?v=5"/> --%>
     <link rel="stylesheet" href="${basePath}/css/account_manage_1.css"/>
@@ -545,6 +546,18 @@ button.cancal.btn.btn-default {
                 $('#orgInfo .layui-form select').attr('disabled', 'disabled');
                 form.render('select');
             });
+            /* 导出组织弹窗 */
+            $("#org_export").click(function() {
+                var id =checkedNode.id;
+                var orgName = checkedNode.data.org_name;
+                var orgId = checkedNode.data.org_id;
+                if(!id){
+                    layer.msg("请选择组织。");
+                    return;
+                }else {
+                    window.open("${orgExport}&type=org&orgId=" + orgId + "&orgName=" + orgName  ,"_blank")
+                }
+            });
         });
 
 });
@@ -572,6 +585,7 @@ button.cancal.btn.btn-default {
                                 </div>
                                 <button type="button" id="org_add" class="layui-btn layui-btn-warm" style="display:none">添加组织</button>
                                 <button type="button" id="org_delete" class="layui-btn layui-btn-danger" style="display:none">删除组织</button>
+                                <button type="button" id="org_export" class="layui-btn " style="">导出组织</button>
                             </div>
                         </div>
                     </div>
