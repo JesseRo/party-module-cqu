@@ -17,7 +17,7 @@
         table_outer_box > table thead, tbody tr {
             display: table-row !important;
             width: 100%;
-            table-layout: fixed;
+            table-layout: auto;
         }
         #searchForm .layui-form-item .layui-inline .keyword {
             width: 300px;
@@ -85,14 +85,13 @@
                         groups:4
                     },
                     cols: [[ //表头
-                        {field: 'member_code', align:'center', title: '工号'},
-                        {field: 'member_name', align:'center', title: '姓名', width:100},
-                        {field: 'org_name', align:'center', title: '所在组织', width:320},
-                        {field: 'secName', align:'center', title: '上级组织', width:320},
-                        {field: 'campus', align:'center', title: '所在校区'},
-                        {field: 'type', align:'center', title: '类别', width:80},
-                        {field: 'count', align:'center', title: '检查次数', width:120},
-                        {field: 'operation', align:'center', title: '操作', width:100, toolbar: '#checkPersonTableBtns'}
+                        {field: 'member_code', align:'center', title: '工号', width:'14.16%'},
+                        {field: 'member_name', align:'center', title: '姓名', width:'14.16%'},
+                        {field: 'org_name', align:'center', title: '所在二级党组织', width:'14.16%'},
+                        {field: 'secName', align:'center', title: '所在支部', width:'14.16%'},
+                        {field: 'type', align:'center', title: '类别', width:'14.16%'},
+                        {field: 'count', align:'center', title: '检查次数', width:'14.16%'},
+                        {field: 'operation', align:'center', title: '操作', width:'15%', toolbar: '#checkPersonTableBtns'}
                     ]],
                     done: function(res, curr, count){
                         pageInfo.page = curr;

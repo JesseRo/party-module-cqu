@@ -133,7 +133,7 @@ $(function(){
 			当前位置：
 			<span class="layui-breadcrumb" lay-separator=">">
 				<a href="javascript:;">数据统计</a>
-				<a href="javascript:;">领导参会统计</a>
+				<a href="javascript:;">领导参会检索</a>
 			</span>
 		</div>
 		<div class="bg_white_container">
@@ -142,21 +142,6 @@ $(function(){
 				</portlet:actionURL>
 				<form class="form-horizontal" role="form" action="${findURL }" method="post">
 					<div class="form-group">
-<%--					   <div class="col-sm-6 col-xs-12">--%>
-<%--							<span class="col-sm-3 col-xs-3 control-label">会议类型</span>--%>
-<%--							<div class="col-sm-9 col-xs-9">--%>
-<%--								<select class="form-control"  name="meetType" id="meetType">--%>
-<%--								  <option value="">请选择</option>--%>
-<%--								</select>--%>
-<%--							</div>--%>
-<%--						</div>--%>
-
-<%--						<div class="col-sm-6 col-xs-12">--%>
-<%--							<span class="col-sm-3 col-xs-3 control-label">会议主题</span>--%>
-<%--							<div class="col-sm-9 col-xs-9">--%>
-<%--								  <input type="text" class="form-control"  name="meetTheme" id="meetTheme" value="${meetTheme}">--%>
-<%--							</div>--%>
-<%--						</div>--%>
 
 					 	<div class="col-sm-6 col-xs-12">
 							<span class="col-sm-3 col-xs-3 control-label" >二级党组织</span>
@@ -243,6 +228,7 @@ $(function(){
 										<td data-label="开展时间" title="${info.start_time }" class="publish_time start_time">
 											<fmt:formatDate pattern="yyyy-MM-dd HH:mm" value="${info.start_time }" /></td>
 										<td data-label="联系人" title="${info.contact }">${info.contact }</td>
+										<td data-label="联系人" title="${info.contact_phone }">${info.contact_phone }</td>
 										<td data-label="任务状态" title="${info.leader_name}">${info.leader_name}</td>
 									</tr>
 								</c:forEach>

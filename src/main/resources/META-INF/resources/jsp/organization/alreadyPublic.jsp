@@ -149,9 +149,9 @@
                     groups:4
                 },
                 cols: [[ //表头
-                    {field: 'meeting_theme', align:'center', title: '活动名称'},
-                    {field: 'release_time', align:'center', title: '开始时间',width:180,templet: function(d){return new Date(d.release_time).format("yyyy-MM-dd hh:mm:ss");}},
-                    {field: 'operation', align:'center', title: '操作',width:120,toolbar: '#informTableBtns'}
+                    {field: 'meeting_theme', align:'center', title: '活动名称',width:'42.5%'},
+                    {field: 'release_time', align:'center', title: '开始时间',width:'42.5%',templet: function(d){return new Date(d.release_time).format("yyyy-MM-dd hh:mm:ss");}},
+                    {field: 'operation', align:'center', title: '操作',width:'15%',toolbar: '#informTableBtns'}
 
                 ]],
                 done: function(res, curr, count){

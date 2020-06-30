@@ -28,7 +28,7 @@ import java.util.Map;
         property = {
                 "com.liferay.portlet.display-category=category.sample",
                 "com.liferay.portlet.instanceable=true",
-                "javax.portlet.display-name=领导参会统计",
+                "javax.portlet.display-name=领导参会检索",
                 "javax.portlet.init-param.template-path=/",
                 "com.liferay.portlet.requires-namespaced-parameters=false",
                 "javax.portlet.init-param.view-template=/jsp/party/leaderMeeting.jsp",

@@ -29,7 +29,7 @@
 		.table_outer_box > table thead, tbody tr {
 			display: table-row !important;
 			width: 100%;
-			table-layout: fixed;
+			table-layout: auto;
 		}
 		#searchForm .layui-form-item .layui-inline .keyword {
 			width: 300px;
@@ -88,9 +88,6 @@
 </div>
 
 <script type="text/html" id="noteAuditTableBtns">
-	<%--{{#  if(d.note_status == "1"){ }}
-	<a class="layui-btn layui-btn-xs" lay-event="audit">审核</a>
-	{{#  } }}--%>
 	{{#  if(d.note_status == "2"){ }}
 	<a class="layui-btn layui-btn-xs" lay-event="audit">驳回</a>
 	{{#  } }}
@@ -129,17 +126,13 @@
 					groups:4
 				},
 				cols: [[ //表头
-					{field: 'org_name', align:'center',width:320, title: '党组织'},
-					{field: 'meeting_theme', align:'center',width:320, title: '开展主题'},
-					{field: 'start_time', align:'center', title: '开始时间',width:180,templet: function(d){return new Date(d.start_time).format("yyyy-MM-dd hh:mm:ss");}},
-					{field: 'campus', align:'center', title: '开展校区',templet: function(d){
-							var campus = d.campus;
-							if(campus == null || campus == undefined){
-								campus = '';
-							}
-							return campus;
-						}},
-					{field: 'note_status', align:'center', title: '审核状态',width:120,templet: function(d){
+					{field: 'org_name', align:'center',width:'12.14%', title: '党组织'},
+					{field: 'meeting_type', align:'center',width:'12.14%', title: '会议类型'},
+					{field: 'meeting_theme', align:'center',width:'12.14%', title: '开展主题'},
+					{field: 'start_time', align:'center', title: '开始时间',width:'12.14%',templet: function(d){return new Date(d.start_time).format("yyyy-MM-dd hh:mm:ss");}},
+					{field: 'member_name', align:'center', title: '联系人',width:'12.14%'},
+					{field: 'member_phone_number', align:'center', title: '联系电话',width:'12.14%'},
+					{field: 'note_status', align:'center', title: '审核状态',width:'12.14%',templet: function(d){
 							var status = '';
 							switch(parseInt(d.note_status)){
 								case 1:status = '待审核';break;
@@ -148,7 +141,7 @@
 							}
 							return status;
 						}},
-					{field: 'operation', align:'center', title: '操作',width:200,toolbar: '#noteAuditTableBtns'},
+					{field: 'operation', align:'center', title: '操作',width:'15%',toolbar: '#noteAuditTableBtns'},
 
 				]],
 				done: function(res, curr, count){
