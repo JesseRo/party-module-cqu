@@ -637,9 +637,9 @@
                 $("#addPerson").click(function () {
                     window.location.href = '/addperson?orgId=' + checkedNode.data.org_id;
                 });
-                $("#memberImport").click(function () {
-                    alert("请先进行人员名册导出，在导出的人员信息表上进行人员信息编辑，然后再进行导入操作！");
-                });
+                // $("#memberImport").click(function () {
+                //     alert("请先进行人员名册导出，在导出的人员信息表上进行人员信息编辑，然后再进行导入操作！");
+                // });
             })
         });
     </script>
@@ -692,19 +692,20 @@
                                                 <button type="button" id="orgExport" class="layui-btn layui-btn-primary">党组织导出</button>
                                                 <button type="button" id="memberImport" class="layui-btn layui-btn-primary">人员名册导入</button>
                                                 <button type="button" id="memberExport" class="layui-btn layui-btn-primary">人员名单导出</button>
-                                                <div id="upload-block" style="display: none;">
-                                                    <form action="${orgImport}" method="post" target="uploadTarget"
-                                                          enctype="multipart/form-data">
-                                                        <input type="file" name="excel">
-                                                        <input name="orgId">
-                                                        <input name="type">
-                                                        <input type="submit">
-                                                        <iframe name="uploadTarget"></iframe>
-                                                    </form>
-                                                </div>
+
                                         </div>
                                     </div>
                                 </form>
+                                <div id="upload-block" style="display: none;">
+                                    <form action="${orgImport}" method="post" target="uploadTarget"
+                                          enctype="multipart/form-data">
+                                        <input type="file" name="excel">
+                                        <input name="orgId">
+                                        <input name="type">
+                                        <input type="submit">
+                                        <iframe name="uploadTarget"></iframe>
+                                    </form>
+                                </div>
                                 <table id="memberTable" lay-filter="memberTable"></table>
                             </div>
                         </div>

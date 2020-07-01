@@ -564,6 +564,14 @@ button.cancal.btn.btn-default {
                     window.open("${orgExport}&type=org&orgId=" + orgId + "&orgName=" + orgName  ,"_blank")
                 }
             });
+            $('#upload-block [type="file"]').change(function () {
+                $('#upload-block [type="submit"]').click();
+            })
+            $("#org_import").click(function() {
+                $('#upload-block [name="type"]').val('org');
+                $('#upload-block [type="file"]').click();
+            });
+
         });
 
 });
@@ -589,9 +597,18 @@ button.cancal.btn.btn-default {
                                 <div class="layui-input-inline orgTree">
                                     <input type="text" name="orgTree" id="orgTree" lay-filter="orgTree" placeholder="请选择组织" class="layui-input">
                                 </div>
+                                <portlet:resourceURL id="/org/import" var="orgImport" />
                                 <button type="button" id="org_add" class="layui-btn layui-btn-warm" style="display:none">添加组织</button>
                                 <button type="button" id="org_delete" class="layui-btn layui-btn-danger" style="display:none">删除组织</button>
                                 <button type="button" id="org_import" class="layui-btn " style="">导入组织</button>
+                                <div id="upload-block" style="display: none;">
+                                    <form action="${orgImport}" method="post" target="uploadTarget" enctype="multipart/form-data">
+                                        <input type="file" name="excel">
+                                        <input name="type">
+                                        <input type="submit">
+                                        <iframe name="uploadTarget"></iframe>
+                                    </form>
+                                </div>
                                 <button type="button" id="org_export" class="layui-btn " style="">导出组织</button>
                             </div>
                         </div>

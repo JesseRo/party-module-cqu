@@ -36,6 +36,7 @@ import static hg.util.ConstantsKey.ORG_DESC_MAP_REVERSE;
         immediate = true,
         property = {
                 "javax.portlet.name=" + PartyPortletKeys.Org,
+                "javax.portlet.name=" + PartyPortletKeys.OrgCRUD,
                 "mvc.command.name=/org/import"
         },
         service = MVCResourceCommand.class
@@ -113,28 +114,12 @@ public class ExcelUploadResourceCommand implements MVCResourceCommand {
             member.setMember_degree(Optional.of(row.get("学历").toString().trim()).filter(p -> !p.equals("")).orElse(null));
             member.setMember_type(Optional.of(row.get("党员类型").toString().trim()).filter(p -> !p.equals("")).orElse(null));
             member.setMember_join_date(Optional.of(row.get("入党时间").toString().trim()).filter(p -> !p.equals("")).orElse(null));
-            member.setMember_org(Optional.of(row.get("所在支部").toString().trim()).filter(p -> !p.equals("")).orElse(null));
+            member.setMember_org(Optional.of(row.get("所属支部").toString().trim()).filter(p -> !p.equals("")).orElse(null));
             member.setMember_fomal_date(Optional.of(row.get("转正时间").toString().trim()).filter(p -> !p.equals("")).orElse(null));
             member.setMember_address(Optional.of(row.get("家庭住址").toString().trim()).filter(p -> !p.equals("")).orElse(null));
-//			member.setMember_party_position(Optional.of(row.get("党内职务").toString().trim()).filter(p->!p.equals("")).orElse(null));
-//			member.setMember_major_title(Optional.of(row.get("党费标准（元/月）").toString().trim()).filter(p->!p.equals("")).orElse(null));
-//			member.setMember_new_class(Optional.of(row.get("学生宿舍").toString().trim()).filter(p->!p.equals("")).orElse(null));
-            member.setMember_job(Optional.of(row.get("工作岗位").toString().trim()).filter(p -> !p.equals("")).orElse(null));
-            member.setMember_marriage(Optional.of(row.get("婚姻状况").toString().trim()).filter(p -> !p.equals("")).orElse(null));
             return member;
         }).collect(Collectors.toList());
 
-        List<String> committees = current.stream().map(Member::getMember_party_committee).distinct().collect(Collectors.toList());
-        if (committees.size() != current.size()) {
-            for (String committee : committees) {
-                if (committee.lastIndexOf("委员会") != committee.length() - 3) {
-                    throw new NotMatchingExcelDataException("第一行必须是\\n中国共产党重庆大学\\n委员会:" + String.join("\\n", committee + "(错误数据!)"));
-                } else {
-                    continue;
-                }
-            }
-
-        }
         List<String> identities = current.stream().map(Member::getMember_identity).distinct().collect(Collectors.toList());
         if (identities.size() != current.size()) {
             List<String> repeated = current.stream().map(Member::getMember_identity).collect(Collectors.toList());
@@ -220,20 +205,22 @@ public class ExcelUploadResourceCommand implements MVCResourceCommand {
         transactionUtil.startTransaction();
 
         try {
-			Map<String, List<Organization>> orgMap = current.stream().collect(Collectors.groupingBy(Organization::getOrg_parent));
+            Map<String, List<Organization>> orgMap = current.stream().collect(Collectors.groupingBy(Organization::getOrg_parent));
             String rootName = "中共重庆大学委员会";
             List<Organization> secondaries = orgMap.get(rootName);
-			List<Organization> organizationList = new ArrayList<>(secondaries);
+            List<Organization> organizationList = new ArrayList<>(secondaries);
             for (Organization secondary : secondaries) {
                 secondary.setOrg_parent("ddddd");
                 String pid = UUID.randomUUID().toString();
-                secondary.setOrg_id(UUID.randomUUID().toString());
+                secondary.setOrg_id(pid);
                 List<Organization> branches = orgMap.get(secondary.getOrg_fullname());
-                branches.forEach(p -> {
-                    p.setOrg_parent(pid);
-                    p.setOrg_id(UUID.randomUUID().toString());
-                });
-                organizationList.addAll(branches);
+                if (branches != null) {
+                    branches.forEach(p -> {
+                        p.setOrg_parent(pid);
+                        p.setOrg_id(UUID.randomUUID().toString());
+                    });
+                    organizationList.addAll(branches);
+                }
             }
             orgDao.insertAll(organizationList);
             transactionUtil.commit();
