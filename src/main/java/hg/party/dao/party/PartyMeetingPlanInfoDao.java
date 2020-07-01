@@ -721,7 +721,7 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
             sb.append(" and (plan.meeting_theme like ? or org.org_name like ?)");
             sb.append(" ORDER BY plan.id desc");
             logger.debug("checkPage:"+sb.toString());
-            return postGresqlFindPageBySql(page, size, sb.toString(),orgId,search,search,search);
+            return postGresqlFindPageBySql(page, size, sb.toString(),orgId,search,search);
         }else{
             sb.append(" ORDER BY plan.id desc");
             logger.debug("checkPage:"+sb.toString());

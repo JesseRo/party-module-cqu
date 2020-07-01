@@ -196,7 +196,7 @@ public class PartyMeetingPlanInfoService {
         Organization org = orgDao.findByOrgId(meetingPlan.getOrganization_id());
         if(meetingPlan != null){
             for(Member member:members){
-                String msgTemplate = "党员同志，您好！您参加的“{theme}”即将开始，请准时到场。\n会议主题：{theme}\n 会议时间：{time}\n 会议地点：{campus}{place}\n  联系人:{contact}\n 联系电话：{phone}\n{orgName}";
+                String msgTemplate = "党员同志，您好！您参加的“{theme}”即将开始，请准时到场。\n会议主题：{theme}\n会议时间：{time}\n会议地点：{campus}{place}\n联系人：{contact}\n 联系电话：{phone}\n{orgName}";
                 String msg = msgTemplate.replace("{name}",member.getMember_name())
                         .replace("{theme}",meetingPlan.getMeeting_theme())
                         .replace("{time}",startTime)
