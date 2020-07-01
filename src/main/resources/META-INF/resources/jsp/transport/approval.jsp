@@ -236,7 +236,18 @@
                     "        margin-bottom: 0;\n" +
                     "    }\n" +
                     "\n" +
-                    "    .line1 div {\n" +
+                    "    .line-top1 div {\n" +
+                    "        top: 40mm;\n" +
+                    "    }\n" +
+                    "\n" +
+                    "    .line-top2 div {\n" +
+                    "        top: 55mm;\n" +
+                    "    }\n" +
+                    "\n" +
+                    "    .line-top3 div {\n" +
+                    "        top: 68mm;\n" +
+                    "    } " +
+                    "   .line1 div {\n" +
                     "        top: 120mm;\n" +
                     "    }\n" +
                     "\n" +
@@ -276,6 +287,18 @@
                     "        top: 220mm;\n" +
                     "    }\n" +
                     "    </style>\n" +
+                    "    <div class=\"line-top1\">\n" +
+                    "        <div style=\"position: absolute;left: 50mm;\" class=\"name\"></div>\n" +
+                    "    </div>\n" +
+                    "    <div class=\"line-top2\">\n" +
+                    "        <div style=\"position: absolute;left: 70mm;\" class=\"org_name\"></div>\n" +
+                    "        <div style=\"position: absolute;left: 135mm;\" class=\"toOrg\"></div>\n" +
+                    "    </div>\n" +
+                    "    <div class=\"line-top3\">\n" +
+                    "        <div style=\"position: absolute;left: 125.7mm;\" class=\"currentYear\"></div>\n" +
+                    "        <div style=\"position: absolute;left: 147.7mm;\" class=\"currentMonth\"></div>\n" +
+                    "        <div style=\"position: absolute;left: 165.7mm;\" class=\"currentDay\"></div>\n" +
+                    "    </div>" +
                     "    <div class=\"line1\">\n" +
                     "        <div style=\"position: absolute;left: 21.7mm;\" class=\"org_name\">本科生第一党支部</div>\n" +
                     "    </div>\n" +
