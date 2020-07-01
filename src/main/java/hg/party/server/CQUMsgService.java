@@ -42,7 +42,8 @@ public class CQUMsgService {
     }
 
     public static void main(String[] args) {
-        sendPhoneNoticeMsg("13272939619","AAA");
+        sendPhoneNoticeMsg("13272939619","aaaaaaaaaa\n" +
+                "aaaaa");
         System.out.println("aa");
     }
     /**
