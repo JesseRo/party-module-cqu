@@ -449,13 +449,19 @@ button.cancal.btn.btn-default {
                 if ("organization" == org_type) {
                     title = '增加二级党委';
                     $('#addOrgForm .layui-form select[name="descType"]').empty();
-                    $('#addOrgForm .layui-form select[name="descType"]').append(' <option value="1">党委</option><option value="2">党总支</option><option value="3">党支部</option>');
+                    $('#addOrgForm .layui-form select[name="descType"]').append(' <option value="1">党委</option><option value="0">党工委</option><option value="2">党总支</option>');
                     $('#addOrgForm .layui-form select[name="descType"]').val(1);
                     form.render('select');
                 } else if ("secondary" == org_type) {
                     title = '增加党支部';
                     $('#addOrgForm .layui-form select[name="descType"]').empty();
-                    $('#addOrgForm .layui-form select[name="descType"]').append('<option value="2">党总支</option><option value="3">党支部</option>');
+                    $('#addOrgForm .layui-form select[name="descType"]').append('<option value="2">党总支</option><option value="3">党支部</option>' +
+                        '                                            <option value="4">教工党支部</option>\n' +
+                        '                                            <option value="5">专任教师支部</option>\n' +
+                        '                                            <option value="6">博士生党支部</option>\n' +
+                        '                                            <option value="7">硕士生党支部</option>\n' +
+                        '                                            <option value="8">本科生党支部</option>\n' +
+                        '                                            <option value="9">离退休党支部</option>');
                     $('#addOrgForm .layui-form select[name="descType"]').val(3);
                     //$('#addOrgForm .layui-form select[name="descType"]').attr('disabled', 'disabled');
                     form.render('select');
@@ -585,6 +591,7 @@ button.cancal.btn.btn-default {
                                 </div>
                                 <button type="button" id="org_add" class="layui-btn layui-btn-warm" style="display:none">添加组织</button>
                                 <button type="button" id="org_delete" class="layui-btn layui-btn-danger" style="display:none">删除组织</button>
+                                <button type="button" id="org_import" class="layui-btn " style="">导入组织</button>
                                 <button type="button" id="org_export" class="layui-btn " style="">导出组织</button>
                             </div>
                         </div>
@@ -612,6 +619,7 @@ button.cancal.btn.btn-default {
                                     <div class="layui-input-inline">
                                         <select name="descType" lay-verify="required" autocomplete="off"class="layui-input"> >
                                             <option value="1" selected>党委</option>
+                                            <option value="0">党工委</option>
                                             <option value="2">党总支</option>
                                             <option value="3">党支部</option>
                                             <option value="4">教工党支部</option>

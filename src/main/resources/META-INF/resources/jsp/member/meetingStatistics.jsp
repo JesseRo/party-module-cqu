@@ -332,11 +332,11 @@
                 treeSelect: 'treeSelect/treeSelect'
             });
             var statisticsTable;
+            var checkedNode = null;
             layui.use(['treeSelect', 'table'], function () {
                 var table = layui.table;
                 var treeSelect = layui.treeSelect;
 
-                var checkedNode = null;
                 renderTree();
 
                 function renderTree() {
@@ -357,7 +357,7 @@
                             checkedNode = d.current;
                             $("#org-path").empty();
                             $("#org-path").append(getPathHtml(checkedNode));
-                            renderOrgInfo(checkedNode.id);
+                            renderOrgInfo();
 
                         },
                         // 加载完成后的回调函数
@@ -368,7 +368,7 @@
                             treeSelect.checkNode('orgTree', checkedNode.id);
                             $("#org-path").empty();
                             $("#org-path").append(getPathHtml(checkedNode));
-                            renderOrgInfo(checkedNode.id);
+                            renderOrgInfo();
                         }
                     });
                 }
@@ -382,13 +382,13 @@
                     return pathHtml;
                 }
 
-                function renderOrgInfo(id) {
+                function renderOrgInfo() {
                     if (!statisticsTable) {
                         statisticsTable = table.render({
                             elem: '#memberTable',
                             url: '${statistics}', //数据接口
                             method: 'post',
-                            where: {search: $('[name=keyword]').val(), orgId: id},
+                            where: {search: $('[name=keyword]').val(), orgId: checkedNode.id},
                             page: {
                                 limit: 10,   //每页条数
                                 limits: [],
@@ -411,14 +411,14 @@
                         $(".layui-table-view .layui-table-page").addClass("layui-table-page-center");
                         $(".layui-table-view .layui-table-page").removeClass("layui-table-page");
                     } else {
-                        reloadTable(id)
+                        reloadTable()
                     }
                 }
             });
 
-            function reloadTable(id) {
+            function reloadTable() {
                 statisticsTable.reload({
-                    where: {search: $('[name=keyword]').val(), orgId: id},
+                    where: {search: $('[name=keyword]').val(), orgId: checkedNode.id},
                     page: {
                         curr: 1 //重新从第 1 页开始
                     }

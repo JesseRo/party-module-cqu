@@ -130,7 +130,7 @@ public class MemberMeetingDao extends PostgresqlDaoImpl<MemberMeeting> {
 		params.add(id);
 		params.add(id);
 		if (!StringUtils.isEmpty(search)) {
-			sql += " where o.org_name like ?\n";
+			sql += " and o.org_name like ?\n";
 			params.add("%" + search + "%");
 		}
 		sql += "\tORDER BY o. org_type = 'organization' desc, o. org_type = 'secondary' desc";

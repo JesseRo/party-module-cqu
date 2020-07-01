@@ -26,6 +26,7 @@ public class Organization{
 	private String org_email;
 	private String org_contactor_phone;
 	private Integer desc_type;
+	private String org_fullname;
 
 	public String getOrg_code() {
 		return org_code;
@@ -224,4 +225,12 @@ public class Organization{
 				", historic=" + historic +
 				'}';
 	}
+
+    public void setOrg_fullname(String org_fullname) {
+        this.org_fullname = org_fullname;
+    }
+
+    public String getOrg_fullname() {
+        return org_fullname;
+    }
 }
