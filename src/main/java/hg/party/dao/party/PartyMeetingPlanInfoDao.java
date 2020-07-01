@@ -59,8 +59,7 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
         return this.jdbcTemplate.queryForMap(sql, meetingId);
     }
 
-    public PostgresqlQueryResult<Map<String, Object>> leaderMeetingPage(int page, int size,
-                                                                        String secondId, String brunchId, String startTime, String endTime, String leader) {
+    public PostgresqlQueryResult<Map<String, Object>> leaderMeetingPage(int page, int size, String secondId, String brunchId, String startTime, String endTime, String leader,String orgId) {
         page = Math.max(page, 0);
         size = size <= 0 ? 10 : size;
         List<Object> params = new ArrayList<>();
@@ -89,6 +88,15 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
                 "\tLEFT JOIN hg_party_member leader ON participant.participant_id = leader.member_identity\n" +
                 "\tLEFT JOIN hg_party_place place ON place.\"id\" = plan.place\n" +
                 "\twhere leader.member_is_leader = '是' ";
+
+
+        if(!StringUtils.isEmpty(orgId)){
+            Organization organization =  orgDao.findByOrgId(orgId);
+            if(!organization.getOrg_type().equals(PartyOrgAdminTypeEnum.ORGANIZATION.getType())){
+                sql += "and org.org_id = ? ";
+                params.add(orgId);
+            }
+        }
         if (!StringUtils.isEmpty(brunchId)){
             sql += "and org.org_id = ? ";
             params.add(brunchId);
@@ -151,12 +159,12 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
             sql += "and org.org_parent = ? ";
             params.add(secondId);
         }
-        if (startTime != null){
+        if (!StringUtils.isEmpty(startTime)){
             sql += "and plan.end_time > ? ";
             Timestamp start = Timestamp.valueOf(LocalDate.parse(startTime).atStartOfDay());
             params.add(start);
         }
-        if (endTime != null){
+        if (!StringUtils.isEmpty(endTime)){
             sql += "and plan.start_time < ? ";
             Timestamp end = Timestamp.valueOf(LocalDate.parse(endTime).atStartOfDay());
             params.add(end);
@@ -687,12 +695,13 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
         }
         Organization org = orgDao.findOrgByOrgId(orgId);
         PartyOrgAdminTypeEnum partyOrgAdminTypeEnum = PartyOrgAdminTypeEnum.getEnum(org.getOrg_type());
-        StringBuffer sb = new StringBuffer("SELECT  note.attachment,org.org_id,users.user_name as checker,org.org_name, place.place as placeName, plan.*");
+        StringBuffer sb = new StringBuffer("SELECT  note.attachment,org.org_id,users.user_name as checker,org.org_name, place.place as placeName, plan.*,member.member_name");
         sb.append(" FROM hg_party_meeting_plan_info AS plan");
         sb.append(" LEFT JOIN hg_party_meeting_notes_info AS note ON plan.meeting_id = note.meeting_id");
         sb.append(" left join hg_users_info users on users.user_id = plan.check_person");
         sb.append(" LEFT JOIN hg_party_org org ON org.org_id = plan.organization_id");
         sb.append(" LEFT JOIN hg_party_place place on place.id = plan.place");
+        sb.append(" left join hg_party_member member on member.member_identity = plan.contact");
         sb.append(" where 1=1");
         sb.append(" and org.historic IS FALSE AND plan.task_status in ('5','6','7')");
         switch(partyOrgAdminTypeEnum){

@@ -152,6 +152,9 @@
 					for(var i=0;i<arr.length;i++){
 						colData.push(arr[i].property);
 						rowData.push(arr[i].num);
+						if(i>9){
+							break;
+						}
 					}
 				}
 				renderCollegeCharts(colData,rowData)

@@ -65,10 +65,11 @@ public class PartyMeetingNoteDao extends HgPostgresqlDaoImpl<MeetingNote> {
 		}
 		Organization org = orgDao.findOrgByOrgId(orgId);
 		PartyOrgAdminTypeEnum partyOrgAdminTypeEnum = PartyOrgAdminTypeEnum.getEnum(org.getOrg_type());
-		StringBuffer sb = new StringBuffer("select plan.*,note.id as note_id,note.status note_status,org.org_name");
+		StringBuffer sb = new StringBuffer("select plan.*,note.id as note_id,note.status note_status,org.org_name,m.member_name,m.member_phone_number");
 		sb.append(" from  hg_party_meeting_notes_info note ");
 		sb.append(" left join hg_party_meeting_plan_info plan on plan.meeting_id = note.meeting_id");
 		sb.append(" LEFT JOIN hg_party_org org ON org.org_id = plan.organization_id");
+		sb.append(" LEFT JOIN hg_party_member m ON plan.contact = m.member_identity");
 		sb.append(" where 1=1 and note.status > 0");
 		switch(partyOrgAdminTypeEnum){
 			case BRANCH:

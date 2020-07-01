@@ -108,7 +108,7 @@
 			.table_outer_box > table thead, tbody tr {
 				display: table-row !important;
 				width: 100%;
-				table-layout: fixed;
+				table-layout: auto;
 			}
 			#searchForm .layui-form-item .layui-inline .keyword {
 				width: 300px;
@@ -267,13 +267,13 @@
 						groups:4
 					},
 					cols: [[ //表头
-						{field: 'org_name', align:'center',width:320, title: '二级党组织'},
-						{field: 'meeting_type', align:'center', title: '活动类型'},
-						{field: 'meeting_theme', align:'center',width:320, title: '活动主题'},
-						{field: 'start_time', align:'center', title: '开始时间',width:180,templet: function(d){return new Date(d.start_time).format("yyyy-MM-dd hh:mm:ss");}},
-						{field: 'total_time', align:'center', title: '时长',width:100,templet: function(d){return d.total_time/60;}},
-						{field: 'member_name', align:'center', title: '联系人'},
-						{field: 'task_status', align:'center', title: '任务状态',width:120,templet: function(d){
+						{field: 'org_name', align:'center',width:'12.14%', title: '党组织'},
+						{field: 'meeting_type', align:'center',width:'12.14%', title: '会议类型'},
+						{field: 'meeting_theme', align:'center',width:'12.14%', title: '开展主题'},
+						{field: 'start_time', align:'center', title: '开始时间',width:'12.14%',templet: function(d){return new Date(d.start_time).format("yyyy-MM-dd hh:mm:ss");}},
+						{field: 'member_name', align:'center', title: '联系人',width:'12.14%'},
+						{field: 'contact_phone', align:'center', title: '联系电话',width:'12.14%'},
+						{field: 'task_status', align:'center', title: '审批状态',width:'12.14%',templet: function(d){
 								var status = '';
 								switch(parseInt(d.task_status)){
 									case 1:status = '待审核';break;
@@ -286,8 +286,7 @@
 								}
 								return status;
 							}},
-						{field: 'operation', align:'center', title: '操作',width:200,toolbar: '#meetingPlanTableBtns'},
-
+						{field: 'operation', align:'center', title: '操作',width:'15%',toolbar: '#meetingPlanTableBtns'}
 					]],
 					done: function(res, curr, count){
 						pageInfo.page = curr;

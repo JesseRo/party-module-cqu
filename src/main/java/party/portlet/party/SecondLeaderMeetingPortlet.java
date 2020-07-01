@@ -28,7 +28,7 @@ import java.util.Map;
         property = {
                 "com.liferay.portlet.display-category=category.sample",
                 "com.liferay.portlet.instanceable=true",
-                "javax.portlet.display-name=领导参会统计",
+                "javax.portlet.display-name=领导参会检索",
                 "javax.portlet.init-param.template-path=/",
                 "com.liferay.portlet.requires-namespaced-parameters=false",
                 "javax.portlet.init-param.view-template=/jsp/party/leaderMeeting.jsp",
@@ -62,7 +62,7 @@ public class SecondLeaderMeetingPortlet extends MVCPortlet {
         leader = HtmlUtil.escape(leader);
 
         int pageNo = ParamUtil.getInteger(renderRequest, "pageNo");
-        PostgresqlQueryResult<Map<String, Object>> pageResult = partyMeetingPlanInfoDao.leaderMeetingPage(pageNo, pageSize, seconedId, branchId, startTime, endTime, leader);
+        PostgresqlQueryResult<Map<String, Object>> pageResult = partyMeetingPlanInfoDao.leaderMeetingPage(pageNo, pageSize, seconedId, branchId, startTime, endTime, leader,orgId);
         //获取当前页
 
         int totalPage = pageResult.getTotalPage();
