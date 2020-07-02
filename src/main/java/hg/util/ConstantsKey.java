@@ -64,6 +64,7 @@ public class ConstantsKey {
     public static final String ORG_DESC_MASTER_BRANCH = "硕士生党支部";
     public static final String ORG_DESC_MASTER_BRANCH_ALIAS = "研究生党支部";
     public static final String ORG_DESC_BACHELOR_BRANCH = "本科生党支部";
+//    public static final String ORG_DESC_STUDENT_BRANCH = "学生党支部";
     public static final String ORG_DESC_RETIRED_BRANCH = "离退休党支部";
 
     public static final Map<Integer, String> ORG_DESC_MAP = new HashMap<>();
@@ -79,6 +80,7 @@ public class ConstantsKey {
         ORG_DESC_MAP.put(7, ORG_DESC_MASTER_BRANCH);
         ORG_DESC_MAP.put(8, ORG_DESC_BACHELOR_BRANCH);
         ORG_DESC_MAP.put(9, ORG_DESC_RETIRED_BRANCH);
+//        ORG_DESC_MAP.put(10, ORG_DESC_STUDENT_BRANCH);
     }
 
     public static final Map<String, Integer> ORG_DESC_MAP_REVERSE = new HashMap<>();
@@ -96,6 +98,7 @@ public class ConstantsKey {
         ORG_DESC_MAP_REVERSE.put(ORG_DESC_MASTER_BRANCH_ALIAS, 7);
         ORG_DESC_MAP_REVERSE.put(ORG_DESC_BACHELOR_BRANCH, 8);
         ORG_DESC_MAP_REVERSE.put(ORG_DESC_RETIRED_BRANCH, 9);
+//        ORG_DESC_MAP_REVERSE.put(ORG_DESC_STUDENT_BRANCH, 10);
     }
 
     public static final HashMap<String, String> PERMISSION_TO_ORGTYPE = new HashMap<>(); // 权限 - 组织类型对应

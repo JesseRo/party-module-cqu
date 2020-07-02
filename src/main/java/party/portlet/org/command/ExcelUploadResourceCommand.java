@@ -132,18 +132,18 @@ public class ExcelUploadResourceCommand implements MVCResourceCommand {
         Map<String, List<Organization>> orgGroup = orgs.stream().collect(Collectors.groupingBy(Organization::getOrg_parent));
         Map<String, List<Member>> currentGroup = current.stream().collect(Collectors.groupingBy(Member::getMember_party_committee));
         for (Map.Entry<String, List<Member>> entry : currentGroup.entrySet()) {
-            Optional<Organization> par = orgs.stream().filter(p -> p.getOrg_name().equalsIgnoreCase(entry.getKey())).findAny();
+            Optional<Organization> par = orgs.stream().filter(p -> p.getOrg_fullname().equalsIgnoreCase(entry.getKey())).findAny();
             String pid = par.map(Organization::getOrg_id).orElseThrow(() -> NotMatchingExcelDataException.create(entry.getKey(), null, entry.getValue().get(0).getMember_name()));
             List<Organization> singleSecondary = orgGroup.get(pid);
             Map<String, List<Member>> singleSecondaryGroup = entry.getValue().stream().collect(Collectors.groupingBy(Member::getMember_org));
             for (Map.Entry<String, List<Member>> et : singleSecondaryGroup.entrySet()) {
                 String sid;
-                if (et.getKey().equalsIgnoreCase(par.get().getOrg_name())) {
+                if (et.getKey().equalsIgnoreCase(par.get().getOrg_fullname())) {
                     // 人员直接属于二级党委
                     sid = pid;
                 } else {
                     Optional<Organization> s = singleSecondary.stream()
-                            .filter(p -> p.getOrg_name().equalsIgnoreCase(et.getKey()))
+                            .filter(p -> p.getOrg_fullname().equalsIgnoreCase(et.getKey()))
                             .findAny();
                     sid = s.map(Organization::getOrg_id)
                             .orElseThrow(() -> NotMatchingExcelDataException.create(entry.getKey(),
