@@ -205,9 +205,9 @@ public class PartyMeetingPlanInfoService {
                         .replace("{contact}",contact.getMember_name())
                         .replace("{phone}",meetingPlan.getContact_phone())
                         .replace("{orgName}",org.getOrg_name());
-                //cquMsgService.sendPhoneNoticeMsg(member.getMember_phone_number(),msg);
+                Result result  = cquMsgService.sendPhoneNoticeMsg(member.getMember_phone_number(),msg);
                 //测试模式短信接受者为周洪云
-                Result result  = cquMsgService.sendPhoneNoticeMsg("15520069183",msg);
+                //Result result  = cquMsgService.sendPhoneNoticeMsg("15520069183",msg);
                 if(ResultCode.INTERNAL_SERVER_ERROR.code == result.getCode() || ResultCode.NOT_FOUND.code == result.getCode()){
                     return result;
                 }

@@ -198,7 +198,7 @@
 					$meetings.html("");
 					for (var i in res.data){
 						var p = $("<p></p>");
-						p.html(res.data[i].meeting_theme);
+						p.html('<a href="/approvaldetails?meetingId='+res.data[i].meeting_id+'">'+res.data[i].meeting_theme+'</a>');
 						$meetings.append(p);
 					}
 				}

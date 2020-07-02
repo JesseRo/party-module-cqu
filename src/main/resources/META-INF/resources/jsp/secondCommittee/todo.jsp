@@ -150,12 +150,12 @@
                     groups:4
                 },
                 cols: [[ //表头
-                    {field: 'meeting_type', align:'center', title: '活动类型'},
-                    {field: 'meeting_theme', align:'center',width:320, title: '活动主题'},
-                    {field: 'start_time', align:'center', title: '开始时间',width:180,templet: function(d){return new Date(d.start_time).format("yyyy-MM-dd hh:mm:ss");}},
-                    {field: 'total_time', align:'center', title: '时长',width:100,templet: function(d){return d.total_time/60;}},
-                    {field: 'member_name', align:'center', title: '联系人',width:120},
-                    {field: 'task_status', align:'center', title: '任务状态',width:120,templet: function(d){
+                    {field: 'meeting_type', align:'center',width:'11.11%', title: '活动类型'},
+                    {field: 'meeting_theme', align:'center',width:'11.11%', title: '活动主题'},
+                    {field: 'start_time', align:'center',width:'11.11%', title: '开始时间',width:180,templet: function(d){return new Date(d.start_time).format("yyyy-MM-dd hh:mm:ss");}},
+                    {field: 'total_time', align:'center',width:'11.11%', title: '时长',width:100,templet: function(d){return d.total_time/60;}},
+                    {field: 'member_name', align:'center',width:'11.11%', title: '联系人',width:120},
+                    {field: 'task_status', align:'center',width:'11.11%', title: '任务状态',width:120,templet: function(d){
                             var status = '';
                             switch(parseInt(d.task_status)){
                                 case 0:status = '待提交';break;
@@ -169,8 +169,8 @@
                             }
                             return status;
                         }},
-                    {field: 'operation', align:'center', title: '操作',width:240,toolbar: '#meetingPlanTableBtns'},
-                    {field: 'attachment', align:'center', title: '附件',width:200,templet:function(d){
+                    {field: 'operation', align:'center',width:'11.11%', title: '操作',width:240,toolbar: '#meetingPlanTableBtns'},
+                    {field: 'attachment', align:'center',width:'11.11%', title: '附件',width:200,templet:function(d){
                             var fileData;
                             if(d.attachment==''||d.attachment==null || d.attachment == undefined ){
                                 fileData = new Array();
@@ -184,7 +184,7 @@
                             ul = ul +'</ul>';
                             return ul;
                     }},
-                    {field: 'remark', align:'center', title: '备注',templet:function(d){
+                    {field: 'remark', align:'center',width:'11.11%', title: '备注',templet:function(d){
                             if(d.task_status == 3){
                                 return "驳回原因："+d.remark;
                             }else{
