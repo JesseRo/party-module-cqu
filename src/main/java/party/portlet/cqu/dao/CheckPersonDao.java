@@ -20,7 +20,7 @@ public class CheckPersonDao extends PostgresqlDaoImpl<CheckPerson> {
         pageSize = pageSize <= 0 ? 10 : pageSize;
         try {
             if (!StringUtils.isEmpty(search)){
-                String sql = "select c.*, member.member_name, brunch.org_name, sec.org_name as secName  " +
+                String sql = "select c.*, member.member_name,member.job_number member_code, brunch.org_name, sec.org_name as sec_name  " +
                         "from hg_party_check_person c " +
                         "left join hg_party_member member on member.member_identity = c.user_id " +
                         "left join hg_party_org brunch on brunch.org_id = member.member_org " +
@@ -29,7 +29,7 @@ public class CheckPersonDao extends PostgresqlDaoImpl<CheckPerson> {
                         "order by campus asc, id desc";
                 return postGresqlFindBySql(page, pageSize, sql, search);
             }else {
-                String sql = "select c.*, member.member_name, brunch.org_name, sec.org_name as secName" +
+                String sql = "select c.*, member.member_name,member.job_number member_code, brunch.org_name, sec.org_name as sec_name" +
                         " from hg_party_check_person c " +
                         "left join hg_party_member member on member.member_identity = c.user_id " +
                         "left join hg_party_org brunch on brunch.org_id = member.member_org " +
