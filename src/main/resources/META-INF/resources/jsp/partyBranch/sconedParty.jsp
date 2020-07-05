@@ -166,7 +166,7 @@
                             </div>
                         </div>
                         <div class="layui-inline">
-                            <label class="layui-form-label layui-required">共计时长：</label>
+                            <label class="layui-form-label layui-required">计划时长：</label>
                             <div class="layui-input-inline">
                                 <select  name="timeLasts" lay-verify="select">
                                     <option  value="" disabled>请选择</option>
@@ -221,9 +221,9 @@
                             </div>
                         </div>
                         <div class="layui-inline">
-                            <label class="layui-form-label layui-required">列席人员：</label>
+                            <label class="layui-form-label">列席人员：</label>
                             <div class="layui-input-inline">
-                                <input type="text" class="layui-input" name="sit"  lay-verify="required" autocomplete="off" value="${meetingPlan.sit}">
+                                <input type="text" class="layui-input" name="sit"  autocomplete="off" value="${meetingPlan.sit}">
                             </div>
                         </div>
                     </div>
@@ -274,7 +274,7 @@
                         <div class="layui-inline">
                             <label class="layui-form-label">短信自动通知：</label>
                             <div class="layui-input-block">
-                                <input type="checkbox" name="autoPhoneMsg" lay-skin="switch" lay-text="是|否">
+                                <input type="checkbox" name="autoPhoneMsg" lay-skin="switch"  lay-filter="autoPhoneMsg" lay-text="是|否">
                             </div>
                         </div>
                     </div>
@@ -290,7 +290,7 @@
                     </div>
                     <div class="layui-form-item">
                         <div class="layui-inline">
-                            <label class="layui-form-label layui-required">附件上传：</label>
+                            <label class="layui-form-label">附件上传：</label>
                             <div class="layui-input-block layui-upload-drag meetingContent" id="upload">
                                 <i class="layui-icon"></i>
                                 <p>点击上传，或将文件拖拽到此处</p>
@@ -442,11 +442,12 @@
             size:10
         };
         var checkedGroup =  new Array();
-        var fileData
-        if('${m.attachment}'==''||'${m.attachment}'=='null'){
+        var fileData;
+        var attachment = '${meetingPlan.attachment}';
+        if(attachment ==''||attachment=='null'){
             fileData = new Array();
         }else{
-            fileData =  eval("(" +'${m.attachment}' + ")");
+            fileData =  eval("(" + attachment + ")");
         }
         renderEditor();
         renderUpload();
@@ -457,16 +458,16 @@
         if('${meetingPlan.place}'!='' && '${meetingPlan.place}' !='null' && '${meetingPlan.place}' > '0'){
             renderPlace('${meetingPlan.place}');
         }
-        if('${participate}'!=''){
-            var arr = '${participate}'.split(",");
-            renderParticipate(arr);
-        }
         if('${meetingPlan.autoPhoneMsg}'!='' && '${meetingPlan.autoPhoneMsg}' !='null'){
             var autoMsg = '${meetingPlan.autoPhoneMsg}' == '1'?'on':'off';
             renderAutoPhoneMsg(autoMsg);
         }
         function renderAutoPhoneMsg(autoMsg){
             $("#addMeetingPlanForm input[name='autoPhoneMsg']").val(autoMsg);
+            if(autoMsg){
+                $("#addMeetingPlanForm input[name='autoPhoneMsg']").attr('checked', 'checked');
+            }
+            form.render('checkbox');
         }
         function renderSelectData(){
             var campus = '${meetingPlan.campus}';
@@ -485,15 +486,14 @@
             if(contact != '' && contact != 'null'){
                 $('#addMeetingPlanForm  select[name="contact"]').val(contact);
             }
-            var participate= '${participate}';
-            if(contact != '' && contact != 'null'){
-                var participateArr = participate.split(",");
-                $('#addMeetingPlanForm  select[name="participate"]').val(participateArr);
-            }
             if('${meetingplan.autoPhoneMsg}' == '1'){
                 $("input[name='autoPhoneMsg']").val("on");
             }else{
                 $("input[name='autoPhoneMsg']").val("off");
+            }
+            if('${participate}'!=''){
+                var arr = '${participate}'.split(",");
+                renderParticipate(arr);
             }
             form.render();
         }
@@ -518,7 +518,7 @@
                 video: '${uploadvideoUrl}'
             };
             var ueditor = UE.getEditor("meetingContent", { initialFrameWidth:700,zIndex:100});
-
+            ueditor.setHeight(400);
             UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
             UE.Editor.prototype.getActionUrl = function(action) {
                 if (action == 'uploadimage' || action == 'uploadscrawl' || action == 'uploadimage') {
@@ -854,7 +854,10 @@
                 }
             },'json');
         });
-
+        //监听指定开关
+        form.on('switch(autoPhoneMsg)', function(data){
+            $("input[name='autoPhoneMsg']").val(data.othis);
+        });
         form.on('submit(meetingPlanSave)', function(data){
             var postData= data.field;
             postData.graft = true;
