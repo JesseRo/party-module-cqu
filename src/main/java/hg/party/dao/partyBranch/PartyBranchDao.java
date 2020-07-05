@@ -659,9 +659,7 @@ public class PartyBranchDao extends PostgresqlDaoImpl<MeetingPlan> {
     }
 
     public List<Map<String, Object>> findMeetingMember(String meetingId) {
-        String sql = "select u.* from hg_users_info as u JOIN hg_party_member as mb on u.user_id = mb.member_identity " +
-                "where mb.historic is false " +
-                "AND u.user_department_id= ? ";
+        String sql = "select i.* from (select * from hg_party_meeting_member_info where meeting_id = ?) i  left join hg_party_member m  on i.participant_id = m .member_identity";
 
         return jdbcTemplate.queryForList(sql, meetingId);
     }

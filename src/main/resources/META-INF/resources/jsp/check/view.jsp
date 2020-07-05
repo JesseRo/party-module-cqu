@@ -88,7 +88,7 @@
                         {field: 'member_code', align:'center', title: '工号', width:'14.16%'},
                         {field: 'member_name', align:'center', title: '姓名', width:'14.16%'},
                         {field: 'org_name', align:'center', title: '所在二级党组织', width:'14.16%'},
-                        {field: 'secName', align:'center', title: '所在支部', width:'14.16%'},
+                        {field: 'sec_name', align:'center', title: '所在支部', width:'14.16%'},
                         {field: 'type', align:'center', title: '类别', width:'14.16%'},
                         {field: 'count', align:'center', title: '检查次数', width:'14.16%'},
                         {field: 'operation', align:'center', title: '操作', width:'15%', toolbar: '#checkPersonTableBtns'}

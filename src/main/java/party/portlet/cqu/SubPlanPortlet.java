@@ -77,13 +77,18 @@ public class SubPlanPortlet extends MVCPortlet {
             }
             if(meetingPlan.getMeeting_id() != null){
                 List<Map<String, Object>> memberList = partyBranchService.findMeetingMember(meetingPlan.getMeeting_id());
-                List<String> participate = new ArrayList<>();
+                String participate = "";
                 if(memberList.size() > 0){
-                    for(Map<String, Object> member:memberList){
-                        participate.add((String) member.get("participant_id"));
+                    for(int i=0;i<memberList.size();i++){
+                        if(i==0){
+                            participate = participate + memberList.get(i).get("participant_id");
+                        }else{
+                            participate = participate +","+ memberList.get(i).get("participant_id");
+                        }
+
                     }
                 }
-                renderRequest.setAttribute("participate", Arrays.toString(participate.toArray()));
+                renderRequest.setAttribute("participate", participate);
             }
         }
 

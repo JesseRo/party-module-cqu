@@ -48,7 +48,7 @@ public class PartyMeetingNoteDao extends HgPostgresqlDaoImpl<MeetingNote> {
 		StringBuffer sb = new StringBuffer("select plan.*,note.id as note_id,note.status note_status");
 		sb.append(" from hg_party_meeting_plan_info plan");
 		sb.append(" left join hg_party_meeting_notes_info note on plan.meeting_id = note.meeting_id");
-		sb.append(" where 1=1 and plan.organization_id = ? ");
+		sb.append(" where 1=1 and plan.organization_id = ? and plan.task_status not in('0','2','3')");
 		if(!StringUtils.isEmpty(search)){
 			search = "%" + search + "%";
 			sb.append(" and (meeting_type like ? or meeting_theme like ?)");

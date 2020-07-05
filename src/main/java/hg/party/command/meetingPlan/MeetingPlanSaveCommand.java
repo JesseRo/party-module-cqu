@@ -144,7 +144,7 @@ public class MeetingPlanSaveCommand implements MVCResourceCommand {
             if (!StringUtils.isEmpty(meetingId) ) {
                 url = "/backlogtwo";
             }  else {
-                url = "/approvalplanone";
+                url = "/backlogtwo";
             }
             if(ret > 0){
                 transactionUtil.commit();
