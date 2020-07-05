@@ -358,7 +358,6 @@ public class OrgDao extends PostgresqlDaoImpl<Organization> {
         } else {
             return null;
         }
-
     }
 
     public boolean saveAdmin(String org, String... admin) {
@@ -739,7 +738,7 @@ public class OrgDao extends PostgresqlDaoImpl<Organization> {
     }
 
     public List<Map<String, Object>> orgMemberStatistics(String search, List<String> orgIds) {
-        List<Object> params = new ArrayList<>();
+        List<Object> params = new ArrayList<>(orgIds);
         params.addAll(orgIds);
         String suffix = orgIds.stream().map(p -> "?").collect(Collectors.joining(","));
         String sql = "SELECT T\n" +
@@ -754,11 +753,11 @@ public class OrgDao extends PostgresqlDaoImpl<Organization> {
                 "\t\thg_party_member\n" +
                 "\t\tM INNER JOIN hg_party_org o ON M.member_org = o.org_id\n" +
                 "\t\tINNER JOIN hg_party_org P ON o.org_parent = P.org_id \n" +
+                " where o.historic = false and (o.org_id in (" + suffix + ") or p.org_id in (" + suffix + "))" +
                 "\tGROUP BY\n" +
                 "\t\tP.org_id, m.member_type \n" +
                 "\t)\n" +
-                "\tT LEFT JOIN hg_party_org l ON T.org_id = l.org_id" +
-                " where l.org_id in (" + suffix + ")";
+                "\tT LEFT JOIN hg_party_org l ON T.org_id = l.org_id";
         if (!StringUtils.isEmpty(search)) {
             sql += " and l.org_name like ?\n";
             params.add("%" + search + "%");

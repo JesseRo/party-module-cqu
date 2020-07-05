@@ -5,14 +5,17 @@ import com.google.gson.GsonBuilder;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCResourceCommand;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
+import dt.session.SessionManager;
+import hg.party.dao.org.MemberDao;
+import hg.party.dao.org.OrgDao;
+import hg.party.entity.organization.Organization;
 import hg.party.entity.party.MeetingStatistics;
 import hg.party.entity.partyMembers.JsonPageResponse;
 import hg.party.entity.partyMembers.JsonResponse;
+import hg.party.server.CQUMsgService;
 import hg.party.server.memberMeeting.MemberMeetingServer;
-import hg.party.server.organization.OrgService;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-import org.springframework.util.StringUtils;
 import party.constants.PartyPortletKeys;
 import party.portlet.transport.entity.PageQueryResult;
 
@@ -21,10 +24,8 @@ import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 /**
  * @author jesse
@@ -38,48 +39,42 @@ import java.util.Map;
         immediate = true,
         property = {
                 "javax.portlet.name=" + PartyPortletKeys.MeetingStatistics,
-                "mvc.command.name=/hg/org/meetingStatistics"
+                "mvc.command.name=/hg/org/meetingStatistics/sms"
         },
         service = MVCResourceCommand.class
 )
-public class OrgMeetingStatisticsResourceCommand implements MVCResourceCommand {
+public class OrgMeetingRemindResourceCommand implements MVCResourceCommand {
+
     @Reference
-    private MemberMeetingServer memberMeetingServer;
+    private OrgDao orgDao;
+    private static String smsTemplate = "【重庆大学】\n" +
+            "%s：支部在%s——%s之间未开展组织生活，请核实情况，及时组织开展。\n" +
+            "%s";
     private Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 
     @Override
     public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
             throws PortletException {
 
-        int page = ParamUtil.getInteger(resourceRequest, "page");
-        int size = ParamUtil.getInteger(resourceRequest, "limit");
-        String name = ParamUtil.getString(resourceRequest, "search");
-        int orgId = ParamUtil.getInteger(resourceRequest, "orgId");
-        String start = ParamUtil.getString(resourceRequest, "start", null);
-        String end = ParamUtil.getString(resourceRequest, "end", null);
-        if (StringUtils.isEmpty(start)) {
-            LocalDate currentDate = LocalDate.now();
-            end = currentDate.toString();
-            start = currentDate.plusMonths(-1).toString();
-        }
+        String orgId = ParamUtil.getString(resourceRequest, "orgId");
+        String start = ParamUtil.getString(resourceRequest, "start");
+        String end = ParamUtil.getString(resourceRequest, "end");
+
+        String currentOrgId = (String) SessionManager.getAttribute(resourceRequest.getRequestedSessionId(), "department");
+        Organization currentOrg = orgDao.findByOrgId(currentOrgId);
+        Organization organization = orgDao.findByOrgId(orgId);
+
         HttpServletResponse res = PortalUtil.getHttpServletResponse(resourceResponse);
         res.addHeader("content-type", "application/json");
 
         try {
-            PageQueryResult<MeetingStatistics> data = memberMeetingServer.meetingStatisticsPage(page, size, orgId, name, start, end);
-            JsonPageResponse jsonPageResponse = new JsonPageResponse();
-            jsonPageResponse.setStart(start);
-            jsonPageResponse.setEnd(end);
-            if (data != null) {
-                jsonPageResponse.setCode(0);
-                jsonPageResponse.setCount(data.getCount());
-                jsonPageResponse.setData(data.getList());
-            } else {
-                jsonPageResponse.setCode(0);
-                jsonPageResponse.setCount(0);
-                jsonPageResponse.setData(Collections.emptyList());
+            List<String> phones = orgDao.findAdminPhoneNumberIn(Collections.singletonList(orgId));
+            if (phones != null && phones.size() > 0) {
+
+                CQUMsgService.sendPhoneNoticeMsg(String.join(",", phones),
+                        String.format(smsTemplate, organization.getOrg_name(), start, end, currentOrg.getOrg_name()));
             }
-            res.getWriter().write(gson.toJson(jsonPageResponse));
+            res.getWriter().write(gson.toJson(JsonResponse.Success()));
         } catch (Exception e) {
             try {
                 e.printStackTrace();
@@ -88,6 +83,7 @@ public class OrgMeetingStatisticsResourceCommand implements MVCResourceCommand {
                 e1.printStackTrace();
             }
         }
+
         return false;
     }
 }

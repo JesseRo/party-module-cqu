@@ -31,10 +31,7 @@ import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -102,9 +99,8 @@ public class TransportApprovalCommand implements MVCResourceCommand {
                             newMember.setMember_org(transport.getTo_org_id());
                             user.setUser_department_id(transport.getTo_org_id());
                             userDao.saveOrUpdate(user);
-                            memberDao.save(newMember);
+                            memberDao.insertAll(Collections.singletonList(newMember));
                             memberDao.historic(true, member);
-                            memberDao.historic(false, newMember);
                             if (transport.getType().equalsIgnoreCase("1")) {
                                 orgAdminDao.deleteOrgAdmin(member.getMember_identity(), PartyOrgAdminTypeEnum.SECONDARY);
                             }

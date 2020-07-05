@@ -1,6 +1,7 @@
 <%@ include file="/init.jsp" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <portlet:resourceURL id="/hg/org/meetingStatistics" var="statistics"/>
+<portlet:resourceURL id="/hg/org/meetingStatistics/sms" var="sms"/>
 
 
 <head>
@@ -324,7 +325,7 @@
     <portlet:resourceURL id="/org/tree" var="orgTreeUrl"/>
 
     <script type="text/javascript">
-
+        var startDate, endDate;
         $(function () {
             layui.config({
                 base: '${basePath}/js/layui/module/'
@@ -398,7 +399,7 @@
                                 theme: '#FFB800'
                             },
                             cols: [[ //表头
-                                {field: 'retention_id', title: 'id', hide: true},
+                                {field: 'org_id', title: 'id', hide: true},
                                 {field: 'org_name', title: '组织名称', width: '15%'},
                                 {field: 'org_secretary', title: '党委书记', width: '15%'},
                                 {field: 'branch_count', title: '开展支部数', width: '14%'},
@@ -406,7 +407,13 @@
                                 {field: 'member_count', title: '参数人数', width: '14%'},
                                 {field: 'leader_count', title: '参会领导', width: '14%'},
                                 {field: 'operate', title: '操作', width: '14%', toolbar: '#retentionBtns'}
-                            ]]
+                            ]],
+                            parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
+                                startDate = res.start;
+                                endDate = res.end;
+                                $('#date_range').val(startDate + " - " + endDate);
+                                return res;
+                            }
                         });
                         $(".layui-table-view .layui-table-page").addClass("layui-table-page-center");
                         $(".layui-table-view .layui-table-page").removeClass("layui-table-page");
@@ -416,9 +423,31 @@
                 }
             });
 
+            layui.use('laydate', function () {
+                var laydate = layui.laydate;
+                laydate.render({
+                    elem: '#date_range'
+                    , range: '-',
+                    done: function (value, date, e) {
+                        console.log(value); //得到日期生成的值，如：2017-08-18
+                        console.log(date); //得到日期时间对象：{year: 2017, month: 8, date: 18, hours: 0, minutes: 0, seconds: 0}
+                        console.log(e); //得结束的日期时间对象，开启范围选择（range: true）才会返回。对象成员同上。
+                        startDate = toDateStr(date);
+                        endDate = toDateStr(e);
+                    }
+                });
+            })
+            function toDateStr(date){
+                if (date.year) {
+                    return date.year + '-' + date.month + '-' + date.date;
+                }else {
+                    return "";
+                }
+            }
+
             function reloadTable() {
                 statisticsTable.reload({
-                    where: {search: $('[name=keyword]').val(), orgId: checkedNode.id},
+                    where: {search: $('[name=keyword]').val(), orgId: checkedNode.id, start: startDate, end: endDate},
                     page: {
                         curr: 1 //重新从第 1 页开始
                     }
@@ -428,12 +457,22 @@
             }
 
             $('#transportSearchBtn').on('click', reloadTable);
+
+
         });
+        function sms(e){
+            var orgId = $(e).attr("bid");
+            $.post("${sms}", {id: orgId, start: startDate, end: endDate}, function (res) {
+                if (res.result) {
+                    layuiModal.alert("已短信通知");
+                }
+            })
+        }
     </script>
 </head>
 <script type="text/html" id="retentionBtns">
     <div class="operate_btns">
-        <span class="blue_text" style="cursor: pointer;color: #5160FF; ">短信通知</span>
+        <span bid="{{d.org_id}}" onclick="sms(this)" class="blue_text sms_button" style="cursor: pointer;color: #5160FF; ">短信通知</span>
     </div>
 </script>
 <div>
@@ -467,6 +506,9 @@
                         <form class="layui-form" id="searchForm">
                             <div class="layui-form-item" style="margin-top: 15px;">
                                 <div class="layui-inline">
+                                    <div class="layui-input-inline" style="margin-left: 20px;height: 40px;">
+                                        <input type="text" class="layui-input" id="date_range" placeholder="日期范围">
+                                    </div>
                                     <div class="layui-input-inline keyword">
                                         <input type="text" name="keyword" placeholder="搜索党组织"
                                                class="layui-input">

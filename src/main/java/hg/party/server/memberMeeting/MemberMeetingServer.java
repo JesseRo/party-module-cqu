@@ -24,6 +24,7 @@ import party.portlet.cqu.dao.StatisticsDao;
 import party.portlet.transport.entity.PageQueryResult;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -44,18 +45,18 @@ public class MemberMeetingServer {
         memberMeetingDao.findByMeetingIdAndUserId(userId, meetingId);
     }
 
-    public PageQueryResult<MeetingStatistics> meetingStatisticsPage(int page, int size, int id, String name) {
+    public PageQueryResult<MeetingStatistics> meetingStatisticsPage(int page, int size, int id, String name, String start, String end) {
         Organization organization = orgService.findOrgById(id);
         PageQueryResult<Map<String, Object>> result = memberMeetingDao.orgIdsPage(page, size, id, name);
         List<String> orgIds = result.getList().stream().map(p -> String.valueOf(p.get("org_id"))).collect(Collectors.toList());
         List<MeetingStatistics> statisticsResult;
         List<Map<String, Object>> joinStatisticsResult;
         if (organization.getOrg_type().equals(PartyOrgAdminTypeEnum.ORGANIZATION.getType())) {
-            statisticsResult = memberMeetingDao.secondaryMeetingStatistics(orgIds);
-            joinStatisticsResult = memberMeetingDao.secondaryMeetingJoinStatistics(orgIds);
+            statisticsResult = memberMeetingDao.secondaryMeetingStatistics(orgIds, start, end);
+            joinStatisticsResult = memberMeetingDao.secondaryMeetingJoinStatistics(orgIds, start, end);
         } else {
-            statisticsResult = memberMeetingDao.branchMeetingStatistics(orgIds);
-            joinStatisticsResult = memberMeetingDao.branchMeetingJoinStatistics(orgIds);
+            statisticsResult = memberMeetingDao.branchMeetingStatistics(orgIds, start, end);
+            joinStatisticsResult = memberMeetingDao.branchMeetingJoinStatistics(orgIds, start, end);
         }
         Map<String, MeetingStatistics> meetingStatisticsMap = statisticsResult.stream()
                 .collect(Collectors.toMap(MeetingStatistics::getOrg_id, p -> p));
@@ -89,9 +90,9 @@ public class MemberMeetingServer {
             if (organization.getOrg_id().equals(orgId)) {
                 Map<String, Object> map = null;
                 if (organization.getOrg_type().equals(PartyOrgAdminTypeEnum.ORGANIZATION.getType())) {
-                    map = statisticsDao.countAllMeeting();
+                    map = statisticsDao.countAllMeeting(start, end);
                 } else if (organization.getOrg_type().equals(PartyOrgAdminTypeEnum.SECONDARY.getType())) {
-                    map = statisticsDao.countSecondaryMeeting(orgId);
+                    map = statisticsDao.countSecondaryMeeting(orgId, start, end);
                 }
                 if (map != null) {
 					statistics.setBranch_count((long) map.get("branch_count"));
@@ -102,7 +103,10 @@ public class MemberMeetingServer {
             }
             statisticsList.add(statistics);
         }
-
+        Map<String, Object> data = new HashMap<>();
+        data.put("list", statisticsList);
+        data.put("start", start);
+        data.put("end", end);
 		return new PageQueryResult<>(statisticsList, result.getCount(), result.getPageNow(), result.getPageSize());
     }
 }

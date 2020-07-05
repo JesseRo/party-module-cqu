@@ -25,10 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 @Component(
         immediate = true,
@@ -56,8 +53,8 @@ public class BigScreenPortlet extends MVCPortlet {
     @Override
     public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
             throws IOException, PortletException {
-        String sessionId=renderRequest.getRequestedSessionId();
-        String role = (String)SessionManager.getAttribute(sessionId, "role");
+        String sessionId = renderRequest.getRequestedSessionId();
+        String role = (String) SessionManager.getAttribute(sessionId, "role");
         String url;
         if (ConstantsKey.SECOND_PARTY.equals(role)) {
             url = "/backlogtwo";
@@ -70,10 +67,10 @@ public class BigScreenPortlet extends MVCPortlet {
         }
 
         List<Map<String, Object>> orgCounts = dao.countOrg();
-        for (Map<String, Object> orgCount : orgCounts){
-            if(orgCount.get("org_type").equals(ConstantsKey.ORG_TYPE_BRANCH)){
+        for (Map<String, Object> orgCount : orgCounts) {
+            if (orgCount.get("org_type").equals(ConstantsKey.ORG_TYPE_BRANCH)) {
                 renderRequest.setAttribute("brunchCount", orgCount.get("count"));
-            }else if (orgCount.get("org_type").equals(ConstantsKey.ORG_TYPE_SECONDARY)){
+            } else if (orgCount.get("org_type").equals(ConstantsKey.ORG_TYPE_SECONDARY)) {
                 renderRequest.setAttribute("secondaryCount", orgCount.get("count"));
             }
 
@@ -84,58 +81,63 @@ public class BigScreenPortlet extends MVCPortlet {
         List<String> secondaryNames = new ArrayList<>();
         List<Long> secondaryMemberCounts = new ArrayList<>();
 
-        List<List<String >> secNameGroup = new ArrayList<>();
-        List<List<Long >> secCountGroup = new ArrayList<>();
-        List<String > secNames = new ArrayList<>();
-        List<Long > secCounts = new ArrayList<>();
-        for (int i = 0; i < memberCounts.size(); i++){
-            if (i % 12 == 0){
+        List<List<String>> secNameGroup = new ArrayList<>();
+        List<List<Long>> secCountGroup = new ArrayList<>();
+        List<String> secNames = new ArrayList<>();
+        List<Long> secCounts = new ArrayList<>();
+        for (int i = 0; i < memberCounts.size(); i++) {
+            if (i % 12 == 0) {
                 secNames = new ArrayList<>();
                 secCounts = new ArrayList<>();
                 secCountGroup.add(secCounts);
                 secNameGroup.add(secNames);
             }
             Map<String, Object> memberCount = memberCounts.get(i);
-            allMemberCount += (Long)memberCount.get("count");
-            secondaryNames.add((String)memberCount.get("name"));
-            secondaryMemberCounts.add((Long)memberCount.get("count"));
-            secNames.add((String)memberCount.get("name"));
-            secCounts.add((Long)memberCount.get("count"));
+            allMemberCount += (Long) memberCount.get("count");
+            secondaryNames.add((String) memberCount.get("name"));
+            secondaryMemberCounts.add((Long) memberCount.get("count"));
+            secNames.add((String) memberCount.get("name"));
+            secCounts.add((Long) memberCount.get("count"));
         }
         renderRequest.setAttribute("memberGroups", secNameGroup);
         renderRequest.setAttribute("secNameGroup", gson.toJson(secNameGroup));
         renderRequest.setAttribute("secCountGroup", gson.toJson(secCountGroup));
-        renderRequest.setAttribute("maxSecCount", secondaryMemberCounts.stream().mapToLong(p->p).max().getAsLong());
+        renderRequest.setAttribute("maxSecCount", secondaryMemberCounts.stream().mapToLong(p -> p).max().getAsLong());
 
 
         renderRequest.setAttribute("allMemberCount", allMemberCount);
 
 
+        List<Map<String, Object>> meetingCounts = dao.countMeeting();
+        Map<String, Long> campusMeetingCounts = new HashMap<>();
+        Map<String, String> campusMeetingPercentage = new HashMap<>();
+        long total = 0L;
+        for (Map<String, Object> memberCount : meetingCounts) {
+            long count = (Long) memberCount.get("count");
+            total += count;
+            campusMeetingCounts.put((String) memberCount.get("campus"), count);
+        }
 
+        for (Map.Entry<String, Long> c : campusMeetingCounts.entrySet()) {
+            campusMeetingPercentage.put(c.getKey(), String.format("%.1f", (((float)c.getValue()) / total) * 100));
+        }
+        renderRequest.setAttribute("campusMeetingCounts", gson.toJson(campusMeetingCounts));
+        renderRequest.setAttribute("campusMeetingPercentage", gson.toJson(campusMeetingPercentage));
 
-//        List<Map<String, Object>> meetingCounts = dao.countMeeting();
-//        int allMeetingCount = 0;
-//        List<String> campus = new ArrayList<>();
-//        List<Integer> campusMeetingCounts = new ArrayList<>();
-//        for (Map<String, Object> memberCount : memberCounts){
-//            allMemberCount += (Long)memberCount.get("count");
-//            secondaryNames.add((String)memberCount.get("name"));
-//            secondaryMemberCounts.add((Long)memberCount.get("count"));
-//        }
-//
 
 //        List<Map<String, Object>> brunchCounts = dao.countBrunchBySecondary();
-
+        String []weekDays = new String[]{"", "星期一", "星期二", "星期三", "星期四", "星期五","星期六", "星期日"};
         List<Map<String, Object>> logCounts = dao.countWeekLog();
         Long allLog = dao.countAllLog();
-        List<String > weekdays = new ArrayList<>();
+        List<String> weekdays = new ArrayList<>();
         List<Long> weekdayCounts = new ArrayList<>();
-        outerLoop: for (int i = 6; i >= 0; i--){
+        outerLoop:
+        for (int i = 6; i >= 0; i--) {
             LocalDate date = LocalDate.now().minusDays(i);
-            String dateOfWeek = date.getDayOfWeek().name();
+            String dateOfWeek = weekDays[date.getDayOfWeek().getValue()];
             weekdays.add(dateOfWeek);
-            for (Map<String, Object> count : logCounts){
-                if (count.get("date").toString().equals(date.toString())){
+            for (Map<String, Object> count : logCounts) {
+                if (count.get("date").toString().equals(date.toString())) {
                     weekdayCounts.add((Long) count.get("count"));
                     continue outerLoop;
                 }

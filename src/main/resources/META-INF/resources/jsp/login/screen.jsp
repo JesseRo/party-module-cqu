@@ -12,11 +12,11 @@
 </head>
 <style>
     .attend_container .triple_charts{
-        width: 300%;
+        width: 400%;
         height: 100%;
     }
     .attend_container .triple_charts > div{
-        width: 33.33%;
+        width: 25%;
         height: 100%;
         float: left;
     }
@@ -177,31 +177,33 @@
         var legendDom = $(".echarts_legend");
         var domStr = '';
         var numStr = '';
+        var campusMeetingCounts = ${campusMeetingCounts};
+        var campusMeetingPercentage = ${campusMeetingPercentage};
         var legendData = [
             {
                 title:'重庆大学A区',
-                num:400,
+                num: campusMeetingCounts['A区'] || 0,
                 color:'#E60012',
-                percent:'30%'
+                percent: (campusMeetingPercentage['A区'] || 0)  + '%'
             },
             {
                 title:'重庆大学B区',
-                num:300,
+                num: campusMeetingCounts['B区'] || 0,
                 color:'#0DE5D9',
-                percent:'40%'
+                percent: (campusMeetingPercentage['B区'] || 0) + '%'
             },
             {
                 title:'重庆大学C区',
-                num:200,
+                num: campusMeetingCounts['C区'] || 0,
                 color:'#FFB100',
-                percent:'50%'
+                percent: (campusMeetingPercentage['C区'] || 0) + '%'
             },
             {
                 title:'重庆大学虎溪校区',
-                num:100,
+                num: campusMeetingCounts['虎溪校区'] || 0,
                 color:'#FF6926',
-                percent:'60%'
-            },
+                percent: (campusMeetingPercentage['虎溪校区'] || 0) + '%'
+            }
         ];
         legendData.map(function (i) {
             domStr += '<div class="legend_item">' +

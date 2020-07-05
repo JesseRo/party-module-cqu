@@ -33,13 +33,14 @@ public class UserService {
     private PartyBranchService partyBranchService;
     @Reference
     private VisitCountService visitCountService;
+
     /**
      * 通过账号查询用户信息
      */
     public User findByUserId(String id) {
         User tt = new User();
         List<Map<String, Object>> listMap = userDao.findAllByUserId(id);
-        if(listMap.size()>0){
+        if (listMap.size() > 0) {
             Map<String, Object> map = listMap.get(0);
             tt.setId(Integer.parseInt(map.get("_id") + ""));
             tt.setUser_password((String) map.get("user_password"));
@@ -47,8 +48,8 @@ public class UserService {
             tt.setUser_name((String) map.get("user_name"));
             tt.setUser_department_id((String) map.get("user_department_id"));
             tt.setState(map.get("state").toString());
-        }else{
-            tt =null;
+        } else {
+            tt = null;
         }
         return tt;
     }
@@ -62,18 +63,19 @@ public class UserService {
         return null;
     }
 
-    public List<String> myRoles(String userId){
+    public List<String> myRoles(String userId) {
         return orgDao.findRoleByUserId(userId);
     }
+
     public boolean isRole(String userId, String role) {
         List<String> roles = myRoles(userId);
         String orgType = ConstantsKey.PERMISSION_TO_ORGTYPE.get(role);
-        if (orgType == null){
+        if (orgType == null) {
             if (role.equalsIgnoreCase(ConstantsKey.COMMON_PARTY)) {
-				return true;
-			}else {
-				return false;
-			}
+                return true;
+            } else {
+                return false;
+            }
         }
         return roles.contains(orgType);
     }
@@ -89,7 +91,7 @@ public class UserService {
         return userDao.findUserByEthnicity(ethnicity);
     }
 
-    public String  login(String userName, String password, String role, String sessionId, String ip){
+    public String login(String userName, String password, String role, String sessionId, String ip) {
         User user;
         try {
             user = findByUserId(userName);
@@ -109,13 +111,13 @@ public class UserService {
         else {
             /**用户中文名*/
             List<String> roles = myRoles(userName);
-            if (roles.contains(ConstantsKey.ORG_TYPE_ROOT)){
+            if (roles.contains(ConstantsKey.ORG_TYPE_ROOT)) {
                 role = ConstantsKey.ORG_PARTY;
-            }else if (roles.contains(ConstantsKey.ORG_TYPE_SECONDARY)){
+            } else if (roles.contains(ConstantsKey.ORG_TYPE_SECONDARY)) {
                 role = ConstantsKey.SECOND_PARTY;
-            }else if (roles.contains(ConstantsKey.ORG_TYPE_BRANCH)){
+            } else if (roles.contains(ConstantsKey.ORG_TYPE_BRANCH)) {
                 role = ConstantsKey.BRANCH_PARTY;
-            }else {
+            } else {
                 role = ConstantsKey.COMMON_PARTY;
             }
 
@@ -130,7 +132,7 @@ public class UserService {
             SessionManager.setAttribute(sessionId, "orgId", user.getUser_department_id());
             SessionManager.setAttribute(sessionId, "loginCount", 1);
             //判断是否是第一次登陆
-            boolean bool=isFirstLogin(userName, name);
+            boolean bool = isFirstLogin(userName, name);
             SessionManager.setAttribute(sessionId, "firstLogin", bool);
             VisitCount count = new VisitCount();
             count.setDepartment_id(orgId);
@@ -164,15 +166,16 @@ public class UserService {
                 url = "/personalcenter";
             } else if (ConstantsKey.OTHER_PARTY.equals(role)) {
                 url = "/membertodolist";
-            }else if(ConstantsKey.ORG_PROPAGANDA.equals(role)){
+            } else if (ConstantsKey.ORG_PROPAGANDA.equals(role)) {
                 url = "/passpublic";
             } else {
                 url = "/errorpage";
             }
             return "3" + url;//成功登录
+        }
     }
-    }
-    public String  loginCas(String userName, String role, String sessionId, String ip){
+
+    public String loginCas(String userName, String role, String sessionId, String ip) {
         User user;
         try {
             user = findByUserId(userName);
@@ -182,7 +185,7 @@ public class UserService {
         //判断用户不存在
         if (user == null) {
             return "1";
-        }else {
+        } else {
             boolean isRole = isRole(userName, role);
             if (isRole) {
                 /**用户中文名*/
@@ -197,7 +200,7 @@ public class UserService {
                 SessionManager.setAttribute(sessionId, "orgId", user.getUser_department_id());
                 SessionManager.setAttribute(sessionId, "loginCount", 1);
                 //判断是否是第一次登陆
-                boolean bool=isFirstLogin(userName, name);
+                boolean bool = isFirstLogin(userName, name);
                 SessionManager.setAttribute(sessionId, "firstLogin", bool);
                 VisitCount count = new VisitCount();
                 count.setDepartment_id(orgId);
@@ -233,20 +236,21 @@ public class UserService {
                     url = "/errorpage";
                 }
                 return "3" + url;//成功登录
-            }else {
+            } else {
                 return "0"; //角色不匹配
             }
         }
     }
-   public  boolean isFirstLogin (String userId,String userName){
-	    List<Map<String, Object>> list=userDao.findLogin(userId);
-	    if (list!=null&&list.size()>0) {
-	    	return true;
-		}else {
-			userDao.insertLogin(userId, userName);
-			return false;
-		}
-     }
+
+    public boolean isFirstLogin(String userId, String userName) {
+        List<Map<String, Object>> list = userDao.findLogin(userId);
+        if (list != null && list.size() > 0) {
+            return true;
+        } else {
+            userDao.insertLogin(userId, userName);
+            return false;
+        }
+    }
 
     public int updateUserInfo(User user) {
         return userDao.updateUserInfo(user);
