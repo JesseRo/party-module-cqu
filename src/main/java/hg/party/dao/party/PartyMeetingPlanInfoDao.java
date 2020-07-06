@@ -446,8 +446,11 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
                 "\t\tLEFT OUTER JOIN hg_users_info AS us ON plan.check_person = us.user_id \n" +
                 "\t\tleft outer join hg_party_org as org_o on plan.organization_id = org_o.org_id \n" +
                 "left join hg_party_org as org_p on org_o.org_parent = org_p.org_id and org_p.org_type != 'organization' " +
-                "\twhere 1 = 1 and org_o.org_id='"+orgId+"'";
+                "\twhere 1 = 1";
         StringBuffer buffer = new StringBuffer(sql);
+        if(!StringUtils.isEmpty(orgId)){
+            buffer.append(" and org_o.org_id='"+orgId+"'");
+        }
         if (!StringUtils.isEmpty(startDate) && StringUtils.isEmpty(endDate)) {
             buffer.append(" AND plan.start_time>'" + startDate + " 00:00:00' and plan.start_time<'" + startDate + " 24:00:00'");
         }

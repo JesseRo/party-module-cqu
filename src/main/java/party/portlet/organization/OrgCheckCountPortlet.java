@@ -85,7 +85,7 @@ public class OrgCheckCountPortlet extends MVCPortlet{
 	     }
 	     List<Map<String, Object>> listResult= 
 	    	partyMeetingPlanInfoService.find(startTime,endTime, meetType, meetTheme, seconedId, branchId, pageSize,
-			(pageNo-1)*pageSize,checkState);
+			(pageNo-1)*pageSize,checkState,null);
 	     for (Map<String, Object> map : listResult) {
 	    	 try {
 			String note=ExprotUntil.getNote(map);

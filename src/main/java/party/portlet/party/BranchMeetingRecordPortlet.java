@@ -77,7 +77,7 @@ public class BranchMeetingRecordPortlet extends MVCPortlet {
         String seconedId = dao.getOrgParentIdByBranchId(orgId).get(0).get("org_parent").toString();
         //获取当前页
         int totalCount = partyMeetingPlanInfoService.count(startTime, endTime, meetType, meetTheme,
-                seconedId, orgId, "");
+                seconedId, orgId, "",null);
         int pageSize = 8;
         int totalPage = totalCount / pageSize;
         if (totalCount % pageSize != 0) {
@@ -90,7 +90,7 @@ public class BranchMeetingRecordPortlet extends MVCPortlet {
         }
         List<Map<String, Object>> listResult =
                 partyMeetingPlanInfoService.find(startTime, endTime, meetType, meetTheme, seconedId, orgId, pageSize,
-                        (pageNo - 1) * pageSize, "");
+                        (pageNo - 1) * pageSize, "",null);
         renderRequest.setAttribute("list", listResult);
         renderRequest.setAttribute("pageNo", pageNo);
         renderRequest.setAttribute("totalPage", totalPage);
