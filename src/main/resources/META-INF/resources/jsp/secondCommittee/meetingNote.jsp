@@ -106,6 +106,7 @@
 </div>
 <script type="text/javascript">
     var ueObj = UE.getEditor("meeting_content", { initialFrameWidth:821, initialFrameHeight: 250});
+    ueObj.setHeight(400);
     var uploadUrls = {
         file: '${uploadfileUrl}',
         image: '${uploadimageUrl}',

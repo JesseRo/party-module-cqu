@@ -386,7 +386,7 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
 
     //bb
     public List<Map<String, Object>> find(String starDdate, String endDate, String meetType, String theme,
-                              String seconedId, String branchId, Integer pageSize, Integer startPage, String checkState) {
+                              String seconedId, String branchId, Integer pageSize, Integer startPage, String checkState,String orgId) {
         String sql = "\n" +
                 "\tSELECT\n" +
                 "\t\tplan.task_status AS plan_state,org_o.org_name AS branch_name,plc.place as place_name," +
@@ -401,7 +401,7 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
                 "\t\tleft outer join hg_party_org as org_o on plan.organization_id = org_o.org_id \n" +
                 "left join hg_party_org as org_p on org_o.org_parent = org_p.org_id and org_p.org_type != 'organization' " +
                 "left join hg_party_place as plc on plan.place = plc.id " +
-                "\twhere 1 = 1 ";
+                "\twhere 1 = 1 and  org_o.org_id='"+orgId+"'";
         StringBuffer buffer = new StringBuffer(sql);
         if (!StringUtils.isEmpty(starDdate) && StringUtils.isEmpty(endDate)) {
             buffer.append(" AND plan.start_time>'" + starDdate + " 00:00:00' and plan.start_time<'" + starDdate + " 24:00:00'");
@@ -437,7 +437,7 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
         return jdbcTemplate.queryForList(buffer.toString());
     }
 
-    public int count(String startDate, String endDate, String meetType, String theme, String seconedId, String branchId, String checkState) {
+    public int count(String startDate, String endDate, String meetType, String theme, String seconedId, String branchId, String checkState,String orgId) {
         String sql = "\n" +
                 "\tSELECT\n" +
                 " count(1) " +
@@ -446,7 +446,7 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
                 "\t\tLEFT OUTER JOIN hg_users_info AS us ON plan.check_person = us.user_id \n" +
                 "\t\tleft outer join hg_party_org as org_o on plan.organization_id = org_o.org_id \n" +
                 "left join hg_party_org as org_p on org_o.org_parent = org_p.org_id and org_p.org_type != 'organization' " +
-                "\twhere 1 = 1 ";
+                "\twhere 1 = 1 and org_o.org_id='"+orgId+"'";
         StringBuffer buffer = new StringBuffer(sql);
         if (!StringUtils.isEmpty(startDate) && StringUtils.isEmpty(endDate)) {
             buffer.append(" AND plan.start_time>'" + startDate + " 00:00:00' and plan.start_time<'" + startDate + " 24:00:00'");

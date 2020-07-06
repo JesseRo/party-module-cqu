@@ -12,6 +12,7 @@ import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import dt.session.SessionManager;
 import org.apache.log4j.Logger;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -68,11 +69,12 @@ public class MeetingRecordPortlet extends MVCPortlet {
         String meetType = ParamUtil.getString(renderRequest, "meetType");//会议类型
         meetType = HtmlUtil.escape(meetType);
         int pageNo = ParamUtil.getInteger(renderRequest, "pageNo");
+        String orgId = (String) SessionManager.getAttribute(renderRequest.getRequestedSessionId(), "department");
         String checkState = "";
 
         //获取当前页
         int totalCount = partyMeetingPlanInfoService.count(startTime, endTime, meetType,
-				meetTheme, seconedId, branchId, checkState);
+				meetTheme, seconedId, branchId, checkState,orgId);
         int pageSize = 8;
         int totalPage = totalCount / pageSize;
         if (totalCount % pageSize != 0) {
@@ -86,13 +88,13 @@ public class MeetingRecordPortlet extends MVCPortlet {
         }
         List<Map<String, Object>> listResult =
                 partyMeetingPlanInfoService.find(startTime, endTime, meetType, meetTheme, seconedId, branchId, pageSize,
-                        (pageNo - 1) * pageSize, checkState);
+                        (pageNo - 1) * pageSize, checkState, orgId);
         renderRequest.setAttribute("list", listResult);
         renderRequest.setAttribute("pageNo", pageNo);
         renderRequest.setAttribute("totalPage", totalPage);
         renderRequest.setAttribute("startTime", startTime);
         renderRequest.setAttribute("endTime", endTime);
-        renderRequest.setAttribute("seconedId", seconedId);
+        renderRequest.setAttribute("seconedId", orgId);
         renderRequest.setAttribute("branchId", branchId);
         renderRequest.setAttribute("meetTheme", meetTheme);
         renderRequest.setAttribute("meetType", meetType);

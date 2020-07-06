@@ -124,8 +124,8 @@ public class PartyMeetingPlanInfoService {
         return partyMeetingPlanInfo.find(startDate, endDate, meetType, theme, seconedId, branchId, checkState);
     }
 
-    public int count(String startDate, String endDate, String meetType, String theme, String seconedId, String branchId, String checkState) {
-        return partyMeetingPlanInfo.count(startDate, endDate, meetType, theme, seconedId, branchId, checkState);
+    public int count(String startDate, String endDate, String meetType, String theme, String seconedId, String branchId, String checkState,String orgId) {
+        return partyMeetingPlanInfo.count(startDate, endDate, meetType, theme, seconedId, branchId, checkState,orgId);
     }
 
     //aa0统计条数
@@ -139,8 +139,8 @@ public class PartyMeetingPlanInfoService {
     }
 
     //bb
-    public List<Map<String, Object>> find(String startDate, String endDate, String meetType, String theme, String seconedId, String branchId, Integer pageSize, Integer startPage, String checkState) {
-        return partyMeetingPlanInfo.find(startDate, endDate, meetType, theme, seconedId, branchId, pageSize, startPage, checkState);
+    public List<Map<String, Object>> find(String startDate, String endDate, String meetType, String theme, String seconedId, String branchId, Integer pageSize, Integer startPage, String checkState,String orgId) {
+        return partyMeetingPlanInfo.find(startDate, endDate, meetType, theme, seconedId, branchId, pageSize, startPage, checkState,orgId);
     }
 
     //bb1

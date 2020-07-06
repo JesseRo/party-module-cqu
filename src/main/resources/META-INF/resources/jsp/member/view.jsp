@@ -512,7 +512,7 @@
                     return pathHtml;
                 }
                 function deleteMember(userId){
-                    layer.confirm('您确认删除吗？', {
+                    layer.confirm('您确定将此条记录移入历史档案库吗？', {
                         btn: ['确定','取消'] //按钮
                     }, function(){
                         $.ajax({
@@ -521,10 +521,10 @@
                             dataType: "json",
                             success: function (succee) {
                                 if (succee.state == true) {
-                                    layer.msg("删除成功");
+                                    layer.msg("移入历史档案库成功。");
                                     renderTable(pageInfo.page,pageInfo.size);
                                 } else {
-                                    layer.msg("删除失败");
+                                    layer.msg("移入历史档案库失败！");
                                 }
                             }
                         });
@@ -652,7 +652,7 @@
                 当前位置：
                 <span class="layui-breadcrumb" lay-separator=">">
                     <a href="javascript:;">基础数据管理</a>
-                    <a href="javascript:;">党员信息管理</a>
+                    <a href="javascript:;">党员管理</a>
                 </span>
             </div>
             <div class="party_manage_content content_form content_info">
@@ -738,7 +738,7 @@
     <script type="text/html" id="tableTool">
         {{#  if(d.historic == false){ }}
             <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">移入历史档案库</a>
         {{#  } }}
         {{#  if(d.historic != false){ }}
         <a class="layui-btn layui-btn-xs" lay-event="recovery">恢复</a>

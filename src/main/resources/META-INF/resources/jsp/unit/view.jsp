@@ -108,7 +108,7 @@
                 }
                 function renderUnitModal(obj){
                     var title = "";
-                    if(obj.data.id==null){
+                    if(obj==null){
                         title = '添加行政机构';
                     }else{
                         title = '编辑行政机构';
