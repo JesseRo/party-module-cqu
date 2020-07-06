@@ -18,7 +18,7 @@
             <p class="form-title">智慧党建云平台</p>
             <div class="info_title">
                 <span class="active">普通登录</span>
-                <span>统一身份认证</span>
+                <span onclick="window.location.href = '${urlAddress}'">统一身份认证</span>
             </div>
             <form class="login_form" action="" method="post">
                 <div class="user_container">

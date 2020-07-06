@@ -1,53 +1,73 @@
 package hg.party.entity.partyMembers;
 
 public class JsonPageResponse {
-	private int code;
+    private int code;
 
-	private String msg;
+    private String msg;
 
-	private Object data;
+    private Object data;
 
-	private int count;
+    private int count;
 
-	public Object getData() {
-		return data;
-	}
+    private String start;
 
-	public void setData(Object data) {
-		this.data = data;
-	}
+    private String end;
 
-	public int getCode() {
-		return code;
-	}
+    public Object getData() {
+        return data;
+    }
 
-	public void setCode(int code) {
-		this.code = code;
-	}
+    public void setData(Object data) {
+        this.data = data;
+    }
 
-	public String getMsg() {
-		return msg;
-	}
+    public int getCode() {
+        return code;
+    }
 
-	public void setMsg(String msg) {
-		this.msg = msg;
-	}
+    public void setCode(int code) {
+        this.code = code;
+    }
 
-	public int getCount() {
-		return count;
-	}
+    public String getMsg() {
+        return msg;
+    }
 
-	public void setCount(int count) {
-		this.count = count;
-	}
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
 
-	public JsonPageResponse() {
-	}
+    public int getCount() {
+        return count;
+    }
 
-	public JsonPageResponse(int code, String msg, Object data, int count) {
-		this.code = code;
-		this.msg = msg;
-		this.data = data;
-		this.count = count;
-	}
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public JsonPageResponse() {
+    }
+
+    public JsonPageResponse(int code, String msg, Object data, int count) {
+        this.code = code;
+        this.msg = msg;
+        this.data = data;
+        this.count = count;
+    }
+
+    public String getEnd() {
+        return end;
+    }
+
+    public void setEnd(String end) {
+        this.end = end;
+    }
+
+    public String getStart() {
+        return start;
+    }
+
+    public void setStart(String start) {
+        this.start = start;
+    }
 }

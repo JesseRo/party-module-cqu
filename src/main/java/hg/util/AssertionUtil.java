@@ -1,15 +1,13 @@
 package hg.util;
 
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import hg.party.command.login.ajaxLoginCommand;
 import org.apache.log4j.Logger;
 import org.jasig.cas.client.authentication.AttributePrincipal;
 import org.jasig.cas.client.util.CommonUtils;
@@ -21,7 +19,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 public class AssertionUtil {
-	
+	private static Logger logger = Logger.getLogger(AssertionUtil.class);
 	private static String SERVCENAME = "";
 	private static String SERVERURL = "";
 	private static String CASLOGINURL = "";
@@ -55,9 +53,10 @@ public class AssertionUtil {
 			}
 			
 			String serviceUrl = null;
+
 			serviceUrl = CommonUtils.constructServiceUrl(request, response, serviceUrl, SERVCENAME, "ticket", false);
 			String ticket = ParamUtil.getString(request, "ticket");
-			
+
 			if (Validator.isNotNull(ticket)){
 				TicketValidator ticketValidator = getTicketValidator(companyId);
 				assertion = ticketValidator.validate(ticket, serviceUrl);
@@ -78,7 +77,9 @@ public class AssertionUtil {
 			String serviceUrl = null;
 			serviceUrl = CommonUtils.constructServiceUrl(request, response, serviceUrl, SERVCENAME, "ticket", false);
 			String ticket = ParamUtil.getString(request, "ticket");
-			
+			logger.info(ticket);
+			logger.info("service name:" + SERVCENAME);
+			logger.info("service url:" + serviceUrl);
 			if (Validator.isNotNull(ticket))
 			{
 				TicketValidator ticketValidator = getTicketValidator(companyId);
@@ -89,16 +90,14 @@ public class AssertionUtil {
 					casLoginName = attributePrincipal.getName();
 					Map<String, Object> attrs = attributePrincipal.getAttributes();
 					if (attrs == null) {
-						System.out.println("没有额外参数。。");
+						logger.info("没有额外参数。。");
 					}else{
-						System.out.println("额外参数:" + attrs.size());
+						logger.info("额外参数:" + attrs.size());
 						for(Map.Entry<String, Object> entry : attributePrincipal.getAttributes().entrySet()){
-							System.out.println("cas返回参数: " + entry.getKey() + "-" + entry.getValue());
+							logger.info("cas返回参数: " + entry.getKey() + "-" + entry.getValue());
 						}
 						if (attrs.containsKey("ACPIDCARD")){
 							casLoginName = new String(Base64.getDecoder().decode((String)attrs.get("ACPIDCARD"))).toUpperCase().trim();
-							
-					
 						}
 					}
 				}
@@ -106,6 +105,8 @@ public class AssertionUtil {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.info(e);
+			Arrays.stream(e.getStackTrace()).forEach(p->logger.info(p));
 			return null;
 		}
 		return casLoginName;

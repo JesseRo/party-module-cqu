@@ -132,6 +132,14 @@ public class OrgService {
                         o.put("grand_branch", orgCount.get("count"));
                     }
                 }
+                orgCounts = statisticsDao.countMemberByType();
+                for (Map<String, Object> m : orgCounts) {
+                    if (Objects.equals(m.get("member_type"), "正式党员")) {
+                        o.put("member_formal", m.getOrDefault("c", 0));
+                    } else if (Objects.equals(m.get("member_type"), "预备党员")) {
+                        o.put("member_pre", m.getOrDefault("c", 0));
+                    }
+                }
             } else if ("secondary".equalsIgnoreCase((String) o.get("org_type"))) {
                 int descType = (Integer) o.get("desc_type");
                 if (descType == 1) {
@@ -152,9 +160,9 @@ public class OrgService {
             o.put("member_pre", 0);
             if (lm != null) {
                 for (Map<String, Object> m : lm) {
-                    if (m.get("member_type").equals("正式党员")) {
+                    if (Objects.equals(m.get("member_type"), "正式党员")) {
                         o.put("member_formal", m.getOrDefault("c", 0));
-                    } else if (m.get("member_type").equals("预备党员")) {
+                    } else if (Objects.equals(m.get("member_type"), "预备党员")) {
                         o.put("member_pre", m.getOrDefault("c", 0));
                     }
                 }

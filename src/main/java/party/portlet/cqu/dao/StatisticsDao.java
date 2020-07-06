@@ -24,7 +24,13 @@ public class StatisticsDao extends PostgresqlDaoImpl<Place> {
         return jdbcTemplate.queryForList(sql);
     }
 
-    public Map<String, Object> countAllMeeting() {
+    public List<Map<String, Object>> countMemberByType() {
+        String sql = "SELECT member_type, count(id) as c FROM hg_party_member where historic = false GROUP BY member_type";
+        return jdbcTemplate.queryForList(sql);
+    }
+
+
+    public Map<String, Object> countAllMeeting(String start, String end) {
         String sql = "SELECT COUNT\n" +
                 "\t( DISTINCT plan.ID ) AS plan_count,\n" +
                 "\tCOUNT ( DISTINCT plan.organization_id ) AS branch_count,\n" +
@@ -37,21 +43,23 @@ public class StatisticsDao extends PostgresqlDaoImpl<Place> {
                 "\t\tLEFT JOIN hg_party_meeting_member_info M ON plan.meeting_id = M.meeting_id\n" +
                 "\t\tLEFT JOIN hg_party_member MEMBER ON M.participant_id = MEMBER.member_identity \n" +
                 "\tWHERE\n" +
-                "\t\tplan.task_status_org > '0' \n" +
+                "\t\tplan.task_status > '0' \n" +
                 "\t\tAND ( MEMBER.member_is_leader = '是' AND MEMBER.member_is_leader IS NOT NULL ) \n" +
+                "\t\tand plan.start_time >= ?::TIMESTAMP and plan.start_time <= ?::TIMESTAMP\n" +
                 "\t) \n" +
                 "FROM\n" +
                 "\thg_party_meeting_plan_info plan\n" +
                 "\tLEFT JOIN hg_party_meeting_member_info M ON plan.meeting_id = M.meeting_id\n" +
                 "\tLEFT JOIN hg_party_member MEMBER ON M.participant_id = MEMBER.member_identity \n" +
                 "WHERE\n" +
-                "\tplan.task_status_org > '0'";
-        return jdbcTemplate.queryForMap(sql);
+                "\tplan.task_status > '0'" +
+                "\tand plan.start_time >= ?::TIMESTAMP and plan.start_time <= ?::TIMESTAMP";
+        return jdbcTemplate.queryForMap(sql, start, end, start, end);
     }
 
-    public Map<String, Object> countSecondaryMeeting(String orgId) {
+    public Map<String, Object> countSecondaryMeeting(String orgId, String start, String end) {
         String sql = "SELECT COUNT\n" +
-                "\t( plan.ID ) AS plan_count,\n" +
+                "\t(distinct plan.ID ) AS plan_count,\n" +
                 "\tCOUNT ( DISTINCT plan.organization_id ) AS branch_count,\n" +
                 "\tCOUNT ( DISTINCT M.participant_id ) AS member_count,\n" +
                 "\t(\tSELECT \n" +
@@ -62,17 +70,19 @@ public class StatisticsDao extends PostgresqlDaoImpl<Place> {
                 "\tLEFT JOIN hg_party_meeting_member_info M ON plan.meeting_id = M.meeting_id\n" +
                 "\tLEFT JOIN hg_party_member MEMBER ON M.participant_id = MEMBER.member_identity \n" +
                 "WHERE\n" +
-                "\ttask_status_org > '0' and MEMBER.member_is_leader = '是'\n" +
-                "\tand (o.org_id = ? or o.org_parent = ?))\n" +
+                "\ttask_status > '0' and MEMBER.member_is_leader = '是'\n" +
+                "\tand (o.org_id = ? or o.org_parent = ?)\n" +
+                "\t\tand plan.start_time >= ?::TIMESTAMP and plan.start_time <= ?::TIMESTAMP)\n" +
                 "FROM\n" +
                 "\thg_party_meeting_plan_info plan\n" +
                 "\tLEFT JOIN hg_party_org o ON plan.organization_id = o.org_id \n" +
                 "\tLEFT JOIN hg_party_meeting_member_info M ON plan.meeting_id = M.meeting_id\n" +
                 "\tLEFT JOIN hg_party_member MEMBER ON M.participant_id = MEMBER.member_identity \n" +
                 "WHERE\n" +
-                "\ttask_status_org > '0'\tand (o.org_id = ? or o.org_parent = ?)\n" +
+                "\ttask_status > '0'\tand (o.org_id = ? or o.org_parent = ?)\n" +
+                "\t\tand plan.start_time >= ?::TIMESTAMP and plan.start_time <= ?::TIMESTAMP\n" +
                 "\t\n";
-        return jdbcTemplate.queryForMap(sql, orgId, orgId, orgId, orgId);
+        return jdbcTemplate.queryForMap(sql, orgId, orgId, start, end, orgId, orgId, start, end);
     }
 
     public List<Map<String, Object>> countMember() {
@@ -90,5 +100,11 @@ public class StatisticsDao extends PostgresqlDaoImpl<Place> {
     public Long countAllLog() {
         String sql = "SELECT count(*) FROM hg_party_visit_count  where type = '登陆系统'";
         return jdbcTemplate.queryForObject(sql, Long.class);
+}
+
+    public List<Map<String, Object>> countMeeting() {
+        String sql = "SELECT count(id),campus from hg_party_meeting_plan_info WHERE campus " +
+                "in ('A区', 'B区', 'C区', '虎溪校区') and task_status > '0' GROUP BY campus ORDER BY campus ";
+        return jdbcTemplate.queryForList(sql);
     }
 }

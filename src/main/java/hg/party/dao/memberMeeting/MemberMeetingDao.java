@@ -38,8 +38,11 @@ public class MemberMeetingDao extends PostgresqlDaoImpl<MemberMeeting> {
 		jdbcTemplate.update(sql,meetingId,userId);
 	}
 
-	public List<MeetingStatistics> secondaryMeetingStatistics(List<String> orgIds) {
+	public List<MeetingStatistics> secondaryMeetingStatistics(List<String> orgIds, String start, String end) {
 		String suffix = orgIds.stream().map(p -> "?").collect(Collectors.joining(","));
+		List<Object> params = new ArrayList<>(orgIds);
+		params.add(start);
+		params.add(end);
 		String sql = "SELECT \n" +
 				"\tT.*,\n" +
 				"\tl.id,\n" +
@@ -56,17 +59,21 @@ public class MemberMeetingDao extends PostgresqlDaoImpl<MemberMeeting> {
 				"\t\tLEFT JOIN hg_party_org o ON plan.organization_id = o.org_id\n" +
 				"\t\tLEFT JOIN hg_party_org P ON P.org_id = o.org_parent \n" +
 				"\tWHERE\n" +
-				"\t\to.historic = FALSE and plan.task_status_org > '0'\n" +
+				"\t\to.historic = FALSE and plan.task_status > '0'\n" +
 				"\t\tand p.org_id in (" + suffix + ")\n" +
+				"\t\tand plan.start_time >= ?::TIMESTAMP and plan.start_time <= ?::TIMESTAMP\n" +
 				"\tGROUP BY\n" +
 				"\t\tP.org_id \n" +
 				"\t)\n" +
 				"\tT LEFT JOIN hg_party_org l ON T.org_id = l.org_id";
-		return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(MeetingStatistics.class), orgIds.toArray());
+		return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(MeetingStatistics.class), params.toArray());
 	}
 
-	public List<Map<String, Object>> secondaryMeetingJoinStatistics(List<String> orgIds) {
+	public List<Map<String, Object>> secondaryMeetingJoinStatistics(List<String> orgIds, String start, String end) {
 		String suffix = orgIds.stream().map(p -> "?").collect(Collectors.joining(","));
+		List<Object> params = new ArrayList<>(orgIds);
+		params.add(start);
+		params.add(end);
 		String sql = "SELECT\n" +
 				"\to.org_parent,\n" +
 				"\t( M.member_is_leader = '是' AND M.member_is_leader IS NOT NULL ) AS leader,\n" +
@@ -75,18 +82,23 @@ public class MemberMeetingDao extends PostgresqlDaoImpl<MemberMeeting> {
 				"\t\"hg_party_meeting_member_info\" par\n" +
 				"\tINNER JOIN hg_party_member M ON par.participant_id = M.member_identity\n" +
 				"\tLEFT JOIN hg_party_org o ON M.member_org = o.org_id \n" +
+				"\tLEFT JOIN hg_party_meeting_plan_info plan ON par.meeting_id = plan.meeting_id \n" +
 				"\tWHERE\n" +
 				"\t\to.historic = FALSE " +
 				"\t\tand o.org_parent in (" + suffix + ")\n" +
+				"\t\tand plan.start_time >= ?::TIMESTAMP and plan.start_time <= ?::TIMESTAMP\n" +
 				" GROUP BY\n" +
 				"\to.org_parent,\n" +
 				"\t( M.member_is_leader = '是' AND M.member_is_leader IS NOT NULL )";
-		return jdbcTemplate.queryForList(sql, orgIds.toArray());
+		return jdbcTemplate.queryForList(sql, params.toArray());
 	}
 
 
-	public List<MeetingStatistics> branchMeetingStatistics(List<String> orgIds) {
+	public List<MeetingStatistics> branchMeetingStatistics(List<String> orgIds, String start, String end) {
 		String suffix = orgIds.stream().map(p -> "?").collect(Collectors.joining(","));
+		List<Object> params = new ArrayList<>(orgIds);
+		params.add(start);
+		params.add(end);
 		String sql = "SELECT\n" +
 				"\to.ID,O.org_type,o.org_name, o.org_id,o.org_secretary,\n" +
 				"\t1 AS branch_count,\n" +
@@ -97,16 +109,20 @@ public class MemberMeetingDao extends PostgresqlDaoImpl<MemberMeeting> {
 				"\tLEFT JOIN hg_party_org P ON o.org_parent = P.org_id \n" +
 				"WHERE\n" +
 				"\to.historic = FALSE \n" +
-				"\tAND plan.task_status_org > '0' \n" +
+				"\tAND plan.task_status > '0' \n" +
 				"\t\tand o.org_id in (" + suffix + ")\n" +
+				"\t\tand plan.start_time >= ?::TIMESTAMP and plan.start_time <= ?::TIMESTAMP\n" +
 				"GROUP BY\n" +
 				"\to.ID";
-		return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(MeetingStatistics.class), orgIds.toArray());
+		return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(MeetingStatistics.class), params.toArray());
 	}
 
 
-	public List<Map<String, Object>> branchMeetingJoinStatistics(List<String> orgIds) {
+	public List<Map<String, Object>> branchMeetingJoinStatistics(List<String> orgIds, String start, String end) {
 		String suffix = orgIds.stream().map(p -> "?").collect(Collectors.joining(","));
+		List<Object> params = new ArrayList<>(orgIds);
+		params.add(start);
+		params.add(end);
 		String sql = "SELECT\n" +
 				"\to.org_id,\n" +
 				"\t( M.member_is_leader = '是' AND M.member_is_leader IS NOT NULL ) AS leader,\n" +
@@ -115,11 +131,13 @@ public class MemberMeetingDao extends PostgresqlDaoImpl<MemberMeeting> {
 				"\t\"hg_party_meeting_member_info\" par\n" +
 				"\tINNER JOIN hg_party_member M ON par.participant_id = M.member_identity\n" +
 				"\tLEFT JOIN hg_party_org o ON M.member_org = o.org_id \n" +
+				"\tLEFT JOIN hg_party_meeting_plan_info plan ON par.meeting_id = plan.meeting_id \n" +
 				"WHERE o.org_id in (" + suffix + ")\n" +
+				"\t\tand plan.start_time >= ?::TIMESTAMP and plan.start_time <= ?::TIMESTAMP\n" +
 				"GROUP BY\n" +
 				"\to.org_id,\n" +
 				"\t( M.member_is_leader = '是' AND M.member_is_leader IS NOT NULL )";
-		return jdbcTemplate.queryForList(sql, orgIds.toArray());
+		return jdbcTemplate.queryForList(sql, params.toArray());
 	}
 
 	public PageQueryResult<Map<String, Object>> orgIdsPage(int pageNow, int pageSize, int id, String search) {

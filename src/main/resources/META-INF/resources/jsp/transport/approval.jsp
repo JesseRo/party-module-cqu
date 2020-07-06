@@ -482,7 +482,7 @@
             var id = $(e).parent().parent().parent().parent().find("[data-field='transport_id']").children().text();
             $.post("${approval}", {id: id, type: 'transport', status: status}, function (res) {
                 if (res.result) {
-                    alert("已" + $(e).text());
+                    layuiModal.alert("已" + $(e).text());
                     window.location.reload();
                 }
             })
@@ -492,7 +492,7 @@
             var id = $(e).parent().parent().parent().parent().find("[data-field='retention_id']").children().text();
             $.post("${approval}", {id: id, type: 'retention', status: status}, function (res) {
                 if (res.result) {
-                    alert("已" + $(e).text());
+                    layuiModal.alert("已" + $(e).text());
                     window.location.reload();
                 }
             })
