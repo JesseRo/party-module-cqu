@@ -435,8 +435,7 @@ public class OrgDao extends PostgresqlDaoImpl<Organization> {
     public List<Map<String, Object>> findPersonByUserId(String userId) {
         String sql = "select m.*,org.org_name,s.org_name s_org_name,o.org_name o_org_name from hg_party_member m " +
                 "left join hg_party_org org on org.org_id = m.member_org left join hg_party_org s on org.org_parent = s.org_id left join hg_party_org  o on s.org_parent =o.org_id " +
-                " where m.member_identity = ? " +
-                " and m.historic";
+                " where m.member_identity = ? ";
         return jdbcTemplate.queryForList(sql, userId);
     }
 
