@@ -125,7 +125,7 @@
             }
         };
         ueObj.ready(function() {
-            ueObj.setHeight(400);
+            ueObj.setHeight(200);
         });
     }
 

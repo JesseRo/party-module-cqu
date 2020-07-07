@@ -103,7 +103,6 @@
                         };
                     });
                 }
-
                 function unitEdit(obj){
                     renderUnitModal(obj);
                 }
@@ -111,6 +110,7 @@
                     var title = "";
                     if(obj==null){
                         title = '添加行政机构';
+                        $("#unitFormModel input[name='unitName']").val("");
                     }else{
                         id = obj.data.id;
                         title = '编辑行政机构';
@@ -142,11 +142,11 @@
                         return false;
                     });
                 }
-                function unitDelete(id) {
+                function unitDelete(obj) {
                     layer.confirm('您确认删除吗？', {
                         btn: ['确定','取消'] //按钮
                     }, function(){
-                        $.post("${delete}", {id: id},function (res) {
+                        $.post("${delete}", {id: obj.data.id},function (res) {
                             if (res.result){
                                 layer.msg("删除成功");
                                 renderTable(pageInfo.page,pageInfo.size);

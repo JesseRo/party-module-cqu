@@ -387,17 +387,17 @@
                        , keyword: $("#searchForm input[name=keyword]").val()
                    };
                    var cols = [[
-                       {type: 'checkbox'}
-                       ,{field: 'member_name', align:'center', title: '姓名',templet: function(d) {
+                       {type: 'checkbox', width:'8%'}
+                       ,{field: 'member_name', align:'center', width:'12%',title: '姓名',templet: function(d) {
                                return '<a href="/memberDetail?userId='+d.member_identity+'" >' + d.member_name + '</a>';
                            }
                            }
-                       ,{field: 'member_sex', align:'center', title: '性别',width:80}
-                       ,{field: 'member_identity', align:'center', title: '公民身份证', minWidth:200}
-                       ,{field: 'member_phone_number', align:'center', title: '联系电话'}
-                       ,{field: 'member_fomal_date', align:'center', title: '入党时间',width:160}
-                       ,{field: 'member_type', align:'center', title: '党员类型'}
-                       ,{field: 'historic', title: '操作', width:120, align:'center',toolbar: '#tableTool'}
+                       ,{field: 'member_sex', align:'center', width:'12%',title: '性别'}
+                       ,{field: 'member_identity', align:'center', width:'12%',title: '公民身份证'}
+                       ,{field: 'member_phone_number', align:'center', width:'12%',title: '联系电话'}
+                       ,{field: 'member_fomal_date', align:'center', width:'12%', title: '入党时间'}
+                       ,{field: 'member_type', align:'center', width:'12%', title: '党员类型'}
+                       ,{field: 'historic', title: '操作', width:'20%', align:'center',toolbar: '#tableTool'}
                    ]];
                    var ins = table.render({
                         elem: '#memberTable'
