@@ -56,6 +56,7 @@
                     page:1,
                     size:10
                 };
+                var id = null;
                 renderTable(1,pageInfo.size);
                 function renderTable(page,size){
                     var  where = {
@@ -111,6 +112,7 @@
                     if(obj==null){
                         title = '添加行政机构';
                     }else{
+                        id = obj.data.id;
                         title = '编辑行政机构';
                         $("#unitFormModel input[name='unitName']").val(obj.data.unit_name);
                     }
@@ -122,7 +124,9 @@
                     });
                     form.on('submit(unitForm)', function(data){
                         var postData = data.field;
-                        postData["id"] = id;
+                        if(obj!=null){
+                            postData["id"] = id;
+                        }
                         $.post("${unitSave}", postData, function (res) {
                             if(res.result){
                                 var msg = id==null?'添加成功。':'修改成功。';

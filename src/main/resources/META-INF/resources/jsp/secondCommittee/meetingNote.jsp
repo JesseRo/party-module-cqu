@@ -107,7 +107,6 @@
 <script type="text/javascript">
     function renderEditor(){
         var ueObj = UE.getEditor("meeting_content", { initialFrameWidth:821, initialFrameHeight: 250});
-        ueObj.setHeight(400);
         var uploadUrls = {
             file: '${uploadfileUrl}',
             image: '${uploadimageUrl}',
@@ -125,6 +124,9 @@
                 return this._bkGetActionUrl.call(this, action);
             }
         };
+        ueObj.ready(function() {
+            ueObj.setHeight(400);
+        });
     }
 
     $(function () {
