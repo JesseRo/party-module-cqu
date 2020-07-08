@@ -1,13 +1,16 @@
 package party.portlet.cqu.dao;
 
 import com.dt.springjdbc.dao.impl.PostgresqlDaoImpl;
+import hg.party.entity.party.MeetingStatistics;
 import org.osgi.service.component.annotations.Component;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import party.portlet.cqu.entity.Place;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component(immediate = true,service = StatisticsDao.class)
 public class StatisticsDao extends PostgresqlDaoImpl<Place> {
@@ -29,6 +32,30 @@ public class StatisticsDao extends PostgresqlDaoImpl<Place> {
         return jdbcTemplate.queryForList(sql);
     }
 
+    public List<MeetingStatistics> secondaryMeetingStatistics() {
+        String sql = "SELECT \n" +
+                "\tT.*,\n" +
+                "\tl.id,\n" +
+                "\tl.org_name,\n" +
+                "\tl.org_type,\n" +
+                "\tl.org_secretary \n" +
+                "FROM\n" +
+                "\t(\n" +
+                "\tSELECT P.org_id,\n" +
+                "\t\tCOUNT ( DISTINCT o.org_id ) as branch_count,\n" +
+                "\tcount(plan.id)\tas plan_count\n" +
+                "\tFROM\n" +
+                "\t\thg_party_meeting_plan_info plan\n" +
+                "\t\tLEFT JOIN hg_party_org o ON plan.organization_id = o.org_id\n" +
+                "\t\tLEFT JOIN hg_party_org P ON P.org_id = o.org_parent \n" +
+                "\tWHERE\n" +
+                "\t\to.historic = FALSE and plan.task_status > '0'\n" +
+                "\tGROUP BY\n" +
+                "\t\tP.org_id \n" +
+                "\t)\n" +
+                "\tT LEFT JOIN hg_party_org l ON T.org_id = l.org_id";
+        return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(MeetingStatistics.class));
+    }
 
     public Map<String, Object> countAllMeeting(String start, String end) {
         String sql = "SELECT COUNT\n" +

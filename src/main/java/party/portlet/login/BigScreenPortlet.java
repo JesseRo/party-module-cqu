@@ -10,6 +10,7 @@ import com.liferay.portal.kernel.util.WebKeys;
 import dt.session.SessionManager;
 import hg.party.dao.org.MemberDao;
 import hg.party.dao.org.OrgDao;
+import hg.party.entity.party.MeetingStatistics;
 import hg.util.ConstantsKey;
 import hg.util.PropertiesUtil;
 import org.osgi.service.component.annotations.Component;
@@ -26,6 +27,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Component(
         immediate = true,
@@ -77,35 +79,46 @@ public class BigScreenPortlet extends MVCPortlet {
         }
 
         List<Map<String, Object>> memberCounts = dao.countMember();
+        List<MeetingStatistics> statisticsResult = dao.secondaryMeetingStatistics();
+        Map<String, Long> meetingStatisticsMap = statisticsResult.stream()
+                .collect(Collectors.toMap(MeetingStatistics::getOrg_name, MeetingStatistics::getPlan_count));
+
         int allMemberCount = 0;
         List<String> secondaryNames = new ArrayList<>();
         List<Long> secondaryMemberCounts = new ArrayList<>();
 
         List<List<String>> secNameGroup = new ArrayList<>();
         List<List<Long>> secCountGroup = new ArrayList<>();
+        List<List<Long>> secMeetingCountGroup = new ArrayList<>();
         List<String> secNames = new ArrayList<>();
         List<Long> secCounts = new ArrayList<>();
+        List<Long> secMeetingCounts = new ArrayList<>();
         for (int i = 0; i < memberCounts.size(); i++) {
             if (i % 12 == 0) {
                 secNames = new ArrayList<>();
                 secCounts = new ArrayList<>();
                 secCountGroup.add(secCounts);
                 secNameGroup.add(secNames);
+                secMeetingCountGroup.add(secMeetingCounts);
             }
             Map<String, Object> memberCount = memberCounts.get(i);
+            String orgName = (String) memberCount.get("name");
             allMemberCount += (Long) memberCount.get("count");
-            secondaryNames.add((String) memberCount.get("name"));
+            secondaryNames.add(orgName);
             secondaryMemberCounts.add((Long) memberCount.get("count"));
-            secNames.add((String) memberCount.get("name"));
+            secNames.add(orgName);
             secCounts.add((Long) memberCount.get("count"));
+            secMeetingCounts.add(meetingStatisticsMap.getOrDefault(orgName, 0L));
         }
         renderRequest.setAttribute("memberGroups", secNameGroup);
         renderRequest.setAttribute("secNameGroup", gson.toJson(secNameGroup));
         renderRequest.setAttribute("secCountGroup", gson.toJson(secCountGroup));
+        renderRequest.setAttribute("secMeetingCountGroup", gson.toJson(secMeetingCountGroup));
         renderRequest.setAttribute("maxSecCount", secondaryMemberCounts.stream().mapToLong(p -> p).max().getAsLong());
 
 
         renderRequest.setAttribute("allMemberCount", allMemberCount);
+
 
 
         List<Map<String, Object>> meetingCounts = dao.countMeeting();
