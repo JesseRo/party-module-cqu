@@ -21,7 +21,7 @@ public class TransactionUtil {
         transactionDefinition = new DefaultTransactionDefinition();
         transactionDefinition.setIsolationLevel(TransactionDefinition.ISOLATION_READ_COMMITTED);
         transactionDefinition.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-        transactionDefinition.setTimeout(10);
+        transactionDefinition.setTimeout(30);
     }
 
     public void startTransaction() {
