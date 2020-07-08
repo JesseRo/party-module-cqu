@@ -459,7 +459,7 @@
             renderPlace('${meetingPlan.place}');
         }
         if('${meetingPlan.autoPhoneMsg}'!='' && '${meetingPlan.autoPhoneMsg}' !='null'){
-            var autoMsg = '${meetingPlan.autoPhoneMsg}' == '1'?'on':'off';
+            var autoMsg = '${meetingPlan.autoPhoneMsg}' == '1';
             renderAutoPhoneMsg(autoMsg);
         }
         function renderAutoPhoneMsg(autoMsg){
@@ -485,11 +485,6 @@
             var contact= '${meetingPlan.contact}';
             if(contact != '' && contact != 'null'){
                 $('#addMeetingPlanForm  select[name="contact"]').val(contact);
-            }
-            if('${meetingplan.autoPhoneMsg}' == '1'){
-                $("input[name='autoPhoneMsg']").val("on");
-            }else{
-                $("input[name='autoPhoneMsg']").val("off");
             }
             if('${participate}'!=''){
                 var arr = '${participate}'.split(",");
@@ -858,7 +853,7 @@
         });
         //监听指定开关
         form.on('switch(autoPhoneMsg)', function(data){
-            $("input[name='autoPhoneMsg']").val(data.othis);
+            $("input[name='autoPhoneMsg']").val(this.checked);
         });
         form.on('submit(meetingPlanSave)', function(data){
             var postData= data.field;

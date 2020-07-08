@@ -265,28 +265,6 @@
 
                     <div class="layui-form-item">
                         <div class="layui-inline">
-                            <label class="layui-form-label">婚姻状况</label>
-                            <div class="layui-input-inline">
-                                <select class="layui-input" name="marriage" id="marriage" >
-                                    <option value="" disabled>-请选择-</option>
-                                    <option value="已婚">已婚</option>
-                                    <option value="未婚">未婚</option>
-                                    <option value="离异">离异</option>
-                                    <option value="丧偶">丧偶</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="layui-inline">
-                            <label class="layui-form-label">党费标准</label>
-                            <div class="layui-input-inline">
-                                <input type="text" class="layui-input" name="major_title" id="major_title" onblur="check(this)"
-                                       onkeyup="this.value=this.value.replace(/[^0-9.]/g,'')" placeholder="（元/月）" value="${info.member_major_title }">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="layui-form-item">
-                        <div class="layui-inline">
                             <label class="layui-form-label layui-required">行政机构</label>
                             <div class="layui-input-inline">
                                 <select class="layui-input" name="unit" id="unit" lay-verify="select">
@@ -312,13 +290,22 @@
                         <div class="layui-inline">
                             <label class="layui-form-label">工&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号</label>
                             <div class="layui-input-inline">
-                                <input type="text" class="layui-input" name="jobNumber" id="jobNumber" value="${info.job_number }">
+                                <input type="text" class="layui-input" name="jobNumber" id="jobNumber" value="${info.job_number }" >
                             </div>
                         </div>
                         <div class="layui-inline">
                             <label class="layui-form-label">统一身份认证号</label>
                             <div class="layui-input-inline">
                                 <input type="text" class="layui-input" name="authNumber" id="authNumber" value="${info.auth_number }">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">党费标准</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" name="major_title" id="major_title" onblur="check(this)"
+                                       onkeyup="this.value=this.value.replace(/[^0-9.]/g,'')" placeholder="（元/月）" value="${info.member_major_title }">
                             </div>
                         </div>
                     </div>

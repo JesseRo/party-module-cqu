@@ -126,6 +126,7 @@
         };
         ueObj.ready(function() {
             ueObj.setHeight(200);
+            ueObj.setContent("${meetingNote.attachment}");
         });
     }
 
@@ -133,14 +134,11 @@
         layui.use('form', function(){
             var form = layui.form;
             renderEditor();
-            //表单提交
+             /*     表单提交*/
             form.on('submit(activityForm)', function(data){
 
                 $('#attendances').val(transfer.getData('attendance')
                     .map(function(att){return att.value}).join(","));
-                // layer.alert(JSON.stringify(data.field), {
-                //     title: '最终的提交信息'
-                // });
                 $('#isTemp').val(0);
                 $('#activityForm').submit();
                 return true;
@@ -161,15 +159,19 @@
             participants = participants.map(function (p) {
                 return {value: p.participant_id, title: p.member_name}
             });
+            var values = ${meetingNote.attendance};
+            if(values== null || values== ''){
+                values = [];
+            }
             transfer.render({
                 elem: '#attendance',
                 title: ['应到人员', '实到人员'],
                 height: 210,
                 id: 'attendance',
-                data: participants
+                data: participants,
+                value:values
             });
         });
-        //渲染
     });
 </script>
 </body>
