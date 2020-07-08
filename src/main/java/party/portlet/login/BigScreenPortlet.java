@@ -73,7 +73,6 @@ public class BigScreenPortlet extends MVCPortlet {
             } else if (orgCount.get("org_type").equals(ConstantsKey.ORG_TYPE_SECONDARY)) {
                 renderRequest.setAttribute("secondaryCount", orgCount.get("count"));
             }
-
         }
 
         List<Map<String, Object>> memberCounts = dao.countMember();
@@ -103,8 +102,6 @@ public class BigScreenPortlet extends MVCPortlet {
         renderRequest.setAttribute("secNameGroup", gson.toJson(secNameGroup));
         renderRequest.setAttribute("secCountGroup", gson.toJson(secCountGroup));
         renderRequest.setAttribute("maxSecCount", secondaryMemberCounts.stream().mapToLong(p -> p).max().getAsLong());
-
-
         renderRequest.setAttribute("allMemberCount", allMemberCount);
 
 
@@ -124,8 +121,11 @@ public class BigScreenPortlet extends MVCPortlet {
         renderRequest.setAttribute("campusMeetingCounts", gson.toJson(campusMeetingCounts));
         renderRequest.setAttribute("campusMeetingPercentage", gson.toJson(campusMeetingPercentage));
 
+        List<Map<String, Object>> meetings = dao.recentMeetings();
+        renderRequest.setAttribute("meetings", gson.toJson(meetings));
 
-//        List<Map<String, Object>> brunchCounts = dao.countBrunchBySecondary();
+
+
         String []weekDays = new String[]{"", "星期一", "星期二", "星期三", "星期四", "星期五","星期六", "星期日"};
         List<Map<String, Object>> logCounts = dao.countWeekLog();
         Long allLog = dao.countAllLog();

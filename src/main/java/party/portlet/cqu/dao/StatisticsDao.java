@@ -29,6 +29,13 @@ public class StatisticsDao extends PostgresqlDaoImpl<Place> {
         return jdbcTemplate.queryForList(sql);
     }
 
+    public List<Map<String, Object>> recentMeetings() {
+        String sql = "SELECT o.org_name, p.submit_time, p.start_time from hg_party_meeting_plan_info p\n" +
+                "LEFT JOIN hg_party_org o on p.organization_id = o.org_id\n" +
+                "where task_status > '1' ORDER BY p.id asc LIMIT 20 OFFSET 0 ";
+        return jdbcTemplate.queryForList(sql);
+    }
+
 
     public Map<String, Object> countAllMeeting(String start, String end) {
         String sql = "SELECT COUNT\n" +

@@ -23,6 +23,10 @@
     .report_list_container .report_list{
         padding: 0;
     }
+    .big_screen_container .first_container .data_report_container .report_list_container .report_list .report_item span{
+        overflow: hidden;
+        height: inherit;
+    }
 </style>
 <div class="big_screen_container">
     <div class="content_container">
@@ -347,22 +351,15 @@
     };
     //数据上报
     function renderReportList(){
-        var data = {
-            name:'音乐学院',
-            releaseTime:'08-20 09:00',
-            repoprtTime:'08-20 09:00',
-        };
+        var datas = ${meetings};
         var reportDom = '';
-        var renderItem = function(num) {
-            if(num <= 18){
-                reportDom += '<div class="report_item">' +
-                    '<span>' + data.name + num + '</span>' +
-                    '<span>' + data.releaseTime + '</span>' +
-                    '<span>' + data.repoprtTime + '</span></div>';
-                return renderItem(num+=1);
-            }
-        };
-        renderItem(1);
+        for(var i in datas){
+            var data = datas[i];
+            reportDom += '<div class="report_item">' +
+                '<span>' + data.org_name + '</span>' +
+                '<span>' + data.submit_time + '</span>' +
+                '<span>' + data.start_time + '</span></div>';
+        }
         $(".report_list").html(reportDom);
     };
     function autoScroll(){
