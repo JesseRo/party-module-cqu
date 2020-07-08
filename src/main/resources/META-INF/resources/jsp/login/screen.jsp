@@ -25,7 +25,6 @@
     .report_list_container .report_list {
         padding: 0;
     }
-<<<<<<< HEAD
 
     .big_screen_container .bottom_container .activity_outer_container .charts_dots {
         position: absolute;
@@ -45,11 +44,10 @@
 
     .big_screen_container .bottom_container .activity_outer_container .charts_dots li.on {
         background: #E60012;
-=======
+    }
     .big_screen_container .first_container .data_report_container .report_list_container .report_list .report_item span{
         overflow: hidden;
         height: inherit;
->>>>>>> fc45263ad133f9b50aad3e7395187b58e44513dd
     }
 </style>
 <div class="big_screen_container">

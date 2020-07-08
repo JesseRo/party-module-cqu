@@ -33,27 +33,10 @@ public class StatisticsDao extends PostgresqlDaoImpl<Place> {
     }
 
     public List<MeetingStatistics> secondaryMeetingStatistics() {
-        String sql = "SELECT \n" +
-                "\tT.*,\n" +
-                "\tl.id,\n" +
-                "\tl.org_name,\n" +
-                "\tl.org_type,\n" +
-                "\tl.org_secretary \n" +
-                "FROM\n" +
-                "\t(\n" +
-                "\tSELECT P.org_id,\n" +
-                "\t\tCOUNT ( DISTINCT o.org_id ) as branch_count,\n" +
-                "\tcount(plan.id)\tas plan_count\n" +
-                "\tFROM\n" +
-                "\t\thg_party_meeting_plan_info plan\n" +
-                "\t\tLEFT JOIN hg_party_org o ON plan.organization_id = o.org_id\n" +
-                "\t\tLEFT JOIN hg_party_org P ON P.org_id = o.org_parent \n" +
-                "\tWHERE\n" +
-                "\t\to.historic = FALSE and plan.task_status > '0'\n" +
-                "\tGROUP BY\n" +
-                "\t\tP.org_id \n" +
-                "\t)\n" +
-                "\tT LEFT JOIN hg_party_org l ON T.org_id = l.org_id";
+        String sql = "SELECT p.org_name, count(p.id) as branch_count FROM \"hg_party_org\" o " +
+                "INNER JOIN hg_party_org p on o.org_parent = p.org_id " +
+                "where o.historic = false and p.historic = false and p.org_type != 'organization' " +
+                "GROUP BY p.org_name";
         return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(MeetingStatistics.class));
     }
 

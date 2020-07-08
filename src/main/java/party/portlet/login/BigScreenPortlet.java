@@ -80,7 +80,7 @@ public class BigScreenPortlet extends MVCPortlet {
         List<Map<String, Object>> memberCounts = dao.countMember();
         List<MeetingStatistics> statisticsResult = dao.secondaryMeetingStatistics();
         Map<String, Long> meetingStatisticsMap = statisticsResult.stream()
-                .collect(Collectors.toMap(MeetingStatistics::getOrg_name, MeetingStatistics::getPlan_count));
+                .collect(Collectors.toMap(MeetingStatistics::getOrg_name, MeetingStatistics::getBranch_count));
 
         int allMemberCount = 0;
         List<String> secondaryNames = new ArrayList<>();
