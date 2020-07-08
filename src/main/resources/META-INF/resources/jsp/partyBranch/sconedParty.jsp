@@ -518,7 +518,6 @@
                 video: '${uploadvideoUrl}'
             };
             var ueditor = UE.getEditor("meetingContent", { initialFrameWidth:700,zIndex:100});
-            ueditor.setHeight(400);
             UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
             UE.Editor.prototype.getActionUrl = function(action) {
                 if (action == 'uploadimage' || action == 'uploadscrawl' || action == 'uploadimage') {
@@ -531,6 +530,9 @@
                     return this._bkGetActionUrl.call(this, action);
                 }
             };
+            ueditor.ready(function() {
+                ueditor.setHeight(400);
+            });
         }
         function renderUpload(){
             //拖拽上传

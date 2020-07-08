@@ -56,7 +56,7 @@ public class MemberRecoveryResourceCommand implements MVCResourceCommand {
 					}else{
 						transactionUtil.startTransaction();
 						int n = orgDao.recoveryMemberByUserId(userId,orgId);
-						User user = userDao.findUserByEthnicity(orgId);
+						User user = userDao.findUserByEthnicity(userId);
 						if(user == null){
 							User u = new User();
 							u.setUser_id(userId);

@@ -387,17 +387,17 @@
                        , keyword: $("#searchForm input[name=keyword]").val()
                    };
                    var cols = [[
-                       {type: 'checkbox'}
-                       ,{field: 'member_name', align:'center', title: '姓名',templet: function(d) {
+                       {type: 'checkbox', width:'8%'}
+                       ,{field: 'member_name', align:'center', width:'12%',title: '姓名',templet: function(d) {
                                return '<a href="/memberDetail?userId='+d.member_identity+'" >' + d.member_name + '</a>';
                            }
                            }
-                       ,{field: 'member_sex', align:'center', title: '性别',width:80}
-                       ,{field: 'member_identity', align:'center', title: '公民身份证', minWidth:200}
-                       ,{field: 'member_phone_number', align:'center', title: '联系电话'}
-                       ,{field: 'member_fomal_date', align:'center', title: '入党时间',width:160}
-                       ,{field: 'member_type', align:'center', title: '党员类型'}
-                       ,{field: 'historic', title: '操作', width:120, align:'center',toolbar: '#tableTool'}
+                       ,{field: 'member_sex', align:'center', width:'12%',title: '性别'}
+                       ,{field: 'member_identity', align:'center', width:'12%',title: '公民身份证'}
+                       ,{field: 'member_phone_number', align:'center', width:'12%',title: '联系电话'}
+                       ,{field: 'member_fomal_date', align:'center', width:'12%', title: '入党时间'}
+                       ,{field: 'member_type', align:'center', width:'12%', title: '党员类型'}
+                       ,{field: 'historic', title: '操作', width:'20%', align:'center',toolbar: '#tableTool'}
                    ]];
                    var ins = table.render({
                         elem: '#memberTable'
@@ -512,7 +512,7 @@
                     return pathHtml;
                 }
                 function deleteMember(userId){
-                    layer.confirm('您确认删除吗？', {
+                    layer.confirm('您确定将此条记录移入历史档案库吗？', {
                         btn: ['确定','取消'] //按钮
                     }, function(){
                         $.ajax({
@@ -521,10 +521,10 @@
                             dataType: "json",
                             success: function (succee) {
                                 if (succee.state == true) {
-                                    layer.msg("删除成功");
+                                    layer.msg("移入历史档案库成功。");
                                     renderTable(pageInfo.page,pageInfo.size);
                                 } else {
-                                    layer.msg("删除失败");
+                                    layer.msg("移入历史档案库失败！");
                                 }
                             }
                         });
@@ -652,7 +652,7 @@
                 当前位置：
                 <span class="layui-breadcrumb" lay-separator=">">
                     <a href="javascript:;">基础数据管理</a>
-                    <a href="javascript:;">党员信息管理</a>
+                    <a href="javascript:;">党员管理</a>
                 </span>
             </div>
             <div class="party_manage_content content_form content_info">
@@ -738,7 +738,7 @@
     <script type="text/html" id="tableTool">
         {{#  if(d.historic == false){ }}
             <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">移入历史档案库</a>
         {{#  } }}
         {{#  if(d.historic != false){ }}
         <a class="layui-btn layui-btn-xs" lay-event="recovery">恢复</a>

@@ -69,9 +69,9 @@ public class UserDao extends PostgresqlDaoImpl<User> {
 		args.add(ethnicity);
 		RowMapper<User> rowMapper = BeanPropertyRowMapper.newInstance(User.class);
 		users = jdbcTemplate.query(sql, rowMapper, args.toArray());
-		try {
+		if(users.size()>0){
 			return users.get(0);
-		} catch (Exception e) {
+		}else{
 			return null;
 		}
 	}

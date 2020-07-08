@@ -33,6 +33,7 @@
         }
         .layui-card-body{
             height: 200px;
+            overflow-y: scroll;
         }
     </style>
 </head>

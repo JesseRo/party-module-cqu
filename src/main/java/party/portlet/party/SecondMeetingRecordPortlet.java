@@ -72,7 +72,7 @@ public class SecondMeetingRecordPortlet extends MVCPortlet {
         int pageNo = ParamUtil.getInteger(renderRequest, "pageNo");
         String checkState = "";
 
-        int totalCount = partyMeetingPlanInfoService.count(startTime, endTime, meetType, meetTheme, orgId, branchId, checkState);
+        int totalCount = partyMeetingPlanInfoService.count(startTime, endTime, meetType, meetTheme, orgId, branchId, checkState,null);
 
         int pageSize = 8;
         int totalPage = totalCount / pageSize;
@@ -85,7 +85,7 @@ public class SecondMeetingRecordPortlet extends MVCPortlet {
             pageNo = totalPage;
         }
         List<Map<String, Object>> listResult = partyMeetingPlanInfoService.find(startTime, endTime, meetType, meetTheme, orgId, branchId, pageSize,
-                        (pageNo - 1) * pageSize, checkState);
+                        (pageNo - 1) * pageSize, checkState,null);
         renderRequest.setAttribute("list", listResult);
         renderRequest.setAttribute("pageNo", pageNo);
         renderRequest.setAttribute("totalPage", totalPage);

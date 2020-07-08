@@ -60,7 +60,7 @@ public class MeetingCount implements MVCResourceCommand {
         meetType = HtmlUtil.escape(meetType);
         boolean ifExportAll = ParamUtil.getBoolean(resourceRequest, "ifExportAll");//是否导出所有
         try {
-            List<Map<String, Object>> list = partyMeetingPlanInfoService.find(startTime, endTime, meetType, meetTheme, seconedId, branchId,null,null, "");
+            List<Map<String, Object>> list = partyMeetingPlanInfoService.find(startTime, endTime, meetType, meetTheme, seconedId, branchId,null,null, "",null);
 
 
             JSONArray jsonArray = new JSONArray();

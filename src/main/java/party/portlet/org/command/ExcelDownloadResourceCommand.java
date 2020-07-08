@@ -104,8 +104,7 @@ public class ExcelDownloadResourceCommand implements MVCResourceCommand {
                 headMap.put("contact", "党组织联系人");
                 headMap.put("phoneNumber", "联系电话");
                 headMap.put("orgDesc", "党组织类型");
-
-
+                
                 // SXSSFWorkbook workbook = ExcelUtil.exportExcelX(title, headMap, ja, null, 0, null);
                 SXSSFWorkbook workbook = ExcelUtil.exportExcelX(title, headMap, ja, null, 0, null);
                 try {

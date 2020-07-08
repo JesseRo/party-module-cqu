@@ -105,30 +105,34 @@
 
 </div>
 <script type="text/javascript">
-    var ueObj = UE.getEditor("meeting_content", { initialFrameWidth:821, initialFrameHeight: 250});
-    var uploadUrls = {
-        file: '${uploadfileUrl}',
-        image: '${uploadimageUrl}',
-        video: '${uploadvideoUrl}'
-    };
-    UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
-    UE.Editor.prototype.getActionUrl = function(action) {
-        if (action === 'uploadimage' || action === 'uploadscrawl' || action === 'uploadimage') {
-            return uploadUrls.image;
-        } else if (action === 'uploadvideo') {//视频
-            return uploadUrls.video;
-        } else if (action === 'uploadfile') {//附件
-            return uploadUrls.file;
-        } else {
-            return this._bkGetActionUrl.call(this, action);
-        }
-    };
-    $(function () {
-        layui.use('element', function(){
-            var element = layui.element;
+    function renderEditor(){
+        var ueObj = UE.getEditor("meeting_content", { initialFrameWidth:821, initialFrameHeight: 250});
+        var uploadUrls = {
+            file: '${uploadfileUrl}',
+            image: '${uploadimageUrl}',
+            video: '${uploadvideoUrl}'
+        };
+        UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
+        UE.Editor.prototype.getActionUrl = function(action) {
+            if (action === 'uploadimage' || action === 'uploadscrawl' || action === 'uploadimage') {
+                return uploadUrls.image;
+            } else if (action === 'uploadvideo') {//视频
+                return uploadUrls.video;
+            } else if (action === 'uploadfile') {//附件
+                return uploadUrls.file;
+            } else {
+                return this._bkGetActionUrl.call(this, action);
+            }
+        };
+        ueObj.ready(function() {
+            ueObj.setHeight(200);
         });
+    }
+
+    $(function () {
         layui.use('form', function(){
             var form = layui.form;
+            renderEditor();
             //表单提交
             form.on('submit(activityForm)', function(data){
 
