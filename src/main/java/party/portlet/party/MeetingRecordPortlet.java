@@ -70,6 +70,7 @@ public class MeetingRecordPortlet extends MVCPortlet {
         meetType = HtmlUtil.escape(meetType);
         int pageNo = ParamUtil.getInteger(renderRequest, "pageNo");
         String orgId = (String) SessionManager.getAttribute(renderRequest.getRequestedSessionId(), "department");
+        String orgType = (String) SessionManager.getAttribute(renderRequest.getRequestedSessionId(), "orgType");
         String checkState = "";
 
         //获取当前页
