@@ -402,15 +402,6 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
                 "left join hg_party_org as org_p on org_o.org_parent = org_p.org_id and org_p.org_type != 'organization' " +
                 "left join hg_party_place as plc on plan.place = plc.id " +
                 "\twhere 1 = 1";
-        if (!StringUtils.isEmpty(orgId)) {
-            Organization organization =orgDao.findByOrgId(orgId);
-            String orgType = organization.getOrg_type();
-            if(PartyOrgAdminTypeEnum.SECONDARY.getType().equals(orgType)){
-                sql = sql + " and  org_p.org_id='"+orgId+"'";
-            }else if(PartyOrgAdminTypeEnum.BRANCH.getType().equals(orgType)){
-                sql = sql + " and  org_o.org_id='"+orgId+"'";
-            }
-        }
         StringBuffer buffer = new StringBuffer(sql);
         if (!StringUtils.isEmpty(starDdate) && StringUtils.isEmpty(endDate)) {
             buffer.append(" AND plan.start_time>'" + starDdate + " 00:00:00' and plan.start_time<'" + starDdate + " 24:00:00'");
@@ -431,7 +422,7 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
             buffer.append(" AND plan.organization_id='" + branchId + "'");
         }
         if (!StringUtils.isEmpty(seconedId) && StringUtils.isEmpty(branchId)) {
-            buffer.append(" and (org_o.org_parent='" + seconedId + "'  or org_o.org_id='" + seconedId + "') and plan.organization_id=org_o.org_id");
+            buffer.append(" and (org_o.org_parent='" + seconedId + "'  or org_o.org_id='" + seconedId + "')");
         }
         if (!StringUtils.isEmpty(checkState)) {
             if ("t".equals(checkState)) {
@@ -457,9 +448,6 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
                 "left join hg_party_org as org_p on org_o.org_parent = org_p.org_id and org_p.org_type != 'organization' " +
                 "\twhere 1 = 1";
         StringBuffer buffer = new StringBuffer(sql);
-        if(!StringUtils.isEmpty(orgId)){
-            buffer.append(" and org_o.org_id='"+orgId+"'");
-        }
         if (!StringUtils.isEmpty(startDate) && StringUtils.isEmpty(endDate)) {
             buffer.append(" AND plan.start_time>'" + startDate + " 00:00:00' and plan.start_time<'" + startDate + " 24:00:00'");
         }
@@ -479,7 +467,7 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
             buffer.append(" AND plan.organization_id='" + branchId + "'");
         }
         if (!StringUtils.isEmpty(seconedId) && StringUtils.isEmpty(branchId)) {
-            buffer.append(" and (org_o.org_parent='" + seconedId + "'  or org_o.org_id='" + seconedId + "') and plan.organization_id=org_o.org_id");
+            buffer.append(" and (org_o.org_parent='" + seconedId + "'  or org_o.org_id='" + seconedId + "')");
         }
         if (!StringUtils.isEmpty(checkState)) {
             if ("t".equals(checkState)) {

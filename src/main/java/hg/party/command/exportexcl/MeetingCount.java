@@ -13,6 +13,10 @@ import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 import javax.servlet.http.HttpServletResponse;
 
+import dt.session.SessionManager;
+import hg.party.dao.org.OrgDao;
+import hg.party.entity.organization.Organization;
+import hg.util.ConstantsKey;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -42,7 +46,8 @@ import party.constants.PartyPortletKeys;
 public class MeetingCount implements MVCResourceCommand {
     @Reference
     private PartyMeetingPlanInfoService partyMeetingPlanInfoService;
-
+    @Reference
+    private OrgDao orgDao;
     @Override
     public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
             throws PortletException {
@@ -59,6 +64,13 @@ public class MeetingCount implements MVCResourceCommand {
         String meetType = ParamUtil.getString(resourceRequest, "meetType");//会议类型
         meetType = HtmlUtil.escape(meetType);
         boolean ifExportAll = ParamUtil.getBoolean(resourceRequest, "ifExportAll");//是否导出所有
+        String orgId = (String) SessionManager.getAttribute(resourceRequest.getRequestedSessionId(), "department");
+        Organization organization = orgDao.findByOrgId(orgId);
+        String orgType = organization.getOrg_type();
+
+        if (orgType.equals(ConstantsKey.ORG_TYPE_SECONDARY)) {
+            seconedId = orgId;
+        }
         try {
             List<Map<String, Object>> list = partyMeetingPlanInfoService.find(startTime, endTime, meetType, meetTheme, seconedId, branchId,null,null, "",null);
 

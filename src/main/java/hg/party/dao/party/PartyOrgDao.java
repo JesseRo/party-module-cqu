@@ -284,6 +284,31 @@ public class PartyOrgDao extends PostgresqlDaoImpl<Organization> {
         }
         return result;
     }
+    //学院开展活动统计
+    public List<BaseStatistics> searchActivitiesStatistics(Timestamp startTime, Timestamp endTime, String orgId) {
+        String secondarySql = "SELECT o.org_id as property, count(pl.id) as num FROM \"hg_party_meeting_plan_info\" pl\n" +
+                "LEFT JOIN hg_party_org o on pl.organization_id = o.org_id\n" +
+                "where o.org_parent = ? and o.historic = false and pl.start_time >= ? and pl.start_time < ?\n" +
+                "GROUP BY o.org_id";
+        String secondaryListSql = "select * from hg_party_org where org_parent = ? and historic = false";
+
+        List<Organization> secondaryList = jdbcTemplate.query(secondaryListSql, BeanPropertyRowMapper.newInstance(Organization.class), orgId);
+
+        List<BaseStatistics> secondaryCounts = jdbcTemplate.query(secondarySql, BeanPropertyRowMapper.newInstance(BaseStatistics.class), startTime, endTime);
+        Map<String, BaseStatistics> secondaryMap = secondaryCounts.stream().collect(Collectors.toMap(BaseStatistics::getProperty, p->p));
+        List<BaseStatistics> result = new ArrayList<>();
+        for (Organization organization : secondaryList) {
+            BaseStatistics s = secondaryMap.get(organization.getOrg_id());
+            BaseStatistics baseStatistics = new BaseStatistics();
+            baseStatistics.setProperty(organization.getOrg_name());
+            if (s != null){
+                baseStatistics.setNum(s.getNum());
+            }
+            result.add(baseStatistics);
+        }
+        return result;
+    }
+
 
     //党活动分类年月统计
     public List<BaseStatistics> activitiesTypeStatistic(int year, int month) {

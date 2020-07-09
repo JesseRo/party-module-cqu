@@ -15,6 +15,7 @@ import javax.portlet.RenderResponse;
 import dt.session.SessionManager;
 import hg.party.dao.org.OrgDao;
 import hg.party.entity.organization.Organization;
+import hg.util.ConstantsKey;
 import org.apache.log4j.Logger;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -61,7 +62,7 @@ public class MeetingRecordPortlet extends MVCPortlet {
             throws IOException, PortletException {
         logger.info("MeetingRecordPortlet doView...");
         String orgId = (String) SessionManager.getAttribute(renderRequest.getRequestedSessionId(), "department");
-        Organization organization =orgDao.findByOrgId(orgId);
+        Organization organization = orgDao.findByOrgId(orgId);
         String orgType = organization.getOrg_type();
         String startTime = ParamUtil.getString(renderRequest, "startTime");//开始时间
         startTime = HtmlUtil.escape(startTime);
@@ -78,9 +79,13 @@ public class MeetingRecordPortlet extends MVCPortlet {
         int pageNo = ParamUtil.getInteger(renderRequest, "pageNo");
         String checkState = "";
 
+        if (orgType.equals(ConstantsKey.ORG_TYPE_SECONDARY)) {
+            seconedId = orgId;
+        }
+
         //获取当前页
         int totalCount = partyMeetingPlanInfoService.count(startTime, endTime, meetType,
-				meetTheme, seconedId, branchId, checkState,orgId);
+                meetTheme, seconedId, branchId, checkState, orgId);
         int pageSize = 8;
         int totalPage = totalCount / pageSize;
         if (totalCount % pageSize != 0) {
@@ -100,7 +105,7 @@ public class MeetingRecordPortlet extends MVCPortlet {
         renderRequest.setAttribute("totalPage", totalPage);
         renderRequest.setAttribute("startTime", startTime);
         renderRequest.setAttribute("endTime", endTime);
-        renderRequest.setAttribute("seconedId", orgId);
+        renderRequest.setAttribute("seconedId", seconedId);
         renderRequest.setAttribute("branchId", branchId);
         renderRequest.setAttribute("meetTheme", meetTheme);
         renderRequest.setAttribute("meetType", meetType);

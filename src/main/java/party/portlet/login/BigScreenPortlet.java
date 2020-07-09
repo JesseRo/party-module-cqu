@@ -136,6 +136,7 @@ public class BigScreenPortlet extends MVCPortlet {
 
         List<Map<String, Object>> meetings = dao.recentMeetings();
         renderRequest.setAttribute("meetings", gson.toJson(meetings));
+        renderRequest.setAttribute("meetingTotalCount", total);
 
 
 

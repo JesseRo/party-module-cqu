@@ -61,7 +61,7 @@ public class MemberMeetingDao extends PostgresqlDaoImpl<MemberMeeting> {
 				"\tWHERE\n" +
 				"\t\to.historic = FALSE and plan.task_status > '0'\n" +
 				"\t\tand p.org_id in (" + suffix + ")\n" +
-				"\t\tand plan.start_time >= ?::TIMESTAMP and plan.start_time <= ?::TIMESTAMP\n" +
+				"\t\tand plan.start_time >= ?::date and plan.start_time <= ?::date\n" +
 				"\tGROUP BY\n" +
 				"\t\tP.org_id \n" +
 				"\t)\n" +
@@ -86,7 +86,7 @@ public class MemberMeetingDao extends PostgresqlDaoImpl<MemberMeeting> {
 				"\tWHERE\n" +
 				"\t\to.historic = FALSE " +
 				"\t\tand o.org_parent in (" + suffix + ")\n" +
-				"\t\tand plan.start_time >= ?::TIMESTAMP and plan.start_time <= ?::TIMESTAMP\n" +
+				"\t\tand plan.start_time >= ?::date and plan.start_time <= ?::date\n" +
 				" GROUP BY\n" +
 				"\to.org_parent,\n" +
 				"\t( M.member_is_leader = '是' AND M.member_is_leader IS NOT NULL )";
@@ -111,7 +111,7 @@ public class MemberMeetingDao extends PostgresqlDaoImpl<MemberMeeting> {
 				"\to.historic = FALSE \n" +
 				"\tAND plan.task_status > '0' \n" +
 				"\t\tand o.org_id in (" + suffix + ")\n" +
-				"\t\tand plan.start_time >= ?::TIMESTAMP and plan.start_time <= ?::TIMESTAMP\n" +
+				"\t\tand plan.start_time >= ?::date and plan.start_time <= ?::date\n" +
 				"GROUP BY\n" +
 				"\to.ID";
 		return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(MeetingStatistics.class), params.toArray());
@@ -133,7 +133,7 @@ public class MemberMeetingDao extends PostgresqlDaoImpl<MemberMeeting> {
 				"\tLEFT JOIN hg_party_org o ON M.member_org = o.org_id \n" +
 				"\tLEFT JOIN hg_party_meeting_plan_info plan ON par.meeting_id = plan.meeting_id \n" +
 				"WHERE o.org_id in (" + suffix + ")\n" +
-				"\t\tand plan.start_time >= ?::TIMESTAMP and plan.start_time <= ?::TIMESTAMP\n" +
+				"\t\tand plan.start_time >= ?::date and plan.start_time <= ?::date\n" +
 				"GROUP BY\n" +
 				"\to.org_id,\n" +
 				"\t( M.member_is_leader = '是' AND M.member_is_leader IS NOT NULL )";

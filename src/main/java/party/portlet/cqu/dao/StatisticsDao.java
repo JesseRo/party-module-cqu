@@ -33,17 +33,17 @@ public class StatisticsDao extends PostgresqlDaoImpl<Place> {
     }
 
     public List<MeetingStatistics> secondaryMeetingStatistics() {
-        String sql = "SELECT p.org_name, count(p.id) as branch_count FROM \"hg_party_org\" o " +
+        String sql = "SELECT p.org_name_short as org_name, count(p.id) as branch_count FROM \"hg_party_org\" o " +
                 "INNER JOIN hg_party_org p on o.org_parent = p.org_id " +
                 "where o.historic = false and p.historic = false and p.org_type != 'organization' " +
-                "GROUP BY p.org_name";
+                "GROUP BY p.org_name_short";
         return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(MeetingStatistics.class));
     }
 
     public List<Map<String, Object>> recentMeetings() {
         String sql = "SELECT o.org_name, p.submit_time, p.start_time from hg_party_meeting_plan_info p\n" +
                 "LEFT JOIN hg_party_org o on p.organization_id = o.org_id\n" +
-                "where task_status > '1' ORDER BY p.id asc LIMIT 20 OFFSET 0 ";
+                "where task_status > '0' ORDER BY p.id asc LIMIT 20 OFFSET 0 ";
         return jdbcTemplate.queryForList(sql);
     }
 
@@ -63,7 +63,7 @@ public class StatisticsDao extends PostgresqlDaoImpl<Place> {
                 "\tWHERE\n" +
                 "\t\tplan.task_status > '0' \n" +
                 "\t\tAND ( MEMBER.member_is_leader = '是' AND MEMBER.member_is_leader IS NOT NULL ) \n" +
-                "\t\tand plan.start_time >= ?::TIMESTAMP and plan.start_time <= ?::TIMESTAMP\n" +
+                "\t\tand plan.start_time >= ?::date and plan.start_time <= ?::date\n" +
                 "\t) \n" +
                 "FROM\n" +
                 "\thg_party_meeting_plan_info plan\n" +
@@ -71,7 +71,7 @@ public class StatisticsDao extends PostgresqlDaoImpl<Place> {
                 "\tLEFT JOIN hg_party_member MEMBER ON M.participant_id = MEMBER.member_identity \n" +
                 "WHERE\n" +
                 "\tplan.task_status > '0'" +
-                "\tand plan.start_time >= ?::TIMESTAMP and plan.start_time <= ?::TIMESTAMP";
+                "\tand plan.start_time >= ?::date and plan.start_time <= ?::date";
         return jdbcTemplate.queryForMap(sql, start, end, start, end);
     }
 
@@ -90,7 +90,7 @@ public class StatisticsDao extends PostgresqlDaoImpl<Place> {
                 "WHERE\n" +
                 "\ttask_status > '0' and MEMBER.member_is_leader = '是'\n" +
                 "\tand (o.org_id = ? or o.org_parent = ?)\n" +
-                "\t\tand plan.start_time >= ?::TIMESTAMP and plan.start_time <= ?::TIMESTAMP)\n" +
+                "\t\tand plan.start_time >= ?::date and plan.start_time <= ?::date)\n" +
                 "FROM\n" +
                 "\thg_party_meeting_plan_info plan\n" +
                 "\tLEFT JOIN hg_party_org o ON plan.organization_id = o.org_id \n" +
@@ -98,13 +98,13 @@ public class StatisticsDao extends PostgresqlDaoImpl<Place> {
                 "\tLEFT JOIN hg_party_member MEMBER ON M.participant_id = MEMBER.member_identity \n" +
                 "WHERE\n" +
                 "\ttask_status > '0'\tand (o.org_id = ? or o.org_parent = ?)\n" +
-                "\t\tand plan.start_time >= ?::TIMESTAMP and plan.start_time <= ?::TIMESTAMP\n" +
+                "\t\tand plan.start_time >= ?::date and plan.start_time <= ?::date\n" +
                 "\t\n";
         return jdbcTemplate.queryForMap(sql, orgId, orgId, start, end, orgId, orgId, start, end);
     }
 
     public List<Map<String, Object>> countMember() {
-        String sql = "select sec.org_name as name, count(m.id) as count from hg_party_member m left join hg_party_org brunch on m.member_org = brunch.org_id left join hg_party_org sec on brunch.org_parent = sec.org_id  where m.historic = false and brunch.historic = false group by sec.org_name";
+        String sql = "select sec.org_name_short as name, count(m.id) as count from hg_party_member m left join hg_party_org brunch on m.member_org = brunch.org_id left join hg_party_org sec on brunch.org_parent = sec.org_id  where m.historic = false and brunch.historic = false group by sec.org_name_short";
         return  jdbcTemplate.queryForList(sql);
     }
 

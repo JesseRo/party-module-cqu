@@ -73,7 +73,7 @@
                     </div>
                     <div class="organ_item">
                         <p class="organ_title">党组织生活</p>
-                        <p class="organ_num">35</p>
+                        <p class="organ_num">${meetingTotalCount}</p>
                     </div>
                     <div class="logo_container">
                         <img src="/images/index-logo.png"/>
