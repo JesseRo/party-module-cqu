@@ -134,6 +134,9 @@ public class PartyOrgServer {
 	public List<BaseStatistics> searchActivitiesStatistics(Timestamp startTime, Timestamp  endTime){
 		return partyOrgDao.searchActivitiesStatistics(startTime,endTime);
 	}
+	public List<BaseStatistics> searchActivitiesStatistics(Timestamp startTime, Timestamp  endTime, String orgId){
+		return partyOrgDao.searchActivitiesStatistics(startTime,endTime,orgId);
+	}
 	//党活动分类年月统计
 	public List<BaseStatistics> activitiesTypeStatistic(int year, int month){
 		return partyOrgDao.activitiesTypeStatistic(year,month);

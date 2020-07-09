@@ -50,7 +50,7 @@ public class BigScreenPortlet extends MVCPortlet {
     @Reference
     private StatisticsDao dao;
 
-    private Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm").create();
+    private Gson gson = new GsonBuilder().setDateFormat("MM-dd HH:mm").create();
 
     @Override
     public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
@@ -136,6 +136,7 @@ public class BigScreenPortlet extends MVCPortlet {
 
         List<Map<String, Object>> meetings = dao.recentMeetings();
         renderRequest.setAttribute("meetings", gson.toJson(meetings));
+        renderRequest.setAttribute("meetingTotalCount", total);
 
 
 

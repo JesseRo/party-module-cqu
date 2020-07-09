@@ -79,7 +79,7 @@
 							<p>二级党组织组织生活开展次数</p>
 						</div>
 						<div class="attend_rate_container" id="brunch_meeting_container"></div>
-						<p class="desc_text"><a id="collegeMore" onclick="window.location.href='/attend_charts'">查看更多</a></p>
+						<p class="desc_text"><a id="collegeMore" onclick="window.location.href='/attend_charts'" style="cursor: pointer;">查看更多</a></p>
 					</div>
 					<div class="views_group">
 						<div class="text_container">
