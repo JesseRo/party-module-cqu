@@ -132,7 +132,7 @@
 					{field: 'start_time', align:'center', title: '开始时间',width:'12.14%',templet: function(d){return new Date(d.start_time).format("yyyy-MM-dd hh:mm:ss");}},
 					{field: 'member_name', align:'center', title: '联系人',width:'12.14%'},
 					{field: 'member_phone_number', align:'center', title: '联系电话',width:'12.14%'},
-					{field: 'note_status', align:'center', title: '审核状态',width:'12.14%',templet: function(d){
+					{field: 'note_status', align:'center', title: '审核状态',width:'12.14%',minWidth:'200px',templet: function(d){
 							var status = '';
 							switch(parseInt(d.note_status)){
 								case 1:status = '待审核';break;

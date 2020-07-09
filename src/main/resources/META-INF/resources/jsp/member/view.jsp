@@ -737,11 +737,13 @@
     </c:if>
     <script type="text/html" id="tableTool">
         {{#  if(d.historic == false){ }}
-            <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">移入历史档案库</a>
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">移入历史档案库</a>
         {{#  } }}
+    <c:if test="${role=='organization'}">
         {{#  if(d.historic != false){ }}
         <a class="layui-btn layui-btn-xs" lay-event="recovery">恢复</a>
         {{#  } }}
+    </c:if>
     </script>
 </body>
