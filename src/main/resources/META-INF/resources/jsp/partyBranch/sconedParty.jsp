@@ -283,7 +283,6 @@
                             <label class="layui-form-label layui-required">计划内容：</label>
                             <div class="layui-input-inline meetingContent">
                                 <script id="meetingContent" name="meetingContent" type="text/plain">
-                                    ${meetingPlan.content}
                                 </script>
                             </div>
                         </div>
@@ -459,7 +458,7 @@
             renderPlace('${meetingPlan.place}');
         }
         if('${meetingPlan.autoPhoneMsg}'!='' && '${meetingPlan.autoPhoneMsg}' !='null'){
-            var autoMsg = '${meetingPlan.autoPhoneMsg}' == '1'?'on':'off';
+            var autoMsg = '${meetingPlan.autoPhoneMsg}' == '1';
             renderAutoPhoneMsg(autoMsg);
         }
         function renderAutoPhoneMsg(autoMsg){
@@ -485,11 +484,6 @@
             var contact= '${meetingPlan.contact}';
             if(contact != '' && contact != 'null'){
                 $('#addMeetingPlanForm  select[name="contact"]').val(contact);
-            }
-            if('${meetingplan.autoPhoneMsg}' == '1'){
-                $("input[name='autoPhoneMsg']").val("on");
-            }else{
-                $("input[name='autoPhoneMsg']").val("off");
             }
             if('${participate}'!=''){
                 var arr = '${participate}'.split(",");
@@ -532,6 +526,10 @@
             };
             ueditor.ready(function() {
                 ueditor.setHeight(400);
+                var content = '${meetingPlan.content}';
+                if(content!=null &&content !=''&&content!='null'){
+                    ueditor.setContent(content);
+                }
             });
         }
         function renderUpload(){
@@ -858,7 +856,7 @@
         });
         //监听指定开关
         form.on('switch(autoPhoneMsg)', function(data){
-            $("input[name='autoPhoneMsg']").val(data.othis);
+            $("input[name='autoPhoneMsg']").val(this.checked);
         });
         form.on('submit(meetingPlanSave)', function(data){
             var postData= data.field;

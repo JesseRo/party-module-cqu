@@ -118,7 +118,7 @@
     <a class="layui-btn layui-btn-xs" lay-event="edit"> 编辑</a>
     {{#  } }}
     <a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
-    {{#  if(d.task_status != '0' && d.task_status != '1' && d.task_status != '2' && d.task_status != '3'){ }}
+    {{#  if(d.task_status != '0' && d.task_status != '1' && d.task_status != '2' && d.task_status != '3' && d.note_status !='2' && d.note_status !='3'){ }}
     <a class="layui-btn layui-btn-xs" lay-event="sendPhoneMsg"> 短信通知</a>
     {{#  } }}
 </script>

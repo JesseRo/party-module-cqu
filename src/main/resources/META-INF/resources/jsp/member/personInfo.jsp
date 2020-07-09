@@ -197,23 +197,6 @@
 
                     <div class="layui-form-item">
                         <div class="layui-inline">
-                            <label class="layui-form-label">婚姻状况:</label>
-                            <div class="layui-input-inline">
-                                <label class="layui-form-label-text">${info.member_marriage }</label>
-                            </div>
-                        </div>
-                        <div class="layui-inline">
-                            <label class="layui-form-label">党费标准:</label>
-                            <div class="layui-input-inline">
-                                <label class="layui-form-label-text">
-                                    <c:if test="${info.member_major_title ==null || info.member_major_title=='' }"></c:if>
-                                    <c:if test="${info.member_major_title !=null && info.member_major_title!='' }">${info.member_major_title } 元/月</label></c:if>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="layui-form-item">
-                        <div class="layui-inline">
                             <label class="layui-form-label">行政机构:</label>
                             <div class="layui-input-inline">
                                 <c:forEach items="${units}" var="u">
@@ -239,6 +222,16 @@
                             <label class="layui-form-label">统一身份认证号:</label>
                             <div class="layui-input-inline">
                                 <label class="layui-form-label-text">${info.auth_number }</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">党费标准:</label>
+                            <div class="layui-input-inline">
+                                <label class="layui-form-label-text">
+                                    <c:if test="${info.member_major_title ==null || info.member_major_title=='' }"></c:if>
+                                    <c:if test="${info.member_major_title !=null && info.member_major_title!='' }">${info.member_major_title } 元/月</label></c:if>
                             </div>
                         </div>
                     </div>

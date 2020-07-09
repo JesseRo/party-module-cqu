@@ -13,6 +13,8 @@ import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
 import dt.session.SessionManager;
+import hg.party.dao.org.OrgDao;
+import hg.party.entity.organization.Organization;
 import org.apache.log4j.Logger;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -50,12 +52,17 @@ public class MeetingRecordPortlet extends MVCPortlet {
     Logger logger = Logger.getLogger(MeetingRecordPortlet.class);
     @Reference
     private PartyMeetingPlanInfoService partyMeetingPlanInfoService;
+    @Reference
+    private OrgDao orgDao;
     private int pageSize = 8;//每页条数
 
     @Override
     public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
             throws IOException, PortletException {
         logger.info("MeetingRecordPortlet doView...");
+        String orgId = (String) SessionManager.getAttribute(renderRequest.getRequestedSessionId(), "department");
+        Organization organization =orgDao.findByOrgId(orgId);
+        String orgType = organization.getOrg_type();
         String startTime = ParamUtil.getString(renderRequest, "startTime");//开始时间
         startTime = HtmlUtil.escape(startTime);
         String endTime = ParamUtil.getString(renderRequest, "endTime");//开始时间
@@ -69,8 +76,6 @@ public class MeetingRecordPortlet extends MVCPortlet {
         String meetType = ParamUtil.getString(renderRequest, "meetType");//会议类型
         meetType = HtmlUtil.escape(meetType);
         int pageNo = ParamUtil.getInteger(renderRequest, "pageNo");
-        String orgId = (String) SessionManager.getAttribute(renderRequest.getRequestedSessionId(), "department");
-        String orgType = (String) SessionManager.getAttribute(renderRequest.getRequestedSessionId(), "orgType");
         String checkState = "";
 
         //获取当前页
@@ -99,6 +104,7 @@ public class MeetingRecordPortlet extends MVCPortlet {
         renderRequest.setAttribute("branchId", branchId);
         renderRequest.setAttribute("meetTheme", meetTheme);
         renderRequest.setAttribute("meetType", meetType);
+        renderRequest.setAttribute("orgType", orgType);
         super.doView(renderRequest, renderResponse);
     }
 

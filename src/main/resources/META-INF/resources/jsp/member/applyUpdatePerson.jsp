@@ -235,26 +235,6 @@
                         </div>
                     </div>
 
-                    <div class="layui-form-item">
-                        <div class="layui-inline">
-                            <label class="layui-form-label layui-required">婚姻状况</label>
-                            <div class="layui-input-inline">
-                                <select class="layui-input" name="marriage" id="marriage" lay-verify="select">
-                                    <option value="" disabled>-请选择-</option>
-                                    <option value="已婚">已婚</option>
-                                    <option value="未婚">未婚</option>
-                                    <option value="离异">离异</option>
-                                    <option value="丧偶">丧偶</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="layui-inline">
-                            <label class="layui-form-label">党费标准:</label>
-                            <div class="layui-input-inline">
-                                <label class="layui-form-label-text">${info.member_major_title } 元/月</label>
-                            </div>
-                        </div>
-                    </div>
 
                     <div class="layui-form-item">
                         <div class="layui-inline">
@@ -290,6 +270,14 @@
                             <label class="layui-form-label">统一身份认证号</label>
                             <div class="layui-input-inline">
                                 <label class="layui-form-label-text">${info.auth_number }</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">党费标准:</label>
+                            <div class="layui-input-inline">
+                                <label class="layui-form-label-text">${info.member_major_title } 元/月</label>
                             </div>
                         </div>
                     </div>
