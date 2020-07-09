@@ -126,7 +126,9 @@
         };
         ueObj.ready(function() {
             ueObj.setHeight(200);
-            ueObj.setContent("${meetingNote.attachment}");
+            if('${meetingNote}'!='' && '${meetingNote}'!='null'){
+                ueObj.setContent("${meetingNote.attachment}");
+            }
         });
     }
 
@@ -159,9 +161,9 @@
             participants = participants.map(function (p) {
                 return {value: p.participant_id, title: p.member_name}
             });
-            var values = ${meetingNote.attendance};
-            if(values== null || values== ''){
-                values = [];
+            var values = [];
+            if("${attendance}"!="" && "${attendance}"!="null"){
+                values = "${attendance}".split(",");
             }
             transfer.render({
                 elem: '#attendance',

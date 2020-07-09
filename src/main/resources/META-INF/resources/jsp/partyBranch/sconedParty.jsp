@@ -283,7 +283,6 @@
                             <label class="layui-form-label layui-required">计划内容：</label>
                             <div class="layui-input-inline meetingContent">
                                 <script id="meetingContent" name="meetingContent" type="text/plain">
-                                    ${meetingPlan.content}
                                 </script>
                             </div>
                         </div>
@@ -527,6 +526,10 @@
             };
             ueditor.ready(function() {
                 ueditor.setHeight(400);
+                var content = '${meetingPlan.content}';
+                if(content!=null &&content !=''&&content!='null'){
+                    ueditor.setContent(content);
+                }
             });
         }
         function renderUpload(){

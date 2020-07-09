@@ -15,9 +15,9 @@
 		.content_form .content_table    _container{
 			height: calc(100% - 250px);
 		}
-		
+
 		th,td{
-		     text-align: left; 
+		     text-align: left;
 		}
 		.content_info .content_form .form-group .control-label {
              text-align: right;
@@ -58,7 +58,7 @@
 	   $(".party_branch").empty();
 	   $(".party_branch").append('<option value="">请选择</option>')
 	   var branchId=$(".party_branch_id").val();
-	   var url="${assigned}";	  
+	   var url="${assigned}";
 	   var pid=seconedId;
 	   var data={paramType:"partyBranch",pid:pid};
 	   $.ajax({
@@ -71,12 +71,12 @@
 		        	 $(".party_branch").prepend('<option selected="selected" value="'+result[i].org_id+'">'+result[i].org_name+'</option>')
 		         }else{
 		        	 $(".party_branch").append('<option value="'+result[i].org_id+'">'+result[i].org_name+'</option>')
- 
+
 		         }
 			  }
 	          }
 		   });
-} 
+}
 $(function(){
 	   var orgId="${seconedId}";
 	   var meetTheme="${theme}";
@@ -93,14 +93,14 @@ $(function(){
  		   success:function(result){
  			         for(var i=0;i<result.length;i++){
  			        	 if(orgId&&orgId==result[i].org_id){
- 			        		 $(".sconed_party").prepend('<option selected="selected" value="'+result[i].org_id+'">'+result[i].org_name+'</option>') 
+ 			        		 $(".sconed_party").prepend('<option selected="selected" value="'+result[i].org_id+'">'+result[i].org_name+'</option>')
  			        	 }else{
- 			        		 $(".sconed_party").append('<option value="'+result[i].org_id+'">'+result[i].org_name+'</option>') 
+ 			        		 $(".sconed_party").append('<option value="'+result[i].org_id+'">'+result[i].org_name+'</option>')
  			        	 }
  			         }
  		     }
 	   });
-	  
+
 	   $(".sconed_party").change(function(){
 		   $(".party_branch").empty();
 		   $(".party_branch").append('<option value="">--选择--</option>')
@@ -118,14 +118,14 @@ $(function(){
 	 	          }
 	 		   });
 	   });
-	    	   
+
        $.ajax({
-           url: '${getMeetingTypeAndTheme}',  
-           type: 'POST',  
+           url: '${getMeetingTypeAndTheme}',
+           type: 'POST',
            data: "",
            dataType:'json',
-           async: false,   
-           success: function (data) {  
+           async: false,
+           success: function (data) {
                    for(var i=0;i<data.length;i++){
                     var c=data[i];
                    	if(c.type=='meetingType'){
@@ -134,24 +134,24 @@ $(function(){
                        }else{
                       		 $("select[name='meetType']").append('<option value="'+c.resources_value+'">'+c.resources_value+'</option>');
                        }
-                   	}	
+                   	}
                    	if(c.type=='news'){
                    		if(meetTheme&&c.resources_value == meetTheme){
                        		$("select[name='theme']").prepend('<option selected="selected" value="'+c.resources_value+'">'+c.resources_value+'</option>');
                         }else{
                        		 $("select[name='theme']").append('<option value="'+c.resources_value+'">'+c.resources_value+'</option>');
                         }
-                   	}	
+                   	}
                   }
-           },  
-           error: function (data) {  
-                  alert("获取数据失败");  
-           }  
+           },
+           error: function (data) {
+                  alert("获取数据失败");
+           }
     });
-       getBranch(seconedId);   
-});	   
-	   
-	   
+       getBranch(seconedId);
+});
+
+
 	</script>
 </head>
 <body>
@@ -198,7 +198,7 @@ $(function(){
 							</div>
 						</c:if>
 
-						<c:if test="${orgType != 'branch'} ">
+						<c:if test="${orgType != 'branch' }">
 						   <div class="col-sm-6 col-xs-12">
 								<span class="col-sm-3 col-xs-3 control-label">党支部</span>
 								<div class="col-sm-9 col-xs-9">

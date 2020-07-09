@@ -15,9 +15,9 @@
 		.content_form .content_table    _container{
 			height: calc(100% - 250px);
 		}
-		
+
 		th,td{
-		     text-align: left; 
+		     text-align: left;
 		}
 		.content_info .content_form .form-group .control-label {
              text-align: right;
@@ -76,7 +76,7 @@
 	  }
 	  }
 	});
-} 
+}
 $(function(){
 	   var orgId="${seconedId}";
 	   <%--var meetTheme="${theme}";--%>
@@ -93,14 +93,14 @@ $(function(){
  		   success:function(result){
  			         for(var i=0;i<result.length;i++){
  			        	 if(orgId&&orgId==result[i].org_id){
- 			        		 $(".sconed_party").prepend('<option selected="selected" value="'+result[i].org_id+'">'+result[i].org_name+'</option>') 
+ 			        		 $(".sconed_party").prepend('<option selected="selected" value="'+result[i].org_id+'">'+result[i].org_name+'</option>')
  			        	 }else{
- 			        		 $(".sconed_party").append('<option value="'+result[i].org_id+'">'+result[i].org_name+'</option>') 
+ 			        		 $(".sconed_party").append('<option value="'+result[i].org_id+'">'+result[i].org_name+'</option>')
  			        	 }
  			         }
  		     }
 	   });
-	  
+
 	   $(".sconed_party").change(function(){
 		   $(".party_branch").empty();
 		   $(".party_branch").append('<option value="">--选择--</option>')
@@ -118,10 +118,10 @@ $(function(){
 	 	          }
 	 		   });
 	   });
-       getBranch(seconedId);   
-});	   
-	   
-	   
+       getBranch(seconedId);
+});
+
+
 	</script>
 </head>
 <body>
@@ -214,6 +214,7 @@ $(function(){
 									<td>上报主题</td>
 									<td>开展时间</td>
 									<td>联系人</td>
+									<td>联系电话</td>
 									<td>参会领导</td>
 								</tr>
 							</thead>

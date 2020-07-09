@@ -11,6 +11,7 @@ import hg.party.server.dwonlistserver.DownListServer;
 import org.apache.log4j.Logger;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+import org.springframework.util.StringUtils;
 import party.constants.PartyPortletKeys;
 
 import javax.portlet.Portlet;
@@ -65,6 +66,12 @@ public class MeetingNotePortlet extends MVCPortlet {
         req.setAttribute("formId", formId);
         req.setAttribute("meeting", meetingData);
         req.setAttribute("meetingNote", meetingNote);
+        String attendance = "";
+        if(!StringUtils.isEmpty(meetingNote.getAttendance())){
+            attendance = meetingNote.getAttendance();
+            attendance =  attendance.replace("[","").replace("]","").replace("\"","");
+        }
+        req.setAttribute("attendance", attendance);
         req.setAttribute("participants", gson.toJson(participants));
         super.doView(req, res);
     }
