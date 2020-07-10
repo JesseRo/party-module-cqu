@@ -19,6 +19,7 @@
 <!-- 常用人员，组的增加，修改，删除 -->
 <portlet:resourceURL id="/hg/paersonAndGroupAddDelete" var="personAndGroupAddDelete"/>
 <portlet:resourceURL id="/hg/meetingPlan/save" var="saveMeetingPlan"/>
+
 <html>
 <head>
     <style type="text/css">
@@ -409,6 +410,8 @@
                 <a class="layui-layer-btn1">取消</a>
             </div>
         </form>
+        <input type="hidden" class="planContent" value='${meetingPlan.content}'>
+
     </div>
 
 </div>
@@ -526,10 +529,7 @@
             };
             ueditor.ready(function() {
                 ueditor.setHeight(400);
-                var content = '${meetingPlan.content}';
-                if(content!=null &&content !=''&&content!='null'){
-                    ueditor.setContent(content);
-                }
+                ueditor.setContent($('.planContent').val());
             });
         }
         function renderUpload(){

@@ -1,5 +1,25 @@
 package hg.party.command.PartyBranch;
 
+import com.google.gson.Gson;
+import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
+import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
+import com.liferay.portal.kernel.upload.UploadPortletRequest;
+import com.liferay.portal.kernel.util.FileUtil;
+import com.liferay.portal.kernel.util.HtmlUtil;
+import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.PortalUtil;
+import dt.session.SessionManager;
+import hg.party.dao.partyBranch.PartyBranchDao;
+import hg.party.entity.party.MeetingPlan;
+import hg.party.server.partyBranch.PartyBranchService;
+import hg.party.unity.ResourceProperties;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.springframework.util.StringUtils;
+import party.constants.PartyPortletKeys;
+
+import javax.portlet.ActionRequest;
+import javax.portlet.ActionResponse;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -8,33 +28,6 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.Properties;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
-
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
-import javax.servlet.http.HttpServletRequest;
-
-import com.google.gson.Gson;
-import org.apache.poi.xdgf.usermodel.section.geometry.Ellipse;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
-import org.springframework.util.StringUtils;
-
-import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
-import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
-import com.liferay.portal.kernel.upload.UploadPortletRequest;
-import com.liferay.portal.kernel.util.FileUtil;
-import com.liferay.portal.kernel.util.HtmlUtil;
-import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.PortalUtil;
-
-import dt.session.SessionManager;
-import hg.party.dao.partyBranch.PartyBranchDao;
-import hg.party.entity.party.MeetingPlan;
-import hg.party.server.partyBranch.PartyBranchService;
-import hg.party.unity.ResourceProperties;
-import party.constants.PartyPortletKeys;
 
 //党支部报送计划
 @Component(

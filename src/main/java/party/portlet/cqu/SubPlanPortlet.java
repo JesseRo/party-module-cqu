@@ -1,6 +1,5 @@
 package party.portlet.cqu;
 
-import com.alibaba.fastjson.JSON;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.util.PortalUtil;
 import dt.session.SessionManager;
@@ -12,7 +11,6 @@ import org.apache.axis.utils.StringUtils;
 import org.apache.log4j.Logger;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-import org.springframework.web.util.HtmlUtils;
 import party.constants.PartyOrgAdminTypeEnum;
 import party.constants.PartyPortletKeys;
 
@@ -94,7 +92,6 @@ public class SubPlanPortlet extends MVCPortlet {
 
         logger.info("members size:"+members.size());
         renderRequest.setAttribute("organization",organization);
-        meetingPlan.setContent(HtmlUtils.htmlUnescape(meetingPlan.getContent()));
         renderRequest.setAttribute("meetingPlan",meetingPlan);
         renderRequest.setAttribute("conferenceTypes",CONFERENCE_TYPES);
         renderRequest.setAttribute("timeLasts",TIME_LASTS);
