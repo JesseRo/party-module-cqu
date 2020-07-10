@@ -61,8 +61,8 @@
 					<input type="text" class="layui-input" id="dateSelect">
 				</div>
 			</div>
-			<div class="charts_container attend_charts_container">
-				<div class="view_charts" id="attendEcharts" style="width: 100%; height: 100%;"></div>
+			<div class="charts_container attend_charts_container" style="overflow-y: scroll;">
+				<div class="view_charts" id="attendEcharts" style="width: 100%; height: 200%;"></div>
 			</div>
 		</div>
 	</div>

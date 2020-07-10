@@ -294,7 +294,7 @@ public class PartyOrgDao extends PostgresqlDaoImpl<Organization> {
 
         List<Organization> secondaryList = jdbcTemplate.query(secondaryListSql, BeanPropertyRowMapper.newInstance(Organization.class), orgId);
 
-        List<BaseStatistics> secondaryCounts = jdbcTemplate.query(secondarySql, BeanPropertyRowMapper.newInstance(BaseStatistics.class), startTime, endTime);
+        List<BaseStatistics> secondaryCounts = jdbcTemplate.query(secondarySql, BeanPropertyRowMapper.newInstance(BaseStatistics.class), orgId, startTime, endTime);
         Map<String, BaseStatistics> secondaryMap = secondaryCounts.stream().collect(Collectors.toMap(BaseStatistics::getProperty, p->p));
         List<BaseStatistics> result = new ArrayList<>();
         for (Organization organization : secondaryList) {
