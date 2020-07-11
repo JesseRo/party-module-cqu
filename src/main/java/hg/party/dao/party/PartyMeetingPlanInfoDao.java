@@ -385,9 +385,7 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
     }
 
     //bb
-    public List<Map<String, Object>> find(String starDdate, String endDate, String meetType, String theme,
-                              String seconedId, String branchId, Integer pageSize, Integer startPage, String checkState,String orgId) {
-        String sql = "\n" +
+    public List<Map<String, Object>> find(String starDdate, String endDate, String meetType, String theme, String seconedId, String branchId, Integer pageSize, Integer startPage, String checkState,String orgId) { String sql = "\n" +
                 "\tSELECT\n" +
                 "\t\tplan.task_status AS plan_state,org_o.org_name AS branch_name,plc.place as place_name," +
                 " us.user_name as check_person_name, contact.user_name as contact_name, host.user_name as host_name, \n" +
@@ -423,6 +421,12 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
         }
         if (!StringUtils.isEmpty(seconedId) && StringUtils.isEmpty(branchId)) {
             buffer.append(" and (org_o.org_parent='" + seconedId + "'  or org_o.org_id='" + seconedId + "')");
+        }
+        if(!StringUtils.isEmpty(orgId)){
+            Organization organization =  orgDao.findByOrgId(orgId);
+            if(!organization.getOrg_type().equals(PartyOrgAdminTypeEnum.ORGANIZATION.getType())){
+                buffer.append(" and org_o.org_id='" + orgId + "')");
+            }
         }
         if (!StringUtils.isEmpty(checkState)) {
             if ("t".equals(checkState)) {
@@ -468,6 +472,12 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
         }
         if (!StringUtils.isEmpty(seconedId) && StringUtils.isEmpty(branchId)) {
             buffer.append(" and (org_o.org_parent='" + seconedId + "'  or org_o.org_id='" + seconedId + "')");
+        }
+        if(!StringUtils.isEmpty(orgId)){
+            Organization organization =  orgDao.findByOrgId(orgId);
+            if(!organization.getOrg_type().equals(PartyOrgAdminTypeEnum.ORGANIZATION.getType())){
+                buffer.append(" and org_o.org_id='" + orgId + "')");
+            }
         }
         if (!StringUtils.isEmpty(checkState)) {
             if ("t".equals(checkState)) {

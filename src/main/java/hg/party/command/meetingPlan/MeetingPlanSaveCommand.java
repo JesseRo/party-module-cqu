@@ -17,6 +17,7 @@ import hg.util.result.ResultUtil;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.springframework.util.StringUtils;
+import org.springframework.web.util.HtmlUtils;
 import party.constants.PartyPortletKeys;
 
 import javax.portlet.ResourceRequest;
@@ -68,6 +69,7 @@ public class MeetingPlanSaveCommand implements MVCResourceCommand {
         boolean graft = ParamUtil.getBoolean(resourceRequest, "graft");
         String meetingId = ParamUtil.getString(resourceRequest, "meetingId");
         String attachment = ParamUtil.getString(resourceRequest, "attachment");
+        attachment = HtmlUtils.htmlUnescape(attachment);
         String content = ParamUtil.getString(resourceRequest, "meetingContent");
         boolean autoPhoneMsg = ParamUtil.getBoolean(resourceRequest, "autoPhoneMsg");
         campus = HtmlUtil.escape(campus);
