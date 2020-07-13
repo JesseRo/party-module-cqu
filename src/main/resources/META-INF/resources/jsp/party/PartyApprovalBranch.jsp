@@ -100,7 +100,7 @@
 				<input type="hidden" class="layui-layer-input"  name="meetingId" value="1">
 				<div class="layui-form-item">
 					<div class="layui-inline">
-						<label class="layui-form-label layui-required">驳回理由:</label>
+						<label class="layui-form-label layui-d">驳回理由:</label>
 						<div class="layui-input-inline">
 							<select name="rejectReason" lay-verify="select" >
 								<option value="">-请选择-</option>

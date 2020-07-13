@@ -269,7 +269,7 @@
                         <div class="layui-inline">
                             <label class="layui-form-label">统一身份认证号</label>
                             <div class="layui-input-inline">
-                                <label class="layui-form-label-text">${info.auth_number }</label>
+                                <input type="text" class="layui-input" name="authNumber"  value="${info.auth_number }">
                             </div>
                         </div>
                     </div>
@@ -277,7 +277,7 @@
                         <div class="layui-inline">
                             <label class="layui-form-label">党费标准:</label>
                             <div class="layui-input-inline">
-                                <label class="layui-form-label-text">${info.member_major_title } 元/月</label>
+                                <input type="text" class="layui-input" name="major_title"  value="${info.member_major_title }"> 元/月
                             </div>
                         </div>
                     </div>

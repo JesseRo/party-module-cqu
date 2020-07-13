@@ -178,12 +178,7 @@
 					<div class="layui-inline">
 						<label class="layui-form-label layui-required">驳回理由:</label>
 						<div class="layui-input-inline">
-							<select name="rejectReason" lay-verify="select" >
-								<option value="">-请选择-</option>
-								<c:forEach var="reason" items="${reasonList }">
-									<option value="${reason.resources_value}">${reason.resources_value}</option>
-								</c:forEach>
-							</select>
+							<input  class="layui-layer-input"  name="rejectReason" lay-verify="required" >
 						</div>
 					</div>
 				</div>

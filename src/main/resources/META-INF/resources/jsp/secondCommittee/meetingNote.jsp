@@ -86,7 +86,8 @@
                 <div class="layui-inline ueditor_container">
                     <label class="layui-form-label">会议纪要：</label>
                     <div class="layui-input-inline">
-                        <script id="meeting_content" name="meeting_content"  type="text/plain">${meetingNote.attachment}</script>
+                        <script id="meeting_content" name="meeting_content"  type="text/plain"></script>
+                        <input type="hidden" id="meeting_contentStr" value="${meetingNote.attachment}">
                     </div>
                 </div>
                 <div class="layui-inline btn_group">
@@ -126,6 +127,7 @@
         };
         ueObj.ready(function() {
             ueObj.setHeight(200);
+            ueObj.setContent($("#meeting_contentStr").val());
         });
     }
 

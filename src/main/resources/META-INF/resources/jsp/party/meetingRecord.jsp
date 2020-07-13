@@ -163,7 +163,7 @@ $(function(){
 			当前位置：
 			<span class="layui-breadcrumb" lay-separator=">">
 				<a href="javascript:;">数据统计</a>
-				<a href="javascript:;">组织活动检索</a>
+				<a href="javascript:;">组织生活检索</a>
 			</span>
 		</div>
 		<div class="bg_white_container">
