@@ -384,7 +384,7 @@ button.cancal.btn.btn-default {
     }).extend({
         treeSelect: 'treeSelect/treeSelect'
     });
-    layui.use(['treeSelect','form','layer'], function () {
+    layui.use(['treeSelect','form','layer','table'], function () {
         var treeSelect= layui.treeSelect,
             layer = layui.layer,
             table = layui.table,
