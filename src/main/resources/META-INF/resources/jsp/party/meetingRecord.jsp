@@ -262,21 +262,8 @@ $(function(){
 							<tbody>
 								<c:forEach items="${list}" var="info" varStatus="status">
 									<tr>
-		<%--	                            <td data-label="二级党组织" class="Party_name">	                           --%>
-		<%--	                                <c:if test="${not empty info.second_name }"> --%>
-		<%--	                            	 ${info.second_name }--%>
-		<%--									</c:if>--%>
-		<%--									 <c:if test="${ empty info.second_name }"> --%>
-		<%--	                            	  ${info.branch_name }--%>
-		<%--									</c:if>--%>
-		<%--	                            </td>--%>
-		<%--	                            <td data-label="党支部">                           --%>
-		<%--	                                <c:if test="${not empty info.second_name }"> --%>
-		<%--	                            	 ${info.branch_name }--%>
-		<%--									</c:if>--%>
-		<%--	                            </td>--%>
-										<td data-label="党支部" title="${info.branch_name }">
-											${info.branch_name }
+										<td data-label="党支部" title="${info.org_name }">
+											${info.org_name }
 										</td>
 										<td data-label="会议类型" title="${info.meeting_type }">${info.meeting_type }</td>
 		<%--	                            <td data-label="发布时间" class="publish_time"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${info.release_time }" /></td>--%>

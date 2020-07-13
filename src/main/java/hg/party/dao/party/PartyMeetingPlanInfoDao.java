@@ -425,7 +425,7 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
         if(!StringUtils.isEmpty(orgId)){
             Organization organization =  orgDao.findByOrgId(orgId);
             if(!organization.getOrg_type().equals(PartyOrgAdminTypeEnum.ORGANIZATION.getType())){
-                buffer.append(" and org_o.org_id='" + orgId + "')");
+                buffer.append(" and org_o.org_id='" + orgId + "'");
             }
         }
         if (!StringUtils.isEmpty(checkState)) {
@@ -476,7 +476,7 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
         if(!StringUtils.isEmpty(orgId)){
             Organization organization =  orgDao.findByOrgId(orgId);
             if(!organization.getOrg_type().equals(PartyOrgAdminTypeEnum.ORGANIZATION.getType())){
-                buffer.append(" and org_o.org_id='" + orgId + "')");
+                buffer.append(" and org_o.org_id='" + orgId + "'");
             }
         }
         if (!StringUtils.isEmpty(checkState)) {
@@ -762,4 +762,46 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
         }
     }
 
+    public PostgresqlPageResult<Map<String, Object>> searchMeetingRecordPage(int page, int size, String startTime, String endTime, String meetType, String meetTheme, String seconedId, String branchId, String checkState, String orgId) {
+        if (size <= 0){
+            size = 10;
+        }
+        StringBuffer sb = new StringBuffer("SELECT plan.task_status AS plan_state,org_o.org_name, contact.user_name as contact_name,plan.*");
+        sb.append(" FROM hg_party_meeting_plan_info AS plan");
+        sb.append(" LEFT JOIN hg_users_info AS contact ON plan.contact = contact.user_id ");
+        sb.append(" left  join hg_party_org as org_o on plan.organization_id = org_o.org_id left join hg_party_org  org_p on org_o.org_parent = org_p.org_id");
+        sb.append(" where 1=1");
+        if (!StringUtils.isEmpty(startTime)) {
+            sb.append(" AND plan.start_time>'" + startTime + " 00:00:00'");
+        }
+        if (!StringUtils.isEmpty(endTime)) {
+            sb.append(" and plan.start_time<'" + endTime + " 24:00:00'");
+        }
+        if (!StringUtils.isEmpty(meetType)) {
+            sb.append(" and plan.meeting_type='" + meetType + "'");
+        }
+        if (!StringUtils.isEmpty(meetTheme)) {
+            sb.append(" and plan.meeting_theme like '%" + meetTheme + "%'");
+        }
+        if(!StringUtils.isEmpty(orgId)){
+            Organization organization =  orgDao.findByOrgId(orgId);
+            if(organization.getOrg_type().equals(PartyOrgAdminTypeEnum.ORGANIZATION.getType())){
+                if (!StringUtils.isEmpty(seconedId)) {
+                    sb.append(" AND org_p.org_id='" + seconedId + "'");
+                }
+                if (!StringUtils.isEmpty(branchId)) {
+                    sb.append(" and org_o.org_id='" + branchId + "'");
+                }
+            }else if(organization.getOrg_type().equals(PartyOrgAdminTypeEnum.SECONDARY.getType())){
+                sb.append(" AND org_p.org_id='" + orgId + "'");
+                if (!StringUtils.isEmpty(branchId)) {
+                    sb.append(" and org_o.org_id='" + branchId + "'");
+                }
+            }else{
+                sb.append(" and org_o.org_id='" + orgId + "'");
+            }
+        }
+        sb.append(" order by plan.submit_time desc ");
+        return postGresqlFindPageBySql(page, size, sb.toString());
+    }
 }

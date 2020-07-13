@@ -5,7 +5,9 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import dt.session.SessionManager;
+import hg.party.dao.org.OrgDao;
 import hg.party.dao.party.PartyMeetingPlanInfoDao;
+import hg.party.entity.organization.Organization;
 import org.apache.log4j.Logger;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -44,7 +46,8 @@ public class SecondLeaderMeetingPortlet extends MVCPortlet {
     private PartyMeetingPlanInfoDao partyMeetingPlanInfoDao;
     //	private DateTimeFormatter dateTimeFormatter = new PortalSimpleDateFormat("yyyy-MM-dd HH:")
     private int pageSize = 8;//每页条数
-
+    @Reference
+    private OrgDao orgDao;
     @Override
     public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
             throws IOException, PortletException {
@@ -66,7 +69,8 @@ public class SecondLeaderMeetingPortlet extends MVCPortlet {
         //获取当前页
 
         int totalPage = pageResult.getTotalPage();
-
+        Organization organization = orgDao.findByOrgId(orgId);
+        String orgType = organization.getOrg_type();
         renderRequest.setAttribute("list", pageResult.getList());
         renderRequest.setAttribute("pageNo", pageNo);
         renderRequest.setAttribute("totalPage", totalPage);
@@ -75,6 +79,7 @@ public class SecondLeaderMeetingPortlet extends MVCPortlet {
         renderRequest.setAttribute("seconedId", seconedId);
 		renderRequest.setAttribute("branchId", branchId);
 		renderRequest.setAttribute("leader", leader);
+        renderRequest.setAttribute("orgType", orgType);
         super.doView(renderRequest, renderResponse);
     }
 

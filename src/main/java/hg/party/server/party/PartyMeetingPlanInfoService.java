@@ -215,4 +215,9 @@ public class PartyMeetingPlanInfoService {
         }
         return ResultUtil.success(meetingId);
     }
+
+    public PostgresqlPageResult<Map<String, Object>> searchMeetingRecordPage(int pageNo, int size, String startTime, String endTime, String meetType, String meetTheme, String seconedId, String branchId, String checkState, String orgId) {
+        return   partyMeetingPlanInfo.searchMeetingRecordPage(pageNo, size,startTime, endTime, meetType,
+                meetTheme, seconedId, branchId, checkState, orgId);
+    }
 }

@@ -142,26 +142,27 @@ $(function(){
 				</portlet:actionURL>
 				<form class="form-horizontal" role="form" action="${findURL }" method="post">
 					<div class="form-group">
-
-					 	<div class="col-sm-6 col-xs-12">
-							<span class="col-sm-3 col-xs-3 control-label" >二级党组织</span>
-							<div class="col-sm-9 col-xs-9">
-								<select class="form-control sconed_party"  name="seconedId" id="seconedId">
-									<option value="">请选择</option>
-								</select>
+						<c:if test="${orgType == 'organization' }">
+							<div class="col-sm-6 col-xs-12">
+								<span class="col-sm-3 col-xs-3 control-label" >二级党组织</span>
+								<div class="col-sm-9 col-xs-9">
+									<select class="form-control sconed_party"  name="seconedId" id="seconedId">
+										<option value="">请选择</option>
+									</select>
+								</div>
 							</div>
-						</div>
+						</c:if>
+						<c:if test="${orgType != 'branch' }">
+							<div class="col-sm-6 col-xs-12">
+								<span class="col-sm-3 col-xs-3 control-label">党支部</span>
+								<div class="col-sm-9 col-xs-9">
+									<input type="hidden" class="party_branch_id" value="${branchId}">
+									<select class="form-control party_branch"  name="branchId" id="branchId">
 
-					   	<div class="col-sm-6 col-xs-12">
-							<span class="col-sm-3 col-xs-3 control-label">党支部</span>
-							<div class="col-sm-9 col-xs-9">
-								<input type="hidden" class="party_branch_id" value="${branchId}">
-								<select class="form-control party_branch"  name="branchId" id="branchId">
-
-								</select>
+									</select>
+								</div>
 							</div>
-						</div>
-
+						</c:if>
 						<div class="col-sm-6 col-xs-12">
 							<span class="col-sm-3 col-xs-3 control-label">开始时间</span>
 							<div class="col-sm-9 col-xs-9">

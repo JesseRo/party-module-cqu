@@ -16,6 +16,7 @@ import dt.session.SessionManager;
 import hg.party.dao.org.OrgDao;
 import hg.party.entity.organization.Organization;
 import hg.util.ConstantsKey;
+import hg.util.postgres.PostgresqlPageResult;
 import org.apache.log4j.Logger;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -62,8 +63,6 @@ public class MeetingRecordPortlet extends MVCPortlet {
             throws IOException, PortletException {
         logger.info("MeetingRecordPortlet doView...");
         String orgId = (String) SessionManager.getAttribute(renderRequest.getRequestedSessionId(), "department");
-        Organization organization = orgDao.findByOrgId(orgId);
-        String orgType = organization.getOrg_type();
         String startTime = ParamUtil.getString(renderRequest, "startTime");//开始时间
         startTime = HtmlUtil.escape(startTime);
         String endTime = ParamUtil.getString(renderRequest, "endTime");//开始时间
@@ -78,30 +77,22 @@ public class MeetingRecordPortlet extends MVCPortlet {
         meetType = HtmlUtil.escape(meetType);
         int pageNo = ParamUtil.getInteger(renderRequest, "pageNo");
         String checkState = "";
-
+        Organization organization = orgDao.findByOrgId(orgId);
+        String orgType = organization.getOrg_type();
         if (orgType.equals(ConstantsKey.ORG_TYPE_SECONDARY)) {
             seconedId = orgId;
         }
-
-        //获取当前页
-        int totalCount = partyMeetingPlanInfoService.count(startTime, endTime, meetType,
-                meetTheme, seconedId, branchId, checkState, orgId);
-        int pageSize = 8;
-        int totalPage = totalCount / pageSize;
-        if (totalCount % pageSize != 0) {
+        PostgresqlPageResult<Map<String, Object>> data = new PostgresqlPageResult(null, 0,0);
+        if(orgId!=null && !StringUtils.isEmpty(orgId)){
+            data = partyMeetingPlanInfoService.searchMeetingRecordPage(pageNo, pageSize,startTime, endTime, meetType,
+                    meetTheme, seconedId, branchId, checkState, orgId);
+        }
+        renderRequest.setAttribute("list", data.getList());
+        renderRequest.setAttribute("pageNo", pageNo);
+        int totalPage = data.getCount() / pageSize;
+        if (data.getCount() % pageSize != 0) {
             totalPage = totalPage + 1;
         }
-        if (pageNo > totalPage) {
-            pageNo = totalPage;
-        }
-        if (pageNo <= 0) {
-            pageNo = 1;//默认当前页为1
-        }
-        List<Map<String, Object>> listResult =
-                partyMeetingPlanInfoService.find(startTime, endTime, meetType, meetTheme, seconedId, branchId, pageSize,
-                        (pageNo - 1) * pageSize, checkState, orgId);
-        renderRequest.setAttribute("list", listResult);
-        renderRequest.setAttribute("pageNo", pageNo);
         renderRequest.setAttribute("totalPage", totalPage);
         renderRequest.setAttribute("startTime", startTime);
         renderRequest.setAttribute("endTime", endTime);
