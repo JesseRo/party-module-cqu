@@ -4,6 +4,7 @@
 <portlet:resourceURL id="/org/adminSave" var="adminSave" />
 <portlet:resourceURL id="/org/admin/query" var="findOrgAdmin" />
 <portlet:resourceURL id="/org/users" var="findOrgUsers" />
+<portlet:resourceURL id="/org/users/page" var="findOrgUsersPage" />
 <portlet:resourceURL id="/org/tree" var="orgTreeUrl" />
 <head>
   <%--   <link rel="stylesheet" href="${basePath}/css/party_organization.css?v=5"/> --%>
@@ -360,6 +361,7 @@ button.cancal.btn.btn-default {
                         当前组织：
                         <span class="layui-breadcrumb"  style="visibility: visible;" id="org-path">
                         </span>
+                        <table id="adminMemberTable" lay-filter="adminMemberTable"></table>
                     </div>
                     <form class="layui-form" action=""  id="orgManager">
                         <div class="layui-block">
@@ -385,8 +387,13 @@ button.cancal.btn.btn-default {
     layui.use(['treeSelect','form','layer'], function () {
         var treeSelect= layui.treeSelect,
             layer = layui.layer,
+            table = layui.table,
             form = layui.form;
         var checkedNode = null;
+        var pageInfo = {
+            page:1,
+            size:10
+        };
         treeSelect.render({
             // 选择器
             elem: '#orgTree',
@@ -422,7 +429,59 @@ button.cancal.btn.btn-default {
             }
             return pathHtml;
         }
+        function renderAdminTable(page,size){
+            var  where = {
+                id: checkedNode.id
+            };
+            var cols = [[
+                {field: 'member_name', align:'center', width:'40%',title: '姓名',templet: function(d) {
+                        return '<a href="/memberDetail?userId='+d.member_identity+'" >' + d.member_name + '</a>';
+                    }
+                }
+                ,{field: 'member_identity', align:'center', width:'40%',title: '公民身份证'}
+                ,{field: 'historic', title: '操作', width:'20%', align:'center',toolbar: '#tableTool'}
+            ]];
+            var ins = table.render({
+                elem: '#adminMemberTable'
+                ,where: where
+                ,height:450
+                ,url: '${findOrgUsersPage}'//数据接口
+                ,page: {
+                    limit:size,   //每页条数
+                    limits:[10,15,20],
+                    prev:'&lt;上一页',
+                    curr:page,
+                    next:'下一页&gt;',
+                    theme: '#FFB800',
+                    groups:4
+                }
+                ,cols: cols
+                ,done: function(res, curr, count){
+                    pageInfo.page = curr;
+                    pageInfo.size = ins.config.limit;
+                    if(count<(pageInfo.page-1)*pageInfo.size){
+                        renderTable(pageInfo.page-1,pageInfo.size);
+                    }
+                }
+            });
+            $(".layui-table-view .layui-table-page").addClass("layui-table-page-center");
+            $(".layui-table-view .layui-table-page").removeClass("layui-table-page");
+            //监听事件
+            table.on('tool(adminMemberTable)', function(obj){
+                switch(obj.event){
+                    case 'delete':
+                        //deleteAdminMember(obj.data.member_identity);
+                        break;
+                    case 'edit':
+                        break;
+                };
+            });
+        }
+        function deleteAdminMember(){
+
+        }
         function renderOrgManagers(){
+            renderAdminTable(1,pageInfo.size);
             var postData = {
                 id:checkedNode.id
             };
@@ -469,5 +528,8 @@ button.cancal.btn.btn-default {
             return false;
         });
     });
+</script>
+<script type="text/html" id="tableTool">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">移除管理员</a>
 </script>
 </body>

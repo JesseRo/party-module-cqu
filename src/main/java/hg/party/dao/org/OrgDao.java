@@ -1,8 +1,9 @@
 package hg.party.dao.org;
 
-import com.dt.springjdbc.dao.impl.PostgresqlDaoImpl;
 import hg.party.entity.organization.Organization;
 import hg.party.entity.party.TreeNode;
+import hg.util.postgres.HgPostgresqlDaoImpl;
+import hg.util.postgres.PostgresqlPageResult;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -28,7 +29,7 @@ import java.util.stream.Stream;
 
 
 @Component(immediate = true, service = OrgDao.class)
-public class OrgDao extends PostgresqlDaoImpl<Organization> {
+public class OrgDao extends HgPostgresqlDaoImpl<Organization> {
     @Reference
     private RetentionDao retentionDao;
 
@@ -803,5 +804,13 @@ public class OrgDao extends PostgresqlDaoImpl<Organization> {
         } else {
             return this.jdbcTemplate.queryForList(exeSql.toString(), new Object[]{pageSize, pageNo * pageSize});
         }
+    }
+
+    public PostgresqlPageResult<Map<String, Object>> searchOrgUsersPage(int page, int size, int orgId) {
+        if (size <= 0){
+            size = 10;
+        }
+        StringBuffer sb = new StringBuffer("select i.user_id,i.user_name from hg_party_org_admin a left join hg_users_info i on a.admin_id = i.user_id left join hg_party_org o on a.org_id = o.org_id where o.id=?");
+        return postGresqlFindPageBySql(page, size, sb.toString(),orgId);
     }
 }

@@ -218,12 +218,7 @@ public class MemberDao extends HgPostgresqlDaoImpl<Member> {
             return null;
         }
         String sql = "select * from hg_party_member where historic = false and member_org in ('" + String.join("','", orgIds) + "') order by member_party_committee, member_org";
-        try {
-            return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Member.class));
-        } catch (Exception e) {
-            // TODO: handle exception
-            return null;
-        }
+        return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Member.class));
     }
 
     public List<Member> findByOrg(List<String> orgIds, boolean is) {

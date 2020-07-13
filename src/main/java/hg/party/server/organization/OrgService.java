@@ -5,6 +5,7 @@ import hg.party.dao.org.OrgDao;
 import hg.party.entity.organization.Organization;
 import hg.party.entity.party.TreeNode;
 import hg.util.ConstantsKey;
+import hg.util.postgres.PostgresqlPageResult;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import party.constants.PartyOrgAdminTypeEnum;
@@ -169,5 +170,9 @@ public class OrgService {
             }
         }
         return childrenStati;
+    }
+
+    public PostgresqlPageResult<Map<String, Object>> searchOrgUsersPage(int page, int size, int orgId) {
+        return orgDao.searchOrgUsersPage(page,size,orgId);
     }
 }
