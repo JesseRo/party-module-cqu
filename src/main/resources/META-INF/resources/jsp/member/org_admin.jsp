@@ -331,7 +331,17 @@ button.cancal.btn.btn-default {
 .party_manage_container .layui-form .layui-form-item.btn-save .layui-btn {
     width: 160px;
 }
-
+    .table_outer_box > table thead, tbody tr {
+        display: table-row !important;
+        width: 100%;
+        table-layout: auto;
+    }
+    th, tr{
+        text-align:center !important;
+    }
+    .layui-table-page-center{
+        text-align: center;
+    }
 </style>
 </head>
 <body>
@@ -355,24 +365,30 @@ button.cancal.btn.btn-default {
                                     <input type="text" name="orgTree" id="orgTree" lay-filter="orgTree" placeholder="请选择组织" class="layui-input">
                                 </div>
                             </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label orgTree-label">是否管理员:</label>
+                                <div class="layui-input-inline">
+                                    <select>
+                                        <option vlue="">-全部-</option>
+                                        <option vlue="1">-是-</option>
+                                        <option vlue="0">-否-</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <div class="layui-input-inline keyword">
+                                    <input type="text" name="keyword"  placeholder="请输入姓名、身份证关键字" class="layui-input">
+                                </div>
+                                <button type="button"  class="layui-btn layui-btn-warm"  lay-submit="" lay-filter="searchForm"><icon class="layui-icon layui-icon-search"></icon>搜索</button>
+                            </div>
                         </div>
                     </form>
                     <div class="breadcrumb_group">
                         当前组织：
                         <span class="layui-breadcrumb"  style="visibility: visible;" id="org-path">
                         </span>
-                        <table id="adminMemberTable" lay-filter="adminMemberTable"></table>
                     </div>
-                    <form class="layui-form" action=""  id="orgManager">
-                        <div class="layui-block">
-                            <label class="layui-form-label">管理员：</label>
-                            <div class="layui-input-inline" id="manager-select">
-                            </div>
-                        </div>
-                        <div class="layui-form-item btn-save">
-                            <button  type="button" class="layui-btn layui-btn-radius layui-btn-warm" lay-submit="" lay-filter="orgManager" id="org_manager_save">保 存</button>
-                        </div>
-                    </form>
+                    <table id="adminMemberTable" lay-filter="adminMemberTable"></table>
                 </div>
             </div>
         </div>
@@ -434,11 +450,11 @@ button.cancal.btn.btn-default {
                 id: checkedNode.id
             };
             var cols = [[
-                {field: 'member_name', align:'center', width:'40%',title: '姓名',templet: function(d) {
-                        return '<a href="/memberDetail?userId='+d.member_identity+'" >' + d.member_name + '</a>';
+                {field: 'user_name', align:'center', width:'40%',title: '姓名',templet: function(d) {
+                        return '<a href="/memberDetail?userId='+d.user_id+'" >' + d.user_name + '</a>';
                     }
                 }
-                ,{field: 'member_identity', align:'center', width:'40%',title: '公民身份证'}
+                ,{field: 'user_id', align:'center', width:'40%',title: '公民身份证'}
                 ,{field: 'historic', title: '操作', width:'20%', align:'center',toolbar: '#tableTool'}
             ]];
             var ins = table.render({
@@ -482,7 +498,7 @@ button.cancal.btn.btn-default {
         }
         function renderOrgManagers(){
             renderAdminTable(1,pageInfo.size);
-            var postData = {
+           /* var postData = {
                 id:checkedNode.id
             };
             $.post("${findOrgUsers}", postData, function (res) {
@@ -510,7 +526,7 @@ button.cancal.btn.btn-default {
                 }else {
                     layer.msg(res.message);
                 }
-            },'json');
+            },'json');*/
         }
         //表单提交
         form.on('submit(orgManager)', function(data){
@@ -531,5 +547,6 @@ button.cancal.btn.btn-default {
 </script>
 <script type="text/html" id="tableTool">
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">移除管理员</a>
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="delete">设置管理员</a>
 </script>
 </body>
