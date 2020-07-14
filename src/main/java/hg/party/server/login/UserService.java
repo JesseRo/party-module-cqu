@@ -120,11 +120,11 @@ public class UserService {
             } else {
                 role = ConstantsKey.COMMON_PARTY;
             }
-            return afterLogin(user, role, sessionId, ip);
+            return afterLogin(user, role, sessionId, ip, false);
         }
     }
 
-    private String afterLogin(User user, String role, String sessionId, String ip) {
+    private String afterLogin(User user, String role, String sessionId, String ip, boolean changeRole) {
         String userName = user.getUser_id();
         String name = user.getUser_name();
         SessionManager.setAttribute(sessionId, "userName", userName);
@@ -160,11 +160,13 @@ public class UserService {
         logger.info("dateLong:  " + t);
         String url;
         if (ConstantsKey.SECOND_PARTY.equals(role)) {
-                url = "/backlogtwo";
+            url = "/backlogtwo";
 //            url = "/screen";
         } else if (ConstantsKey.ORG_PARTY.equals(role)) {
             url = "/screen";
-//                url = "/statisticalreport";
+            if (changeRole) {
+                url = "/statisticalreport";
+            }
         } else if (ConstantsKey.BRANCH_PARTY.equals(role)) {
             url = "/backlogtwo";
         } else if (ConstantsKey.COMMON_PARTY.equals(role)) {
@@ -192,7 +194,7 @@ public class UserService {
         } else {
             boolean isRole = isRole(userName, role);
             if (isRole) {
-                return afterLogin(user, role, sessionId, ip);
+                return afterLogin(user, role, sessionId, ip, true);
             } else {
                 return "0"; //角色不匹配
             }
@@ -221,7 +223,7 @@ public class UserService {
             } else {
                 role = ConstantsKey.COMMON_PARTY;
             }
-            return afterLogin(user, role, sessionId, ip);
+            return afterLogin(user, role, sessionId, ip, false);
         }
     }
 

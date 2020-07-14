@@ -13,6 +13,7 @@ import dt.session.SessionManager;
 import hg.util.PropertiesUtil;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.Properties;
 
 import javax.portlet.ActionRequest;
@@ -80,6 +81,8 @@ public class Hgg_loginPortlet extends MVCPortlet {
 		PropertiesUtil propertiesUtil = new PropertiesUtil("/cas.properties");
 		Properties properties = propertiesUtil.getResourceProperties();
 		String urlAddress = properties.getProperty("casServer");
+		urlAddress += URLEncoder.encode(
+				PortalUtil.getOriginalServletRequest(request).getRequestURL().toString(), "utf-8");
 		renderRequest.setAttribute("urlAddress", urlAddress);	
 		// cas统一身份认证地址
 //		PortletPreferences preferences = renderRequest.getPreferences();
