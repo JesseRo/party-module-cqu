@@ -77,6 +77,10 @@ public class OrgDao extends HgPostgresqlDaoImpl<Organization> {
         String sql = "DELETE from hg_party_org_admin where admin_id= ? ";
         return jdbcTemplate.update(sql, userId);
     }
+    public int deleteAdmin(String orgId,String userId) {
+        String sql = "DELETE from hg_party_org_admin where org_id=? and admin_id= ? ";
+        return jdbcTemplate.update(sql, orgId,userId);
+    }
 
     public List<Organization> findAllHistoric() {
         String sql = "select * from hg_party_org";
@@ -133,6 +137,14 @@ public class OrgDao extends HgPostgresqlDaoImpl<Organization> {
         String sql = "select * from hg_party_org where org_id = '" + orgId + "'";
         try {
             return jdbcTemplate.queryForObject(sql, BeanPropertyRowMapper.newInstance(Organization.class));
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    public Organization findById(int id) {
+        String sql = "select * from hg_party_org where id = ?";
+        try {
+            return jdbcTemplate.queryForObject(sql, BeanPropertyRowMapper.newInstance(Organization.class),id);
         } catch (Exception e) {
             return null;
         }
@@ -343,7 +355,15 @@ public class OrgDao extends HgPostgresqlDaoImpl<Organization> {
         }
         return saveAdmin(organization, admin);
     }
-
+    public boolean addAdmin(Organization org, String userId){
+        String sql = "insert into hg_party_org_admin (org_id,admin_id,org_type) values ('"+org.getOrg_id()+"','"+userId+"','"+org.getOrg_type()+"')";
+        try {
+            jdbcTemplate.execute(sql);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
     public void deleteOrgAdmin(String org) {
         String sql = "delete from hg_party_org_admin where org_id = ? ";
         jdbcTemplate.update(sql, org);
@@ -806,11 +826,27 @@ public class OrgDao extends HgPostgresqlDaoImpl<Organization> {
         }
     }
 
-    public PostgresqlPageResult<Map<String, Object>> searchOrgUsersPage(int page, int size, int orgId) {
+    public PostgresqlPageResult<Map<String, Object>> searchOrgUsersPage(int page, int size, int id,String adminType,String keyword) {
         if (size <= 0){
             size = 10;
         }
-        StringBuffer sb = new StringBuffer("select i.user_id,i.user_name from hg_party_org_admin a left join hg_users_info i on a.admin_id = i.user_id left join hg_party_org o on a.org_id = o.org_id where o.id=?");
-        return postGresqlFindPageBySql(page, size, sb.toString(),orgId);
+        Organization organization =  findById(id);
+        StringBuffer sb = new StringBuffer("select i.user_id,i.user_name,case when a.org_id='" + organization.getOrg_id() + "' then 1 else 0 end admin_type from hg_party_org_admin a full join hg_users_info i on a.admin_id = i.user_id left join hg_party_org o on a.org_id = o.org_id left join hg_party_member m on i.user_id = m.member_identity left join hg_party_org org on m.member_org = org.org_id where 1=1");
+        if(organization.getOrg_type().equals(PartyOrgAdminTypeEnum.BRANCH.getType())){
+            sb.append(" and org.org_id='" + organization.getOrg_id() + "'");
+        }else if(organization.getOrg_type().equals(PartyOrgAdminTypeEnum.SECONDARY.getType())){
+            sb.append(" AND org.org_parent='" + organization.getOrg_id() + "'");
+        }
+        if(adminType == "1"){
+            sb.append(" and a.org_id is not null");
+        }else if(adminType == "0"){
+            sb.append(" and a.org_id is null");
+        }
+        if(!StringUtils.isEmpty(keyword)){
+            keyword = "'%"+keyword+"%'";
+            sb.append(" and (i.user_name like "+ keyword +" or i.user_id like "+keyword+")");
+        }
+        sb.append(" ORDER BY admin_type desc,user_name desc");
+        return postGresqlFindPageBySql(page, size, sb.toString());
     }
 }

@@ -2,6 +2,8 @@
 <%@ include file="/init.jsp" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <portlet:resourceURL id="/org/adminSave" var="adminSave" />
+<portlet:resourceURL id="/org/adminAdd" var="adminAdd" />
+<portlet:resourceURL id="/org/adminDelete" var="adminDelete" />
 <portlet:resourceURL id="/org/admin/query" var="findOrgAdmin" />
 <portlet:resourceURL id="/org/users" var="findOrgUsers" />
 <portlet:resourceURL id="/org/users/page" var="findOrgUsersPage" />
@@ -302,8 +304,8 @@ button.cancal.btn.btn-default {
     width: 120px;
 }
 .layui-input-inline.orgTree{
-    width: 400px;
-}
+     width: 400px;
+ }
 .party_member_container.form_content .custom_form .layui-inline:last-child{
     border-bottom: 1px solid #CCC;
 }
@@ -317,13 +319,13 @@ button.cancal.btn.btn-default {
     width: calc(100% - 8px);
 }
 .party_manage_container .layui-form-item{
-    width:640px
+    width:100%;
 }
 .party_manage_container .layui-form .layui-form-label{
     width:120px;
 }
 .party_manage_container .layui-form .layui-input-inline{
-    width:480px;
+    width:320px;
 }
 .party_manage_container .layui-form .layui-form-item.btn-save{
    text-align: center;
@@ -331,6 +333,9 @@ button.cancal.btn.btn-default {
 .party_manage_container .layui-form .layui-form-item.btn-save .layui-btn {
     width: 160px;
 }
+    .layui-input-inline.admin-type{
+        width: 100px !important;
+    }
     .table_outer_box > table thead, tbody tr {
         display: table-row !important;
         width: 100%;
@@ -355,7 +360,7 @@ button.cancal.btn.btn-default {
                         <a href="javascript:;">组织管理员设置</a>
                     </span>
             </div>
-            <div class="party_manage_content content_form content_info">
+            <div class="party_manage_content content_form content_info bg_white_container">
                 <div class="content_form content_info content_table_container party_table_container party_manage_container" style="padding-top: 0;">
                     <form class="layui-form" >
                         <div class="layui-form-item">
@@ -367,17 +372,18 @@ button.cancal.btn.btn-default {
                             </div>
                             <div class="layui-inline">
                                 <label class="layui-form-label orgTree-label">是否管理员:</label>
-                                <div class="layui-input-inline">
-                                    <select>
-                                        <option vlue="">-全部-</option>
-                                        <option vlue="1">-是-</option>
-                                        <option vlue="0">-否-</option>
+                                <div class="layui-input-inline admin-type">
+                                    <select name="adminType" id="adminType">
+                                        <option value="">-全部-</option>
+                                        <option value="1">-是-</option>
+                                        <option value="0">-否-</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="layui-inline">
+                                <label class="layui-form-label orgTree-label">关键字:</label>
                                 <div class="layui-input-inline keyword">
-                                    <input type="text" name="keyword"  placeholder="请输入姓名、身份证关键字" class="layui-input">
+                                    <input type="text" name="keyword"  placeholder="请输入姓名、身份证关键字" class="layui-input" id="keyword">
                                 </div>
                                 <button type="button"  class="layui-btn layui-btn-warm"  lay-submit="" lay-filter="searchForm"><icon class="layui-icon layui-icon-search"></icon>搜索</button>
                             </div>
@@ -410,6 +416,9 @@ button.cancal.btn.btn-default {
             page:1,
             size:10
         };
+        form.on('submit(searchForm)', function (data) {
+            renderAdminTable(1,pageInfo.size);
+        })
         treeSelect.render({
             // 选择器
             elem: '#orgTree',
@@ -447,15 +456,20 @@ button.cancal.btn.btn-default {
         }
         function renderAdminTable(page,size){
             var  where = {
-                id: checkedNode.id
+                id: checkedNode.id,
+                adminType:$("#searchForm select[name=adminType]").val(),
+                keyword:$("#searchForm input[name=keyword]").val()
             };
             var cols = [[
-                {field: 'user_name', align:'center', width:'40%',title: '姓名',templet: function(d) {
+                {field: 'user_name', align:'center', width:'28%',title: '姓名',templet: function(d) {
                         return '<a href="/memberDetail?userId='+d.user_id+'" >' + d.user_name + '</a>';
                     }
                 }
-                ,{field: 'user_id', align:'center', width:'40%',title: '公民身份证'}
-                ,{field: 'historic', title: '操作', width:'20%', align:'center',toolbar: '#tableTool'}
+                ,{field: 'user_id', align:'center', width:'28%',title: '公民身份证'}
+                ,{field: 'admin_type', align:'center', width:'28%',title: '是否为管理员',templet: function(d) {
+                        return d.admin_type==1?'是':'否';
+                    }}
+                ,{field: 'historic', title: '操作', width:'16%', align:'center',toolbar: '#tableTool'}
             ]];
             var ins = table.render({
                 elem: '#adminMemberTable'
@@ -486,47 +500,42 @@ button.cancal.btn.btn-default {
             table.on('tool(adminMemberTable)', function(obj){
                 switch(obj.event){
                     case 'delete':
-                        //deleteAdminMember(obj.data.member_identity);
+                        deleteAdminMember(obj.data);
                         break;
-                    case 'edit':
+                    case 'add':
+                        addAdminMember(obj.data);
                         break;
                 };
             });
         }
-        function deleteAdminMember(){
-
+        function deleteAdminMember(d){
+            var index = layer.confirm('您确认取消“'+d.user_name+'”管理员身份吗？', {
+                btn: ['确定','取消'] //按钮
+            }, function(){
+                $.post('${adminDelete}', {orgId: checkedNode.data.org_id,userId:d.user_id}, function (res) {
+                    if (res.code == 200){
+                        layer.msg("取消管理员成功");
+                        layer.close(index);
+                        setTimeout(function(){renderAdminTable(pageInfo.page,pageInfo.size)}, 1000);
+                    }
+                })
+            });
+        }
+        function addAdminMember(d){
+            var index = layer.confirm('您确认设置“'+d.user_name+'”为管理员吗？', {
+                btn: ['确定','取消'] //按钮
+            }, function(){
+                $.post('${adminAdd}', {orgId: checkedNode.data.org_id,userId:d.user_id}, function (res) {
+                    if (res.code == 200){
+                        layer.msg("设置管理员成功");
+                        layer.close(index);
+                        setTimeout(function(){renderAdminTable(pageInfo.page,pageInfo.size)}, 1000);
+                    }
+                })
+            });
         }
         function renderOrgManagers(){
             renderAdminTable(1,pageInfo.size);
-           /* var postData = {
-                id:checkedNode.id
-            };
-            $.post("${findOrgUsers}", postData, function (res) {
-                if(res.code==200){
-                    $('#manager-select').empty();
-                    var selectHtml = '<select name="admin" multiple lay-search><option value="">请选择管理员</option>';
-                    for(var i=0;res.data.length>0 && i<res.data.length;i++){
-                        selectHtml = selectHtml + "<option value='"+res.data[i].user_id+"'>"+res.data[i].user_name+"("+res.data[i].user_id+")</option>";
-                    }
-                    selectHtml = selectHtml + '</select>';
-                    $('#manager-select').append(selectHtml);
-                    form.render();
-                    $.post("${findOrgAdmin}", postData, function (res) {
-                        if(res.code==200){
-                            var  managerArr = new Array();
-                            for(var i=0;res.data.length>0 && i<res.data.length;i++){
-                                managerArr.push(res.data[i]['user_id']);
-                            }
-                            $('select[name="admin"]').val(managerArr);
-                            form.render();
-                        }else {
-                            layer.msg(res.message);
-                        }
-                    },'json');
-                }else {
-                    layer.msg(res.message);
-                }
-            },'json');*/
         }
         //表单提交
         form.on('submit(orgManager)', function(data){
@@ -546,7 +555,11 @@ button.cancal.btn.btn-default {
     });
 </script>
 <script type="text/html" id="tableTool">
+    {{#  if(d.admin_type == 1){ }}
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">移除管理员</a>
-    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="delete">设置管理员</a>
+    {{#  } }}
+    {{#  if(d.admin_type != 1){ }}
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="add">设置管理员</a>
+    {{#  } }}
 </script>
 </body>

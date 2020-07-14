@@ -174,7 +174,7 @@ public class OrgService {
         return childrenStati;
     }
 
-    public PostgresqlPageResult<Map<String, Object>> searchOrgUsersPage(int page, int size, int orgId) {
-        return orgDao.searchOrgUsersPage(page,size,orgId);
+    public PostgresqlPageResult<Map<String, Object>> searchOrgUsersPage(int page, int size, int orgId,String adminType,String keyword) {
+        return orgDao.searchOrgUsersPage(page,size,orgId,adminType,keyword);
     }
 }

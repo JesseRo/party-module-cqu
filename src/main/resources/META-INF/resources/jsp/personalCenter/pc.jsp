@@ -176,7 +176,6 @@
 					<p>姓名：${userInfo.member_name}</p>
 					<p>性别：${userInfo.member_sex}</p>
 					<p>入党时间：${userInfo.member_join_date}</p>
-					<p>党内职务：支部书记</p>
 					<p>联系电话：${userInfo.member_phone_number}</p>
 				</div>
 				<p class="text_line"></p>

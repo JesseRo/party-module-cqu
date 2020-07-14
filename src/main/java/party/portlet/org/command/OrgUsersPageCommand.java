@@ -36,8 +36,10 @@ public class OrgUsersPageCommand implements MVCResourceCommand {
 		HttpServletResponse res = PortalUtil.getHttpServletResponse(resourceResponse);
 		int page = ParamUtil.getInteger(resourceRequest, "page");
 		int size = ParamUtil.getInteger(resourceRequest, "limit");
+		String adminType = ParamUtil.getString(resourceRequest, "adminType");
+		String keyword = ParamUtil.getString(resourceRequest, "keyword");
 		try {
-			PostgresqlPageResult<Map<String, Object>> data = orgService.searchOrgUsersPage(page, size,id);
+			PostgresqlPageResult<Map<String, Object>> data = orgService.searchOrgUsersPage(page, size,id,adminType,keyword);
 			Gson gson = new Gson();
 			res.getWriter().write(gson.toJson(data.toJsonPageResponse()));
 		} catch (Exception e) {
