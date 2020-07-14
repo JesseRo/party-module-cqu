@@ -96,6 +96,7 @@ public class BigScreenPortlet extends MVCPortlet {
             if (i % 12 == 0) {
                 secNames = new ArrayList<>();
                 secCounts = new ArrayList<>();
+                secMeetingCounts = new ArrayList<>();
                 secCountGroup.add(secCounts);
                 secNameGroup.add(secNames);
                 secMeetingCountGroup.add(secMeetingCounts);
