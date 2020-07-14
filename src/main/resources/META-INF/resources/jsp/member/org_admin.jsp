@@ -362,7 +362,7 @@ button.cancal.btn.btn-default {
             </div>
             <div class="party_manage_content content_form content_info bg_white_container">
                 <div class="content_form content_info content_table_container party_table_container party_manage_container" style="padding-top: 0;">
-                    <form class="layui-form" >
+                    <form class="layui-form" id="searchForm" >
                         <div class="layui-form-item">
                             <div class="layui-inline">
                                 <label class="layui-form-label orgTree-label">请选择组织:</label>
@@ -518,7 +518,7 @@ button.cancal.btn.btn-default {
                         layer.close(index);
                         setTimeout(function(){renderAdminTable(pageInfo.page,pageInfo.size)}, 1000);
                     }
-                })
+                },"json");
             });
         }
         function addAdminMember(d){
@@ -531,7 +531,7 @@ button.cancal.btn.btn-default {
                         layer.close(index);
                         setTimeout(function(){renderAdminTable(pageInfo.page,pageInfo.size)}, 1000);
                     }
-                })
+                },"json");
             });
         }
         function renderOrgManagers(){
