@@ -10,6 +10,9 @@ import javax.portlet.RenderResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.liferay.portal.kernel.util.ParamUtil;
+import hg.party.dao.org.MemberDao;
+import hg.party.entity.partyMembers.Member;
 import hg.party.server.login.UserService;
 import hg.party.server.organization.UserRoleService;
 
@@ -39,55 +42,71 @@ import party.constants.PartyPortletKeys;
  * 修改内容： <br>
  */
 @Component(
-	immediate = true,
-	property = {
-		"com.liferay.portlet.display-category=category.sample",
-		"com.liferay.portlet.instanceable=true",
-		"javax.portlet.display-name=选择用户角色",
-		"javax.portlet.init-param.template-path=/",
-		"com.liferay.portlet.requires-namespaced-parameters=false",
-		"javax.portlet.init-param.view-template=/jsp/userRoles/view.jsp",
-		"javax.portlet.name=" + PartyPortletKeys.UserRoles,
-		"javax.portlet.resource-bundle=content.Language",
-		"javax.portlet.security-role-ref=power-user,user"
-	},
-	service = Portlet.class
+        immediate = true,
+        property = {
+                "com.liferay.portlet.display-category=category.sample",
+                "com.liferay.portlet.instanceable=true",
+                "javax.portlet.display-name=选择用户角色",
+                "javax.portlet.init-param.template-path=/",
+                "com.liferay.portlet.requires-namespaced-parameters=false",
+                "javax.portlet.init-param.view-template=/jsp/userRoles/view.jsp",
+                "javax.portlet.name=" + PartyPortletKeys.UserRoles,
+                "javax.portlet.resource-bundle=content.Language",
+                "javax.portlet.security-role-ref=power-user,user"
+        },
+        service = Portlet.class
 )
-public class UserRolesPortlet extends MVCPortlet{
-	Logger log = Logger.getLogger(UserRolesPortlet.class);
-	@Reference
-	private UserRoleService userRoleService;
-	@Reference
-	private UserService userService;
-	@Override
-	public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
-			throws IOException, PortletException {
-		HttpServletRequest request = PortalUtil.getOriginalServletRequest(PortalUtil.getHttpServletRequest(renderRequest));
-	    HttpServletResponse response = PortalUtil.getHttpServletResponse(renderResponse);
-	    long companyId = PortalUtil.getCompanyId(request);
-		String casLoginName = AssertionUtil.resCasLoginName(request, response, companyId);
-		log.info("[casLoginName] :"+casLoginName);
-	    List<String> role = userRoleService.getRoles(casLoginName);
-        if (role !=null&& role.size() == 1) {
-        	   HttpServletRequest httpServletRequest = PortalUtil.getHttpServletRequest(renderRequest);
-               String ip = httpServletRequest.getHeader("x-forwarded-for");
-               if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-                   ip = httpServletRequest.getHeader("Proxy-Client-IP");
-               }
-               if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-                   ip = httpServletRequest.getHeader("WL-Proxy-Client-IP");
-               }
-               if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-                   ip = httpServletRequest.getRemoteAddr();
-               }
-		    String urls = userService.loginCas(casLoginName, role.get(0), renderRequest.getRequestedSessionId(), ip);
-			String url=urls.substring(1);
-			if(!StringUtils.isEmpty(url)&&url.length()>0){
-				response.sendRedirect(url);
-			}			
-		}
-		System.out.println("casLoginName=" + casLoginName);
-		renderRequest.setAttribute("userName", casLoginName);
-		super.doView(renderRequest, renderResponse);
-	}
+public class UserRolesPortlet extends MVCPortlet {
+    Logger log = Logger.getLogger(UserRolesPortlet.class);
+    @Reference
+    private UserRoleService userRoleService;
+    @Reference
+    private UserService userService;
+    @Reference
+    private MemberDao memberDao;
+
+    @Override
+    public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
+            throws IOException, PortletException {
+        HttpServletRequest request = PortalUtil.getOriginalServletRequest(PortalUtil.getHttpServletRequest(renderRequest));
+        HttpServletResponse response = PortalUtil.getHttpServletResponse(renderResponse);
+        long companyId = PortalUtil.getCompanyId(request);
+        String ticket = ParamUtil.getString(request, "ticket");
+        if (!StringUtils.isEmpty(ticket)) {
+            String casLoginName = AssertionUtil.resCasLoginName(request, response, companyId);
+            log.info("[casLoginName] :" + casLoginName);
+            Member member = memberDao.findByAuthNumber(casLoginName);
+            if (member == null) {
+                renderRequest.setAttribute("ok", false);
+            } else {
+                renderRequest.setAttribute("ok", true);
+                String identity = member.getMember_identity();
+                List<String> role = userRoleService.getRoles(identity);
+                if (role != null && role.size() > 0) {
+                    HttpServletRequest httpServletRequest = PortalUtil.getHttpServletRequest(renderRequest);
+                    String ip = httpServletRequest.getHeader("x-forwarded-for");
+                    if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+                        ip = httpServletRequest.getHeader("Proxy-Client-IP");
+                    }
+                    if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+                        ip = httpServletRequest.getHeader("WL-Proxy-Client-IP");
+                    }
+                    if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+                        ip = httpServletRequest.getRemoteAddr();
+                    }
+                    log.info("[role] :" + role.get(0));
+                    String urls = userService.loginCas(identity, renderRequest.getRequestedSessionId(), ip);
+                    String url = urls.substring(1);
+                    log.info("[url] :" + url);
+                    if (!StringUtils.isEmpty(url) && url.length() > 0) {
+                        response.sendRedirect(url);
+                    }
+                }
+            }
+        } else {
+            renderRequest.setAttribute("ok", true);
+        }
+
+        super.doView(renderRequest, renderResponse);
+    }
 }

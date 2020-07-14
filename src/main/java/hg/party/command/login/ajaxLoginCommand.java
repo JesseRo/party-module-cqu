@@ -53,6 +53,7 @@ public class ajaxLoginCommand implements MVCResourceCommand {
     Logger logger = Logger.getLogger(ajaxLoginCommand.class);
     @Reference
     private UserService userService;
+
     @Override
     public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
             throws PortletException {
@@ -69,7 +70,7 @@ public class ajaxLoginCommand implements MVCResourceCommand {
         exit = HtmlUtil.escape(exit);
         role = HtmlUtil.escape(role);
         changType = HtmlUtil.escape(changType);
-        
+
         /**
          *用户退出功能
          */
@@ -77,7 +78,7 @@ public class ajaxLoginCommand implements MVCResourceCommand {
             SessionManager.removeSession(sessionId);
             PrintWriter printWriter;
             try {
-               printWriter = resourceResponse.getWriter();
+                printWriter = resourceResponse.getWriter();
                 printWriter.write("4");//退出成功
                 printWriter.close();
                 return false;
@@ -101,17 +102,17 @@ public class ajaxLoginCommand implements MVCResourceCommand {
         logger.info("ip:  " + ip);
         //身份切换登陆
         if ("changeRole".equals(changType)) {
-		String result	= userService.loginCas((String)SessionManager.getAttribute(sessionId, "userName"), role, sessionId, ip);
-			 try {
-	                PrintWriter printWriter = resourceResponse.getWriter();
-	                printWriter.write(result);
-	                printWriter.close();
-	                return false;
-	            } catch (IOException e) {
-	                e.printStackTrace();
-	            }
-		}
-        
+            String result = userService.changeRole((String) SessionManager.getAttribute(sessionId, "userName"), role, sessionId, ip);
+            try {
+                PrintWriter printWriter = resourceResponse.getWriter();
+                printWriter.write(result);
+                printWriter.close();
+                return false;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
         User user;
         String result;
         if (type.equals("cas")) {
@@ -122,9 +123,9 @@ public class ajaxLoginCommand implements MVCResourceCommand {
             } catch (Exception e) {
                 user = null;
             }
-            if (user == null){
+            if (user == null) {
                 result = "1"; //用户不存在
-            }else {
+            } else {
                 result = userService.login(userName, user.getUser_password(), role, sessionId, ip);
 
             }
@@ -160,7 +161,6 @@ public class ajaxLoginCommand implements MVCResourceCommand {
         }
         return false;
     }
-
 
 
 }

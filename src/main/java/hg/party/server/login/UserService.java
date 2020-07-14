@@ -120,62 +120,66 @@ public class UserService {
             } else {
                 role = ConstantsKey.COMMON_PARTY;
             }
-
-            String name = user.getUser_name();
-            SessionManager.setAttribute(sessionId, "userName", userName);
-            SessionManager.setAttribute(sessionId, "user_name", name);
-            String orgId = userDao.findOrgId(role, userName, user.getUser_department_id());
-            SessionManager.setAttribute(sessionId, "department", orgId);
-            SessionManager.setAttribute(sessionId, "role", role);
-            String orgType = partyBranchService.findSconedAndBranch(orgId);
-            SessionManager.setAttribute(sessionId, "orgType", orgType);
-            SessionManager.setAttribute(sessionId, "orgId", user.getUser_department_id());
-            SessionManager.setAttribute(sessionId, "loginCount", 1);
-            //判断是否是第一次登陆
-            boolean bool = isFirstLogin(userName, name);
-            SessionManager.setAttribute(sessionId, "firstLogin", bool);
-            VisitCount count = new VisitCount();
-            count.setDepartment_id(orgId);
-            count.setIp(ip);
-            count.setUser_role(role);
-            count.setUser_id(userName);
-            count.setUser_name(name);
-            count.setType("登陆系统");
-            LocalDateTime ldTime = LocalDateTime.now(ZoneId.of("Asia/Shanghai"));
-            Timestamp t = Timestamp.valueOf(ldTime);
-            count.setVisit_time(t);
-            if (ConstantsKey.COMMON_PARTY.equals(role)) {
-                count.setDepartment_name(name);
-            } else if (ConstantsKey.BRANCH_PARTY.equals(role)) {
-                count.setDepartment_name(visitCountService.findOrgNameByBranchId(orgId) + "  " + visitCountService.findOrgNameByOrgId(orgId));
-            } else {
-                count.setDepartment_name(visitCountService.findOrgNameByOrgId(orgId));
-            }
-            visitCountService.save(count);
-            logger.info("dateLong:  " + t);
-            String url;
-            if (ConstantsKey.SECOND_PARTY.equals(role)) {
-//                url = "/backlogtwo";
-                url = "/screen";
-            } else if (ConstantsKey.ORG_PARTY.equals(role)) {
-                url = "/screen";
-//                url = "/statisticalreport";
-            } else if (ConstantsKey.BRANCH_PARTY.equals(role)) {
-                url = "/backlogtwo";
-            } else if (ConstantsKey.COMMON_PARTY.equals(role)) {
-                url = "/personalcenter";
-            } else if (ConstantsKey.OTHER_PARTY.equals(role)) {
-                url = "/membertodolist";
-            } else if (ConstantsKey.ORG_PROPAGANDA.equals(role)) {
-                url = "/passpublic";
-            } else {
-                url = "/errorpage";
-            }
-            return "3" + url;//成功登录
+            return afterLogin(user, role, sessionId, ip);
         }
     }
 
-    public String loginCas(String userName, String role, String sessionId, String ip) {
+    private String afterLogin(User user, String role, String sessionId, String ip) {
+        String userName = user.getUser_id();
+        String name = user.getUser_name();
+        SessionManager.setAttribute(sessionId, "userName", userName);
+        SessionManager.setAttribute(sessionId, "user_name", name);
+        String orgId = userDao.findOrgId(role, userName, user.getUser_department_id());
+        SessionManager.setAttribute(sessionId, "department", orgId);
+        SessionManager.setAttribute(sessionId, "role", role);
+        String orgType = partyBranchService.findSconedAndBranch(orgId);
+        SessionManager.setAttribute(sessionId, "orgType", orgType);
+        SessionManager.setAttribute(sessionId, "orgId", user.getUser_department_id());
+        SessionManager.setAttribute(sessionId, "loginCount", 1);
+        //判断是否是第一次登陆
+        boolean bool = isFirstLogin(userName, name);
+        SessionManager.setAttribute(sessionId, "firstLogin", bool);
+        VisitCount count = new VisitCount();
+        count.setDepartment_id(orgId);
+        count.setIp(ip);
+        count.setUser_role(role);
+        count.setUser_id(userName);
+        count.setUser_name(name);
+        count.setType("登陆系统");
+        LocalDateTime ldTime = LocalDateTime.now(ZoneId.of("Asia/Shanghai"));
+        Timestamp t = Timestamp.valueOf(ldTime);
+        count.setVisit_time(t);
+        if (ConstantsKey.COMMON_PARTY.equals(role)) {
+            count.setDepartment_name(name);
+        } else if (ConstantsKey.BRANCH_PARTY.equals(role)) {
+            count.setDepartment_name(visitCountService.findOrgNameByBranchId(orgId) + "  " + visitCountService.findOrgNameByOrgId(orgId));
+        } else {
+            count.setDepartment_name(visitCountService.findOrgNameByOrgId(orgId));
+        }
+        visitCountService.save(count);
+        logger.info("dateLong:  " + t);
+        String url;
+        if (ConstantsKey.SECOND_PARTY.equals(role)) {
+                url = "/backlogtwo";
+//            url = "/screen";
+        } else if (ConstantsKey.ORG_PARTY.equals(role)) {
+            url = "/screen";
+//                url = "/statisticalreport";
+        } else if (ConstantsKey.BRANCH_PARTY.equals(role)) {
+            url = "/backlogtwo";
+        } else if (ConstantsKey.COMMON_PARTY.equals(role)) {
+            url = "/personalcenter";
+        } else if (ConstantsKey.OTHER_PARTY.equals(role)) {
+            url = "/membertodolist";
+        } else if (ConstantsKey.ORG_PROPAGANDA.equals(role)) {
+            url = "/passpublic";
+        } else {
+            url = "/errorpage";
+        }
+        return "3" + url;//成功登录
+    }
+
+    public String changeRole(String userName, String role, String sessionId, String ip) {
         User user;
         try {
             user = findByUserId(userName);
@@ -188,57 +192,36 @@ public class UserService {
         } else {
             boolean isRole = isRole(userName, role);
             if (isRole) {
-                /**用户中文名*/
-                String name = user.getUser_name();
-                SessionManager.setAttribute(sessionId, "userName", userName);
-                SessionManager.setAttribute(sessionId, "user_name", name);
-                String orgId = userDao.findOrgId(role, userName, user.getUser_department_id());
-                SessionManager.setAttribute(sessionId, "department", orgId);
-                SessionManager.setAttribute(sessionId, "role", role);
-                String orgType = partyBranchService.findSconedAndBranch(orgId);
-                SessionManager.setAttribute(sessionId, "orgType", orgType);
-                SessionManager.setAttribute(sessionId, "orgId", user.getUser_department_id());
-                SessionManager.setAttribute(sessionId, "loginCount", 1);
-                //判断是否是第一次登陆
-                boolean bool = isFirstLogin(userName, name);
-                SessionManager.setAttribute(sessionId, "firstLogin", bool);
-                VisitCount count = new VisitCount();
-                count.setDepartment_id(orgId);
-                count.setIp(ip);
-                count.setUser_role(role);
-                count.setUser_id(userName);
-                count.setUser_name(name);
-                count.setType("切换角色");
-                LocalDateTime ldTime = LocalDateTime.now(ZoneId.of("Asia/Shanghai"));
-                Timestamp t = Timestamp.valueOf(ldTime);
-                count.setVisit_time(t);
-                if (ConstantsKey.COMMON_PARTY.equals(role)) {
-                    count.setDepartment_name(name);
-                } else if (ConstantsKey.BRANCH_PARTY.equals(role)) {
-                    count.setDepartment_name(visitCountService.findOrgNameByBranchId(orgId) + "  " + visitCountService.findOrgNameByOrgId(orgId));
-                } else {
-                    count.setDepartment_name(visitCountService.findOrgNameByOrgId(orgId));
-                }
-                visitCountService.save(count);
-                logger.info("dateLong:  " + t);
-                String url;
-                if (ConstantsKey.SECOND_PARTY.equals(role)) {
-                    url = "/backlogtwo";
-                } else if (ConstantsKey.ORG_PARTY.equals(role)) {
-                    url = "/statisticalreport";
-                } else if (ConstantsKey.BRANCH_PARTY.equals(role)) {
-                    url = "/backlogtwo";
-                } else if (ConstantsKey.COMMON_PARTY.equals(role)) {
-                    url = "/personalcenter";
-                } else if (ConstantsKey.OTHER_PARTY.equals(role)) {
-                    url = "/membertodolist";
-                } else {
-                    url = "/errorpage";
-                }
-                return "3" + url;//成功登录
+                return afterLogin(user, role, sessionId, ip);
             } else {
                 return "0"; //角色不匹配
             }
+        }
+    }
+
+    public String loginCas(String userName, String sessionId, String ip) {
+        User user;
+        try {
+            user = findByUserId(userName);
+        } catch (Exception e) {
+            user = null;
+        }
+        //判断用户不存在
+        if (user == null) {
+            return "1";
+        } else {
+            String role;
+            List<String> roles = myRoles(userName);
+            if (roles.contains(ConstantsKey.ORG_TYPE_ROOT)) {
+                role = ConstantsKey.ORG_PARTY;
+            } else if (roles.contains(ConstantsKey.ORG_TYPE_SECONDARY)) {
+                role = ConstantsKey.SECOND_PARTY;
+            } else if (roles.contains(ConstantsKey.ORG_TYPE_BRANCH)) {
+                role = ConstantsKey.BRANCH_PARTY;
+            } else {
+                role = ConstantsKey.COMMON_PARTY;
+            }
+            return afterLogin(user, role, sessionId, ip);
         }
     }
 

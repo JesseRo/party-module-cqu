@@ -119,7 +119,7 @@
 	<body>
 	<div style="position: relative; width: 100%; height: 7.4vh; position: relative;">
 	<c:choose>
-		<c:when test="${role == '组织部' or role == '二级党组织'}">
+		<c:when test="${role == '组织部'}">
 			<img class="left_logo" src="/images/logo.png" alt="" title="logo" style="left: 0;cursor: pointer;" onclick="window.location.href='/screen'"/>
 		</c:when>
 		<c:otherwise>

@@ -141,30 +141,32 @@ public class OrgService {
                         o.put("member_pre", m.getOrDefault("c", 0));
                     }
                 }
-            } else if ("secondary".equalsIgnoreCase((String) o.get("org_type"))) {
-                int descType = (Integer) o.get("desc_type");
-                if (descType == 1) {
-                    o.put("grand_branch", 0);
-                    o.put("committee", 1);
-                } else if (descType == 2) {
-                    o.put("grand_branch", 1);
-                    o.put("committee", 0);
-                }
             } else {
-                o.put("grand_branch", 0);
-                o.put("committee", 0);
-                o.put("c", 1);
-            }
+                if ("secondary".equalsIgnoreCase((String) o.get("org_type"))) {
+                    int descType = (Integer) o.get("desc_type");
+                    if (descType == 1) {
+                        o.put("grand_branch", 0);
+                        o.put("committee", 1);
+                    } else if (descType == 2) {
+                        o.put("grand_branch", 1);
+                        o.put("committee", 0);
+                    }
+                } else {
+                    o.put("grand_branch", 0);
+                    o.put("committee", 0);
+                    o.put("c", 1);
+                }
 
-            List<Map<String, Object>> lm = memberStatiMap.get(orgId);
-            o.put("member_formal", 0);
-            o.put("member_pre", 0);
-            if (lm != null) {
-                for (Map<String, Object> m : lm) {
-                    if (Objects.equals(m.get("member_type"), "正式党员")) {
-                        o.put("member_formal", m.getOrDefault("c", 0));
-                    } else if (Objects.equals(m.get("member_type"), "预备党员")) {
-                        o.put("member_pre", m.getOrDefault("c", 0));
+                List<Map<String, Object>> lm = memberStatiMap.get(orgId);
+                o.put("member_formal", 0);
+                o.put("member_pre", 0);
+                if (lm != null) {
+                    for (Map<String, Object> m : lm) {
+                        if (Objects.equals(m.get("member_type"), "正式党员")) {
+                            o.put("member_formal", m.getOrDefault("c", 0));
+                        } else if (Objects.equals(m.get("member_type"), "预备党员")) {
+                            o.put("member_pre", m.getOrDefault("c", 0));
+                        }
                     }
                 }
             }

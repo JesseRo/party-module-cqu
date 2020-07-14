@@ -558,4 +558,14 @@ public class MemberDao extends HgPostgresqlDaoImpl<Member> {
         sb.append("and m.member_identity  not in (select gm.participant_id from  hg_party_group_member_info gm where gm.group_id=?)");
         return this.jdbcTemplate.query(sb.toString(), rowMapper, orgId, groupId);
     }
+
+    public Member findByAuthNumber(String casLoginName) {
+        String sql = "select * from hg_party_member where historic = false and auth_number = ?";
+        try {
+            return jdbcTemplate.queryForObject(sql, BeanPropertyRowMapper.newInstance(Member.class), casLoginName);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

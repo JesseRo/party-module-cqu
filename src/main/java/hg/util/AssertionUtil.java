@@ -23,6 +23,7 @@ public class AssertionUtil {
 	private static String SERVCENAME = "";
 	private static String SERVERURL = "";
 	private static String CASLOGINURL = "";
+	private static String CAS_PARAM_KEY = "uid";
 	static {
 		PropertiesUtil propertiesUtil = new PropertiesUtil("/cas.properties");
 		Properties properties = propertiesUtil.getResourceProperties();
@@ -96,8 +97,8 @@ public class AssertionUtil {
 						for(Map.Entry<String, Object> entry : attributePrincipal.getAttributes().entrySet()){
 							logger.info("cas返回参数: " + entry.getKey() + "-" + entry.getValue());
 						}
-						if (attrs.containsKey("ACPIDCARD")){
-							casLoginName = new String(Base64.getDecoder().decode((String)attrs.get("ACPIDCARD"))).toUpperCase().trim();
+						if (attrs.containsKey(CAS_PARAM_KEY)){
+							casLoginName = ((String)attrs.get(CAS_PARAM_KEY)).trim();
 						}
 					}
 				}
