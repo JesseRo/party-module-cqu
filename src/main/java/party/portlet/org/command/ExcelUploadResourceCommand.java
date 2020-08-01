@@ -117,6 +117,11 @@ public class ExcelUploadResourceCommand implements MVCResourceCommand {
             member.setMember_org(Optional.of(row.get("所属支部").toString().trim()).filter(p -> !p.equals("")).orElse(null));
             member.setMember_fomal_date(Optional.of(row.get("转正时间").toString().trim()).filter(p -> !p.equals("")).orElse(null));
             member.setMember_address(Optional.of(row.get("家庭住址").toString().trim()).filter(p -> !p.equals("")).orElse(null));
+            member.setMember_job(Optional.of(row.get("人员类别").toString().trim()).filter(p -> !p.equals("")).orElse(null));
+//            member.setmember(Optional.of(row.get("行政机构").toString().trim()).filter(p -> !p.equals("")).orElse(null));
+            member.setMember_is_leader(Optional.of(row.get("是否是处级以上干部").toString().trim()).filter(p -> !p.equals("")).orElse(null));
+            member.setJobNumber(Optional.of(row.get("学工号").toString().trim()).filter(p -> !p.equals("")).orElse(null));
+            member.setAuthNumber(Optional.of(row.get("统一认证号").toString().trim()).filter(p -> !p.equals("")).orElse(null));
             return member;
         }).collect(Collectors.toList());
 

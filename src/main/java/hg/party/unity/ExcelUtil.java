@@ -265,7 +265,8 @@ public class ExcelUtil{
      * @author 
      */  
 	private static Object getCellFormatValue(Cell cell) {  
-       Object cellvalue = "";  
+       Object cellvalue = "";
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
        if (cell != null) {  
            // 判断当前Cell的Type  
            switch (cell.getCellTypeEnum()) {  
@@ -274,7 +275,6 @@ public class ExcelUtil{
 //        	   cell.setCellType(CellType.NUMERIC);
         	   if(HSSFDateUtil.isCellDateFormatted(cell)){
             	   cellvalue = cell.getDateCellValue();
-            	   SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             	   cellvalue = dateFormat.format(((Date)cellvalue));
         	   }else{
         		   cell.setCellType(CellType.STRING);
@@ -288,9 +288,9 @@ public class ExcelUtil{
                    // data格式是带时分秒的：2013-7-10 0:00:00  
                    // cellvalue = cell.getDateCellValue().toLocaleString();  
                    // data格式是不带带时分秒的：2013-7-10  
-                   Date date = cell.getDateCellValue();  
-                   cellvalue = date;  
-               } else {// 如果是纯数字  
+                   Date date = cell.getDateCellValue();
+                   cellvalue = dateFormat.format(date);
+               } else {// 如果是纯数字
                    // 取得当前Cell的数值,不按科学计数法输出
             	  // DecimalFormat df = new DecimalFormat("0");    
             	  /// cellvalue = df.format(cell.getNumericCellValue()); 
