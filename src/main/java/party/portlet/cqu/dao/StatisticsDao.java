@@ -1,10 +1,16 @@
 package party.portlet.cqu.dao;
 
 import com.dt.springjdbc.dao.impl.PostgresqlDaoImpl;
+import hg.party.entity.party.BaseStatistics;
 import hg.party.entity.party.MeetingStatistics;
+import hg.util.postgres.PostgresqlPageResult;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.util.StringUtils;
 import party.portlet.cqu.entity.Place;
+import party.portlet.transport.dao.RetentionDao;
+import party.portlet.transport.entity.PageQueryResult;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -12,8 +18,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Component(immediate = true,service = StatisticsDao.class)
+@Component(immediate = true, service = StatisticsDao.class)
 public class StatisticsDao extends PostgresqlDaoImpl<Place> {
+
+    @Reference
+    private RetentionDao retentionDao;
 
     public List<Map<String, Object>> countOrg() {
         String sql = "select org_type, count(*) as count from hg_party_org " +
@@ -30,6 +39,45 @@ public class StatisticsDao extends PostgresqlDaoImpl<Place> {
     public List<Map<String, Object>> countMemberByType() {
         String sql = "SELECT member_type, count(id) as c FROM hg_party_member where historic = false GROUP BY member_type";
         return jdbcTemplate.queryForList(sql);
+    }
+
+    public PageQueryResult<Map<String, Object>> leaderPage(int page, int limit, String orgId, String name) {
+        List<Object> params = new ArrayList<>();
+        String sql = "SELECT m.member_identity, m.member_name, branch.org_id, branch.org_name from hg_party_member M\n" +
+                "inner join hg_party_org branch on m.member_org = branch.org_id and branch.historic = false \n" +
+                "\tinner join hg_party_org secondary on branch.org_parent = secondary.org_id and secondary.historic = false\n" +
+                "\tinner join hg_party_org school on secondary.org_parent = school.org_id and \n" +
+                "school.historic = false\n" +
+                "WHERE\n" +
+                "\t(branch.org_id = ?\n" +
+                "\tor secondary.org_id = ?\n" +
+                "\tor school.org_id = ?)\n" +
+                "and member_is_leader = '是' and m.historic = false";
+        params.add(orgId);
+        params.add(orgId);
+        params.add(orgId);
+        if (!StringUtils.isEmpty(name)){
+            sql += " and member_name like ?";
+            params.add("%" + name + "%");
+        }
+
+        return retentionDao.pageBySql(page, limit, sql, params);
+    }
+
+    public List<BaseStatistics> leaderJoinStatistics(List<String> orgIds) {
+        String prefix = orgIds.stream().map(p->"?").collect(Collectors.joining(","));
+        String sql = "SELECT\n" +
+                "\tmi.participant_id AS property,\n" +
+                "\tCOUNT ( mi.meeting_id ) AS num \n" +
+                "FROM\n" +
+                "\t\"hg_party_meeting_member_info\" mi\n" +
+                "\tINNER JOIN hg_party_member M ON mi.participant_id = M.member_identity and m.historic = false\n" +
+                "where\n" +
+                "\tmi.participant_id in (" + prefix + ")\n" +
+                "GROUP BY\n" +
+                "\tmi.participant_id";
+        List<Object> params = new ArrayList<>(orgIds);
+        return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(BaseStatistics.class), params.toArray());
     }
 
     public List<MeetingStatistics> secondaryMeetingStatistics() {
@@ -105,7 +153,7 @@ public class StatisticsDao extends PostgresqlDaoImpl<Place> {
 
     public List<Map<String, Object>> countMember() {
         String sql = "select sec.org_name_short as name, count(m.id) as count from hg_party_member m left join hg_party_org brunch on m.member_org = brunch.org_id left join hg_party_org sec on brunch.org_parent = sec.org_id  where m.historic = false and brunch.historic = false group by sec.org_name_short";
-        return  jdbcTemplate.queryForList(sql);
+        return jdbcTemplate.queryForList(sql);
     }
 
     public List<Map<String, Object>> countWeekLog() {
@@ -118,7 +166,7 @@ public class StatisticsDao extends PostgresqlDaoImpl<Place> {
     public Long countAllLog() {
         String sql = "SELECT count(*) FROM hg_party_visit_count  where type = '登陆系统'";
         return jdbcTemplate.queryForObject(sql, Long.class);
-}
+    }
 
     public List<Map<String, Object>> countMeeting() {
         String sql = "SELECT count(id),campus from hg_party_meeting_plan_info WHERE campus " +

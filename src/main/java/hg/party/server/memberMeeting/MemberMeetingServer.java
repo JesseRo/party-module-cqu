@@ -15,6 +15,8 @@ package hg.party.server.memberMeeting;
 
 import hg.party.dao.memberMeeting.MemberMeetingDao;
 import hg.party.entity.organization.Organization;
+import hg.party.entity.party.BaseStatistics;
+import hg.party.entity.party.LeaderStatistics;
 import hg.party.entity.party.MeetingStatistics;
 import hg.party.server.organization.OrgService;
 import org.osgi.service.component.annotations.Component;
@@ -82,8 +84,8 @@ public class MemberMeetingServer {
                     if ((boolean) map.get("leader")) {
                         statistics.setLeader_count((long) map.getOrDefault("count", 0));
                     } else {
-						statistics.setMember_count((long) map.getOrDefault("count", 0));
-					}
+                        statistics.setMember_count((long) map.getOrDefault("count", 0));
+                    }
                 }
             }
 
@@ -95,11 +97,11 @@ public class MemberMeetingServer {
                     map = statisticsDao.countSecondaryMeeting(orgId, start, end);
                 }
                 if (map != null) {
-					statistics.setBranch_count((long) map.get("branch_count"));
-					statistics.setPlan_count((long) map.get("plan_count"));
-					statistics.setLeader_count((long) map.get("leader_count"));
-					statistics.setMember_count((long) map.get("member_count"));
-				}
+                    statistics.setBranch_count((long) map.get("branch_count"));
+                    statistics.setPlan_count((long) map.get("plan_count"));
+                    statistics.setLeader_count((long) map.get("leader_count"));
+                    statistics.setMember_count((long) map.get("member_count"));
+                }
             }
             statisticsList.add(statistics);
         }
@@ -107,6 +109,34 @@ public class MemberMeetingServer {
         data.put("list", statisticsList);
         data.put("start", start);
         data.put("end", end);
-		return new PageQueryResult<>(statisticsList, result.getCount(), result.getPageNow(), result.getPageSize());
+        return new PageQueryResult<>(statisticsList, result.getCount(), result.getPageNow(), result.getPageSize());
     }
+
+    public PageQueryResult<LeaderStatistics> LeaderStatisticsPage(int page, int size, int id, String name) {
+        Organization organization = orgService.findOrgById(id);
+        PageQueryResult<Map<String, Object>> pageResult = statisticsDao.leaderPage(page, size, organization.getOrg_id(), name);
+        List<String> orgIds = pageResult.getList().stream().map(p -> (String) p.get("member_identity")).collect(Collectors.toList());
+        List<BaseStatistics> joinStatistics = statisticsDao.leaderJoinStatistics(orgIds);
+        Map<String, BaseStatistics> baseStatisticsMap = joinStatistics.stream().collect(Collectors.toMap(BaseStatistics::getProperty, p -> p));
+        List<LeaderStatistics> leaderStatisticsList = new ArrayList<>();
+        for (Map<String, Object> map : pageResult.getList()) {
+            String memberId = (String) map.get("member_identity");
+            String memberName = (String) map.get("member_name");
+            String orgName = (String) map.get("org_name");
+            String orgId = (String) map.get("org_id");
+            LeaderStatistics leaderStatistics = new LeaderStatistics();
+            leaderStatistics.setMember_identity(memberId);
+            leaderStatistics.setMember_name(memberName);
+            leaderStatistics.setOrg_id(orgId);
+            leaderStatistics.setOrg_name(orgName);
+
+            BaseStatistics baseStatistics = baseStatisticsMap.get(memberId);
+            if (baseStatistics != null) {
+                leaderStatistics.setJoin_count(baseStatistics.getNum());
+            }
+            leaderStatisticsList.add(leaderStatistics);
+        }
+        return new PageQueryResult<>(leaderStatisticsList, pageResult.getCount(), pageResult.getPageNow(), pageResult.getPageSize());
+    }
+
 }

@@ -245,14 +245,15 @@ public class RetentionDao extends PostgresqlDaoImpl<Retention> {
         }
 
         List<Map<String, Object>> list = this.listBySql(pageNow, pageSize, sql, objects);
-        int count = this.countBySql(sql, objects);
-        return new PageQueryResult(list, count, pageNow, pageSize);
+        long count = this.countBySql(sql, objects);
+        return new PageQueryResult(list, (int)count, pageNow, pageSize);
     }
 
 
-    public int countBySql(String sql, List<Object> objects) {
-        List<Map<String, Object>> maps = this.jdbcTemplate.queryForList(sql, objects.toArray(new Object[0]));
-        return null == maps ? 0 : maps.size();
+    public long countBySql(String sql, List<Object> objects) {
+        sql = "select count(*) from (" + sql + ") t";
+        long size = this.jdbcTemplate.queryForObject(sql, Long.class, objects.toArray(new Object[0]));
+        return size;
     }
     private List<Map<String, Object>> listBySql(int pageNo, int pageSize, String sql, List<Object> objects) {
         StringBuffer exeSql = new StringBuffer();
