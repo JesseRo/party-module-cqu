@@ -34,7 +34,7 @@ public class OrgDao extends HgPostgresqlDaoImpl<Organization> {
     private RetentionDao retentionDao;
 
     public List<Organization> findAll() {
-        String sql = "select * from hg_party_org where historic is false";
+        String sql = "select * from hg_party_org where historic is false order by id asc";
         return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Organization.class));
     }
 

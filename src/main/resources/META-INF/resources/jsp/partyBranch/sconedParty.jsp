@@ -501,11 +501,21 @@
                 ,type: 'datetime'
                 ,isInitValue: true
                 //,trigger: 'click'
-                ,done: function(value, date, endDate){
+                ,ready: function(date){
+                    $('.laydate-btns-confirm').hide();
                 }
-                ,change: function(value, date, endDate){
+                ,done: function(value, date, endDate){
                     this.elem.val(value)
                 }
+                ,change: function(value, date, endDate){
+                    if($('.laydate-btns-time').attr('lay-type') === 'date'){
+                    } else {
+                        $('.laydate-btns-time').click();
+                        $('.laydate-btns-confirm').show();
+                    }
+                    this.elem.val(value)
+                }
+                ,btns: ['confirm']
             });
         }
         function renderEditor(){

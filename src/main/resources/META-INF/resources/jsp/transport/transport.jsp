@@ -21,11 +21,50 @@
     </style>
     <style type="text/css">
     </style>
+    <portlet:resourceURL id="/org/tree" var="orgTreeUrl"/>
+
     <script type="text/javascript">
         $(function () {
+            layui.config({
+                base: '${basePath}/js/layui/module/'
+            }).extend({
+                treeSelect: 'treeSelect/treeSelect'
+            });
             var data = ${transportJson};
-            layui.use('form', function () {
+            var checkedNode = null;
+
+            layui.use(['form', 'treeSelect'], function () {
                 var form = layui.form;
+                var treeSelect = layui.treeSelect;
+
+                renderTree();
+
+                function renderTree() {
+                    treeSelect.destroy('orgTree');
+                    treeSelect.render({
+                        // 选择器
+                        elem: '#orgTree',
+                        // 数据
+                        data: '${orgTreeUrl}&isFilter=false',
+                        // 异步加载方式：get/post，默认get
+                        type: 'get',
+                        // 占位符
+                        placeholder: '请选择',
+                        // 是否开启搜索功能：true/false，默认false
+                        search: true,
+                        // 点击回调
+                        click: function (d) {
+                            checkedNode = d.current;
+                        },
+                        // 加载完成后的回调函数
+                        success: function (d) {
+                            if (!checkedNode) {
+                                checkedNode = d.data[0];
+                            }
+                            treeSelect.checkNode('orgTree', checkedNode.id);
+                        }
+                    });
+                }
                 //表单提交
                 form.on('submit(organRelaForm)', function (data) {
                     // layer.alert(JSON.stringify(data.field), {
@@ -215,16 +254,15 @@
                         </select>
                     </div>
                     <div class="layui-input-block" id="org_all" style="display: none;">
-                        <select name="org_name" id="org_all_select">
-                            <option value="">请选择</option>
-                            <c:forEach var="group" items="${allBrunchGroup}">
-                                <optgroup label="${group.key}">
-                                    <c:forEach var="brunch" items="${group.value}">
-                                        <option value="${brunch.org_id}">${brunch.org_name}</option>
-                                    </c:forEach>
-                                </optgroup>
-                            </c:forEach>
-                        </select>
+                        <div class="layui-form-item" style="clear: none;">
+                            <div class="layui-inline" style="width: 100%;">
+                                <div class="layui-input-inline orgTree" style="width: 100%;">
+                                    <input type="text" name="orgTree" id="orgTree" lay-filter="orgTree"
+                                           placeholder="请选择组织" class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
                 <div class="layui-form-item">
