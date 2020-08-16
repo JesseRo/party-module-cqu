@@ -14,6 +14,9 @@ import javax.portlet.RenderResponse;
 import com.liferay.portal.kernel.service.persistence.PortletUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import hg.party.dao.org.OrgDao;
+import hg.party.server.CacheCore;
+import hg.util.MD5;
+import org.apache.commons.codec.digest.Md5Crypt;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.springframework.util.StringUtils;
@@ -26,6 +29,7 @@ import hg.party.server.navigation.NavigationPermissionsServer;
 import hg.party.server.organization.UserRoleService;
 import hg.util.ConstantsKey;
 import party.constants.PartyPortletKeys;
+import redis.clients.jedis.Jedis;
 
 /**
  * 文件名称： party<br>
@@ -69,6 +73,8 @@ public class TopNavigationPortlet extends MVCPortlet {
 	 private UserRoleService userRoleService;
 	@Reference
 	private OrgDao orgDao;
+	@Reference
+	private CacheCore cacheCore;
 	@Override
 	public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
 			throws IOException, PortletException {
@@ -126,6 +132,9 @@ public class TopNavigationPortlet extends MVCPortlet {
 				renderRequest.setAttribute("organization",  organization);
 			}
 			renderRequest.setAttribute("roles",  roles);
+			String sessionKey = MD5.getMD5(sessionId);
+			renderRequest.setAttribute("sessionKey", sessionKey);
+			cacheCore.getJedis().expire(String.format("baixun:session:%s", MD5.getMD5(sessionId)), 30 * 60);
 		}else{
 			PortalUtil.getHttpServletResponse(renderResponse).sendRedirect("/home");
 		}

@@ -56,9 +56,10 @@ public class OrgMeetingRemindResourceCommand implements MVCResourceCommand {
     public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
             throws PortletException {
 
-        String orgId = ParamUtil.getString(resourceRequest, "orgId");
+        String orgId = ParamUtil.getString(resourceRequest, "id");
         String start = ParamUtil.getString(resourceRequest, "start");
         String end = ParamUtil.getString(resourceRequest, "end");
+        boolean template = ParamUtil.getBoolean(resourceRequest, "template");
 
         String currentOrgId = (String) SessionManager.getAttribute(resourceRequest.getRequestedSessionId(), "department");
         Organization currentOrg = orgDao.findByOrgId(currentOrgId);
@@ -68,13 +69,17 @@ public class OrgMeetingRemindResourceCommand implements MVCResourceCommand {
         res.addHeader("content-type", "application/json");
 
         try {
-            List<String> phones = orgDao.findAdminPhoneNumberIn(Collections.singletonList(orgId));
-            if (phones != null && phones.size() > 0) {
-
-                CQUMsgService.sendPhoneNoticeMsg(String.join(",", phones),
-                        String.format(smsTemplate, organization.getOrg_name(), start, end, currentOrg.getOrg_name()));
+            if (template) {
+                res.getWriter().write(gson.toJson(JsonResponse.Success(String.format(smsTemplate, organization.getOrg_name(), start, end, currentOrg.getOrg_name()))));
+            } else {
+                List<String> phones = orgDao.findAdminPhoneNumberIn(Collections.singletonList(orgId));
+                if (phones != null && phones.size() > 0) {
+                    CQUMsgService.sendPhoneNoticeMsg(String.join(",", phones),
+                            String.format(smsTemplate, organization.getOrg_name(), start, end, currentOrg.getOrg_name()));
+                }
+                res.getWriter().write(gson.toJson(JsonResponse.Success()));
             }
-            res.getWriter().write(gson.toJson(JsonResponse.Success()));
+
         } catch (Exception e) {
             try {
                 e.printStackTrace();

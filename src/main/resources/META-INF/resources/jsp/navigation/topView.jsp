@@ -191,6 +191,9 @@
            	  		}
 				})
 			}
+            $(function() {
+                sessionStorage.setItem("sessionKey", "${sessionKey}")
+            })
 		</script>
 		<!-- </div> -->
 	</body>

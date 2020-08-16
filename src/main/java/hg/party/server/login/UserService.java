@@ -8,12 +8,15 @@ import java.util.Map;
 
 import javax.print.DocFlavor.STRING;
 
+import com.alibaba.fastjson.JSONObject;
 import dt.session.SessionManager;
 import hg.party.dao.org.OrgDao;
 import hg.party.entity.organization.VisitCount;
+import hg.party.server.CacheCore;
 import hg.party.server.organization.VisitCountService;
 import hg.party.server.partyBranch.PartyBranchService;
 import hg.util.ConstantsKey;
+import hg.util.MD5;
 import org.apache.log4j.Logger;
 import org.osgi.service.component.annotations.Component;
 import hg.party.dao.login.UserDao;
@@ -33,7 +36,9 @@ public class UserService {
     private PartyBranchService partyBranchService;
     @Reference
     private VisitCountService visitCountService;
-
+    @Reference
+    private CacheCore cacheCore;
+    private static final String USER_INFO_KEY = "userInfo";
     /**
      * 通过账号查询用户信息
      */
@@ -136,6 +141,12 @@ public class UserService {
         SessionManager.setAttribute(sessionId, "orgType", orgType);
         SessionManager.setAttribute(sessionId, "orgId", user.getUser_department_id());
         SessionManager.setAttribute(sessionId, "loginCount", 1);
+        UserInfo userInfo = new UserInfo();
+        userInfo.setDepartment(orgId);
+        userInfo.setMemberId(userName);
+        userInfo.setOrgId(user.getUser_department_id());
+        userInfo.setUserId(user.getId());
+        cacheCore.getJedis().hsetnx(String.format("baixun:session:%s", MD5.getMD5(sessionId)), USER_INFO_KEY, JSONObject.toJSONString(userInfo));
         //判断是否是第一次登陆
         boolean bool = isFirstLogin(userName, name);
         SessionManager.setAttribute(sessionId, "firstLogin", bool);

@@ -462,9 +462,15 @@
         });
         function sms(e){
             var orgId = $(e).attr("bid");
-            $.post("${sms}", {id: orgId, start: startDate, end: endDate}, function (res) {
+            $.post("${sms}", {id: orgId, start: startDate, end: endDate, template: true}, function (res) {
                 if (res.result) {
-                    layuiModal.alert("已短信通知");
+                    layuiModal.confirm("是否发送通知短信：\n" + res.data, function () {
+                        $.post("${sms}", {id: orgId, start: startDate, end: endDate}, function (res) {
+                            if (res.result) {
+                                layuiModal.alert("已发送短信通知");
+                            }
+                        })
+                    });
                 }
             })
         }
