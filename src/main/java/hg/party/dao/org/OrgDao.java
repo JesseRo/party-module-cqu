@@ -428,12 +428,12 @@ public class OrgDao extends HgPostgresqlDaoImpl<Organization> {
     }
 
     //删除人员
-    public int deletePersonByuserId(String userId) {
-        String sql = "update hg_party_member set historic = true " +
+    public int deletePersonByuserId(String userId, String extra) {
+        String sql = "update hg_party_member set historic = true, historic_extra = ? " +
                 " where member_identity = ? " +
                 " and historic is false ";
 
-        return jdbcTemplate.update(sql, userId);
+        return jdbcTemplate.update(sql, extra, userId);
     }
     //恢复人员
     public int recoveryMemberByUserId(String userId,String orgId) {

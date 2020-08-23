@@ -115,8 +115,8 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
             params.add(end);
         }
         if (!StringUtils.isEmpty(leader)){
-            sql += "and leader.member_name = ? ";
-            params.add(leader);
+            sql += "and leader.member_name like ? ";
+            params.add("%" + leader + "%");
         }
         sql += "order by plan.id asc ";
         return postGresqlFindBySql(page, size, sql, params.toArray(new Object[0]));

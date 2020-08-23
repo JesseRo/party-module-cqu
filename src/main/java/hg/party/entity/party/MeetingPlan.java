@@ -63,6 +63,8 @@ public class MeetingPlan {
    private String cancel_reason;
    //列席人员
    private String sit;
+	//列席人员
+	private String sit_id;
    //组织部抽查人
    private String check_person_org;
    //组织部抽查状态
@@ -285,5 +287,13 @@ public class MeetingPlan {
 
 	public void setAutoPhoneMsg(int autoPhoneMsg) {
 		this.autoPhoneMsg = autoPhoneMsg;
+	}
+
+	public String getSit_id() {
+		return sit_id;
+	}
+
+	public void setSit_id(String sit_id) {
+		this.sit_id = sit_id;
 	}
 }

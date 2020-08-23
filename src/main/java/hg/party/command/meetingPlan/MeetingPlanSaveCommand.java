@@ -8,8 +8,10 @@ import com.liferay.portal.kernel.util.ParamUtil;
 
 import dt.session.SessionManager;
 
+import hg.party.dao.org.MemberDao;
 import hg.party.entity.party.MeetingPlan;
 
+import hg.party.entity.partyMembers.Member;
 import hg.party.server.partyBranch.PartyBranchService;
 
 import hg.util.TransactionUtil;
@@ -33,7 +35,7 @@ import java.util.UUID;
 @Component(
         immediate = true,
         property = {
-                "javax.portlet.name="+ PartyPortletKeys.Form,
+                "javax.portlet.name=" + PartyPortletKeys.Form,
                 "javax.portlet.name=" + PartyPortletKeys.NewPlan,
                 "mvc.command.name=/hg/meetingPlan/save"
         },
@@ -43,6 +45,10 @@ public class MeetingPlanSaveCommand implements MVCResourceCommand {
 
     @Reference
     PartyBranchService partyBranchService;
+
+    @Reference
+    private MemberDao memberDao;
+
     @Reference
     private TransactionUtil transactionUtil;
 
@@ -60,7 +66,7 @@ public class MeetingPlanSaveCommand implements MVCResourceCommand {
         int location = ParamUtil.getInteger(resourceRequest, "location");
 
         String host = ParamUtil.getString(resourceRequest, "host");
-        String sit = ParamUtil.getString(resourceRequest, "sit");
+        String sitId = ParamUtil.getString(resourceRequest, "sit");
 
         String linkMan = ParamUtil.getString(resourceRequest, "contact");
         String linkManTelephone = ParamUtil.getString(resourceRequest, "phoneNumber");
@@ -80,18 +86,18 @@ public class MeetingPlanSaveCommand implements MVCResourceCommand {
         conferenceType = HtmlUtil.escape(conferenceType);
         meeting_theme = HtmlUtil.escape(meeting_theme);
         timeLasts = HtmlUtil.escape(timeLasts);
-        sit = HtmlUtil.escape(sit);
+        sitId = HtmlUtil.escape(sitId);
         meetingId = HtmlUtil.escape(meetingId);
         PrintWriter printWriter = null;
         try {
             printWriter = resourceResponse.getWriter();
-            MeetingPlan m  = new MeetingPlan();
+            MeetingPlan m = new MeetingPlan();
             if (StringUtils.isEmpty(meetingId)) {
                 String meeting_id = UUID.randomUUID().toString();
                 m.setMeeting_id(meeting_id);
-            }else{
+            } else {
                 m = partyBranchService.findMeetingPlan(meetingId);
-                if(m== null){
+                if (m == null) {
                     printWriter.write(JSON.toJSONString(ResultUtil.fail("操作的数据不存在。")));
                     return false;
                 }
@@ -107,35 +113,42 @@ public class MeetingPlanSaveCommand implements MVCResourceCommand {
             m.setContact(linkMan);
             m.setContact_phone(linkManTelephone);
             m.setContent(content);
-            m.setSit(sit);
+            if (!StringUtils.isEmpty(sitId)) {
+                Member member = memberDao.findByUserId(sitId);
+                if (member != null) {
+                    m.setSit(member.getMember_name());
+                    m.setSit_id(sitId);
+                }
+            }
+
             m.setCampus(campus);
             m.setAttachment(attachment);
-            m.setAutoPhoneMsg(autoPhoneMsg?1:0);
+            m.setAutoPhoneMsg(autoPhoneMsg ? 1 : 0);
             LocalDateTime ldTime = LocalDateTime.now(ZoneId.of("Asia/Shanghai"));
             Timestamp t = Timestamp.valueOf(ldTime);
             m.setSubmit_time(t);
             m.setOrganization_id(orgId);
-            if (graft){
+            if (graft) {
                 m.setTask_status("0");//草稿
-            }else {
+            } else {
                 m.setTask_status("1");//非草稿
             }
 
             int ret = 0;
-            String message = graft?"保存成功":"发布成功";
+            String message = graft ? "保存成功" : "发布成功";
             transactionUtil.startTransaction();
-            if(StringUtils.isEmpty(meetingId)){
+            if (StringUtils.isEmpty(meetingId)) {
                 ret = partyBranchService.save(m);
-            }else{
+            } else {
                 ret = partyBranchService.update(m);
                 message = "修改成功";
             }
-            if(ret>0){
+            if (ret > 0) {
                 String[] participateArr = participate.split(",");
                 partyBranchService.deleteMeetingMember(m.getMeeting_id());
-                for(int i=0;i<participateArr.length;i++){
-                    if(!StringUtils.isEmpty(participateArr[i])){
-                        partyBranchService.addMeetingMember(m.getMeeting_id(),participateArr[i]);
+                for (int i = 0; i < participateArr.length; i++) {
+                    if (!StringUtils.isEmpty(participateArr[i])) {
+                        partyBranchService.addMeetingMember(m.getMeeting_id(), participateArr[i]);
                     }
                 }
             }
@@ -143,15 +156,15 @@ public class MeetingPlanSaveCommand implements MVCResourceCommand {
             //获取组织类型
             String orgType = partyBranchService.findSconedAndBranch(orgId);
             String url;
-            if (!StringUtils.isEmpty(meetingId) ) {
+            if (!StringUtils.isEmpty(meetingId)) {
                 url = "/backlogtwo";
-            }  else {
+            } else {
                 url = "/backlogtwo";
             }
-            if(ret > 0){
+            if (ret > 0) {
                 transactionUtil.commit();
-                printWriter.write(JSON.toJSONString(ResultUtil.success(url,message)));
-            }else{
+                printWriter.write(JSON.toJSONString(ResultUtil.success(url, message)));
+            } else {
                 transactionUtil.rollback();
                 printWriter.write(JSON.toJSONString(ResultUtil.fail("操作失败，请刷新后重试...")));
             }

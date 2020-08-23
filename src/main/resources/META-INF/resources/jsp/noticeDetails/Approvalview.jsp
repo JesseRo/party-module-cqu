@@ -66,7 +66,7 @@
 						<div class="layui-form-item layui-row" >
 							<p class="layui-col-xs6 layui-col-sm6 layui-col-md4"><span>开展地点：</span>${meetingPlan.placeName }</p>
 							<p class="layui-col-xs6 layui-col-sm6 layui-col-md4"><span>主持人：</span>${meetingPlan.hostName }</p>
-							<p class="layui-col-xs6 layui-col-sm6 layui-col-md4"><span>列席人员：</span>${meetingPlan.sit }</p>
+							<p class="layui-col-xs6 layui-col-sm6 layui-col-md4"><span>联系领导：</span>${meetingPlan.sit }</p>
 						</div>
 
 						<div class="layui-form-item layui-row" >

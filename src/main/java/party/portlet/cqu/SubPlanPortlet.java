@@ -3,8 +3,10 @@ package party.portlet.cqu;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.util.PortalUtil;
 import dt.session.SessionManager;
+import hg.party.dao.org.MemberDao;
 import hg.party.entity.organization.Organization;
 import hg.party.entity.party.MeetingPlan;
+import hg.party.entity.partyMembers.Member;
 import hg.party.server.organization.OrgService;
 import hg.party.server.partyBranch.PartyBranchService;
 import org.apache.axis.utils.StringUtils;
@@ -52,6 +54,10 @@ public class SubPlanPortlet extends MVCPortlet {
     Logger logger = Logger.getLogger(SubPlanPortlet.class);
     @Reference
     private OrgService orgService;
+
+    @Reference
+    private MemberDao memberDao;
+
     @Reference
     private PartyBranchService partyBranchService;
     @Override
@@ -89,6 +95,7 @@ public class SubPlanPortlet extends MVCPortlet {
                 renderRequest.setAttribute("participate", participate);
             }
         }
+        List<Map<String, Object>> leaders = memberDao.leaders();
 
         logger.info("members size:"+members.size());
         renderRequest.setAttribute("organization",organization);
@@ -97,6 +104,7 @@ public class SubPlanPortlet extends MVCPortlet {
         renderRequest.setAttribute("timeLasts",TIME_LASTS);
         renderRequest.setAttribute("campus",CAMPUS);
         renderRequest.setAttribute("members", members);
+        renderRequest.setAttribute("leaders", leaders);
         Date now = Calendar.getInstance().getTime();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         renderRequest.setAttribute("now", sdf.format(now));

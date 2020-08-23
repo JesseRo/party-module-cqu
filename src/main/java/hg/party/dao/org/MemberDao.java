@@ -65,6 +65,17 @@ public class MemberDao extends HgPostgresqlDaoImpl<Member> {
         }
     }
 
+    public List<Map<String, Object>> leaders() {
+        String sql = "SELECT m.member_identity, m.member_name, branch.org_id, branch.org_name from hg_party_member M\n" +
+                "left join hg_party_org branch on M.member_org = branch.org_id " +
+                "WHERE member_is_leader = '是' and m.historic is false";
+        try {
+            return jdbcTemplate.queryForList(sql);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     public List<Map<String, Object>> findMemeberJob() {
         String sql = "select DISTINCT member_job  from hg_party_member where member_job is not null";
@@ -246,7 +257,7 @@ public class MemberDao extends HgPostgresqlDaoImpl<Member> {
             return null;
         }
         String idSql = String.join("','", ids);
-        String sql = "SELECT * from hg_party_member where member_identity in ('%s')";
+        String sql = "SELECT * from hg_party_member where member_identity in ('%s') and historic is false";
         try {
             return jdbcTemplate.query(String.format(sql, idSql), BeanPropertyRowMapper.newInstance(Member.class));
         } catch (Exception e) {

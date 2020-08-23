@@ -222,9 +222,14 @@
                             </div>
                         </div>
                         <div class="layui-inline">
-                            <label class="layui-form-label">列席人员：</label>
+                            <label class="layui-form-label">联系领导：</label>
                             <div class="layui-input-inline">
-                                <input type="text" class="layui-input" name="sit"  autocomplete="off" value="${meetingPlan.sit}">
+                                <select name="sit" lay-search="" lay-verify="select" lay-filter="sit" placeholder="可搜索可输入">
+                                    <option value="">请选择</option>
+                                    <c:forEach var="l" items="${leaders}">
+                                        <option value="${l.member_identity}">${l.member_name} [${l.org_name}]</option>
+                                    </c:forEach>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -302,8 +307,8 @@
                     </div>
                     <div class="layui-form-item">
                         <div class="layui-input-block">
-                            <button type="submit" class="layui-btn layui-btn-warm" lay-submit="" lay-filter="meetingPlanRelease">发 布</button>
-                            <button type="submit" class="layui-btn layui-btn-warm" lay-submit="" lay-filter="meetingPlanSave">暂 存</button>
+                            <button type="button" class="layui-btn layui-btn-warm" lay-submit="" lay-filter="meetingPlanRelease">发 布</button>
+                            <button type="button" class="layui-btn layui-btn-warm" lay-submit="" lay-filter="meetingPlanSave">暂 存</button>
                             <button type="button" class="layui-btn layui-btn-primary" id="meetingPlanCancle">取 消</button>
                         </div>
                     </div>
@@ -487,6 +492,10 @@
             var contact= '${meetingPlan.contact}';
             if(contact != '' && contact != 'null'){
                 $('#addMeetingPlanForm  select[name="contact"]').val(contact);
+            }
+            var sit = '${meetingPlan.sit_id}';
+            if(sit != '' && sit != 'null'){
+                $('#addMeetingPlanForm  select[name="sit"]').val(sit);
             }
             if('${participate}'!=''){
                 var arr = '${participate}'.split(",");
@@ -883,18 +892,19 @@
             return false;
         });
         form.on('submit(meetingPlanRelease)', function(data){
-            var postData= data.field;
-            postData.graft = false;
-            postData.host =  postData.host.join(",");
-            postData.participate =  postData.participate.join(",");
-            postData.attachment = JSON.stringify(fileData);
-            $.post("${saveMeetingPlan}", postData, function (res) {
-                if (res.code==200) {
-                    layer.msg("发布成功。");
-                    setTimeout(function(){window.location.href = res.data}, 1000);
-                }
-            },'json');
-            return false;
+            layuiModal.confirm("确定要发布此计划吗？", function () {
+                var postData= data.field;
+                postData.graft = false;
+                postData.host =  postData.host.join(",");
+                postData.participate =  postData.participate.join(",");
+                postData.attachment = JSON.stringify(fileData);
+                $.post("${saveMeetingPlan}", postData, function (res) {
+                    if (res.code==200) {
+                        layer.msg("发布成功。");
+                        setTimeout(function(){window.location.href = res.data}, 1000);
+                    }
+                },'json');
+            })
         });
         //验证
         form.verify({

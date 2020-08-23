@@ -316,6 +316,7 @@ $(function(){
 							$('#getPageNo [name=seconedId]').val($('.form-group [name=seconedId]').val());
 							$('#getPageNo [name=endTime]').val($('.form-group [name=endTime]').val());
 							$('#getPageNo [name=startTime]').val($('.form-group [name=startTime]').val());
+							$('#getPageNo [name=leader]').val($('.form-group [name=leader]').val());
 							$('#getPageNo').submit();
 						})
 				  });

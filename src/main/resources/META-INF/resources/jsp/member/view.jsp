@@ -515,19 +515,21 @@
                     layer.confirm('您确定将此条记录移入历史档案库吗？', {
                         btn: ['确定','取消'] //按钮
                     }, function(){
-                        $.ajax({
-                            url: '${orgDeletePerson}',
-                            data: {"userIds": userId},
-                            dataType: "json",
-                            success: function (succee) {
-                                if (succee.state == true) {
-                                    layer.msg("移入历史档案库成功。");
-                                    renderTable(pageInfo.page,pageInfo.size);
-                                } else {
-                                    layer.msg("移入历史档案库失败！");
+                        layuiModal.prompt("备注", "", function (value) {
+                            $.ajax({
+                                url: '${orgDeletePerson}',
+                                data: {"userIds": userId, extra: value},
+                                dataType: "json",
+                                success: function (succee) {
+                                    if (succee.state) {
+                                        layer.msg("移入历史档案库成功。");
+                                        renderTable(pageInfo.page,pageInfo.size);
+                                    } else {
+                                        layer.msg("移入历史档案库失败！");
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        })
                     });
                 }
                 function recoveryMember(userId){

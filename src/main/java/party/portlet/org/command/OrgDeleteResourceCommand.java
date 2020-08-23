@@ -39,6 +39,7 @@ public class OrgDeleteResourceCommand implements MVCResourceCommand {
 	public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 			throws PortletException {
 		String userIds = ParamUtil.getString(resourceRequest, "userIds");
+		String extra = ParamUtil.getString(resourceRequest, "extra");
 		String orgId = ParamUtil.getString(resourceRequest, "orgId");
 		String userIdInfo[] = userIds.split(",");
 		//String deleteSsql = "delete from hg_party_group_member_info where participant_id='"+userId+"'";
@@ -50,7 +51,7 @@ public class OrgDeleteResourceCommand implements MVCResourceCommand {
 			for (int i = 0; i < userIdInfo.length; i++) {
 				String deleteAssigneSql = "DELETE from hg_party_assigne  where assigne_user_id='"+userIdInfo[i]+"'";
 				String deleteSsql = "delete from hg_party_group_member_info where participant_id='"+userIdInfo[i]+"'";
-				n = orgDao.deletePersonByuserId(userIdInfo[i]);
+				n = orgDao.deletePersonByuserId(userIdInfo[i], extra);
 				j = orgDao.deleteUserByuserId(userIdInfo[i]);
 				//orgDao.deleteAdmin(userIdInfo[i]);
 			    //memberDao.insertOrUpate(deleteSsql);
