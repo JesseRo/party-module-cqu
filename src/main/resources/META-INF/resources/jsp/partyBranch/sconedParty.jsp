@@ -146,7 +146,7 @@
                                 <select  name="conferenceType" lay-verify="select">
                                     <option  value="" disabled>请选择</option>
                                     <c:forEach var="n" items="${conferenceTypes }">
-                                        <option value="${n}">${n}</option>
+                                        <option value="${n.resources_value}">${n.resources_value}</option>
                                     </c:forEach>
                                 </select>
                             </div>
@@ -158,6 +158,28 @@
                             </div>
                         </div>
                     </div>
+                    <div id="speaker">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label layui-required">会议类型：</label>
+                                <div class="layui-input-inline">
+                                    <select  name="conferenceType" lay-verify="select">
+                                        <option  value="" disabled>请选择</option>
+                                        <c:forEach var="n" items="${conferenceTypes }">
+                                            <option value="${n.resources_value}">${n.resources_value}</option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label layui-required">开展主题：</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" name="subject"  lay-verify="required" autocomplete="on" value="${meetingPlan.meeting_theme }">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="layui-form-item">
                         <div class="layui-inline">
                             <label class="layui-form-label layui-required">开始时间：</label>
@@ -816,6 +838,11 @@
                 };
             });
         }
+        form.on('select(conferenceType)', function (data) {
+            if(data === '主题党课') {
+
+            }
+        })
         form.on('select(campus)', function(data){
             if(data.value !=""){
                 renderPlace(null);

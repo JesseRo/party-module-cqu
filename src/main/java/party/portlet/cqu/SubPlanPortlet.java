@@ -3,8 +3,10 @@ package party.portlet.cqu;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.util.PortalUtil;
 import dt.session.SessionManager;
+import hg.party.dao.downlistdao.DownListDao;
 import hg.party.dao.org.MemberDao;
 import hg.party.entity.organization.Organization;
+import hg.party.entity.party.Hg_Value_Attribute_Info;
 import hg.party.entity.party.MeetingPlan;
 import hg.party.entity.partyMembers.Member;
 import hg.party.server.organization.OrgService;
@@ -59,6 +61,8 @@ public class SubPlanPortlet extends MVCPortlet {
     private MemberDao memberDao;
 
     @Reference
+    private DownListDao downListDao;
+    @Reference
     private PartyBranchService partyBranchService;
     @Override
     public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
@@ -98,9 +102,10 @@ public class SubPlanPortlet extends MVCPortlet {
         List<Map<String, Object>> leaders = memberDao.leaders();
 
         logger.info("members size:"+members.size());
+        List<Hg_Value_Attribute_Info> meetingTypes = downListDao.meetType();
         renderRequest.setAttribute("organization",organization);
         renderRequest.setAttribute("meetingPlan",meetingPlan);
-        renderRequest.setAttribute("conferenceTypes",CONFERENCE_TYPES);
+        renderRequest.setAttribute("conferenceTypes",meetingTypes);
         renderRequest.setAttribute("timeLasts",TIME_LASTS);
         renderRequest.setAttribute("campus",CAMPUS);
         renderRequest.setAttribute("members", members);

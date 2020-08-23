@@ -66,7 +66,6 @@ public class ListAddOrUpdateCommand extends BaseMVCActionCommand{
 			asset_List.setResources_value(resources_value);
 			asset_List.setResources_type(resources_type);
 			asset_List.setRemark(remark);
-			asset_List.setOrg_id(orgId);
 			asset_List.setUser_id(userId);
 			server.SaveOrUpdate(asset_List);
 			
