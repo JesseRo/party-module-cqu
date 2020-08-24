@@ -188,98 +188,98 @@ public class PartyBranchDao extends PostgresqlDaoImpl<MeetingPlan> {
         return map;
     }
 
-	public Map<String, Object> queryInformMeetingsByOrgIdAndInformId(String orgId, String meetingType, String taskStatus, String informId,int page) {
+    public Map<String, Object> queryInformMeetingsByOrgIdAndInformId(String orgId, String meetingType, String taskStatus, String informId, int page) {
 
-		String sql = "SELECT\n" +
-				"i.inform_id,\n" +
-				"i.inform_status,\n" +
-				"i.deadline_time,\n" +
-				"i.meeting_type AS imeetingtype,\n" +
-				"i.meeting_theme AS imeetingtheme,\n" +
-				"g.pub_org_id,\n" +
-				"g.has_resend,\n" +
-				"g.read_status,\n" +
-				"g.send_to,\n" +
-				"i.content AS icontent,\n" +
-				"i.start_time AS istarttime,\n" +
-				"i.end_time AS iendtime,\n" +
-				"i.publisher,\n" +
-				"i.public_status,\n" +
-				"i.release_time,\n" +
-				"i.remark AS iremark,\n" +
-				"i.send_branch,\n" +
-				"i.org_type,\n" +
-				"i.parent,\n" +
-				"m.meeting_id,\n" +
-				"m.organization_id,\n" +
-				"m.meeting_type AS mmeetingtype,\n" +
-				"m.meeting_theme AS mmeetingtheme,\n" +
-				"m.place,\n" +
-				"m.start_time AS mstarttime,\n" +
-				"m.end_time AS mendtime,\n" +
-				"m.total_time,\n" +
-				"m.participant_group,\n" +
-				"m.contact,\n" +
-				"m.contact_phone,\n" +
-				"m.content AS mcontent,\n" +
-				"m.task_status,\n" +
-				"m.read_receipt,\n" +
-				"m.check_status,\n" +
-				"m.submit_time\n" +
-				"FROM\n" +
-				"hg_party_org_inform_info AS i\n" +
-				"INNER JOIN hg_party_inform_group_info AS g ON i.inform_id = g.inform_id\n" +
-				"INNER JOIN hg_party_meeting_plan_info AS m ON g.inform_id = m.inform_id AND g.pub_org_id = m.organization_id\n" +
-				"WHERE\n" +
-				"g.pub_org_id = '" + orgId + "' AND (i.public_status = '2' OR i.public_status = '1') " +
-				"and i.inform_id = '" + informId + "'";
+        String sql = "SELECT\n" +
+                "i.inform_id,\n" +
+                "i.inform_status,\n" +
+                "i.deadline_time,\n" +
+                "i.meeting_type AS imeetingtype,\n" +
+                "i.meeting_theme AS imeetingtheme,\n" +
+                "g.pub_org_id,\n" +
+                "g.has_resend,\n" +
+                "g.read_status,\n" +
+                "g.send_to,\n" +
+                "i.content AS icontent,\n" +
+                "i.start_time AS istarttime,\n" +
+                "i.end_time AS iendtime,\n" +
+                "i.publisher,\n" +
+                "i.public_status,\n" +
+                "i.release_time,\n" +
+                "i.remark AS iremark,\n" +
+                "i.send_branch,\n" +
+                "i.org_type,\n" +
+                "i.parent,\n" +
+                "m.meeting_id,\n" +
+                "m.organization_id,\n" +
+                "m.meeting_type AS mmeetingtype,\n" +
+                "m.meeting_theme AS mmeetingtheme,\n" +
+                "m.place,\n" +
+                "m.start_time AS mstarttime,\n" +
+                "m.end_time AS mendtime,\n" +
+                "m.total_time,\n" +
+                "m.participant_group,\n" +
+                "m.contact,\n" +
+                "m.contact_phone,\n" +
+                "m.content AS mcontent,\n" +
+                "m.task_status,\n" +
+                "m.read_receipt,\n" +
+                "m.check_status,\n" +
+                "m.submit_time\n" +
+                "FROM\n" +
+                "hg_party_org_inform_info AS i\n" +
+                "INNER JOIN hg_party_inform_group_info AS g ON i.inform_id = g.inform_id\n" +
+                "INNER JOIN hg_party_meeting_plan_info AS m ON g.inform_id = m.inform_id AND g.pub_org_id = m.organization_id\n" +
+                "WHERE\n" +
+                "g.pub_org_id = '" + orgId + "' AND (i.public_status = '2' OR i.public_status = '1') " +
+                "and i.inform_id = '" + informId + "'";
 //    		   if (!StringUtils.isEmpty(meetingType) ) {
 //    			   sql += "AND i.meeting_type = '" + meetingType + "'\n";
 //    		   }
 //    		   if (!StringUtils.isEmpty(taskStatus)) {
 //    			   sql += "AND i.task_status = '" + taskStatus + "'\n";
 //    		   }
-		if (!StringUtils.isEmpty(meetingType)) {
-			sql += "AND i.meeting_type = '" + meetingType + "'\n";
-		}
-		if (!StringUtils.isEmpty(taskStatus)) {
-			try {
-				int statusCode = Integer.valueOf(taskStatus);
-				if (statusCode > 0) {
-					if (statusCode < IGNORED_STATUS_CODE) {
-						sql += "AND cast(m .task_status as INTEGER) = " + statusCode + "\n";
-					} else {
-						sql += "AND cast(m .task_status as INTEGER) >= " + IGNORED_STATUS_CODE + "\n";
-					}
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		if (page == 0) {
-			page = 1;
-		}
+        if (!StringUtils.isEmpty(meetingType)) {
+            sql += "AND i.meeting_type = '" + meetingType + "'\n";
+        }
+        if (!StringUtils.isEmpty(taskStatus)) {
+            try {
+                int statusCode = Integer.valueOf(taskStatus);
+                if (statusCode > 0) {
+                    if (statusCode < IGNORED_STATUS_CODE) {
+                        sql += "AND cast(m .task_status as INTEGER) = " + statusCode + "\n";
+                    } else {
+                        sql += "AND cast(m .task_status as INTEGER) >= " + IGNORED_STATUS_CODE + "\n";
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if (page == 0) {
+            page = 1;
+        }
 
-		sql += "ORDER BY g.read_status ,release_time DESC ";
-		logger.info("sql 111111:" + sql);
-		//return postGresqlFindBySql(page, 8, sql );
-		String sql1 = sql + " limit 8 offset " + (page - 1) * 8;
-		Map<String, Object> map = new HashMap<>();
-		List<Map<String, Object>> list = this.jdbcTemplate.queryForList(sql1);
-		List<Map<String, Object>> count = this.jdbcTemplate.queryForList(sql);
-		int total = count.size();
-		if (total % 8 == 0) {
-			map.put("totalPage", total / 8);
-		} else {
-			map.put("totalPage", total / 8 + 1);
-		}
-		map.put("pageNow", page);
-		map.put("list", list);
-		return map;
-	}
+        sql += "ORDER BY g.read_status ,release_time DESC ";
+        logger.info("sql 111111:" + sql);
+        //return postGresqlFindBySql(page, 8, sql );
+        String sql1 = sql + " limit 8 offset " + (page - 1) * 8;
+        Map<String, Object> map = new HashMap<>();
+        List<Map<String, Object>> list = this.jdbcTemplate.queryForList(sql1);
+        List<Map<String, Object>> count = this.jdbcTemplate.queryForList(sql);
+        int total = count.size();
+        if (total % 8 == 0) {
+            map.put("totalPage", total / 8);
+        } else {
+            map.put("totalPage", total / 8 + 1);
+        }
+        map.put("pageNow", page);
+        map.put("list", list);
+        return map;
+    }
 
 
-	public List<Map<String, Object>> exportBranchTask(String orgId, String meetingType, String taskStatus, int page) {
+    public List<Map<String, Object>> exportBranchTask(String orgId, String meetingType, String taskStatus, int page) {
 
         String sql = "SELECT\n" +
                 "i.inform_id,\n" +
@@ -615,9 +615,9 @@ public class PartyBranchDao extends PostgresqlDaoImpl<MeetingPlan> {
         String sql = "select * FROM  hg_party_meeting_plan_info where meeting_id=?";
         RowMapper<MeetingPlan> rowMapper = BeanPropertyRowMapper.newInstance(MeetingPlan.class);
         List<MeetingPlan> meetingPlanList = this.jdbcTemplate.query(sql, rowMapper, meetingId);
-        if(meetingPlanList.size()>0){
+        if (meetingPlanList.size() > 0) {
             return meetingPlanList.get(0);
-        }else{
+        } else {
             return null;
         }
 
@@ -627,40 +627,51 @@ public class PartyBranchDao extends PostgresqlDaoImpl<MeetingPlan> {
         String sql = "select * FROM  hg_party_meeting_plan_info where organization_id=? and task_status='0'";
         RowMapper<MeetingPlan> rowMapper = BeanPropertyRowMapper.newInstance(MeetingPlan.class);
         List<MeetingPlan> meetingPlanList = this.jdbcTemplate.query(sql, rowMapper, org_id);
-        if(meetingPlanList.size()>0){
+        if (meetingPlanList.size() > 0) {
             return meetingPlanList.get(0);
-        }else{
+        } else {
             return new MeetingPlan();
         }
     }
 
     public int updateGroupNameByGroupId(String groupName, String groupId) {
         String sql = "update hg_party_group_org_info set group_name = ? where group_id= ? and group_state='1' ";
-        return jdbcTemplate.update(sql, groupName,groupId);
+        return jdbcTemplate.update(sql, groupName, groupId);
     }
 
     public int addGroupMember(String groupId, String userIdentity) {
-        String sql="INSERT INTO hg_party_group_member_info (group_id, participant_id) VALUES (?,?)";
-        return jdbcTemplate.update(sql,groupId,userIdentity);
+        String sql = "INSERT INTO hg_party_group_member_info (group_id, participant_id) VALUES (?,?)";
+        return jdbcTemplate.update(sql, groupId, userIdentity);
     }
+
     public int deleteGroupMember(int groupMemberId) {
-        String sql="delete  from  hg_party_group_member_info where id=?";
-        return jdbcTemplate.update(sql,groupMemberId);
+        String sql = "delete  from  hg_party_group_member_info where id=?";
+        return jdbcTemplate.update(sql, groupMemberId);
     }
 
     public void deleteMeetingMember(String meetingId) {
-        String sql="delete  from  hg_party_meeting_member_info where meeting_id=?";
-        jdbcTemplate.update(sql,meetingId);
+        String sql = "delete  from  hg_party_meeting_member_info where meeting_id=?";
+        jdbcTemplate.update(sql, meetingId);
     }
 
     public int addMeetingMember(String meetingId, String userId) {
-        String sql="INSERT INTO hg_party_meeting_member_info (meeting_id, participant_id,check_status) VALUES (?,?,'未读')";
-        return jdbcTemplate.update(sql,meetingId,userId);
+        String sql = "INSERT INTO hg_party_meeting_member_info (meeting_id, participant_id,check_status) VALUES (?,?,'未读')";
+        return jdbcTemplate.update(sql, meetingId, userId);
     }
 
     public List<Map<String, Object>> findMeetingMember(String meetingId) {
         String sql = "select i.* from (select * from hg_party_meeting_member_info where meeting_id = ?) i  left join hg_party_member m  on i.participant_id = m .member_identity";
 
         return jdbcTemplate.queryForList(sql, meetingId);
+    }
+
+    public void deleteMeetingSpeak(String meetingId) {
+        String sql = "delete  from  hg_party_meeting_speaker where meeting_id = ?";
+        jdbcTemplate.update(sql, meetingId);
+    }
+
+    public void addMeetingSpeak(String meeting_id, String speaker, String speakTitle) {
+        String sql = "insert into hg_party_meeting_speaker(member_id, meeting_id, speak_title) values(?, ?, ?)";
+        jdbcTemplate.update(sql, speaker, meeting_id, speakTitle);
     }
 }

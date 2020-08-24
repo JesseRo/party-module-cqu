@@ -117,6 +117,21 @@
 </head>
 <body>
 <div class="table_form_content ">
+    <div class="layui-form-item speaker_row" style="display: none;">
+        <div class="layui-inline">
+            <label class="layui-form-label layui-required">主讲人：</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" name="speaker"  autocomplete="on">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label layui-required">主讲题目：</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" name="speakTitle"  autocomplete="on">
+            </div>
+            <a href="javascript:void(0)" class="add_speaker" ><i class="layui-icon layui-icon-addition"></i></a>
+        </div>
+    </div>
     <!-- 右侧盒子内容 -->
     <div class="activity_manage_page">
         <div class="breadcrumb_group" style="margin-bottom: 20px;">
@@ -143,7 +158,7 @@
                         <div class="layui-inline">
                             <label class="layui-form-label layui-required">会议类型：</label>
                             <div class="layui-input-inline">
-                                <select  name="conferenceType" lay-verify="select">
+                                <select  name="conferenceType" lay-verify="select" lay-filter="conferenceType">
                                     <option  value="" disabled>请选择</option>
                                     <c:forEach var="n" items="${conferenceTypes }">
                                         <option value="${n.resources_value}">${n.resources_value}</option>
@@ -154,30 +169,12 @@
                         <div class="layui-inline">
                             <label class="layui-form-label layui-required">开展主题：</label>
                             <div class="layui-input-inline">
-                                <input type="text" class="layui-input" name="subject"  lay-verify="required" autocomplete="on" value="${meetingPlan.meeting_theme }">
+                                <input type="text" class="layui-input" name="subject" autocomplete="on" lay-verify="required"  value="${meetingPlan.meeting_theme }">
                             </div>
                         </div>
                     </div>
                     <div id="speaker">
-                        <div class="layui-form-item">
-                            <div class="layui-inline">
-                                <label class="layui-form-label layui-required">会议类型：</label>
-                                <div class="layui-input-inline">
-                                    <select  name="conferenceType" lay-verify="select">
-                                        <option  value="" disabled>请选择</option>
-                                        <c:forEach var="n" items="${conferenceTypes }">
-                                            <option value="${n.resources_value}">${n.resources_value}</option>
-                                        </c:forEach>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="layui-inline">
-                                <label class="layui-form-label layui-required">开展主题：</label>
-                                <div class="layui-input-inline">
-                                    <input type="text" class="layui-input" name="subject"  lay-verify="required" autocomplete="on" value="${meetingPlan.meeting_theme }">
-                                </div>
-                            </div>
-                        </div>
+
                     </div>
 
                     <div class="layui-form-item">
@@ -838,9 +835,19 @@
                 };
             });
         }
+        $('.bg_white_container').on('click', '.add_speaker', function () {
+            $('.add_speaker').hide();
+            var row = $('.speaker_row').clone();
+            row.show();
+            $('#speaker').append(row);
+        })
         form.on('select(conferenceType)', function (data) {
-            if(data === '主题党课') {
-
+            if(data.value === '主题党课') {
+                var row = $('.speaker_row').clone();
+                $('#speaker').append(row);
+                row.show();
+            } else {
+                $('#speaker').html("");
             }
         })
         form.on('select(campus)', function(data){

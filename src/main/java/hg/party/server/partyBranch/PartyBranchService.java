@@ -364,4 +364,12 @@ public class PartyBranchService {
     public List<Map<String, Object>> findMeetingMember(String meetingId) {
         return dao.findMeetingMember(meetingId);
     }
+
+    public void deleteMeetingSpeak(String meeting_id) {
+        dao.deleteMeetingSpeak(meeting_id);
+    }
+
+    public void addMeetingSpeak(String meeting_id, String speaker, String speakTitle) {
+        dao.addMeetingSpeak(meeting_id, speaker, speakTitle);
+    }
 }
