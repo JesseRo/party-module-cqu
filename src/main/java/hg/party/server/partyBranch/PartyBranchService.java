@@ -372,4 +372,8 @@ public class PartyBranchService {
     public void addMeetingSpeak(String meeting_id, String speaker, String speakTitle) {
         dao.addMeetingSpeak(meeting_id, speaker, speakTitle);
     }
+
+    public List<Map<String, Object>> getMeetingSpeak(String meeting_id) {
+        return dao.getMeetingSpeak(meeting_id);
+    }
 }

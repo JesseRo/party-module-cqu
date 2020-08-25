@@ -1,5 +1,6 @@
 package party.portlet.cqu;
 
+import com.google.gson.Gson;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.util.PortalUtil;
 import dt.session.SessionManager;
@@ -54,6 +55,8 @@ import static party.constants.PartyMeetingConst.*;
 )
 public class SubPlanPortlet extends MVCPortlet {
     Logger logger = Logger.getLogger(SubPlanPortlet.class);
+
+    private Gson gson = new Gson();
     @Reference
     private OrgService orgService;
 
@@ -75,6 +78,7 @@ public class SubPlanPortlet extends MVCPortlet {
         Organization organization = new Organization() ;
         MeetingPlan meetingPlan = new MeetingPlan();
         List<Map<String,Object>> members = new ArrayList<>();
+        List<Map<String, Object>> speakers = Collections.emptyList();
         if(orgAdminTypeEnum!=null){
             organization = orgService.findAdminOrg(userId, orgAdminTypeEnum);
             members = orgService.findMembersByOrg(organization.getOrg_id(),orgAdminTypeEnum);
@@ -93,12 +97,14 @@ public class SubPlanPortlet extends MVCPortlet {
                         }else{
                             participate = participate +","+ memberList.get(i).get("participant_id");
                         }
-
                     }
                 }
                 renderRequest.setAttribute("participate", participate);
+                speakers = partyBranchService.getMeetingSpeak(meetingPlan.getMeeting_id());
             }
         }
+        renderRequest.setAttribute("speaks", gson.toJson(speakers));
+
         List<Map<String, Object>> leaders = memberDao.leaders();
 
         logger.info("members size:"+members.size());

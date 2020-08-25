@@ -102,6 +102,9 @@
         .layui-layer-page.addGroupMemberModal-skin .layui-layer-content {
             overflow: visible;
         }
+        input, select {
+            text-indent: 0;
+        }
     </style>
     <link rel="stylesheet" href="${basePath}/js/layui/css/modules/multiSelect/multi-select.css"/>
     <link rel="stylesheet" href="${basePath}/js/layui/css/modules/checkbox/checkbox.css?version=98"/>
@@ -117,15 +120,20 @@
 </head>
 <body>
 <div class="table_form_content ">
-    <div class="layui-form-item speaker_row" style="display: none;">
+    <div class="layui-form-item speaker_row" style="display: none;" id="speaker_template">
         <div class="layui-inline">
-            <label class="layui-form-label layui-required">主讲人：</label>
+            <label class="layui-form-label">主讲人：</label>
             <div class="layui-input-inline">
-                <input type="text" class="layui-input" name="speaker"  autocomplete="on">
+                <select name="speaker" lay-search="" lay-verify="select" lay-filter="speaker" placeholder="可搜索可输入">
+                    <option value="">请选择</option>
+                    <c:forEach var="m" items="${members}">
+                        <option value="${m.member_identity}" phone="${m.member_phone_number}">${m.member_name}</option>
+                    </c:forEach>
+                </select>
             </div>
         </div>
         <div class="layui-inline">
-            <label class="layui-form-label layui-required">主讲题目：</label>
+            <label class="layui-form-label">主讲题目：</label>
             <div class="layui-input-inline">
                 <input type="text" class="layui-input" name="speakTitle"  autocomplete="on">
             </div>
@@ -500,6 +508,10 @@
             if(campus != '' && campus != 'null'){
                 $('#addMeetingPlanForm  select[name="campus"]').val(campus);
             }
+            var meetingType = '${meetingPlan.meeting_type}';
+            if(meetingType != '' && meetingType != 'null'){
+                $('#addMeetingPlanForm  select[name="conferenceType"]').val(meetingType);
+            }
             var place = '${meetingPlan.place}';
             if(place != '' && place != 'null'){
                 $('#addMeetingPlanForm  select[name="place"]').val(place);
@@ -519,6 +531,12 @@
             if('${participate}'!=''){
                 var arr = '${participate}'.split(",");
                 renderParticipate(arr);
+            }
+            var speaks = ${speaks};
+            if(speaks.length > 0){
+                for (var i = 0; i < speaks.length; i++) {
+                    addSpeaker(speaks[i].member_id, speaks[i].speak_title);
+                }
             }
             form.render();
         }
@@ -835,17 +853,30 @@
                 };
             });
         }
-        $('.bg_white_container').on('click', '.add_speaker', function () {
+        function addSpeaker(member, title) {
             $('.add_speaker').hide();
-            var row = $('.speaker_row').clone();
-            row.show();
+            var row = $('#speaker_template').clone();
+            if (member && title) {
+                row.find("[name=speaker]").val(member);
+                row.find("[name=speakTitle]").val(title);
+            }
             $('#speaker').append(row);
-        })
+            row.show();
+            row.find(".add_speaker").show();
+        }
+        $('.bg_white_container').on('click', '.add_speaker', function () {
+            addSpeaker();
+            form.render('select');
+        });
         form.on('select(conferenceType)', function (data) {
             if(data.value === '主题党课') {
-                var row = $('.speaker_row').clone();
-                $('#speaker').append(row);
-                row.show();
+                if ($('#speaker').find('.speaker_row').length === 0) {
+                    var row = $('#speaker_template').clone();
+                    $('#speaker').append(row);
+                    row.show();
+                    row.find(".add_speaker").show();
+                    form.render('select');
+                }
             } else {
                 $('#speaker').html("");
             }
@@ -917,6 +948,13 @@
             postData.host =  postData.host.join(",");
             postData.attachment = JSON.stringify(fileData);
             postData.participate =  postData.participate.join(",");
+            if (postData.conferenceType === '主题党课'){
+                var speakers = [], speakTitles = [];
+                $('#speaker').find('select[name=speaker]').each(function(i, e){speakers.push($(e).val())})
+                postData.speaker = speakers.join(",");
+                $('#speaker').find('[name=speakTitle]').each(function(i, e){speakTitles.push($(e).val())})
+                postData.speakTitle = speakTitles.join(",");
+            }
             $.post("${saveMeetingPlan}", postData, function (res) {
                 if (res.code==200) {
                     layer.msg("保存成功。");
@@ -932,6 +970,13 @@
                 postData.host =  postData.host.join(",");
                 postData.participate =  postData.participate.join(",");
                 postData.attachment = JSON.stringify(fileData);
+                if (postData.conferenceType === '主题党课'){
+                    var speakers = [], speakTitles = [];
+                    $('#speaker').find('select[name=speaker]').each(function(i, e){speakers.push($(e).val())})
+                    postData.speaker = speakers.join(",");
+                    $('#speaker').find('[name=speakTitle]').each(function(i, e){speakTitles.push($(e).val())})
+                    postData.speakTitle = speakTitles.join(",");
+                }
                 $.post("${saveMeetingPlan}", postData, function (res) {
                     if (res.code==200) {
                         layer.msg("发布成功。");

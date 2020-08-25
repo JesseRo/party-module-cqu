@@ -79,8 +79,8 @@ public class MeetingPlanSaveCommand implements MVCResourceCommand {
         String content = ParamUtil.getString(resourceRequest, "meetingContent");
         boolean autoPhoneMsg = ParamUtil.getBoolean(resourceRequest, "autoPhoneMsg");
 
-        String[] speakers = ParamUtil.getStringValues(resourceRequest, "speaker");
-        String[] speakTitles = ParamUtil.getStringValues(resourceRequest, "speakTitle");
+        String speaker = ParamUtil.getString(resourceRequest, "speaker");
+        String speakTitle = ParamUtil.getString(resourceRequest, "speakTitle");
 
         campus = HtmlUtil.escape(campus);
         startDate = HtmlUtil.escape(startDate);
@@ -156,9 +156,13 @@ public class MeetingPlanSaveCommand implements MVCResourceCommand {
                     }
                 }
                 partyBranchService.deleteMeetingSpeak(m.getMeeting_id());
-                for (int i = 0; i < speakers.length; i++) {
-                    if (!StringUtils.isEmpty(speakers[i])) {
-                        partyBranchService.addMeetingSpeak(m.getMeeting_id(), speakers[i], speakTitles[i]);
+                if (!StringUtils.isEmpty(speaker)) {
+                    String[] speakers = speaker.split(",");
+                    String[] speakTitles = speakTitle.split(",");
+                    for (int i = 0; i < speakers.length; i++) {
+                        if (!StringUtils.isEmpty(speakers[i])) {
+                            partyBranchService.addMeetingSpeak(m.getMeeting_id(), speakers[i], speakTitles[i]);
+                        }
                     }
                 }
             }

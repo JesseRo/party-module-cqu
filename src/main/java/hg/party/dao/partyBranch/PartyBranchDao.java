@@ -674,4 +674,9 @@ public class PartyBranchDao extends PostgresqlDaoImpl<MeetingPlan> {
         String sql = "insert into hg_party_meeting_speaker(member_id, meeting_id, speak_title) values(?, ?, ?)";
         jdbcTemplate.update(sql, speaker, meeting_id, speakTitle);
     }
+
+    public List<Map<String, Object>> getMeetingSpeak(String meeting_id) {
+        String sql = "select * from hg_party_meeting_speaker where meeting_id = ?";
+        return jdbcTemplate.queryForList(sql, meeting_id);
+    }
 }
