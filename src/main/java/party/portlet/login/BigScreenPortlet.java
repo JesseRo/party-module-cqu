@@ -103,6 +103,7 @@ public class BigScreenPortlet extends MVCPortlet {
             }
             Map<String, Object> memberCount = memberCounts.get(i);
             String orgName = (String) memberCount.get("name");
+            orgName = orgName == null ? "医学院" : orgName;
             allMemberCount += (Long) memberCount.get("count");
             secondaryNames.add(orgName);
             secondaryMemberCounts.add((Long) memberCount.get("count"));

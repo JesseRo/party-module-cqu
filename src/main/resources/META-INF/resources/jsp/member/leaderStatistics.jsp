@@ -324,7 +324,7 @@
     <portlet:resourceURL id="/org/tree" var="orgTreeUrl"/>
 
     <script type="text/javascript">
-
+        var startDate, endDate;
         $(function () {
             var checkedNode = null;
             layui.config({
@@ -404,7 +404,13 @@
                                 {field: 'join_count', title: '组织生活次数', width: '20%'},
                                 {field: 'sit_count', title: '列席指导次数', width: '20%'},
                                 {field: 'teach_count', title: '讲授党课次数', width: '20%'},
-                            ]]
+                            ]],
+                            parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
+                                startDate = res.start;
+                                endDate = res.end;
+                                $('#date_range').val(startDate + " - " + endDate);
+                                return res;
+                            }
                         });
                         $(".layui-table-view .layui-table-page").addClass("layui-table-page-center");
                         $(".layui-table-view .layui-table-page").removeClass("layui-table-page");
@@ -414,9 +420,31 @@
                 }
             });
 
+            layui.use('laydate', function () {
+                var laydate = layui.laydate;
+                laydate.render({
+                    elem: '#date_range'
+                    , range: '-',
+                    done: function (value, date, e) {
+                        console.log(value); //得到日期生成的值，如：2017-08-18
+                        console.log(date); //得到日期时间对象：{year: 2017, month: 8, date: 18, hours: 0, minutes: 0, seconds: 0}
+                        console.log(e); //得结束的日期时间对象，开启范围选择（range: true）才会返回。对象成员同上。
+                        startDate = toDateStr(date);
+                        endDate = toDateStr(e);
+                    }
+                });
+            })
+            function toDateStr(date){
+                if (date.year) {
+                    return date.year + '-' + date.month + '-' + date.date;
+                }else {
+                    return "";
+                }
+            }
+
             function reloadTable() {
                 statisticsTable.reload({
-                    where: {search: $('[name=keyword]').val(), orgId: checkedNode.id},
+                    where: {search: $('[name=keyword]').val(), orgId: checkedNode.id, start: startDate, end: endDate},
                     page: {
                         curr: 1 //重新从第 1 页开始
                     }
@@ -460,6 +488,9 @@
                         <form class="layui-form" id="searchForm">
                             <div class="layui-form-item" style="margin-top: 15px;">
                                 <div class="layui-inline">
+                                    <div class="layui-input-inline" style="margin-left: 20px;height: 40px;">
+                                        <input type="text" class="layui-input" id="date_range" placeholder="日期范围">
+                                    </div>
                                     <div class="layui-input-inline keyword">
                                         <input type="text" name="keyword" placeholder="搜索领导干部"
                                                class="layui-input">

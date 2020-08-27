@@ -112,12 +112,16 @@ public class MemberMeetingServer {
         return new PageQueryResult<>(statisticsList, result.getCount(), result.getPageNow(), result.getPageSize());
     }
 
-    public PageQueryResult<LeaderStatistics> LeaderStatisticsPage(int page, int size, int id, String name) {
+    public PageQueryResult<LeaderStatistics> LeaderStatisticsPage(int page, int size, int id, String name, String start, String end) {
         Organization organization = orgService.findOrgById(id);
         PageQueryResult<Map<String, Object>> pageResult = statisticsDao.leaderPage(page, size, organization.getOrg_id(), name);
         List<String> orgIds = pageResult.getList().stream().map(p -> (String) p.get("member_identity")).collect(Collectors.toList());
-        List<BaseStatistics> joinStatistics = statisticsDao.leaderJoinStatistics(orgIds);
-        Map<String, BaseStatistics> baseStatisticsMap = joinStatistics.stream().collect(Collectors.toMap(BaseStatistics::getProperty, p -> p));
+        List<BaseStatistics> joinStatistics = statisticsDao.leaderJoinStatistics(orgIds, start, end);
+        List<BaseStatistics> sitStatistics = statisticsDao.leaderSitStatistics(orgIds, start, end);
+        List<BaseStatistics> teachStatistics = statisticsDao.leaderTeachStatistics(orgIds, start, end);
+        Map<String, BaseStatistics> joinStatisticsMap = joinStatistics.stream().collect(Collectors.toMap(BaseStatistics::getProperty, p -> p));
+        Map<String, BaseStatistics> sitStatisticsMap = sitStatistics.stream().collect(Collectors.toMap(BaseStatistics::getProperty, p -> p));
+        Map<String, BaseStatistics> teachStatisticsMap = teachStatistics.stream().collect(Collectors.toMap(BaseStatistics::getProperty, p -> p));
         List<LeaderStatistics> leaderStatisticsList = new ArrayList<>();
         for (Map<String, Object> map : pageResult.getList()) {
             String memberId = (String) map.get("member_identity");
@@ -130,9 +134,17 @@ public class MemberMeetingServer {
             leaderStatistics.setOrg_id(orgId);
             leaderStatistics.setOrg_name(orgName);
 
-            BaseStatistics baseStatistics = baseStatisticsMap.get(memberId);
+            BaseStatistics baseStatistics = joinStatisticsMap.get(memberId);
             if (baseStatistics != null) {
                 leaderStatistics.setJoin_count(baseStatistics.getNum());
+            }
+            BaseStatistics sit = sitStatisticsMap.get(memberId);
+            if (sit != null) {
+                leaderStatistics.setSit_count(sit.getNum());
+            }
+            BaseStatistics teach = teachStatisticsMap.get(memberId);
+            if (teach != null) {
+                leaderStatistics.setTeach_count(teach.getNum());
             }
             leaderStatisticsList.add(leaderStatistics);
         }

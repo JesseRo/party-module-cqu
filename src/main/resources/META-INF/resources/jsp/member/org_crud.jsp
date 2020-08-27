@@ -600,7 +600,7 @@ button.cancal.btn.btn-default {
                                 <portlet:resourceURL id="/org/import" var="orgImport" />
                                 <button type="button" id="org_add" class="layui-btn layui-btn-warm" style="display:none">添加组织</button>
                                 <button type="button" id="org_delete" class="layui-btn layui-btn-danger" style="display:none">删除组织</button>
-                                <button type="button" id="org_import" class="layui-btn " style="">导入组织</button>
+<%--                                <button type="button" id="org_import" class="layui-btn " style="">导入组织</button>--%>
                                 <div id="upload-block" style="display: none;">
                                     <form action="${orgImport}" method="post" target="uploadTarget" enctype="multipart/form-data">
                                         <input type="file" name="excel">

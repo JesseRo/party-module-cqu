@@ -9,6 +9,8 @@ public class UserInfo {
 
     private String department;
 
+    private String orgType;
+
 
     public String getMemberId() {
         return memberId;
@@ -40,5 +42,13 @@ public class UserInfo {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
+    }
+
+    public String getOrgType() {
+        return orgType;
+    }
+
+    public void setOrgType(String orgType) {
+        this.orgType = orgType;
     }
 }

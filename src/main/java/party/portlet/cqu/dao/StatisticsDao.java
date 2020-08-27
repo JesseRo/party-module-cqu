@@ -64,19 +64,63 @@ public class StatisticsDao extends PostgresqlDaoImpl<Place> {
         return retentionDao.pageBySql(page, limit, sql, params);
     }
 
-    public List<BaseStatistics> leaderJoinStatistics(List<String> orgIds) {
+    public List<BaseStatistics> leaderJoinStatistics(List<String> orgIds, String start, String end) {
         String prefix = orgIds.stream().map(p->"?").collect(Collectors.joining(","));
         String sql = "SELECT\n" +
                 "\tmi.participant_id AS property,\n" +
                 "\tCOUNT ( mi.meeting_id ) AS num \n" +
                 "FROM\n" +
                 "\t\"hg_party_meeting_member_info\" mi\n" +
+                "\tinner join hg_party_meeting_plan_info info on mi.meeting_id = info.meeting_id" +
                 "\tINNER JOIN hg_party_member M ON mi.participant_id = M.member_identity and m.historic = false\n" +
                 "where\n" +
                 "\tmi.participant_id in (" + prefix + ")\n" +
-                "GROUP BY\n" +
+                "\tand info.start_time >= ?::date and info.start_time <= ?::date" +
+                "\tGROUP BY\n" +
                 "\tmi.participant_id";
         List<Object> params = new ArrayList<>(orgIds);
+        params.add(start);
+        params.add(end);
+        return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(BaseStatistics.class), params.toArray());
+    }
+
+    public List<BaseStatistics> leaderSitStatistics(List<String> orgIds, String start, String end) {
+        String prefix = orgIds.stream().map(p->"?").collect(Collectors.joining(","));
+        String sql = "SELECT\n" +
+                "\tmember.member_identity AS property \n" +
+                "\t, count(info.id) as  num\n" +
+                "FROM\n" +
+                "\thg_party_meeting_plan_info info \n" +
+                "LEFT JOIN\n" +
+                "\thg_party_member member on info.sit_id = member.member_identity\n" +
+                "where \n" +
+                "\tmember.historic is false \n" +
+                "\tand member.member_identity in (" + prefix + ")\n" +
+                "\tand info.start_time >= ?::date and info.start_time <= ?::date" +
+                "\tGROUP BY member.member_identity";
+        List<Object> params = new ArrayList<>(orgIds);
+        params.add(start);
+        params.add(end);
+        return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(BaseStatistics.class), params.toArray());
+    }
+
+    public List<BaseStatistics> leaderTeachStatistics(List<String> orgIds, String start, String end) {
+        String prefix = orgIds.stream().map(p->"?").collect(Collectors.joining(","));
+        String sql = "SELECT\n" +
+                "\tmi.member_id AS property,\n" +
+                "\tCOUNT (distinct mi.meeting_id ) AS num \n" +
+                "FROM\n" +
+                "\t\"hg_party_meeting_speaker\" mi\n" +
+                "\tinner join hg_party_meeting_plan_info info on mi.meeting_id = info.meeting_id" +
+                "\tINNER JOIN hg_party_member M ON mi.member_id = M.member_identity and m.historic = false\n" +
+                "where\n" +
+                "\tmi.member_id in (" + prefix + ")\n" +
+                "\tand info.start_time >= ?::date and info.start_time <= ?::date" +
+                "\tGROUP BY\n" +
+                "\tmi.member_id";
+        List<Object> params = new ArrayList<>(orgIds);
+        params.add(start);
+        params.add(end);
         return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(BaseStatistics.class), params.toArray());
     }
 

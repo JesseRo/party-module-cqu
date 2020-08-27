@@ -53,12 +53,20 @@ public class LeaderStatisticsResourceCommand implements MVCResourceCommand {
         int size = ParamUtil.getInteger(resourceRequest, "limit");
         String name = ParamUtil.getString(resourceRequest, "search");
         int orgId = ParamUtil.getInteger(resourceRequest, "orgId");
+        String start = ParamUtil.getString(resourceRequest, "start", null);
+        String end = ParamUtil.getString(resourceRequest, "end", null);
         HttpServletResponse res = PortalUtil.getHttpServletResponse(resourceResponse);
         res.addHeader("content-type", "application/json");
-
+        if (StringUtils.isEmpty(start)) {
+            LocalDate currentDate = LocalDate.now();
+            end = currentDate.toString();
+            start = currentDate.plusMonths(-1).toString();
+        }
         try {
-            PageQueryResult<LeaderStatistics> data = memberMeetingServer.LeaderStatisticsPage(page, size, orgId, name);
+            PageQueryResult<LeaderStatistics> data = memberMeetingServer.LeaderStatisticsPage(page, size, orgId, name, start, end);
             JsonPageResponse jsonPageResponse = new JsonPageResponse();
+            jsonPageResponse.setStart(start);
+            jsonPageResponse.setEnd(end);
             if (data != null) {
                 jsonPageResponse.setCode(0);
                 jsonPageResponse.setCount(data.getCount());

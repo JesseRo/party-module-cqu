@@ -281,7 +281,7 @@
                                 <select class="layui-input" name="isLeader" id="isLeader" lay-verify="select">
                                     <option value="" disabled>-请选择-</option>
                                     <option value="是" <c:if test="${info.member_is_leader == '是' }">selected</c:if>>是</option>
-                                    <option value="否" <c:if test="${info.member_is_leader == '否' }">selected</c:if>>否</option>
+                                    <option value="否" <c:if test="${info.member_is_leader == '否' or empty info.member_is_leader  }">selected</c:if>>否</option>
                                 </select>
                             </div>
                         </div>

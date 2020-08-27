@@ -16,6 +16,8 @@ import javax.portlet.ResourceResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.swing.event.ListSelectionEvent;
 
+import com.alibaba.fastjson.JSONObject;
+import hg.party.server.CacheCore;
 import org.apache.log4j.Logger;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -54,6 +56,9 @@ public class ajaxLoginCommand implements MVCResourceCommand {
     @Reference
     private UserService userService;
 
+    @Reference
+    private CacheCore cacheCore;
+
     @Override
     public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
             throws PortletException {
@@ -81,6 +86,7 @@ public class ajaxLoginCommand implements MVCResourceCommand {
                 printWriter = resourceResponse.getWriter();
                 printWriter.write("4");//退出成功
                 printWriter.close();
+                cacheCore.getJedis().del(String.format("baixun:session:%s", MD5.getMD5(sessionId)));
                 return false;
             } catch (IOException e) {
 
