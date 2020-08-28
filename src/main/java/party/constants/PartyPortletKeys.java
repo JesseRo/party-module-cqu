@@ -221,6 +221,9 @@ public class PartyPortletKeys {
     public static final String MeetingStatistics = "MeetingStatistics";
     public static final String LeaderStatistics = "LeaderStatistics";
     public static final String MemberDetailPortlet = "MemberDetailPortlet";
+
+    //党费管理相关
+    public static final String MemberFeeListPortlet = "MemberFeeListPortlet";
 }
 
 
