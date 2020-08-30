@@ -58,6 +58,6 @@ public class CheckPersonDao extends PostgresqlDaoImpl<CheckPerson> {
 
     public void addCount(String check_person) {
         String sql = "update hg_party_check_person set count = count + 1 where user_id = ?";
-        jdbcTemplate.execute(sql);
+        jdbcTemplate.update(sql, check_person);
     }
 }

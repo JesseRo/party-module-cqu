@@ -1,130 +1,8 @@
 {
-  "vars": [
-    {
-      "name": "",
-      "value": "",
-      "comment": ""
-    }
-  ],
   "columns": [
     {
-      "id": "branch",
-      "name": "党组织：",
-      "type": {
-        "name": "chosen",
-        "checker": "branch",
-        "options": "",
-        "optionsKey": "",
-        "datePattern": ""
-      },
-      "display": true,
-      "readonly": false,
-      "required": true,
-      "defaultValue": ""
-    },
-    {
-      "id": "conferenceType",
-      "name": "会议类型：",
-      "type": {
-        "name": "chosen",
-        "checker": "conferenceType",
-        "options": "",
-        "optionsKey": "",
-        "datePattern": ""
-      },
-      "display": true,
-      "readonly": false,
-      "required": true,
-      "defaultValue": ""
-    },
-    {
-      "id": "subject",
-      "name": "开展主题：",
-      "type": {
-        "name": "str",
-        "checker": "subject"
-      },
-      "display": true,
-      "readonly": false,
-      "required": true,
-      "defaultValue": null
-    },
-    {
-      "id": "timeDuring",
-      "name": "开始时间：",
-      "type": {
-        "name": "date",
-        "checker": "timeDuring",
-        "datePattern": "yyyy-MM-dd HH:mm"
-      },
-      "display": true,
-      "readonly": false,
-      "required": true,
-      "defaultValue": null
-    },
-    {
-      "id": "timeLasts",
-      "name": "共计时长：",
-      "type": {
-        "name": "str",
-        "checker": "timeLasts"
-      },
-      "display": true,
-      "readonly": false,
-      "required": true,
-      "defaultValue": null
-    },
-    {
-      "id": "location",
-      "name": "开展地点：",
-      "type": {
-        "name": "chosen",
-        "optionsKey": "location"
-      },
-      "display": true,
-      "readonly": false,
-      "required": true,
-      "defaultValue": null
-    },
-    {
-      "id": "participate",
-      "name": "参会人员：",
-      "type": {
-        "name": "chosen",
-        "optionsKey": "participate"
-      },
-      "display": true,
-      "readonly": false,
-      "required": true,
-      "defaultValue": null
-    },
-    {
-      "id": "host",
-      "name": "主持人：",
-      "type": {
-        "name": "str",
-        "checker": "host"
-      },
-      "display": true,
-      "readonly": false,
-      "required": true,
-      "defaultValue": null
-    },
-    {
-      "id": "contact",
-      "name": "联系人：",
-      "type": {
-        "name": "str",
-        "checker": "contact"
-      },
-      "display": true,
-      "readonly": false,
-      "required": true,
-      "defaultValue": null
-    },
-    {
-      "id": "sit",
-      "name": "列席人员：",
+      "id": "theme",
+      "name": "标题",
       "type": {
         "name": "str",
         "options": "",
@@ -136,25 +14,61 @@
       },
       "display": "true",
       "readonly": null,
-      "required": "false",
+      "required": "true",
       "validation": null,
       "defaultValue": ""
     },
     {
-      "id": "phoneNumber",
-      "name": "联系人电话：",
+      "id": "publicDate",
+      "name": "发布时间",
       "type": {
-        "name": "str",
-        "checker": "phoneNumber"
+        "name": "date",
+        "options": "",
+        "optionSql": "",
+        "optionsKey": "",
+        "datePattern": "",
+        "optionNameField": "",
+        "optionValueField": ""
       },
-      "display": true,
-      "readonly": false,
-      "required": true,
-      "defaultValue": null
+      "display": "true",
+      "readonly": null,
+      "required": "true",
+      "validation": null,
+      "defaultValue": ""
     },
     {
-      "id": "new_12",
-      "name": "计划内容：",
+      "id": "publicObject",
+      "name": "发布对象",
+      "type": {
+        "name": "chosen",
+        "checker": "",
+        "options": "",
+        "optionsKey": "",
+        "datePattern": ""
+      },
+      "display": "true",
+      "readonly": null,
+      "required": null,
+      "defaultValue": ""
+    },
+    {
+      "id": "ajaxFileName",
+      "name": "附件",
+      "type": {
+        "name": "file",
+        "checker": "",
+        "options": "",
+        "optionsKey": "",
+        "datePattern": ""
+      },
+      "display": "true",
+      "readonly": null,
+      "required": null,
+      "defaultValue": ""
+    },
+    {
+      "id": "contentbody",
+      "name": "发布内容",
       "type": {
         "name": "richtext",
         "checker": "",
@@ -166,26 +80,22 @@
         "optionValueField": ""
       },
       "display": "true",
-      "readonly": "false",
-      "required": "true",
+      "readonly": null,
+      "required": null,
       "defaultValue": ""
     }
   ],
   "variables": [
     {
-      "name": "meetingId",
+      "name": "informId",
       "defaultValue": ""
     },
     {
-      "name": "infromId",
+      "name": "resend",
       "defaultValue": ""
     },
     {
-      "name": "orgId",
-      "defaultValue": ""
-    },
-    {
-      "name": "type",
+      "name": "orgEdit",
       "defaultValue": ""
     }
   ]

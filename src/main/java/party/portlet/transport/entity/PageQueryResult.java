@@ -1,5 +1,7 @@
 package party.portlet.transport.entity;
 
+import hg.party.entity.partyMembers.JsonPageResponse;
+
 import java.util.List;
 
 /**
@@ -52,4 +54,9 @@ public class PageQueryResult<T> {
     public void setPageSize(int pageSize) {
         this.pageSize = pageSize;
     }
+
+    public JsonPageResponse toJsonPageResponse(){
+        return new JsonPageResponse(0,null,this.getList(),this.getCount());
+    }
+
 }

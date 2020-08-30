@@ -395,7 +395,7 @@
                        ,{field: 'member_sex', align:'center', width:'12%',title: '性别'}
                        ,{field: 'member_identity', align:'center', width:'12%',title: '公民身份证'}
                        ,{field: 'member_phone_number', align:'center', width:'12%',title: '联系电话'}
-                       ,{field: 'member_fomal_date', align:'center', width:'12%', title: '入党时间'}
+                       ,{field: 'member_join_date', align:'center', width:'12%', title: '入党时间'}
                        ,{field: 'member_type', align:'center', width:'12%', title: '党员类型'}
                        ,{field: 'historic', title: '操作', width:'20%', align:'center',toolbar: '#tableTool'}
                    ]];

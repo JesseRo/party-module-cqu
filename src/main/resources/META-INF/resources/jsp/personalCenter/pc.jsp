@@ -164,9 +164,10 @@
 			<div class="text_container left_bottom">
 				<p class="text_title">党课学习</p>
 				<div class="text_content">
-					<p>学习课程：我读《习近平谈治国理政</p>
-					<p>缺会情况：2次</p>
-					<p>党费缴纳：266.79元</p>
+					暂未开放
+<%--					<p>学习课程：我读《习近平谈治国理政</p>--%>
+<%--					<p>缺会情况：2次</p>--%>
+<%--					<p>党费缴纳：266.79元</p>--%>
 				</div>
 				<p class="text_line"></p>
 			</div>

@@ -16,6 +16,7 @@ import org.springframework.util.StringUtils;
 import party.constants.PartyPortletKeys;
 import party.log.LogDao;
 import party.portlet.personal.dao.PersonalDao;
+import party.portlet.transport.entity.PageQueryResult;
 
 import javax.portlet.PortletException;
 import javax.portlet.ResourceRequest;
@@ -49,27 +50,12 @@ public class PersonalMeetingsCommand implements MVCResourceCommand {
         int size = ParamUtil.getInteger(resourceRequest, "limit");
         String userId = (String) SessionManager.getAttribute(resourceRequest.getRequestedSessionId(), "userName");
         String search = ParamUtil.getString(resourceRequest, "search");
-        PostgresqlQueryResult<Map<String, Object>> data;
-        if (StringUtils.isEmpty(search)){
-            data = personalDao.meetings(page, size, userId);
-        }else {
-            data = personalDao.searchMeetings(page, size, userId, search);
-        }
-
+        PageQueryResult<Map<String, Object>> data;
+        data = personalDao.searchMeetings(page, size, userId, search);
         HttpServletResponse res = PortalUtil.getHttpServletResponse(resourceResponse);
         res.addHeader("content-type","application/json");
         try {
-            JsonPageResponse jsonPageResponse = new JsonPageResponse();
-            if (data != null){
-                jsonPageResponse.setCode(0);
-                jsonPageResponse.setCount(data.getTotalPage() * size);
-                jsonPageResponse.setData(data.getList());
-            }else {
-                jsonPageResponse.setCode(0);
-                jsonPageResponse.setCount(0);
-                jsonPageResponse.setData(Collections.emptyList());
-            }
-            res.getWriter().write(gson.toJson(jsonPageResponse));
+            res.getWriter().write(gson.toJson(data.toJsonPageResponse()));
         } catch (Exception e) {
             try {
                 e.printStackTrace();

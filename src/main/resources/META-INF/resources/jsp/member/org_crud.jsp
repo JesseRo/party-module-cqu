@@ -585,7 +585,7 @@ button.cancal.btn.btn-default {
                 当前位置：
                 <span class="layui-breadcrumb" lay-separator=">">
                         <a href="javascript:;">基础数据管理</a>
-                        <a href="javascript:;">组织信息管理</a>
+                        <a href="javascript:;">党组织管理</a>
                     </span>
             </div>
             <div class="party_manage_content content_form content_info">
@@ -688,7 +688,7 @@ button.cancal.btn.btn-default {
                                 <div class="layui-inline"  style="width: 100%;">
                                     <label class="layui-form-label" style="width: 25%;">地址：</label>
                                     <div class="layui-input-inline" style="width: 75%;">
-                                        <input type="text" name="address" maxlength="20" autocomplete="off" class="layui-input">
+                                        <input type="text" name="address" maxlength="100" autocomplete="off" class="layui-input">
                                     </div>
                                 </div>
                                 <div class="layui-inline" id="org_update" style="display:none">
@@ -780,7 +780,7 @@ button.cancal.btn.btn-default {
         <div class="layui-form-item">
             <label class="layui-form-label" >地址</label>
             <div class="layui-input-inline" style="width: 580px;" >
-                <input type="text" name="address" maxlength="20" autocomplete="off" class="layui-input">
+                <input type="text" name="address" maxlength="100" autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-layer-btn layui-layer-btn-">

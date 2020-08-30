@@ -340,11 +340,11 @@ public class PartyOrgDao extends PostgresqlDaoImpl<Organization> {
         Calendar calendar = Calendar.getInstance();
         RowMapper<BaseStatistics> rowMapper = BeanPropertyRowMapper.newInstance(BaseStatistics.class);
         if (year == 0 && month == 0) {//统计所有
-            String sql = "SELECT i.meeting_type property,count(i.meeting_type) num  from hg_party_meeting_plan_info i left join hg_party_org o on i.organization_id=o.org_id  where o.org_parent = ? or o.org_id = ? group by i.meeting_type";
+            String sql = "SELECT i.meeting_type property,count(i.meeting_type) num  from hg_party_meeting_plan_info i left join hg_party_org o on i.organization_id=o.org_id  where o.org_parent = ? or o.org_id = ? and i.task_status > '4' group by i.meeting_type";
             return jdbcTemplate.query(sql, rowMapper, orgId, orgId);
         } else {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
-            String sql = "SELECT i.meeting_type property,count(i.meeting_type) num  from hg_party_meeting_plan_info i left join hg_party_org o on i.organization_id=o.org_id  where o.org_parent = ? or o.org_id = ? and start_time>=? and start_time < ? group by i.meeting_type";
+            String sql = "SELECT i.meeting_type property,count(i.meeting_type) num  from hg_party_meeting_plan_info i left join hg_party_org o on i.organization_id=o.org_id  where o.org_parent = ? or o.org_id = ? and start_time>=? and start_time < ? and i.task_status > '4' group by i.meeting_type";
             Timestamp startTime;
             Timestamp endTime;
             if (year > 0 && month == 0) {//全年统计
@@ -374,7 +374,7 @@ public class PartyOrgDao extends PostgresqlDaoImpl<Organization> {
     public int activitiesStatisticsCount(String orgId) {
         RowMapper<BaseStatistics> rowMapper = BeanPropertyRowMapper.newInstance(BaseStatistics.class);
         String countSql = "SELECT count(id) num  from hg_party_meeting_plan_info " +
-                "where organization_id = ?";
+                "where organization_id = ? and task_status > '4'";
         BaseStatistics count = jdbcTemplate.queryForObject(countSql, rowMapper, orgId);
         return count.getNum();
     }

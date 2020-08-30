@@ -63,6 +63,12 @@
 							<p class="layui-col-xs6 layui-col-sm6 layui-col-md4"><span>开展时间:</span>${time }</p>
 							<p class="layui-col-xs6 layui-col-sm6 layui-col-md4"><span>开展校区：</span>${meetingPlan.campus}</p>
 						</div>
+						<c:forEach items="${speakers}" var="s" varStatus="vs">
+						<div class="layui-form-item layui-row" >
+							<p class="layui-col-xs6 layui-col-sm6 layui-col-md4"><span>主讲人${vs.count}:</span>${s.speaker }</p>
+							<p class="layui-col-xs6 layui-col-sm6 layui-col-md4"><span>主讲题目${vs.count}:</span>${s.speak_title }</p>
+						</div>
+						</c:forEach>
 						<div class="layui-form-item layui-row" >
 							<p class="layui-col-xs6 layui-col-sm6 layui-col-md4"><span>开展地点：</span>${meetingPlan.placeName }</p>
 							<p class="layui-col-xs6 layui-col-sm6 layui-col-md4"><span>主持人：</span>${meetingPlan.hostName }</p>
@@ -78,7 +84,7 @@
 							<p class="layui-col-xs12 layui-col-sm12 layui-col-md12"><span>参会人员：</span>${meetingUserName }</p>
 						</div>
 						<div class="layui-form-item layui-row" >
-							<p class="layui-col-xs12 layui-col-sm12 layui-col-md12"><span>详细内容：</span></p>
+							<p class="layui-col-xs12 layui-col-sm12 layui-col-md12"><span>计划内容：</span></p>
 							<p class="layui-col-xs12 layui-col-sm12 layui-col-md12">${meetingPlan.content}</p>
 						</div>
 						<div class="layui-form-item layui-row" >

@@ -9,6 +9,7 @@ import hg.util.postgres.PostgresqlPageResult;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import party.constants.PartyPortletKeys;
+import party.portlet.transport.entity.PageQueryResult;
 
 import javax.portlet.PortletException;
 import javax.portlet.ResourceRequest;
@@ -39,7 +40,7 @@ public class OrgUsersPageCommand implements MVCResourceCommand {
 		String adminType = ParamUtil.getString(resourceRequest, "adminType");
 		String keyword = ParamUtil.getString(resourceRequest, "keyword");
 		try {
-			PostgresqlPageResult<Map<String, Object>> data = orgService.searchOrgUsersPage(page, size,id,adminType,keyword);
+			PageQueryResult<Map<String, Object>> data = orgService.searchOrgUsersPage(page, size,id,adminType,keyword);
 			Gson gson = new Gson();
 			res.getWriter().write(gson.toJson(data.toJsonPageResponse()));
 		} catch (Exception e) {

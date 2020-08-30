@@ -679,4 +679,11 @@ public class PartyBranchDao extends PostgresqlDaoImpl<MeetingPlan> {
         String sql = "select * from hg_party_meeting_speaker where meeting_id = ?";
         return jdbcTemplate.queryForList(sql, meeting_id);
     }
+
+    public List<Map<String, Object>> getMeetingSpeaker(String meeting_id) {
+        String sql = "select m.member_name as speaker, * from hg_party_meeting_speaker s " +
+                " left join hg_party_member m on s.member_id = m.member_identity and m.historic = false " +
+                " where meeting_id = ?";
+        return jdbcTemplate.queryForList(sql, meeting_id);
+    }
 }

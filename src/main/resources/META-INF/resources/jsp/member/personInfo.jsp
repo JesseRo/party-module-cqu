@@ -205,7 +205,7 @@
                             </div>
                         </div>
                         <div class="layui-inline">
-                            <label class="layui-form-label">是否处级以上干部:</label>
+                            <label class="layui-form-label">是否副处级以上干部:</label>
                             <div class="layui-input-inline">
                                 <label class="layui-form-label-text">${info.member_is_leader }</label>
                             </div>

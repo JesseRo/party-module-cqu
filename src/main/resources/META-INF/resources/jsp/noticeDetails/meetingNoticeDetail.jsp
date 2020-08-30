@@ -67,7 +67,7 @@
 						 style="width: 960px;">
 						<div class="layui-form-item">
 							<div class="layui-inline">
-								<label class="layui-form-label">会议主题:</label>
+								<label class="layui-form-label">标题:</label>
 								<div class="layui-input-inline">
 									<label class="layui-form-label-text">${informDetail.meeting_theme }</label>
 								</div>
@@ -75,7 +75,7 @@
 						</div>
 						<div class="layui-form-item">
 							<div class="layui-inline">
-								<label class="layui-form-label">开始时间:</label>
+								<label class="layui-form-label">发布时间:</label>
 								<div class="layui-input-inline">
 									<label class="layui-form-label-text">
 										<fmt:formatDate value="${informDetail.start_time }" type="both"></fmt:formatDate>
@@ -83,18 +83,18 @@
 								</div>
 							</div>
 						</div>
-						<div class="layui-form-item">
-							<div class="layui-inline">
-								<label class="layui-form-label">通知组织:</label>
-								<div class="layui-input-inline">
-									<ul>
-										<c:forEach var="org" items="${orgList}">
-											<li>${org.org_name}</li>
-										</c:forEach>
-									</ul>
-								</div>
-							</div>
-						</div>
+<%--						<div class="layui-form-item">--%>
+<%--							<div class="layui-inline">--%>
+<%--								<label class="layui-form-label">通知组织:</label>--%>
+<%--								<div class="layui-input-inline">--%>
+<%--									<ul>--%>
+<%--										<c:forEach var="org" items="${orgList}">--%>
+<%--											<li>${org.org_name}</li>--%>
+<%--										</c:forEach>--%>
+<%--									</ul>--%>
+<%--								</div>--%>
+<%--							</div>--%>
+<%--						</div>--%>
 						<div class="layui-form-item">
 							<div class="layui-inline">
 								<label class="layui-form-label">附            件:</label>

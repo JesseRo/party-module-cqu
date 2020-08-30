@@ -357,7 +357,7 @@ button.cancal.btn.btn-default {
                 当前位置：
                 <span class="layui-breadcrumb" lay-separator=">">
                         <a href="javascript:;">系统管理</a>
-                        <a href="javascript:;">组织管理员设置</a>
+                        <a href="javascript:;">管理员设置</a>
                     </span>
             </div>
             <div class="party_manage_content content_form content_info bg_white_container">

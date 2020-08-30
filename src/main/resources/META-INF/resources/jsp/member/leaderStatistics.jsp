@@ -463,7 +463,7 @@
             <div class="breadcrumb_group">
                 当前位置：
                 <span class="layui-breadcrumb" lay-separator=">">
-                    <a href="javascript:;">基础数据管理</a>
+                    <a href="javascript:;">数据统计</a>
                     <a href="javascript:;">领导参会统计</a>
                 </span>
             </div>

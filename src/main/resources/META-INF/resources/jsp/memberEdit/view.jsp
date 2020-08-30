@@ -392,7 +392,7 @@
                 <div class="layui-input-inline" name="unitName"></div>
             </div>
             <div class="layui-inline">
-                <label class="layui-form-label">是否处级以上干部:</label>
+                <label class="layui-form-label">是否副处级以上干部:</label>
                 <div class="layui-input-inline">
                     <label class="layui-form-label-text" name="memberIsLeader"></label>
                 </div>

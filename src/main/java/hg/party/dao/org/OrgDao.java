@@ -77,9 +77,10 @@ public class OrgDao extends HgPostgresqlDaoImpl<Organization> {
         String sql = "DELETE from hg_party_org_admin where admin_id= ? ";
         return jdbcTemplate.update(sql, userId);
     }
-    public int deleteAdmin(String orgId,String userId) {
+
+    public int deleteAdmin(String orgId, String userId) {
         String sql = "DELETE from hg_party_org_admin where org_id=? and admin_id= ? ";
-        return jdbcTemplate.update(sql, orgId,userId);
+        return jdbcTemplate.update(sql, orgId, userId);
     }
 
     public List<Organization> findAllHistoric() {
@@ -141,10 +142,11 @@ public class OrgDao extends HgPostgresqlDaoImpl<Organization> {
             return null;
         }
     }
+
     public Organization findById(int id) {
         String sql = "select * from hg_party_org where id = ?";
         try {
-            return jdbcTemplate.queryForObject(sql, BeanPropertyRowMapper.newInstance(Organization.class),id);
+            return jdbcTemplate.queryForObject(sql, BeanPropertyRowMapper.newInstance(Organization.class), id);
         } catch (Exception e) {
             return null;
         }
@@ -355,8 +357,9 @@ public class OrgDao extends HgPostgresqlDaoImpl<Organization> {
         }
         return saveAdmin(organization, admin);
     }
-    public boolean addAdmin(Organization org, String userId){
-        String sql = "insert into hg_party_org_admin (org_id,admin_id,org_type) values ('"+org.getOrg_id()+"','"+userId+"','"+org.getOrg_type()+"')";
+
+    public boolean addAdmin(Organization org, String userId) {
+        String sql = "insert into hg_party_org_admin (org_id,admin_id,org_type) values ('" + org.getOrg_id() + "','" + userId + "','" + org.getOrg_type() + "')";
         try {
             jdbcTemplate.execute(sql);
         } catch (Exception e) {
@@ -364,6 +367,7 @@ public class OrgDao extends HgPostgresqlDaoImpl<Organization> {
         }
         return true;
     }
+
     public void deleteOrgAdmin(String org) {
         String sql = "delete from hg_party_org_admin where org_id = ? ";
         jdbcTemplate.update(sql, org);
@@ -435,22 +439,24 @@ public class OrgDao extends HgPostgresqlDaoImpl<Organization> {
 
         return jdbcTemplate.update(sql, extra, userId);
     }
+
     //恢复人员
-    public int recoveryMemberByUserId(String userId,String orgId) {
+    public int recoveryMemberByUserId(String userId, String orgId) {
         String sql = "update hg_party_member set historic = false,member_org=?" +
                 " where member_identity = ? " +
                 " and historic is true ";
 
-        return jdbcTemplate.update(sql,orgId, userId);
+        return jdbcTemplate.update(sql, orgId, userId);
     }
 
     public int deleteUserByuserId(String userId) {
         String sql = "update hg_users_info set state = '0' where user_id = ? ";
         return jdbcTemplate.update(sql, userId);
     }
-    public int recoveryUserByUserId(String userId,String orgId) {
+
+    public int recoveryUserByUserId(String userId, String orgId) {
         String sql = "update hg_users_info set state = '1',user_department_id=? where user_id = ? ";
-        return jdbcTemplate.update(sql,orgId , userId);
+        return jdbcTemplate.update(sql, orgId, userId);
     }
 
     public List<Map<String, Object>> findPersonByUserId(String userId) {
@@ -759,7 +765,6 @@ public class OrgDao extends HgPostgresqlDaoImpl<Organization> {
 
     public List<Map<String, Object>> orgMemberStatistics(String search, List<String> orgIds) {
         List<Object> params = new ArrayList<>(orgIds);
-        params.addAll(orgIds);
         String suffix = orgIds.stream().map(p -> "?").collect(Collectors.joining(","));
         String sql = "SELECT T\n" +
                 "\t.*,\n" +
@@ -770,14 +775,13 @@ public class OrgDao extends HgPostgresqlDaoImpl<Organization> {
                 "\t\t( M ) AS C,\n" +
                 "\t\tP.org_id,m.member_type \n" +
                 "\tFROM\n" +
-                "\t\thg_party_member\n" +
-                "\t\tM INNER JOIN hg_party_org o ON M.member_org = o.org_id\n" +
-                "\t\tINNER JOIN hg_party_org P ON o.org_parent = P.org_id \n" +
-                " where o.historic = false and (o.org_id in (" + suffix + ") or p.org_id in (" + suffix + "))" +
-                "\tGROUP BY\n" +
-                "\t\tP.org_id, m.member_type \n" +
+                "\t\t hg_party_org P\n" +
+                "\t\t left JOIN hg_party_org o ON o.org_parent = P.org_id and o.historic = false\n" +
+                "\t\t left JOIN hg_party_member M ON M.member_org = o.org_id or m.member_org = p.org_id \n" +
+                " where M.historic = false and P.historic = false and p.org_id in (" + suffix + ")\t\n" +
+                " GROUP BY p.org_id, m.member_type \n" +
                 "\t)\n" +
-                "\tT LEFT JOIN hg_party_org l ON T.org_id = l.org_id";
+                "T LEFT JOIN hg_party_org l ON T.org_id = l.org_id and l.historic = false";
         if (!StringUtils.isEmpty(search)) {
             sql += " and l.org_name like ?\n";
             params.add("%" + search + "%");
@@ -801,9 +805,9 @@ public class OrgDao extends HgPostgresqlDaoImpl<Organization> {
         int start = sql.toLowerCase().indexOf("from");
         int end = sql.toLowerCase().indexOf("order");
         if (start == -1) {
-			return 0;
+            return 0;
         }
-        if (end == -1){
+        if (end == -1) {
             end = sql.length();
         }
         sql = "select count(1) " + sql.substring(start, end);
@@ -826,27 +830,48 @@ public class OrgDao extends HgPostgresqlDaoImpl<Organization> {
         }
     }
 
-    public PostgresqlPageResult<Map<String, Object>> searchOrgUsersPage(int page, int size, int id,String adminType,String keyword) {
-        if (size <= 0){
+    public PageQueryResult<Map<String, Object>> searchOrgUsersPage(int page, int size, int id, String adminType, String keyword) {
+        if (size <= 0) {
             size = 10;
         }
-        Organization organization =  findById(id);
-        StringBuffer sb = new StringBuffer("select i.user_id,i.user_name,case when a.org_id='" + organization.getOrg_id() + "' then 1 else 0 end admin_type from hg_party_org_admin a full join hg_users_info i on a.admin_id = i.user_id left join hg_party_org o on a.org_id = o.org_id left join hg_party_member m on i.user_id = m.member_identity left join hg_party_org org on m.member_org = org.org_id where 1=1");
-        if(organization.getOrg_type().equals(PartyOrgAdminTypeEnum.BRANCH.getType())){
-            sb.append(" and org.org_id='" + organization.getOrg_id() + "'");
-        }else if(organization.getOrg_type().equals(PartyOrgAdminTypeEnum.SECONDARY.getType())){
-            sb.append(" AND org.org_parent='" + organization.getOrg_id() + "'");
+        List<Object> params = new ArrayList<>();
+        Organization organization = findById(id);
+        params.add(organization.getOrg_id());
+        params.add(organization.getOrg_id());
+        params.add(organization.getOrg_id());
+        params.add(organization.getOrg_id());
+
+        String sql = "SELECT\n" +
+                "\tm.member_identity as user_id,\n" +
+                "\tm.member_name as user_name,\n" +
+                "CASE\n" +
+                "\t\tWHEN A.org_id is null THEN\n" +
+                "\t\t0 ELSE 1 \n" +
+                "\tEND admin_type \n" +
+                "FROM\n" +
+                "\thg_party_member M \t\n" +
+                "\tLEFT JOIN hg_party_org_admin a ON a.admin_id = M.member_identity and a.org_id = ?\n" +
+                "\tLEFT JOIN hg_party_org org ON M.member_org = org.org_id \n" +
+                "\tLEFT JOIN hg_party_org s ON s.org_id = org.org_parent \n" +
+                "WHERE\n" +
+                "\tm.historic = false and org.historic = false and s.historic = false and (org.org_id = ?\n" +
+                "  or s.org_id = ?\n" +
+                "\tor s.org_parent = ?) \n";
+        if (!StringUtils.isEmpty(adminType)) {
+            if (adminType.equals("1")) {
+                sql += "\tand A.org_id is not null\n";
+            } else {
+                sql += "\tand A.org_id is null\n";
+            }
         }
-        if(adminType == "1"){
-            sb.append(" and a.org_id is not null");
-        }else if(adminType == "0"){
-            sb.append(" and a.org_id is null");
+        if (!StringUtils.isEmpty(keyword)) {
+            sql += "\tand( m.member_name like ? or m.member_identity like ?)\n";
+            params.add("%" + keyword + "%");
+            params.add("%" + keyword + "%");
         }
-        if(!StringUtils.isEmpty(keyword)){
-            keyword = "'%"+keyword+"%'";
-            sb.append(" and (i.user_name like "+ keyword +" or i.user_id like "+keyword+")");
-        }
-        sb.append(" ORDER BY admin_type desc,user_name desc");
-        return postGresqlFindPageBySql(page, size, sb.toString());
+        sql += "ORDER BY\n" +
+                "\tadmin_type DESC,\n" +
+                "\tm.member_name asc";
+        return retentionDao.pageBySql(page, size, sql, params);
     }
 }

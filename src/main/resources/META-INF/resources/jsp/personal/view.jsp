@@ -35,7 +35,7 @@
                         {field: 'meeting_theme', title: '会议主题', width:'12.5%'},
                         {field: 'start_time', title: '开始时间', width: '12.5%'},
                         {field: 'total_time', title: '开展时长(分钟)', width: '12.5%'},
-                        {field: 'contact', title: '联系人', width: '12.5%'},
+                        {field: 'contact_name', title: '联系人', width: '12.5%'},
                         {field: 'contact_phone', title: '联系电话', width: '12.5%'},
                         {field: 'remark', title: '详情', width: '12.5%', toolbar: '#transportBtns'}
                     ]]
@@ -61,7 +61,7 @@
                         {field: 'meeting_theme', title: '会议主题', width:'12.5%'},
                         {field: 'start_time', title: '开始时间', width: '12.5%'},
                         {field: 'total_time', title: '开展时长(分钟)', width: '12.5%'},
-                        {field: 'contact', title: '联系人', width: '12.5%'},
+                        {field: 'contact_name', title: '联系人', width: '12.5%'},
                         {field: 'contact_phone', title: '联系电话', width: '12.5%'},
                         {field: 'remark', title: '详情', width: '12.5%', toolbar: '#transportBtns'}
                     ]]

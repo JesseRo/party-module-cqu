@@ -150,6 +150,9 @@ public class OrgService {
                     } else if (descType == 2) {
                         o.put("grand_branch", 1);
                         o.put("committee", 0);
+                    } else {
+                        o.put("grand_branch", 0);
+                        o.put("committee", 0);
                     }
                 } else {
                     o.put("grand_branch", 0);
@@ -174,7 +177,7 @@ public class OrgService {
         return childrenStati;
     }
 
-    public PostgresqlPageResult<Map<String, Object>> searchOrgUsersPage(int page, int size, int orgId,String adminType,String keyword) {
+    public PageQueryResult<Map<String, Object>> searchOrgUsersPage(int page, int size, int orgId,String adminType,String keyword) {
         return orgDao.searchOrgUsersPage(page,size,orgId,adminType,keyword);
     }
 }

@@ -21,6 +21,7 @@ import dt.session.SessionManager;
 import hg.party.dao.org.MemberDao;
 import hg.party.dao.org.OrgDao;
 import hg.party.dao.party.PartyMeetingPlanInfoDao;
+import hg.party.dao.partyBranch.PartyBranchDao;
 import hg.party.dao.secondCommittee.MeetingNotesDao;
 import hg.party.entity.organization.Organization;
 import hg.party.entity.party.Hg_Value_Attribute_Info;
@@ -76,6 +77,9 @@ public class PartyApprovalPortlet extends MVCPortlet {
     @Reference
     private MemberDao memberDao;
 
+    @Reference
+    private PartyBranchDao partyBranchDao;
+
     private Gson gson = new Gson();
 
     @Override
@@ -112,14 +116,22 @@ public class PartyApprovalPortlet extends MVCPortlet {
             List<Member> participants = memberDao.findMemberByUserId(meetingUserList);
             String meetingUserName = participants.stream().map(Member::getMember_name).collect(Collectors.joining(","));
 
-            MeetingNote meetingNote = notesDao.findByMeetingId(meetingId);
-            if (meetingNote != null){
-                renderRequest.setAttribute("hasNote", true);
-                renderRequest.setAttribute("note", meetingNote);
-                List<String> meetingAttendances = gson.fromJson(meetingNote.getAttendance(), new TypeToken<List<String>>(){}.getType());
-                List<Member> members = memberDao.findMemberByUserId(meetingAttendances);
-                renderRequest.setAttribute("attendances", members.stream()
-                        .map(Member::getMember_name).collect(Collectors.joining(",")));
+            if (type.equals("主题党课")) {
+                List<Map<String, Object>> speakers = partyBranchDao.getMeetingSpeaker(meetingId);
+                renderRequest.setAttribute("speakers", speakers);
+            }
+
+            if (org.getOrg_parent().equals(orgId)) {
+                MeetingNote meetingNote = notesDao.findByMeetingId(meetingId);
+                if (meetingNote != null) {
+                    renderRequest.setAttribute("hasNote", true);
+                    renderRequest.setAttribute("note", meetingNote);
+                    List<String> meetingAttendances = gson.fromJson(meetingNote.getAttendance(), new TypeToken<List<String>>() {
+                    }.getType());
+                    List<Member> members = memberDao.findMemberByUserId(meetingAttendances);
+                    renderRequest.setAttribute("attendances", members.stream()
+                            .map(Member::getMember_name).collect(Collectors.joining(",")));
+                }
             }
 
             System.out.println("orgType=" + orgType);

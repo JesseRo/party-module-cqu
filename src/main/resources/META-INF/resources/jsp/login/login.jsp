@@ -23,7 +23,7 @@
             <form class="login_form" action="" method="post">
                 <div class="user_container">
                     <i class="input_icon"></i>
-                    <input type="text" maxlength="20" id="username"/>
+                    <input type="text" maxlength="20" id="username" placeholder="请输入身份证号"/>
                 </div>
                 <div class="pwd_container">
                     <i class="input_icon"></i>

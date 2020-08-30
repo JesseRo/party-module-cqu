@@ -101,6 +101,9 @@
 				height: 48px;
 				font-size: 14px;
 			}
+			input {
+				text-indent: 0;
+			}
 	        /* 录入弹窗样式 */			
 		</style>
 	</head>
@@ -149,23 +152,23 @@
 									<td data-label="党委名称" class="Party_name">${info.org_name }</td>
 									<td data-label="会议类型">${info.meeting_type }</td>
 									<td data-label="开展主题">${info.meeting_theme }</td>
-									<td data-label="开始时间"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${info.start_p }" /></td>
+									<td data-label="开始时间" title="<fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${info.start_p }" />"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${info.start_p }" /></td>
 									<td data-label="操作">
 										<c:if test="${info.task_status == '5' }">
-											<a onclick="entry('${info.meeting}')">
+											<a onclick="entry('${info.meeting}')" style="cursor: pointer;">
 												录入</a>
 										</c:if>
 										<c:if test="${info.task_status == '7' }">
-											<a onclick="entry('${info.meeting}')">
+											<a onclick="entry('${info.meeting}')" style="cursor: pointer;">
 												修改</a>
 										</c:if>
 									</td>
 										<%--	                            <td data-label="开展时长">${info.total_time }</td>--%>
-									<td data-label="开展地点">${info.place }</td>
+									<td data-label="开展地点" title="${info.campus }-${info.place_name}">${info.campus }-${info.place_name}</td>
 										<%--	                            <td data-label="应到人数">${info.shoule_persons }</td>--%>
 										<%--	                            <td data-label="实到人数">${info.actual_persons }</td>--%>
 										<%--	                            <td data-label="主持人">${info.host }</td>--%>
-									<td data-label="联系人">${info.contact }</td>
+									<td data-label="联系人">${info.contact_name }</td>
 										<%--	                            <td data-label="联系人电话">${info.contact_phone }</td>--%>
 										<%--	                            <td data-label="任务状态">--%>
 										<%--	                            	<c:if test="${info.task_status == '1'}"> --%>
@@ -191,19 +194,19 @@
 										<%--									</c:if>--%>
 										<%--	                            </td>--%>
 									<td data-label="抽查状态">
-										<c:if test="${info.task_status_org == '5'}">
+										<c:if test="${info.task_status == '5'}">
 											已指派
 										</c:if>
-										<c:if test="${info.task_status_org == '6'}">
+										<c:if test="${info.task_status == '6'}">
 											未检查
 										</c:if>
-										<c:if test="${info.task_status_org == '7'}">
+										<c:if test="${info.task_status == '7'}">
 											已检查
 										</c:if>
 									</td>
 										<%--	                            <td data-label="审核人">${info.auditor }</td>--%>
 									<td data-label="图片" class="img_td">
-										<input type="hidden" class="imageNemeOrg" value="${info.image_org }" name="imageNeme"/>
+										<input type="hidden" class="imageNemeOrg" value="${info.image }" name="imageNeme"/>
 									</td>
 										<%--	                            <td data-label="备注">${info.remarks_org }</td>--%>
 								</tr>

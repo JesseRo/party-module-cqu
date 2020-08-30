@@ -76,7 +76,7 @@
             当前位置：
             <span class="layui-breadcrumb" lay-separator=">">
                 <a href="javascript:;">组织生活管理</a>
-                <a href="javascript:;">通知列表</a>
+                <a href="javascript:;">通知信息</a>
             </span>
         </div>
         <div class="bg_white_container">
