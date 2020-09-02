@@ -437,6 +437,9 @@
                             case 'recovery':
                                 recoveryMember(obj.data.member_identity);
                                 break;
+                            case 'resetPass':
+                                recoveryMember(obj.data.member_identity);
+                                break;
                         };
                     });
                 }
@@ -740,6 +743,7 @@
     <script type="text/html" id="tableTool">
         {{#  if(d.historic == false){ }}
         <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="resetPass">重置密码</a>
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">移入历史档案库</a>
         {{#  } }}
     <c:if test="${role=='organization'}">

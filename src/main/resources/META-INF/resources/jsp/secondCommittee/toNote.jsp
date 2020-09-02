@@ -186,10 +186,9 @@
 </div>
 </body>
 <script type="text/html" id="meetingNoteTableBtn">
-    {{#  if(d.task_status == '0' || d.task_status == '2' || d.task_status == '3'){ }}
+    {{#  if(d.task_status > '3'){ }}
     <a class="layui-btn layui-btn-xs" lay-event="note">会议纪要</a>
     {{#  } }}
-    <a class="layui-btn layui-btn-xs" lay-event="note">会议纪要</a>
 </script>
 <script>
     layui.use(['table','layer','form'], function() {
