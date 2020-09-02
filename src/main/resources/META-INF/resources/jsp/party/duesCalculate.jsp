@@ -335,6 +335,12 @@
 										<input type="number"  name="employmentInjuryInsurance"  min="0"  lay-verify="inputNumber" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
 								</div>
+								<div class="layui-form-item" >
+									<label class="layui-form-label layui-required">养老保险</label>
+									<div class="layui-input-block">
+										<input type="number"  name="pensionInsurance"  min="0"  lay-verify="inputNumber" placeholder="" autocomplete="off" class="layui-input" value="0">
+									</div>
+								</div>
 								<div class="layui-form-item">
 									<label class="layui-form-label">个人所得税:</label>
 									<div class="layui-input-block">
