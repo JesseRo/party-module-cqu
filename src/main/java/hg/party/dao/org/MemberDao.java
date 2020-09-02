@@ -448,7 +448,7 @@ public class MemberDao extends HgPostgresqlDaoImpl<Member> {
     }
 
     public PostgresqlPageResult<Map<String, Object>> pageMembersByOrg(String orgId, PartyOrgAdminTypeEnum partyOrgAdminTypeEnum, Page page, String memberType, String history, String keyword) {
-        StringBuffer sb = new StringBuffer("select i.* from hg_party_member i left join hg_party_org b on i.member_org = b.org_id left join hg_party_org s on s.org_id = b.org_parent left join hg_party_org o on o.org_id = s.org_parent");
+        StringBuffer sb = new StringBuffer("select i.*,b.org_name as branch,s.org_name as secondary from hg_party_member i left join hg_party_org b on i.member_org = b.org_id left join hg_party_org s on s.org_id = b.org_parent left join hg_party_org o on o.org_id = s.org_parent");
         sb.append(" where 1=1");
         if (!StringUtils.isEmpty(memberType)) {
             sb.append(" and i.member_type='" + memberType + "'");

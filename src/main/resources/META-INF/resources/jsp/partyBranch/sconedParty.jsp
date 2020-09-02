@@ -251,7 +251,7 @@
                         <div class="layui-inline">
                             <label class="layui-form-label">联系领导：</label>
                             <div class="layui-input-inline">
-                                <select name="sit" lay-search="" lay-verify="select" lay-filter="sit" placeholder="可搜索可输入">
+                                <select name="sit" lay-search="" lay-filter="sit" placeholder="可搜索可输入">
                                     <option value="">请选择</option>
                                     <c:forEach var="l" items="${leaders}">
                                         <option value="${l.member_identity}">${l.member_name} [${l.org_name}]</option>

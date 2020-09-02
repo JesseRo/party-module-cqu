@@ -204,6 +204,7 @@
 		<a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
 	</script>
 	<script type="text/javascript">
+		var rejectModal;
 		layui.use(['table','layer','form'], function() {
 			var table = layui.table,
 					layer = layui.layer,
@@ -212,7 +213,6 @@
 				page:1,
 				size:10
 			};
-			var rejectModal;
 			var rejectId;
 			renderTable(1,pageInfo.size);
 			form.on('submit(searchForm)', function (data) {
@@ -227,8 +227,11 @@
 					async:false,
 					success:function(res){
 						if(res){
-							layer.msg("驳回成功。");
-							layer.close(rejectModal);
+							layer.closeAll();
+							layer.msg("驳回成功。", {
+								icon: 1,
+								time: 1000
+							});
 							renderTable(pageInfo.page,pageInfo.size);
 						}
 					}

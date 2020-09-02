@@ -752,11 +752,11 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
         if(!StringUtils.isEmpty(search)){
             search = "%" + search + "%";
             sb.append(" and (plan.meeting_theme like ? or member.member_name like ?)");
-            sb.append(" ORDER BY plan.task_status asc, plan.id desc");
+            sb.append(" ORDER BY  plan.start_time desc, plan.task_status asc ");
             logger.info("searchPage:"+sb.toString());
-            return postGresqlFindPageBySql(page, size, sb.toString(),orgId,search,search,search);
+            return postGresqlFindPageBySql(page, size, sb.toString(),orgId,search,search);
         }else{
-            sb.append(" ORDER BY plan.task_status asc, plan.id desc");
+            sb.append(" ORDER BY plan.start_time asc, plan.task_status desc");
             logger.info("searchPage:"+sb.toString());
             return postGresqlFindPageBySql(page, size, sb.toString(),orgId);
         }

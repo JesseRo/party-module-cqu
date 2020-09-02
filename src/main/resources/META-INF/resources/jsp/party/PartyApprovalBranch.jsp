@@ -175,7 +175,11 @@
 					async:false,
 					success:function(res){
 						if(res){
-							layer.msg("驳回成功。");
+							layer.closeAll();
+							layer.msg("驳回成功。", {
+								icon: 1,
+								time: 1000
+							});
 							renderTable(pageInfo.page,pageInfo.size);
 						}
 					}

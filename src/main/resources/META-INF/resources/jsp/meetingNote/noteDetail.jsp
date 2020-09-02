@@ -59,7 +59,7 @@
                             <b>已通过</b>
                         </c:if>
                         <c:if test="${meetingNote.status == 3}">
-                            <b>未通过(原因：${memberEdit.reason})</b>
+                            <b>未通过(原因：${meetingNote.reason})</b>
                         </c:if>
                     </div>
                 </div>
