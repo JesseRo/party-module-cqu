@@ -193,6 +193,9 @@
 			{{#  if(d.id != '' && d.id != null && d.task_status == '5'){ }}
 			<a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
 			{{#  } }}
+			{{#  if(d.id != '' && d.id != null && d.task_status == '7'){ }}
+			<a class="layui-btn layui-btn-xs" lay-event="result">抽查结果</a>
+			{{#  } }}
 			<a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
 		</script>
     <script type="text/javascript">
@@ -271,7 +274,11 @@
 							// renderDetail('check',obj);
 							window.location.href='/approvaldetails?meetingId='+obj.data.meeting_id;
 							break;
-					};
+						case 'result':
+							// renderDetail('check',obj);
+							renderResult(obj);
+							break;
+					}
 				});
 			}
 		});
@@ -295,6 +302,17 @@
 			$("#Assign .operation_container").find(".add_memeber_form").css("display", "none");
 			$("#Assign").modal("show");
 			getAssignPerson(obj.data.id);
+		}
+		//抽查结果
+		function renderResult(obj) {
+			var content = '<p>备注信息: </p><p>remark</p><p>检查结果: </p><p>meeting_state</p><p>上传照片: </p><img src="pic" style="max-width:500px;" />'
+					.replace('remark', obj.data.remark).replace('meeting_state', obj.data.meeting_state).replace('pic', obj.data.img);
+			layer.open({
+				title: '检查结果'
+				,content: content,
+				area: 'auto',
+				maxWidth: '500px'
+			});
 		}
         //一键指派  弹窗 点击确定
         $(".confirm_keyAssign").click(function() {

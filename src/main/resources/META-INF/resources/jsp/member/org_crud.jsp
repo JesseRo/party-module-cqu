@@ -341,6 +341,7 @@ button.cancal.btn.btn-default {
                             $('#orgInfo input[name="fax"]').val(res.data.organization.org_fax);
                             $('#orgInfo input[name="secretary"]').val(res.data.organization.org_secretary);
                             $('#orgInfo input[name="email"]').val(res.data.organization.org_email);
+                            $('#orgInfo input[name="postal"]').val(res.data.organization.org_code);
                             $('#orgInfo input[name="contactor"]').val(res.data.organization.org_contactor);
                             $('#orgInfo input[name="contactorNumber"]').val(res.data.organization.org_contactor_phone);
                             var descType = res.data.organization.desc_type;
@@ -685,10 +686,16 @@ button.cancal.btn.btn-default {
                                         <input type="text" name="contactorNumber" lay-verify="contactNumber" maxlength="20" autocomplete="off" class="layui-input">
                                     </div>
                                 </div>
-                                <div class="layui-inline"  style="width: 100%;">
-                                    <label class="layui-form-label" style="width: 25%;">地址：</label>
-                                    <div class="layui-input-inline" style="width: 75%;">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">地址：</label>
+                                    <div class="layui-input-inline">
                                         <input type="text" name="address" maxlength="100" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">邮编：</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="postal" maxlength="20" autocomplete="off" class="layui-input">
                                     </div>
                                 </div>
                                 <div class="layui-inline" id="org_update" style="display:none">
@@ -778,9 +785,17 @@ button.cancal.btn.btn-default {
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label" >地址</label>
-            <div class="layui-input-inline" style="width: 580px;" >
-                <input type="text" name="address" maxlength="100" autocomplete="off" class="layui-input">
+            <div class="layui-inline">
+                <label class="layui-form-label">地址</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="address" maxlength="100" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">邮编</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="postal" maxlength="20" autocomplete="off" class="layui-input">
+                </div>
             </div>
         </div>
         <div class="layui-layer-btn layui-layer-btn-">

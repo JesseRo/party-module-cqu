@@ -108,6 +108,7 @@ public class OrgCRUDCommand implements MVCResourceCommand{
 		String fax = ParamUtil.getString(resourceRequest, "fax");
 		String secretary = ParamUtil.getString(resourceRequest, "secretary");
 		String email = ParamUtil.getString(resourceRequest, "email");
+		String postal = ParamUtil.getString(resourceRequest, "postal");
 		String contactor = ParamUtil.getString(resourceRequest, "contactor");
 		String contactorNumber = ParamUtil.getString(resourceRequest, "contactorNumber");
 		PrintWriter printWriter = resourceResponse.getWriter();
@@ -134,6 +135,7 @@ public class OrgCRUDCommand implements MVCResourceCommand{
 					organization.setOrg_email(email);
 					organization.setOrg_phone_number(contactNumber);
 					organization.setOrg_fax(fax);
+					organization.setOrg_code(postal);
 					organization.setOrg_secretary(secretary);
 					int createId = orgService.createOrg(organization);
 					if(createId>0){
@@ -170,6 +172,7 @@ public class OrgCRUDCommand implements MVCResourceCommand{
 				String address = ParamUtil.getString(resourceRequest, "address");
 				String contactNumber = ParamUtil.getString(resourceRequest, "contactNumber");
 				String fax = ParamUtil.getString(resourceRequest, "fax");
+				String postal = ParamUtil.getString(resourceRequest, "postal");
 				String secretary = ParamUtil.getString(resourceRequest, "secretary");
 				String email = ParamUtil.getString(resourceRequest, "email");
 				String contactor = ParamUtil.getString(resourceRequest, "contactor");
@@ -182,6 +185,7 @@ public class OrgCRUDCommand implements MVCResourceCommand{
 					organization.setOrg_fax(fax);
 					organization.setOrg_secretary(secretary);
 					organization.setOrg_email(email);
+					organization.setOrg_code(postal);
 					organization.setOrg_contactor(contactor);
 					organization.setOrg_contactor_phone(contactorNumber);
 					organization.setDesc_type(Integer.parseInt(descType));

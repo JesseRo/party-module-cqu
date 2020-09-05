@@ -40,6 +40,8 @@ public class MeetingNote {
     private String meeting_state_org;
 	//会议纪要流程状态
 	private int status;
+	//会议纪要流程状态
+	private String reason;
     
     
 	public String getImage_org() {
@@ -158,5 +160,12 @@ public class MeetingNote {
 				+ ", meeting_state_org=" + meeting_state_org + "]";
 	}
 
-    
+
+	public String getReason() {
+		return reason;
+	}
+
+	public void setReason(String reason) {
+		this.reason = reason;
+	}
 }

@@ -142,7 +142,7 @@
                                 _admin[admins[i]] = admins[i];
                             }
                             for ( var group in candidatesGroup) {
-                                for ( var j in candidatesGroup[group]) {
+                                for ( var j = 0; j < candidatesGroup[group].length; j++) {
                                     var member = candidatesGroup[group][j];
                                     candidates.push({
                                         id : member.member_identity,
@@ -170,9 +170,9 @@
                 $('#addBtn').on('click', function () {
                     layer.open({
                         title: '新增督察人员'
-                        ,content: "<div id=\"add_popup\">\n" +
+                        ,content: "<div id=\"add_popup\" style='height: 500px;'>\n" +
                             "    <div class=\"layui-form-item\">\n" +
-                            "        <label class=\"layui-form-label\" style='width: 100px;'>督察人员：</label>\n" +
+                            "        <label class=\"layui-form-label\" style='width: 110px;'>督察人员：</label>\n" +
                             "        <div class=\"layui-input-block\">\n" +
                             "            <div class=\"dropdown-mul-2\">\n" +
                             "                <select id=\"add_user\">\n" +
@@ -181,7 +181,7 @@
                             "        </div>\n" +
                             "    </div>\n" +
                             "    <div class=\"layui-form-item\">\n" +
-                            "        <label class=\"layui-form-label\" style='width: 100px;'>校区：</label>\n" +
+                            "        <label class=\"layui-form-label\" style='width: 110px;'>校区：</label>\n" +
                             "        <div class=\"layui-input-block\">\n" +
                             "            <select autocomplete=\"off\" class=\"form-control\" id=\"add_campus\">\n" +
                             "                <option disabled selected>请选择校区</option>\n" +
@@ -193,7 +193,7 @@
                             "        </div>\n" +
                             "    </div>\n" +
                             "    <div class=\"layui-form-item\">\n" +
-                            "        <label class=\"layui-form-label\" style='width: 100px;'>类别：</label>\n" +
+                            "        <label class=\"layui-form-label\" style='width: 110px;'>类别：</label>\n" +
                             "        <div class=\"layui-input-block\">\n" +
                             "            <select autocomplete=\"off\" class=\"form-control\" id=\"add_type\">\n" +
                             "                <option disabled selected>请选择类别</option>\n" +
@@ -204,6 +204,7 @@
                             "    </div>\n" +
                             "</div>"
                         ,btn: ['确定', '取消']
+                        ,area: ['400px', '500px']
                         ,yes: function (index) {
                             var user = $('#add_user').val();
                             var campus = $('#add_campus').val();

@@ -217,7 +217,12 @@
                                     <option value="本科">本科</option>
                                     <option value="硕士研究生">硕士研究生</option>
                                     <option value="博士研究生">博士研究生</option>
-                                    <option value="其他">其他</option>
+                                    <option value="其他">研究生</option>
+                                    <option value="其他">初中</option>
+                                    <option value="其他">高中</option>
+                                    <option value="其他">中技</option>
+                                    <option value="其他">中专</option>
+                                    <option value="其他">专科</option>
                                 </select>
                             </div>
                         </div>
@@ -267,7 +272,7 @@
                         <div class="layui-inline">
                             <label class="layui-form-label layui-required">行政机构</label>
                             <div class="layui-input-inline">
-                                <select class="layui-input" name="unit" id="unit" lay-verify="select">
+                                <select class="layui-input" name="unit" id="unit" lay-verify="select" lay-search>
                                     <option value="" disabled selected>-请选择-</option>
                                     <c:forEach items="${units}" var="u">
                                         <option value="${u.id}"  <c:if test="${info.member_unit == u.id }">selected</c:if>>${u.unit_name}</option>
@@ -288,7 +293,7 @@
                     </div>
                     <div class="layui-form-item">
                         <div class="layui-inline">
-                            <label class="layui-form-label">工&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号</label>
+                            <label class="layui-form-label">工号/学号</label>
                             <div class="layui-input-inline">
                                 <input type="text" class="layui-input" name="jobNumber" id="jobNumber" value="${info.job_number }" >
                             </div>

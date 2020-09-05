@@ -705,7 +705,7 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
         }
         Organization org = orgDao.findOrgByOrgId(orgId);
         PartyOrgAdminTypeEnum partyOrgAdminTypeEnum = PartyOrgAdminTypeEnum.getEnum(org.getOrg_type());
-        StringBuffer sb = new StringBuffer("SELECT  note.attachment,org.org_id,users.user_name as checker,org.org_name, place.place as placeName, plan.*,member.member_name");
+        StringBuffer sb = new StringBuffer("SELECT  note.attachment,note.img,note.remarks,note.meeting_state,org.org_id,users.user_name as checker,org.org_name, place.place as placeName, plan.*,member.member_name");
         sb.append(" FROM hg_party_meeting_plan_info AS plan");
         sb.append(" LEFT JOIN hg_party_meeting_notes_info AS note ON plan.meeting_id = note.meeting_id");
         sb.append(" left join hg_users_info users on users.user_id = plan.check_person");
@@ -752,11 +752,11 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
         if(!StringUtils.isEmpty(search)){
             search = "%" + search + "%";
             sb.append(" and (plan.meeting_theme like ? or member.member_name like ?)");
-            sb.append(" ORDER BY plan.task_status asc, plan.id desc");
+            sb.append(" ORDER BY  plan.start_time desc, plan.task_status asc ");
             logger.info("searchPage:"+sb.toString());
-            return postGresqlFindPageBySql(page, size, sb.toString(),orgId,search,search,search);
+            return postGresqlFindPageBySql(page, size, sb.toString(),orgId,search,search);
         }else{
-            sb.append(" ORDER BY plan.task_status asc, plan.id desc");
+            sb.append(" ORDER BY plan.start_time asc, plan.task_status desc");
             logger.info("searchPage:"+sb.toString());
             return postGresqlFindPageBySql(page, size, sb.toString(),orgId);
         }
