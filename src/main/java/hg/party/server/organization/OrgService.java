@@ -144,14 +144,11 @@ public class OrgService {
             } else {
                 if ("secondary".equalsIgnoreCase((String) o.get("org_type"))) {
                     int descType = (Integer) o.get("desc_type");
-                    if (descType == 1) {
+                    if (descType == 1 || descType == 0) {
                         o.put("grand_branch", 0);
                         o.put("committee", 1);
-                    } else if (descType == 2) {
-                        o.put("grand_branch", 1);
-                        o.put("committee", 0);
                     } else {
-                        o.put("grand_branch", 0);
+                        o.put("grand_branch", 1);
                         o.put("committee", 0);
                     }
                 } else {

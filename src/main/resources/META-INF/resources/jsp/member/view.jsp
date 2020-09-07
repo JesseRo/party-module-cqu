@@ -4,6 +4,7 @@
 <portlet:resourceURL id="/org/export" var="orgExport"/>
 <portlet:resourceURL id="/org/import" var="orgImport"/>
 <portlet:resourceURL id="/org/delete/user" var="orgDeletePerson"/>
+<portlet:resourceURL id="/org/resetPass/user" var="resetPass"/>
 <portlet:resourceURL id="/org/user/recovery" var="orgRecoveryPerson"/>
 <portlet:resourceURL id="/hg/org/move/object" var="moveObject"/>
 <portlet:resourceURL id="/hg/org/move/org" var="moveObjectorg"/>
@@ -387,14 +388,13 @@
                        , keyword: $("#searchForm input[name=keyword]").val()
                    };
                    var cols = [[
-                       {type: 'checkbox', width:'8%'}
-                       ,{field: 'member_name', align:'center', width:'12%',title: '姓名',templet: function(d) {
+                       {field: 'member_name', align:'center', width:'12%',title: '姓名',templet: function(d) {
                                return '<a href="/memberDetail?userId='+d.member_identity+'" >' + d.member_name + '</a>';
                            }
-                           }
+                       }
                        ,{field: 'member_sex', align:'center', width:'12%',title: '性别'}
-                       ,{field: 'secondary', align:'center', width:'12%',title: '所属二级党组织'}
-                       ,{field: 'branch', align:'center', width:'12%',title: '所属支部'}
+                       ,{field: 'secondary', align:'center', width:'16%',title: '所属二级党组织'}
+                       ,{field: 'branch', align:'center', width:'16%',title: '所属支部'}
                        ,{field: 'member_join_date', align:'center', width:'12%', title: '入党时间'}
                        ,{field: 'member_type', align:'center', width:'12%', title: '党员类型'}
                        ,{field: 'historic', title: '操作', width:'20%', align:'center',toolbar: '#tableTool'}
@@ -438,7 +438,7 @@
                                 recoveryMember(obj.data.member_identity);
                                 break;
                             case 'resetPass':
-                                recoveryMember(obj.data.member_identity);
+                                resetPass(obj.data.member_identity);
                                 break;
                         };
                     });
@@ -534,6 +534,17 @@
                             });
                         })
                     });
+                }
+                function resetPass(userId){
+                    layuiModal.confirm("确定要重置该用户的密码吗？", function () {
+                        $.post("${resetPass}", {userId: userId}, function (res) {
+                            if (res.result) {
+                                layuiModal.alert("已重置");
+                            }else {
+                                layuiModal.alert("重置失败");
+                            }
+                        })
+                    })
                 }
                 function recoveryMember(userId){
                     recoveryId = userId;
@@ -743,7 +754,9 @@
     <script type="text/html" id="tableTool">
         {{#  if(d.historic == false){ }}
         <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+<c:if test="${role=='organization' or role == 'secondary'}">
         <a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="resetPass">重置密码</a>
+</c:if>
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">移入历史档案库</a>
         {{#  } }}
     <c:if test="${role=='organization'}">

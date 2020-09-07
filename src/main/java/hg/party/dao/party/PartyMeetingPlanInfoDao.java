@@ -14,6 +14,8 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.util.StringUtils;
 import party.constants.PartyOrgAdminTypeEnum;
+import party.portlet.transport.dao.RetentionDao;
+import party.portlet.transport.entity.PageQueryResult;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -29,6 +31,9 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
     Logger logger = Logger.getLogger(PartyMeetingPlanInfoDao.class);
     @Reference
     private OrgDao orgDao;
+
+    @Reference
+    private RetentionDao retentionDao;
 
     //根据会议id查询
     public List<MeetingPlan> meetingId(String meetingid) {
@@ -59,11 +64,13 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
         return this.jdbcTemplate.queryForMap(sql, meetingId);
     }
 
-    public PostgresqlQueryResult<Map<String, Object>> leaderMeetingPage(int page, int size, String secondId, String brunchId, String startTime, String endTime, String leader,String orgId) {
+    public PageQueryResult<Map<String, Object>> leaderMeetingPage(int page, int size, String secondId, String brunchId, String startTime, String endTime, String leader, String orgId) {
         page = Math.max(page, 0);
         size = size <= 0 ? 10 : size;
         List<Object> params = new ArrayList<>();
         String sql = "SELECT\n" +
+                "\tDISTINCT(plan.meeting_id, leader.id),\n" +
+                "\tplan.id," +
                 "\tplan.meeting_type,\n" +
                 "\tplan.meeting_theme ,\n" +
                 "\torg.org_name as org_name,\n" +
@@ -85,24 +92,15 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
                 "\tLEFT JOIN hg_party_member contact ON plan.contact = contact.member_identity\n" +
                 "\tLEFT JOIN hg_party_member HOST ON plan.HOST = HOST.member_identity\n" +
                 "\tLEFT JOIN hg_party_member checker ON plan.HOST = checker.member_identity\n" +
-                "\tLEFT JOIN hg_party_member leader ON participant.participant_id = leader.member_identity\n" +
+                "\tLEFT JOIN hg_party_member leader ON participant.participant_id = leader.member_identity or plan.sit_id = leader.member_identity\n" +
                 "\tLEFT JOIN hg_party_place place ON place.\"id\" = plan.place\n" +
                 "\twhere leader.member_is_leader = '是' ";
 
 
         if(!StringUtils.isEmpty(orgId)){
-            Organization organization =  orgDao.findByOrgId(orgId);
-            if(!organization.getOrg_type().equals(PartyOrgAdminTypeEnum.ORGANIZATION.getType())){
-                sql += "and org.org_id = ? ";
-                params.add(orgId);
-            }
-        }
-        if (!StringUtils.isEmpty(brunchId)){
-            sql += "and org.org_id = ? ";
-            params.add(brunchId);
-        }else if (!StringUtils.isEmpty(secondId)){
-            sql += "and org.org_parent = ? ";
-            params.add(secondId);
+            sql += "and (org.org_id = ? or org.org_parent = ?)";
+            params.add(orgId);
+            params.add(orgId);
         }
         if (!StringUtils.isEmpty(startTime)){
             sql += "and plan.end_time > ? ";
@@ -118,8 +116,8 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
             sql += "and leader.member_name like ? ";
             params.add("%" + leader + "%");
         }
-        sql += "order by plan.id asc ";
-        return postGresqlFindBySql(page, size, sql, params.toArray(new Object[0]));
+        sql += "order by leader_name asc, plan.id asc ";
+        return retentionDao.pageBySql(page, size, sql, params);
     }
 
 
@@ -705,7 +703,7 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
         }
         Organization org = orgDao.findOrgByOrgId(orgId);
         PartyOrgAdminTypeEnum partyOrgAdminTypeEnum = PartyOrgAdminTypeEnum.getEnum(org.getOrg_type());
-        StringBuffer sb = new StringBuffer("SELECT  note.attachment,note.img,note.remarks,note.meeting_state,org.org_id,users.user_name as checker,org.org_name, place.place as placeName, plan.*,member.member_name");
+        StringBuffer sb = new StringBuffer("SELECT  note.attachment,note.image,note.remarks,note.meeting_state,org.org_id,users.user_name as checker,org.org_name, place.place as placeName, plan.*,member.member_name");
         sb.append(" FROM hg_party_meeting_plan_info AS plan");
         sb.append(" LEFT JOIN hg_party_meeting_notes_info AS note ON plan.meeting_id = note.meeting_id");
         sb.append(" left join hg_users_info users on users.user_id = plan.check_person");
@@ -714,28 +712,28 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
         sb.append(" left join hg_party_member member on member.member_identity = plan.contact");
         sb.append(" where 1=1");
         sb.append(" and org.historic IS FALSE AND plan.task_status in ('5','6','7')");
-        switch(partyOrgAdminTypeEnum){
-            case BRANCH:
-                sb.append(" and org.org_id = ?");
-                break;
-            case SECONDARY:
-                sb.append(" and org.org_parent = ? and org.org_type ='"+PartyOrgAdminTypeEnum.BRANCH.getType()+"'");
-                break;
-            case ORGANIZATION:;
-                sb.append(" and org.org_parent = ? and org.org_type ='"+PartyOrgAdminTypeEnum.SECONDARY.getType()+"'");
-                break;
-            default: return new PostgresqlPageResult(null, 0,0);
-        }
+//        switch(partyOrgAdminTypeEnum){
+//            case BRANCH:
+//                sb.append(" and org.org_id = ?");
+//                break;
+//            case SECONDARY:
+//                sb.append(" and org.org_parent = ? and org.org_type ='"+PartyOrgAdminTypeEnum.BRANCH.getType()+"'");
+//                break;
+//            case ORGANIZATION:;
+//                sb.append(" and org.org_parent = ? and org.org_type ='"+PartyOrgAdminTypeEnum.SECONDARY.getType()+"'");
+//                break;
+//            default: return new PostgresqlPageResult(null, 0,0);
+//        }
         if(!StringUtils.isEmpty(search)){
             search = "%" + search + "%";
             sb.append(" and (plan.meeting_theme like ? or org.org_name like ?)");
             sb.append(" ORDER BY plan.id desc");
             logger.debug("checkPage:"+sb.toString());
-            return postGresqlFindPageBySql(page, size, sb.toString(),orgId,search,search);
+            return postGresqlFindPageBySql(page, size, sb.toString(),search,search);
         }else{
             sb.append(" ORDER BY plan.id desc");
             logger.debug("checkPage:"+sb.toString());
-            return postGresqlFindPageBySql(page, size, sb.toString(),orgId);
+            return postGresqlFindPageBySql(page, size, sb.toString());
         }
     }
 
@@ -743,7 +741,7 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
         if (size <= 0){
             size = 10;
         }
-        StringBuffer sb = new StringBuffer("SELECT plan.*,member.member_name,note.status note_status");
+        StringBuffer sb = new StringBuffer("SELECT plan.*,member.member_name,note.status note_status,plan.end_time > CURRENT_TIMESTAMP as over ");
         sb.append(" FROM hg_party_meeting_plan_info AS plan");
         sb.append(" left join hg_party_member member on member.member_identity = plan.contact ");
         sb.append(" left join hg_party_meeting_notes_info note on plan.meeting_id = note.meeting_id");

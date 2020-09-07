@@ -118,7 +118,7 @@
     <a class="layui-btn layui-btn-xs" lay-event="edit"> 编辑</a>
     {{#  } }}
     <a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
-    {{#  if(d.task_status != '0' && d.task_status != '1' && d.task_status != '2' && d.task_status != '3' && d.note_status !='2' && d.note_status !='3'){ }}
+    {{#  if(d.task_status != '0' && d.task_status != '1' && d.task_status != '2' && d.task_status != '3' && d.note_status !='2' && d.note_status !='3' && d.over){ }}
     <a class="layui-btn layui-btn-xs" lay-event="sendPhoneMsg"> 短信通知</a>
     {{#  } }}
 </script>
@@ -162,10 +162,10 @@
                                 case 1:status = '待审核';break;
                                 case 2:status = '已撤回';break;
                                 case 3:status = '已驳回';break;
-                                case 4:status = '已通过';break;
-                                case 5:status = '已指派';break;
-                                case 6:status = '未检查';break;
-                                case 7:status = '已检查';break;
+                                case 4:
+                                case 5:
+                                case 6:
+                                case 7:status = '已通过';break;
                             }
                             return status;
                         }},

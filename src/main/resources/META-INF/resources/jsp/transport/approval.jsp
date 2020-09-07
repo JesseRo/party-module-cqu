@@ -566,7 +566,7 @@
         <span class="red_text" onclick="transportApprove(this, 2);">驳回</span>
         {{# } }}
         {{# if(d.status == 3){ }}
-        <span class="blue_text" onclick="window.location.href='{{d.receipt}}'">回执</span>
+        <span class="blue_text" onclick="window.open('{{d.receipt}}');">回执</span>
         <span class="blue_text" onclick="transportApprove(this, 4);">确认</span>
         {{# } }}
     </div>

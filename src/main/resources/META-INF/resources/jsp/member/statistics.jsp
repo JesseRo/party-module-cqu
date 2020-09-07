@@ -401,8 +401,8 @@
                                 {field: 'retention_id', title: 'id', hide: true},
                                 {field: 'org_name', title: '组织名称', width: '15%'},
                                 {field: 'org_secretary', title: '党委书记', width: '15%'},
-                                {field: 'committee', title: '党委数', width: '14%'},
-                                {field: 'grand_branch', title: '党总支数', width: '14%'},
+                                {field: 'committee', title: '党委数(含党工委)', width: '14%'},
+                                {field: 'grand_branch', title: '党总支数(含直属党支部)', width: '14%'},
                                 {field: 'c', title: '党支部数', width: '14%'},
                                 {field: 'member_formal', title: '正式党员数', width: '14%'},
                                 {field: 'member_pre', title: '预备党员数', width: '14%'}

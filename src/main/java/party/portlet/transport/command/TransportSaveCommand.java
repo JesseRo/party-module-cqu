@@ -80,7 +80,7 @@ public class TransportSaveCommand implements MVCResourceCommand {
             String type = ParamUtil.getString(resourceRequest, "type");
             String org = ParamUtil.getString(resourceRequest, "org");
             if (type.equalsIgnoreCase("0") || type.equalsIgnoreCase("1")) {
-                Organization toOrg = orgDao.findByOrgId(org);
+                Organization toOrg = orgDao.findById(Long.valueOf(org));
                 if (!toOrg.getOrg_type().equalsIgnoreCase(ConstantsKey.ORG_TYPE_BRANCH)) {
                     throw new Exception();
                 }
@@ -91,7 +91,7 @@ public class TransportSaveCommand implements MVCResourceCommand {
                     toApproveList.add(organization.getOrg_parent());
                     toApproveList.add(toOrg.getOrg_parent());
                 }
-                toApproveList.add(org);
+                toApproveList.add(toOrg.getOrg_id());
                 transport.setTo_approve_list(gson.toJson(toApproveList));
                 transport.setTo_org_id(toOrg.getOrg_id());
                 transport.setTo_org_name(toOrg.getOrg_name());

@@ -95,7 +95,7 @@
                                     <div class="layui-row member-list">
                                         <div class="layui-col-md6">
                                             <div class="layui-card">
-                                                <div class="layui-card-header">参会人员</div>
+                                                <div class="layui-card-header">应到人员</div>
                                                 <div class="layui-card-body">
                                                     <ul>
                                                     <c:forEach var="m" items="${participants }">

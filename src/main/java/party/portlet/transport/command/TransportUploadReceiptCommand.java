@@ -75,7 +75,7 @@ public class TransportUploadReceiptCommand implements MVCResourceCommand {
 			FileUtil.copyFile(receipt, filePath);
 			transport.setReceipt(fileUrl);
 			transportDao.saveOrUpdate(transport);
-			resourceResponse.getWriter().write("<script>alert('已上传回执');window.location.reload();</script>");
+			resourceResponse.getWriter().write("<script>alert('已上传回执');parent.location.reload();</script>");
 		}catch (Exception e){
 			e.printStackTrace();
 		}

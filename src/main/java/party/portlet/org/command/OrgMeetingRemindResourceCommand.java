@@ -48,7 +48,7 @@ public class OrgMeetingRemindResourceCommand implements MVCResourceCommand {
     @Reference
     private OrgDao orgDao;
     private static String smsTemplate = "【重庆大学】\n" +
-            "%s：支部在%s——%s之间未开展组织生活，请核实情况，及时组织开展。\n" +
+            "%s：支部在%s——%s之间开展了%s次组织生活，特此通报。\n" +
             "%s";
     private Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 
@@ -59,6 +59,7 @@ public class OrgMeetingRemindResourceCommand implements MVCResourceCommand {
         String orgId = ParamUtil.getString(resourceRequest, "id");
         String start = ParamUtil.getString(resourceRequest, "start");
         String end = ParamUtil.getString(resourceRequest, "end");
+        long num = ParamUtil.getLong(resourceRequest, "num");
         boolean template = ParamUtil.getBoolean(resourceRequest, "template");
 
         String currentOrgId = (String) SessionManager.getAttribute(resourceRequest.getRequestedSessionId(), "department");
@@ -70,7 +71,7 @@ public class OrgMeetingRemindResourceCommand implements MVCResourceCommand {
 
         try {
             if (template) {
-                res.getWriter().write(gson.toJson(JsonResponse.Success(String.format(smsTemplate, organization.getOrg_name(), start, end, currentOrg.getOrg_name()))));
+                res.getWriter().write(gson.toJson(JsonResponse.Success(String.format(smsTemplate, organization.getOrg_name(), start, end,num, currentOrg.getOrg_name()))));
             } else {
                 List<String> phones = orgDao.findAdminPhoneNumberIn(Collections.singletonList(orgId));
                 if (phones != null && phones.size() > 0) {

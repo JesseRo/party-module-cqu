@@ -131,6 +131,14 @@
                     <p style="float: left;line-height: 35px;color: red;" id="status">${statusList[transport.status]}</p>
                 </div>
             </div>
+            <c:if test="${not empty transport.receipt}">
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">回执：</label>
+                <div class="layui-input-block">
+                    <p style="float: left;line-height: 35px; cursor: pointer;color: blue;" onclick="window.open('${transport.receipt}');">点击下载</p>
+                </div>
+            </div>
+            </c:if>
             <div class="layui-form-item btn_group">
                 <div class="layui-input-block">
                     <button type="button" style="color: white;" class="layui-btn _submit" lay-filter="organRelaForm" onclick="window.history.back();">返回</button>

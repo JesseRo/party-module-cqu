@@ -8,10 +8,13 @@ import dt.session.SessionManager;
 import hg.party.dao.org.OrgDao;
 import hg.party.dao.party.PartyMeetingPlanInfoDao;
 import hg.party.entity.organization.Organization;
+import hg.util.ConstantsKey;
 import org.apache.log4j.Logger;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+import org.springframework.util.StringUtils;
 import party.constants.PartyPortletKeys;
+import party.portlet.transport.entity.PageQueryResult;
 
 import javax.portlet.Portlet;
 import javax.portlet.PortletException;
@@ -64,13 +67,29 @@ public class SecondLeaderMeetingPortlet extends MVCPortlet {
         String leader = ParamUtil.getString(renderRequest, "leader");
         leader = HtmlUtil.escape(leader);
 
+        Organization organization = orgDao.findByOrgId(orgId);
+        String orgType = organization.getOrg_type();
+
         int pageNo = ParamUtil.getInteger(renderRequest, "pageNo");
-        PostgresqlQueryResult<Map<String, Object>> pageResult = partyMeetingPlanInfoDao.leaderMeetingPage(pageNo, pageSize, seconedId, branchId, startTime, endTime, leader,orgId);
+
+        if (StringUtils.isEmpty(branchId)) {
+            if (StringUtils.isEmpty(seconedId)) {
+                if (orgType.equals(ConstantsKey.ORG_TYPE_SECONDARY)) {
+                    seconedId = orgId;
+                } else if (orgType.equals(ConstantsKey.ORG_TYPE_ROOT)) {
+                    orgId = null;
+                }
+            } else {
+                orgId = seconedId;
+            }
+        } else {
+            orgId = branchId;
+        }
+        PageQueryResult<Map<String, Object>> pageResult = partyMeetingPlanInfoDao.leaderMeetingPage(pageNo, pageSize, seconedId, branchId, startTime, endTime, leader,orgId);
         //获取当前页
 
         int totalPage = pageResult.getTotalPage();
-        Organization organization = orgDao.findByOrgId(orgId);
-        String orgType = organization.getOrg_type();
+
         renderRequest.setAttribute("list", pageResult.getList());
         renderRequest.setAttribute("pageNo", pageNo);
         renderRequest.setAttribute("totalPage", totalPage);

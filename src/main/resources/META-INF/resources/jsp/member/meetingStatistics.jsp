@@ -462,10 +462,11 @@
         });
         function sms(e){
             var orgId = $(e).attr("bid");
+            var num = $(e).attr("num");
             $.post("${sms}", {id: orgId, start: startDate, end: endDate, template: true}, function (res) {
                 if (res.result) {
                     layuiModal.confirm("是否发送通知短信：\n" + res.data, function () {
-                        $.post("${sms}", {id: orgId, start: startDate, end: endDate}, function (res) {
+                        $.post("${sms}", {id: orgId, start: startDate, end: endDate, num: num}, function (res) {
                             if (res.result) {
                                 layuiModal.alert("已发送短信通知");
                             }
@@ -478,7 +479,7 @@
 </head>
 <script type="text/html" id="retentionBtns">
     <div class="operate_btns">
-        <span bid="{{d.org_id}}" onclick="sms(this)" class="blue_text sms_button" style="cursor: pointer;color: #5160FF; ">短信通知</span>
+        <span bid="{{d.org_id}}" num="{{d.plan_count}}" onclick="sms(this)" class="blue_text sms_button" style="cursor: pointer;color: #5160FF; ">短信通知</span>
     </div>
 </script>
 <div>

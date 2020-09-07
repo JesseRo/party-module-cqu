@@ -137,7 +137,7 @@
                 if (type === '0') {
                     org = $('#org_brunch_select').val();
                 } else if (type === '1') {
-                    org = $('#org_all_select').val();
+                    org = $('#orgTree').val();
                 } else {
                     org = $('#org').val();
                 }
@@ -247,7 +247,7 @@
                             <c:forEach var="group" items="${brunchGroup}">
                                 <optgroup label="${group.key}">
                                     <c:forEach var="brunch" items="${group.value}">
-                                        <option value="${brunch.org_id}">${brunch.org_name}</option>
+                                        <option value="${brunch.id}">${brunch.org_name}</option>
                                     </c:forEach>
                                 </optgroup>
                             </c:forEach>
@@ -354,11 +354,12 @@
             </div>
             <div class="tips_container">
                 <p class="tips_title">注意事项</p>
-                <p>1.请与转入单位党务工作部门（非人事）落实；</p>
-                <p> 2.市外原则上需县级以上党组织，不应出现支部、街道等；</p>
-                <p>3.市外则通过12371平台进行转接，抬头需落实到支部；</p>
+                <p>1.填写前需与转入单位党务工作部门（非人事）核实介绍信抬头。</p>
+                <p>2.转往市外介绍信抬头原则上需为县级及以上党组织，不应出现支部、街道等。</p>
+                <p>3.转往市内（含校内、院内）需通过12371平台进行操作，介绍信抬头应落实到支部。</p>
                 <p>
-                    4.以转入“重庆大学外国语学院”为例，【由市外转入】去往单位：重庆大学外国语学院，介绍信抬头：重庆市委教育工委；【由市内转入】去往单位：重庆大学外国语学院，介绍信抬头：市委教工委-重庆大学党委-外语学院党委-XX支部</p>
+                    以转入“重庆大学外国语学院”为例，【由市外转入】去往单位：重庆大学外国语学院，介绍信抬头：重庆市委教育工委；【由市内转入】去往单位：重庆大学外国语学院，介绍信抬头：市委教工委-重庆大学党委-外语学院党委-XX支部。
+                </p>
             </div>
         </div>
     </div>
