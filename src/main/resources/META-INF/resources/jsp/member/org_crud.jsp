@@ -344,6 +344,7 @@ button.cancal.btn.btn-default {
                             $('#orgInfo input[name="postal"]').val(res.data.organization.org_code);
                             $('#orgInfo input[name="contactor"]').val(res.data.organization.org_contactor);
                             $('#orgInfo input[name="contactorNumber"]').val(res.data.organization.org_contactor_phone);
+                            $('#orgInfo input[name="fullname"]').val(res.data.organization.org_fullname);
                             var descType = res.data.organization.desc_type;
                             if(descType == null || descType == ''){
                                 descType = 1;
@@ -635,7 +636,7 @@ button.cancal.btn.btn-default {
                                 <div class="layui-inline" style="border-top: 1px solid #CCC;">
                                     <label class="layui-form-label layui-required">党组织类型：</label>
                                     <div class="layui-input-inline">
-                                        <select name="descType" lay-verify="required" autocomplete="off"class="layui-input"> >
+                                        <select name="descType" lay-verify="required" autocomplete="off" class="layui-input"> >
                                             <option value="1" selected>党委</option>
                                             <option value="0">党工委</option>
                                             <option value="2">党总支</option>
@@ -649,10 +650,16 @@ button.cancal.btn.btn-default {
                                         </select>
                                     </div>
                                 </div>
+                                <div class="layui-inline"  style="width: 100%;">
+                                    <label class="layui-form-label layui-required"  style="width: 25%;">党组织全称：</label>
+                                    <div class="layui-input-inline" style="width: 75%;">
+                                        <input type="text" name="fullName" maxlength="100" autocomplete="off" class="layui-input" lay-verify="required">
+                                    </div>
+                                </div>
                                 <div class="layui-inline">
                                     <label class="layui-form-label layui-required">联系电话（座机）：</label>
                                     <div class="layui-input-inline">
-                                        <input type="text" name="contactNumber" lay-verify="zuoji" maxlength="20" autocomplete="off" class="layui-input">
+                                        <input type="text" name="contactNumber" maxlength="20" autocomplete="off" class="layui-input">
                                     </div>
                                 </div>
                                 <div class="layui-inline">
@@ -706,7 +713,7 @@ button.cancal.btn.btn-default {
                             </form>
                         </div>
                         <div class="form_content party_member_container no-authority" style="display:none" id="orgInfoNoAuthority">
-                            <div class="title_label" style="height: 286px;padding: 110px 16px;">
+                            <div class="title_label" style="height: 345px;padding: 110px 16px;">
                                 基本信息
                             </div>
                             <div class="layui-form custom_form">
@@ -740,12 +747,19 @@ button.cancal.btn.btn-default {
                 </div>
             </div>
         </div>
-
+        <div class="layui-form-item">
+            <div class="">
+                <label class="layui-form-label layui-required">全称</label>
+                <div class="layui-input-inline" style="width: 580px;">
+                    <input type="text" name="fullname" lay-verify="required" maxlength="" autocomplete="off" class="layui-input" style="width: 100%;font-size: 15px;">
+                </div>
+            </div>
+        </div>
         <div class="layui-form-item">
             <div class="layui-inline">
                 <label class="layui-form-label layui-required">联系电话（座机）</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="contactNumber" lay-verify="zuoji" maxlength="20" autocomplete="off" class="layui-input">
+                    <input type="text" name="contactNumber" maxlength="20" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-inline">

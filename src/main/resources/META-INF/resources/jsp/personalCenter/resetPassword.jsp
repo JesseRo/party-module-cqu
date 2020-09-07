@@ -146,6 +146,8 @@
                                 layuiModal.alert(res.message)
                             }
                         })
+                    } else {
+                        layuiModal.alert("两次密码不一致")
                     }
                 });
             });

@@ -111,6 +111,7 @@ public class OrgCRUDCommand implements MVCResourceCommand{
 		String postal = ParamUtil.getString(resourceRequest, "postal");
 		String contactor = ParamUtil.getString(resourceRequest, "contactor");
 		String contactorNumber = ParamUtil.getString(resourceRequest, "contactorNumber");
+		String fullName = ParamUtil.getString(resourceRequest, "fullName");
 		PrintWriter printWriter = resourceResponse.getWriter();
 		if(!StringUtils.isEmpty(id) && !StringUtils.isEmpty(orgName) && !StringUtils.isEmpty(descType)){
 			List<String> list = getPermissions(userId,Integer.parseInt(id));
@@ -137,6 +138,7 @@ public class OrgCRUDCommand implements MVCResourceCommand{
 					organization.setOrg_fax(fax);
 					organization.setOrg_code(postal);
 					organization.setOrg_secretary(secretary);
+					organization.setOrg_fullname(fullName);
 					int createId = orgService.createOrg(organization);
 					if(createId>0){
 						printWriter.write(JSON.toJSONString(ResultUtil.success(createId,"创建成功！")));
@@ -177,6 +179,7 @@ public class OrgCRUDCommand implements MVCResourceCommand{
 				String email = ParamUtil.getString(resourceRequest, "email");
 				String contactor = ParamUtil.getString(resourceRequest, "contactor");
 				String contactorNumber = ParamUtil.getString(resourceRequest, "contactorNumber");
+				String fullName = ParamUtil.getString(resourceRequest, "fullName");
 				Organization organization = orgService.findOrgById(Integer.parseInt(id));
 				if (organization != null){
 					organization.setOrg_name(orgName);
@@ -189,6 +192,7 @@ public class OrgCRUDCommand implements MVCResourceCommand{
 					organization.setOrg_contactor(contactor);
 					organization.setOrg_contactor_phone(contactorNumber);
 					organization.setDesc_type(Integer.parseInt(descType));
+					organization.setOrg_fullname(fullName);
 					int rows = orgService.updateOrg(organization);
 					if(rows>0){
 						printWriter.write(JSON.toJSONString(ResultUtil.success(null,"修改成功！")));

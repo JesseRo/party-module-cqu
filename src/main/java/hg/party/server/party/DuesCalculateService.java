@@ -150,8 +150,8 @@ public class DuesCalculateService {
                 .subtract(duesCal.getUnemployedInsurance())
                 .subtract(duesCal.getBirthInsurance())
                 .subtract(duesCal.getEmploymentInjuryInsurance())
-/*                .subtract(duesCal.getTreatmentInsurance())
-                .subtract(duesCal.getPensionInsurance())*/
+///*                .subtract(duesCal.getTreatmentInsurance())
+                .subtract(duesCal.getPensionInsurance())
                 .subtract(duesCal.getOccupationalAnnuities())
                 .subtract(personTax);
         double duesBasicNum  = duesBasic.doubleValue();//党费基数

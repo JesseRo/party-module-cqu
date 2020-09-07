@@ -137,31 +137,31 @@
 									</div>
 								</div>
 								<div class="layui-form-item">
-									<label class="layui-form-label layui-required">住房公积金</label>
+									<label class="layui-form-label layui-required">房公积金</label>
 									<div class="layui-input-block">
 										<input type="number" name="housingFund" min="0" lay-verify="inputNumber" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
 								</div>
 								<div class="layui-form-item">
-									<label class="layui-form-label layui-required">失业保险</label>
+									<label class="layui-form-label layui-required">失业个人</label>
 									<div class="layui-input-block">
 										<input type="number" name="unemployedInsurance" min="0" lay-verify="inputNumber" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
 								</div>
 								<div class="layui-form-item">
-									<label class="layui-form-label layui-required">医疗保险</label>
+									<label class="layui-form-label layui-required">医保</label>
 									<div class="layui-input-block">
 										<input type="number" name="treatmentInsurance" min="0"  lay-verify="inputNumber" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
 								</div>
 								<div class="layui-form-item" id="pensionInsurance-div">
-									<label class="layui-form-label layui-required">养老保险</label>
+									<label class="layui-form-label layui-required">养老个人</label>
 									<div class="layui-input-block">
 										<input type="number"  name="pensionInsurance"  min="0"  lay-verify="inputNumber" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
 								</div>
 								<div class="layui-form-item" id="occupationalAnnuities-div" >
-									<label class="layui-form-label layui-required">预扣职业年金</label>
+									<label class="layui-form-label layui-required">职业年金</label>
 									<div class="layui-input-block">
 										<input type="number" name="occupationalAnnuities"  min="0"  lay-verify="inputNumber" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
@@ -210,31 +210,31 @@
 									</div>
 								</div>
 								<div class="layui-form-item">
-									<label class="layui-form-label layui-required">住房公积金</label>
+									<label class="layui-form-label layui-required">房公积金</label>
 									<div class="layui-input-block">
 										<input type="number" name="housingFund"  min="0"  lay-verify="inputNumber" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
 								</div>
 								<div class="layui-form-item">
-									<label class="layui-form-label layui-required">失业保险</label>
+									<label class="layui-form-label layui-required">失业个人</label>
 									<div class="layui-input-block">
 										<input type="number" name="unemployedInsurance"  min="0"  lay-verify="inputNumber" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
 								</div>
 								<div class="layui-form-item">
-									<label class="layui-form-label layui-required">医疗保险</label>
+									<label class="layui-form-label layui-required">医保</label>
 									<div class="layui-input-block">
 										<input type="number" name="treatmentInsurance"  min="0"  lay-verify="inputNumber" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
 								</div>
 								<div class="layui-form-item" >
-									<label class="layui-form-label layui-required">养老保险</label>
+									<label class="layui-form-label layui-required">养老个人</label>
 									<div class="layui-input-block">
 										<input type="number"  name="pensionInsurance"  min="0"  lay-verify="inputNumber" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
 								</div>
 								<div class="layui-form-item" >
-									<label class="layui-form-label layui-required">预扣职业年金</label>
+									<label class="layui-form-label layui-required">职业年金</label>
 									<div class="layui-input-block">
 										<input type="number" name="occupationalAnnuities"  min="0"  lay-verify="inputNumber" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
@@ -306,19 +306,25 @@
 									</div>
 								</div>
 								<div class="layui-form-item">
-									<label class="layui-form-label layui-required">住房公积金</label>
+									<label class="layui-form-label layui-required">房公积金</label>
 									<div class="layui-input-block">
 										<input type="number" name="housingFund"  min="0"  lay-verify="inputNumber" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
 								</div>
 								<div class="layui-form-item">
-									<label class="layui-form-label layui-required">失业保险</label>
+									<label class="layui-form-label layui-required">失业个人</label>
 									<div class="layui-input-block">
 										<input type="number" name="unemployedInsurance"  min="0"  lay-verify="inputNumber" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
 								</div>
+								<div class="layui-form-item" >
+									<label class="layui-form-label layui-required">职业年金</label>
+									<div class="layui-input-block">
+										<input type="number" name="occupationalAnnuities"  min="0"  lay-verify="inputNumber" placeholder="" autocomplete="off" class="layui-input" value="0">
+									</div>
+								</div>
 								<div class="layui-form-item">
-									<label class="layui-form-label layui-required">医疗保险</label>
+									<label class="layui-form-label layui-required">医保</label>
 									<div class="layui-input-block">
 										<input type="number" name="treatmentInsurance"  min="0"  lay-verify="inputNumber" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
@@ -336,7 +342,7 @@
 									</div>
 								</div>
 								<div class="layui-form-item" >
-									<label class="layui-form-label layui-required">养老保险</label>
+									<label class="layui-form-label layui-required">养老个人</label>
 									<div class="layui-input-block">
 										<input type="number"  name="pensionInsurance"  min="0"  lay-verify="inputNumber" placeholder="" autocomplete="off" class="layui-input" value="0">
 									</div>
