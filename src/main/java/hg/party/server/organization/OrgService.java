@@ -127,9 +127,10 @@ public class OrgService {
                 }
                 orgCounts = statisticsDao.countOrgByDescType();
                 for (Map<String, Object> orgCount : orgCounts) {
-                    if (orgCount.get("desc_type").equals(1)) {
+                    int c = (Integer) orgCount.get("desc_type");
+                    if (c == 1 || c == 0) {
                         o.put("committee", orgCount.get("count"));
-                    } else if (orgCount.get("desc_type").equals(2)) {
+                    } else {
                         o.put("grand_branch", orgCount.get("count"));
                     }
                 }

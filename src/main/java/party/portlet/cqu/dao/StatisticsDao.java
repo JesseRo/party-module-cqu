@@ -32,7 +32,7 @@ public class StatisticsDao extends PostgresqlDaoImpl<Place> {
 
     public List<Map<String, Object>> countOrgByDescType() {
         String sql = "select desc_type, count(*) as count from hg_party_org " +
-                "where org_type != 'organization' and historic = false group by desc_type";
+                "where org_type = 'secondary' and historic = false group by desc_type";
         return jdbcTemplate.queryForList(sql);
     }
 
