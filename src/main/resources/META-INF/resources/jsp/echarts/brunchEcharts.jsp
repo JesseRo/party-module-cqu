@@ -51,7 +51,7 @@
 					<span>支部组织生活次数</span>
 				</p>
 				<p class="total_num">
-					<span>${activitiesStatisticsCount}</span>个
+					<span>${activitiesStatisticsCount}</span>次
 				</p>
 			</li>
 		</ul>

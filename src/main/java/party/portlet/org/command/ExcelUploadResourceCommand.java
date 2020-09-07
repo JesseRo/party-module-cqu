@@ -19,6 +19,8 @@ import org.springframework.util.StringUtils;
 import party.constants.PartyPortletKeys;
 import party.portlet.org.NotMatchingExcelDataException;
 import party.portlet.org.OrgUtil;
+import party.portlet.unit.Unit;
+import party.portlet.unit.UnitDao;
 
 import javax.portlet.PortletException;
 import javax.portlet.ResourceRequest;
@@ -49,6 +51,9 @@ public class ExcelUploadResourceCommand implements MVCResourceCommand {
 
     @Reference
     TransactionUtil transactionUtil;
+
+    @Reference
+    private UnitDao unitDao;
 
     @Override
     public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws PortletException {
@@ -100,6 +105,8 @@ public class ExcelUploadResourceCommand implements MVCResourceCommand {
                 originals = new ArrayList<>();
             }
         }
+        List<Unit> units = unitDao.findAll();
+        Map<String, Integer> unitMap = units.stream().collect(Collectors.toMap(Unit::getUnit_name, Unit::getId));
 
         List<Member> current = maps.stream().map(row -> {
             Member member = new Member();
@@ -122,6 +129,7 @@ public class ExcelUploadResourceCommand implements MVCResourceCommand {
             member.setMember_is_leader(Optional.of(row.get("是否是处级以上干部").toString().trim()).filter(p -> !p.equals("")).orElse(null));
             member.setJobNumber(Optional.of(row.get("学工号").toString().trim()).filter(p -> !p.equals("")).orElse(null));
             member.setAuthNumber(Optional.of(row.get("统一认证号").toString().trim()).filter(p -> !p.equals("")).orElse(null));
+            member.setMember_unit(unitMap.get(row.getOrDefault("行政机构", "").toString().trim()));
             return member;
         }).collect(Collectors.toList());
 
@@ -157,6 +165,7 @@ public class ExcelUploadResourceCommand implements MVCResourceCommand {
                 et.getValue().forEach(p -> p.setMember_org(sid));
             }
         }
+
         currentGroup = current.stream().collect(Collectors.groupingBy(Member::getMember_org));
         Map<String, List<Member>> originalGroup = originals.stream().collect(Collectors.groupingBy(Member::getMember_org));
         Map<String, List<Member>> ret = OrgUtil.upgradeMember(originalGroup, currentGroup, Member::getMember_identity, p -> p.setHistoric(true));

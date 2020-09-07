@@ -449,7 +449,8 @@
                             <select type="text" name="title" id="transportType" autocomplete="off" class="form-control"
                                     style="width: 15%;float: left;border-radius: 0;height: 40px!important;">
                                 <option value="">全部转出类型</option>
-                                <option value="0,1">校内</option>
+                                <option value="0">院内</option>
+                                <option value="1">校内</option>
                                 <option value="2">市内</option>
                                 <option value="3">市外</option>
                             </select>

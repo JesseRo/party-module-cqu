@@ -195,9 +195,9 @@
                     "                天\n" +
                     "            </p>\n" +
                     "            <p style=\"white-space: normal;text-align: right;\">\n" +
-                    "                <input id='print_year' style=\"max-width: 60px;height: 20px!important;text-align: center;\">年\n" +
-                    "              <input id='print_month' style=\"max-width: 30px;height: 20px!important;text-align: center;\">月\n" +
-                    "                <input id='print_day' style=\"max-width: 30px;height: 20px!important;text-align: center;\">日\n" +
+                    "                <input id='print_year' value='{year}' style=\"max-width: 60px;height: 20px!important;text-align: center;\">年\n" +
+                    "              <input id='print_month' value='{month}' style=\"max-width: 30px;height: 20px!important;text-align: center;\">月\n" +
+                    "                <input id='print_day' value='{day}' style=\"max-width: 30px;height: 20px!important;text-align: center;\">日\n" +
                     "            </p>\n" +
                     "            <p style=\"white-space: normal;\">\n" +
                     "                党员电话或其他联系方式：\n" +
@@ -291,8 +291,8 @@
                     "        <div style=\"position: absolute;left: 50mm;\" class=\"name\"></div>\n" +
                     "    </div>\n" +
                     "    <div class=\"line-top2\">\n" +
-                    "        <div style=\"position: absolute;left: 70mm;\" class=\"org_name\"></div>\n" +
-                    "        <div style=\"position: absolute;left: 135mm;\" class=\"toOrg\"></div>\n" +
+                    "        <div style=\"position: absolute;left: 70mm;font-size: 3mm;line-height: 4mm;text-align: center;max-width: 50mm;top: 53mm;\" class=\"org_name\"></div>\n" +
+                    "        <div style=\"position: absolute;left: 135mm;font-size: 3mm;line-height: 4mm;text-align: center;max-width: 50mm;top: 53mm;\" class=\"toOrg\"></div>\n" +
                     "    </div>\n" +
                     "    <div class=\"line-top3\">\n" +
                     "        <div style=\"position: absolute;left: 125.7mm;\" class=\"currentYear\"></div>\n" +
@@ -300,7 +300,7 @@
                     "        <div style=\"position: absolute;left: 165.7mm;\" class=\"currentDay\"></div>\n" +
                     "    </div>" +
                     "    <div class=\"line1\">\n" +
-                    "        <div style=\"position: absolute;left: 21.7mm;\" class=\"org_name\"></div>\n" +
+                    "        <div style=\"position: absolute;left: 21.7mm;font-size: 3mm;line-height: 4mm;text-align: center;max-width: 50mm;top: 118mm;\" class=\"org_name\"></div>\n" +
                     "    </div>\n" +
                     "    <div class=\"line2\">\n" +
                     "        <div style=\"position: absolute;left: 36.7mm;\" class=\"name\"></div>\n" +
@@ -311,8 +311,8 @@
                     "        <div style=\"position: absolute;left: 110.7mm;\" class=\"identity\">111111111111111111</div>\n" +
                     "    </div>\n" +
                     "    <div class=\"line4\">\n" +
-                    "        <div style=\"position: absolute;left: 27mm;font-size: 16px;\" class=\"org_name\"></div>\n" +
-                    "        <div style=\"position: absolute;left: 95.7mm;\" class=\"toOrg\"></div>\n" +
+                    "        <div style=\"position: absolute;left: 27mm;font-size: 3mm;max-width: 50mm;top: 148mm;height: 6mm;line-height: 4mm;text-align: center;\" class=\"org_name\"></div>\n" +
+                    "        <div style=\"position: absolute;left: 95.7mm;font-size: 3mm; max-width: 70mm;text-align: center;line-height: 4mm;top: 148mm;\" class=\"toOrg\"></div>\n" +
                     "    </div>\n" +
                     "    <div class=\"line5\">\n" +
                     "        <div style=\"position: absolute;left: 110.7mm;\" class=\"feeYear\"></div>\n" +
@@ -354,11 +354,9 @@
                             .replace("{identity}", data.identity)
                             .replace(/{toOrg}/g, data.to_org_name)
                             .replace("{toOrgTitle}", data.to_org_title)
-                            .replace("{year}", 2020)
-                            .replace("{month}", 2)
-                            .replace("{currentYear}", today.getFullYear())
-                            .replace("{currentMonth}", today.getMonth() + 1)
-                            .replace("{currentDay}", today.getDate())
+                            .replace("{year}", today.getFullYear())
+                            .replace("{month}", today.getMonth() + 1)
+                            .replace("{day}", today.getDate())
                             .replace("{telephone}", data.phone_number)
                             .replace("{orgAddress}", data.org_address || "")
                             .replace("{orgTelephone}", data.org_contactor_phone || "")

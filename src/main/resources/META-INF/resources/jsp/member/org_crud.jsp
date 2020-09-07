@@ -344,7 +344,7 @@ button.cancal.btn.btn-default {
                             $('#orgInfo input[name="postal"]').val(res.data.organization.org_code);
                             $('#orgInfo input[name="contactor"]').val(res.data.organization.org_contactor);
                             $('#orgInfo input[name="contactorNumber"]').val(res.data.organization.org_contactor_phone);
-                            $('#orgInfo input[name="fullname"]').val(res.data.organization.org_fullname);
+                            $('#orgInfo input[name="fullName"]').val(res.data.organization.org_fullname);
                             var descType = res.data.organization.desc_type;
                             if(descType == null || descType == ''){
                                 descType = 1;
@@ -623,7 +623,7 @@ button.cancal.btn.btn-default {
                     <div class="table_content" id="op_buttons">
 
                         <div class="form_content party_member_container" id="orgInfo">
-                            <div class="title_label" style="height: 286px;padding: 110px 16px;">
+                            <div class="title_label" style="height: 345px;padding: 110px 16px;">
                                 基本信息
                             </div>
                             <form class="layui-form custom_form" id="">
@@ -751,7 +751,7 @@ button.cancal.btn.btn-default {
             <div class="">
                 <label class="layui-form-label layui-required">全称</label>
                 <div class="layui-input-inline" style="width: 580px;">
-                    <input type="text" name="fullname" lay-verify="required" maxlength="" autocomplete="off" class="layui-input" style="width: 100%;font-size: 15px;">
+                    <input type="text" name="fullName" lay-verify="required" maxlength="" autocomplete="off" class="layui-input" style="width: 100%;font-size: 15px;">
                 </div>
             </div>
         </div>

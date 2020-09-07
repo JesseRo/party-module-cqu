@@ -44,7 +44,7 @@ public class TransportDao extends PostgresqlDaoImpl<Transport> {
 
     public PageQueryResult<Map<String, Object>> findSecondaryPage(int page, int size, String orgId, List<String> type,
                                                                   String name, boolean completed, String startDate, String endDate) {
-        String sql = "select t.*, o.org_fax, o.org_contactor_phone, o.org_address, p.org_name as second_name," +
+        String sql = "select t.*, o.org_fax,o.org_fullname, o.org_code, o.org_contactor_phone, o.org_address, p.org_name as second_name," +
                 " extract(year from age(cast(m.member_birthday as date))) as age, org.org_name as current_org_name " +
                 " from hg_party_transport t " +
                 " left join hg_party_member m on m.member_identity = t.user_id" +
@@ -128,7 +128,7 @@ public class TransportDao extends PostgresqlDaoImpl<Transport> {
     }
 
     public PageQueryResult<Map<String, Object>> findRootPage(int page, int size, List<String> type, String name, boolean completed, String startDate, String endDate) {
-        String sql = "select t.*, o.org_fullname, o.org_fax, o.org_contactor_phone, o.org_address,p.org_name as second_name," +
+        String sql = "select t.*, o.org_fullname, o.org_code, o.org_fax, o.org_contactor_phone, o.org_address,p.org_name as second_name," +
                 " extract(year from age(cast(m.member_birthday as date))) as age, org.org_name as current_org_name" +
                 " from hg_party_transport t " +
                 " left join hg_party_member m on m.member_identity = t.user_id" +
@@ -206,7 +206,7 @@ public class TransportDao extends PostgresqlDaoImpl<Transport> {
     }
 
     public PageQueryResult<Map<String, Object>> findBranchPage(int page, int size, String orgId, List<String> type, String name, boolean completed, String startDate, String endDate) {
-        String sql = "select t.*, o.org_fax, o.org_contactor_phone, o.org_address,p.org_name as second_name," +
+        String sql = "select t.*, o.org_fax, o.org_fullname, o.org_code,o.org_contactor_phone, o.org_address,p.org_name as second_name," +
                 " extract(year from age(cast(m.member_birthday as date))) as age, org.org_name as current_org_name " +
                 " from hg_party_transport t " +
                 " left join hg_party_member m on t.user_id = m.member_identity" +
