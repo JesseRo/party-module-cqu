@@ -484,7 +484,7 @@
                         $("#orgImport").hide();
                         $("#orgExport").hide();
                         $("#addPerson").hide();
-                        $("#delete").hide();
+                        // $("#delete").hide();
                         $("#memberImport").hide();
                         $("#memberExport").hide();
                     }else{
@@ -493,14 +493,14 @@
                             $("#orgImport").hide();
                             $("#orgExport").hide();
                             $("#addPerson").show();
-                            $("#delete").show();
+                            // $("#delete").show();
                             $("#memberImport").show();
                             $("#memberExport").show();
                         } else {
                             $("#orgImport").hide();
                             $("#orgExport").hide();
                             $("#addPerson").hide();
-                            $("#delete").hide();
+                            // $("#delete").hide();
                             $("#memberImport").show();
                             $("#memberExport").show();
                         }
@@ -637,18 +637,18 @@
                 });
 
                 /* 删除*/
-                $("#delete").click(function () {
-                    var selectData = layui.table.checkStatus('queryList').data;
-                    if (selectData.length<1) {
-                        layer.alert("请选择删除对象！");
-                        return;
-                    }
-                    var userIds = new Array();
-                    for(var i =0;i<selectData.length;i++){
-                        userIds.push(selectData[i].member_identity);
-                    }
-                    deleteMember(userIds.join(","));
-                });
+                // $("#delete").click(function () {
+                //     var selectData = layui.table.checkStatus('queryList').data;
+                //     if (selectData.length<1) {
+                //         layer.alert("请选择删除对象！");
+                //         return;
+                //     }
+                //     var userIds = new Array();
+                //     for(var i =0;i<selectData.length;i++){
+                //         userIds.push(selectData[i].member_identity);
+                //     }
+                //     deleteMember(userIds.join(","));
+                // });
 
                 $("#addPerson").click(function () {
                     window.location.href = '/addperson?orgId=' + checkedNode.data.org_id;
@@ -702,7 +702,7 @@
                                                 <input type="text" name="keyword"  placeholder="请输入名字、工号、身份证号关键字" class="layui-input">
                                             </div>
                                             <button type="button"  class="layui-btn layui-btn-warm"  lay-submit="" lay-filter="searchForm"><icon class="layui-icon layui-icon-search"></icon>搜索</button>
-                                                <button type="button" id="delete" class="layui-btn layui-btn layui-btn-danger">删除人员</button>
+<%--                                                <button type="button" id="delete" class="layui-btn layui-btn layui-btn-danger">删除人员</button>--%>
                                                 <button type="button" id="addPerson" class="layui-btn layui-btn-primary">添加人员</button>
 <%--                                                <button type="button" id="orgImport" class="layui-btn layui-btn-primary">党组织导入</button>--%>
                                                 <button type="button" id="orgExport" class="layui-btn layui-btn-primary">党组织导出</button>

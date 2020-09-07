@@ -156,7 +156,7 @@
                     "        </div>\n" +
                     "        <div class=\"view\" style=\"overflow-y: hidden; padding: 0 20px;\">\n" +
                     "            <p style=\"white-space: normal;\">\n" +
-                    "                <span style=\"border-bottom: 1px solid;\" >&nbsp;{secondary} :</span>\n" +
+                    "                <span style=\"border-bottom: 1px solid;\" >&nbsp;{toOrg} :</span>\n" +
                     "            </p>\n" +
                     "            <p style=\"white-space: normal;\">&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;\n" +
                     "                <span style=\"border-bottom: 1px solid;\" id='print_name'>&nbsp; {name}&nbsp;\n" +
@@ -300,12 +300,12 @@
                     "        <div style=\"position: absolute;left: 165.7mm;\" class=\"currentDay\"></div>\n" +
                     "    </div>" +
                     "    <div class=\"line1\">\n" +
-                    "        <div style=\"position: absolute;left: 21.7mm;\" class=\"org_name\">本科生第一党支部</div>\n" +
+                    "        <div style=\"position: absolute;left: 21.7mm;\" class=\"org_name\"></div>\n" +
                     "    </div>\n" +
                     "    <div class=\"line2\">\n" +
-                    "        <div style=\"position: absolute;left: 36.7mm;\" class=\"name\">罗怀西</div>\n" +
-                    "        <div style=\"position: absolute;left: 121.7mm;\" class=\"age\">28</div>\n" +
-                    "        <div style=\"position: absolute;left: 150.7mm;\" class=\"ethnic\">汉</div>\n" +
+                    "        <div style=\"position: absolute;left: 36.7mm;\" class=\"name\"></div>\n" +
+                    "        <div style=\"position: absolute;left: 121.7mm;\" class=\"age\"></div>\n" +
+                    "        <div style=\"position: absolute;left: 150.7mm;\" class=\"ethnic\"></div>\n" +
                     "    </div>\n" +
                     "    <div class=\"line3\">\n" +
                     "        <div style=\"position: absolute;left: 110.7mm;\" class=\"identity\">111111111111111111</div>\n" +
@@ -345,7 +345,7 @@
                     if (obj.event === 'print') {
                         var today = new Date();
                         var html = modalTemplate
-                            .replace(/{secondary}/g, data.org_name)
+                            .replace(/{secondary}/g, data.org_fullname)
                             .replace("{name}", data.user_name)
                             .replace("{sex}", data.sex)
                             .replace("{age}", data.age)

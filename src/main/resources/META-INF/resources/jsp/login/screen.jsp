@@ -53,7 +53,7 @@
 <div class="big_screen_container">
     <div class="content_container">
         <div class="page_title_container" style="cursor: pointer;">
-            <p id="platformTitle">重庆大学智慧党建云平台</p>
+            <p id="platformTitle">重庆大学党建信息化平台</p>
             <img src="/images/index-title-bg.png"/>
         </div>
         <div class="first_container">

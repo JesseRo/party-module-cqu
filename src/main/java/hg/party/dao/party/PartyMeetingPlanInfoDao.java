@@ -754,7 +754,7 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
             logger.info("searchPage:"+sb.toString());
             return postGresqlFindPageBySql(page, size, sb.toString(),orgId,search,search);
         }else{
-            sb.append(" ORDER BY plan.start_time asc, plan.task_status desc");
+            sb.append(" ORDER BY plan.start_time desc, plan.task_status desc");
             logger.info("searchPage:"+sb.toString());
             return postGresqlFindPageBySql(page, size, sb.toString(),orgId);
         }

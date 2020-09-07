@@ -580,7 +580,7 @@ public class OrgDao extends HgPostgresqlDaoImpl<Organization> {
 
     public int createOrg(final Organization org) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        String sql = "insert into hg_party_org (org_id,org_name,org_type,org_parent,desc_type,org_address,org_contactor,org_contactor_phone,org_email,org_phone_number,org_fax,org_secretary, org_code) values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "insert into hg_party_org (org_id,org_name,org_type,org_parent,desc_type,org_address,org_contactor,org_contactor_phone,org_email,org_phone_number,org_fax,org_secretary, org_code, org_fullname) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         jdbcTemplate.update(new PreparedStatementCreator() {
                                 @Override
                                 public PreparedStatement createPreparedStatement(Connection conn) throws SQLException {
@@ -598,6 +598,7 @@ public class OrgDao extends HgPostgresqlDaoImpl<Organization> {
                                     ps.setString(11, org.getOrg_fax());
                                     ps.setString(12, org.getOrg_secretary());
                                     ps.setString(13, org.getOrg_code());
+                                    ps.setString(14, org.getOrg_fullname());
                                     return ps;
                                 }
                             },
@@ -609,12 +610,12 @@ public class OrgDao extends HgPostgresqlDaoImpl<Organization> {
         String sql = "update hg_party_org set org_name = ?," +
                 "org_address = ?, org_phone_number = ?, org_fax = ?," +
                 "org_secretary = ?, org_email = ?, org_contactor = ?," +
-                "desc_type = ?,org_contactor_phone = ?, org_code = ? where id = ?";
+                "desc_type = ?,org_contactor_phone = ?, org_code = ?, org_fullname = ? where id = ?";
 
         return jdbcTemplate.update(sql, organization.getOrg_name(),
                 organization.getOrg_address(), organization.getOrg_phone_number(), organization.getOrg_fax(),
                 organization.getOrg_secretary(), organization.getOrg_email(), organization.getOrg_contactor(),
-                organization.getDesc_type(), organization.getOrg_contactor_phone(), organization.getOrg_code(),
+                organization.getDesc_type(), organization.getOrg_contactor_phone(), organization.getOrg_code(), organization.getOrg_fullname(),
                 organization.getId());
     }
 

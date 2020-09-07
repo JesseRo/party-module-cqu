@@ -15,7 +15,7 @@
             <img src="../images/login-title.png"/>
         </div>
         <div class="info_container">
-            <p class="form-title">智慧党建云平台</p>
+            <p class="form-title">党建信息化平台</p>
             <div class="info_title">
                 <span class="active">普通登录</span>
                 <span onclick="window.location.href = '${urlAddress}'">统一身份认证</span>

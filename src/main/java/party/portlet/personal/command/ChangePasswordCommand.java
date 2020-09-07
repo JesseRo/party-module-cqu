@@ -69,7 +69,7 @@ public class ChangePasswordCommand implements MVCResourceCommand {
 					userDao.saveOrUpdate(user);
 					res.getWriter().write(gson.toJson(JsonResponse.Success()));
 				}else {
-					res.getWriter().write(gson.toJson(JsonResponse.Failure("密码错误")));
+					res.getWriter().write(gson.toJson(JsonResponse.Failure("原密码错误")));
 				}
 			}
 			transactionUtil.commit();

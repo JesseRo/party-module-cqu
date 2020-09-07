@@ -306,7 +306,8 @@
 		//抽查结果
 		function renderResult(obj) {
 			var content = '<p>备注信息: </p><p>remark</p><p>检查结果: </p><p>meeting_state</p><p>上传照片: </p><img src="pic" style="max-width:500px;" />'
-					.replace('remark', obj.data.remarks || '').replace('meeting_state', obj.data.meeting_state || '').replace('pic', obj.data.img);
+					.replace('remark', obj.data.remarks || '').replace('meeting_state', obj.data.meeting_state || '').replace('pic', obj.data.image);
+
 			layer.open({
 				title: '检查结果'
 				,content: content,
