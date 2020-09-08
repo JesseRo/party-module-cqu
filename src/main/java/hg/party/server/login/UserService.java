@@ -172,7 +172,7 @@ public class UserService {
         logger.info("dateLong:  " + t);
         String url;
         if (ConstantsKey.SECOND_PARTY.equals(role)) {
-            url = "/backlogtwo";
+            url = "/secondary_stati";
 //            url = "/screen";
         } else if (ConstantsKey.ORG_PARTY.equals(role)) {
             url = "/screen";
@@ -180,7 +180,7 @@ public class UserService {
                 url = "/statisticalreport";
             }
         } else if (ConstantsKey.BRANCH_PARTY.equals(role)) {
-            url = "/backlogtwo";
+            url = "/brunch_statistics";
         } else if (ConstantsKey.COMMON_PARTY.equals(role)) {
             url = "/personalcenter";
         } else if (ConstantsKey.OTHER_PARTY.equals(role)) {

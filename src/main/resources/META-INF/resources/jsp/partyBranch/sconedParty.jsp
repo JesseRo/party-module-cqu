@@ -105,6 +105,15 @@
         input, select {
             text-indent: 0;
         }
+        #participate_group .multiSelect{
+            height: auto;
+        }
+        #participate_group input.layui-input:first-child{
+            border: none;
+        }
+        #participate_group dd.layui-select-tips input.layui-input {
+            border-bottom: 1px solid #ddd;!important;
+        }
     </style>
     <link rel="stylesheet" href="${basePath}/js/layui/css/modules/multiSelect/multi-select.css"/>
     <link rel="stylesheet" href="${basePath}/js/layui/css/modules/checkbox/checkbox.css?version=98"/>
@@ -280,7 +289,7 @@
                         </div>
                     </div>
                     <div class="layui-form-item">
-                        <div class="layui-inline">
+                        <div class="layui-inline" id="participate_group">
                             <label class="layui-form-label layui-required">参会人员：</label>
                             <div class="layui-input-inline" style="width:700px">
                                 <select name="participate" lay-filter="participate" multiple lay-search lay-case >
