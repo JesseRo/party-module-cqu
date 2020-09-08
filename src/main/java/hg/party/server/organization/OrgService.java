@@ -126,14 +126,19 @@ public class OrgService {
                     }
                 }
                 orgCounts = statisticsDao.countOrgByDescType();
+                int committeeCount = 0;
+                int grandBranchCount = 0;
                 for (Map<String, Object> orgCount : orgCounts) {
-                    int c = (Integer) orgCount.get("desc_type");
-                    if (c == 1 || c == 0) {
-                        o.put("committee", orgCount.get("count"));
+                    int type = (Integer) orgCount.get("desc_type");
+                    long c = (Long) orgCount.getOrDefault("count", 0L);
+                    if (type == 1 || type == 0) {
+                        committeeCount += c;
                     } else {
-                        o.put("grand_branch", orgCount.get("count"));
+                        grandBranchCount += c;
                     }
                 }
+                o.put("grand_branch", grandBranchCount);
+                o.put("committee", committeeCount);
                 orgCounts = statisticsDao.countMemberByType();
                 for (Map<String, Object> m : orgCounts) {
                     if (Objects.equals(m.get("member_type"), "正式党员")) {

@@ -205,7 +205,7 @@
                         <div class="layui-inline btn_group" style="width: calc(50% - 120px);margin: 0;margin-top: 10px;">
                             <label class="layui-form-label"></label>
                             <div class="layui-input-inline">
-                                <button id="send" type="button" class="layui-btn" lay-submit="" lay-filter="partyMemForm" style="padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;background-color: #FFAB33;border-radius: 4px;">
+                                <button id="send" type="button" class="layui-btn" lay-filter="partyMemForm" style="padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;background-color: #FFAB33;border-radius: 4px;">
                                     确定
                                 </button>
                                 <button id="cancel" onclick="window.history.back();" type="button" class="layui-btn layui-btn-primary" style="background-color: transparent;color: #666;padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;border-radius: 4px;">
@@ -213,8 +213,6 @@
                                 </button>
                             </div>
                         </div>
-<%--                        <button id="send" type="button" class="btn btn-default col-sm-2 col-xs-4" style="margin-left: 12%; ">上报 </button>--%>
-<%--                        <button id="cancel" type="button" class="btn btn-default col-sm-2 col-xs-4" style="margin-left: 45%;">取消 </button>--%>
                     </div>
                 </form>
             </div>
