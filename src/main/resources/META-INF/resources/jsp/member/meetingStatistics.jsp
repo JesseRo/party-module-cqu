@@ -463,7 +463,7 @@
         function sms(e){
             var orgId = $(e).attr("bid");
             var num = $(e).attr("num");
-            $.post("${sms}", {id: orgId, start: startDate, end: endDate, template: true}, function (res) {
+            $.post("${sms}", {id: orgId, start: startDate, end: endDate, template: true, num: num}, function (res) {
                 if (res.result) {
                     layuiModal.confirm("是否发送通知短信：\n" + res.data, function () {
                         $.post("${sms}", {id: orgId, start: startDate, end: endDate, num: num}, function (res) {

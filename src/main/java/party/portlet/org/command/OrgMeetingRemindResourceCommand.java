@@ -76,7 +76,7 @@ public class OrgMeetingRemindResourceCommand implements MVCResourceCommand {
                 List<String> phones = orgDao.findAdminPhoneNumberIn(Collections.singletonList(orgId));
                 if (phones != null && phones.size() > 0) {
                     CQUMsgService.sendPhoneNoticeMsg(String.join(",", phones),
-                            String.format(smsTemplate, organization.getOrg_name(), start, end, currentOrg.getOrg_name()));
+                            String.format(smsTemplate, organization.getOrg_name(), start, end, num, currentOrg.getOrg_name()));
                 }
                 res.getWriter().write(gson.toJson(JsonResponse.Success()));
             }

@@ -706,7 +706,7 @@
                                                 <button type="button" id="addPerson" class="layui-btn layui-btn-primary">添加人员</button>
 <%--                                                <button type="button" id="orgImport" class="layui-btn layui-btn-primary">党组织导入</button>--%>
                                                 <button type="button" id="orgExport" class="layui-btn layui-btn-primary">党组织导出</button>
-                                                <button type="button" id="memberImport" class="layui-btn layui-btn-primary">人员名册导入</button>
+<%--                                                <button type="button" id="memberImport" class="layui-btn layui-btn-primary">人员名册导入</button>--%>
                                                 <button type="button" id="memberExport" class="layui-btn layui-btn-primary">人员名单导出</button>
 
                                         </div>

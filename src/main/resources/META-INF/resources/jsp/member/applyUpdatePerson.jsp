@@ -249,7 +249,7 @@
                             </div>
                         </div>
                         <div class="layui-inline">
-                            <label class="layui-form-label layui-required">是否副处级以上干部</label>
+                            <label class="layui-form-label layui-required">是否副处及以上干部</label>
                             <div class="layui-input-inline">
                                 <select class="layui-input" name="isLeader" id="isLeader" lay-verify="select">
                                     <option value="" disabled>-请选择-</option>
