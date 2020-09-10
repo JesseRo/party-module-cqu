@@ -44,7 +44,12 @@ public class TransportDao extends PostgresqlDaoImpl<Transport> {
 
     public PageQueryResult<Map<String, Object>> findSecondaryPage(int page, int size, String orgId, List<String> type,
                                                                   String name, boolean completed, String startDate, String endDate) {
-        String sql = "select t.*, o.org_fax,o.org_fullname, o.org_code, o.org_contactor_phone, o.org_address, p.org_name as second_name," +
+        String sql = "select t.*, o.org_fullname," +
+                "\tcase when p.org_type = 'secondary' then p.org_code else o.org_code end,\n" +
+                "\tcase when p.org_type = 'secondary' then p.org_fax else o.org_fax end,\n" +
+                "\tcase when p.org_type = 'secondary' then p.org_address else o.org_address end,\n" +
+                "\tcase when p.org_type = 'secondary' then p.org_contactor_phone else o.org_contactor_phone end,\n" +
+                "p.org_name as second_name," +
                 " extract(year from age(cast(m.member_birthday as date))) as age, org.org_name as current_org_name " +
                 " from hg_party_transport t " +
                 " left join hg_party_member m on m.member_identity = t.user_id" +
@@ -128,14 +133,24 @@ public class TransportDao extends PostgresqlDaoImpl<Transport> {
     }
 
     public PageQueryResult<Map<String, Object>> findRootPage(int page, int size, List<String> type, String name, boolean completed, String startDate, String endDate) {
-        String sql = "select t.*, o.org_fullname, o.org_code, o.org_fax, o.org_contactor_phone, o.org_address,p.org_name as second_name," +
-                " extract(year from age(cast(m.member_birthday as date))) as age, org.org_name as current_org_name" +
-                " from hg_party_transport t " +
-                " left join hg_party_member m on m.member_identity = t.user_id" +
-                " left join hg_party_org o on o.org_id = m.member_org" +
-                " left join hg_party_org p on p.org_id = o.org_parent" +
-                " left join hg_party_org org on org.org_id = t.current_approve_org" +
-                " where t.type in ('2', '3')";
+        String sql = "SELECT \n" +
+                "\tT.*,\n" +
+                "\to.org_fullname,\n" +
+                "\tcase when p.org_type = 'secondary' then p.org_code else o.org_code end,\n" +
+                "\tcase when p.org_type = 'secondary' then p.org_fax else o.org_fax end,\n" +
+                "\tcase when p.org_type = 'secondary' then p.org_address else o.org_address end,\n" +
+                "\tcase when p.org_type = 'secondary' then p.org_contactor_phone else o.org_contactor_phone end,\n" +
+                "\tP.org_name AS second_name,\n" +
+                "\tEXTRACT ( YEAR FROM age( CAST ( M.member_birthday AS DATE ) ) ) AS age,\n" +
+                "\torg.org_name AS current_org_name \n" +
+                "FROM\n" +
+                "\thg_party_transport\n" +
+                "\tT LEFT JOIN hg_party_member M ON M.member_identity = T.user_id\n" +
+                "\tLEFT JOIN hg_party_org o ON o.org_id = M.member_org\n" +
+                "\tLEFT JOIN hg_party_org P ON P.org_id = o.org_parent\n" +
+                "\tLEFT JOIN hg_party_org org ON org.org_id = T.current_approve_org \n" +
+                "WHERE\n" +
+                "\tT.TYPE IN ( '2', '3' )";
         List<Object> params = new ArrayList<>();
         if (completed) {
             sql += " and (t.status = 4 or (t.status = 1 and t.type != '3'))";
@@ -206,7 +221,12 @@ public class TransportDao extends PostgresqlDaoImpl<Transport> {
     }
 
     public PageQueryResult<Map<String, Object>> findBranchPage(int page, int size, String orgId, List<String> type, String name, boolean completed, String startDate, String endDate) {
-        String sql = "select t.*, o.org_fax, o.org_fullname, o.org_code,o.org_contactor_phone, o.org_address,p.org_name as second_name," +
+        String sql = "select t.*, o.org_fullname, " +
+                "\tcase when p.org_type = 'secondary' then p.org_code else o.org_code end,\n" +
+                "\tcase when p.org_type = 'secondary' then p.org_fax else o.org_fax end,\n" +
+                "\tcase when p.org_type = 'secondary' then p.org_address else o.org_address end,\n" +
+                "\tcase when p.org_type = 'secondary' then p.org_contactor_phone else o.org_contactor_phone end,\n" +
+                "p.org_name as second_name," +
                 " extract(year from age(cast(m.member_birthday as date))) as age, org.org_name as current_org_name " +
                 " from hg_party_transport t " +
                 " left join hg_party_member m on t.user_id = m.member_identity" +

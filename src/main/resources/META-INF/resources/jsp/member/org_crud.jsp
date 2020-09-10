@@ -451,13 +451,23 @@ button.cancal.btn.btn-default {
                 if ("organization" == org_type) {
                     title = '增加二级党委';
                     $('#addOrgForm .layui-form select[name="descType"]').empty();
-                    $('#addOrgForm .layui-form select[name="descType"]').append(' <option value="1">党委</option><option value="0">党工委</option><option value="2">党总支</option>');
+                    $('#addOrgForm .layui-form select[name="descType"]').append('<option value="1">党委</option>' +
+                        '                                                <option value="0">党工委</option>' +
+                        '                                            <option value="2">党总支</option>' +
+                        '                                            <option value="4">教工党支部</option>\n' +
+                        '                                            <option value="5">专任教师支部</option>\n' +
+                        '                                            <option value="6">博士生党支部</option>\n' +
+                        '                                            <option value="7">硕士生党支部</option>\n' +
+                        '                                            <option value="8">本科生党支部</option>\n' +
+                        '                                            <option value="9">离退休党支部</option>');
                     $('#addOrgForm .layui-form select[name="descType"]').val(1);
                     form.render('select');
                 } else if ("secondary" == org_type) {
                     title = '增加党支部';
                     $('#addOrgForm .layui-form select[name="descType"]').empty();
-                    $('#addOrgForm .layui-form select[name="descType"]').append('<option value="2">党总支</option><option value="3">党支部</option>' +
+                    $('#addOrgForm .layui-form select[name="descType"]').append('<option value="1">党委</option>' +
+                    '                                                <option value="0">党工委</option>' +
+                        '                                            <option value="2">党总支</option>' +
                         '                                            <option value="4">教工党支部</option>\n' +
                         '                                            <option value="5">专任教师支部</option>\n' +
                         '                                            <option value="6">博士生党支部</option>\n' +

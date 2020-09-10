@@ -156,7 +156,7 @@
                     "        </div>\n" +
                     "        <div class=\"view\" style=\"overflow-y: hidden; padding: 0 20px;\">\n" +
                     "            <p style=\"white-space: normal;\">\n" +
-                    "                <span style=\"border-bottom: 1px solid;\" >&nbsp;{toOrg} :</span>\n" +
+                    "                <span style=\"border-bottom: 1px solid;\" id=\"print_to_org_title\">&nbsp;{toOrgTitle} :</span>\n" +
                     "            </p>\n" +
                     "            <p style=\"white-space: normal;\">&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;\n" +
                     "                <span style=\"border-bottom: 1px solid;\" id='print_name'>&nbsp; {name}&nbsp;\n" +
@@ -166,7 +166,7 @@
                     "                <span style=\"border-bottom: 1px solid;\" id='print_age'>&nbsp; {age}&nbsp;\n" +
                     "                </span>岁，\n" +
                     "                <span style=\"border-bottom: 1px solid;\" id='print_ethnic'>&nbsp; {ethnic}&nbsp;\n" +
-                    "                </span>，是中共\n" +
+                    "                </span>族，是中共\n" +
                     "                <span style=\"border-bottom: 1px solid;\" id='print_type'>&nbsp; {type}&nbsp;\n" +
                     "                </span>，身份证号码<br>\n" +
                     "            </p>\n" +
@@ -291,7 +291,7 @@
                     "        <div style=\"position: absolute;left: 50mm;\" class=\"name\"></div>\n" +
                     "    </div>\n" +
                     "    <div class=\"line-top2\">\n" +
-                    "        <div style=\"position: absolute;left: 70mm;font-size: 3mm;line-height: 4mm;text-align: center;max-width: 50mm;top: 53mm;\" class=\"org_name\"></div>\n" +
+                    "        <div style=\"position: absolute;left: 60mm;font-size: 3mm;line-height: 4mm;text-align: center;max-width: 50mm;top: 53mm;\" class=\"org_name\"></div>\n" +
                     "        <div style=\"position: absolute;left: 135mm;font-size: 3mm;line-height: 4mm;text-align: center;max-width: 50mm;top: 53mm;\" class=\"toOrg\"></div>\n" +
                     "    </div>\n" +
                     "    <div class=\"line-top3\">\n" +
@@ -300,11 +300,11 @@
                     "        <div style=\"position: absolute;left: 165.7mm;\" class=\"currentDay\"></div>\n" +
                     "    </div>" +
                     "    <div class=\"line1\">\n" +
-                    "        <div style=\"position: absolute;left: 21.7mm;font-size: 3mm;line-height: 4mm;text-align: center;max-width: 50mm;top: 118mm;\" class=\"org_name\"></div>\n" +
+                    "        <div style=\"position: absolute;left: 21.7mm;font-size: 3mm;line-height: 4mm;text-align: center;max-width: 50mm;top: 118mm;\" class=\"toOrgTitle\"></div>\n" +
                     "    </div>\n" +
                     "    <div class=\"line2\">\n" +
                     "        <div style=\"position: absolute;left: 36.7mm;\" class=\"name\"></div>\n" +
-                    "        <div style=\"position: absolute;left: 121.7mm;\" class=\"age\"></div>\n" +
+                    "        <div style=\"position: absolute;left: 111.7mm;\" class=\"age\"></div>\n" +
                     "        <div style=\"position: absolute;left: 150.7mm;\" class=\"ethnic\"></div>\n" +
                     "    </div>\n" +
                     "    <div class=\"line3\">\n" +
@@ -322,9 +322,9 @@
                     "        <div style=\"position: absolute;left: 52.7mm;\" class=\"validTime\"></div>\n" +
                     "    </div>\n" +
                     "    <div class=\"line7\">\n" +
-                    "        <div style=\"position: absolute;left: 125.7mm;\" class=\"currentYear\"></div>\n" +
-                    "        <div style=\"position: absolute;left: 147.7mm;\" class=\"currentMonth\"></div>\n" +
-                    "        <div style=\"position: absolute;left: 165.7mm;\" class=\"currentDay\"></div>\n" +
+                    "        <div style=\"position: absolute;left: 115.7mm;\" class=\"currentYear\"></div>\n" +
+                    "        <div style=\"position: absolute;left: 137.7mm;\" class=\"currentMonth\"></div>\n" +
+                    "        <div style=\"position: absolute;left: 155.7mm;\" class=\"currentDay\"></div>\n" +
                     "    </div>\n" +
                     "    <div class=\"line8\">\n" +
                     "        <div style=\"position: absolute;left: 95.7mm;\" class=\"telephone\"></div>\n" +
@@ -344,16 +344,17 @@
                     var data = obj.data;
                     if (obj.event === 'print') {
                         var today = new Date();
+                        var ethnicity = data.ethnicity && data.ethnicity.length > 1 ? data.ethnicity.substr(0, data.ethnicity.length - 1) : '';
                         var html = modalTemplate
                             .replace(/{secondary}/g, data.org_fullname)
                             .replace("{name}", data.user_name)
                             .replace("{sex}", data.sex)
                             .replace("{age}", data.age)
-                            .replace("{ethnic}", data.ethnicity)
+                            .replace("{ethnic}", ethnicity)
                             .replace("{type}", data.member_type)
                             .replace("{identity}", data.identity)
                             .replace(/{toOrg}/g, data.to_org_name)
-                            .replace("{toOrgTitle}", data.to_org_title)
+                            .replace(/{toOrgTitle}/g, data.to_org_title)
                             .replace("{year}", today.getFullYear())
                             .replace("{month}", today.getMonth() + 1)
                             .replace("{day}", today.getDate())
@@ -373,6 +374,7 @@
                             , move: false
                             , btn: ["打印", "取消"]
                             , yes: function (index) {
+                                $('#div_print .toOrgTitle').text($('#print_to_org_title').text());
                                 $('#div_print .org_name').text($('#print_org').text());
                                 $('#div_print .name').text($('#print_name').text());
                                 $('#div_print .age').text($('#print_age').text());

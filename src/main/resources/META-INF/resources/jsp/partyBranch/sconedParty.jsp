@@ -198,7 +198,7 @@
                         <div class="layui-inline">
                             <label class="layui-form-label layui-required">开始时间：</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="timeDuring" id="timeDuring" value="${meetingPlan.start_time }"
+                                <input type="text" name="timeDuring" id="timeDuring" value="<fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${meetingPlan.start_time}" />"
                                        class="layui-input start_date" lay-verify="required" autocomplete="off">
                             </div>
                         </div>
@@ -208,10 +208,10 @@
                                 <select  name="timeLasts" lay-verify="select">
                                     <option  value="" disabled>请选择</option>
                                     <c:forEach var="n" items="${timeLasts }">
-                                        <c:if test="${meetingPlan.total_time == n/60 }">
+                                        <c:if test="${meetingPlan.total_time == n }">
                                             <option value="${n}" selected>${n/60}小时</option>
                                         </c:if>
-                                        <c:if test="${meetingPlan.total_time != n/60 }">
+                                        <c:if test="${meetingPlan.total_time != n }">
                                             <option value="${n}">${n/60}小时</option>
                                         </c:if>
                                     </c:forEach>
