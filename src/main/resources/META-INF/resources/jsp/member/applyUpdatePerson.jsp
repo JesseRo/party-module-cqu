@@ -228,7 +228,7 @@
                             </div>
                         </div>
                         <div class="layui-inline">
-                            <label class="layui-form-label layui-required">邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;箱</label>
+                            <label class="layui-form-label">邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;箱</label>
                             <div class="layui-input-inline">
                                 <input type="text" class="layui-input" name="email" id="email" value="${info.member_mailbox }" lay-verify="partyEmail">
                             </div>
@@ -361,7 +361,7 @@
                 },
                 partyEmail: function (value, item) {
                     var reg = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-                    if (value == '' || value == null || !reg.test(value)) {
+                    if (value != '' && value != null && !reg.test(value)) {
                         return "邮箱格式不正确。";
                     }
                 },

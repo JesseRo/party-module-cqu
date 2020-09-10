@@ -83,8 +83,50 @@
                         <div class="layui-form-item">
                             <div class="layui-inline">
                                 <label class="layui-form-label">会议主题：</label>
-                                <div class="layui-input-inline layui-long">
+                                <div class="layui-input-inline">
                                     <label class="layui-form-label-text">${meeting.meeting_theme }</label>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">开展时间：</label>
+                                <div class="layui-input-inline">
+                                    <label class="layui-form-label-text"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${meeting.start_time }" /></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">地点：</label>
+                                <div class="layui-input-inline">
+                                    <label class="layui-form-label-text">${meeting.place_name }</label>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">主持人：</label>
+                                <div class="layui-input-inline">
+                                    <label class="layui-form-label-text">${meeting.host_name }</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">联系领导：</label>
+                                <div class="layui-input-inline">
+                                    <label class="layui-form-label-text">${meeting.sit }</label>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">联系人：</label>
+                                <div class="layui-input-inline">
+                                    <label class="layui-form-label-text">${meeting.contact }</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">联系电话：</label>
+                                <div class="layui-input-inline layui-long">
+                                    <label class="layui-form-label-text">${meeting.contact_phone }</label>
                                 </div>
                             </div>
                         </div>

@@ -302,10 +302,13 @@ public class MeetingPlanDao extends PostgresqlDaoImpl<MeetingPlan> {
     public Map<String, Object> queryMeetingPlanByMeetingId(String meetingId) {
 //	   String sql = "SELECT m.*,s.org_id AS sid,s.org_name AS sname,g.org_id AS gid,g.org_name AS gname FROM hg_party_org AS s ,hg_party_meeting_plan_info AS m ,hg_party_org AS g WHERE m.meeting_id = '"+ meetingId +"' AND s.org_id = m.organization_id AND m.participant_group = g.org_id";
         //  String sql = "SELECT m.*,s.org_id AS sid,s.org_name AS sname,g.group_name ,g.group_id FROM public.hg_party_org AS s ,public.hg_party_meeting_plan_info AS m ,public.hg_party_group_org_info AS g WHERE m.meeting_id = '"+ meetingId +"' AND s.org_id = m.organization_id AND m.participant_group = g.group_id";
-        String sql = "select  m.*,s.org_id AS sid,s.org_name AS sname,g.group_name ,g.group_id from hg_party_meeting_plan_info as m " +
+        String sql = "select concat(m.campus, '-', place.place) as place_name, host.member_name as host_name, contact.member_name as contact_name, m.*,s.org_id AS sid,s.org_name AS sname,g.group_name ,g.group_id from hg_party_meeting_plan_info as m " +
                 "LEFT JOIN  hg_party_group_org_info as g on m.participant_group = g.group_id  " +
                 "LEFT JOIN hg_party_org as s on s.org_id = m.organization_id " +
-                "where m.meeting_id = ? and s.historic is false";
+                "\tLEFT JOIN hg_party_member as host on host.member_identity = m.\"host\" and host.historic = false \n" +
+                "\tLEFT JOIN hg_party_member as contact on contact.member_identity = m.contact and contact.historic = false " +
+                "\tleft join hg_party_place as place on place.\"id\" = m.place" +
+                "\twhere m.meeting_id = ? and s.historic is false";
 //	   logger.info("sql :" + sql);
         return this.jdbcTemplate.queryForMap(sql, meetingId);
     }
