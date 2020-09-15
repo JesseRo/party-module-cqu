@@ -125,7 +125,7 @@
                                 $("#personInfo label[name='memberJG']").text(res.data.member_province+'-'+res.data.member_city);
                                 $("#personInfo label[name='memberBirthday']").text(res.data.member_birthday);
                                 $("#personInfo label[name='memberJoinDate']").text(res.data.member_join_date);
-                                $("#personInfo label[name='memberFomalFate']").text(res.data.member_fomal_date);
+                                $("#personInfo label[name='memberFomalDate']").text(res.data.member_fomal_date);
                                 $("#personInfo label[name='memberPhoneNumber']").text(res.data.member_phone_number);
                                 $("#personInfo label[name='memberIdentity']").text(res.data.member_identity);
                                 $("#personInfo label[name='memberDegree']").text(res.data.member_degree);

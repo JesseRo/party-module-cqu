@@ -118,7 +118,7 @@
                             <div class="layui-inline">
                                 <label class="layui-form-label">联系人：</label>
                                 <div class="layui-input-inline">
-                                    <label class="layui-form-label-text">${meeting.contact }</label>
+                                    <label class="layui-form-label-text">${meeting.contact_name }</label>
                                 </div>
                             </div>
                         </div>
