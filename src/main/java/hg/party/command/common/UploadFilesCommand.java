@@ -44,11 +44,13 @@ public class UploadFilesCommand implements MVCResourceCommand {
     private final static String TEMP = "tmp";
     private final static String REPOSITORY = "repository";
     private final static String fileInputName = "file";
+    private final static String separator = "/";
+
     @Override
-    public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse)  {
+    public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse) {
         UploadPortletRequest uploadRequest = PortalUtil.getUploadPortletRequest(resourceRequest);
         try {
-            PrintWriter printWriter=resourceResponse.getWriter();
+            PrintWriter printWriter = resourceResponse.getWriter();
             if (uploadRequest.getSize(fileInputName) == 0) {
                 printWriter.write(JSON.toJSONString(ResultUtil.fail("文件为空!")));
                 return false;
@@ -58,25 +60,25 @@ public class UploadFilesCommand implements MVCResourceCommand {
             String bucket = ParamUtil.getString(uploadRequest, "bucket");
             // 从uploadRequest获得File对象
             File uploadedFile = uploadRequest.getFile(fileInputName);
-            String rootPath = System.getProperty("catalina.home")+ File.separator+"webapps";
-            String path =SAVE_PATH;
-            if(ableDelete){
-                path =  path + File.separator +TEMP;
-            }else{
-                if(!StringUtils.isEmpty(bucket)){
-                    path =  path + File.separator +REPOSITORY + File.separator +bucket;
-                }else{
+            String rootPath = System.getProperty("catalina.home") + separator + "webapps";
+            String path = SAVE_PATH;
+            if (ableDelete) {
+                path = path + separator + TEMP;
+            } else {
+                if (!StringUtils.isEmpty(bucket)) {
+                    path = path + separator + REPOSITORY + separator + bucket;
+                } else {
                     printWriter.write(JSON.toJSONString(ResultUtil.fail("不可删除文件，参数bucket不能为空。")));
                     return false;
                 }
             }
             String sourceFileName = uploadRequest.getFileName(fileInputName);
-            if(!StringUtils.isEmpty(fileName)){
+            if (!StringUtils.isEmpty(fileName)) {
                 sourceFileName = fileName;
             }
             // 存储文件的目录
-            File folder = new File(rootPath+path);
-            if(!folder.exists()){
+            File folder = new File(rootPath + path);
+            if (!folder.exists()) {
                 folder.mkdirs();
             }
             // 对当前目录做可用空间检查
@@ -86,11 +88,11 @@ public class UploadFilesCommand implements MVCResourceCommand {
             }
             // 最终的文件路径
             String uuid = UUID.randomUUID().toString();
-            String savePath = folder.getAbsolutePath() + File.separator + uuid;
+            String savePath = folder.getAbsolutePath() + separator + uuid;
             File file = new File(savePath);
             // 保存文件到物理路径
             FileUtils.copyFile(uploadedFile, file);
-            printWriter.write(JSON.toJSONString(ResultUtil.success(new FileVM(sourceFileName,uploadedFile.length(),path+  File.separator + uuid))));
+            printWriter.write(JSON.toJSONString(ResultUtil.success(new FileVM(sourceFileName, uploadedFile.length(), path + separator + uuid))));
         } catch (Exception e) {
             e.printStackTrace();
         }
