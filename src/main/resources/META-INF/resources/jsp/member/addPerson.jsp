@@ -313,6 +313,18 @@
                                        onkeyup="this.value=this.value.replace(/[^0-9.]/g,'')" placeholder="（元/月）" value="${info.member_major_title }">
                             </div>
                         </div>
+                        <c:if test="${userId != null && userId !='' && orgType == 'secondary'}">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">所在支部</label>
+                            <div class="layui-input-inline">
+                                <select type="text" class="layui-input" name="org" lay-verify="select" value="${info.auth_number }">
+                                    <c:forEach var="o" items="${orgs}" >
+                                        <option value="${o.org_id}" <c:if test="${o.org_id == info.member_org }">selected</c:if>>${o.org_name}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                        </div>
+                        </c:if>
                     </div>
                     <input type="hidden" name="seconedName" value="${seconedName }"/>
                     <input type="hidden" name="prevID_card" value="${info.member_identity }"/>
