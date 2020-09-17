@@ -134,7 +134,9 @@ public class TopNavigationPortlet extends MVCPortlet {
 			renderRequest.setAttribute("roles",  roles);
 			String sessionKey = MD5.getMD5(sessionId);
 			renderRequest.setAttribute("sessionKey", sessionKey);
-			cacheCore.getJedis().expire(String.format("baixun:session:%s", MD5.getMD5(sessionId)), 30 * 60);
+			Jedis jedis = cacheCore.getJedis();
+			jedis.expire(String.format("baixun:session:%s", MD5.getMD5(sessionId)), 30 * 60);
+			jedis.close();
 		}else{
 			PortalUtil.getHttpServletResponse(renderResponse).sendRedirect("/home");
 		}

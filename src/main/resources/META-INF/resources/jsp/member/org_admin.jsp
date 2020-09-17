@@ -528,9 +528,11 @@ button.cancal.btn.btn-default {
                 $.post('${adminAdd}', {orgId: checkedNode.data.org_id,userId:d.user_id}, function (res) {
                     if (res.code == 200){
                         layer.msg("设置管理员成功");
-                        layer.close(index);
                         setTimeout(function(){renderAdminTable(pageInfo.page,pageInfo.size)}, 1000);
+                    }else {
+                        layuiModal.alert("res.message")
                     }
+                    layer.close(index);
                 },"json");
             });
         }

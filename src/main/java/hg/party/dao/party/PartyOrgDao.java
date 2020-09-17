@@ -122,9 +122,9 @@ public class PartyOrgDao extends PostgresqlDaoImpl<Organization> {
 
     //根据组织党员统计
     public UserStatistics userSecondaryStatistics(String orgId) {
-        String sql = "select count(*) count ,COALESCE(sum(case when member_sex='男' then 1 else 0 end ),0) maleCount,COALESCE(sum(case when member_sex='女' then 1 else 0 end ),0) femaleCount from hg_party_member m left join hg_party_org  o on m.member_org = o.org_id where o.historic = false and org_parent = ? ";
+        String sql = "select count(*) count ,COALESCE(sum(case when member_sex='男' then 1 else 0 end ),0) maleCount,COALESCE(sum(case when member_sex='女' then 1 else 0 end ),0) femaleCount from hg_party_member m left join hg_party_org  o on m.member_org = o.org_id where m.historic is false and o.historic = false and (org_parent = ? or o.org_id = ?) ";
         RowMapper<UserStatistics> rowMapper = BeanPropertyRowMapper.newInstance(UserStatistics.class);
-        return jdbcTemplate.queryForObject(sql, rowMapper, orgId);
+        return jdbcTemplate.queryForObject(sql, rowMapper, orgId, orgId);
     }
 
     //根据支部党员统计

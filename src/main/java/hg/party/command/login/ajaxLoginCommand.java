@@ -39,6 +39,7 @@ import hg.party.server.sms.SmsService;
 import hg.util.ConstantsKey;
 import hg.util.MD5;
 import party.constants.PartyPortletKeys;
+import redis.clients.jedis.Jedis;
 
 @Component(
         immediate = true,
@@ -86,7 +87,9 @@ public class ajaxLoginCommand implements MVCResourceCommand {
                 printWriter = resourceResponse.getWriter();
                 printWriter.write("4");//退出成功
                 printWriter.close();
-                cacheCore.getJedis().del(String.format("baixun:session:%s", MD5.getMD5(sessionId)));
+                Jedis jedis = cacheCore.getJedis();
+                jedis.del(String.format("baixun:session:%s", MD5.getMD5(sessionId)));
+                jedis.close();
                 return false;
             } catch (IOException e) {
 

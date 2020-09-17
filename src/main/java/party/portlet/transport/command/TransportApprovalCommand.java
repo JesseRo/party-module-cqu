@@ -94,13 +94,13 @@ public class TransportApprovalCommand implements MVCResourceCommand {
                         if ((transport.getType().equalsIgnoreCase("0")
                             || transport.getType().equalsIgnoreCase("1"))) {
                             // 校内
-                            Member newMember = new Member();
-                            BeanUtils.copyProperties(member, newMember, "id");
-                            newMember.setMember_org(transport.getTo_org_id());
+//                            Member newMember = new Member();
+//                            BeanUtils.copyProperties(member, newMember, "id");
+//                            newMember.setMember_org(transport.getTo_org_id());
                             user.setUser_department_id(transport.getTo_org_id());
                             userDao.saveOrUpdate(user);
-                            memberDao.insertAll(Collections.singletonList(newMember));
-                            memberDao.historic(true, member);
+//                            memberDao.insertAll(Collections.singletonList(newMember));
+                            memberDao.updateOrg(member, transport.getTo_org_id());
                             if (transport.getType().equalsIgnoreCase("1")) {
                                 orgAdminDao.deleteOrgAdmin(member.getMember_identity(), PartyOrgAdminTypeEnum.SECONDARY);
                             }

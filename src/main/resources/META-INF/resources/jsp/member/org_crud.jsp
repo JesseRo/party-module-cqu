@@ -666,7 +666,7 @@ button.cancal.btn.btn-default {
                                     </div>
                                 </div>
                                 <div class="layui-inline">
-                                    <label class="layui-form-label layui-required">联系电话（座机）：</label>
+                                    <label class="layui-form-label">联系电话（座机）：</label>
                                     <div class="layui-input-inline">
                                         <input type="text" name="contactNumber" maxlength="20" autocomplete="off" class="layui-input">
                                     </div>

@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.portlet.*;
 
@@ -122,12 +123,11 @@ public class AddPersonResourceCommand implements MVCResourceCommand {
             // :["+ID_card+"]");
             synchronized (PortalUtil.getHttpServletRequest(resourceRequest).getSession()) {
                 transactionUtil.startTransaction();
-                Member ret = memberDao.findMemberByUser(ID_card);
+
                 if (!StringUtils.isEmpty(id)) {
                     if (!StringUtils.isEmpty(org)) {
                         orgId = org;
                     }
-
                     String Updatesql = "UPDATE hg_party_member set \"member_name\"='" + userName + "', \"member_sex\"='" + sex
                             + "', \"member_ethnicity\"='" + ethnicity + "', \"member_birthday\"='" + birthday
                             + "', \"member_identity\"='" + ID_card + "', \"member_degree\"='" + member_degree
@@ -148,12 +148,17 @@ public class AddPersonResourceCommand implements MVCResourceCommand {
 
                     memberDao.insertOrUpate(Updatesql);
                     UserDao.updateUserInfo(u);
+                    Member m = memberDao.findById(id);
+                    if (!Objects.equals(m.getMember_org(), orgId)) {
+                        orgDao.deleteAdmin(m.getMember_org(), m.getMember_identity());
+                    }
                     if (!prevID_card.equals(ID_card)) {
                         String sqls = getSql(prevID_card, ID_card);
                         memberDao.getJdbcTemplate().execute(sqls);
                     }
                     log.info("编辑人员:[" + new Date() + "] [by " + userId + "]  ID_card :[" + ID_card + "]");
                 } else {
+                    Member ret = memberDao.findMemberByUser(ID_card);
                     if (ret != null && !id.equals(ret.getId())) {
                         transactionUtil.rollback();
                         printWriter.write(JSON.toJSONString(ResultUtil.result(ResultCode.DATA_REPEAT, "身份证号已存在", ret)));

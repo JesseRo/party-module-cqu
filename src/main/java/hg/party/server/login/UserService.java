@@ -22,6 +22,7 @@ import org.osgi.service.component.annotations.Component;
 import hg.party.dao.login.UserDao;
 import hg.party.entity.login.User;
 import org.osgi.service.component.annotations.Reference;
+import redis.clients.jedis.Jedis;
 
 
 @Component(immediate = true, service = UserService.class)
@@ -147,7 +148,9 @@ public class UserService {
         userInfo.setOrgId(user.getUser_department_id());
         userInfo.setUserId(user.getId());
         userInfo.setOrgType(orgType);
-        cacheCore.getJedis().hsetnx(String.format("baixun:session:%s", MD5.getMD5(sessionId)), USER_INFO_KEY, JSONObject.toJSONString(userInfo));
+        Jedis jedis = cacheCore.getJedis();
+        jedis.hsetnx(String.format("baixun:session:%s", MD5.getMD5(sessionId)), USER_INFO_KEY, JSONObject.toJSONString(userInfo));
+        jedis.close();
         //判断是否是第一次登陆
         boolean bool = isFirstLogin(userName, name);
         SessionManager.setAttribute(sessionId, "firstLogin", bool);

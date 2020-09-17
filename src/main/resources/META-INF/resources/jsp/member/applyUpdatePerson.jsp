@@ -67,7 +67,7 @@
     <script type="text/javascript" src="${basePath}/js/jquery.jqprint-0.3.js"></script>
     <script type="text/javascript" src="${basePath}/js/My97DatePicker/WdatePicker.js"></script>
     <script type="text/javascript" src="${basePath}/js/pagination.js"></script>
-    <script type="text/javascript" src="${basePath}/js/ChineseCities.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="${basePath}/js/ChineseCities.min.js?v=1" charset="utf-8"></script>
     <link rel="stylesheet" href="${basePath}/css/print_div.css">
 </head>
 <body>
@@ -158,10 +158,10 @@
 
                     <div class="layui-form-item">
                         <div class="layui-inline">
-                            <label class="layui-form-label layui-required">转正时间</label>
+                            <label class="layui-form-label">转正时间</label>
                             <div class="layui-input-inline">
                                 <input type="text" name="turn_Time" id="turn_labCheckEndDate" value="${info.member_fomal_date }"
-                                        class="layui-input start_date" lay-verify="required">
+                                        class="layui-input start_date">
                             </div>
                         </div>
                         <div class="layui-inline">

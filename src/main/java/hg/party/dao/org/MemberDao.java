@@ -579,4 +579,9 @@ public class MemberDao extends HgPostgresqlDaoImpl<Member> {
             return null;
         }
     }
+
+    public void updateOrg(Member member, String to_org_id) {
+        String sql = "update hg_party_member set member_org = ? where id = ?";
+        jdbcTemplate.update(sql, to_org_id, member.getId());
+    }
 }
