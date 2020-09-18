@@ -126,7 +126,9 @@ public class ExcelDownloadResourceCommand implements MVCResourceCommand {
                     jsonObject.put("committee", member.getMember_party_committee());
                     jsonObject.put("name", member.getMember_name());
                     jsonObject.put("sex", member.getMember_sex());
-                    jsonObject.put("birthPlace", member.getMember_birth_place());
+                    if (member.getMember_province() != null && member.getMember_city() != null) {
+                        jsonObject.put("birthPlace", member.getMember_province() + member.getMember_city());
+                    }
                     jsonObject.put("identity", member.getMember_identity());
                     jsonObject.put("ethnicity", member.getMember_ethnicity());
                     jsonObject.put("phone", member.getMember_phone_number());

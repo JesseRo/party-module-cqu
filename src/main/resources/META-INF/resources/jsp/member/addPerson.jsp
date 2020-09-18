@@ -217,12 +217,12 @@
                                     <option value="本科">本科</option>
                                     <option value="硕士研究生">硕士研究生</option>
                                     <option value="博士研究生">博士研究生</option>
-                                    <option value="其他">研究生</option>
-                                    <option value="其他">初中</option>
-                                    <option value="其他">高中</option>
-                                    <option value="其他">中技</option>
-                                    <option value="其他">中专</option>
-                                    <option value="其他">专科</option>
+                                    <option value="研究生">研究生</option>
+                                    <option value="初中">初中</option>
+                                    <option value="高中">高中</option>
+                                    <option value="中技">中技</option>
+                                    <option value="中专">中专</option>
+                                    <option value="专科">专科</option>
                                 </select>
                             </div>
                         </div>
