@@ -165,6 +165,14 @@
                         </div>
                         <div class="layui-form-item">
                             <div class="layui-inline ueditor_container">
+                                <label class="layui-form-label">计划内容：</label>
+                                <div class="layui-input-inline layui-form-label-text layui-long">
+                                    ${meeting.content }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-inline ueditor_container">
                                 <label class="layui-form-label">会议纪要：</label>
                                 <div class="layui-input-inline layui-form-label-text layui-long">
                                     ${meetingNote.attachment }

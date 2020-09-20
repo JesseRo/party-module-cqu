@@ -123,6 +123,9 @@ public class MeetingPlanSaveCommand implements MVCResourceCommand {
                     m.setSit(member.getMember_name());
                     m.setSit_id(sitId);
                 }
+            }else {
+                m.setSit_id(null);
+                m.setSit(null);
             }
 
             m.setCampus(campus);

@@ -377,7 +377,7 @@
                         if(!res.data.historic){
                             layer.msg("该身份证党员已存在在校党员中。");
                         }else{
-                            layer.msg("该身份证党员已存在历史党员中。");
+                            layer.msg("该党员已经在历史党员库中，请联系管理员恢复身份即可。");
                         }
 
                     }else if(res){

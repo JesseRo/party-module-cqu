@@ -759,7 +759,7 @@
 </c:if>
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">移入历史档案库</a>
         {{#  } }}
-    <c:if test="${role=='organization'}">
+    <c:if test="${role=='organization' or role == 'secondary'}">
         {{#  if(d.historic != false){ }}
         <a class="layui-btn layui-btn-xs" lay-event="recovery">恢复</a>
         {{#  } }}

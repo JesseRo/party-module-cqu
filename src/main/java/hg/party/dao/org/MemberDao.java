@@ -68,7 +68,7 @@ public class MemberDao extends HgPostgresqlDaoImpl<Member> {
     public List<Map<String, Object>> leaders() {
         String sql = "SELECT m.member_identity, m.member_name, branch.org_id, branch.org_name from hg_party_member M\n" +
                 "left join hg_party_org branch on M.member_org = branch.org_id " +
-                "WHERE member_is_leader = '是' and m.historic is false";
+                "WHERE m.historic is false";
         try {
             return jdbcTemplate.queryForList(sql);
         } catch (Exception e) {

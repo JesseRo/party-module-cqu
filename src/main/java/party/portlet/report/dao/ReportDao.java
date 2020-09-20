@@ -86,4 +86,12 @@ public class ReportDao extends PostgresqlDaoImpl<Report> {
         return postGresqlFindBySql(page, 10, sql, status);
     }
 
+    public void deleteByTaskId(String task_id) {
+        String sql = "delete from hg_party_report_task where task_id = ?";
+        jdbcTemplate.update(sql, task_id);
+        sql = "delete from hg_party_report where task_id = ?";
+        jdbcTemplate.update(sql, task_id);
+        sql = "delete from hg_party_report_task_org where task_id = ?";
+        jdbcTemplate.update(sql, task_id);
+    }
 }

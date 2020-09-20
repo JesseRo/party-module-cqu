@@ -121,7 +121,7 @@ public class PartyApprovalPortlet extends MVCPortlet {
                 renderRequest.setAttribute("speakers", speakers);
             }
 
-            if (org.getOrg_parent().equals(orgId)) {
+            if (!org.getOrg_id().equals(orgId)) {
                 MeetingNote meetingNote = notesDao.findByMeetingId(meetingId);
                 if (meetingNote != null) {
                     renderRequest.setAttribute("hasNote", true);

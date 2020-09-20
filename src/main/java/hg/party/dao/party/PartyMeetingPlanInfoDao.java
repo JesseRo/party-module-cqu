@@ -669,13 +669,13 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
         }
         Organization org = orgDao.findOrgByOrgId(orgId);
         PartyOrgAdminTypeEnum partyOrgAdminTypeEnum = PartyOrgAdminTypeEnum.getEnum(org.getOrg_type());
-        StringBuffer sb = new StringBuffer("SELECT plan.*,org.org_name,member.member_name");
+        StringBuffer sb = new StringBuffer("SELECT plan.*,org.org_name,member.member_name, note.id as note_id");
         sb.append(" FROM hg_party_meeting_plan_info AS plan");
         sb.append(" LEFT JOIN hg_party_meeting_notes_info AS note ON plan.meeting_id = note.meeting_id");
         sb.append(" left join hg_party_member member on member.member_identity = plan.contact");
         sb.append(" LEFT JOIN hg_party_org org ON org.org_id = plan.organization_id");
         sb.append(" where 1=1");
-        sb.append(" and org.historic IS FALSE and member.historic = false AND plan.task_status in('1','3','4')");
+        sb.append(" and org.historic IS FALSE and member.historic = false AND plan.task_status in('1','3','4','5','6','7')");
         switch(partyOrgAdminTypeEnum){
             case SECONDARY:
                 sb.append(" and org.org_parent = ? and org.org_type ='"+PartyOrgAdminTypeEnum.BRANCH.getType()+"'");

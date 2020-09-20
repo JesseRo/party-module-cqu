@@ -195,12 +195,14 @@
 		<%--<a class="layui-btn layui-btn-xs" lay-event="check">审核</a>--%>
 		<a class="layui-btn layui-btn-xs" lay-event="pass">
 			通过</a>
+		{{#  } }}
+		{{#  if(d.task_status == "1" || (d.task_status == '6' && !d.note_id)){ }}
 		<a  class="layui-btn layui-btn-xs" lay-event="reject">
 			驳回</a>
 		{{#  } }}
-		{{#  if(d.task_status == '4' || d.task_status == '5' || d.task_status == '6'){ }}
-		<a class="layui-btn layui-btn-xs" lay-event="edit"> 编辑</a>
-		{{#  } }}
+<%--		{{#  if(d.task_status == '4' || d.task_status == '5' || d.task_status == '6'){ }}--%>
+<%--		<a class="layui-btn layui-btn-xs" lay-event="edit"> 编辑</a>--%>
+<%--		{{#  } }}--%>
 		<a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
 	</script>
 	<script type="text/javascript">
@@ -277,10 +279,13 @@
 									case 1:status = '待审核';break;
 									case 2:status = '已撤回';break;
 									case 3:status = '已驳回';break;
-									case 4:status = '已通过';break;
-									case 5:status = '已指派';break;
-									case 6:status = '未检查';break;
-									case 7:status = '已检查';break;
+									case 4:
+									case 5:
+									case 6:
+									case 7:status = '已通过';break;
+								}
+								if (d.note_id) {
+									status = '已纪要'
 								}
 								return status;
 							}},

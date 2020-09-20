@@ -217,6 +217,7 @@ $(function(){
 									<td>联系人</td>
 									<td>联系电话</td>
 									<td>参会领导</td>
+									<td>详情</td>
 								</tr>
 							</thead>
 							<tbody>
@@ -230,8 +231,9 @@ $(function(){
 										<td data-label="开展时间" title="${info.start_time }" class="publish_time start_time">
 											<fmt:formatDate pattern="yyyy-MM-dd HH:mm" value="${info.start_time }" /></td>
 										<td data-label="联系人" title="${info.contact }">${info.contact }</td>
-										<td data-label="联系人" title="${info.contact_phone }">${info.contact_phone }</td>
-										<td data-label="任务状态" title="${info.leader_name}">${info.leader_name}</td>
+										<td data-label="联系电话" title="${info.contact_phone }">${info.contact_phone }</td>
+										<td data-label="参会领导" title="${info.leader_name}">${info.leader_name}</td>
+										<td data-label="详情"><a style="cursor: pointer;" onclick="window.location.href='/approvaldetails?meetingId=${info.meeting_id}'">查看详情</a></td>
 									</tr>
 								</c:forEach>
 							</tbody>

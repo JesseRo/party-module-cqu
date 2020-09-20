@@ -151,7 +151,7 @@
                             <label class="layui-form-label layui-required">入党时间</label>
                             <div class="layui-input-inline">
                                 <input type="text" name="join_party_time" id="labCheckEndDate" value="${info.member_join_date }"
-                                       class="layui-input start_date" lay-verify="required">
+                                       class="layui-input start_date" lay-verify="required" readonly>
                             </div>
                         </div>
                     </div>
@@ -161,7 +161,7 @@
                             <label class="layui-form-label">转正时间</label>
                             <div class="layui-input-inline">
                                 <input type="text" name="turn_Time" id="turn_labCheckEndDate" value="${info.member_fomal_date }"
-                                        class="layui-input start_date">
+                                        class="layui-input start_date" readonly>
                             </div>
                         </div>
                         <div class="layui-inline">
@@ -178,7 +178,7 @@
                             <label class="layui-form-label layui-required">身份证号</label>
                             <div class="layui-input-inline">
                                 <input type="text" class="layui-input" name="ID_card" id="ID_card" lay-verify="idCard"
-                                       value="${info.member_identity }">
+                                       value="${info.member_identity }" readonly>
                             </div>
                         </div>
                         <div class="layui-inline">
@@ -309,8 +309,8 @@
                 }//选中后回调函数
             });
             laydate.render({elem: '#labCheckDate'});
-            laydate.render({elem: '#labCheckEndDate'});
-            laydate.render({elem: '#turn_labCheckEndDate'});
+            // laydate.render({elem: '#labCheckEndDate'});
+            // laydate.render({elem: '#turn_labCheckEndDate'});
             setSelect();
             form.on('submit(updatePersonApply)', function (data) {
 

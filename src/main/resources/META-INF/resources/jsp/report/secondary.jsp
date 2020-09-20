@@ -2,6 +2,7 @@
 <%@ include file="/init.jsp" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <portlet:resourceURL id="/brunch/report/approval" var="approval"/>
+<portlet:resourceURL id="/task/delete" var="deleteTask"/>
 <portlet:resourceURL id="/brunch/report/download" var="download"/>
 
 <!DOCTYPE html>
@@ -79,7 +80,7 @@
                                 <a onclick="window.location.href = '/report_task_detail?taskId=${c.task_id }'"
                                    title="查看任务详情" style="cursor: pointer;">${c.theme}</a>
                             </td>
-                            <td style="color: red;padding-left: 25px;">
+                            <td style="color: red;">
                                 <a style="cursor: pointer" onclick="templateDetail(this);">查看模板</a>
                                 <div class="report_template" style="display:none;">
                                     <c:forEach var="f" items="${c.fileView }">
@@ -97,6 +98,7 @@
                             <td>
                                 <a onclick="window.location.href='/secondaryReportDetail?task=${c.task_id }'"
                                    href="javascript:;">查看报送情况</a>
+                                <a onclick="deleteTask('${c.task_id}')" href="javascript:;" style="color: red; margin-left: 10px;">刪除</a>
                             </td>
                         </tr>
                         　　 </c:forEach>
@@ -136,6 +138,18 @@
     <script type="text/javascript">
         var layer;
 
+        function deleteTask(taskId) {
+            layuiModal.confirm("确定要删除此任务以及所有相关上报吗？", function () {
+                $.post('${deleteTask}', {taskId: taskId}, function (res) {
+                    if (res.result) {
+                        layuiModal.alert('已刪除')
+                        window.location.reload();
+                    } else {
+                        layuiModal.alert(res.message);
+                    }
+                })
+            })
+        }
         function templateDetail(e) {
             $('#file_detail').find('ul').html($(e).next().html());
             layer.open(
@@ -163,7 +177,7 @@
                 var report = $(this).parent().parent().attr("id");
                 $.post("${approval}", {report: report, status: 2}, function (res) {
                     if (res.success) {
-                        alert("已驳回");
+                        layuiModal.alert("已驳回");
                         window.location.reload();
                     }
                 })
