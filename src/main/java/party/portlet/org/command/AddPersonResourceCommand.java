@@ -106,35 +106,35 @@ public class AddPersonResourceCommand implements MVCResourceCommand {
                     + "VALUES ('" + userName + "', '" + sex + "', '" + ethnicity + "', NULL, '" + birthday + "', '"
                     + ID_card + "', '" + member_degree + "', '" + job + "', '" + join_party_time + "', '"
                     + turn_Time + "', '" + orgId + "', '" + party_type + "', '" + home_addrss + "', '" + telephone
-                    + "', NULL, NULL, NULL, NULL, NULL, NULL, '" + member_mailbox + "', '" + false + "', '" + positior + "','" + marriage + "','" + province + "','" + city + "','" + title
+                    + "', NULL, NULL, NULL, NULL, NULL, NULL, '" + email + "', '" + false + "', '" + positior + "','" + marriage + "','" + province + "','" + city + "','" + title
                     + "','" + classnew + "', NULL, '" + seconedName + "', '" + birth_place + "', '" + isLeader + "', '" + unit + "', '" + jobNumber + "', '" + authNumber + "');";
-            Member member = new Member();
-            member.setMember_name(userName);
-            member.setMember_sex(sex);
-            member.setMember_ethnicity(ethnicity);
-            member.setMember_birthday(birthday);
-            member.setMember_identity(ID_card);
-            member.setMember_degree(member_degree);
-            member.setMember_job(job);
-            member.setMember_join_date(join_party_time);
-            member.setMember_fomal_date(turn_Time);
-            member.setMember_org(orgId);
-            member.setMember_type(party_type);
-            member.setMember_address(home_addrss);
-            member.setMember_phone_number(telephone);
-            member.setMember_mailbox(member_mailbox);
-            member.setMember_party_position(positior);
-            member.setMember_marriage(marriage);
-            member.setMember_province(province);
-            member.setMember_city(city);
-            member.setMember_major_title(title);
-            member.setMember_new_class(classnew);
-            member.setMember_party_committee(seconedName);
-            member.setMember_birth_place(birth_place);
-            member.setMember_unit(Integer.valueOf(unit));
-            member.setMember_is_leader(isLeader);
-            member.setJobNumber(jobNumber);
-            member.setAuthNumber(authNumber);
+//            Member member = new Member();
+//            member.setMember_name(userName);
+//            member.setMember_sex(sex);
+//            member.setMember_ethnicity(ethnicity);
+//            member.setMember_birthday(birthday);
+//            member.setMember_identity(ID_card);
+//            member.setMember_degree(member_degree);
+//            member.setMember_job(job);
+//            member.setMember_join_date(join_party_time);
+//            member.setMember_fomal_date(turn_Time);
+//            member.setMember_org(orgId);
+//            member.setMember_type(party_type);
+//            member.setMember_address(home_addrss);
+//            member.setMember_phone_number(telephone);
+//            member.setMember_mailbox(member_mailbox);
+//            member.setMember_party_position(positior);
+//            member.setMember_marriage(marriage);
+//            member.setMember_province(province);
+//            member.setMember_city(city);
+//            member.setMember_major_title(title);
+//            member.setMember_new_class(classnew);
+//            member.setMember_party_committee(seconedName);
+//            member.setMember_birth_place(birth_place);
+//            member.setMember_unit(Integer.valueOf(unit));
+//            member.setMember_is_leader(isLeader);
+//            member.setJobNumber(jobNumber);
+//            member.setAuthNumber(authNumber);
             if (!StringUtils.isEmpty(id)) {
                 u = UserDao.findUserByEthnicity(prevID_card);
             }
@@ -172,6 +172,7 @@ public class AddPersonResourceCommand implements MVCResourceCommand {
                             + "', \"member_unit\"='" + unit
                             + "', \"job_number\"='" + jobNumber
                             + "', \"auth_number\"='" + authNumber
+                            + "', \"member_mailbox\"='" + email
                             + "', \"member_new_class\"='" + classnew + "'  WHERE id='" + id + "'";
 
                     memberDao.insertOrUpate(Updatesql);
@@ -194,8 +195,8 @@ public class AddPersonResourceCommand implements MVCResourceCommand {
                         return false;
                     }
                     u.setUser_password(MD5.getMD5(ID_card.substring(12)));
-//                    memberDao.insertOrUpate(sql);
-                    memberDao.save(member);
+                    memberDao.insertOrUpate(sql);
+//                    memberDao.save(member);
                     UserDao.save(u);
                     log.info("添加人员:[" + new Date() + "] [by " + userId + "]  ID_card :[" + ID_card + "]");
                 }

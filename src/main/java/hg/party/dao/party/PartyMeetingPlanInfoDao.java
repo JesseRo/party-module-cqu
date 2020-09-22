@@ -71,6 +71,7 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
         String sql = "SELECT\n" +
                 "\tDISTINCT(plan.meeting_id, leader.id),\n" +
                 "\tplan.id," +
+                "\tplan.meeting_id," +
                 "\tplan.meeting_type,\n" +
                 "\tplan.meeting_theme ,\n" +
                 "\torg.org_name as org_name,\n" +
@@ -785,7 +786,7 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
             Organization organization =  orgDao.findByOrgId(orgId);
             if(organization.getOrg_type().equals(PartyOrgAdminTypeEnum.ORGANIZATION.getType())){
                 if (!StringUtils.isEmpty(seconedId)) {
-                    sb.append(" AND org_p.org_id='" + seconedId + "'");
+                    sb.append(" AND (org_p.org_id='" + seconedId + "' or org_o.org_id = '" + seconedId + "'");
                 }
                 if (!StringUtils.isEmpty(branchId)) {
                     sb.append(" and org_o.org_id='" + branchId + "'");
