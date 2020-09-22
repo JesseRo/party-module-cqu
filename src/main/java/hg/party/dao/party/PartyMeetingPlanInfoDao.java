@@ -764,9 +764,10 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
         if (size <= 0){
             size = 10;
         }
-        StringBuffer sb = new StringBuffer("SELECT plan.task_status AS plan_state,org_o.org_name, contact.user_name as contact_name,plan.*");
+        StringBuffer sb = new StringBuffer("SELECT plan.task_status AS plan_state,org_o.org_name, contact.user_name as contact_name,plan.*, note.id as note_id");
         sb.append(" FROM hg_party_meeting_plan_info AS plan");
         sb.append(" LEFT JOIN hg_users_info AS contact ON plan.contact = contact.user_id ");
+        sb.append(" LEFT JOIN hg_party_meeting_notes_info AS note ON note.meeting_id = plan.meeting_id and note.status = 2 ");
         sb.append(" left  join hg_party_org as org_o on plan.organization_id = org_o.org_id left join hg_party_org  org_p on org_o.org_parent = org_p.org_id");
         sb.append(" where 1=1");
         if (!StringUtils.isEmpty(startTime)) {

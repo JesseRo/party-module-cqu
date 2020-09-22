@@ -276,27 +276,25 @@ $(function(){
 										<td data-label="联系电话" title="${info.contact_phone }">${info.contact_phone }</td>
 		<%--	                            <td data-label="联系人电话">${info.contact_phone }</td>--%>
 										<td data-label="任务状态">
-											<c:if test="${info.plan_state == '1'}">
-												已提交
-											</c:if>
-											<c:if test="${info.plan_state == '2'}">
-												已撤回
-											</c:if>
-											<c:if test="${info.plan_state == '3'}">
-												被驳回
-											</c:if>
-											<c:if test="${info.plan_state == '4'}">
-												已通过
-											</c:if>
-											<c:if test="${info.plan_state == '5'}">
-												已指派
-											</c:if>
-											<c:if test="${info.plan_state == '6'}">
-												未检查
-											</c:if>
-											<c:if test="${info.plan_state == '7'}">
-												已检查
-											</c:if>
+											<c:choose>
+												<c:when test="${not empty info.note_id}">
+													已纪要
+												</c:when>
+												<c:otherwise>
+													<c:if test="${info.plan_state == '1'}">
+														已提交
+													</c:if>
+													<c:if test="${info.plan_state == '2'}">
+														已撤回
+													</c:if>
+													<c:if test="${info.plan_state == '3'}">
+														被驳回
+													</c:if>
+													<c:if test="${info.plan_state >= '4'}">
+														已通过
+													</c:if>
+												</c:otherwise>
+											</c:choose>
 										</td>
 										<td><a style="cursor: pointer;" onclick="window.location.href='/approvaldetails?meetingId=${info.meeting_id}'">查看详情</a></td>
 		<%--	                            <td data-label="审核人">${info.auditor }</td>--%>

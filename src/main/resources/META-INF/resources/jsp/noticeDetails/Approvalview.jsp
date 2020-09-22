@@ -81,27 +81,17 @@
 							<p class="layui-col-xs6 layui-col-sm6 layui-col-md4"><span>联系人电话：</span>${meetingPlan.contact_phone }</p>
 						</div>
 						<div class="layui-form-item layui-row" >
-							<p class="layui-col-xs12 layui-col-sm12 layui-col-md12"><span>参会人员：</span>${meetingUserName }</p>
-						</div>
-						<div class="layui-form-item layui-row" >
 							<p class="layui-col-xs12 layui-col-sm12 layui-col-md12"><span>计划内容：</span></p>
 							<p class="layui-col-xs12 layui-col-sm12 layui-col-md12">${meetingPlan.content}</p>
-						</div>
-						<div class="layui-form-item layui-row" >
-							<div class="layui-col-xs12 layui-col-sm12 layui-col-md12">
-								<span>附件内容：</span>
-								<ul>
-									<c:forEach var="file" items="${attachment }">
-										<li><a href="javascript:void(0)" path="${file.path}" name="${file.name}" onclick="downloadFile()">${file.name}</a></li>
-									</c:forEach>
-								</ul>
-							</div>
 						</div>
 						<c:if test="${meetingPlan.task_status == '3'}">
 							<div class="layui-form-item layui-row" >
 								<p class="layui-col-xs12 layui-col-sm12 layui-col-md12"><span>驳回原因：</span>${meetingPlan.remark }</p>
 							</div>
 						</c:if>
+						<div class="layui-form-item layui-row" >
+							<p class="layui-col-xs12 layui-col-sm12 layui-col-md12"><span>参会人员：</span>${meetingUserName }</p>
+						</div>
 						<c:if test="${hasNote}">
 							<div class="layui-form-item layui-row" >
 								<p class="layui-col-xs6 layui-col-sm6 layui-col-md4"><span>实到人员：</span>${attendances }</p>

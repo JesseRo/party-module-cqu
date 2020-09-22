@@ -87,7 +87,7 @@
                     <label class="layui-form-label">会议纪要：</label>
                     <div class="layui-input-inline">
                         <script id="meeting_content" name="meeting_content"  type="text/plain"></script>
-                        <input type="hidden" id="meeting_contentStr" value="${meetingNote.attachment}">
+                        <input type="hidden" id="meeting_contentStr" value='${meetingNote.attachment}'>
                     </div>
                 </div>
                 <div class="layui-inline btn_group">
