@@ -71,8 +71,12 @@ public class SecondaryTaskReportsPortlet extends MVCPortlet {
         HttpServletRequest servletRequest = PortalUtil.getOriginalServletRequest(request);
         String taskId = servletRequest.getParameter("task");
         int page = ParamUtil.getInteger(renderRequest, "pageNo");
+        String _taskId = ParamUtil.getString(renderRequest, "taskId");
         if (page <= 0 ){
             page = 1;
+        }
+        if (StringUtils.isEmpty(taskId)) {
+            taskId = _taskId;
         }
         PostgresqlQueryResult<Map<String, Object>> taskPage;
         String statusStr = servletRequest.getParameter("status");

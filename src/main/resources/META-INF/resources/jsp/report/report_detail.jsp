@@ -176,6 +176,7 @@
                         <%--  <input label="站点id" name="Site"  value="${Site }" type="hidden"/>
                         <input label="栏目id" name="Column"  value="${Column }" type="hidden"/> --%>
                         <input type="hidden" id="date_date" name="date" value=""/>
+                        <input type="hidden" id="taskId" name="taskId" value="${taskId}"/>
                         <button type="submit" class="button">确定</button>
                     </form>
                 </div>
