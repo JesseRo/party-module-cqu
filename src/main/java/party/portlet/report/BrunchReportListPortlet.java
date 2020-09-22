@@ -72,14 +72,15 @@ public class BrunchReportListPortlet extends MVCPortlet {
             data.put("templateFileView", templateFileViews);
             if (data.get("status").equals(ConstantsKey.REPORTED)){
                 String uploadJson = (String)data.get("uploadFiles");
+                String orgId = (String)data.get("org_id");
                 List<ExcelHandler> uploadExcelHandlers = gson.fromJson(uploadJson, new TypeToken<List<ExcelHandler>>(){}.getType());
                 List<FileView> uploadFileViews = uploadExcelHandlers.stream()
-                        .map(p->new FileView(p.getFileName(), "/ajaxFileName/" + taskId + "/" + p.getFileName()))
+                        .map(p->new FileView(p.getFileName(), "/ajaxFileName/" + taskId + "/" + orgId + "/" + p.getFileName()))
                         .collect(Collectors.toList());
                 String wordJson = (String)data.get("wordUploadFiles");
                 List<WordHandler> wordHandlers = gson.fromJson(wordJson, new TypeToken<List<WordHandler>>(){}.getType());
                 List<FileView> wordFileViews = wordHandlers.stream()
-                        .map(p->new FileView(p.getFileName(), "/ajaxFileName/" + taskId + "/" + p.getFileName()))
+                        .map(p->new FileView(p.getFileName(), "/ajaxFileName/" + taskId + "/" + orgId + "/" + p.getFileName()))
                         .collect(Collectors.toList());
                 uploadFileViews.addAll(wordFileViews);
                 data.put("uploadFileView", uploadFileViews);

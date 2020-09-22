@@ -731,7 +731,7 @@
             </div>
         </div>
     </div>
-    <c:if test="${role=='organization'}">
+    <c:if test="${role=='organization' or role == 'secondary'}">
         <div style="display: none" id="recoveryModal">
             <form class="layui-form" action="">
                 <input type="hidden" class="layui-layer-input"  name="userID" value="1">

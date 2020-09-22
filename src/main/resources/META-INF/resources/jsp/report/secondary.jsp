@@ -113,7 +113,7 @@
                     <portlet:actionURL name="/PageNoMVCActionCommand" var="pageNoUrl">
                     </portlet:actionURL>
                     <form action="#" id="getPageNo" method="post">
-                        <input type="hidden" id="pageNo" name="pageNo" value=""/>
+                        <input type="hidden" id="pageNo" name="pageNo" value="${pageNo}"/>
                         <input type="hidden" id="total_page_" name="total_page_" value="${totalPage}"/>
                         <span>跳转到第</span>
                         <input type="text" id="jumpPageNo" name="jumpPageNo"/>
