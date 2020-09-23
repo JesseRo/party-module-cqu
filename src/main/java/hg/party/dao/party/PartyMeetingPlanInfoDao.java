@@ -59,7 +59,7 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
                 "FROM hg_party_meeting_plan_info plan " +
                 "left join hg_party_member m on plan.contact = m.member_identity and m.historic = false " +
                 "left join hg_party_place p on p.id = plan.place " +
-                "left join hg_party_member host on host.member_identity = plan.host and m.historic = false " +
+                "left join hg_party_member host on host.member_identity = plan.host and host.historic = false " +
                 "WHERE meeting_id= ? ";
         return this.jdbcTemplate.queryForMap(sql, meetingId);
     }
@@ -787,7 +787,7 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
             Organization organization =  orgDao.findByOrgId(orgId);
             if(organization.getOrg_type().equals(PartyOrgAdminTypeEnum.ORGANIZATION.getType())){
                 if (!StringUtils.isEmpty(seconedId)) {
-                    sb.append(" AND (org_p.org_id='" + seconedId + "' or org_o.org_id = '" + seconedId + "'");
+                    sb.append(" AND (org_p.org_id='" + seconedId + "' or org_o.org_id = '" + seconedId + "')");
                 }
                 if (!StringUtils.isEmpty(branchId)) {
                     sb.append(" and org_o.org_id='" + branchId + "'");

@@ -110,7 +110,7 @@
                         </div>
                         <div class="layui-form-item">
                             <div class="layui-inline">
-                                <label class="layui-form-label">联系领导：</label>
+                                <label class="layui-form-label">联系委员：</label>
                                 <div class="layui-input-inline">
                                     <label class="layui-form-label-text">${meeting.sit }</label>
                                 </div>
