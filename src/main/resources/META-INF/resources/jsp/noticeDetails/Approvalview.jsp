@@ -72,7 +72,7 @@
 						<div class="layui-form-item layui-row" >
 							<p class="layui-col-xs6 layui-col-sm6 layui-col-md4"><span>开展地点：</span>${meetingPlan.placeName }</p>
 							<p class="layui-col-xs6 layui-col-sm6 layui-col-md4"><span>主持人：</span>${meetingPlan.hostName }</p>
-							<p class="layui-col-xs6 layui-col-sm6 layui-col-md4"><span>联系领导：</span>${meetingPlan.sit }</p>
+							<p class="layui-col-xs6 layui-col-sm6 layui-col-md4"><span>联系委员：</span>${meetingPlan.sit }</p>
 						</div>
 
 						<div class="layui-form-item layui-row" >
@@ -80,6 +80,14 @@
 							<p class="layui-col-xs6 layui-col-sm6 layui-col-md4"><span>联系人：</span>${meetingPlan.contactName }</p>
 							<p class="layui-col-xs6 layui-col-sm6 layui-col-md4"><span>联系人电话：</span>${meetingPlan.contact_phone }</p>
 						</div>
+						<div class="layui-form-item layui-row" >
+							<p class="layui-col-xs12 layui-col-sm12 layui-col-md12"><span>应到人员：</span>${meetingUserName }</p>
+						</div>
+						<c:if test="${hasNote}">
+						<div class="layui-form-item layui-row" >
+							<p class="layui-col-xs12 layui-col-sm12 layui-col-md12"><span>实到人员：</span>${attendances }</p>
+						</div>
+						</c:if>
 						<div class="layui-form-item layui-row" >
 							<p class="layui-col-xs12 layui-col-sm12 layui-col-md12"><span>计划内容：</span></p>
 							<p class="layui-col-xs12 layui-col-sm12 layui-col-md12">${meetingPlan.content}</p>
@@ -89,13 +97,7 @@
 								<p class="layui-col-xs12 layui-col-sm12 layui-col-md12"><span>驳回原因：</span>${meetingPlan.remark }</p>
 							</div>
 						</c:if>
-						<div class="layui-form-item layui-row" >
-							<p class="layui-col-xs12 layui-col-sm12 layui-col-md12"><span>应到人员：</span>${meetingUserName }</p>
-						</div>
 						<c:if test="${hasNote}">
-							<div class="layui-form-item layui-row" >
-								<p class="layui-col-xs12 layui-col-sm12 layui-col-md12"><span>实到人员：</span>${attendances }</p>
-							</div>
 							<div class="layui-form-item layui-row">
 								<p class="layui-col-xs6 layui-col-sm6 layui-col-md4"><span>会议纪要：</span></p>
 								<p class="layui-col-xs6 layui-col-sm6 layui-col-md4"></p>
