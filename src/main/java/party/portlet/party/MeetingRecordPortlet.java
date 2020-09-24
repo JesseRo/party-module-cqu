@@ -94,6 +94,7 @@ public class MeetingRecordPortlet extends MVCPortlet {
             totalPage = totalPage + 1;
         }
         renderRequest.setAttribute("totalPage", totalPage);
+        renderRequest.setAttribute("totalCount", data.getCount());
         renderRequest.setAttribute("startTime", startTime);
         renderRequest.setAttribute("endTime", endTime);
         renderRequest.setAttribute("seconedId", seconedId);

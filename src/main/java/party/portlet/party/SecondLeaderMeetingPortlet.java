@@ -93,6 +93,7 @@ public class SecondLeaderMeetingPortlet extends MVCPortlet {
         renderRequest.setAttribute("list", pageResult.getList());
         renderRequest.setAttribute("pageNo", pageNo);
         renderRequest.setAttribute("totalPage", totalPage);
+        renderRequest.setAttribute("totalCount", pageResult.getCount());
         renderRequest.setAttribute("startTime", startTime);
         renderRequest.setAttribute("endTime", endTime);
         renderRequest.setAttribute("seconedId", seconedId);

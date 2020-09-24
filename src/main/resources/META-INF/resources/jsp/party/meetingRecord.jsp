@@ -338,6 +338,7 @@ $(function(){
 								<input name="meetTheme" type="hidden" value="${meetTheme }"/>
 								<input name="meetType" type="hidden" value="${meetType }"/>
 							</form>
+							<p>共<span class="total_page">${totalCount }</span>条</p>
 						</div>
 					</div>
 				</div>

@@ -85,7 +85,7 @@
     <script type="text/javascript" src="${basePath}/js/jquery.jqprint-0.3.js"></script>
     <script type="text/javascript" src="${basePath}/js/My97DatePicker/WdatePicker.js"></script>
     <script type="text/javascript" src="${basePath}/js/pagination.js"></script>
-    <script type="text/javascript" src="${basePath}/js/ChineseCities.min.js?v=1" charset="utf-8"></script>
+    <script type="text/javascript" src="${basePath}/js/ChineseCities.min.js?v=2" charset="utf-8"></script>
     <link rel="stylesheet" href="${basePath}/css/print_div.css">
     <portlet:resourceURL id="/hg/assigned" var="assigned"/>
     <portlet:resourceURL id="/hg/getMeetingTypeAndTheme" var="getMeetingTypeAndTheme"/>

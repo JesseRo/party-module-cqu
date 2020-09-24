@@ -266,6 +266,7 @@ $(function(){
 								<input name="branchId" type="hidden" value="${branchId }"/>
 								<input name="leader" type="hidden" value="${leader }"/>
 							</form>
+							<p>共<span class="total_page">${totalCount }</span>条</p>
 						</div>
 					</div>
 				</div>

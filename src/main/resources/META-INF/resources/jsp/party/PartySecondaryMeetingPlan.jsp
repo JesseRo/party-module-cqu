@@ -187,7 +187,7 @@
 	        </div>
 	    </div>
 		<script type="text/html" id="meetingCheckTableBtns">
-			{{#  if(d.id != '' && d.id != null && d.task_status == "6"){ }}
+			{{#  if(d.id != '' && d.id != null && d.task_status == "6" && new Date() < new Date(d.start_time)){ }}
 			<a class="layui-btn layui-btn-xs" lay-event="check">抽查</a>
 			{{#  } }}
 			{{#  if(d.id != '' && d.id != null && d.task_status == '5'){ }}
