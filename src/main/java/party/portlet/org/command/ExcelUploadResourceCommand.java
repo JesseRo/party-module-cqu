@@ -58,6 +58,7 @@ public class ExcelUploadResourceCommand implements MVCResourceCommand {
     @Override
     public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws PortletException {
         String type = ParamUtil.getString(resourceRequest, "type");
+        String orgId = ParamUtil.getString(resourceRequest, "orgId");
         type = HtmlUtil.escape(type);
 
         UploadPortletRequest upload = PortalUtil.getUploadPortletRequest(resourceRequest);
@@ -71,7 +72,7 @@ public class ExcelUploadResourceCommand implements MVCResourceCommand {
             if (type.equalsIgnoreCase("org")) {
                 savingOrg(maps);
             } else if (type.equalsIgnoreCase("member")) {
-                savingMember(maps, "ddddd");
+                savingMember(maps, orgId);
             }
             message = "导入成功";
         } catch (NotMatchingExcelDataException e) {
