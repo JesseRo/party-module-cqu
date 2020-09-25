@@ -53,9 +53,10 @@ public class OrgAdminAddCommand implements MVCResourceCommand {
                 Organization adminOrg = orgDao.findAdminOrg(userId, PartyOrgAdminTypeEnum.getEnum(organization.getOrg_type()));
                 if (adminOrg != null) {
                     if (!adminOrg.getOrg_id().equals(orgId)) {
-                        isUpdate = false;
-                        User user = userService.findByUserId(userId);
-                        printWriter.write(JSON.toJSONString(ResultUtil.fail(user.getUser_name() + " 不能同时管理两个同级组织..")));
+//                        isUpdate = false;
+//                        User user = userService.findByUserId(userId);
+//                        printWriter.write(JSON.toJSONString(ResultUtil.fail(user.getUser_name() + " 不能同时管理两个同级组织..")));
+                        orgDao.deleteAdmin(adminOrg.getOrg_id(), userId);
                     }
                 }
                 if (isUpdate) {

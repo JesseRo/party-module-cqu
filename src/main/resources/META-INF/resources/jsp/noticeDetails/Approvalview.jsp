@@ -85,8 +85,7 @@
 						</div>
 						<c:if test="${hasNote}">
 						<div class="layui-form-item layui-row" >
-							<p class="layui-col-xs6 layui-col-sm6 layui-col-md4"><span>实到人员：</span>${attendances }</p>
-							<p class="layui-col-xs6 layui-col-sm6 layui-col-md4"></p>
+							<p class="layui-col-xs12 layui-col-sm12 layui-col-md12"><span>实到人员：</span>${attendances }</p>
 						</div>
 						</c:if>
 						<div class="layui-form-item layui-row" >
@@ -103,7 +102,7 @@
 								<p class="layui-col-xs6 layui-col-sm6 layui-col-md4"><span>会议纪要：</span></p>
 								<p class="layui-col-xs6 layui-col-sm6 layui-col-md4"></p>
 							</div>
-							<div class="details_content_info" style="word-wrap:break-word">
+							<div class="details_content_info" style="word-wrap:break-word;max-height: none;">
 								${note.attachment }
 							</div>
 						</c:if>
