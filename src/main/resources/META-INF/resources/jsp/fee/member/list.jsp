@@ -58,8 +58,8 @@
         <div class="breadcrumb_group">
             当前位置：
             <span class="layui-breadcrumb" lay-separator=">">
-                        <a href="javascript:;">系统管理</a>
-                        <a href="javascript:;">日志管理</a>
+                        <a href="javascript:;">党费管理</a>
+                        <a href="javascript:;">党费列表</a>
                     </span>
         </div>
         <div class="bg_white_container">
