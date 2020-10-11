@@ -60,7 +60,7 @@
 				当前位置：
 				<span class="layui-breadcrumb" lay-separator=">">
 					<a href="javascript:;">党费管理</a>
-					<a href="javascript:;">缴费详情</a>
+					<a href="javascript:;">审核详情</a>
 				</span>
 			</div>
 			<div class="bg_white_container">
@@ -76,46 +76,21 @@
 							<p class="layui-col-xs6 layui-col-sm6 layui-col-md6"><span id="member_org"></span></p>
 						</div>
 						<div class="layui-form-item layui-row" >
-							<p class="layui-col-xs6 layui-col-sm6 layui-col-md6"><span>交费类型</span></p>
-							<p class="layui-col-xs6 layui-col-sm6 layui-col-md6"><span>党   费</span></p>
+							<p class="layui-col-xs6 layui-col-sm6 layui-col-md6"><span>党费类型</span></p>
+							<p class="layui-col-xs6 layui-col-sm6 layui-col-md6"><span id="config_type"></span></p>
 						</div>
 						<div class="layui-form-item layui-row" >
-							<p class="layui-col-xs6 layui-col-sm6 layui-col-md6"><span>交费项目</span></p>
-							<p class="layui-col-xs6 layui-col-sm6 layui-col-md6"><span id="fee_type"></span></p>
-						</div>
-						<div class="layui-form-item layui-row" >
-							<p class="layui-col-xs6 layui-col-sm6 layui-col-md6"><span>交费明细</span></p>
-						</div>
-						<div class="layui-form-item layui-row" >
-							<p class="layui-col-xs6 layui-col-sm6 layui-col-md6"><span id="fee_yearMonth"></span></p>
-							<p class="layui-col-xs6 layui-col-sm6 layui-col-md6"><span class="fee_amount"></span></p>
-						</div>
-						<div class="layui-form-item layui-row" >
-							<p class="layui-col-xs6 layui-col-sm6 layui-col-md6"><span>交费说明</span></p>
-						</div>
-						<div class="layui-form-item layui-row" >
-							<p class="layui-col-xs12 layui-col-sm12 layui-col-md12">
-								<span>
-									按照规定向党组织交纳党费，是每个党员应尽的义务，也是党员党性和组织观念的体现。对不按照规定交纳党费的党员，其所在党组织应及时对其进行批评教育，限期改正。对无正当理由，连续6个月不交纳党费的党员，按自行脱党处理。请各位党员在规定时间内自觉交纳党费。
-								</span>
-							</p>
-						</div>
-						<div class="layui-form-item layui-row" >
-							<p class="layui-col-xs6 layui-col-sm6 layui-col-md6"><span>交费截止时间</span></p>
-							<p class="layui-col-xs6 layui-col-sm6 layui-col-md6"><span id="end_time"></span></p>
-						</div>
-						<div class="layui-form-item layui-row" >
-							<p class="layui-col-xs6 layui-col-sm6 layui-col-md6"><span>交费金额</span></p>
-							<p class="layui-col-xs6 layui-col-sm6 layui-col-md6"><span class="fee_amount"></span></p>
-						</div>
-						<div class="layui-form-item layui-row" >
-							<p class="layui-col-xs6 layui-col-sm6 layui-col-md6"><span>交费状态</span></p>
-							<p class="layui-col-xs6 layui-col-sm6 layui-col-md6"><span id="fee_state"></span></p>
+							<p class="layui-col-xs6 layui-col-sm6 layui-col-md6"><span>党费金额</span></p>
+							<p class="layui-col-xs6 layui-col-sm6 layui-col-md6"><span id="fee_amount"></span>元/月</p>
 						</div>
 						<div class="layui-form-item layui-row">
-							<button type="button" id="button_pay"
+							<button type="button" id="button_pass"
 									class="layui-btn layui-btn-primary" style="display:none; background-color: transparent;color: #666;padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;border-radius: 4px;">
-								支付
+								通过
+							</button>
+							<button type="button" id="button_reject"
+									class="layui-btn layui-btn-primary" style="background-color: transparent;color: #666;padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;border-radius: 4px;">
+								驳回
 							</button>
 							<button type="button" onclick="window.history.back();"
 									class="layui-btn layui-btn-primary" style="background-color: transparent;color: #666;padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;border-radius: 4px;">
@@ -124,6 +99,30 @@
 						</div>
 					</div>
 				</div>
+			</div>
+			<!-- 弹窗 -->
+			<div style="display: none" id="rejectModal">
+				<form class="layui-form" action="">
+					<input type="hidden" class="layui-layer-input"  name="meetingId" value="1">
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label layui-required">驳回理由:</label>
+							<div class="layui-input-inline">
+								<select name="rejectReason" lay-verify="select" >
+									<option value="">-请选择-</option>
+									<c:forEach var="reason" items="${reasonList }">
+										<option value="${reason.resources_value}">${reason.resources_value}</option>
+									</c:forEach>
+								</select>
+							</div>
+						</div>
+					</div>
+
+					<div class="layui-layer-btn layui-layer-btn-">
+						<a class="layui-layer-btn0" type="button"  lay-submit="" lay-filter="rejectForm">确定</a>
+						<a class="layui-layer-btn1">取消</a>
+					</div>
+				</form>
 			</div>
 		</div>
 	</div>

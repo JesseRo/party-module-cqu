@@ -193,6 +193,9 @@
 			}
             $(function() {
                 sessionStorage.setItem("sessionKey", "${sessionKey}")
+				$.ajaxSettings.beforeSend = function(xhr,request){
+					xhr.setRequestHeader('Authorization', sessionStorage.getItem("sessionKey"));
+				}
             })
 		</script>
 		<!-- </div> -->
