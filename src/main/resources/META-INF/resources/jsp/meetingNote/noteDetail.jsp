@@ -184,7 +184,27 @@
 <script type="text/javascript" src="${basePath}/js/jspdf.umd.min.js"></script>
 <script>
     $(function () {
+        function getImage() {
+            $('.content_form .form_container').eq(0).find('img').each(function(i, e) {
+                var url = $(e).attr('src');
+                $(e).attr("width", 400);
+                if (url.startsWith(document.location.host)) {
+                    return;
+                }
+                var xhr = new XMLHttpRequest();
+                xhr.open('get', url, true);
+                xhr.responseType = 'blob';
+                xhr.onload = function () {
+                    if (this.status === 200) {
+                        e.src =  URL.createObjectURL(this.response);
+                    }
+                };
+                xhr.send();
+            });
+        }
         var pdf = new jspdf.jsPDF('', 'pt', 'a4');
+
+        getImage();
         setTimeout(function() {
             // html2canvas($('.content_form .form_container')[0], {
             //     userCORS: true
@@ -223,8 +243,9 @@
                 // pdf.save('content.pdf');
 
             html2canvas($('.content_form .form_container')[0], {
-                userCORS: true
-            }).then(canvas => {
+                useCORS: true,
+                proxy: 'http://cpa.cqu.edu.cn/'
+            }).then(function(canvas) {
                 document.body.appendChild(canvas);
                 //返回图片dataURL，参数：图片格式和清晰度(0-1)
                 var pageData = canvas.toDataURL('image/jpeg', 1.0);
@@ -233,7 +254,7 @@
                 pdf.addImage(pageData, 'JPEG', 0, 0, 595.28, 592.28/canvas.width * canvas.height );
                 pdf.save('stone.pdf');
             });
-        }, 1000);
+        }, 5000);
     })
 </script>
 
