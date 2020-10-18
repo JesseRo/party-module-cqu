@@ -176,6 +176,7 @@ public class AddPersonResourceCommand implements MVCResourceCommand {
                             + "', \"member_new_class\"='" + classnew + "'  WHERE id='" + id + "'";
 
                     memberDao.insertOrUpate(Updatesql);
+                    u.setUser_department_id(orgId);
                     UserDao.updateUserInfo(u);
                     Member m = memberDao.findById(Integer.valueOf(id));
                     m.setHistoric(true);

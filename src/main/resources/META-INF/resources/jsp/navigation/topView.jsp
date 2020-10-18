@@ -185,8 +185,8 @@
             	   	success:function(result){
           		 		if(result==="4"){
 							// var domain = /^https?:\/\/.*?\//.exec(window.location.href);
-							// window.location.href = 'http://authserver.cqu.edu.cn/authserver/logout?service=' + encodeURI('http://dj.cqu.edu.cn');
-							window.location.href = '/home';
+							window.location.href = 'http://authserver.cqu.edu.cn/authserver/logout?service=' + encodeURI('http://dj.cqu.edu.cn');
+							// window.location.href = '/home';
           		 		}
            	  		}
 				})

@@ -5,6 +5,8 @@
 <portlet:resourceURL id="/org/meeting/page" var="OrgMeetingPage" />
 <portlet:resourceURL id="/api/download" var="downloadUrl" />
 <portlet:resourceURL id="/meetingPlan/sendPhoneMsg" var="sendPhoneMsg" />
+<portlet:resourceURL id="/meeting/delete" var="meetingDelete" />
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -121,9 +123,13 @@
     {{#  if(d.task_status != '0' && d.task_status != '1' && d.task_status != '2' && d.task_status != '3' && d.note_status !='2' && d.note_status !='3' && d.over){ }}
     <a class="layui-btn layui-btn-xs" lay-event="sendPhoneMsg"> 短信通知</a>
     {{#  } }}
+    {{#  if(d.task_status == '0' && d.task_status == '1' || d.task_status == '2' || d.task_status == '3'){ }}
+    <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delete"> 删除</a>
+    {{#  } }}
 </script>
 <script>
     layui.use(['table','layer','form'], function() {
+        var cur = 1;
         var table = layui.table,
             layer = layui.layer,
             form = layui.form;
@@ -131,7 +137,10 @@
         form.on('submit(searchForm)', function (data) {
             renderTable();
         })
-        function renderTable(){
+        function renderTable(curr){
+            if (!curr) {
+                curr = 1
+            }
             var  where = {
                 keyword: $("#searchForm input[name=keyword]").val()
             };
@@ -147,6 +156,7 @@
                     prev:'&lt;上一页',
                     next:'下一页&gt;',
                     theme: '#FFB800',
+                    curr: curr,
                     groups:4
                 },
                 cols: [[ //表头
@@ -195,7 +205,10 @@
                             }
                         }
                     }
-                ]]
+                ]],
+                done: function(res, curr, count){
+                    cur = curr;
+                }
             });
             $(".layui-table-view .layui-table-page").addClass("layui-table-page-center");
             $(".layui-table-view .layui-table-page").removeClass("layui-table-page");
@@ -212,11 +225,31 @@
                     case 'sendPhoneMsg':
                         sendPhoneMsg(obj.data);
                         break;
+                    case 'delete':
+                        deleteMeeting(obj.data.meeting_id);
+                        break;
                 };
             });
         }
-
+        function deleteMeeting(id) {
+            layer.confirm('确认刪除？', {
+                btn: ['确定','取消'] //按钮
+            }, function(){
+                $.ajax({
+                    url:"${meetingDelete}",
+                    data:{meetingId:id},
+                    dataType:'json',
+                    success:function(res){
+                        if(res.code === 200){
+                            layuiModal.alert("已删除");
+                            renderTable(cur);
+                        }
+                    }
+                });
+            });
+        }
     });
+
     function sendPhoneMsg(meetingObj){
         layer.confirm('您确认短信通知所有参会人员吗？', {
             btn: ['确定','取消'] //按钮

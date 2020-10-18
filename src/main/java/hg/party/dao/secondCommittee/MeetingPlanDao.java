@@ -374,4 +374,8 @@ public class MeetingPlanDao extends PostgresqlDaoImpl<MeetingPlan> {
     }
 
 
+    public void deleteByMeetingId(String meetingId) {
+        String sql = "delete from hg_party_meeting_plan_info where meeting_id = ?";
+        this.jdbcTemplate.update(sql, meetingId);
+    }
 }

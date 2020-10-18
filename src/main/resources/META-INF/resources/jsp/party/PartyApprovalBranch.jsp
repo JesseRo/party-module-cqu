@@ -8,6 +8,7 @@
 <portlet:resourceURL id="/PartyRejectedCommand" var="PartyRejected" />
 <portlet:resourceURL id="/part/meeting/page" var="PartyMeetingPage" />
 <portlet:resourceURL id="/PartyPassCommand" var="PartyPass" />
+<portlet:resourceURL id="/meeting/delete" var="meetingDelete" />
 <!DOCTYPE html>
 <html>
 	<head>
@@ -148,11 +149,15 @@
 		<a  class="layui-btn layui-btn-xs" lay-event="reject">
 			驳回</a>
 		{{#  } }}
+
 		<%--		{{#  if(d.task_status == '4' || d.task_status == '5' || d.task_status == '6'){ }}--%>
 <%--		<a class="layui-btn layui-btn-xs" lay-event="edit"> 编辑</a>--%>
 <%--		&lt;%&ndash;<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>&ndash;%&gt;--%>
 <%--		{{#  } }}--%>
 		<a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
+		{{#  if(d.task_status == '1' || d.task_status == '2' || d.task_status == '3'){ }}
+		<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delete"> 删除</a>
+		{{#  } }}
 	</script>
 	<script type="text/javascript">
 		layui.use(['table','layer','form'], function() {
@@ -261,7 +266,27 @@
 						case 'detail':
 							window.location.href='/approvaldetails?meetingId='+obj.data.meeting_id;
 							break;
+						case 'delete':
+							deleteMeeting(obj.data.meeting_id)
+							break;
 					};
+				});
+			}
+			function deleteMeeting(id) {
+				layer.confirm('确认刪除？', {
+					btn: ['确定','取消'] //按钮
+				}, function(){
+					$.ajax({
+						url:"${meetingDelete}",
+						data:{meetingId:id},
+						dataType:'json',
+						success:function(res){
+							if(res.code === 200){
+								layuiModal.alert("已删除");
+								renderTable(pageInfo.page,pageInfo.size);
+							}
+						}
+					});
 				});
 			}
 			function pass(meetingId){

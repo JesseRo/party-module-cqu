@@ -1,5 +1,6 @@
 package party.portlet.login;
 
+import org.springframework.util.StringUtils;
 import org.springframework.web.util.HtmlUtils;
 import party.constants.PartyPortletKeys;
 
@@ -25,6 +26,7 @@ import javax.portlet.PortletPreferences;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -55,6 +57,7 @@ public class Hgg_loginPortlet extends MVCPortlet {
             throws IOException, PortletException {
 //        String sessionId = renderRequest.getRequestedSessionId();
         HttpServletRequest request = PortalUtil.getHttpServletRequest(renderRequest);
+        HttpServletResponse response = PortalUtil.getHttpServletResponse(renderResponse);
 //        /**评论页面的路径*/
 //        String url = PortalUtil.getOriginalServletRequest(request).getParameter("url");
 //        /**资源id及resource_id*/
@@ -82,9 +85,14 @@ public class Hgg_loginPortlet extends MVCPortlet {
         PropertiesUtil propertiesUtil = new PropertiesUtil("/cas.properties");
         Properties properties = propertiesUtil.getResourceProperties();
         String urlAddress = properties.getProperty("casServer");
+        HttpServletRequest servletRequest = PortalUtil.getOriginalServletRequest(request);
+        String cas = servletRequest.getParameter("cas");
         urlAddress += URLEncoder.encode(
                 PortalUtil.getOriginalServletRequest(request).getRequestURL().toString(), "utf-8");
         renderRequest.setAttribute("urlAddress", HtmlUtils.htmlEscape(urlAddress));
+        if (!StringUtils.isEmpty(cas)) {
+            response.sendRedirect(urlAddress);
+        }
         // cas统一身份认证地址
 //		PortletPreferences preferences = renderRequest.getPreferences();
 //		String urlAddress = preferences.getValue("urlAddress", "");

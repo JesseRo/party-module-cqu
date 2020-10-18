@@ -148,7 +148,15 @@
 	<div class="activity_manage_page personal_center_container" style="height: 85vh;">
 		<div class="img_content_container">
 			<div class="icon_container">
-				<img src="../images/person-icon1.png"/>
+				<c:choose>
+					<c:when test="${userInfo.member_sex == '男'}">
+						<img src="../images/person-icon1.png"/>
+					</c:when>
+					<c:otherwise>
+						<img src="../images/person_female.png"/>
+					</c:otherwise>
+				</c:choose>
+
 				<p class="line"></p>
 				<p class="outer_line left_line"></p>
 				<p class="outer_line right_line"></p>

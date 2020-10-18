@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.swing.*;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Component(
         immediate = true,
@@ -61,8 +62,8 @@ public class MeetingNoteDetailPortlet extends MVCPortlet {
         req.setAttribute("meeting", meetingData);
         req.setAttribute("meetingNote", meetingNote);
         List<Member> memberList  = meetingNotesDao.findAttendMember(meetingId);
-        req.setAttribute("memberList", memberList);
-        req.setAttribute("participants", participants);
+        req.setAttribute("memberList", memberList.stream().map(Member::getMember_name).collect(Collectors.joining(",")));
+        req.setAttribute("participants", participants.stream().map(p->(String)p.get("member_name")).collect(Collectors.joining(",")));
         super.doView(req, res);
     }
 }

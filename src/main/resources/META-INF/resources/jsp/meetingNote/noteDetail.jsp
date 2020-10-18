@@ -132,34 +132,21 @@
                         </div>
                         <div class="layui-form-item">
                             <div class="layui-inline">
-                                <label class="layui-form-label">会议考勤：</label>
-                                <div class="layui-input-inline">
-                                    <div class="layui-row member-list">
-                                        <div class="layui-col-md6">
-                                            <div class="layui-card">
-                                                <div class="layui-card-header">应到人员</div>
-                                                <div class="layui-card-body">
-                                                    <ul>
-                                                    <c:forEach var="m" items="${participants }">
-                                                        <li>${m.member_name}</li>
-                                                    </c:forEach>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="layui-col-md6">
-                                            <div class="layui-card">
-                                                <div class="layui-card-header">实到人员</div>
-                                                <div class="layui-card-body">
-                                                    <ul>
-                                                        <c:forEach var="m" items="${memberList }">
-                                                            <li>${m.member_name}</li>
-                                                        </c:forEach>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                <label class="layui-form-label">应到人员：</label>
+                                <div class="layui-input-inline layui-long">
+                                    <label class="layui-form-label-text" style="word-wrap: break-word; width: 100%;">
+                                        ${memberList}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">实到人员：</label>
+                                <div class="layui-input-inline layui-long">
+                                    <label class="layui-form-label-text" style="word-wrap: break-word; width: 100%;">
+                                        ${participants}
+                                    </label>
                                 </div>
                             </div>
                         </div>
