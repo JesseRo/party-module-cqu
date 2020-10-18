@@ -10,14 +10,28 @@
     <style type="text/css">
     </style>
     <script type="text/javascript" >
-        $(function() {
-            var tableObj;
+        var tableObj;
+
+        function audit(state, id, msg) {
+        layuiModal.confirm("确定要" + msg + "吗？", function () {
+            $.post("http://" + document.domain + ':9007/fee/branch/audit', {id: id, state: state}, function (res) {
+                if (res.code === 0) {
+                    layuiModal.alert("已" + msg);
+                    tableObj.reload();
+                } else {
+                    layuiModal.alert(res.message)
+                }
+            })
+        })
+    }
+
+    $(function() {
             layui.use('table', function(){
                 var table = layui.table;
 
                 tableObj = table.render({
                     elem: '#feeTable',
-                    url: "http://" + document.domain + ':9007/fee/member/list', //数据接口
+                    url: "http://" + document.domain + ':9007/fee/branch/audit/list', //数据接口
                     headers: {Authorization: sessionStorage.getItem("sessionKey")},
                     method: 'get',
                     page: {
@@ -29,13 +43,10 @@
                     },
                     cols: [[ //表头
                         {field: 'id', title: 'id', hide: true},
-                        {field: 'name', title: '姓名', width:'12.5%'},
-                        {field: 'orgName', title: '所在组织', width:'12.5%'},
-                        {field: 'feeType', title: '党费类型', width:'12.5%'},
-                        {field: 'yearMonth', title: '交费期间', width: '12.5%'},
-                        {field: 'shouldFee', title: '党费金额', width: '12.5%'},
-                        {field: 'fee', title: '已交金额', width: '12.5%'},
-                        {field: 'feeState', title: '交费状态', width: '12.5%'},
+                        {field: 'memberName', title: '姓名', width:'20%'},
+                        {field: 'orgName', title: '所在组织', width:'20%'},
+                        {field: 'feeType', title: '党费类型', width:'20%'},
+                        {field: 'fee', title: '党费金额', width: '20%'},
                         {field: 'operation', title: '操作', width: '12.5%', toolbar: '#operationButton'}
                     ]],
                     parseData: function(res){ //res 即为原始返回的数据
@@ -59,21 +70,19 @@
             当前位置：
             <span class="layui-breadcrumb" lay-separator=">">
                         <a href="javascript:;">党费管理</a>
-                        <a href="javascript:;">党费列表</a>
+                        <a href="javascript:;">类型审核</a>
                     </span>
         </div>
         <div class="bg_white_container">
-            <div class="operate_form_group">
-                <button type="button" class="layui-btn custom_btn search_btn">历史党费查询</button>
-                <button type="button" class="layui-btn custom_btn search_btn">党员捐款</button>
-            </div>
             <table id="feeTable" lay-filter="feeTable" class="custom_table"></table>
         </div>
     </div>
     <!-- 右侧盒子内容 -->
 </div>
 <script type="text/html" id="operationButton">
-    <a class="layui-btn layui-btn-xs" onclick="window.location.href='/fee_detail?id={{d.id}}&memberId={{d.memberId}}'">详情</a>
+    <a class="layui-btn layui-btn-xs" onclick="window.location.href='/audit_detail?id={{d.id}}'">详情</a>
+    <a class="layui-btn layui-btn-xs" onclick="audit(1, '{{d.id}}', '通过')">通过</a>
+    <a class="layui-btn layui-btn-xs" onclick="audit(2, '{{d.id}}', '驳回')">驳回</a>
 </script>
 </body>
 </html>

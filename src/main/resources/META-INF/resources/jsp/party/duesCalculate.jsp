@@ -187,13 +187,13 @@
 								<div class="layui-form-item">
 									<label class="layui-form-label">月应交党费:</label>
 									<div class="layui-input-block dues">
-										<span class="duesPerMonth">0 元</span>
+										<span class="duesPerMonth"></span>
 									</div>
 								</div>
 								<div class="layui-form-item">
 									<div class="layui-input-block">
 										<button type="submit" class="layui-btn custom_btn" lay-submit="" lay-filter="monthCalForm">计算党费</button>
-										<!-- <button type="reset" class="layui-btn layui-btn-primary">重置</button> -->
+										<button type="button" class="layui-btn layui-btn-primary" onclick="setFeeConfig(this, 1);">设置党费类型</button>
 									</div>
 								</div>
 							</div>
@@ -260,12 +260,13 @@
 								<div class="layui-form-item">
 									<label class="layui-form-label">月应交党费:</label>
 									<div class="layui-input-block dues">
-										<span class="duesPerMonth">0 元</span>
+										<span class="duesPerMonth"></span>
 									</div>
 								</div>
 								<div class="layui-form-item">
 									<div class="layui-input-block">
 										<button type="submit" class="layui-btn custom_btn" lay-submit="" lay-filter="yearCalForm">计算党费</button>
+										<button type="button" class="layui-btn layui-btn-primary" onclick="setFeeConfig(this, 2);">设置党费类型</button>
 									</div>
 								</div>
 							</div>
@@ -368,12 +369,13 @@
 								<div class="layui-form-item">
 									<label class="layui-form-label">月应交党费:</label>
 									<div class="layui-input-block dues">
-										<span class="duesPerMonth">0 元</span>
+										<span class="duesPerMonth"></span>
 									</div>
 								</div>
 								<div class="layui-form-item">
 									<div class="layui-input-block">
 										<button type="submit" class="layui-btn custom_btn" lay-submit="" lay-filter="companyCalForm">计算党费</button>
+										<button type="button" class="layui-btn layui-btn-primary" onclick="setFeeConfig(this, 3);">设置党费类型</button>
 									</div>
 								</div>
 							</div>
@@ -411,7 +413,7 @@
 								<div class="layui-form-item">
 									<div class="layui-input-block">
 										<button type="submit" class="layui-btn custom_btn" lay-submit="" lay-filter="retireEmployeeCalForm">计算党费</button>
-										<!-- <button type="reset" class="layui-btn layui-btn-primary">重置</button> -->
+										<button type="button" class="layui-btn layui-btn-primary" onclick="setFeeConfig(this, 4);">设置党费类型</button>
 									</div>
 								</div>
 							</div>
@@ -426,6 +428,11 @@
 									<div class="layui-input-block dues">
 										<span class="duesPerMonth"></span>
 									</div>
+								</div>
+							</div>
+							<div class="layui-form-item">
+								<div class="layui-input-block">
+									<button type="button" class="layui-btn layui-btn-primary" onclick="setFeeConfig(this, 5);">设置党费类型</button>
 								</div>
 							</div>
 						</div>
@@ -461,20 +468,66 @@
 								<div class="layui-form-item">
 									<div class="layui-input-block">
 										<button type="submit" class="layui-btn custom_btn" lay-submit="" lay-filter="masterCalForm">计算党费</button>
-										<!-- <button type="reset" class="layui-btn layui-btn-primary">重置</button> -->
+										<button type="button" class="layui-btn layui-btn-primary" onclick="setFeeConfig(this, 6);">提交党费设置</button>
 									</div>
 								</div>
 							</div>
 							</form>
 						</div>
-
+						<div class="layui-form-item" style="color: red;"><span style="margin-left: 20px;">当前党费设置：</span><span id="fee_config"></span></div>
+						<div class="layui-form-item" style="color: red;">
+							<span style="margin-left: 20px;">审核状态：</span>
+							<span id="fee_audit_state"></span>
+							<span style="display: none;" id="fee_warning">请重新提交设置</span>
+						</div>
 					</div>
 				</div>
+
 			</div>
 		</div>
 		<!-- 右侧盒子内容 -->
 	</div>
 	<script>
+		var configStatus = {0: "待审核",1: "已通过", 2:"已驳回",4: "已过期"}
+		$(function () {
+			$.get("http://" + document.domain + ':9007/fee/member/fee-config', function (res) {
+				if (res.code === 0) {
+					$('#fee_config').text($('[partyType=' + res.data.type + ']').text() + " " + res.data.fee + " 元/月");
+					$('#fee_audit_state').text(configStatus[res.data.state]);
+					if (res.data.state > 1) {
+						$('#fee_warning').show();
+					}
+				} else if (res.code === -2) {
+					$('#fee_config').text("未设置");
+				} else {
+					layuiModal.alert(res.message)
+				}
+			})
+		})
+		function setFeeConfig(e, type) {
+			if(!type) {
+				return
+			}
+			var el = $(e);
+			var _fee = fee[type];
+			if (_fee) {
+				layuiModal.confirm("确定提交党费设置： " + $('[partyType=' + type + ']').text() + " " + _fee + "元/月", function () {
+					$.post("http://" + document.domain + ':9007/fee/member/fee-config', {
+						type: type,
+						fee: _fee
+					}, function (res) {
+						if (res.code === 0) {
+							layuiModal.alert("已提交设置!");
+							window.location.reload();
+						} else {
+							layuiModal.alert(res.message);
+						}
+					})
+				});
+			} else {
+				layuiModal.alert("请先计算党费");
+			}
+		}
 		layui.config({
 			base: '${basePath}/js/layui/module/'
 		}).extend({
@@ -636,29 +689,32 @@
 			cal(data);
 		}
 
+		var fee = {};
+
 		/*党费计算*/
-		function cal(data){
+		function cal(_data){
 			var url = "${duesCal}";
 			$.ajax({
 				url:url,
-				data:data,
+				data:_data,
 				type:"POST",
 				dataType:'json',
 				async:false,
 				success:function(data){
 					if(data.code == 200){
 						var duesPerMonth = data.data.duesPerMonth;
-						if(data.partyType!=5 && data.partyType!=4){
+						if(_data.partyType!=5 && _data.partyType!=4){
 							var basicDues = data.data.basicDues;
 							var percentDues = data.data.percentDues*100;
 							var personalTax = data.data.personalTax;
 							$(".layui-tab-content .layui-tab-item .layui-input-block .basicDues").text(basicDues.toFixed(2)+"元");
 							$(".layui-tab-content .layui-tab-item .layui-input-block .percentDues").text(percentDues.toFixed(2)+"%");
-							if( data.partyType!=6){
+							if( _data.partyType!=6){
 								$(".layui-tab-content .layui-tab-item .layui-input-block .personalTax").text(personalTax.toFixed(2)+"元");
 							}
 
 						}
+						fee[_data.partyType] = duesPerMonth.toFixed(2);
 						$(".layui-tab-content .layui-tab-item .layui-input-block .duesPerMonth").text(duesPerMonth.toFixed(2)+"元");
 					}
 

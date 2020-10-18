@@ -224,6 +224,12 @@ public class PartyPortletKeys {
 
     //党费管理相关
     public static final String MemberFeeListPortlet = "MemberFeeListPortlet";
+
+    public static final String MemberFeeDetailPortlet = "MemberFeeDetailPortlet";
+
+    public static final String BranchFeeAuditListPortlet = "BranchFeeAuditListPortlet";
+
+    public static final String BranchFeeAuditDetailPortlet = "BranchFeeAuditDetailPortlet";
 }
 
 
