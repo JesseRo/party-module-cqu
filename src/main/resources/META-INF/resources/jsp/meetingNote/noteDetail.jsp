@@ -64,7 +64,7 @@
                     </div>
                 </div>
                 <div class="form_container">
-                    <div class="layui-form custom_form inform-detail"  method="post">
+                    <div class="layui-form custom_form inform-detail" style="width: 900px;" method="post">
                         <div class="layui-form-item">
                             <div class="layui-inline">
                                 <input type="hidden" name="meetingNoteId" value="${meetingNote.id}">
@@ -154,37 +154,38 @@
                             <div class="layui-inline ueditor_container">
                                 <label class="layui-form-label">计划内容：</label>
                                 <div class="layui-input-inline layui-form-label-text layui-long">
-                                    <p>&nbsp;&nbsp;&nbsp;</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="layui-form-item">
-                            <div class="layui-inline ueditor_container">
-                                <div class="layui-input-inline layui-form-label-text layui-long">
                                     ${meeting.content }
                                 </div>
                             </div>
                         </div>
+<%--                        <div class="layui-form-item">--%>
+<%--                            <div class="layui-inline ueditor_container">--%>
+<%--                                <div class="layui-input-inline layui-form-label-text layui-long">--%>
+<%--                                    ${meeting.content }--%>
+<%--                                </div>--%>
+<%--                            </div>--%>
+<%--                        </div>--%>
                         <div class="layui-form-item">
                             <div class="layui-inline ueditor_container">
                                 <label class="layui-form-label">会议纪要：</label>
-                                <div class="layui-input-inline layui-form-label-text layui-long">
-                                    <p>&nbsp;&nbsp;&nbsp;</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="layui-form-item">
-                            <div class="layui-inline ueditor_container">
                                 <div class="layui-input-inline layui-form-label-text layui-long">
                                     ${meetingNote.attachment }
                                 </div>
                             </div>
                         </div>
+<%--                        <div class="layui-form-item">--%>
+<%--                            <div class="layui-inline ueditor_container">--%>
+<%--                                <div class="layui-input-inline layui-form-label-text layui-long">--%>
+<%--                                    ${meetingNote.attachment }--%>
+<%--                                </div>--%>
+<%--                            </div>--%>
+<%--                        </div>--%>
                         <div class="layui-form-item">
                             <div class="layui-inline btn_group">
                                 <label class="layui-form-label"></label>
                                 <div class="layui-input-inline">
                                     <button type="button" class="layui-btn layui-btn-primary" onclick="window.history.back();">返回</button>
+                                    <button type="button" class="layui-btn layui-btn-warm" id="pdf_button">导出pdf</button>
                                 </div>
                             </div>
                         </div>
@@ -198,7 +199,54 @@
 <script type="text/javascript" src="${basePath}/js/jspdf.umd.min.js"></script>
 <script>
     $(function () {
+        var pdf = new jspdf.jsPDF('', 'pt', 'a4');
 
+        $('.ueditor_container').find('img').each(function (i, e) {
+            var url = $(e).attr('src');
+            $(e).attr("width", 500);
+            if (url.indexOf(document.location.host) !== -1) {
+                return;
+            }
+            $(e).attr("src", 'http://' + document.location.hostname + ':9007/proxy?target=' + encodeURIComponent(url));
+        });
+
+        function renderPdf(children, i, lastHeight, currentPageHeight) {
+            html2canvas(children[i], {useCORS: true}).then(canvas => {
+                var contentWidth = canvas.width;
+                var contentHeight = canvas.height;
+                var pageHeight = contentWidth / 492.28 * 741.89;
+                var nextPageHeight = currentPageHeight;
+                //一页pdf显示html页面生成的canvas高度;
+                if (contentHeight > 0) {
+                    if (currentPageHeight < lastHeight + contentHeight) {
+                        if (i > 0) {
+                            pdf.addPage();
+                        }
+                        pdf.addImage(canvas.toDataURL('image/jpeg', 1.0), 'JPEG', 50, 50, 495.28, (contentHeight / contentWidth) * 495.28);
+                        nextPageHeight += pageHeight;
+                        lastHeight = currentPageHeight + contentHeight;
+                    } else {
+                        pdf.addImage(canvas.toDataURL('image/jpeg', 1.0), 'JPEG', 50, 50 + ((lastHeight - currentPageHeight + pageHeight) / contentWidth) * 495.28, 495.28, (contentHeight / contentWidth) * 495.28);
+                        lastHeight += contentHeight;
+                    }
+                }
+                if (i + 1 < children.length) {
+                    renderPdf(children, i + 1, lastHeight, nextPageHeight)
+                } else {
+                    pdf.save('stone.pdf');
+                }
+            });
+        }
+
+
+        $('#pdf_button').on('click', function () {
+            var children = $('.inform-detail').children();
+            var doms = [];
+            for (var i = 0; i < children.length - 1; i++) {
+                doms.push(children[i])
+            }
+            renderPdf(doms, 0, 0, 0);
+        })
     })
 </script>
 
