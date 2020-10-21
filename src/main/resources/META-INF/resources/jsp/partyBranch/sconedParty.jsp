@@ -117,7 +117,7 @@
     </style>
     <link rel="stylesheet" href="${basePath}/js/layui/css/modules/multiSelect/multi-select.css"/>
     <link rel="stylesheet" href="${basePath}/js/layui/css/modules/checkbox/checkbox.css?version=98"/>
-    <script type="text/javascript" src="${basePath}/js/utf8-jsp/ueditor.config-thumb.js?v=4"></script>
+    <script type="text/javascript" src="${basePath}/js/utf8-jsp/ueditor.config-thumb.js?v=5"></script>
     <script type="text/javascript" src="${basePath}/js/utf8-jsp/ueditor.all.js"></script>
     <script type="text/javascript" charset="utf-8" src="${ basePath }/js/utf8-jsp/lang/zh-cn/zh-cn.js"></script>
     <link rel="stylesheet" href="${basePath }/js/utf8-jsp/themes/default/css/ueditor.css"/>
