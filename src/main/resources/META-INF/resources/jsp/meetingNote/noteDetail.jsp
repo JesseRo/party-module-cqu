@@ -135,7 +135,7 @@
                                 <label class="layui-form-label">应到人员：</label>
                                 <div class="layui-input-inline layui-long">
                                     <label class="layui-form-label-text" style="word-wrap: break-word; width: 100%;">
-                                        ${memberList}
+                                        ${participants}
                                     </label>
                                 </div>
                             </div>
@@ -145,7 +145,7 @@
                                 <label class="layui-form-label">实到人员：</label>
                                 <div class="layui-input-inline layui-long">
                                     <label class="layui-form-label-text" style="word-wrap: break-word; width: 100%;">
-                                        ${participants}
+                                        ${memberList}
                                     </label>
                                 </div>
                             </div>
@@ -184,77 +184,7 @@
 <script type="text/javascript" src="${basePath}/js/jspdf.umd.min.js"></script>
 <script>
     $(function () {
-        function getImage() {
-            $('.content_form .form_container').eq(0).find('img').each(function(i, e) {
-                var url = $(e).attr('src');
-                $(e).attr("width", 400);
-                if (url.startsWith(document.location.host)) {
-                    return;
-                }
-                var xhr = new XMLHttpRequest();
-                xhr.open('get', url, true);
-                xhr.responseType = 'blob';
-                xhr.onload = function () {
-                    if (this.status === 200) {
-                        e.src =  URL.createObjectURL(this.response);
-                    }
-                };
-                xhr.send();
-            });
-        }
-        var pdf = new jspdf.jsPDF('', 'pt', 'a4');
 
-        getImage();
-        setTimeout(function() {
-            // html2canvas($('.content_form .form_container')[0], {
-            //     userCORS: true
-            // }).then(function(canvas) {
-                // var contentWidth = canvas.width;
-                // var contentHeight = canvas.height;
-                //
-                // //一页pdf显示html页面生成的canvas高度;
-                // var pageHeight = contentWidth / 592.28 * 841.89;
-                // //未生成pdf的html页面高度
-                // var leftHeight = contentHeight;
-                // //页面偏移
-                // var position = 0;
-                // //a4纸的尺寸[595.28,841.89]，html页面生成的canvas在pdf中图片的宽高
-                // var imgWidth = 595.28;
-                // var imgHeight = 592.28/contentWidth * contentHeight;
-                //
-                // var pageData = canvas.toDataURL('image/jpeg', 1.0);
-                //
-                // //有两个高度需要区分，一个是html页面的实际高度，和生成pdf的页面高度(841.89)
-                // //当内容未超过pdf一页显示的范围，无需分页
-                // if (leftHeight < pageHeight) {
-                //     pdf.addImage(pageData, 'JPEG', 0, 0, imgWidth, imgHeight );
-                // } else {
-                //     while(leftHeight > 0) {
-                //         pdf.addImage(pageData, 'JPEG', 0, position, imgWidth, imgHeight)
-                //         leftHeight -= pageHeight;
-                //         position -= 841.89;
-                //         //避免添加空白页
-                //         if(leftHeight > 0) {
-                //             pdf.addPage();
-                //         }
-                //     }
-                // }
-                //
-                // pdf.save('content.pdf');
-
-            html2canvas($('.content_form .form_container')[0], {
-                useCORS: true,
-                proxy: 'http://cpa.cqu.edu.cn/'
-            }).then(function(canvas) {
-                document.body.appendChild(canvas);
-                //返回图片dataURL，参数：图片格式和清晰度(0-1)
-                var pageData = canvas.toDataURL('image/jpeg', 1.0);
-                //方向默认竖直，尺寸ponits，格式a4[595.28,841.89]
-                //addImage后两个参数控制添加图片的尺寸，此处将页面高度按照a4纸宽高比列进行压缩
-                pdf.addImage(pageData, 'JPEG', 0, 0, 595.28, 592.28/canvas.width * canvas.height );
-                pdf.save('stone.pdf');
-            });
-        }, 5000);
     })
 </script>
 

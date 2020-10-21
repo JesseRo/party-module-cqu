@@ -123,9 +123,9 @@ public class MeetingCount implements MVCResourceCommand {
 			}else {
 				headMap.put("branch_name", "党支部");
 				headMap.put("meeting_type", "会议类型");
-				headMap.put("meeting_theme_secondary", "开展主题");
+				headMap.put("meeting_theme", "开展主题");
 				headMap.put("start_time", "开展时间");
-				headMap.put("contact_name", "联系人");
+				headMap.put("contact", "联系人");
 				headMap.put("plan_state", "任务状态");
 			}
             String datePattern = "yyyy-MM-dd HH:ss:mm";

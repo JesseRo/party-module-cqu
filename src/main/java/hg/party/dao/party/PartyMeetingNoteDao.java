@@ -68,7 +68,7 @@ public class PartyMeetingNoteDao extends HgPostgresqlDaoImpl<MeetingNote> {
 		StringBuffer sb = new StringBuffer("select plan.*,note.id as note_id,note.status note_status,org.org_name,m.member_name,m.member_phone_number");
 		sb.append(" from  hg_party_meeting_notes_info note ");
 		sb.append(" left join hg_party_meeting_plan_info plan on plan.meeting_id = note.meeting_id");
-		sb.append(" LEFT JOIN hg_party_org org ON org.org_id = plan.organization_id");
+		sb.append(" LEFT JOIN hg_party_org org ON org.org_id = plan.organization_id and org.historic = false ");
 		sb.append(" LEFT JOIN hg_party_member m ON plan.contact = m.member_identity");
 		sb.append(" where 1=1 and note.status > 0");
 		switch(partyOrgAdminTypeEnum){
@@ -85,9 +85,9 @@ public class PartyMeetingNoteDao extends HgPostgresqlDaoImpl<MeetingNote> {
 		}
 		if(!StringUtils.isEmpty(search)){
 			search = "%" + search + "%";
-			sb.append(" and (meeting_type like ? or meeting_theme like ?)");
+			sb.append(" and (meeting_type like ? or meeting_theme like ? or org.org_name like ?)");
 			sb.append(" order by plan.id desc");
-			return postGresqlFindPageBySql(page, size, sb.toString(),orgId,search,search);
+			return postGresqlFindPageBySql(page, size, sb.toString(),orgId,search,search, search);
 		}else{
 			sb.append(" order by plan.id desc");
 			return postGresqlFindPageBySql(page, size, sb.toString(),orgId);

@@ -174,7 +174,7 @@
                 <div class="layui-form-item">
                     <div class="layui-inline">
                         <div class="layui-input-inline keyword">
-                            <input type="text" name="keyword"  placeholder="请输入组织名称、主题关键字" class="layui-input">
+                            <input type="text" name="keyword"  placeholder="请输入会议类型、主题关键字" class="layui-input">
                         </div>
                         <button type="button"  class="layui-btn layui-btn-warm"  lay-submit="" lay-filter="searchForm"><icon class="layui-icon layui-icon-search"></icon>搜索</button>
                     </div>

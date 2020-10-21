@@ -135,8 +135,8 @@
             <div class="layui-input-inline">
                 <select name="speaker" lay-search="" lay-verify="select" lay-filter="speaker" placeholder="可搜索可输入">
                     <option value="">请选择</option>
-                    <c:forEach var="m" items="${members}">
-                        <option value="${m.member_identity}" phone="${m.member_phone_number}">${m.member_name}</option>
+                    <c:forEach var="m" items="${leaders}">
+                        <option value="${m.member_identity}">${m.member_name} [${m.org_name}]</option>
                     </c:forEach>
                 </select>
             </div>
