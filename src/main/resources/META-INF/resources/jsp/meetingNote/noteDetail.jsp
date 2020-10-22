@@ -70,13 +70,13 @@
                                 <input type="hidden" name="meetingNoteId" value="${meetingNote.id}">
                                 <label class="layui-form-label">党组织：</label>
                                 <div class="layui-input-inline">
-                                    <label class="layui-form-label-text">${meeting.sname }</label>
+                                    <label class="layui-form-label-text" id="org_name">${meeting.sname }</label>
                                 </div>
                             </div>
                             <div class="layui-inline">
                                 <label class="layui-form-label">会议类型：</label>
                                 <div class="layui-input-inline">
-                                    <label class="layui-form-label-text">${meeting.meeting_type }</label>
+                                    <label class="layui-form-label-text" id="meeting_type">${meeting.meeting_type }</label>
                                 </div>
                             </div>
                         </div>
@@ -84,7 +84,7 @@
                             <div class="layui-inline">
                                 <label class="layui-form-label">会议主题：</label>
                                 <div class="layui-input-inline layui-long">
-                                    <label class="layui-form-label-text" style="width: 100%;">${meeting.meeting_theme }</label>
+                                    <label class="layui-form-label-text" style="width: 100%;" id="meeting_theme">${meeting.meeting_theme }</label>
                                 </div>
                             </div>
                         </div>
@@ -154,32 +154,32 @@
                             <div class="layui-inline ueditor_container">
                                 <label class="layui-form-label">计划内容：</label>
                                 <div class="layui-input-inline layui-form-label-text layui-long">
+                                    <p>&nbsp;&nbsp;&nbsp;</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-inline ueditor_container">
+                                <div class="layui-input-inline layui-form-label-text layui-long">
                                     ${meeting.content }
                                 </div>
                             </div>
                         </div>
-<%--                        <div class="layui-form-item">--%>
-<%--                            <div class="layui-inline ueditor_container">--%>
-<%--                                <div class="layui-input-inline layui-form-label-text layui-long">--%>
-<%--                                    ${meeting.content }--%>
-<%--                                </div>--%>
-<%--                            </div>--%>
-<%--                        </div>--%>
                         <div class="layui-form-item">
                             <div class="layui-inline ueditor_container">
                                 <label class="layui-form-label">会议纪要：</label>
+                                <div class="layui-input-inline layui-form-label-text layui-long">
+                                    <p>&nbsp;&nbsp;&nbsp;</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-inline ueditor_container">
                                 <div class="layui-input-inline layui-form-label-text layui-long">
                                     ${meetingNote.attachment }
                                 </div>
                             </div>
                         </div>
-<%--                        <div class="layui-form-item">--%>
-<%--                            <div class="layui-inline ueditor_container">--%>
-<%--                                <div class="layui-input-inline layui-form-label-text layui-long">--%>
-<%--                                    ${meetingNote.attachment }--%>
-<%--                                </div>--%>
-<%--                            </div>--%>
-<%--                        </div>--%>
                         <div class="layui-form-item">
                             <div class="layui-inline btn_group">
                                 <label class="layui-form-label"></label>
@@ -200,6 +200,9 @@
 <script>
     $(function () {
         var pdf = new jspdf.jsPDF('', 'pt', 'a4');
+        var px = $('.inform-detail').css("width");
+        var contentWidth = px.substr(0, px.length - 2);
+        var marginWidth = 82;
 
         $('.ueditor_container').find('img').each(function (i, e) {
             var url = $(e).attr('src');
@@ -207,14 +210,15 @@
             if (url.indexOf(document.location.host) !== -1) {
                 return;
             }
-            $(e).attr("src", 'http://' + document.location.hostname + ':9007/proxy?target=' + encodeURIComponent(url));
+            $(e).attr("src", 'http://' + document.location.hostname + '/party_fee/proxy?target=' + encodeURIComponent(url));
         });
 
         function renderPdf(children, i, lastHeight, currentPageHeight) {
             html2canvas(children[i], {useCORS: true}).then(canvas => {
-                var contentWidth = canvas.width;
+                var currentContentWidth = canvas.width;
                 var contentHeight = canvas.height;
-                var pageHeight = contentWidth / 492.28 * 741.89;
+                var rate = contentWidth / 495.28;
+                var pageHeight = rate * 741.89;
                 var nextPageHeight = currentPageHeight;
                 //一页pdf显示html页面生成的canvas高度;
                 if (contentHeight > 0) {
@@ -222,18 +226,18 @@
                         if (i > 0) {
                             pdf.addPage();
                         }
-                        pdf.addImage(canvas.toDataURL('image/jpeg', 1.0), 'JPEG', 50, 50, 495.28, (contentHeight / contentWidth) * 495.28);
+                        pdf.addImage(canvas.toDataURL('image/jpeg', 1.0), 'JPEG', marginWidth, 50, marginWidth + currentContentWidth / rate, contentHeight / rate);
                         nextPageHeight += pageHeight;
                         lastHeight = currentPageHeight + contentHeight;
                     } else {
-                        pdf.addImage(canvas.toDataURL('image/jpeg', 1.0), 'JPEG', 50, 50 + ((lastHeight - currentPageHeight + pageHeight) / contentWidth) * 495.28, 495.28, (contentHeight / contentWidth) * 495.28);
+                        pdf.addImage(canvas.toDataURL('image/jpeg', 1.0), 'JPEG', marginWidth, 50 + (lastHeight - currentPageHeight + pageHeight) / rate, marginWidth + currentContentWidth / rate, contentHeight / rate);
                         lastHeight += contentHeight;
                     }
                 }
                 if (i + 1 < children.length) {
                     renderPdf(children, i + 1, lastHeight, nextPageHeight)
                 } else {
-                    pdf.save('stone.pdf');
+                    pdf.save($('#org_name').text() + $('#meeting_type').text() + ':' + $('#meeting_theme').text());
                 }
             });
         }
@@ -242,8 +246,25 @@
         $('#pdf_button').on('click', function () {
             var children = $('.inform-detail').children();
             var doms = [];
-            for (var i = 0; i < children.length - 1; i++) {
-                doms.push(children[i])
+            var length = children.length;
+            var note = children[length - 2];
+            var noteTitle = children[length - 3];
+            var meeting = children[length - 4];
+            var meetingTitle = children[length - 5];
+            for(var i = 0; i < length - 5; i++) {
+                doms.push(children[i]);
+            }
+            doms.push(meetingTitle);
+            var meetingDoms = $(meeting).find('.layui-long').children();
+            var meetingLength = meetingDoms.length;
+            for(var j = 0; j < meetingLength; j++) {
+                doms.push(meetingDoms[j]);
+            }
+            doms.push(noteTitle);
+            var noteDoms = $(note).find('.layui-long').children();
+            var noteLength = noteDoms.length;
+            for(j = 0; j < noteLength; j++) {
+                doms.push(noteDoms[j]);
             }
             renderPdf(doms, 0, 0, 0);
         })
