@@ -87,8 +87,9 @@ public class Hgg_loginPortlet extends MVCPortlet {
         String urlAddress = properties.getProperty("casServer");
         HttpServletRequest servletRequest = PortalUtil.getOriginalServletRequest(request);
         String cas = servletRequest.getParameter("cas");
-        urlAddress += URLEncoder.encode(
-                PortalUtil.getOriginalServletRequest(request).getRequestURL().toString(), "utf-8");
+//        urlAddress += URLEncoder.encode(
+//                PortalUtil.getOriginalServletRequest(request).getRequestURL().toString(), "utf-8");
+        urlAddress += URLEncoder.encode(properties.getProperty("serverName") + "/", "utf-8");
         renderRequest.setAttribute("urlAddress", HtmlUtils.htmlEscape(urlAddress));
         if (!StringUtils.isEmpty(cas)) {
             response.sendRedirect(urlAddress);
