@@ -227,9 +227,30 @@ public class PartyPortletKeys {
 
     public static final String MemberFeeDetailPortlet = "MemberFeeDetailPortlet";
 
+    public static final String MemberFeeStatisticsPortlet = "MemberFeeStatisticsPortlet";
+
+    public static final String MemberDonateListPortlet = "MemberDonateListPortlet";
+
+    public static final String MemberDonateDetailPortlet = "MemberDonateDetailPortlet";
+
     public static final String BranchFeeAuditListPortlet = "BranchFeeAuditListPortlet";
 
     public static final String BranchFeeAuditDetailPortlet = "BranchFeeAuditDetailPortlet";
+
+    public static final String BranchFeeListPortlet = "BranchFeeListPortlet";
+
+    public static final String BranchFeeStatisticsPortlet = "BranchFeeStatisticsPortlet";
+
+    public static final String BranchDonateStatisticsPortlet = "BranchDonateStatisticsPortlet";
+
+    public static final String SecondaryDonateStatisticsPortlet = "SecondaryDonateStatisticsPortlet";
+
+    public static final String SecondaryFeeStatisticsPortlet = "SecondaryFeeStatisticsPortlet";
+
+    public static final String SchoolDonateListPortlet = "SchoolDonateListPortlet";
+
+    public static final String SchoolDonateTaskPortlet = "SchoolDonateTaskPortlet";
+
 }
 
 

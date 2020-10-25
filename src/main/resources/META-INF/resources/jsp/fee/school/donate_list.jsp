@@ -17,7 +17,7 @@
 
                 tableObj = table.render({
                     elem: '#feeTable',
-                    url: "http://" + document.domain + ':9007/fee/member/list', //数据接口
+                    url: "http://" + document.domain + ':9007/fee/school/donate/list', //数据接口
                     headers: {Authorization: sessionStorage.getItem("sessionKey")},
                     method: 'get',
                     page: {
@@ -29,14 +29,12 @@
                     },
                     cols: [[ //表头
                         {field: 'id', title: 'id', hide: true},
-                        {field: 'name', title: '姓名', width:'12.5%'},
-                        {field: 'orgName', title: '所在组织', width:'12.5%'},
-                        {field: 'feeType', title: '党费类型', width:'12.5%'},
-                        {field: 'yearMonth', title: '交费期间', width: '12.5%'},
-                        {field: 'shouldFee', title: '党费金额', width: '12.5%'},
-                        {field: 'fee', title: '已交金额', width: '12.5%'},
-                        {field: 'feeState', title: '交费状态', width: '12.5%'},
-                        {field: 'operation', title: '操作', width: '12.5%', toolbar: '#operationButton'}
+                        {field: 'secondaryName', title: '二级党组织', width:'16.6%'},
+                        {field: 'secretary', title: '党组织书记', width:'16.6%'},
+                        {field: 'memberCount', title: '党组织人数', width:'16.6%'},
+                        {field: 'title', title: '捐款项目', width:'16.6%'},
+                        {field: 'donateCount', title: '已捐人数', width:'16.6%'},
+                        {field: 'amount', title: '捐款金额', width:'16.6%'},
                     ]],
                     parseData: function(res){ //res 即为原始返回的数据
                         return {
@@ -59,23 +57,18 @@
             当前位置：
             <span class="layui-breadcrumb" lay-separator=">">
                         <a href="javascript:;">党费管理</a>
-                        <a href="javascript:;">党费列表</a>
+                        <a href="javascript:;">党员捐款</a>
                     </span>
         </div>
         <div class="bg_white_container">
             <div class="operate_form_group">
                 <button type="button" class="layui-btn custom_btn search_btn"
-                        onclick="window.location.href='/member_fee_statistics'">历史党费查询</button>
-                <button type="button" class="layui-btn custom_btn search_btn"
-                        onclick="window.location.href='/member_donate_list'">党员捐款</button>
+                        onclick="window.location.href='/school_donate_task'">新建党员捐钱</button>
             </div>
             <table id="feeTable" lay-filter="feeTable" class="custom_table"></table>
         </div>
     </div>
     <!-- 右侧盒子内容 -->
 </div>
-<script type="text/html" id="operationButton">
-    <a class="layui-btn layui-btn-xs" onclick="window.location.href='/fee_detail?id={{d.id}}&memberId={{d.memberId}}'">详情</a>
-</script>
 </body>
 </html>
