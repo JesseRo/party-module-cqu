@@ -30,10 +30,26 @@
 				font-size: 16px;
 				text-align: left;
 			}
+			.layui-form-label {
+				width: 110px;
+			}
+			.layui-input-block {
+				width: 500px;
+			}
 		 </style>
 	</head>
 	<body>
 	<script>
+		function getQueryVariable(variable)
+		{
+			var query = window.location.search.substring(1);
+			var vars = query.split("&");
+			for (var i=0;i<vars.length;i++) {
+				var pair = vars[i].split("=");
+				if(pair[0] == variable){return pair[1];}
+			}
+		}
+
 		$(function () {
 			function toDateStr(date){
 				if (date.year) {
@@ -45,9 +61,10 @@
 			layui.use(['upload', 'laydate', 'transfer', 'form'], function() {
 				var upload = layui.upload;
 				var transfer = layui.transfer;
+				var form = layui.form;
 				upload.render({
 					elem: '#upload_button'
-					,url: 'http://' + window.location.host + ":9007/app/file/upload" //改成您自己的上传接口
+					,url: 'http://' + window.location.hostname + ":9007/app/file/upload" //改成您自己的上传接口
 					,accept: 'file' //普通文件
 					,done: function(res){
 						$('#donate_file').val(res.data);
@@ -69,21 +86,19 @@
 						endDate = toDateStr(e);
 					}
 				});
-
-				$.post('http://' + window.location.host + ":9007/fee/school/donate/org", function (res) {
-					if (res.code === 200) {
+				var id = getQueryVariable('id');
+				$.post('http://' + window.location.hostname + ":9007/fee/school/donate/org", {id: id}, function (res) {
+					if (res.code === 0) {
 						transfer.render({
 							elem: '#donate_range',
-							title: ['应到人员', '实到人员'],
-							height: 210,
-							id: 'attendance',
+							title: ['二级党组织', '已选组织'],
+							height: 400,
+							id: 'donate_range',
 							data: res.data.all,
 							value: res.data.selected
 						});
-						transfer.render({
-							elem: '#donate_range'
-							,data: res.data
-						})
+					} else {
+						layuiModal.alert(res.message);
 					}
 				})
 
@@ -95,22 +110,31 @@
 						postData.endDate = endDate;
 						postData.comment = data.field.comment;
 						postData.file = $('#donate_file').val();
-						postData.org = transfer.getData('donate_range')
-								.map(function(att){return att.value})
+						var org = transfer.getData('donate_range');
+						if (org && org.length > 0) {
+							postData.org = org.map(function(att){return att.value})
+						} else {
+							layuiModal.alert("请选择捐款范围");
+							return false;
+						}
+
 						$.ajax({
 							'type': 'POST',
-							'url': 'http://' + window.location.host + ":9007/fee/school/donate/task",
+							'url': 'http://' + window.location.hostname + ":9007/fee/school/donate/task",
 							'contentType': 'application/json; charset=utf-8',
-							'data': JSON.stringify(data),
+							'data': JSON.stringify(postData),
 							'dataType': 'json',
 							'success': function (res) {
-								if (res.code === 200) {
+								if (res.code === 0) {
 									layuiModal.alert("发布成功");
+									window.location.href = '/school_donate_list'
 								}else {
 									layuiModal.alert(res.message);
 								}
 							}
 						});
+					} else {
+						layuiModal.alert("请选择起止日期")
 					}
 
 					return false;
@@ -131,20 +155,20 @@
 			<div class="bg_white_container release_event_form">
 				<form class="layui-form form-horizontal new_publish_form" action="" id="donate_form">
 					<div class="layui-form-item">
-						<label class="layui-form-label">捐款项目</label>
+						<label class="layui-form-label layui-required">捐款项目</label>
 						<div class="layui-input-block">
-							<input type="text" name="title" lay-verify="title" autocomplete="off"
+							<input type="text" name="title" lay-verify="title|required" autocomplete="off"
 								   placeholder="捐款批次/类型说明" class="layui-input">
 						</div>
 					</div>
-					<div class="layui-inline">
-						<label class="layui-form-label">起止时间</label>
+					<div class="layui-form-item">
+						<label class="layui-form-label layui-required">起止时间</label>
 						<div class="layui-input-inline">
-							<input type="text" name="date" id="date_range" autocomplete="off" class="layui-input">
+							<input type="text" name="date" id="date_range" autocomplete="off" class="layui-input" lay-verify="title|required">
 						</div>
 					</div>
 					<div class="layui-form-item layui-form-text">
-						<label class="layui-form-label">捐款说明</label>
+						<label class="layui-form-label layui-required">捐款说明</label>
 						<div class="layui-input-block">
 							<textarea placeholder="请输入捐款说明" name="comment" class="layui-textarea"></textarea>
 						</div>
@@ -157,14 +181,14 @@
 						</div>
 					</div>
 					<div class="layui-form-item">
-						<label class="layui-form-label">捐款范围</label>
+						<label class="layui-form-label layui-required">捐款范围</label>
 						<div class="layui-input-block">
-							<div id="test1" class="demo-transfer" id="donate_range"></div>
+							<div class="demo-transfer" id="donate_range"></div>
 						</div>
 					</div>
 					<div class="layui-form-item">
 						<div class="layui-input-block">
-							<button type="button" class="layui-btn" lay-submit="" lay-filter="submit">立即提交</button>
+							<button type="button" class="layui-btn layui-btn layui-btn-warm" lay-submit="" lay-filter="submit">立即提交</button>
 							<button type="button" class="layui-btn layui-btn-primary" onclick="window.history.back();">返回</button>
 						</div>
 					</div>

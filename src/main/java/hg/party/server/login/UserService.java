@@ -149,7 +149,7 @@ public class UserService {
         userInfo.setUserId(user.getId());
         userInfo.setOrgType(orgType);
         Jedis jedis = cacheCore.getJedis();
-        jedis.hsetnx(String.format("baixun:session:%s", MD5.getMD5(sessionId)), USER_INFO_KEY, JSONObject.toJSONString(userInfo));
+        jedis.hset(String.format("baixun:session:%s", MD5.getMD5(sessionId)), USER_INFO_KEY, JSONObject.toJSONString(userInfo));
         jedis.close();
         //判断是否是第一次登陆
         boolean bool = isFirstLogin(userName, name);

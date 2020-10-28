@@ -34,19 +34,42 @@
 	</head>
 	<body>
 	<script>
+		function getQueryVariable(variable)
+		{
+			var query = window.location.search.substring(1);
+			var vars = query.split("&");
+			for (var i=0;i<vars.length;i++) {
+				var pair = vars[i].split("=");
+				if(pair[0] == variable){return pair[1];}
+			}
+		}
+		function audit(state, id, msg) {
+			layuiModal.confirm("确定要" + msg + "吗？", function () {
+				$.post("http://" + document.domain + ':9007/fee/branch/audit', {id: id, state: state}, function (res) {
+					if (res.code === 0) {
+						layuiModal.alert("已" + msg);
+						tableObj.reload();
+					} else {
+						layuiModal.alert(res.message)
+					}
+				})
+			})
+		}
 		$(function () {
-			$.get("http://" + document.domain + ':9007/fee/member/fee-detail?id=${id}', function (res) {
+			$.get("http://" + document.domain + ':9007/fee/member/fee-detail?id=' + getQueryVariable('id'), function (res) {
 				if (res.code === 0) {
 					if (!res.data.feeState) {
 						$('#button_pay').show();
 					}
 					$('#member_name').text(res.data.name);
 					$('#member_org').text(res.data.secondaryName + res.data.orgName);
-					$('#fee_type').text(res.data.yearMonth + '党费缴纳通知');
-					$('.fee_amount').text(res.data.shouldFee + '元');
-					$('#fee_yearMonth').text(res.data.yearMonth);
-					$('#end_time').text(res.data.endDate);
-					$('#fee_state').text(res.data.feeState ? '已缴费' : '未缴费');
+					$('#config_type').text(res.data.feeTypeName);
+					$('#fee_amount').text(res.data.fee + '元');
+					$('#fee_state').text(res.data.stateName);
+					if (res.data.state !== 0) {
+						$('#button_pass').hide();
+						$('#button_reject').hide();
+					}
 				} else {
 					layuiModal.alert(res.message);
 				}
@@ -83,13 +106,17 @@
 							<p class="layui-col-xs6 layui-col-sm6 layui-col-md6"><span>党费金额</span></p>
 							<p class="layui-col-xs6 layui-col-sm6 layui-col-md6"><span id="fee_amount"></span>元/月</p>
 						</div>
+						<div class="layui-form-item layui-row" >
+							<p class="layui-col-xs6 layui-col-sm6 layui-col-md6"><span>审核状态</span></p>
+							<p class="layui-col-xs6 layui-col-sm6 layui-col-md6"><span style="color: red;" id="fee_state"></span></p>
+						</div>
 						<div class="layui-form-item layui-row">
 							<button type="button" id="button_pass"
-									class="layui-btn layui-btn-primary" style="display:none; background-color: transparent;color: #666;padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;border-radius: 4px;">
+									class="layui-btn layui-btn-warm" onclick="audit(1, '{{d.id}}', '通过')">
 								通过
 							</button>
-							<button type="button" id="button_reject"
-									class="layui-btn layui-btn-primary" style="background-color: transparent;color: #666;padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;border-radius: 4px;">
+							<button type="button" id="button_reject" onclick="audit(1, '{{d.id}}', '驳回')"
+									class="layui-btn layui-btn-danger" style="background-color: transparent;color: #666;padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;border-radius: 4px;">
 								驳回
 							</button>
 							<button type="button" onclick="window.history.back();"

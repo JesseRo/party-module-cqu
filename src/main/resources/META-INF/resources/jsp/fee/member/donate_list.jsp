@@ -17,7 +17,7 @@
 
                 tableObj = table.render({
                     elem: '#feeTable',
-                    url: "http://" + document.domain + ':9007/fee/member/list', //数据接口
+                    url: "http://" + document.domain + ':9007/fee/member/donate/list', //数据接口
                     headers: {Authorization: sessionStorage.getItem("sessionKey")},
                     method: 'get',
                     page: {
@@ -29,14 +29,12 @@
                     },
                     cols: [[ //表头
                         {field: 'id', title: 'id', hide: true},
-                        {field: 'name', title: '姓名', width:'12.5%'},
-                        {field: 'orgName', title: '所在组织', width:'12.5%'},
-                        {field: 'feeType', title: '党费类型', width:'12.5%'},
-                        {field: 'yearMonth', title: '交费期间', width: '12.5%'},
-                        {field: 'shouldFee', title: '党费金额', width: '12.5%'},
-                        {field: 'fee', title: '已交金额', width: '12.5%'},
-                        {field: 'feeState', title: '交费状态', width: '12.5%'},
-                        {field: 'operation', title: '操作', width: '12.5%', toolbar: '#operationButton'}
+                        {field: 'title', title: '捐款项目', width:'35%'},
+                        {field: 'endTime', title: '捐款截止时间', width:'25%'},
+                        {field: 'state', title: '状态', width:'25%', templet: function (d) {
+                                return ['未开始', '进行中', '已结束'][d.state]
+                            }},
+                        {field: 'operation', title: '操作', width: '15%', toolbar: '#operationButton'}
                     ]],
                     parseData: function(res){ //res 即为原始返回的数据
                         return {
@@ -59,15 +57,13 @@
             当前位置：
             <span class="layui-breadcrumb" lay-separator=">">
                         <a href="javascript:;">党费管理</a>
-                        <a href="javascript:;">党费列表</a>
+                        <a href="javascript:;">捐款列表</a>
                     </span>
         </div>
         <div class="bg_white_container">
             <div class="operate_form_group">
-                <button type="button" class="layui-btn custom_btn search_btn"
-                        onclick="window.location.href='/member_fee_statistics'">历史党费查询</button>
-                <button type="button" class="layui-btn custom_btn search_btn"
-                        onclick="window.location.href='/member_donate_list'">党员捐款</button>
+                <button type="button" class="layui-btn custom_btn search_btn" style="margin-left: 0;"
+                        onclick="window.location.href='/member_donate_record'">捐款记录</button>
             </div>
             <table id="feeTable" lay-filter="feeTable" class="custom_table"></table>
         </div>
@@ -75,7 +71,7 @@
     <!-- 右侧盒子内容 -->
 </div>
 <script type="text/html" id="operationButton">
-    <a class="layui-btn layui-btn-xs" onclick="window.location.href='/fee_detail?id={{d.id}}&memberId={{d.memberId}}'">详情</a>
+    <a class="layui-btn layui-btn-xs" onclick="window.location.href='/member_donate_detail?id={{d.id}}'">详情</a>
 </script>
 </body>
 </html>

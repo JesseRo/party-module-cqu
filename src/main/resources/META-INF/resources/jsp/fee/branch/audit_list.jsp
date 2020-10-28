@@ -13,17 +13,17 @@
         var tableObj;
 
         function audit(state, id, msg) {
-        layuiModal.confirm("确定要" + msg + "吗？", function () {
-            $.post("http://" + document.domain + ':9007/fee/branch/audit', {id: id, state: state}, function (res) {
-                if (res.code === 0) {
-                    layuiModal.alert("已" + msg);
-                    tableObj.reload();
-                } else {
-                    layuiModal.alert(res.message)
-                }
+            layuiModal.confirm("确定要" + msg + "吗？", function () {
+                $.post("http://" + document.domain + ':9007/fee/branch/audit', {id: id, state: state}, function (res) {
+                    if (res.code === 0) {
+                        layuiModal.alert("已" + msg);
+                        tableObj.reload();
+                    } else {
+                        layuiModal.alert(res.message)
+                    }
+                })
             })
-        })
-    }
+        }
 
     $(function() {
             layui.use('table', function(){
