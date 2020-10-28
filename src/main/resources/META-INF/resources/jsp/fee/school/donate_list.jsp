@@ -63,7 +63,7 @@
         <div class="bg_white_container">
             <div class="operate_form_group">
                 <button type="button" class="layui-btn custom_btn search_btn"
-                        onclick="window.location.href='/school_donate_task'" style="margin-left: 0;">新建党员捐钱</button>
+                        onclick="window.location.href='/school_donate_task'" style="margin-left: 0;">新建党员捐款</button>
             </div>
             <table id="feeTable" lay-filter="feeTable" class="custom_table"></table>
         </div>

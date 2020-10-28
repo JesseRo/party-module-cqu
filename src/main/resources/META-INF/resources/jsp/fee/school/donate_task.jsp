@@ -170,7 +170,7 @@
 					<div class="layui-form-item layui-form-text">
 						<label class="layui-form-label layui-required">捐款说明</label>
 						<div class="layui-input-block">
-							<textarea placeholder="请输入捐款说明" name="comment" class="layui-textarea"></textarea>
+							<textarea placeholder="" name="comment" class="layui-textarea"></textarea>
 						</div>
 					</div>
 					<div class="layui-form-item">

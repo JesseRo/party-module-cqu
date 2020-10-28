@@ -492,7 +492,7 @@
 		$(function () {
 			$.get("http://" + document.domain + ':9007/fee/member/fee-config', function (res) {
 				if (res.code === 0) {
-					$('#fee_config').text($('[partyType=' + res.data.type + ']').text() + " " + res.data.fee + " 元/月");
+					$('#fee_config').text($('[partyType=' + res.data.type + ']').text() + " " + Number(res.data.fee) / 100 + " 元/月");
 					$('#fee_audit_state').text(configStatus[res.data.state]);
 					if (res.data.state > 1) {
 						$('#fee_warning').show();
@@ -514,7 +514,7 @@
 				layuiModal.confirm("确定提交党费设置： " + $('[partyType=' + type + ']').text() + " " + _fee + "元/月", function () {
 					$.post("http://" + document.domain + ':9007/fee/member/fee-config', {
 						type: type,
-						fee: _fee
+						fee: Number(_fee) * 100
 					}, function (res) {
 						if (res.code === 0) {
 							layuiModal.alert("已提交设置!");

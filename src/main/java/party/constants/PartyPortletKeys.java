@@ -235,6 +235,8 @@ public class PartyPortletKeys {
 
     public static final String BranchFeeAuditListPortlet = "BranchFeeAuditListPortlet";
 
+    public static final String BranchFeeSearchPortlet = "BranchFeeSearchPortlet";
+
     public static final String BranchFeeAuditDetailPortlet = "BranchFeeAuditDetailPortlet";
 
     public static final String BranchFeeListPortlet = "BranchFeeListPortlet";

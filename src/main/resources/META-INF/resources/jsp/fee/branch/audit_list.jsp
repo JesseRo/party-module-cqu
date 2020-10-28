@@ -8,6 +8,9 @@
 
 
     <style type="text/css">
+        .custom_table {
+
+        }
     </style>
     <script type="text/javascript" >
         var tableObj;
@@ -44,10 +47,15 @@
                     cols: [[ //表头
                         {field: 'id', title: 'id', hide: true},
                         {field: 'memberName', title: '姓名', width:'20%'},
-                        {field: 'orgName', title: '所在组织', width:'20%'},
-                        {field: 'feeType', title: '党费类型', width:'20%'},
-                        {field: 'fee', title: '党费金额', width: '20%'},
-                        {field: 'operation', title: '操作', width: '12.5%', toolbar: '#operationButton'}
+                        {field: 'orgName', title: '所在组织', width:'25%'},
+                        {field: 'feeType', title: '党费类型', width:'15%'},
+                        {field: 'fee', title: '党费金额', width: '10%', templet: function (d) {
+                                return Number(d.fee) / 100;
+                            }},
+                        {field: 'status', title: '审核状态', width: '10%', templet: function (d) {
+                                return d.id ? ['已提交', '已通过', '已驳回', '已过期'][d.state] : '未提交';
+                            }},
+                        {field: 'operation', title: '操作', width: '20%', toolbar: '#operationButton'}
                     ]],
                     parseData: function(res){ //res 即为原始返回的数据
                         return {
@@ -80,9 +88,15 @@
     <!-- 右侧盒子内容 -->
 </div>
 <script type="text/html" id="operationButton">
+    {{# if(d.id){ }}
     <a class="layui-btn layui-btn-xs" onclick="window.location.href='/audit_detail?id={{d.id}}'">详情</a>
+    {{# } }}
+
+    {{# if(d.state == 0){ }}
     <a class="layui-btn layui-btn-xs" onclick="audit(1, '{{d.id}}', '通过')">通过</a>
     <a class="layui-btn layui-btn-xs" onclick="audit(2, '{{d.id}}', '驳回')">驳回</a>
+    {{# } }}
+
 </script>
 </body>
 </html>
