@@ -20,6 +20,8 @@ import javax.portlet.RenderResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.swing.*;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -64,6 +66,7 @@ public class MeetingNoteDetailPortlet extends MVCPortlet {
         List<Member> memberList  = meetingNotesDao.findAttendMember(meetingId);
         req.setAttribute("memberList", memberList.stream().map(Member::getMember_name).collect(Collectors.joining(",")));
         req.setAttribute("participants", participants.stream().map(p->(String)p.get("member_name")).collect(Collectors.joining(",")));
+        req.setAttribute("currentDate", LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy 年 MM 月 dd 日")));
         super.doView(req, res);
     }
 }

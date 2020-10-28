@@ -194,6 +194,25 @@
             </div>
         </div>
     </div>
+    <div class="layui-form-item" style="padding-left: 250px;padding-bottom: 30px;display: none;" id="pdf_title">
+        <div class="layui-inline">
+            <label class="layui-form-label" style="font-size: 22px;width: auto;">组织生活会议记录表</label>
+        </div>
+    </div>
+    <div class="layui-form-item" style="padding-left: 350px;padding-top: 40px;display: none;" id="pdf_source">
+        <div class="layui-inline">
+            <div class="layui-input-inline layui-long">
+                <label class="layui-form-label-text" style="width: 100%;">信息来源：重庆大学党建信息化平台</label>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item" style="padding-left: 350px;display: none;" id="pdf_date">
+        <div class="layui-inline">
+            <div class="layui-input-inline layui-long">
+                <label class="layui-form-label-text" style="width: 100%;">生成时间：${currentDate}</label>
+            </div>
+        </div>
+    </div>
 </div>
 <script type="text/javascript" src="${basePath}/js/html2canvas.js?v=1"></script>
 <script type="text/javascript" src="${basePath}/js/jspdf.umd.min.js"></script>
@@ -214,6 +233,7 @@
         });
 
         function renderPdf(children, i, lastHeight, currentPageHeight) {
+            $(children[i]).show();
             html2canvas(children[i], {useCORS: true}).then(canvas => {
                 var currentContentWidth = canvas.width;
                 var contentHeight = canvas.height;
@@ -234,18 +254,23 @@
                         lastHeight += contentHeight;
                     }
                 }
+                $(children[i]).hide();
                 if (i + 1 < children.length) {
                     renderPdf(children, i + 1, lastHeight, nextPageHeight)
                 } else {
                     pdf.save($('#org_name').text() + $('#meeting_type').text() + ':' + $('#meeting_theme').text());
+                    window.location.reload();
                 }
             });
         }
 
 
         $('#pdf_button').on('click', function () {
+            $('#pdf_button').attr("disabled", true);
             var children = $('.inform-detail').children();
             var doms = [];
+            var title = $('#pdf_title')[0];
+            doms.push(title);
             var length = children.length;
             var note = children[length - 2];
             var noteTitle = children[length - 3];
@@ -266,6 +291,10 @@
             for(j = 0; j < noteLength; j++) {
                 doms.push(noteDoms[j]);
             }
+            var source = $('#pdf_source')[0];
+            doms.push(source);
+            var cd = $('#pdf_date')[0];
+            doms.push(cd);
             renderPdf(doms, 0, 0, 0);
         })
     })
