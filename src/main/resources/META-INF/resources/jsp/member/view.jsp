@@ -489,7 +489,7 @@
                         $("#memberExport").hide();
                     }else{
                         var org_type = checkedNode.data.org_type;
-                        if ('branch' == org_type) {
+                        if ('branch' == org_type || checkedNode.children.length === 0) {
                             $("#orgImport").hide();
                             $("#orgExport").hide();
                             $("#addPerson").show();

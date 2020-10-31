@@ -14,8 +14,8 @@
     </style>
     <script type="text/javascript" >
 
-        function audit(memberId, memberName, month, fee) {
-            var html = memberName + "：" + month + '月党费' + Number(fee) / 100 + "元<br><br>是否代缴？";
+        function audit(memberId, memberName, month, fee, text) {
+            var html = memberName + "：" + month + '月党费' + Number(fee) / 100 + "元<br><br>是否" + text + "？";
             layer.open({
                 type: 1
                 ,title: false //不显示标题栏
@@ -26,36 +26,12 @@
                 ,btn: ['确定', '取消']
                 ,btnAlign: 'c'
                 ,moveType: 1 //拖拽模式，0或者1
-                ,content: '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;">' + html + '</div>'
+                ,content: '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;text-align: center;">' + html + '</div>'
                 ,success: function(layero){
                 }
             });
         }
 
-        function representFee() {
-            var html = '';
-            var totalFee = 0;
-            for (var k in selected) {
-                var d = selected[k];
-                html += d.memberName + "：" + d.month + '月党费' + Number(d.fee) / 100 + "元<br>";
-                totalFee += Number(d.fee) / 100;
-            }
-            html += "<br>合计金额：" + totalFee + "<br><br>是否批量代缴？";
-            layer.open({
-                type: 1
-                ,title: false //不显示标题栏
-                ,closeBtn: false
-                ,area: '300px;'
-                ,shade: 0.8
-                ,id: 'LAY_layuipro' //设定一个id，防止重复弹出
-                ,btn: ['确定', '取消']
-                ,btnAlign: 'c'
-                ,moveType: 1 //拖拽模式，0或者1
-                ,content: '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;">' + html + '</div>'
-                ,success: function(layero){
-                }
-            });
-        }
 
         $(function() {
             var startDate, endDate, state = 1;
@@ -87,7 +63,7 @@
                 var table = layui.table;
                 tableObj = table.render({
                     elem: '#feeTable',
-                    url: "http://" + document.domain + ':9007/fee/branch/audit/list', //数据接口
+                    url: "http://" + document.domain + ':9007/fee/branch/list', //数据接口
                     headers: {Authorization: sessionStorage.getItem("sessionKey")},
                     method: 'get',
                     page: {
@@ -153,7 +129,7 @@
             function reload() {
                 tableObj.reload({
                     where: {
-                        secondary: $('#secondary').val(),
+                        orgId: $('#secondary').val(),
                         keys: $('#searchCondition').val(),
                         start: startDate,
                         end: endDate,
@@ -166,16 +142,62 @@
             }
             $('#transportSearchBtn').on('click', reload);
 
-            $('#represent_fee').on('click', representFee);
+            var representButton = $('#represent_fee');
+            representButton.on('click', function () {
+                representFee("代缴");
+            });
+            var smsButton = $('#sms_fee');
+            smsButton.on('click', function () {
+                representFee("短信催缴");
+            });
+            var backButton = $('#back_fee');
+            backButton.on('click', function () {
+                window.location.href = '/back_fee'
+            })
+            function representFee(text) {
+                if (Object.keys(checked).length <= 0) {
+                    layuiModal.alert("请选择人员");
+                    return
+                }
+                var html = '';
+                var totalFee = 0;
+                for (var k in checked) {
+                    var d = checked[k];
+                    html += d.name + "：" + d.month + '月党费' + Number(d.fee) / 100 + "元<br>";
+                    totalFee += Number(d.fee) / 100;
+                }
+                html += "<br>合计金额：" + totalFee + "<br><br>是否批量" + text + "？";
+                layer.open({
+                    type: 1
+                    ,title: false //不显示标题栏
+                    ,closeBtn: false
+                    ,area: '300px;'
+                    ,shade: 0.8
+                    ,id: 'LAY_layuipro' //设定一个id，防止重复弹出
+                    ,btn: ['确定', '取消']
+                    ,btnAlign: 'c'
+                    ,moveType: 1 //拖拽模式，0或者1
+                    ,content: '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;text-align: center;">' + html + '</div>'
+                    ,success: function(layero){
+                    }
+                });
+            }
+
 
             layui.use('element', function(){
                 var element = layui.element;
 
                 //监听Tab切换，以改变地址hash值
                 element.on('tab(docDemoTabBrief)', function(data){
-                    if (data.index == 1) {
+                    if (data.index == 0) {
                         state = 1;
+                        smsButton.hide();
+                        representButton.hide();
+                        backButton.show();
                     } else {
+                        smsButton.show();
+                        representButton.show();
+                        backButton.hide();
                         state = 0
                     }
                     reload();
@@ -198,7 +220,7 @@
         <div class="bg_white_container">
             <div class="operate_form_group">
                 <select type="text" name="title" id="secondary" autocomplete="off" class="form-control"
-                        style="width: 15%;float: left;border-radius: 0;height: 40px!important;">
+                        style="width: 15%;float: left;border-radius: 0;height: 40px!important;text-indent: 0;">
                     <option value="">所有</option>
                     <c:forEach items="${orgs}" var="org">
                         <option value="${org.org_id}">${org.org_name}</option>
@@ -213,19 +235,22 @@
                 <button type="button" id="transportSearchBtn" class="layui-btn custom_btn search_btn"
                         style="float: none;">查询
                 </button>
+                <button type="button" id="back_fee" class="layui-btn custom_btn search_btn"
+                        style="float: none;">补缴
+                </button>
                 <button type="button" id="represent_fee" class="layui-btn custom_btn search_btn"
-                        style="float: right;">代缴
+                        style="float: right;display: none;">代缴
                 </button>
                 <button type="button" id="sms_fee" class="layui-btn custom_btn search_btn"
-                        style="float: right;">短信催交
+                        style="float: right;display: none;">短信催缴
                 </button>
             </div>
-            <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+            <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief" style="height: 100%;">
                 <ul class="layui-tab-title" >
                     <li class="layui-this">已交</li>
                     <li>未交</li>
                 </ul>
-                <div class="layui-tab-content">
+                <div class="layui-tab-content" style="height: 100%;">
                     <table id="feeTable" lay-filter="feeTable" class="custom_table"></table>
                 </div>
             </div>
@@ -235,8 +260,8 @@
 </div>
 <script type="text/html" id="operationButton">
     {{# if(d.state == 0){ }}
-    <a class="layui-btn layui-btn-xs" onclick="audit('{{d.memberId}}', '{{d.memberName}}', '{{d.month}}','{{d.fee}}')">代缴</a>
-    <a class="layui-btn layui-btn-xs" href="#">短信催缴</a>
+    <a class="layui-btn layui-btn-xs" onclick="audit('{{d.memberId}}', '{{d.memberName}}', '{{d.month}}','{{d.fee}}', '代缴')">代缴</a>
+    <a class="layui-btn layui-btn-xs" onclick="audit('{{d.memberId}}', '{{d.memberName}}', '{{d.month}}','{{d.fee}}', '短信催缴')">短信催缴</a>
     {{# } }}
 </script>
 </body>

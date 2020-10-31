@@ -86,19 +86,19 @@
 <%--							<p class="layui-col-xs6 layui-col-sm6 layui-col-md6"><span id="member_org"></span></p>--%>
 <%--						</div>--%>
 						<div class="layui-form-item layui-row" >
-							<p class="layui-col-xs6 layui-col-sm6 layui-col-md6"><span>捐款项目</span></p>
+							<p class="layui-col-xs3 layui-col-sm3 layui-col-md3"><span>捐款项目</span></p>
 							<p class="layui-col-xs6 layui-col-sm6 layui-col-md6"><span id="donate_title"></span></p>
 						</div>
 						<div class="layui-form-item layui-row" >
-							<p class="layui-col-xs6 layui-col-sm6 layui-col-md6"><span>捐款说明</span></p>
+							<p class="layui-col-xs3 layui-col-sm3 layui-col-md3"><span>捐款说明</span></p>
 							<p class="layui-col-xs6 layui-col-sm6 layui-col-md6"><span id="donate_comment"></span></p>
 						</div>
 						<div class="layui-form-item layui-row" >
-							<p class="layui-col-xs6 layui-col-sm6 layui-col-md6"><span>捐款起止时间</span></p>
+							<p class="layui-col-xs3 layui-col-sm3 layui-col-md3"><span>捐款起止时间</span></p>
 							<p class="layui-col-xs6 layui-col-sm6 layui-col-md6"><span id="donate_time"></span></p>
 						</div>
 						<div class="layui-form-item layui-row">
-							<p class="layui-col-xs6 layui-col-sm6 layui-col-md6"><span>附件下载</span></p>
+							<p class="layui-col-xs3 layui-col-sm3 layui-col-md3"><span>附件下载</span></p>
 							<p class="layui-col-xs6 layui-col-sm6 layui-col-md6"><a id="donate_file" style="display: none;">捐款倡议书</a><span id="no_file">无附件</span></p>
 						</div>
 						<div class="layui-form-item layui-row">

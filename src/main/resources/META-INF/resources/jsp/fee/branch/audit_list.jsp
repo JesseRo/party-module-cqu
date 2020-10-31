@@ -3,8 +3,8 @@
 
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/activity-manage1.css?v=1" />
-    <link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/common.min.css" />
+    <link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/activity-manage1.css?v=1"/>
+    <link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/common.min.css"/>
 
 
     <style type="text/css">
@@ -12,7 +12,7 @@
 
         }
     </style>
-    <script type="text/javascript" >
+    <script type="text/javascript">
         var tableObj;
 
         function audit(state, id, msg) {
@@ -28,8 +28,25 @@
             })
         }
 
-    $(function() {
-            layui.use('table', function(){
+        function reject(state, id, msg) {
+            layuiModal.prompt("驳回原因", '', function (value) {
+                $.post("http://" + document.domain + ':9007/fee/branch/audit', {
+                        id: id,
+                        state: state,
+                        reason: value
+                    }, function (res) {
+                        if (res.code === 0) {
+                            layuiModal.alert("已" + msg);
+                            tableObj.reload();
+                        } else {
+                            layuiModal.alert(res.message)
+                        }
+                    })
+            })
+        }
+
+        $(function () {
+            layui.use('table', function () {
                 var table = layui.table;
 
                 tableObj = table.render({
@@ -38,26 +55,31 @@
                     headers: {Authorization: sessionStorage.getItem("sessionKey")},
                     method: 'get',
                     page: {
-                        limit:10,   //每页条数
-                        limits:[],
-                        prev:'&lt;上一页',
-                        next:'下一页&gt;',
-                        groups:4,
+                        limit: 10,   //每页条数
+                        limits: [],
+                        prev: '&lt;上一页',
+                        next: '下一页&gt;',
+                        groups: 4,
                     },
                     cols: [[ //表头
                         {field: 'id', title: 'id', hide: true},
-                        {field: 'memberName', title: '姓名', width:'20%'},
-                        {field: 'orgName', title: '所在组织', width:'25%'},
-                        {field: 'feeType', title: '党费类型', width:'15%'},
-                        {field: 'fee', title: '党费金额', width: '10%', templet: function (d) {
+                        {field: 'memberName', title: '姓名', width: '10%'},
+                        {field: 'orgName', title: '所在组织', width: '25%'},
+                        {field: 'feeTypeName', title: '党费类型', width: '15%'},
+                        {
+                            field: 'fee', title: '党费金额', width: '10%', templet: function (d) {
                                 return Number(d.fee) / 100;
-                            }},
-                        {field: 'status', title: '审核状态', width: '10%', templet: function (d) {
-                                return d.id ? ['已提交', '已通过', '已驳回', '已过期'][d.state] : '未提交';
-                            }},
+                            }
+                        },
+                        {
+                            field: 'status', title: '审核状态', width: '10%', templet: function (d) {
+                                return d.id ? ['审核中', '已通过', '已驳回', '已过期'][d.state] : '未提交';
+                            }
+                        },
+                        {field: 'reason', title: '原因', width: '10%'},
                         {field: 'operation', title: '操作', width: '20%', toolbar: '#operationButton'}
                     ]],
-                    parseData: function(res){ //res 即为原始返回的数据
+                    parseData: function (res) { //res 即为原始返回的数据
                         return {
                             "code": res.code, //解析接口状态
                             "msg": res.message, //解析提示文本
@@ -92,9 +114,9 @@
     <a class="layui-btn layui-btn-xs" onclick="window.location.href='/audit_detail?id={{d.id}}'">详情</a>
     {{# } }}
 
-    {{# if(d.state == 0){ }}
-    <a class="layui-btn layui-btn-xs" onclick="audit(1, '{{d.id}}', '通过')">通过</a>
-    <a class="layui-btn layui-btn-xs" onclick="audit(2, '{{d.id}}', '驳回')">驳回</a>
+    {{# if(d.state == 0 && d.auditLevel == d.auditOrgType){ }}
+    <a class="layui-btn layui-btn-xs layui-btn-warm" onclick="audit(1, '{{d.id}}', '通过')">通过</a>
+    <a class="layui-btn layui-btn-xs layui-btn-danger" onclick="reject(2, '{{d.id}}', '驳回')">驳回</a>
     {{# } }}
 
 </script>

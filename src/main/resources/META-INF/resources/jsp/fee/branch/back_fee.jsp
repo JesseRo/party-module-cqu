@@ -40,45 +40,42 @@
 	</head>
 	<body>
 	<script>
-		function getQueryVariable(variable)
-		{
-			var query = window.location.search.substring(1);
-			var vars = query.split("&");
-			for (var i=0;i<vars.length;i++) {
-				var pair = vars[i].split("=");
-				if(pair[0] == variable){return pair[1];}
-			}
-		}
-
 		$(function () {
 			function toDateStr(date){
 				if (date.year) {
-					return date.year + '-' + date.month + '-' + date.date;
+					return date.year + '-' + date.month;
 				}else {
 					return "";
 				}
 			}
-			layui.use(['upload', 'laydate', 'transfer', 'form'], function() {
-				var upload = layui.upload;
-				var transfer = layui.transfer;
+			var searchTimeOut, memberMap = {};
+			$('#member_div').on('input', 'input', function () {
+				var search = $(this);
+				clearTimeout(searchTimeOut);
+				searchTimeOut = setTimeout(function () {
+					$.post('http://' + window.location.hostname + ":9007/fee/branch/members", {search: search}, function (res) {
+						if (res.code === 0) {
+							var html = '<option value="">请选择</option>';
+							for(var i = 0; i < res.data.length; i++) {
+								var m = res.data[i];
+								memberMap[m.memberId] = m;
+								html += '<option value="' + m.memberId + '">' + m.memberName + '</option>';
+							}
+							$('#member_id').html(html);
+						}
+					})
+				}, 500)
+			})
+			layui.use(['laydate', 'form'], function() {
 				var form = layui.form;
-				upload.render({
-					elem: '#upload_button'
-					,url: 'http://' + window.location.hostname + ":9007/app/file/upload" //改成您自己的上传接口
-					,auto: true
-					,accept: 'file' //普通文件
-					,done: function(res){
-						$('#donate_file').val(res.data);
-						$('#file_name').text(res.data).show();
-					}
-				});
 
 				var laydate = layui.laydate;
 				var startDate, endDate;
 				laydate.render({
 					elem: '#date_range'
-					, range: '-',
-					done: function (value, date, e) {
+					, range: '-'
+					, type: 'month'
+					, done: function (value, date, e) {
 						console.log(value); //得到日期生成的值，如：2017-08-18
 						console.log(date); //得到日期时间对象：{year: 2017, month: 8, date: 18, hours: 0, minutes: 0, seconds: 0}
 						console.log(e); //得结束的日期时间对象，开启范围选择（range: true）才会返回。对象成员同上。
@@ -86,21 +83,6 @@
 						endDate = toDateStr(e);
 					}
 				});
-				var id = getQueryVariable('id');
-				$.post('http://' + window.location.hostname + ":9007/fee/school/donate/org", {id: id}, function (res) {
-					if (res.code === 0) {
-						transfer.render({
-							elem: '#donate_range',
-							title: ['二级党组织', '已选组织'],
-							height: 400,
-							id: 'donate_range',
-							data: res.data.all,
-							value: res.data.selected
-						});
-					} else {
-						layuiModal.alert(res.message);
-					}
-				})
 
 				form.on('submit(submit)', function(data){
 					var postData = {};
@@ -149,47 +131,40 @@
 				当前位置：
 				<span class="layui-breadcrumb" lay-separator=">">
 					<a href="javascript:;">党费管理</a>
-					<a href="javascript:;">新建捐款</a>
+					<a href="javascript:;">补缴录入</a>
 				</span>
 			</div>
 			<div class="bg_white_container release_event_form">
 				<form class="layui-form form-horizontal new_publish_form" action="" id="donate_form">
 					<div class="layui-form-item">
-						<label class="layui-form-label layui-required">捐款项目</label>
+						<label class="layui-form-label layui-required">党员姓名</label>
+						<div class="layui-input-block" id="member_div">
+							<select name="member_id" lay-filter="aihao" id="member_id">
+								<option value="" disabled>输入关键字搜索</option>
+							</select>
+						</div>
+					</div>
+					<div class="layui-form-item layui-form-text">
+						<label class="layui-form-label layui-required">所在组织</label>
 						<div class="layui-input-block">
-							<input type="text" name="title" lay-verify="title|required" autocomplete="off"
-								   placeholder="捐款批次/类型说明" class="layui-input">
+							<input type="text" name="member_org" id="member_org" readonly autocomplete="off" class="layui-input" lay-verify="title|required">
+						</div>
+					</div>
+					<div class="layui-form-item layui-form-text">
+						<label class="layui-form-label layui-required">党费类型</label>
+						<div class="layui-input-block">
+							<input type="text" name="member_org" id="fee_type" readonly autocomplete="off" class="layui-input" lay-verify="title|required">
 						</div>
 					</div>
 					<div class="layui-form-item">
-						<label class="layui-form-label layui-required">起止时间</label>
+						<label class="layui-form-label layui-required">补缴月份</label>
 						<div class="layui-input-inline">
 							<input type="text" name="date" id="date_range" autocomplete="off" class="layui-input" lay-verify="title|required">
 						</div>
 					</div>
-					<div class="layui-form-item layui-form-text">
-						<label class="layui-form-label layui-required">捐款说明</label>
-						<div class="layui-input-block">
-							<textarea placeholder="" name="comment" class="layui-textarea"></textarea>
-						</div>
-					</div>
-					<div class="layui-form-item">
-						<label class="layui-form-label">上传附件</label>
-						<input name="file" style="display: none;" id="donate_file">
-						<div class="layui-input-block">
-							<button type="button" class="layui-btn" id="upload_button"><i class="layui-icon"></i>上传文件</button>
-							<span id="file_name" style="display: none;"></span>
-						</div>
-					</div>
-					<div class="layui-form-item">
-						<label class="layui-form-label layui-required">捐款范围</label>
-						<div class="layui-input-block">
-							<div class="demo-transfer" id="donate_range"></div>
-						</div>
-					</div>
 					<div class="layui-form-item">
 						<div class="layui-input-block">
-							<button type="button" class="layui-btn layui-btn layui-btn-warm" lay-submit="" lay-filter="submit">立即提交</button>
+							<button type="button" class="layui-btn layui-btn layui-btn-warm" lay-submit="" lay-filter="submit">补缴录入</button>
 							<button type="button" class="layui-btn layui-btn-primary" onclick="window.history.back();">返回</button>
 						</div>
 					</div>

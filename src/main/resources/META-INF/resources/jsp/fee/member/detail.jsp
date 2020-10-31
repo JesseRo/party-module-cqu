@@ -40,13 +40,13 @@
 					if (!res.data.feeState) {
 						$('#button_pay').show();
 					}
-					$('#member_name').text(res.data.name);
+					$('#member_name').text(res.data.memberName);
 					$('#member_org').text(res.data.secondaryName + res.data.orgName);
 					$('#fee_type').text(res.data.yearMonth + '党费缴纳通知');
-					$('.fee_amount').text(res.data.shouldFee + '元');
+					$('.fee_amount').text(Number(res.data.shouldFee) / 100 + '元');
 					$('#fee_yearMonth').text(res.data.yearMonth);
 					$('#end_time').text(res.data.endDate);
-					$('#fee_state').text(res.data.feeState ? '已缴费' : '未缴费');
+					$('#fee_state').text(res.data.feeState == 1 ? '已缴费' : '未缴费');
 				} else {
 					layuiModal.alert(res.message);
 				}
@@ -114,7 +114,7 @@
 						</div>
 						<div class="layui-form-item layui-row">
 							<button type="button" id="button_pay"
-									class="layui-btn layui-btn-primary" style="display:none; background-color: transparent;color: #666;padding: 0 20px;font-size: 16px;height: 40px;line-height: 40px;border-radius: 4px;">
+									class="layui-btn layui-btn-warm" style="display:none;padding: 0 20px;font-size: 16px;height: 40px;border-radius: 4px;">
 								支付
 							</button>
 							<button type="button" onclick="window.history.back();"

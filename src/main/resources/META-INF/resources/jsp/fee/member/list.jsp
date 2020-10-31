@@ -29,13 +29,19 @@
                     },
                     cols: [[ //表头
                         {field: 'id', title: 'id', hide: true},
-                        {field: 'name', title: '姓名', width:'12.5%'},
+                        {field: 'memberName', title: '姓名', width:'12.5%'},
                         {field: 'orgName', title: '所在组织', width:'12.5%'},
-                        {field: 'feeType', title: '党费类型', width:'12.5%'},
+                        {field: 'feeTypeName', title: '党费类型', width:'12.5%'},
                         {field: 'yearMonth', title: '交费期间', width: '12.5%'},
-                        {field: 'shouldFee', title: '党费金额', width: '12.5%'},
-                        {field: 'fee', title: '已交金额', width: '12.5%'},
-                        {field: 'feeState', title: '交费状态', width: '12.5%'},
+                        {field: 'shouldFee', title: '党费金额', width: '12.5%', templet: function (d) {
+                                return Number(d.shouldFee) / 100;
+                            }},
+                        {field: 'fee', title: '已交金额', width: '12.5%', templet: function (d) {
+                                return Number(d.fee) / 100;
+                            }},
+                        {field: 'state', title: '交费状态', width: '12.5%', templet: function (d) {
+                                return d.state == 0 ? '未缴' : '已缴'
+                            }},
                         {field: 'operation', title: '操作', width: '12.5%', toolbar: '#operationButton'}
                     ]],
                     parseData: function(res){ //res 即为原始返回的数据
@@ -75,7 +81,7 @@
     <!-- 右侧盒子内容 -->
 </div>
 <script type="text/html" id="operationButton">
-    <a class="layui-btn layui-btn-xs" onclick="window.location.href='/fee_detail?id={{d.id}}&memberId={{d.memberId}}'">详情</a>
+    <a class="layui-btn layui-btn-xs" onclick="window.location.href='/member_fee_detail?id={{d.id}}&memberId={{d.memberId}}'">详情</a>
 </script>
 </body>
 </html>
