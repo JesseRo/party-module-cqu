@@ -15,19 +15,18 @@ import java.io.IOException;
         property = {
                 "com.liferay.portlet.display-category=category.cqu",
                 "com.liferay.portlet.instanceable=true",
-                "javax.portlet.display-name=支部党费收缴统计",
+                "javax.portlet.display-name=每年逐月已交未交情况",
                 "javax.portlet.init-param.template-path=/",
-
                 "com.liferay.portlet.requires-namespaced-parameters=false",
                 "javax.portlet.portlet-mode=text/html;view,edit",
-                "javax.portlet.init-param.view-template=/jsp/fee/branch/statistics.jsp",
-                "javax.portlet.name=" + PartyPortletKeys.BranchFeeStatisticsPortlet,
+                "javax.portlet.init-param.view-template=/jsp/fee/branch/year_statistics.jsp",
+                "javax.portlet.name=" + PartyPortletKeys.BranchFeeYearStatisticsPortlet,
                 "javax.portlet.resource-bundle=content.Language",
                 "javax.portlet.security-role-ref=power-user,user"
         },
         service = Portlet.class
 )
-public class BranchFeeStatisticsPortlet extends MVCPortlet {
+public class BranchFeeYearStatisticsPortlet extends MVCPortlet {
     @Override
     public void doView(RenderRequest req, RenderResponse res) throws IOException, PortletException {
         super.doView(req, res);

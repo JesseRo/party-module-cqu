@@ -17,33 +17,66 @@
 
                 tableObj = table.render({
                     elem: '#feeTable',
-                    url: "http://" + document.domain + ':9007/fee/member/list', //数据接口
+                    url: "http://" + document.domain + ':9007/fee/member/statistics', //数据接口
                     headers: {Authorization: sessionStorage.getItem("sessionKey")},
                     method: 'get',
-                    page: {
-                        limit:10,   //每页条数
-                        limits:[],
-                        prev:'&lt;上一页',
-                        next:'下一页&gt;',
-                        groups:4,
-                    },
+                    // page: {
+                    //     limit:10,   //每页条数
+                    //     limits:[],
+                    //     prev:'&lt;上一页',
+                    //     next:'下一页&gt;',
+                    //     groups:4,
+                    // },
                     cols: [[ //表头
                         {field: 'id', title: 'id', hide: true},
-                        {field: 'name', title: '姓名', width:'12.5%'},
-                        {field: 'orgName', title: '所在组织', width:'12.5%'},
-                        {field: 'feeType', title: '党费类型', width:'12.5%'},
-                        {field: 'yearMonth', title: '交费期间', width: '12.5%'},
-                        {field: 'shouldFee', title: '党费金额', width: '12.5%'},
-                        {field: 'fee', title: '已交金额', width: '12.5%'},
-                        {field: 'feeState', title: '交费状态', width: '12.5%'},
-                        {field: 'operation', title: '操作', width: '12.5%', toolbar: '#operationButton'}
+                        {field: 'year', title: '年份/月份', width:'9%', templet: function (d) {
+                                return d[-1].year > 0 ? d[-1].year : '总计';
+                            }},
+                        {field: 'jan', title: '1月', width:'7%', templet: function (d) {
+                                return d[1] ? (d[1].state === 1 ? d[1].fee : '<span style="color: red;">未缴费</span>') : '';
+                            }},
+                        {field: 'feb', title: '2月', width:'7%', templet: function (d) {
+                                return d[2] ? (d[2].state === 1 ? d[2].fee : '<span style="color: red;">未缴费</span>') : '';
+                            }},
+                        {field: 'mar', title: '3月', width:'7%', templet: function (d) {
+                                return d[3] ? (d[3].state === 1 ? d[3].fee : '<span style="color: red;">未缴费</span>') : '';
+                            }},
+                        {field: 'apr', title: '4月', width:'7%', templet: function (d) {
+                                return d[4] ? (d[4].state === 1 ? d[4].fee : '<span style="color: red;">未缴费</span>') : '';
+                            }},
+                        {field: 'may', title: '5月', width:'7%', templet: function (d) {
+                                return d[5] ? (d[5].state === 1 ? d[5].fee : '<span style="color: red;">未缴费</span>') : '';
+                            }},
+                        {field: 'jun', title: '6月', width:'7%', templet: function (d) {
+                                return d[6] ? (d[6].state === 1 ? d[6].fee : '<span style="color: red;">未缴费</span>') : '';
+                            }},
+                        {field: 'jul', title: '7月', width:'7%', templet: function (d) {
+                                return d[7] ? (d[7].state === 1 ? d[7].fee : '<span style="color: red;">未缴费</span>') : '';
+                            }},
+                        {field: 'aug', title: '8月', width:'7%', templet: function (d) {
+                                return d[8] ? (d[8].state === 1 ? d[8].fee : '<span style="color: red;">未缴费</span>') : '';
+                            }},
+                        {field: 'sep', title: '9月', width:'7%', templet: function (d) {
+                                return d[9] ? (d[9].state === 1 ? d[9].fee : '<span style="color: red;">未缴费</span>') : '';
+                            }},
+                        {field: 'oct', title: '10月', width:'7%', templet: function (d) {
+                                return d[10] ? (d[10].state === 1 ? d[10].fee : '<span style="color: red;">未缴费</span>') : '';
+                            }},
+                        {field: 'nov', title: '11月', width:'7%', templet: function (d) {
+                                return d[11] ? (d[11].state === 1 ? d[11].fee : '<span style="color: red;">未缴费</span>') : '';
+                            }},
+                        {field: 'dec', title: '12月', width:'7%', templet: function (d) {
+                                return d[12] ? (d[12].state === 1 ? d[12].fee : '<span style="color: red;">未缴费</span>') : '';
+                            }},
+                        {field: 'total', title: '总额', width:'7%', templet: function (d) {
+                                return d[-1].fee
+                            }},
                     ]],
                     parseData: function(res){ //res 即为原始返回的数据
                         return {
                             "code": res.code, //解析接口状态
                             "msg": res.message, //解析提示文本
-                            "count": res.data.count, //解析数据长度
-                            "data": res.data.pageData //解析数据列表
+                            "data": res.data //解析数据列表
                         };
                     }
                 });
@@ -59,23 +92,14 @@
             当前位置：
             <span class="layui-breadcrumb" lay-separator=">">
                         <a href="javascript:;">党费管理</a>
-                        <a href="javascript:;">党费列表</a>
+                        <a href="javascript:;">党费统计</a>
                     </span>
         </div>
         <div class="bg_white_container">
-            <div class="operate_form_group">
-                <button type="button" class="layui-btn custom_btn search_btn"
-                        onclick="window.location.href='/member_fee_statistics'">历史党费查询</button>
-                <button type="button" class="layui-btn custom_btn search_btn"
-                        onclick="window.location.href='/member_donate_list'">党员捐款</button>
-            </div>
             <table id="feeTable" lay-filter="feeTable" class="custom_table"></table>
         </div>
     </div>
     <!-- 右侧盒子内容 -->
 </div>
-<script type="text/html" id="operationButton">
-    <a class="layui-btn layui-btn-xs" onclick="window.location.href='/fee_detail?id={{d.id}}&memberId={{d.memberId}}'">详情</a>
-</script>
 </body>
 </html>

@@ -53,21 +53,24 @@
 				var search = $(this);
 				clearTimeout(searchTimeOut);
 				searchTimeOut = setTimeout(function () {
-					$.post('http://' + window.location.hostname + ":9007/fee/branch/members", {search: search}, function (res) {
+					$.post('http://' + window.location.hostname + ":9007/fee/branch/members", {search: search.val()}, function (res) {
 						if (res.code === 0) {
-							var html = '<option value="">请选择</option>';
+							var html = '<option disabled>请选择</option>'
 							for(var i = 0; i < res.data.length; i++) {
 								var m = res.data[i];
 								memberMap[m.memberId] = m;
 								html += '<option value="' + m.memberId + '">' + m.memberName + '</option>';
 							}
 							$('#member_id').html(html);
+							form.render('select');
 						}
 					})
 				}, 500)
 			})
+			var form = layui.form;
+
 			layui.use(['laydate', 'form'], function() {
-				var form = layui.form;
+				form = layui.form;
 
 				var laydate = layui.laydate;
 				var startDate, endDate;
@@ -139,7 +142,7 @@
 					<div class="layui-form-item">
 						<label class="layui-form-label layui-required">党员姓名</label>
 						<div class="layui-input-block" id="member_div">
-							<select name="member_id" lay-filter="aihao" id="member_id">
+							<select name="member_id" lay-filter="aihao" id="member_id" lay-search>
 								<option value="" disabled>输入关键字搜索</option>
 							</select>
 						</div>
