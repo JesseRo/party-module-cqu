@@ -51,7 +51,7 @@
 			var memberMap = {};
 			$.post('http://' + window.location.hostname + ":9007/fee/branch/members", function (res) {
 				if (res.code === 0) {
-					var html = '<option disabled>请选择</option>'
+					var html = '<option disabled selected>请选择</option>'
 					for(var i = 0; i < res.data.length; i++) {
 						var m = res.data[i];
 						memberMap[m.memberId] = m;
@@ -100,14 +100,14 @@
 
 						$.ajax({
 							'type': 'POST',
-							'url': 'http://' + window.location.hostname + ":9007/fee/school/donate/task",
+							'url': 'http://' + window.location.hostname + ":9007/fee/branch/back-fee",
 							'contentType': 'application/json; charset=utf-8',
 							'data': JSON.stringify(postData),
 							'dataType': 'json',
 							'success': function (res) {
 								if (res.code === 0) {
 									layuiModal.confirm("录入成功，是否继续录入？", function () {
-										$('#member_org').val('');
+										form.render('select');
 										$('#fee_type_name').val('');
 										$('#fee_type').val('');
 										$('#member_id').val('');

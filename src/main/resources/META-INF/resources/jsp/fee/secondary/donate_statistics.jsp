@@ -38,11 +38,11 @@
                     },
                     cols: [[ //表头
                         {field: 'id', title: 'id', hide: true},
-                        {field: 'memberName', title: '支部', width:'25%'},
-                        {field: 'memberSex', title: '支部人数', width:'15%'},
-                        {field: 'jobNumber', title: '捐款人数', width:'15%'},
-                        {field: 'secondaryName', title: '捐款项目', width:'25%'},
-                        {field: 'donateAmount', title: '捐款金额', width:'20%'}
+                        {field: 'branchName', title: '支部', width:'25%'},
+                        {field: 'memberCount', title: '支部人数', width:'15%'},
+                        {field: 'donateCount', title: '捐款人数', width:'15%'},
+                        {field: 'title', title: '捐款项目', width:'25%'},
+                        {field: 'amount', title: '捐款金额', width:'20%'}
                     ]],
                     parseData: function(res){ //res 即为原始返回的数据
                         return {
@@ -99,25 +99,19 @@
         </div>
         <div class="bg_white_container">
             <div class="operate_form_group">
-                <form class="layui-form" id="searchForm">
-                    <div class="layui-form-item" style="margin-top: 15px;">
-                        <div class="layui-inline">
-                            <div class="layui-input-inline" style="margin-left: 20px;height: 40px;">
-                                <input type="text" class="layui-input" id="date_range" placeholder="日期范围">
-                            </div>
-                            <button type="button" id="transportSearchBtn" class="layui-btn custom_btn search_btn"
-                                    style="float: none;">查询
-                            </button>
-                            <select type="text" name="title" id="task" autocomplete="off" class="form-control"
-                                    style="width: 15%;float: right;border-radius: 0;height: 40px!important;text-indent: 0;">
-                                <option value="">所有项目</option>
-                                <c:forEach items="${tasks}" var="task">
-                                    <option value="${task.id}">${task.title}</option>
-                                </c:forEach>
-                            </select>
-                        </div>
-                    </div>
-                </form>
+                <div class="layui-input-inline" style="height: 40px;">
+                    <input type="text" class="layui-input" id="date_range" placeholder="日期范围">
+                </div>
+                <button type="button" id="transportSearchBtn" class="layui-btn custom_btn search_btn"
+                        style="float: none;">查询
+                </button>
+                <select type="text" name="title" id="task" autocomplete="off" class="form-control"
+                        style="width: 15%;float: right;border-radius: 0;height: 40px!important;text-indent: 0;">
+                    <option value="">所有项目</option>
+                    <c:forEach items="${tasks}" var="task">
+                        <option value="${task.id}">${task.title}</option>
+                    </c:forEach>
+                </select>
             </div>
             <table id="feeTable" lay-filter="feeTable" class="custom_table"></table>
         </div>
