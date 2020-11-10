@@ -3,13 +3,17 @@ package party.portlet.fee.school;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.util.PortalUtil;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import party.constants.PartyPortletKeys;
+import party.portlet.fee.dao.FeeDao;
 
 import javax.portlet.Portlet;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 @Component(
         immediate = true,
@@ -29,10 +33,14 @@ import java.io.IOException;
         service = Portlet.class
 )
 public class FeeDonateListPortlet extends MVCPortlet {
+    @Reference
+    private FeeDao feeDao;
     @Override
     public void doView(RenderRequest req, RenderResponse res) throws IOException, PortletException {
         String id = PortalUtil.getOriginalServletRequest(PortalUtil.getHttpServletRequest(req)).getParameter("id");
         req.setAttribute("id", id);
+        List<Map<String, Object>> donates = feeDao.allDonate();
+        req.setAttribute("tasks", donates);
         super.doView(req, res);
     }
 }

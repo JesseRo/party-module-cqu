@@ -43,30 +43,25 @@
 		$(function () {
 			function toDateStr(date){
 				if (date.year) {
-					return date.year + '-' + date.month;
+					return date.year + '-' + date.month + '-01' ;
 				}else {
 					return "";
 				}
 			}
-			var searchTimeOut, memberMap = {};
-			$('#member_div').on('input', 'input', function () {
-				var search = $(this);
-				clearTimeout(searchTimeOut);
-				searchTimeOut = setTimeout(function () {
-					$.post('http://' + window.location.hostname + ":9007/fee/branch/members", {search: search.val()}, function (res) {
-						if (res.code === 0) {
-							var html = '<option disabled>请选择</option>'
-							for(var i = 0; i < res.data.length; i++) {
-								var m = res.data[i];
-								memberMap[m.memberId] = m;
-								html += '<option value="' + m.memberId + '">' + m.memberName + '</option>';
-							}
-							$('#member_id').html(html);
-							form.render('select');
-						}
-					})
-				}, 500)
+			var memberMap = {};
+			$.post('http://' + window.location.hostname + ":9007/fee/branch/members", function (res) {
+				if (res.code === 0) {
+					var html = '<option disabled>请选择</option>'
+					for(var i = 0; i < res.data.length; i++) {
+						var m = res.data[i];
+						memberMap[m.memberId] = m;
+						html += '<option value="' + m.memberId + '">' + m.memberName + '</option>';
+					}
+					$('#member_id').html(html);
+					form.render('select');
+				}
 			})
+
 			var form = layui.form;
 
 			layui.use(['laydate', 'form'], function() {
@@ -87,21 +82,21 @@
 					}
 				});
 
+				form.on('select(aihao)', function(data){
+					var memberId = data.value;
+					if (memberId) {
+						$('#member_org').val(memberMap[memberId].orgName);
+						$('#fee_type_name').val(memberMap[memberId].feeTypeName);
+						$('#fee_type').val(memberMap[memberId].feeType);
+					}
+				});
+
 				form.on('submit(submit)', function(data){
 					var postData = {};
 					if (startDate && endDate) {
-						postData.title = data.field.title;
+						postData.memberId = data.field.member_id;
 						postData.startDate = startDate;
 						postData.endDate = endDate;
-						postData.comment = data.field.comment;
-						postData.file = $('#donate_file').val();
-						var org = transfer.getData('donate_range');
-						if (org && org.length > 0) {
-							postData.org = org.map(function(att){return att.value})
-						} else {
-							layuiModal.alert("请选择捐款范围");
-							return false;
-						}
 
 						$.ajax({
 							'type': 'POST',
@@ -111,8 +106,15 @@
 							'dataType': 'json',
 							'success': function (res) {
 								if (res.code === 0) {
-									layuiModal.alert("发布成功");
-									window.location.href = '/school_donate_list'
+									layuiModal.confirm("录入成功，是否继续录入？", function () {
+										$('#member_org').val('');
+										$('#fee_type_name').val('');
+										$('#fee_type').val('');
+										$('#member_id').val('');
+										$('#date_range').val('');
+									}, function () {
+										window.history.back();
+									});
 								}else {
 									layuiModal.alert(res.message);
 								}
@@ -156,7 +158,8 @@
 					<div class="layui-form-item layui-form-text">
 						<label class="layui-form-label layui-required">党费类型</label>
 						<div class="layui-input-block">
-							<input type="text" name="member_org" id="fee_type" readonly autocomplete="off" class="layui-input" lay-verify="title|required">
+							<input type="text" name="member_org" id="fee_type" style="display: none;">
+							<input type="text" name="member_org" id="fee_type_name" readonly autocomplete="off" class="layui-input" lay-verify="title|required">
 						</div>
 					</div>
 					<div class="layui-form-item">

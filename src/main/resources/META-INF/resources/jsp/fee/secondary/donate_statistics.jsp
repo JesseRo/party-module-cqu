@@ -3,9 +3,7 @@
 
 <html>
 <head>
-    <link rel="stylesheet" href="${basePath}/css/account_manage_1.css"/>
-
-    <link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/party-info-manage.min.css"/>
+    <link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/activity-manage1.css?v=1" />
     <link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/common.min.css" />
 
 
@@ -13,9 +11,8 @@
     </style>
     <script type="text/javascript" >
         $(function() {
-            var tableObj;
             var startDate, endDate;
-
+            var tableObj;
             function toDateStr(date){
                 if (date.year) {
                     return date.year + '-' + date.month + '-' + date.date;
@@ -28,7 +25,7 @@
 
                 tableObj = table.render({
                     elem: '#feeTable',
-                    url: "http://" + document.domain + ':9007/fee/school/donate/list', //数据接口
+                    url: "http://" + document.domain + ':9007/fee/secondary/donate/statistics', //数据接口
                     headers: {Authorization: sessionStorage.getItem("sessionKey")},
                     method: 'post',
                     contentType: 'application/json',
@@ -41,12 +38,11 @@
                     },
                     cols: [[ //表头
                         {field: 'id', title: 'id', hide: true},
-                        {field: 'secondaryName', title: '二级党组织', width:'16.6%'},
-                        {field: 'secretary', title: '党组织书记', width:'16.6%'},
-                        {field: 'memberCount', title: '党组织人数', width:'16.6%'},
-                        {field: 'title', title: '捐款项目', width:'16.6%'},
-                        {field: 'donateCount', title: '已捐人数', width:'16.6%'},
-                        {field: 'amount', title: '捐款金额', width:'16.6%'},
+                        {field: 'memberName', title: '支部', width:'25%'},
+                        {field: 'memberSex', title: '支部人数', width:'15%'},
+                        {field: 'jobNumber', title: '捐款人数', width:'15%'},
+                        {field: 'secondaryName', title: '捐款项目', width:'25%'},
+                        {field: 'donateAmount', title: '捐款金额', width:'20%'}
                     ]],
                     parseData: function(res){ //res 即为原始返回的数据
                         return {
@@ -78,7 +74,6 @@
                     where: {
                         task: $('#task').val(),
                         start: startDate,
-                        name: $('#searchCondition').val(),
                         end: endDate
                     },
                     page: {
@@ -99,31 +94,31 @@
             当前位置：
             <span class="layui-breadcrumb" lay-separator=">">
                         <a href="javascript:;">党费管理</a>
-                        <a href="javascript:;">党员捐款</a>
+                        <a href="javascript:;">党员捐款查询</a>
                     </span>
         </div>
         <div class="bg_white_container">
             <div class="operate_form_group">
-                <button type="button" class="layui-btn custom_btn search_btn"
-                        onclick="window.location.href='/school_donate_task'" style="margin-left: 0;">新建党员捐款</button>
-                <div class="layui-input-inline" style="margin-left: 20px;height: 40px;">
-                    <input type="text" class="layui-input" id="date_range" placeholder="日期范围">
-                </div>
-                <input type="text" name="title" id="searchCondition" placeholder="输入二级党组织" autocomplete="off"
-                       class="layui-input custom_input"
-                       style="margin-left: 20px; float: none;height: 40px;">
-                <button type="button" id="transportSearchBtn" class="layui-btn custom_btn search_btn"
-                        style="float: none;">查询
-                </button>
-                <select type="text" name="title" id="task" autocomplete="off" class="form-control"
-                        style="width: 15%;float: right;border-radius: 0;height: 40px!important;text-indent: 0;">
-                    <option value="">所有项目</option>
-                    <c:forEach items="${tasks}" var="task">
-                        <option value="${task.id}">${task.title}</option>
-                    </c:forEach>
-                </select>
+                <form class="layui-form" id="searchForm">
+                    <div class="layui-form-item" style="margin-top: 15px;">
+                        <div class="layui-inline">
+                            <div class="layui-input-inline" style="margin-left: 20px;height: 40px;">
+                                <input type="text" class="layui-input" id="date_range" placeholder="日期范围">
+                            </div>
+                            <button type="button" id="transportSearchBtn" class="layui-btn custom_btn search_btn"
+                                    style="float: none;">查询
+                            </button>
+                            <select type="text" name="title" id="task" autocomplete="off" class="form-control"
+                                    style="width: 15%;float: right;border-radius: 0;height: 40px!important;text-indent: 0;">
+                                <option value="">所有项目</option>
+                                <c:forEach items="${tasks}" var="task">
+                                    <option value="${task.id}">${task.title}</option>
+                                </c:forEach>
+                            </select>
+                        </div>
+                    </div>
+                </form>
             </div>
-
             <table id="feeTable" lay-filter="feeTable" class="custom_table"></table>
         </div>
     </div>

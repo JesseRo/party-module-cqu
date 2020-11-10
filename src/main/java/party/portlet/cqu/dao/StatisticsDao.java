@@ -74,7 +74,7 @@ public class StatisticsDao extends PostgresqlDaoImpl<Place> {
                 "\tinner join hg_party_meeting_plan_info info on mi.meeting_id = info.meeting_id" +
                 "\tINNER JOIN hg_party_member M ON mi.participant_id = M.member_identity and m.historic = false\n" +
                 "where\n" +
-                "\tmi.participant_id in (" + prefix + ")\n" +
+                "\tmi.participant_id in (" + prefix + ") and info.task_status > '4'\n" +
                 "\tand info.start_time >= ?::date and info.start_time <= ?::date" +
                 "\tGROUP BY\n" +
                 "\tmi.participant_id";
@@ -94,7 +94,7 @@ public class StatisticsDao extends PostgresqlDaoImpl<Place> {
                 "LEFT JOIN\n" +
                 "\thg_party_member member on info.sit_id = member.member_identity\n" +
                 "where \n" +
-                "\tmember.historic is false \n" +
+                "\tmember.historic is false and info.task_status > '4'\n" +
                 "\tand member.member_identity in (" + prefix + ")\n" +
                 "\tand info.start_time >= ?::date and info.start_time <= ?::date" +
                 "\tGROUP BY member.member_identity";
@@ -114,7 +114,7 @@ public class StatisticsDao extends PostgresqlDaoImpl<Place> {
                 "\tinner join hg_party_meeting_plan_info info on mi.meeting_id = info.meeting_id" +
                 "\tINNER JOIN hg_party_member M ON mi.member_id = M.member_identity and m.historic = false\n" +
                 "where\n" +
-                "\tmi.member_id in (" + prefix + ")\n" +
+                "\tmi.member_id in (" + prefix + ") and info.task_status > '4'\n" +
                 "\tand info.start_time >= ?::date and info.start_time <= ?::date" +
                 "\tGROUP BY\n" +
                 "\tmi.member_id";

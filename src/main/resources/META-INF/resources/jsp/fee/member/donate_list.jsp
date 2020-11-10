@@ -12,6 +12,7 @@
     <script type="text/javascript" >
         $(function() {
             var tableObj;
+
             layui.use('table', function(){
                 var table = layui.table;
 
