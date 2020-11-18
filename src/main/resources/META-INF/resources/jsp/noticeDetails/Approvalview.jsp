@@ -155,19 +155,27 @@
 						form = layui.form;
 				form.on('submit(rejectForm)', function (data) {
 					var url = "${PartyRejected}";
-					$.ajax({
-						url:url,
-						data:{meeting_id2:"${meetingPlan.meeting_id}",should_:data.field.rejectReason},
-						dataType:'json',
-						async:false,
-						success:function(res){
-							if(res){
-								layer.msg("驳回成功。");
-								window.history.back();
+					if (data.field.rejectReason === "其他原因") {
+						layuiModal.prompt("驳回原因", "", function (v) {
+							doRej(v);
+						})
+					}else {
+						doRej(data.field.rejectReason);
+					}
+					function doRej(d){
+						$.ajax({
+							url:url,
+							data:{meeting_id2:"${meetingPlan.meeting_id}",should_:d},
+							dataType:'json',
+							async:false,
+							success:function(res){
+								if(res){
+									layer.msg("驳回成功。");
+									window.history.back();
+								}
 							}
-						}
-					});
-
+						});
+					}
 				})
 				form.verify({
 					select: function (value, item) {

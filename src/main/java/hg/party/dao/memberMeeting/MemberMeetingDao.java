@@ -134,7 +134,7 @@ public class MemberMeetingDao extends PostgresqlDaoImpl<MemberMeeting> {
 				"\tINNER JOIN hg_party_member M ON par.participant_id = M.member_identity\n" +
 				"\tLEFT JOIN hg_party_org o ON M.member_org = o.org_id \n" +
 				"\tLEFT JOIN hg_party_meeting_plan_info plan ON par.meeting_id = plan.meeting_id \n" +
-				"WHERE plan.task_status > '4' o.org_id in (" + suffix + ")\n" +
+				"WHERE plan.task_status > '4' and o.org_id in (" + suffix + ")\n" +
 				"\t\tand plan.start_time >= ?::date and plan.start_time <= ?::date\n" +
 				"GROUP BY\n" +
 				"\to.org_id,\n" +

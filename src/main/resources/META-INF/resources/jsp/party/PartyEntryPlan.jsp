@@ -223,22 +223,31 @@
 			})
 			form.on('submit(rejectForm)', function (data) {
 				var url = "${PartyRejected}";
-				$.ajax({
-					url:url,
-					data:{meeting_id2:rejectId,should_:data.field.rejectReason},
-					dataType:'json',
-					async:false,
-					success:function(res){
-						if(res){
-							layer.closeAll();
-							layer.msg("驳回成功。", {
-								icon: 1,
-								time: 1000
-							});
-							renderTable(pageInfo.page,pageInfo.size);
+				if (data.field.rejectReason === "其他原因") {
+					layuiModal.prompt("驳回原因", "", function (v) {
+						doRej(v);
+					})
+				}else {
+					doRej(data.field.rejectReason);
+				}
+				function doRej(d){
+					$.ajax({
+						url:url,
+						data:{meeting_id2:rejectId,should_:d},
+						dataType:'json',
+						async:false,
+						success:function(res){
+							if(res){
+								layer.closeAll();
+								layer.msg("驳回成功。", {
+									icon: 1,
+									time: 1000
+								});
+								renderTable(pageInfo.page,pageInfo.size);
+							}
 						}
-					}
-				});
+					});
+				}
 				return false;
 			})
 			form.verify({
