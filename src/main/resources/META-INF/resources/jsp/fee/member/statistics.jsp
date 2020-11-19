@@ -14,7 +14,7 @@
             var tableObj;
             layui.use('table', function(){
                 var table = layui.table;
-
+                var unpay = '<span style="color: red;font-size: 13px;">未缴费</span>';
                 tableObj = table.render({
                     elem: '#feeTable',
                     url: "http://" + document.domain + ':9007/fee/member/statistics', //数据接口
@@ -33,40 +33,40 @@
                                 return d[-1].year > 0 ? d[-1].year : '总计';
                             }},
                         {field: 'jan', title: '1月', width:'7%', templet: function (d) {
-                                return d[1] ? (d[1].state === 1 ? d[1].fee : '<span style="color: red;">未缴费</span>') : '';
+                                return d[1] ? (d[1].state === 1 ? d[1].fee : unpay) : '';
                             }},
                         {field: 'feb', title: '2月', width:'7%', templet: function (d) {
-                                return d[2] ? (d[2].state === 1 ? d[2].fee : '<span style="color: red;">未缴费</span>') : '';
+                                return d[2] ? (d[2].state === 1 ? d[2].fee : unpay) : '';
                             }},
                         {field: 'mar', title: '3月', width:'7%', templet: function (d) {
-                                return d[3] ? (d[3].state === 1 ? d[3].fee : '<span style="color: red;">未缴费</span>') : '';
+                                return d[3] ? (d[3].state === 1 ? d[3].fee : unpay) : '';
                             }},
                         {field: 'apr', title: '4月', width:'7%', templet: function (d) {
-                                return d[4] ? (d[4].state === 1 ? d[4].fee : '<span style="color: red;">未缴费</span>') : '';
+                                return d[4] ? (d[4].state === 1 ? d[4].fee : unpay) : '';
                             }},
                         {field: 'may', title: '5月', width:'7%', templet: function (d) {
-                                return d[5] ? (d[5].state === 1 ? d[5].fee : '<span style="color: red;">未缴费</span>') : '';
+                                return d[5] ? (d[5].state === 1 ? d[5].fee : unpay) : '';
                             }},
                         {field: 'jun', title: '6月', width:'7%', templet: function (d) {
-                                return d[6] ? (d[6].state === 1 ? d[6].fee : '<span style="color: red;">未缴费</span>') : '';
+                                return d[6] ? (d[6].state === 1 ? d[6].fee : unpay) : '';
                             }},
                         {field: 'jul', title: '7月', width:'7%', templet: function (d) {
-                                return d[7] ? (d[7].state === 1 ? d[7].fee : '<span style="color: red;">未缴费</span>') : '';
+                                return d[7] ? (d[7].state === 1 ? d[7].fee : unpay) : '';
                             }},
                         {field: 'aug', title: '8月', width:'7%', templet: function (d) {
-                                return d[8] ? (d[8].state === 1 ? d[8].fee : '<span style="color: red;">未缴费</span>') : '';
+                                return d[8] ? (d[8].state === 1 ? d[8].fee : unpay) : '';
                             }},
                         {field: 'sep', title: '9月', width:'7%', templet: function (d) {
-                                return d[9] ? (d[9].state === 1 ? d[9].fee : '<span style="color: red;">未缴费</span>') : '';
+                                return d[9] ? (d[9].state === 1 ? d[9].fee : unpay) : '';
                             }},
                         {field: 'oct', title: '10月', width:'7%', templet: function (d) {
-                                return d[10] ? (d[10].state === 1 ? d[10].fee : '<span style="color: red;">未缴费</span>') : '';
+                                return d[10] ? (d[10].state === 1 ? d[10].fee : unpay) : '';
                             }},
                         {field: 'nov', title: '11月', width:'7%', templet: function (d) {
-                                return d[11] ? (d[11].state === 1 ? d[11].fee : '<span style="color: red;">未缴费</span>') : '';
+                                return d[11] ? (d[11].state === 1 ? d[11].fee : unpay) : '';
                             }},
                         {field: 'dec', title: '12月', width:'7%', templet: function (d) {
-                                return d[12] ? (d[12].state === 1 ? d[12].fee : '<span style="color: red;">未缴费</span>') : '';
+                                return d[12] ? (d[12].state === 1 ? d[12].fee : unpay) : '';
                             }},
                         {field: 'total', title: '总额', width:'7%', templet: function (d) {
                                 return d[-1].fee
@@ -85,9 +85,9 @@
     </script>
 </head>
 <body>
-<div class="table_form_content">
+<div class="party_manage_container">
     <!-- 右侧盒子内容 -->
-    <div class="activity_manage_page">
+    <div class="party_manage_page">
         <div class="breadcrumb_group">
             当前位置：
             <span class="layui-breadcrumb" lay-separator=">">

@@ -72,6 +72,7 @@
     <!-- 右侧盒子内容 -->
 </div>
 <script type="text/html" id="operationButton">
+    <a class="layui-btn layui-btn-xs layui-btn-danger">我要捐款</a>
     <a class="layui-btn layui-btn-xs" onclick="window.location.href='/member_donate_detail?id={{d.id}}'">详情</a>
 </script>
 </body>
