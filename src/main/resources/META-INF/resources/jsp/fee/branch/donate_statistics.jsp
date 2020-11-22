@@ -8,8 +8,27 @@
 
 
     <style type="text/css">
+        .table_outer_box > table thead, tbody tr {
+            display: table-row !important;
+            width: 100%;
+            table-layout: fixed;
+        }
+        .layui-table-page {
+            text-align: center;
+        }
     </style>
     <script type="text/javascript" >
+        function getQueryVariable(variable) {
+            var query = window.location.search.substring(1);
+            var vars = query.split("&");
+            for (var i = 0; i < vars.length; i++) {
+                var pair = vars[i].split("=");
+                if (pair[0] == variable) {
+                    return pair[1];
+                }
+            }
+            return '';
+        }
         $(function() {
             var startDate, endDate;
             var tableObj;
@@ -22,13 +41,13 @@
             }
             layui.use('table', function(){
                 var table = layui.table;
+                var orgId = getQueryVariable('orgId');
 
                 tableObj = table.render({
                     elem: '#feeTable',
-                    url: "http://" + document.domain + ':9007/fee/branch/donate/statistics', //数据接口
+                    url: "http://" + document.domain + ':9007/fee/branch/donate/statistics?orgId=' + orgId, //数据接口
                     headers: {Authorization: sessionStorage.getItem("sessionKey")},
-                    method: 'post',
-                    contentType: 'application/json',
+                    method: 'get',
                     page: {
                         limit:10,   //每页条数
                         limits:[],
@@ -41,8 +60,8 @@
                         {field: 'memberName', title: '姓名', width:'15%'},
                         {field: 'memberSex', title: '性别', width:'10%'},
                         {field: 'jobNumber', title: '工号/学号', width:'15%'},
-                        {field: 'secondaryName', title: '所在机构/学院', width:'25%'},
-                        {field: 'donateTaskName', title: '捐款项目', width:'25%'},
+                        {field: 'secondaryName', title: '所在机构/学院', width:'20%'},
+                        {field: 'donateTaskName', title: '捐款项目', width:'20%'},
                         {field: 'donateAmount', title: '捐款金额', width:'10%'},
                         {field: 'donateTime', title: '捐款时间', width:'10%'}
                     ]],
@@ -102,7 +121,7 @@
         </div>
         <div class="bg_white_container">
             <div class="operate_form_group">
-                <div class="layui-input-inline" style="margin-left: 20px;height: 40px;">
+                <div class="layui-input-inline" style="height: 40px;">
                     <input type="text" class="layui-input" id="date_range" placeholder="日期范围">
                 </div>
                 <input type="text" name="title" id="searchCondition" placeholder="输入姓名搜索" autocomplete="off"
@@ -119,7 +138,7 @@
                     </c:forEach>
                 </select>
             </div>
-            <table id="feeTable" lay-filter="feeTable" class="custom_table"></table>
+            <table id="feeTable" lay-filter="feeTable"></table>
         </div>
     </div>
     <!-- 右侧盒子内容 -->

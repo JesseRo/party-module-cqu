@@ -34,7 +34,7 @@
 
 
         $(function() {
-            var startDate, endDate, state = 1;
+            var startDate, endDate, state = 0;
             var tableObj;
             var checked = {};
             var all;
@@ -106,10 +106,10 @@
                             checked = {};
                             for (var i = 0; i < all.length; i++) {
                                 var a = all[i];
-                                checked[a.memberId] = {name: a.memberName, month: a.month, fee: a.fee}
+                                checked[a.memberId + '@' + a.yearMonth] = {name: a.memberName, month: a.month, fee: a.fee}
                             }
                         } else {
-                            checked[obj.data.memberId] = {
+                            checked[obj.data.memberId + '@' + obj.data.yearMonth] = {
                                 name: obj.data.memberName,
                                 month: obj.data.month,
                                 fee: obj.data.fee
@@ -119,7 +119,7 @@
                         if (obj.type == 'all') {
                             checked = {}
                         }
-                        delete checked[obj.data.memberId]
+                        delete checked[obj.data.memberId + '@' + obj.data.yearMonth]
                     }
                     console.log(obj.checked); //当前是否选中状态
                     console.log(obj.data); //选中行的相关数据
@@ -189,7 +189,7 @@
 
                 //监听Tab切换，以改变地址hash值
                 element.on('tab(docDemoTabBrief)', function(data){
-                    if (data.index == 0) {
+                    if (data.index == 1) {
                         state = 1;
                         smsButton.hide();
                         representButton.hide();
@@ -214,7 +214,7 @@
             当前位置：
             <span class="layui-breadcrumb" lay-separator=">">
                         <a href="javascript:;">党费管理</a>
-                        <a href="javascript:;">类型审核</a>
+                        <a href="javascript:;">缴费查询</a>
                     </span>
         </div>
         <div class="bg_white_container">
@@ -226,7 +226,7 @@
                         <option value="${org.org_id}">${org.org_name}</option>
                     </c:forEach>
                 </select>
-                <div class="layui-input-inline" style="margin-left: 20px;height: 40px;">
+                <div class="layui-input-inline" style="height: 40px;">
                     <input type="text" class="layui-input" id="date_range" placeholder="日期范围">
                 </div>
                 <input type="text" name="title" id="searchCondition" placeholder="查询条件" autocomplete="off"
@@ -247,8 +247,8 @@
             </div>
             <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief" style="height: 100%;">
                 <ul class="layui-tab-title" >
-                    <li class="layui-this">已交</li>
-                    <li>未交</li>
+                    <li class="layui-this">未交</li>
+                    <li>已交</li>
                 </ul>
                 <div class="layui-tab-content" style="height: 100%;">
                     <table id="feeTable" lay-filter="feeTable" class="custom_table"></table>

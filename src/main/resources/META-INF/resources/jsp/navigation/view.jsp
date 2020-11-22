@@ -127,56 +127,7 @@
 <%--        --%>
         </style>
         <script type="text/javascript">
-<%--                $(function(){--%>
-<%--                    var firstLogin = "${firstLogin}";--%>
-<%--                    console.log("firstLogin "+firstLogin);--%>
-<%--                    if("false" === firstLogin){--%>
-<%--                         $("#greetModal").modal("show");--%>
-<%--                    }--%>
-<%--                    var messages='';--%>
-<%--                    $(".messageCount_img").each(function(){--%>
-<%--                        var name=$(this).prev().html();--%>
-<%--                        var count=$(this).next().val();--%>
-<%--                            messages +=name+":"+count+"条  "; --%>
-<%--                            var img_="/images/todo-icon.png";--%>
-<%--                            if("发文审批"==name){--%>
-<%--                                img_='/images/todo-approval.png';--%>
-<%--                            }else if("审批计划"==name){--%>
-<%--                                img_='/images/todo-deploy.png';--%>
-<%--                            }--%>
-<%--                            var href=$(this).parent().attr("href");--%>
-<%--                            var template= '<a href="'+href+'"> '+--%>
-<%--                                            '<div class="message_item"> '+--%>
-<%--                                              '<div class="img_box"> '+--%>
-<%--                                              '<img src="'+img_+'"/> '+--%>
-<%--                                              '</div> '+--%>
-<%--                                              '<p> '+--%>
-<%--                                              '<span class="bold_num">'+count+'</span>条 '+--%>
-<%--                                              '</p> '+--%>
-<%--                                              '<p class="item_name">'+name+'</p> '+--%>
-<%--                                             '</div>'+--%>
-<%--                                          '</a>';--%>
-<%--                                          $(".message_box").append(template);--%>
-<%--                                          var href_=$(this).parent().attr("href");--%>
-<%--                                          $(".todo_look").attr("href",href_);--%>
-<%--                         });--%>
-<%--                       var n="${login_Count}";--%>
-<%--                       if(messages&&n == 1){--%>
-<%--                          $("#message_modal").modal("show");--%>
-<%--                       }--%>
-<%--                        var itemLen = $(".message_box").find(".message_item").length;--%>
-<%--                        console.log(itemLen)--%>
-<%--                        if(itemLen == 1){--%>
-<%--                            $("#message_modal .modal-dialog").css("width","580px");--%>
-<%--                            $("#message_modal .modal-content").css("width","580px");--%>
-<%--                            $(".message_item").css("margin","0 108.5px");--%>
-<%--                        }else if(itemLen == 2){--%>
-<%--                            $("#message_modal .modal-dialog").css("width","580px");--%>
-<%--                            $("#message_modal .modal-content").css("width","580px");--%>
-<%--                            $(".message_item").css("marginRight",0);--%>
-<%--                            $(".message_item").eq(1).css("float","right");--%>
-<%--                        }--%>
-<%--                });--%>
+
         </script>
 	</head>
 	<body>

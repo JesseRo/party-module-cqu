@@ -8,6 +8,14 @@
 
 
     <style type="text/css">
+        .table_outer_box > table thead, tbody tr {
+            display: table-row !important;
+            width: 100%;
+            table-layout: fixed;
+        }
+        .layui-table-page {
+            text-align: center;
+        }
     </style>
     <script type="text/javascript">
         function getQueryVariable(variable) {
@@ -230,7 +238,7 @@
                     </span>
         </div>
         <div class="bg_white_container">
-            <table id="feeTable" lay-filter="feeTable" class="custom_table"></table>
+            <table id="feeTable" lay-filter="feeTable"></table>
         </div>
     </div>
     <!-- 右侧盒子内容 -->

@@ -223,13 +223,7 @@
 			})
 			form.on('submit(rejectForm)', function (data) {
 				var url = "${PartyRejected}";
-				if (data.field.rejectReason === "其他原因") {
-					layuiModal.prompt("驳回原因", "", function (v) {
-						doRej(v);
-					})
-				}else {
-					doRej(data.field.rejectReason);
-				}
+				doRej(data.field.rejectReason);
 				function doRej(d){
 					$.ajax({
 						url:url,

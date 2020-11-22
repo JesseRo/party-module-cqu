@@ -12,6 +12,7 @@ import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import hg.party.dao.org.OrgDao;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.springframework.util.StringUtils;
@@ -64,6 +65,9 @@ public class NavigationPortlet extends MVCPortlet {
 	private NavigationPermissionsServer navigationPermissionsServer;
 	@Reference
 	private NavigationMessageServer navigationMessageServer;
+
+	@Reference
+	private OrgDao orgDao;
 	
 	@SuppressWarnings("unchecked")
 	@Override

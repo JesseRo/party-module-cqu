@@ -101,14 +101,9 @@
 				<input type="hidden" class="layui-layer-input"  name="meetingId" value="1">
 				<div class="layui-form-item">
 					<div class="layui-inline">
-						<label class="layui-form-label layui-d">驳回理由:</label>
+						<label class="layui-form-label layui-required">驳回理由:</label>
 						<div class="layui-input-inline">
-							<select name="rejectReason" lay-verify="select" >
-								<option value="">-请选择-</option>
-								<c:forEach var="reason" items="${reasonList }">
-									<option value="${reason.resources_value}">${reason.resources_value}</option>
-								</c:forEach>
-							</select>
+							<input  class="layui-layer-input"  name="rejectReason" lay-verify="required" >
 						</div>
 					</div>
 				</div>
@@ -175,13 +170,7 @@
 			})
 			form.on('submit(rejectForm)', function (data) {
 				var url = "${PartyRejected}";
-				if (data.field.rejectReason === "其他原因") {
-					layuiModal.prompt("驳回原因", "", function (v) {
-						doRej(v);
-					})
-				}else {
-					doRej(data.field.rejectReason);
-				}
+				doRej(data.field.rejectReason);
 				function doRej(d){
 					$.ajax({
 						url:url,

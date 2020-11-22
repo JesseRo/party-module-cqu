@@ -1,15 +1,16 @@
 package party.portlet.fee.secondary;
 
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
+import com.liferay.portal.kernel.util.PortalUtil;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+import org.springframework.util.StringUtils;
 import party.constants.PartyPortletKeys;
 import party.portlet.fee.dao.FeeDao;
 
-import javax.portlet.Portlet;
-import javax.portlet.PortletException;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
+import javax.portlet.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -36,8 +37,14 @@ public class SecondaryDonateStatisticsPortlet extends MVCPortlet {
     private FeeDao feeDao;
     @Override
     public void doView(RenderRequest req, RenderResponse res) throws IOException, PortletException {
-        List<Map<String, Object>> donates = feeDao.allDonate();
-        req.setAttribute("tasks", donates);
-        super.doView(req, res);
+        HttpServletRequest request= PortalUtil.getHttpServletRequest(req);
+        HttpServletRequest orgReq = PortalUtil.getOriginalServletRequest(request);
+
+        PortletURL navigationURL = res.createRenderURL();
+        navigationURL.setParameter("mvcRenderCommandName", "/donate/render");
+        HttpServletResponse response = PortalUtil.getHttpServletResponse(res);
+        String orgId = orgReq.getParameter("orgId");
+        orgId = StringUtils.isEmpty(orgId) ? "" : orgId;
+        response.sendRedirect(response.encodeRedirectURL(navigationURL.toString() + "&orgId=" + orgId));
     }
 }

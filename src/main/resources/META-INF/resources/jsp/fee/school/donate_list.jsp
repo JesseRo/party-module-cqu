@@ -41,7 +41,9 @@
                     },
                     cols: [[ //表头
                         {field: 'id', title: 'id', hide: true},
-                        {field: 'secondaryName', title: '二级党组织', width:'16.6%'},
+                        {field: 'secondaryName', title: '二级党组织', width:'16.6%', templet: function (d) {
+                                return '<a onclick="window.location.href=\'/secondary_donate_statistics?orgId=' + d.orgId + '\'">' + d.secondaryName + '</a>';
+                            }},
                         {field: 'secretary', title: '党组织书记', width:'16.6%'},
                         {field: 'memberCount', title: '党组织人数', width:'16.6%'},
                         {field: 'title', title: '捐款项目', width:'16.6%'},

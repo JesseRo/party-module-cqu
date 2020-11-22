@@ -8,8 +8,27 @@
 
 
     <style type="text/css">
+        .table_outer_box > table thead, tbody tr {
+            display: table-row !important;
+            width: 100%;
+            table-layout: fixed;
+        }
+        .layui-table-page {
+            text-align: center;
+        }
     </style>
     <script type="text/javascript" >
+        function getQueryVariable(variable) {
+            var query = window.location.search.substring(1);
+            var vars = query.split("&");
+            for (var i = 0; i < vars.length; i++) {
+                var pair = vars[i].split("=");
+                if (pair[0] == variable) {
+                    return pair[1];
+                }
+            }
+            return '';
+        }
         $(function() {
             var startDate, endDate;
             var tableObj;
@@ -22,13 +41,13 @@
             }
             layui.use('table', function(){
                 var table = layui.table;
+                var orgId = getQueryVariable('orgId');
 
                 tableObj = table.render({
                     elem: '#feeTable',
-                    url: "http://" + document.domain + ':9007/fee/secondary/donate/statistics', //数据接口
+                    url: "http://" + document.domain + ':9007/fee/secondary/donate/statistics?orgId=' + orgId, //数据接口
                     headers: {Authorization: sessionStorage.getItem("sessionKey")},
-                    method: 'post',
-                    contentType: 'application/json',
+                    method: 'get',
                     page: {
                         limit:10,   //每页条数
                         limits:[],
@@ -38,7 +57,9 @@
                     },
                     cols: [[ //表头
                         {field: 'id', title: 'id', hide: true},
-                        {field: 'branchName', title: '支部', width:'25%'},
+                        {field: 'branchName', title: '支部', width:'25%', templet: function (d) {
+                                return '<a onclick="window.location.href=\'/branch_donate_search?orgId=' + d.orgId + '\'">' + d.branchName + '</a>';
+                            }},
                         {field: 'memberCount', title: '支部人数', width:'15%'},
                         {field: 'donateCount', title: '捐款人数', width:'15%'},
                         {field: 'title', title: '捐款项目', width:'25%'},
@@ -113,7 +134,7 @@
                     </c:forEach>
                 </select>
             </div>
-            <table id="feeTable" lay-filter="feeTable" class="custom_table"></table>
+            <table id="feeTable" lay-filter="feeTable"></table>
         </div>
     </div>
     <!-- 右侧盒子内容 -->
