@@ -10,8 +10,64 @@
     <style type="text/css">
     </style>
     <script type="text/javascript" >
+        function thankLetter(v) {
+
+        }
+        function donatePay(id) {
+            layuiModal.prompt("请输入捐款金额（元）", "", function (v) {
+                if (isNaN(Number(v))) {
+                    layuiModal.alert("请输入正确的金额!");
+                }
+                $.ajax({
+                    type: "post",
+                    url: "http://" + document.domain + ':9007/fee/member/donate-transaction',
+                    data: {
+                        amount: v,
+                        donateId: id
+                    },
+                    dataType: "json",
+                    success: function (res) {
+                        if (res.code === 0) {
+                            payment(res.data.sign, res.data.data);
+                            layer.closeAll();
+                        } else {
+                            layuiModal.alert(res.message)
+                        }
+                    }
+                });
+            })
+        }
+        var layer;
+
         $(function() {
             var tableObj;
+            var noticedId;
+            layui.use("layer", function () {
+                layer = layui.layer;
+                $.get("http://" + document.domain + ':9007/fee/member/donate/notice', function (res) {
+                    if (res.code === 0) {
+                        $('#notice_content').text(res.data.notice);
+                        noticedId = res.data.id;
+                        layer.open({
+                            title: false,
+                            shadeClose: true,
+                            closeBtn: 0,
+                            area: '1200px',
+                            type: 1,
+                            content: $('.donate_notice')
+                        });
+                        $('.donate_notice').show();
+                    }
+                })
+            });
+
+            $('.donate').on('click', function () {
+                donatePay(noticedId);
+            })
+
+            $('.cancel').on('click', function () {
+                layer.closeAll();
+            })
 
             layui.use('table', function(){
                 var table = layui.table;
@@ -69,10 +125,33 @@
             <table id="feeTable" lay-filter="feeTable" class="custom_table"></table>
         </div>
     </div>
+    <div class="donate_notice" style="display: none;background-image: url('/images/img_juankuan_bg.png');width: 1200px;height: 700px;padding: 20px 150px;background-repeat: repeat no-repeat;background-size: 100% 100%;">
+        <div style="background-image: url('/images/img_juankuan_content_bg.png'); width: 900px;padding: 0px 0px 0px 120px;background-repeat: repeat no-repeat;height: 660px;background-size: 100% 100%;">
+            <div style="
+                height: 100px;
+                text-align: center;
+                font-size: 30px;
+                line-height: 100px;
+                padding-right: 150px;
+            ">捐&nbsp;&nbsp;&nbsp;款&nbsp;&nbsp;&nbsp;倡&nbsp;&nbsp;&nbsp;议&nbsp;&nbsp;&nbsp;书</div>
+            <div style="height: 440px;
+    overflow: auto;
+    padding-right: 15px;
+    margin-right: 60px;" id="notice_content">
+
+            </div>
+            <div style="float: right; margin-top: 20px;margin-right: 110px;">
+                <button class="donate" style="background-image: url('/images/btn_juankuan.png'); width: 80px;">&nbsp;</button>
+                <button class="cancel" style="background-image: url('/images/btn_close.png'); width: 80px; margin-left: 30px;">&nbsp;</button>
+            </div>
+        </div>
+    </div>
     <!-- 右侧盒子内容 -->
 </div>
 <script type="text/html" id="operationButton">
-    <a class="layui-btn layui-btn-xs layui-btn-danger">我要捐款</a>
+    {{# if(d.state == 1){ }}
+    <a class="layui-btn layui-btn-xs layui-btn-danger" onclick="donatePay('{{d.id}}')">我要捐款</a>
+    {{# } }}
     <a class="layui-btn layui-btn-xs" onclick="window.location.href='/member_donate_detail?id={{d.id}}'">详情</a>
 </script>
 </body>

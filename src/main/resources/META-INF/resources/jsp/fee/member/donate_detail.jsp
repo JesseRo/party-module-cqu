@@ -34,6 +34,28 @@
 	</head>
 	<body>
 	<script>
+		var id;
+
+		function donatePay() {
+			layuiModal.prompt("请输入捐款金额（元）", "", function (v) {
+				$.ajax({
+					type: "post",
+					url: "http://" + document.domain + ':9007/fee/member/donate-transaction',
+					data: {
+						amount: v,
+						donateId: id
+					},
+					dataType: "json",
+					success: function (res) {
+						if (res.code === 0) {
+							payment(res.data.sign, res.data.data);
+						} else {
+							layuiModal.alert(res.message)
+						}
+					}
+				});
+			})
+		}
 		function getQueryVariable(variable)
 		{
 			var query = window.location.search.substring(1);
@@ -46,7 +68,7 @@
 		$(function () {
 			$.get("http://" + document.domain + ':9007/fee/member/donate/detail?id=' + getQueryVariable('id'), function (res) {
 				if (res.code === 0) {
-					if (!res.data.state < 2) {
+					if (res.data.state == 1) {
 						$('#button_pay').show();
 					}
 					$('#donate_title').text(res.data.title);
@@ -57,6 +79,7 @@
 						$('#donate_file').show();
 						$('#no_file').hide();
 					}
+					id = res.data.id;
 				} else {
 					layuiModal.alert(res.message);
 				}
@@ -102,7 +125,7 @@
 							<p class="layui-col-xs6 layui-col-sm6 layui-col-md6"><a id="donate_file" style="display: none;">捐款倡议书</a><span id="no_file">无附件</span></p>
 						</div>
 						<div class="layui-form-item layui-row">
-							<button type="button" id="button_pay"
+							<button type="button" id="button_pay" onclick="donatePay()"
 									class="layui-btn layui-btn-warm" style="display:none;">
 								我要捐款
 							</button>

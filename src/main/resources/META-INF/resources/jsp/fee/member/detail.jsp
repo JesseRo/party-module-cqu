@@ -34,6 +34,25 @@
 	</head>
 	<body>
 	<script>
+		var recordId;
+		function feePay() {
+			$.ajax({
+				type: "post",
+				url: "http://" + document.domain + ':9007/fee/member/fee-transaction',
+				data: JSON.stringify({
+					id: [recordId]
+				}),
+				dataType: "json",
+				contentType: "application/json; charset=utf-8",
+				success: function (res) {
+					if (res.code === 0) {
+						payment(res.data.sign, res.data.data);
+					} else {
+						layuiModal.alert(res.message)
+					}
+				}
+			});
+		}
 		$(function () {
 			$.get("http://" + document.domain + ':9007/fee/member/fee-detail?id=${id}', function (res) {
 				if (res.code === 0) {
@@ -47,6 +66,7 @@
 					$('#fee_yearMonth').text(res.data.yearMonth);
 					$('#end_time').text(res.data.endDate);
 					$('#fee_state').text(res.data.feeState == 1 ? '已缴费' : '未缴费');
+					recordId = res.data.recordId;
 				} else {
 					layuiModal.alert(res.message);
 				}
@@ -113,7 +133,7 @@
 							<p class="layui-col-xs6 layui-col-sm6 layui-col-md6"><span id="fee_state"></span></p>
 						</div>
 						<div class="layui-form-item layui-row">
-							<button type="button" id="button_pay"
+							<button type="button" id="button_pay" onclick="feePay()"
 									class="layui-btn layui-btn-warm" style="display:none;padding: 0 20px;font-size: 16px;height: 40px;border-radius: 4px;">
 								支付
 							</button>

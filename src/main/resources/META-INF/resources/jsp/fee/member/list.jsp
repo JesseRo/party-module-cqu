@@ -10,6 +10,24 @@
     <style type="text/css">
     </style>
     <script type="text/javascript" >
+        function feePay(id) {
+            $.ajax({
+                type: "post",
+                url: "http://" + document.domain + ':9007/fee/member/fee-transaction',
+                data: JSON.stringify({
+                    id: [id]
+                }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (res) {
+                    if (res.code === 0) {
+                        payment(res.data.sign, res.data.data);
+                    } else {
+                        layuiModal.alert(res.message)
+                    }
+                }
+            });
+        }
         $(function() {
             var tableObj;
             layui.use('table', function(){
@@ -37,7 +55,7 @@
                                 return Number(d.shouldFee) / 100;
                             }},
                         {field: 'fee', title: '已交金额', width: '12.5%', templet: function (d) {
-                                return Number(d.fee) / 100;
+                                return d.state == 0 ? 0 : Number(d.shouldFee) / 100
                             }},
                         {field: 'state', title: '交费状态', width: '12.5%', templet: function (d) {
                                 return d.state == 0 ? '未缴' : '已缴'
@@ -81,6 +99,9 @@
     <!-- 右侧盒子内容 -->
 </div>
 <script type="text/html" id="operationButton">
+    {{# if(d.state == 0){ }}
+    <a class="layui-btn layui-btn-xs" onclick="feePay('{{d.recordId}}');">缴费</a>
+    {{# } }}
     <a class="layui-btn layui-btn-xs" onclick="window.location.href='/member_fee_detail?id={{d.id}}&memberId={{d.memberId}}'">详情</a>
 </script>
 </body>

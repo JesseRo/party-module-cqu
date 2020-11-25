@@ -322,9 +322,9 @@
                     "        <div style=\"position: absolute;left: 52.7mm;\" class=\"validTime\"></div>\n" +
                     "    </div>\n" +
                     "    <div class=\"line7\">\n" +
-                    "        <div style=\"position: absolute;left: 115.7mm;\" class=\"currentYear\"></div>\n" +
-                    "        <div style=\"position: absolute;left: 137.7mm;\" class=\"currentMonth\"></div>\n" +
-                    "        <div style=\"position: absolute;left: 155.7mm;\" class=\"currentDay\"></div>\n" +
+                    "        <div style=\"position: absolute;left: 120.7mm;\" class=\"currentYear\"></div>\n" +
+                    "        <div style=\"position: absolute;left: 142.7mm;\" class=\"currentMonth\"></div>\n" +
+                    "        <div style=\"position: absolute;left: 160.7mm;\" class=\"currentDay\"></div>\n" +
                     "    </div>\n" +
                     "    <div class=\"line8\">\n" +
                     "        <div style=\"position: absolute;left: 95.7mm;\" class=\"telephone\"></div>\n" +
@@ -362,7 +362,7 @@
                             .replace("{orgAddress}", data.org_address || "")
                             .replace("{orgTelephone}", data.org_contactor_phone || "")
                             .replace("{orgFax}", data.org_fax || "")
-                            .replace("{orgMailCode}", data.mail_code || "");
+                            .replace("{orgMailCode}", data.org_code || "");
 
                         layer.open({
                             title: '中国共产党员组织关系介绍信'

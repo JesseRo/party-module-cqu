@@ -14,6 +14,7 @@ import party.portlet.transport.entity.PageQueryResult;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -65,6 +66,9 @@ public class StatisticsDao extends PostgresqlDaoImpl<Place> {
     }
 
     public List<BaseStatistics> leaderJoinStatistics(List<String> orgIds, String start, String end) {
+        if (orgIds.isEmpty()) {
+            return Collections.emptyList();
+        }
         String prefix = orgIds.stream().map(p->"?").collect(Collectors.joining(","));
         String sql = "SELECT\n" +
                 "\tmi.participant_id AS property,\n" +
@@ -75,7 +79,7 @@ public class StatisticsDao extends PostgresqlDaoImpl<Place> {
                 "\tINNER JOIN hg_party_member M ON mi.participant_id = M.member_identity and m.historic = false\n" +
                 "where\n" +
                 "\tmi.participant_id in (" + prefix + ") and info.task_status > '4'\n" +
-                "\tand info.start_time >= ?::date and info.start_time <= ?::date" +
+                "\tand date(info.start_time) >= ?::date and date(info.start_time) <= ?::date" +
                 "\tGROUP BY\n" +
                 "\tmi.participant_id";
         List<Object> params = new ArrayList<>(orgIds);
@@ -96,7 +100,7 @@ public class StatisticsDao extends PostgresqlDaoImpl<Place> {
                 "where \n" +
                 "\tmember.historic is false and info.task_status > '4'\n" +
                 "\tand member.member_identity in (" + prefix + ")\n" +
-                "\tand info.start_time >= ?::date and info.start_time <= ?::date" +
+                "\tand date(info.start_time) >= ?::date and date(info.start_time) <= ?::date" +
                 "\tGROUP BY member.member_identity";
         List<Object> params = new ArrayList<>(orgIds);
         params.add(start);
@@ -115,7 +119,7 @@ public class StatisticsDao extends PostgresqlDaoImpl<Place> {
                 "\tINNER JOIN hg_party_member M ON mi.member_id = M.member_identity and m.historic = false\n" +
                 "where\n" +
                 "\tmi.member_id in (" + prefix + ") and info.task_status > '4'\n" +
-                "\tand info.start_time >= ?::date and info.start_time <= ?::date" +
+                "\tand date(info.start_time) >= ?::date and date(info.start_time) <= ?::date" +
                 "\tGROUP BY\n" +
                 "\tmi.member_id";
         List<Object> params = new ArrayList<>(orgIds);
@@ -155,7 +159,7 @@ public class StatisticsDao extends PostgresqlDaoImpl<Place> {
                 "\tWHERE\n" +
                 "\t\tplan.task_status > '0' \n" +
                 "\t\tAND ( MEMBER.member_is_leader = '是' AND MEMBER.member_is_leader IS NOT NULL ) \n" +
-                "\t\tand plan.start_time >= ?::date and plan.start_time <= ?::date\n" +
+                "\t\tand date(plan.start_time) >= ?::date and date(plan.start_time) <= ?::date\n" +
                 "\t) \n" +
                 "FROM\n" +
                 "\thg_party_meeting_plan_info plan\n" +
@@ -163,7 +167,7 @@ public class StatisticsDao extends PostgresqlDaoImpl<Place> {
                 "\tLEFT JOIN hg_party_member MEMBER ON M.participant_id = MEMBER.member_identity \n" +
                 "WHERE\n" +
                 "\tplan.task_status > '0'" +
-                "\tand plan.start_time >= ?::date and plan.start_time <= ?::date";
+                "\tand date(plan.start_time) >= ?::date and date(plan.start_time) <= ?::date";
         return jdbcTemplate.queryForMap(sql, start, end, start, end);
     }
 
@@ -182,7 +186,7 @@ public class StatisticsDao extends PostgresqlDaoImpl<Place> {
                 "WHERE\n" +
                 "\ttask_status > '0' and MEMBER.member_is_leader = '是'\n" +
                 "\tand (o.org_id = ? or o.org_parent = ?)\n" +
-                "\t\tand plan.start_time >= ?::date and plan.start_time <= ?::date)\n" +
+                "\t\tand date(plan.start_time) >= ?::date and date(plan.start_time) <= ?::date)\n" +
                 "FROM\n" +
                 "\thg_party_meeting_plan_info plan\n" +
                 "\tLEFT JOIN hg_party_org o ON plan.organization_id = o.org_id \n" +
@@ -190,7 +194,7 @@ public class StatisticsDao extends PostgresqlDaoImpl<Place> {
                 "\tLEFT JOIN hg_party_member MEMBER ON M.participant_id = MEMBER.member_identity \n" +
                 "WHERE\n" +
                 "\ttask_status > '0'\tand (o.org_id = ? or o.org_parent = ?)\n" +
-                "\t\tand plan.start_time >= ?::date and plan.start_time <= ?::date\n" +
+                "\t\tand date(plan.start_time) >= ?::date and date(plan.start_time) <= ?::date\n" +
                 "\t\n";
         return jdbcTemplate.queryForMap(sql, orgId, orgId, start, end, orgId, orgId, start, end);
     }

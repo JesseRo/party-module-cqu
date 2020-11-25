@@ -11,6 +11,8 @@ public class UserInfo {
 
     private String orgType;
 
+    private String username;
+
 
     public String getMemberId() {
         return memberId;
@@ -50,5 +52,13 @@ public class UserInfo {
 
     public void setOrgType(String orgType) {
         this.orgType = orgType;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

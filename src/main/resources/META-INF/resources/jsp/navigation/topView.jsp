@@ -170,9 +170,20 @@
 	</p>
 	</div>
 	</div>
+	<form action="http://pay.cqu.edu.cn/payment/pay/payment_appPay.action" id="payment_form" target="_blank" style="display: none">
+	<input name="sign">
+	<input name="sysid" value="58">
+	<input name="subsysid" value="032">
+	<input name="data">
+	</form>
 
 		<!-- </p> -->
 		<script type="text/javascript">
+			function payment(sign, data) {
+				$('#payment_form [name=sign]').val(sign);
+				$('#payment_form [name=data]').val(data);
+				$('#payment_form').submit();
+			}
 			function exit(){
 				var url="${ajaxLogin }";
 				var exit="exit";

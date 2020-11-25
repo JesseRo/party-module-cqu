@@ -148,6 +148,7 @@ public class UserService {
         userInfo.setOrgId(user.getUser_department_id());
         userInfo.setUserId(user.getId());
         userInfo.setOrgType(orgType);
+        userInfo.setUsername(name);
         Jedis jedis = cacheCore.getJedis();
         jedis.hset(String.format("baixun:session:%s", MD5.getMD5(sessionId)), USER_INFO_KEY, JSONObject.toJSONString(userInfo));
         jedis.close();

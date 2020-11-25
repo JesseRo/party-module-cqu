@@ -1,6 +1,8 @@
 package party.portlet.org;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -67,7 +69,10 @@ public class PersonAddPortlet extends MVCPortlet {
             orgId = (String) list.get(0).get("member_org");
         }
         Map<String, Object> organization = orgDao.findOrgAndPathByOrgId(orgId);
-        List<Organization> orgs = orgDao.findChildren(department);
+        List orgs = orgDao.findChildren(department);
+        if (orgs == null || orgs.size() == 0) {
+            orgs = Collections.singletonList(organization);
+        }
         renderRequest.setAttribute("organization", organization);
         renderRequest.setAttribute("orgType", orgType);
         renderRequest.setAttribute("orgs", orgs);

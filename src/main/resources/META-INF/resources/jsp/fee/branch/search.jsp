@@ -13,8 +13,25 @@
         }
     </style>
     <script type="text/javascript" >
-
-        function audit(memberId, memberName, month, fee, text) {
+        function feePay(id) {
+            $.ajax({
+                type: "post",
+                url: "http://" + document.domain + ':9007/fee/member/fee-transaction',
+                data: JSON.stringify({
+                    id: id
+                }),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (res) {
+                    if (res.code === 0) {
+                        payment(res.data.sign, res.data.data);
+                    } else {
+                        layuiModal.alert(res.message)
+                    }
+                }
+            });
+        }
+        function audit(memberId, memberName, month, fee, recordId, text) {
             var html = memberName + "：" + month + '月党费' + Number(fee) / 100 + "元<br><br>是否" + text + "？";
             layer.open({
                 type: 1
@@ -28,15 +45,19 @@
                 ,moveType: 1 //拖拽模式，0或者1
                 ,content: '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;text-align: center;">' + html + '</div>'
                 ,success: function(layero){
+                },
+                yes: function (index) {
+                    layer.close(index);
+                    feePay([recordId]);
                 }
             });
         }
+        var checked = {};
 
 
         $(function() {
             var startDate, endDate, state = 0;
             var tableObj;
-            var checked = {};
             var all;
             function toDateStr(date){
                 if (date.year) {
@@ -106,13 +127,14 @@
                             checked = {};
                             for (var i = 0; i < all.length; i++) {
                                 var a = all[i];
-                                checked[a.memberId + '@' + a.yearMonth] = {name: a.memberName, month: a.month, fee: a.fee}
+                                checked[a.memberId + '@' + a.yearMonth] = {name: a.memberName, month: a.month, fee: a.fee, id: a.recordId}
                             }
                         } else {
                             checked[obj.data.memberId + '@' + obj.data.yearMonth] = {
                                 name: obj.data.memberName,
                                 month: obj.data.month,
-                                fee: obj.data.fee
+                                fee: obj.data.fee,
+                                id: obj.data.recordId
                             }
                         }
                     } else {
@@ -179,6 +201,16 @@
                     ,moveType: 1 //拖拽模式，0或者1
                     ,content: '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;text-align: center;">' + html + '</div>'
                     ,success: function(layero){
+
+                    },
+                    yes: function (index) {
+                        var ids = [];
+                        for (var k in checked) {
+                            var d = checked[k];
+                            ids.push(d.id);
+                        }
+                        feePay(ids);
+                        layer.close(index);
                     }
                 });
             }
@@ -239,10 +271,10 @@
                         style="float: none;">补缴
                 </button>
                 <button type="button" id="represent_fee" class="layui-btn custom_btn search_btn"
-                        style="float: right;display: none;">代缴
+                        style="float: right;">代缴
                 </button>
                 <button type="button" id="sms_fee" class="layui-btn custom_btn search_btn"
-                        style="float: right;display: none;">短信催缴
+                        style="float: right;">短信催缴
                 </button>
             </div>
             <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief" style="height: 100%;">
@@ -260,8 +292,8 @@
 </div>
 <script type="text/html" id="operationButton">
     {{# if(d.state == 0){ }}
-    <a class="layui-btn layui-btn-xs" onclick="audit('{{d.memberId}}', '{{d.memberName}}', '{{d.month}}','{{d.fee}}', '代缴')">代缴</a>
-    <a class="layui-btn layui-btn-xs" onclick="audit('{{d.memberId}}', '{{d.memberName}}', '{{d.month}}','{{d.fee}}', '短信催缴')">短信催缴</a>
+    <a class="layui-btn layui-btn-xs" onclick="audit('{{d.memberId}}', '{{d.memberName}}', '{{d.month}}','{{d.fee}}', '{{d.recordId}}', '代缴')">代缴</a>
+    <a class="layui-btn layui-btn-xs" onclick="audit('{{d.memberId}}', '{{d.memberName}}', '{{d.month}}','{{d.fee}}', '{{d.recordId}}', '短信催缴')">短信催缴</a>
     {{# } }}
 </script>
 </body>
