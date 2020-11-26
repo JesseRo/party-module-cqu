@@ -89,6 +89,9 @@ public class StatisticsDao extends PostgresqlDaoImpl<Place> {
     }
 
     public List<BaseStatistics> leaderSitStatistics(List<String> orgIds, String start, String end) {
+        if (orgIds.isEmpty()) {
+            return Collections.emptyList();
+        }
         String prefix = orgIds.stream().map(p->"?").collect(Collectors.joining(","));
         String sql = "SELECT\n" +
                 "\tmember.member_identity AS property \n" +
@@ -109,6 +112,9 @@ public class StatisticsDao extends PostgresqlDaoImpl<Place> {
     }
 
     public List<BaseStatistics> leaderTeachStatistics(List<String> orgIds, String start, String end) {
+        if (orgIds.isEmpty()) {
+            return Collections.emptyList();
+        }
         String prefix = orgIds.stream().map(p->"?").collect(Collectors.joining(","));
         String sql = "SELECT\n" +
                 "\tmi.member_id AS property,\n" +
