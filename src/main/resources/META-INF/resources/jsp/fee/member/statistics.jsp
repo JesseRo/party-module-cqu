@@ -19,10 +19,13 @@
     </style>
     <script type="text/javascript" >
         $(function() {
+            var unpay = '<span style="color: red;font-size: 13px;">未缴费</span>';
+            function renderFee(d) {
+                return d ? (d.state === 1 ? (d.fee / 100) : unpay) : '';
+            }
             var tableObj;
             layui.use('table', function(){
                 var table = layui.table;
-                var unpay = '<span style="color: red;font-size: 13px;">未缴费</span>';
                 tableObj = table.render({
                     elem: '#feeTable',
                     url: "http://" + document.domain + ':9007/fee/member/statistics', //数据接口
@@ -41,43 +44,43 @@
                                 return d[-1].year > 0 ? d[-1].year : '总计';
                             }},
                         {field: 'jan', title: '1月', width:'7%', templet: function (d) {
-                                return d[1] ? (d[1].state === 1 ? d[1].fee : unpay) : '';
+                                return renderFee(d[1]);
                             }},
                         {field: 'feb', title: '2月', width:'7%', templet: function (d) {
-                                return d[2] ? (d[2].state === 1 ? d[2].fee : unpay) : '';
+                                return renderFee(d[2]);
                             }},
                         {field: 'mar', title: '3月', width:'7%', templet: function (d) {
-                                return d[3] ? (d[3].state === 1 ? d[3].fee : unpay) : '';
+                                return renderFee(d[3]);
                             }},
                         {field: 'apr', title: '4月', width:'7%', templet: function (d) {
-                                return d[4] ? (d[4].state === 1 ? d[4].fee : unpay) : '';
+                                return renderFee(d[4]);
                             }},
                         {field: 'may', title: '5月', width:'7%', templet: function (d) {
-                                return d[5] ? (d[5].state === 1 ? d[5].fee : unpay) : '';
+                                return renderFee(d[5]);
                             }},
                         {field: 'jun', title: '6月', width:'7%', templet: function (d) {
-                                return d[6] ? (d[6].state === 1 ? d[6].fee : unpay) : '';
+                                return renderFee(d[6]);
                             }},
                         {field: 'jul', title: '7月', width:'7%', templet: function (d) {
-                                return d[7] ? (d[7].state === 1 ? d[7].fee : unpay) : '';
+                                return renderFee(d[7]);
                             }},
                         {field: 'aug', title: '8月', width:'7%', templet: function (d) {
-                                return d[8] ? (d[8].state === 1 ? d[8].fee : unpay) : '';
+                                return renderFee(d[8]);
                             }},
                         {field: 'sep', title: '9月', width:'7%', templet: function (d) {
-                                return d[9] ? (d[9].state === 1 ? d[9].fee : unpay) : '';
+                                return renderFee(d[9]);
                             }},
                         {field: 'oct', title: '10月', width:'7%', templet: function (d) {
-                                return d[10] ? (d[10].state === 1 ? d[10].fee : unpay) : '';
+                                return renderFee(d[10]);
                             }},
                         {field: 'nov', title: '11月', width:'7%', templet: function (d) {
-                                return d[11] ? (d[11].state === 1 ? d[11].fee : unpay) : '';
+                                return renderFee(d[11]);
                             }},
                         {field: 'dec', title: '12月', width:'7%', templet: function (d) {
-                                return d[12] ? (d[12].state === 1 ? d[12].fee : unpay) : '';
+                                return renderFee(d[12]);
                             }},
                         {field: 'total', title: '总额', width:'7%', templet: function (d) {
-                                return d[-1].fee
+                                return d[-1].fee ? (d[-1].fee / 100) : '';
                             }},
                     ]],
                     parseData: function(res){ //res 即为原始返回的数据

@@ -62,4 +62,11 @@ public class CacheCore {
             return null;
         }
     }
+
+    public long incr(String key, int second) {
+        Jedis jedis = getJedis();
+        long v = jedis.incr(key);
+        jedis.expire(key, second);
+        return v;
+    }
 }

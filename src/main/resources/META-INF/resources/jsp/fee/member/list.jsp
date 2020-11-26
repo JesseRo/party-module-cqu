@@ -5,9 +5,73 @@
 <head>
     <link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/activity-manage1.css?v=1" />
     <link rel="stylesheet" type="text/css" href="${basePath}/cqu/css/common.min.css" />
-
-
     <style type="text/css">
+
+        .layui-layer-content {
+            overflow: visible !important;
+        }
+        .layui-layer-page {
+            background-color: unset !important;
+        }
+
+        .statue {
+            background-image: url('images/img_choudai.png');
+            height: 360px;
+            background-repeat: repeat no-repeat;
+            width: 540px;
+            background-size: 100% 100%;
+            position: absolute;
+            top: 170px;
+            left: -135px;
+        }
+        .notice_top {
+            margin-top: 20px;
+            height: 80px;
+            text-align: right;
+            margin-right: 20px;
+            line-height: 90px;
+            font-size: 30px;
+            font-family: SimSun;
+            font-weight: 900;
+            letter-spacing: 12px;
+        }
+        .inner_left {
+            background-image: url(images/img_choudai_bg.png);
+            height: 441px;
+            width: 25%;
+            margin-left: 5%;
+        }
+        .inner_right {
+            background-color: #fff;
+            height: 441px;
+            width: 70%;
+            border-radius: 7px;
+        }
+        .notice_inner {
+            display: flex;
+        }
+        .inner_right p {
+            margin-top: 0;
+            margin-bottom: 0;
+            font-size: 21px;
+            font-family: SimSun;
+            font-weight: 900;
+            color: #000000;
+            line-height: 39px;
+            letter-spacing: 14px;
+            text-align: center;
+        }
+        .inner_right .roast_title {
+            height: 30px;
+            font-size: 30px;
+            font-family: SimSun;
+            font-weight: 900;
+            color: #F80A0A;
+            line-height: 30px;
+            margin-top: 35px;
+            text-align: center;
+            letter-spacing: 20px;
+        }
     </style>
     <script type="text/javascript" >
         function feePay(id) {
@@ -30,6 +94,18 @@
         }
         $(function() {
             var tableObj;
+            layui.use("layer", function () {
+                var layer = layui.layer;
+                layer.open({
+                    title: false,
+                    shadeClose: true,
+                    closeBtn: 0,
+                    area: '1200px',
+                    type: 1,
+                    content: $('.donate_notice')
+                });
+                $('.donate_notice').show();
+            })
             layui.use('table', function(){
                 var table = layui.table;
 
@@ -97,6 +173,37 @@
         </div>
     </div>
     <!-- 右侧盒子内容 -->
+</div>
+<div class="donate_notice" style="display: none;">
+    <div style="background-image: url('images/img_juankuan_bg.png');width: 1200px;height: 700px;padding: 20px 150px;background-repeat: repeat no-repeat;background-size: 100% 100%;box-sizing: border-box;">
+        <div class="notice_top">
+            <img src="images/ic_danghui.png" style="margin-right: 20px;">党员缴费
+        </div>
+        <div class="notice_inner">
+            <div class="inner_left">
+            </div>
+            <div class="inner_right">
+                <p class="roast_title">入党誓词</p>
+
+                <p style="text-align: left;margin-left: 120px; margin-top: 20px;">我志愿加入中国共产党拥护党</p>
+
+                <p>的纲领，遵守党的章程，履行党的</p>
+
+                <p>义务，执行党的决定，严守党的纪</p>
+
+                <p>律，保守党的秘密，对党忠诚，积</p>
+
+                <p>极工作，为共产主义奋斗终身，随</p>
+
+                <p>时准备为党和人民牺牲一切，永不</p>
+
+                <p style="text-align: left;margin-left: 49px;">叛党。</p>
+            </div>
+        </div>
+    </div>
+    <div class="statue">
+
+    </div>
 </div>
 <script type="text/html" id="operationButton">
     {{# if(d.state == 0){ }}

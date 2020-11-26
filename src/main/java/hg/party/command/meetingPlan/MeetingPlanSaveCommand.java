@@ -12,6 +12,7 @@ import hg.party.dao.org.MemberDao;
 import hg.party.entity.party.MeetingPlan;
 
 import hg.party.entity.partyMembers.Member;
+import hg.party.server.CacheCore;
 import hg.party.server.partyBranch.PartyBranchService;
 
 import hg.util.TransactionUtil;
@@ -51,6 +52,9 @@ public class MeetingPlanSaveCommand implements MVCResourceCommand {
 
     @Reference
     private TransactionUtil transactionUtil;
+
+    @Reference
+    private CacheCore cacheCore;
 
     @Override
     public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse) {
@@ -143,6 +147,10 @@ public class MeetingPlanSaveCommand implements MVCResourceCommand {
 
             int ret = 0;
             String message = graft ? "保存成功" : "发布成功";
+            if(1L != cacheCore.incr("meeting:new:" + resourceRequest.getRequestedSessionId(), 2)) {
+                printWriter.write(JSON.toJSONString(ResultUtil.fail("请求过于频繁，请稍后再试")));
+                return false;
+            }
             transactionUtil.startTransaction();
             if (StringUtils.isEmpty(meetingId)) {
                 ret = partyBranchService.save(m);

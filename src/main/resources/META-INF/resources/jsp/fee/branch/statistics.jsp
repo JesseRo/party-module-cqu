@@ -20,6 +20,9 @@
     <script type="text/javascript" >
         $(function() {
             var tableObj;
+            function renderFee(d) {
+                return d ? (d / 100) : '';
+            }
             layui.use('table', function(){
                 var table = layui.table;
 
@@ -45,43 +48,43 @@
                                 return d[0] || '';
                             }},
                         {field: 'jan', title: '1月', width:'6.5%', templet: function (d) {
-                                return d[1] || '';
+                                return renderFee(d[1]);
                             }},
                         {field: 'feb', title: '2月', width:'6.5%', templet: function (d) {
-                                return d[2] || '';
+                                return renderFee(d[2]);
                             }},
                         {field: 'mar', title: '3月', width:'6.5%', templet: function (d) {
-                                return d[3] || '';
+                                return renderFee(d[3]);
                             }},
                         {field: 'apr', title: '4月', width:'6.5%', templet: function (d) {
-                                return d[4] || '';
+                                return renderFee(d[4]);
                             }},
                         {field: 'may', title: '5月', width:'6.5%', templet: function (d) {
-                                return d[5] || '';
+                                return renderFee(d[5]);
                             }},
                         {field: 'jun', title: '6月', width:'6.5%', templet: function (d) {
-                                return d[6] || '';
+                                return renderFee(d[6]);
                             }},
                         {field: 'jul', title: '7月', width:'6.5%', templet: function (d) {
-                                return d[7] || '';
+                                return renderFee(d[7]);
                             }},
                         {field: 'aug', title: '8月', width:'6.5%', templet: function (d) {
-                                return d[8] || '';
+                                return renderFee(d[8]);
                             }},
                         {field: 'sep', title: '9月', width:'6.5%', templet: function (d) {
-                                return d[9] || '';
+                                return renderFee(d[9]);
                             }},
                         {field: 'oct', title: '10月', width:'6.5%', templet: function (d) {
-                                return d[10] || '';
+                                return renderFee(d[10]);
                             }},
                         {field: 'nov', title: '11月', width:'6.5%', templet: function (d) {
-                                return d[11] || '';
+                                return renderFee(d[11]);
                             }},
                         {field: 'dec', title: '12月', width:'6.5%', templet: function (d) {
-                                return d[12] || '';
+                                return renderFee(d[12]);
                             }},
                         {field: 'total', title: '总额', width:'6.5%', templet: function (d) {
-                                return d[13] || '';
+                                return renderFee(d[13]);
                             }},
                     ]],
                     parseData: function(res){ //res 即为原始返回的数据

@@ -8,6 +8,9 @@
 
 
     <style type="text/css">
+        .layui-layer-page {
+            background-color: unset !important;
+        }
     </style>
     <script type="text/javascript" >
         function thankLetter(v) {
