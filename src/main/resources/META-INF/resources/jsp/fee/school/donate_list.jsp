@@ -10,6 +10,10 @@
 
 
     <style type="text/css">
+        .layui-laydate-content table {
+            table-layout: fixed;
+            width: 100%;
+        }
     </style>
     <script type="text/javascript" >
         $(function() {

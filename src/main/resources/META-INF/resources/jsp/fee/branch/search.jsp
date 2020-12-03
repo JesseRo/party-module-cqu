@@ -11,6 +11,10 @@
         .custom_table {
 
         }
+        .layui-laydate-content table {
+            table-layout: fixed;
+            width: 100%;
+        }
     </style>
     <script type="text/javascript" >
         function feePay(id) {
@@ -43,7 +47,7 @@
                 ,btn: ['确定', '取消']
                 ,btnAlign: 'c'
                 ,moveType: 1 //拖拽模式，0或者1
-                ,content: '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;text-align: center;">' + html + '</div>'
+                ,content: '<div style="padding: 50px; line-height: 22px; background-color: #B82F3E; color: #fff; font-weight: 300;text-align: center;">' + html + '</div>'
                 ,success: function(layero){
                 },
                 yes: function (index) {
@@ -101,7 +105,7 @@
                         {type:'checkbox'},
                         {field: 'id', title: 'id', hide: true},
                         {field: 'memberName', title: '姓名', width:'10%'},
-                        {field: 'secondaryName', title: '所在组织', width:'20%'},
+                        {field: 'secondaryName', title: '所在组织', width:'10%'},
                         {field: 'orgName', title: '所在支部', width:'20%'},
                         {field: 'yearMonth', title: '缴费年月', width:'10%'},
                         {field: 'feeTypeName', title: '党费类型', width:'10%'},
@@ -199,7 +203,7 @@
                     ,btn: ['确定', '取消']
                     ,btnAlign: 'c'
                     ,moveType: 1 //拖拽模式，0或者1
-                    ,content: '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;text-align: center;">' + html + '</div>'
+                    ,content: '<div style="padding: 50px; line-height: 22px; background-color: #B82F3E; color: #fff; font-weight: 300;text-align: center;">' + html + '</div>'
                     ,success: function(layero){
 
                     },
@@ -252,29 +256,29 @@
         <div class="bg_white_container">
             <div class="operate_form_group">
                 <select type="text" name="title" id="secondary" autocomplete="off" class="form-control"
-                        style="width: 15%;float: left;border-radius: 0;height: 40px!important;text-indent: 0;">
+                        style="width: 15%;float: left;border-radius: 0;height: 38px!important;text-indent: 0;">
                     <option value="">所有</option>
                     <c:forEach items="${orgs}" var="org">
                         <option value="${org.org_id}">${org.org_name}</option>
                     </c:forEach>
                 </select>
-                <div class="layui-input-inline" style="height: 40px;">
+                <div class="layui-input-inline" style="height: 38px;margin-left: 20px;">
                     <input type="text" class="layui-input" id="date_range" placeholder="日期范围">
                 </div>
                 <input type="text" name="title" id="searchCondition" placeholder="查询条件" autocomplete="off"
                        class="layui-input custom_input"
-                       style="margin-left: 20px; float: none;height: 40px;">
+                       style="margin-left: 20px; float: none;height: 38px;">
                 <button type="button" id="transportSearchBtn" class="layui-btn custom_btn search_btn"
-                        style="float: none;">查询
+                        style="float: none;height: 38px;">查询
                 </button>
                 <button type="button" id="back_fee" class="layui-btn custom_btn search_btn"
-                        style="float: none;">补缴
+                        style="float: right;height: 38px; display: none;">补缴
                 </button>
                 <button type="button" id="represent_fee" class="layui-btn custom_btn search_btn"
-                        style="float: right;">代缴
+                        style="float: right;height: 38px;">代缴
                 </button>
                 <button type="button" id="sms_fee" class="layui-btn custom_btn search_btn"
-                        style="float: right;">短信催缴
+                        style="float: right;height: 38px;">短信催缴
                 </button>
             </div>
             <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief" style="height: 100%;">

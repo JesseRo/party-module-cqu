@@ -36,7 +36,7 @@
             letter-spacing: 12px;
         }
         .inner_left {
-            background-image: url(images/img_choudai_bg.png);
+            background-image: url('images/img_choudai_bg.png');
             height: 441px;
             width: 25%;
             margin-left: 5%;
@@ -74,37 +74,42 @@
         }
     </style>
     <script type="text/javascript" >
-        function feePay(id) {
-            $.ajax({
-                type: "post",
-                url: "http://" + document.domain + ':9007/fee/member/fee-transaction',
-                data: JSON.stringify({
-                    id: [id]
-                }),
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (res) {
-                    if (res.code === 0) {
-                        payment(res.data.sign, res.data.data);
-                    } else {
-                        layuiModal.alert(res.message)
-                    }
-                }
+        var layer;
+        var id;
+        function feePay(_id) {
+            id = _id;
+            layer.open({
+                title: false,
+                shadeClose: true,
+                closeBtn: 0,
+                area: '1200px',
+                type: 1,
+                content: $('.donate_notice')
             });
+            $('.donate_notice').show();
         }
         $(function() {
             var tableObj;
             layui.use("layer", function () {
-                var layer = layui.layer;
-                layer.open({
-                    title: false,
-                    shadeClose: true,
-                    closeBtn: 0,
-                    area: '1200px',
-                    type: 1,
-                    content: $('.donate_notice')
+                layer = layui.layer;
+            })
+            $('#pay_fee').on('click', function () {
+                $.ajax({
+                    type: "post",
+                    url: "http://" + document.domain + ':9007/fee/member/fee-transaction',
+                    data: JSON.stringify({
+                        id: [id]
+                    }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (res) {
+                        if (res.code === 0) {
+                            payment(res.data.sign, res.data.data);
+                        } else {
+                            layuiModal.alert(res.message)
+                        }
+                    }
                 });
-                $('.donate_notice').show();
             })
             layui.use('table', function(){
                 var table = layui.table;
@@ -199,6 +204,9 @@
 
                 <p style="text-align: left;margin-left: 49px;">叛党。</p>
             </div>
+        </div>
+        <div class="notice_top" style="margin-right: 272px;">
+            <button id="pay_fee" style="background-image: url('/images/我要支付.png');width: 80px;background-size: 100% 100%;background-repeat: repeat no-repeat;height: 27px;">&nbsp;</button>
         </div>
     </div>
     <div class="statue">

@@ -34,7 +34,11 @@
 				width: 110px;
 			}
 			.layui-input-block {
-				width: 500px;
+				width: 520px;
+			}
+			.layui-laydate-content table {
+				table-layout: fixed;
+				width: 100%;
 			}
 		 </style>
 	</head>
@@ -58,10 +62,12 @@
 					return "";
 				}
 			}
-			layui.use(['upload', 'laydate', 'transfer', 'form'], function() {
+			layui.use(['upload', 'laydate', 'transfer', 'form', 'layedit'], function() {
 				var upload = layui.upload;
 				var transfer = layui.transfer;
 				var form = layui.form;
+				var layedit = layui.layedit;
+				var comment = layedit.build('donate_comment'); //建立编辑器
 				upload.render({
 					elem: '#upload_button'
 					,url: 'http://' + window.location.hostname + ":9007/app/file/upload" //改成您自己的上传接口
@@ -108,7 +114,7 @@
 						postData.title = data.field.title;
 						postData.startDate = startDate;
 						postData.endDate = endDate;
-						postData.comment = data.field.comment;
+						postData.comment = layedit.getContent(comment);
 						postData.file = $('#donate_file').val();
 						var org = transfer.getData('donate_range');
 						if (org && org.length > 0) {
@@ -168,9 +174,9 @@
 						</div>
 					</div>
 					<div class="layui-form-item layui-form-text">
-						<label class="layui-form-label layui-required">捐款说明</label>
+						<label class="layui-form-label layui-required">倡议书</label>
 						<div class="layui-input-block">
-							<textarea placeholder="" name="comment" class="layui-textarea"></textarea>
+							<textarea id="donate_comment" placeholder="" name="comment" class="layui-textarea" style="display: none;"></textarea>
 						</div>
 					</div>
 					<div class="layui-form-item">

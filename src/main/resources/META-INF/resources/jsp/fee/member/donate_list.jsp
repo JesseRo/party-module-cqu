@@ -11,61 +11,68 @@
         .layui-layer-page {
             background-color: unset !important;
         }
+        .layui-layer-prompt .layui-layer-content {
+            background-color: white;
+        }
+        .layui-layer-prompt .layui-layer-btn {
+            background-color: white;
+        }
     </style>
     <script type="text/javascript" >
         function thankLetter(v) {
 
         }
+        var noticedId;
+
         function donatePay(id) {
-            layuiModal.prompt("请输入捐款金额（元）", "", function (v) {
-                if (isNaN(Number(v))) {
-                    layuiModal.alert("请输入正确的金额!");
+            $.get("http://" + document.domain + ':9007/fee/member/donate/notice?id=' + id, function (res) {
+                if (res.code === 0) {
+                    $('#notice_content').html(res.data.notice);
+                    noticedId = res.data.id;
+                    layer.open({
+                        title: false,
+                        shadeClose: true,
+                        closeBtn: 0,
+                        area: '1200px',
+                        type: 1,
+                        content: $('.donate_notice')
+                    });
+                    $('.donate_notice').show();
                 }
-                $.ajax({
-                    type: "post",
-                    url: "http://" + document.domain + ':9007/fee/member/donate-transaction',
-                    data: {
-                        amount: v,
-                        donateId: id
-                    },
-                    dataType: "json",
-                    success: function (res) {
-                        if (res.code === 0) {
-                            payment(res.data.sign, res.data.data);
-                            layer.closeAll();
-                        } else {
-                            layuiModal.alert(res.message)
-                        }
-                    }
-                });
             })
         }
         var layer;
 
         $(function() {
             var tableObj;
-            var noticedId;
             layui.use("layer", function () {
                 layer = layui.layer;
-                $.get("http://" + document.domain + ':9007/fee/member/donate/notice', function (res) {
-                    if (res.code === 0) {
-                        $('#notice_content').text(res.data.notice);
-                        noticedId = res.data.id;
-                        layer.open({
-                            title: false,
-                            shadeClose: true,
-                            closeBtn: 0,
-                            area: '1200px',
-                            type: 1,
-                            content: $('.donate_notice')
-                        });
-                        $('.donate_notice').show();
-                    }
-                })
             });
 
             $('.donate').on('click', function () {
-                donatePay(noticedId);
+                layuiModal.prompt("请输入捐款金额（元）", "", function (v) {
+                    if (isNaN(Number(v))) {
+                        layuiModal.alert("请输入正确的金额!");
+                        return
+                    }
+                    $.ajax({
+                        type: "post",
+                        url: "http://" + document.domain + ':9007/fee/member/donate-transaction',
+                        data: {
+                            amount: v,
+                            donateId: noticedId
+                        },
+                        dataType: "json",
+                        success: function (res) {
+                            if (res.code === 0) {
+                                payment(res.data.sign, res.data.data);
+                                layer.closeAll();
+                            } else {
+                                layuiModal.alert(res.message)
+                            }
+                        }
+                    });
+                })
             })
 
             $('.cancel').on('click', function () {

@@ -36,6 +36,10 @@
 			.layui-input-block {
 				width: 500px;
 			}
+			.layui-laydate-content table {
+				table-layout: fixed;
+				width: 100%;
+			}
 		 </style>
 	</head>
 	<body>

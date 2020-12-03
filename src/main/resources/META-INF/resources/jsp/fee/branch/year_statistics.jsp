@@ -16,6 +16,9 @@
         .layui-table-page {
             text-align: center;
         }
+        .layui-table-cell {
+            font-size: 13px;
+        }
     </style>
     <script type="text/javascript">
         function getQueryVariable(variable) {

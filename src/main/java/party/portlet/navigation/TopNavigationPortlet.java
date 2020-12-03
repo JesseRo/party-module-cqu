@@ -11,6 +11,7 @@ import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import com.alibaba.fastjson.JSONObject;
 import com.liferay.portal.kernel.service.persistence.PortletUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import hg.party.dao.org.OrgDao;
@@ -134,7 +135,9 @@ public class TopNavigationPortlet extends MVCPortlet {
 			renderRequest.setAttribute("roles",  roles);
 			String sessionKey = MD5.getMD5(sessionId);
 			renderRequest.setAttribute("sessionKey", sessionKey);
+			Object userInfo = SessionManager.getAttribute(sessionId, "userInfo");
 			Jedis jedis = cacheCore.getJedis();
+			jedis.hset(String.format("baixun:session:%s", MD5.getMD5(sessionId)), "userInfo", JSONObject.toJSONString(userInfo));
 			jedis.expire(String.format("baixun:session:%s", MD5.getMD5(sessionId)), 30 * 60);
 			jedis.close();
 		}else{

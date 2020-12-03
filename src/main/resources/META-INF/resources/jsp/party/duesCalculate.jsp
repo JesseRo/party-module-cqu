@@ -488,7 +488,7 @@
 		<!-- 右侧盒子内容 -->
 	</div>
 	<script>
-		var configStatus = {0: "待审核",1: "已通过", 2:"已驳回",4: "已过期"}
+		var configStatus = {0: "待审核",1: "已通过", 2:"已驳回",3: "已过期"}
 		$(function () {
 			$.get("http://" + document.domain + ':9007/fee/member/fee-config', function (res) {
 				if (res.code === 0) {

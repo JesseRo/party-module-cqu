@@ -17,37 +17,69 @@
 
         function audit(state, id, msg) {
             layuiModal.confirm("确定要" + msg + "吗？", function () {
-                $.post("http://" + document.domain + ':9007/fee/branch/audit', {id: id, state: state}, function (res) {
-                    if (res.code === 0) {
-                        layuiModal.alert("已" + msg);
-                        tableObj.reload();
-                    } else {
-                        layuiModal.alert(res.message)
-                    }
-                })
-            })
-        }
-
-        function reject(state, id, msg) {
-            layuiModal.prompt("驳回原因", '', function (value) {
-                $.post("http://" + document.domain + ':9007/fee/branch/audit', {
-                        id: id,
-                        state: state,
-                        reason: value
-                    }, function (res) {
+                $.ajax({
+                    type: "post",
+                    url: "http://" + document.domain + ':9007/fee/branch/audit',
+                    data: JSON.stringify({id: id, state: state}),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (res) {
                         if (res.code === 0) {
                             layuiModal.alert("已" + msg);
                             tableObj.reload();
                         } else {
                             layuiModal.alert(res.message)
                         }
-                    })
+                    }
+                });
+            })
+        }
+
+        function reject(state, id, msg) {
+            layuiModal.prompt("驳回原因", '', function (value) {
+                $.ajax({
+                    type: "post",
+                    url: "http://" + document.domain + ':9007/fee/branch/audit',
+                    data: JSON.stringify({
+                        id: id,
+                        state: state,
+                        reason: value
+                    }),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (res) {
+                        if (res.code === 0) {
+                            layuiModal.alert("已" + msg);
+                            tableObj.reload();
+                        } else {
+                            layuiModal.alert(res.message)
+                        }
+                    }
+                });
             })
         }
 
         $(function () {
+            var checked = {};
+            $('#config_audit').on('click', function () {
+                var ids = Object.keys(checked);
+                if (ids.length > 0) {
+                    audit(1, ids, "通过");
+                } else {
+                    layuiModal.alert("请选择人员");
+                }
+            })
+            $('#config_reject').on('click', function () {
+                var ids = Object.keys(checked);
+                if (ids.length > 0) {
+                    reject(2, ids, "驳回");
+                } else {
+                    layuiModal.alert("请选择人员");
+                }
+            })
             layui.use('table', function () {
                 var table = layui.table;
+                var all;
 
                 tableObj = table.render({
                     elem: '#feeTable',
@@ -62,6 +94,7 @@
                         groups: 4,
                     },
                     cols: [[ //表头
+                        {type:'checkbox'},
                         {field: 'id', title: 'id', hide: true},
                         {field: 'memberName', title: '姓名', width: '10%'},
                         {field: 'orgName', title: '所在组织', width: '25%'},
@@ -80,6 +113,8 @@
                         {field: 'operation', title: '操作', width: '20%', toolbar: '#operationButton'}
                     ]],
                     parseData: function (res) { //res 即为原始返回的数据
+                        all = res.data.pageData;
+
                         return {
                             "code": res.code, //解析接口状态
                             "msg": res.message, //解析提示文本
@@ -87,6 +122,28 @@
                             "data": res.data.pageData //解析数据列表
                         };
                     }
+                });
+
+                table.on('checkbox(feeTable)', function(obj){
+                    if (obj.checked) {
+                        if (obj.type == 'all') {
+                            checked = {};
+                            for (var i = 0; i < all.length; i++) {
+                                var a = all[i];
+                                checked[a.id] = 1
+                            }
+                        } else {
+                            checked[obj.data.id] = 1
+                        }
+                    } else {
+                        if (obj.type == 'all') {
+                            checked = {}
+                        }
+                        delete checked[obj.data.id]
+                    }
+                    console.log(obj.checked); //当前是否选中状态
+                    console.log(obj.data); //选中行的相关数据
+                    console.log(obj.type); //如果触发的是全选，则为：all，如果触发的是单选，则为：one
                 });
             });
         });
@@ -104,6 +161,14 @@
                     </span>
         </div>
         <div class="bg_white_container">
+            <div class="operate_form_group">
+                <button type="button" id="config_audit" class="layui-btn custom_btn search_btn"
+                        style="float: right;height: 38px;">批量通过
+                </button>
+                <button type="button" id="config_reject" class="layui-btn custom_btn search_btn"
+                        style="float: right;height: 38px;">批量驳回
+                </button>
+            </div>
             <table id="feeTable" lay-filter="feeTable" class="custom_table"></table>
         </div>
     </div>
@@ -115,8 +180,8 @@
     {{# } }}
 
     {{# if(d.state == 0 && d.auditLevel == d.auditOrgType){ }}
-    <a class="layui-btn layui-btn-xs layui-btn-warm" onclick="audit(1, '{{d.id}}', '通过')">通过</a>
-    <a class="layui-btn layui-btn-xs layui-btn-danger" onclick="reject(2, '{{d.id}}', '驳回')">驳回</a>
+    <a class="layui-btn layui-btn-xs layui-btn-warm" onclick="audit(1, ['{{d.id}}'], '通过')">通过</a>
+    <a class="layui-btn layui-btn-xs layui-btn-danger" onclick="reject(2, ['{{d.id}}'], '驳回')">驳回</a>
     {{# } }}
 
 </script>

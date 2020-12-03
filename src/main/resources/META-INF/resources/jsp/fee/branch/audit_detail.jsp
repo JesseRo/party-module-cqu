@@ -54,20 +54,27 @@
             var id = getQueryVariable('id');
             var fee = $('#fee_amount').val();
             var feeType = $('#config_type').val();
-            $.post("http://" + document.domain + ':9007/fee/branch/audit', {
-                id: id,
-                state: state,
-                fee: Number(fee) * 100,
-                feeType: feeType,
-                reason: value
-            }, function (res) {
-                if (res.code === 0) {
-                    layuiModal.alert("已" + msg);
+            $.ajax({
+                type: "post",
+                url: "http://" + document.domain + ':9007/fee/branch/audit',
+                data: JSON.stringify({
+                    id: [id],
+                    state: state,
+                    fee: Number(fee) * 100,
+                    feeType: feeType,
+                    reason: value
+                }),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (res) {
+                    if (res.code === 0) {
+                        layuiModal.alert("已" + msg);
+                    } else {
+                        layuiModal.alert(res.message)
+                    }
                     window.location.reload();
-                } else {
-                    layuiModal.alert(res.message)
                 }
-            })
+            });
         })
     }
 
@@ -76,19 +83,27 @@
             var id = getQueryVariable('id');
             var fee = $('#fee_amount').val();
             var feeType = $('#config_type').val();
-            $.post("http://" + document.domain + ':9007/fee/branch/audit', {
-                id: id,
-                state: state,
-                fee: Number(fee) * 100,
-                feeType: feeType
-            }, function (res) {
-                if (res.code === 0) {
-                    layuiModal.alert("已" + msg);
+            $.ajax({
+                type: "post",
+                url: "http://" + document.domain + ':9007/fee/branch/audit',
+                data: JSON.stringify({
+                    id: [id],
+                    state: state,
+                    fee: Number(fee) * 100,
+                    feeType: feeType
+                }),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (res) {
+                    if (res.code === 0) {
+                        layuiModal.alert("已" + msg);
+                    } else {
+                        layuiModal.alert(res.message)
+
+                    }
                     window.location.reload();
-                } else {
-                    layuiModal.alert(res.message)
                 }
-            })
+            });
         })
     }
 
@@ -108,7 +123,9 @@
                     $('#button_reject').show();
                 }
             } else {
-                layuiModal.alert(res.message);
+                layuiModal.alert(res.message, function () {
+                    window.location.href = '/branch_fee_list';
+                });
             }
         })
     })
