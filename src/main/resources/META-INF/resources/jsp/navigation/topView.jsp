@@ -203,7 +203,8 @@
 				})
 			}
             $(function() {
-                sessionStorage.setItem("sessionKey", "${sessionKey}")
+                sessionStorage.setItem("sessionKey", "${sessionKey}");
+				sessionStorage.setItem("feeUrl", "${feeUrl}");
 				$.ajaxSettings.beforeSend = function(xhr,request){
 					xhr.setRequestHeader('Authorization', sessionStorage.getItem("sessionKey"));
 				}

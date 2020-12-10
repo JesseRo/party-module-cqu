@@ -96,7 +96,7 @@
             $('#pay_fee').on('click', function () {
                 $.ajax({
                     type: "post",
-                    url: "http://" + document.domain + ':9007/fee/member/fee-transaction',
+                    url: sessionStorage.getItem("feeUrl") + '/fee/member/fee-transaction',
                     data: JSON.stringify({
                         id: [id]
                     }),
@@ -116,7 +116,7 @@
 
                 tableObj = table.render({
                     elem: '#feeTable',
-                    url: "http://" + document.domain + ':9007/fee/member/list', //数据接口
+                    url: sessionStorage.getItem("feeUrl") + '/fee/member/list', //数据接口
                     headers: {Authorization: sessionStorage.getItem("sessionKey")},
                     method: 'get',
                     page: {
@@ -139,7 +139,7 @@
                                 return d.state == 0 ? 0 : Number(d.shouldFee) / 100
                             }},
                         {field: 'state', title: '交费状态', width: '12.5%', templet: function (d) {
-                                return d.state == 0 ? '未缴' : '已缴'
+                                return d.state == 0 ? '<p style="color: red;">未缴</p>' : '已缴'
                             }},
                         {field: 'operation', title: '操作', width: '12.5%', toolbar: '#operationButton'}
                     ]],

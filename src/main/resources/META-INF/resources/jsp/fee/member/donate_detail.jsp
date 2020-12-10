@@ -40,7 +40,7 @@
 			layuiModal.prompt("请输入捐款金额（元）", "", function (v) {
 				$.ajax({
 					type: "post",
-					url: "http://" + document.domain + ':9007/fee/member/donate-transaction',
+					url: sessionStorage.getItem("feeUrl") + '/fee/member/donate-transaction',
 					data: {
 						amount: v,
 						donateId: id
@@ -66,7 +66,7 @@
 			}
 		}
 		$(function () {
-			$.get("http://" + document.domain + ':9007/fee/member/donate/detail?id=' + getQueryVariable('id'), function (res) {
+			$.get(sessionStorage.getItem("feeUrl") + '/fee/member/donate/detail?id=' + getQueryVariable('id'), function (res) {
 				if (res.code === 0) {
 					if (res.data.state == 1) {
 						$('#button_pay').show();

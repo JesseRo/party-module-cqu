@@ -56,7 +56,7 @@
             var feeType = $('#config_type').val();
             $.ajax({
                 type: "post",
-                url: "http://" + document.domain + ':9007/fee/branch/audit',
+                url: sessionStorage.getItem("feeUrl") + '/fee/branch/audit',
                 data: JSON.stringify({
                     id: [id],
                     state: state,
@@ -85,7 +85,7 @@
             var feeType = $('#config_type').val();
             $.ajax({
                 type: "post",
-                url: "http://" + document.domain + ':9007/fee/branch/audit',
+                url: sessionStorage.getItem("feeUrl") + '/fee/branch/audit',
                 data: JSON.stringify({
                     id: [id],
                     state: state,
@@ -111,7 +111,7 @@
         layui.use(['form'], function () {
             var form = layui.form;
         })
-        $.get("http://" + document.domain + ':9007/fee/branch/audit/detail?id=' + getQueryVariable('id'), function (res) {
+        $.get(sessionStorage.getItem("feeUrl") + '/fee/branch/audit/detail?id=' + getQueryVariable('id'), function (res) {
             if (res.code === 0) {
                 $('#member_name').text(res.data.memberName);
                 $('#member_org').text(res.data.orgName);

@@ -19,7 +19,7 @@
             layuiModal.confirm("确定要" + msg + "吗？", function () {
                 $.ajax({
                     type: "post",
-                    url: "http://" + document.domain + ':9007/fee/branch/audit',
+                    url: sessionStorage.getItem("feeUrl") + '/fee/branch/audit',
                     data: JSON.stringify({id: id, state: state}),
                     dataType: "json",
                     contentType: "application/json; charset=utf-8",
@@ -39,7 +39,7 @@
             layuiModal.prompt("驳回原因", '', function (value) {
                 $.ajax({
                     type: "post",
-                    url: "http://" + document.domain + ':9007/fee/branch/audit',
+                    url: sessionStorage.getItem("feeUrl") + '/fee/branch/audit',
                     data: JSON.stringify({
                         id: id,
                         state: state,
@@ -83,7 +83,7 @@
 
                 tableObj = table.render({
                     elem: '#feeTable',
-                    url: "http://" + document.domain + ':9007/fee/branch/audit/list', //数据接口
+                    url: sessionStorage.getItem("feeUrl") + '/fee/branch/audit/list', //数据接口
                     headers: {Authorization: sessionStorage.getItem("sessionKey")},
                     method: 'get',
                     page: {
@@ -97,16 +97,18 @@
                         {type:'checkbox'},
                         {field: 'id', title: 'id', hide: true},
                         {field: 'memberName', title: '姓名', width: '10%'},
-                        {field: 'orgName', title: '所在组织', width: '25%'},
-                        {field: 'feeTypeName', title: '党费类型', width: '15%'},
+                        {field: 'orgName', title: '所在组织', width: '20%'},
+                        {field: 'feeTypeName', title: '党费类型', width: '10%'},
                         {
                             field: 'fee', title: '党费金额', width: '10%', templet: function (d) {
                                 return Number(d.fee) / 100;
                             }
                         },
+                        {field: 'createTime', title: '提交时间', width: '10%'},
                         {
                             field: 'status', title: '审核状态', width: '10%', templet: function (d) {
-                                return d.id ? ['审核中', '已通过', '已驳回', '已过期'][d.state] : '未提交';
+                                var content = d.id ? ['审核中', '已通过', '已驳回', '已过期'][d.state] : '未提交';
+                                return '<p style="color: red">' + content + '</p>';
                             }
                         },
                         {field: 'reason', title: '原因', width: '10%'},

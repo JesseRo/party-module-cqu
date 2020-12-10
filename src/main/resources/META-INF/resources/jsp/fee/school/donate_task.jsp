@@ -70,7 +70,7 @@
 				var comment = layedit.build('donate_comment'); //建立编辑器
 				upload.render({
 					elem: '#upload_button'
-					,url: 'http://' + window.location.hostname + ":9007/app/file/upload" //改成您自己的上传接口
+					,url: sessionStorage.getItem("feeUrl") + "/app/file/upload" //改成您自己的上传接口
 					,auto: true
 					,accept: 'file' //普通文件
 					,done: function(res){
@@ -93,7 +93,7 @@
 					}
 				});
 				var id = getQueryVariable('id');
-				$.post('http://' + window.location.hostname + ":9007/fee/school/donate/org", {id: id}, function (res) {
+				$.post(sessionStorage.getItem("feeUrl") + "/fee/school/donate/org", {id: id}, function (res) {
 					if (res.code === 0) {
 						transfer.render({
 							elem: '#donate_range',
@@ -126,7 +126,7 @@
 
 						$.ajax({
 							'type': 'POST',
-							'url': 'http://' + window.location.hostname + ":9007/fee/school/donate/task",
+							'url': sessionStorage.getItem("feeUrl") + "/fee/school/donate/task",
 							'contentType': 'application/json; charset=utf-8',
 							'data': JSON.stringify(postData),
 							'dataType': 'json',

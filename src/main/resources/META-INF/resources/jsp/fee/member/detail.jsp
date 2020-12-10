@@ -38,7 +38,7 @@
 		function feePay() {
 			$.ajax({
 				type: "post",
-				url: "http://" + document.domain + ':9007/fee/member/fee-transaction',
+				url: sessionStorage.getItem("feeUrl") + '/fee/member/fee-transaction',
 				data: JSON.stringify({
 					id: [recordId]
 				}),
@@ -54,7 +54,7 @@
 			});
 		}
 		$(function () {
-			$.get("http://" + document.domain + ':9007/fee/member/fee-detail?id=${id}', function (res) {
+			$.get(sessionStorage.getItem("feeUrl") + '/fee/member/fee-detail?id=${id}', function (res) {
 				if (res.code === 0) {
 					if (!res.data.feeState) {
 						$('#button_pay').show();

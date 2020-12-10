@@ -135,6 +135,8 @@ public class TopNavigationPortlet extends MVCPortlet {
 			renderRequest.setAttribute("roles",  roles);
 			String sessionKey = MD5.getMD5(sessionId);
 			renderRequest.setAttribute("sessionKey", sessionKey);
+			String feeUrl = properties.getProperty("feeUrl");
+			renderRequest.setAttribute("feeUrl", feeUrl);
 			Object userInfo = SessionManager.getAttribute(sessionId, "userInfo");
 			Jedis jedis = cacheCore.getJedis();
 			jedis.hset(String.format("baixun:session:%s", MD5.getMD5(sessionId)), "userInfo", JSONObject.toJSONString(userInfo));

@@ -25,7 +25,7 @@
         var noticedId;
 
         function donatePay(id) {
-            $.get("http://" + document.domain + ':9007/fee/member/donate/notice?id=' + id, function (res) {
+            $.get(sessionStorage.getItem("feeUrl") + '/fee/member/donate/notice?id=' + id, function (res) {
                 if (res.code === 0) {
                     $('#notice_content').html(res.data.notice);
                     noticedId = res.data.id;
@@ -57,7 +57,7 @@
                     }
                     $.ajax({
                         type: "post",
-                        url: "http://" + document.domain + ':9007/fee/member/donate-transaction',
+                        url: sessionStorage.getItem("feeUrl") + '/fee/member/donate-transaction',
                         data: {
                             amount: v,
                             donateId: noticedId
@@ -84,7 +84,7 @@
 
                 tableObj = table.render({
                     elem: '#feeTable',
-                    url: "http://" + document.domain + ':9007/fee/member/donate/list', //数据接口
+                    url: sessionStorage.getItem("feeUrl") + '/fee/member/donate/list', //数据接口
                     headers: {Authorization: sessionStorage.getItem("sessionKey")},
                     method: 'get',
                     page: {

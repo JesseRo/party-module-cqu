@@ -53,7 +53,7 @@
 				}
 			}
 			var memberMap = {};
-			$.post('http://' + window.location.hostname + ":9007/fee/branch/members", function (res) {
+			$.post(sessionStorage.getItem("feeUrl") + "/fee/branch/members", function (res) {
 				if (res.code === 0) {
 					var html = '<option disabled selected>请选择</option>'
 					for(var i = 0; i < res.data.length; i++) {
@@ -104,7 +104,7 @@
 
 						$.ajax({
 							'type': 'POST',
-							'url': 'http://' + window.location.hostname + ":9007/fee/branch/back-fee",
+							'url': sessionStorage.getItem("feeUrl") + "/fee/branch/back-fee",
 							'contentType': 'application/json; charset=utf-8',
 							'data': JSON.stringify(postData),
 							'dataType': 'json',

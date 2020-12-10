@@ -15,7 +15,7 @@
 
                 tableObj = table.render({
                     elem: '#feeTable',
-                    url: "http://" + document.domain + ':9007/fee/member/donata/record', //数据接口
+                    url: sessionStorage.getItem("feeUrl") + '/fee/member/donata/record', //数据接口
                     headers: {Authorization: sessionStorage.getItem("sessionKey")},
                     method: 'get',
                     page: {

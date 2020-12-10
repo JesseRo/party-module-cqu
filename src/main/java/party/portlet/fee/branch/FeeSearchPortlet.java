@@ -1,6 +1,7 @@
 package party.portlet.fee.branch;
 
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
+import dt.session.SessionManager;
 import hg.party.dao.org.OrgDao;
 import hg.party.entity.organization.Organization;
 import org.osgi.service.component.annotations.Component;
@@ -38,7 +39,8 @@ public class FeeSearchPortlet extends MVCPortlet {
 
     @Override
     public void doView(RenderRequest req, RenderResponse res) throws IOException, PortletException {
-        List<Organization> organizations = orgDao.findSecondary();
+        String orgId = (String) SessionManager.getAttribute(req.getRequestedSessionId(), "department");
+        List<Organization> organizations = orgDao.findChildren(orgId);
         req.setAttribute("orgs", organizations);
         super.doView(req, res);
     }

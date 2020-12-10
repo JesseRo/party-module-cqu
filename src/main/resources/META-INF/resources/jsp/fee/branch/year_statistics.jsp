@@ -45,12 +45,12 @@
             var orgId = getQueryVariable('orgId');
             layui.use('table', function () {
                 var table = layui.table;
-                $.get("http://" + document.domain + ':9007/fee/branch/org-status?id=' + orgId, function (res) {
+                $.get(sessionStorage.getItem("feeUrl") + '/fee/branch/org-status?id=' + orgId, function (res) {
                     if (res.code === 0) {
                         if (res.data == 1) {
                             tableObj = table.render({
                                 elem: '#feeTable',
-                                url: "http://" + document.domain + ':9007/fee/branch/year/statistics?year=' + getQueryVariable('year') + '&orgId=' + orgId, //数据接口
+                                url: sessionStorage.getItem("feeUrl") + '/fee/branch/year/statistics?year=' + getQueryVariable('year') + '&orgId=' + orgId, //数据接口
                                 headers: {Authorization: sessionStorage.getItem("sessionKey")},
                                 method: 'get',
                                 page: {
@@ -156,7 +156,7 @@
                         } else {
                             tableObj = table.render({
                                 elem: '#feeTable',
-                                url: "http://" + document.domain + ':9007/fee/secondary/year/statistics?year=' + getQueryVariable('year') + '&orgId=' + orgId, //数据接口
+                                url: sessionStorage.getItem("feeUrl") + '/fee/secondary/year/statistics?year=' + getQueryVariable('year') + '&orgId=' + orgId, //数据接口
                                 headers: {Authorization: sessionStorage.getItem("sessionKey")},
                                 method: 'get',
                                 page: {

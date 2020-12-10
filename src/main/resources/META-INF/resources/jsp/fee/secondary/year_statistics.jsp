@@ -28,7 +28,7 @@
 
                 tableObj = table.render({
                     elem: '#feeTable',
-                    url: "http://" + document.domain + ':9007/fee/secondary/year/statistics', //数据接口
+                    url: sessionStorage.getItem("feeUrl") + '/fee/secondary/year/statistics', //数据接口
                     headers: {Authorization: sessionStorage.getItem("sessionKey")},
                     method: 'get',
                     page: {

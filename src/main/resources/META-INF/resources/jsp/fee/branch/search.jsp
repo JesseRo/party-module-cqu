@@ -1,5 +1,6 @@
 <%@ include file="/init.jsp" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions"  prefix="fn" %>
 
 <html>
 <head>
@@ -20,7 +21,7 @@
         function feePay(id) {
             $.ajax({
                 type: "post",
-                url: "http://" + document.domain + ':9007/fee/member/fee-transaction',
+                url: sessionStorage.getItem("feeUrl") + '/fee/member/fee-transaction',
                 data: JSON.stringify({
                     id: id
                 }),
@@ -65,7 +66,7 @@
             var all;
             function toDateStr(date){
                 if (date.year) {
-                    return date.year + '-' + date.month + '-' + date.date;
+                    return date.year + '-' + date.month + '-01';
                 }else {
                     return "";
                 }
@@ -74,8 +75,9 @@
                 var laydate = layui.laydate;
                 laydate.render({
                     elem: '#date_range'
-                    , range: '-',
-                    done: function (value, date, e) {
+                    , range: '-'
+                    , type: 'month'
+                    , done: function (value, date, e) {
                         console.log(value); //得到日期生成的值，如：2017-08-18
                         console.log(date); //得到日期时间对象：{year: 2017, month: 8, date: 18, hours: 0, minutes: 0, seconds: 0}
                         console.log(e); //得结束的日期时间对象，开启范围选择（range: true）才会返回。对象成员同上。
@@ -88,9 +90,10 @@
                 var table = layui.table;
                 tableObj = table.render({
                     elem: '#feeTable',
-                    url: "http://" + document.domain + ':9007/fee/branch/list', //数据接口
+                    url: sessionStorage.getItem("feeUrl") + '/fee/branch/list', //数据接口
                     headers: {Authorization: sessionStorage.getItem("sessionKey")},
-                    method: 'get',
+                    method: 'post',
+                    contentType: 'application/json',
                     page: {
                         limit:10,   //每页条数
                         limits:[],
@@ -105,7 +108,7 @@
                         {type:'checkbox'},
                         {field: 'id', title: 'id', hide: true},
                         {field: 'memberName', title: '姓名', width:'10%'},
-                        {field: 'secondaryName', title: '所在组织', width:'10%'},
+                        {field: 'secondaryName', title: '所在组织', width:'20%'},
                         {field: 'orgName', title: '所在支部', width:'20%'},
                         {field: 'yearMonth', title: '缴费年月', width:'10%'},
                         {field: 'feeTypeName', title: '党费类型', width:'10%'},
@@ -229,11 +232,9 @@
                         state = 1;
                         smsButton.hide();
                         representButton.hide();
-                        backButton.show();
                     } else {
                         smsButton.show();
                         representButton.show();
-                        backButton.hide();
                         state = 0
                     }
                     reload();
@@ -255,6 +256,7 @@
         </div>
         <div class="bg_white_container">
             <div class="operate_form_group">
+                <c:if test="${orgs != null && fn:length(orgs) > 0}">
                 <select type="text" name="title" id="secondary" autocomplete="off" class="form-control"
                         style="width: 15%;float: left;border-radius: 0;height: 38px!important;text-indent: 0;">
                     <option value="">所有</option>
@@ -262,6 +264,7 @@
                         <option value="${org.org_id}">${org.org_name}</option>
                     </c:forEach>
                 </select>
+                </c:if>
                 <div class="layui-input-inline" style="height: 38px;margin-left: 20px;">
                     <input type="text" class="layui-input" id="date_range" placeholder="日期范围">
                 </div>
@@ -272,7 +275,7 @@
                         style="float: none;height: 38px;">查询
                 </button>
                 <button type="button" id="back_fee" class="layui-btn custom_btn search_btn"
-                        style="float: right;height: 38px; display: none;">补缴
+                        style="float: right;height: 38px;">补缴
                 </button>
                 <button type="button" id="represent_fee" class="layui-btn custom_btn search_btn"
                         style="float: right;height: 38px;">代缴
