@@ -468,18 +468,18 @@
 								<div class="layui-form-item">
 									<div class="layui-input-block">
 										<button type="submit" class="layui-btn custom_btn" lay-submit="" lay-filter="masterCalForm">计算党费</button>
-										<button type="button" class="layui-btn layui-btn-primary" onclick="setFeeConfig(this, 6);">提交党费设置</button>
+<%--										<button type="button" class="layui-btn layui-btn-primary" onclick="setFeeConfig(this, 6);">提交党费设置</button>--%>
 									</div>
 								</div>
 							</div>
 							</form>
 						</div>
-						<div class="layui-form-item" style="color: red;"><span style="margin-left: 20px;">当前党费设置：</span><span id="fee_config"></span></div>
-						<div class="layui-form-item" style="color: red;">
-							<span style="margin-left: 20px;">审核状态：</span>
-							<span id="fee_audit_state"></span>
-							<span style="display: none;" id="fee_warning">请重新提交设置</span>
-						</div>
+<%--						<div class="layui-form-item" style="color: red;"><span style="margin-left: 20px;">当前党费设置：</span><span id="fee_config"></span></div>--%>
+<%--						<div class="layui-form-item" style="color: red;">--%>
+<%--							<span style="margin-left: 20px;">审核状态：</span>--%>
+<%--							<span id="fee_audit_state"></span>--%>
+<%--							<span style="display: none;" id="fee_warning">请重新提交设置</span>--%>
+<%--						</div>--%>
 					</div>
 				</div>
 
@@ -489,21 +489,21 @@
 	</div>
 	<script>
 		var configStatus = {0: "待审核",1: "已通过", 2:"已驳回",3: "已过期"}
-		$(function () {
-			$.get("http://" + document.domain + ':9007/fee/member/fee-config', function (res) {
-				if (res.code === 0) {
-					$('#fee_config').text($('[partyType=' + res.data.type + ']').text() + " " + Number(res.data.fee) / 100 + " 元/月");
-					$('#fee_audit_state').text(configStatus[res.data.state]);
-					if (res.data.state > 1) {
-						$('#fee_warning').show();
-					}
-				} else if (res.code === -2) {
-					$('#fee_config').text("未设置");
-				} else {
-					layuiModal.alert(res.message)
-				}
-			})
-		})
+		// $(function () {
+		// 	$.get("http://" + document.domain + ':9007/fee/member/fee-config', function (res) {
+		// 		if (res.code === 0) {
+		// 			$('#fee_config').text($('[partyType=' + res.data.type + ']').text() + " " + Number(res.data.fee) / 100 + " 元/月");
+		// 			$('#fee_audit_state').text(configStatus[res.data.state]);
+		// 			if (res.data.state > 1) {
+		// 				$('#fee_warning').show();
+		// 			}
+		// 		} else if (res.code === -2) {
+		// 			$('#fee_config').text("未设置");
+		// 		} else {
+		// 			layuiModal.alert(res.message)
+		// 		}
+		// 	})
+		// })
 		function setFeeConfig(e, type) {
 			if(!type) {
 				return
