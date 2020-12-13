@@ -9,8 +9,7 @@ dependencies {
 	compileOnly group: "org.osgi", name: "osgi.cmpn", version: "6.0.0"
 	
 	compile files("D:\\work\\liferay-ce-portal-7.0-ga3/osgi/modules/common/hg.session.jar")
-	//compile files('D:/zmgJar/caoxmDBAPI.jar')
-	compile files('D:\\work\\liferay-ce-portal-7.0-ga3/osgi/modules/com.dt.jar')
+	compile files('D:\\work\\liferay-ce-portal-7.0-ga3/osgi/modules/caoxmDBAPI.jar')
 	compile files("D:\\work\\liferay-ce-portal-7.0-ga3/osgi/modules/common/fastjson-1.2.9.jar")
 	//compile files("D:/zmgJar/postgresql-42.1.4.jar")
 	//消息推送

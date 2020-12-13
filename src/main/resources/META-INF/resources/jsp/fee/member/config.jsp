@@ -55,7 +55,7 @@
             var feeType = $('#config_type').val();
             $.ajax({
                 type: "post",
-                url: sessionStorage.getItem("feeUrl") + '/fee/member/config',
+                url: sessionStorage.getItem("feeUrl") + '/fee/member/fee-config',
                 data: JSON.stringify({
                     fee: Number(fee) * 100,
                     feeType: feeType
@@ -78,6 +78,17 @@
     $(function () {
         layui.use(['form'], function () {
             var form = layui.form;
+        })
+
+        $.get(sessionStorage.getItem("feeUrl") + '/fee/member/fee-calculate', function (res) {
+            if (res.code === 0) {
+                $('#config_type').val(1);
+                $('#fee_amount').val(res.data.fee);
+            } else if (res.code === -2) {
+                layuiModal.alert("未能获取到您的工资数据");
+            } else {
+                layuiModal.alert(res.message)
+            }
         })
     })
 </script>

@@ -41,7 +41,7 @@ public class ConfigRenderCommand implements MVCRenderCommand {
 		Map<String, Object> config = feeDao.getCurrentConfig(memberId);
 
 
-		if (config == null && !StringUtils.isEmpty(resubmit)) {
+		if (config == null || resubmit.equals("1")) {
 			view = "/jsp/fee/member/config.jsp";
 		} else {
 			renderRequest.setAttribute("config", config);
