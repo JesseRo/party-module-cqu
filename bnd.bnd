@@ -41,11 +41,9 @@ Export-Package: party.constants,\
 	org.jasig.cas.client.util,\
 	org.jasig.cas.client.validation,\
     org.opensaml,\
-	com.aliyun.odps.udf,\
-	oracle.sql,
+	oracle.sql,\
 
-
-Import-Package: *,org.postgresql
+Import-Package: *, org.postgresql
 
 
 
