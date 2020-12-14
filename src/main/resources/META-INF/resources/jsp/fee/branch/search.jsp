@@ -36,6 +36,24 @@
                 }
             });
         }
+        function sendSms(id) {
+            $.ajax({
+                type: "post",
+                url: sessionStorage.getItem("feeUrl") + '/fee/branch/sms',
+                data: JSON.stringify({
+                    recordIds: id
+                }),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (res) {
+                    if (res.code === 0) {
+                        layuiModal.alert("已发送信息");
+                    } else {
+                        layuiModal.alert(res.message)
+                    }
+                }
+            });
+        }
         function audit(memberId, memberName, month, fee, recordId, text) {
             var html = memberName + "：" + month + '月党费' + Number(fee) / 100 + "元<br><br>是否" + text + "？";
             layer.open({
@@ -53,7 +71,11 @@
                 },
                 yes: function (index) {
                     layer.close(index);
-                    feePay([recordId]);
+                    if (text === '短信催缴') {
+                        sendSms([recordId]);
+                    } else if (text === '代缴') {
+                        feePay([recordId]);
+                    }
                 }
             });
         }
@@ -216,7 +238,11 @@
                             var d = checked[k];
                             ids.push(d.id);
                         }
-                        feePay(ids);
+                        if (text === '短信催缴') {
+                            sendSms(ids);
+                        } else if (text === '代缴') {
+                            feePay(ids);
+                        }
                         layer.close(index);
                     }
                 });

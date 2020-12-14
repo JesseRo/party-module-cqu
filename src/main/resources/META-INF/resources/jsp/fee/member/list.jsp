@@ -171,8 +171,8 @@
             <div class="operate_form_group">
                 <button type="button" class="layui-btn custom_btn search_btn" style="margin-left: 0;"
                         onclick="window.location.href='/member_fee_statistics'">历史党费查询</button>
-                <button type="button" class="layui-btn custom_btn search_btn"
-                        onclick="window.location.href='/member_donate_list'">党员捐款</button>
+<%--                <button type="button" class="layui-btn custom_btn search_btn"--%>
+<%--                        onclick="window.location.href='/member_donate_list'">党员捐款</button>--%>
             </div>
             <table id="feeTable" lay-filter="feeTable" class="custom_table"></table>
         </div>

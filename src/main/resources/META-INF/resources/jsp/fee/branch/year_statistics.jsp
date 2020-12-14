@@ -34,7 +34,22 @@
         }
 
         function sms(memberId) {
-
+            $.ajax({
+                type: "post",
+                url: sessionStorage.getItem("feeUrl") + '/fee/branch/sms',
+                data: JSON.stringify({
+                    memberId: memberId
+                }),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (res) {
+                    if (res.code === 0) {
+                        layuiModal.alert("已发送信息");
+                    } else {
+                        layuiModal.alert(res.message)
+                    }
+                }
+            });
         }
 
         $(function () {
