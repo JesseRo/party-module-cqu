@@ -193,7 +193,7 @@
 								<div class="layui-form-item">
 									<div class="layui-input-block">
 										<button type="submit" class="layui-btn custom_btn" lay-submit="" lay-filter="monthCalForm">计算党费</button>
-										<button type="button" class="layui-btn layui-btn-primary" onclick="setFeeConfig(this, 1);">设置党费类型</button>
+<%--										<button type="button" class="layui-btn layui-btn-primary" onclick="setFeeConfig(this, 1);">设置党费类型</button>--%>
 									</div>
 								</div>
 							</div>
@@ -266,7 +266,7 @@
 								<div class="layui-form-item">
 									<div class="layui-input-block">
 										<button type="submit" class="layui-btn custom_btn" lay-submit="" lay-filter="yearCalForm">计算党费</button>
-										<button type="button" class="layui-btn layui-btn-primary" onclick="setFeeConfig(this, 2);">设置党费类型</button>
+<%--										<button type="button" class="layui-btn layui-btn-primary" onclick="setFeeConfig(this, 2);">设置党费类型</button>--%>
 									</div>
 								</div>
 							</div>
@@ -375,7 +375,7 @@
 								<div class="layui-form-item">
 									<div class="layui-input-block">
 										<button type="submit" class="layui-btn custom_btn" lay-submit="" lay-filter="companyCalForm">计算党费</button>
-										<button type="button" class="layui-btn layui-btn-primary" onclick="setFeeConfig(this, 3);">设置党费类型</button>
+<%--										<button type="button" class="layui-btn layui-btn-primary" onclick="setFeeConfig(this, 3);">设置党费类型</button>--%>
 									</div>
 								</div>
 							</div>
@@ -413,7 +413,7 @@
 								<div class="layui-form-item">
 									<div class="layui-input-block">
 										<button type="submit" class="layui-btn custom_btn" lay-submit="" lay-filter="retireEmployeeCalForm">计算党费</button>
-										<button type="button" class="layui-btn layui-btn-primary" onclick="setFeeConfig(this, 4);">设置党费类型</button>
+<%--										<button type="button" class="layui-btn layui-btn-primary" onclick="setFeeConfig(this, 4);">设置党费类型</button>--%>
 									</div>
 								</div>
 							</div>
@@ -432,7 +432,7 @@
 							</div>
 							<div class="layui-form-item">
 								<div class="layui-input-block">
-									<button type="button" class="layui-btn layui-btn-primary" onclick="setFeeConfig(this, 5);">设置党费类型</button>
+<%--									<button type="button" class="layui-btn layui-btn-primary" onclick="setFeeConfig(this, 5);">设置党费类型</button>--%>
 								</div>
 							</div>
 						</div>
@@ -489,21 +489,23 @@
 	</div>
 	<script>
 		var configStatus = {0: "待审核",1: "已通过", 2:"已驳回",3: "已过期"}
-		// $(function () {
-		// 	$.get("http://" + document.domain + ':9007/fee/member/fee-config', function (res) {
-		// 		if (res.code === 0) {
-		// 			$('#fee_config').text($('[partyType=' + res.data.type + ']').text() + " " + Number(res.data.fee) / 100 + " 元/月");
-		// 			$('#fee_audit_state').text(configStatus[res.data.state]);
-		// 			if (res.data.state > 1) {
-		// 				$('#fee_warning').show();
-		// 			}
-		// 		} else if (res.code === -2) {
-		// 			$('#fee_config').text("未设置");
-		// 		} else {
-		// 			layuiModal.alert(res.message)
-		// 		}
-		// 	})
-		// })
+		$(function () {
+			$.get(sessionStorage.getItem("feeUrl") + '/fee/member/fee-calculate', function (res) {
+				if (res.code === 0) {
+					var container = $('#monthCal');
+					for (var k in res.data) {
+						var _input = container.find("[name=" + k + "]");
+						if (_input.length > 0) {
+							_input.val(res.data[k]);
+						}
+					}
+				} else if (res.code === -2) {
+					layuiModal.alert("未能获取到您的工资数据");
+				} else {
+					layuiModal.alert(res.message)
+				}
+			})
+		})
 		function setFeeConfig(e, type) {
 			if(!type) {
 				return

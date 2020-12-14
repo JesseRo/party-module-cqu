@@ -206,7 +206,7 @@
             </div>
         </div>
         <div class="notice_top" style="margin-right: 272px;">
-            <button id="pay_fee" style="background-image: url('/images/我要支付.png');width: 80px;background-size: 100% 100%;background-repeat: repeat no-repeat;height: 27px;">&nbsp;</button>
+            <button id="pay_fee" style="background-image: url('/images/我要支付@2x.png');width: 120px;background-size: 100% 100%;background-repeat: repeat no-repeat;height: 40px;">&nbsp;</button>
         </div>
     </div>
     <div class="statue">

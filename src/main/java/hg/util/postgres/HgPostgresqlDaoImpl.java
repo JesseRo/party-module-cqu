@@ -19,7 +19,7 @@ public class HgPostgresqlDaoImpl<T> extends HgPostgresqlDynamicDaoImpl<T> {
         Properties pps = new Properties();
 
         try {
-            pps.load(super.getClass().getResourceAsStream("/druid.properties"));
+            pps.load(super.getClass().getResourceAsStream("/db.properties"));
         } catch (IOException var3) {
             var3.printStackTrace();
         }
