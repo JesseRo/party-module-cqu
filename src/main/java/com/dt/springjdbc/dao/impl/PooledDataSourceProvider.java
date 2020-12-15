@@ -11,7 +11,7 @@ import java.util.Properties;
 
 public class PooledDataSourceProvider {
     Logger logger = Logger.getLogger(FileDownCommand.class);
-    private static DataSource ds = null;
+    private static volatile DataSource ds = null;
 
     public PooledDataSourceProvider() {
     }

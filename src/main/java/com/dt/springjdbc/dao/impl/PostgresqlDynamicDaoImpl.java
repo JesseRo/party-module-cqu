@@ -534,10 +534,10 @@ public class PostgresqlDynamicDaoImpl<T> implements BaseDao<T> {
                 }
             }
 
-            args = new Object[fields.length];
-            System.arraycopy(args, 1, args, 0, args.length - 1);
-            args[args.length - 1] = args[0];
-            return args;
+            Object[] _args = new Object[fields.length];
+            System.arraycopy(args, 1, _args, 0, args.length - 1);
+            _args[args.length - 1] = args[0];
+            return _args;
         }
     }
 
