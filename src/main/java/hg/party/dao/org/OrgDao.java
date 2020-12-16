@@ -761,7 +761,7 @@ public class OrgDao extends HgPostgresqlDaoImpl<Organization> {
             sql += " where l.org_name like ?\n";
             params.add("%" + search + "%");
         }
-        sql += "\tORDER BY org_type = 'organization' desc, org_type = 'secondary' desc";
+        sql += "\tORDER BY org_type = 'organization' desc, org_type = 'secondary' desc, id asc";
         return pageBySql(pageNow, pageSize, sql, params);
     }
 

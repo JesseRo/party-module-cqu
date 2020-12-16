@@ -18,14 +18,18 @@ public class TransactionUtil {
     public TransactionUtil(){
         platformTransactionManager = new DataSourceTransactionManager(new MemberDao().getJdbcTemplate().getDataSource());
         transactionStatus = new ThreadLocal<>();
-        transactionDefinition = new DefaultTransactionDefinition();
+    }
+
+    public DefaultTransactionDefinition getDefinition() {
+        DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition();
         transactionDefinition.setIsolationLevel(TransactionDefinition.ISOLATION_READ_COMMITTED);
         transactionDefinition.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
         transactionDefinition.setTimeout(30);
+        return transactionDefinition;
     }
 
     public void startTransaction() {
-        TransactionStatus tmp = platformTransactionManager.getTransaction(transactionDefinition);
+        TransactionStatus tmp = platformTransactionManager.getTransaction(getDefinition());
         transactionStatus.set(tmp);
     }
     public void commit() {

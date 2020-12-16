@@ -196,6 +196,7 @@ public class MeetingPlanSaveCommand implements MVCResourceCommand {
 
         } catch (Exception e) {
             e.printStackTrace();
+            transactionUtil.rollback();
             printWriter.write(JSON.toJSONString(ResultUtil.fail("请求异常。")));
         }
         return false;

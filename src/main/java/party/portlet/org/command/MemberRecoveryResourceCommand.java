@@ -84,6 +84,7 @@ public class MemberRecoveryResourceCommand implements MVCResourceCommand {
 				resourceResponse.getWriter().write(JSON.toJSONString(ResultUtil.fail("请求的组织orgId不正确")));
 			}
 		} catch (Exception e) {
+			transactionUtil.rollback();
 			e.printStackTrace();
 		}
 		return false;
