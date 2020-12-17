@@ -77,6 +77,17 @@
                     layuiModal.alert("请选择人员");
                 }
             })
+            $('#config_set').on('click', function () {
+                window.location.href = "/branch/config-set";
+            })
+            $('#config_import').on('click', function () {
+                var ids = Object.keys(checked);
+                if (ids.length > 0) {
+                    reject(2, ids, "驳回");
+                } else {
+                    layuiModal.alert("请选择人员");
+                }
+            })
             layui.use('table', function () {
                 var table = layui.table;
                 var all;
@@ -169,6 +180,12 @@
                 </button>
                 <button type="button" id="config_reject" class="layui-btn custom_btn search_btn"
                         style="float: right;height: 38px;">批量驳回
+                </button>
+                <button type="button" id="config_set" class="layui-btn custom_btn search_btn"
+                        style="float: right;height: 38px;">录入
+                </button>
+                <button type="button" id="config_import" class="layui-btn custom_btn search_btn"
+                        style="float: right;height: 38px;">批量导入
                 </button>
             </div>
             <table id="feeTable" lay-filter="feeTable" class="custom_table"></table>

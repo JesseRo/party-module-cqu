@@ -705,7 +705,7 @@
 				success:function(data){
 					if(data.code == 200){
 						var duesPerMonth = data.data.duesPerMonth;
-						if(_data.partyType!=5 && _data.partyType!=4){
+						if(_data.partyType!=5){
 							var basicDues = data.data.basicDues;
 							var percentDues = data.data.percentDues*100;
 							var personalTax = data.data.personalTax;
