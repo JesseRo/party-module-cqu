@@ -186,46 +186,46 @@
                                     {field: 'year', title: '组织', width:'9%', templet: function (d) {
                                             return '<a onclick="window.location.href=\'/year_statistics?year=' + getQueryVariable('year') + '&orgId=' + d[-2] + '\'">' + d[-1] + '</a>'
                                         }},
-                                    {field: 'year', title: '党员人数', width:'6.5%', templet: function (d) {
-                                            return d[0]
-                                        }},
-                                    {field: 'jan', title: '1月', width:'6.5%', templet: function (d) {
+                                    // {field: 'year', title: '党员人数', width:'6.5%', templet: function (d) {
+                                    //         return d[0]
+                                    //     }},
+                                    {field: 'jan', title: '1月', width:'7%', templet: function (d) {
                                             return renderFee(d[1]);
                                         }},
-                                    {field: 'feb', title: '2月', width:'6.5%', templet: function (d) {
+                                    {field: 'feb', title: '2月', width:'7%', templet: function (d) {
                                             return renderFee(d[2]);
                                         }},
-                                    {field: 'mar', title: '3月', width:'6.5%', templet: function (d) {
+                                    {field: 'mar', title: '3月', width:'7%', templet: function (d) {
                                             return renderFee(d[3]);
                                         }},
-                                    {field: 'apr', title: '4月', width:'6.5%', templet: function (d) {
+                                    {field: 'apr', title: '4月', width:'7%', templet: function (d) {
                                             return renderFee(d[4]);
                                         }},
-                                    {field: 'may', title: '5月', width:'6.5%', templet: function (d) {
+                                    {field: 'may', title: '5月', width:'7%', templet: function (d) {
                                             return renderFee(d[5]);
                                         }},
-                                    {field: 'jun', title: '6月', width:'6.5%', templet: function (d) {
+                                    {field: 'jun', title: '6月', width:'7%', templet: function (d) {
                                             return renderFee(d[6]);
                                         }},
-                                    {field: 'jul', title: '7月', width:'6.5%', templet: function (d) {
+                                    {field: 'jul', title: '7月', width:'7%', templet: function (d) {
                                             return renderFee(d[7]);
                                         }},
-                                    {field: 'aug', title: '8月', width:'6.5%', templet: function (d) {
+                                    {field: 'aug', title: '8月', width:'7%', templet: function (d) {
                                             return renderFee(d[8]);
                                         }},
-                                    {field: 'sep', title: '9月', width:'6.5%', templet: function (d) {
+                                    {field: 'sep', title: '9月', width:'7%', templet: function (d) {
                                             return renderFee(d[9]);
                                         }},
-                                    {field: 'oct', title: '10月', width:'6.5%', templet: function (d) {
+                                    {field: 'oct', title: '10月', width:'7%', templet: function (d) {
                                             return renderFee(d[10]);
                                         }},
-                                    {field: 'nov', title: '11月', width:'6.5%', templet: function (d) {
+                                    {field: 'nov', title: '11月', width:'7%', templet: function (d) {
                                             return renderFee(d[11]);
                                         }},
-                                    {field: 'dec', title: '12月', width:'6.5%', templet: function (d) {
+                                    {field: 'dec', title: '12月', width:'7%', templet: function (d) {
                                             return renderFee(d[12]);
                                         }},
-                                    {field: 'total', title: '总额', width:'6.5%', templet: function (d) {
+                                    {field: 'total', title: '总额', width:'7%', templet: function (d) {
                                             return renderFee(d[13]);
                                         }},
                                 ]],

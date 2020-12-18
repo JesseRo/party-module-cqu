@@ -72,7 +72,7 @@
 						$('#button_pay').show();
 					}
 					$('#donate_title').text(res.data.title);
-					$('#donate_comment').text(res.data.donateComment);
+					$('#donate_comment').text(res.data.donateNotice);
 					$('#donate_time').text(res.data.startTime + ' - ' + res.data.endTime);
 					if (res.data.file) {
 						$('#donate_file').attr('href', res.data.file);
@@ -113,7 +113,7 @@
 							<p class="layui-col-xs6 layui-col-sm6 layui-col-md6"><span id="donate_title"></span></p>
 						</div>
 						<div class="layui-form-item layui-row" >
-							<p class="layui-col-xs3 layui-col-sm3 layui-col-md3"><span>捐款说明</span></p>
+							<p class="layui-col-xs3 layui-col-sm3 layui-col-md3"><span>捐款倡议书</span></p>
 							<p class="layui-col-xs6 layui-col-sm6 layui-col-md6"><span id="donate_comment"></span></p>
 						</div>
 						<div class="layui-form-item layui-row" >

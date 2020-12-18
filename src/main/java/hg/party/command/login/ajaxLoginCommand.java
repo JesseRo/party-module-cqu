@@ -83,16 +83,16 @@ public class ajaxLoginCommand implements MVCResourceCommand {
         if (exit.equals("exit")) {
             SessionManager.removeSession(sessionId);
             PrintWriter printWriter;
+            Jedis jedis = cacheCore.getJedis();
             try {
                 printWriter = resourceResponse.getWriter();
                 printWriter.write("4");//退出成功
                 printWriter.close();
-                Jedis jedis = cacheCore.getJedis();
                 jedis.del(String.format("baixun:session:%s", MD5.getMD5(sessionId)));
                 jedis.close();
                 return false;
             } catch (IOException e) {
-
+                jedis.close();
             }
         }
 

@@ -292,7 +292,7 @@
                 </select>
                 </c:if>
                 <div class="layui-input-inline" style="height: 38px;margin-left: 20px;">
-                    <input type="text" class="layui-input" id="date_range" placeholder="日期范围">
+                    <input type="text" class="layui-input" id="date_range" placeholder="日期范围" autocomplete="off">
                 </div>
                 <input type="text" name="title" id="searchCondition" placeholder="查询条件" autocomplete="off"
                        class="layui-input custom_input"

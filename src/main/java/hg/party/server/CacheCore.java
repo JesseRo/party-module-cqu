@@ -1,5 +1,7 @@
 package hg.party.server;
 
+import hg.party.server.login.UserService;
+import org.apache.log4j.Logger;
 import org.osgi.service.component.annotations.Component;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -7,6 +9,7 @@ import redis.clients.jedis.JedisPoolConfig;
 
 @Component(immediate = true, service = CacheCore.class)
 public class CacheCore {
+    Logger logger = Logger.getLogger(CacheCore.class);
 
     //可用连接实例的最大数目，默认为8；
     //如果赋值为-1，则表示不限制，如果pool已经分配了maxActive个jedis实例，则此时pool的状态为exhausted(耗尽)
@@ -38,6 +41,7 @@ public class CacheCore {
             config.setMaxIdle(MAX_IDLE);
             config.setMaxWaitMillis(MAX_WAIT_MILLIS);
             config.setTestOnBorrow(TEST_ON_BORROW);
+            config.setTestWhileIdle(true);
             jedisPool = new JedisPool(config, "localhost", 6379, TIMEOUT);
         } catch (Exception e) {
             e.printStackTrace();
@@ -53,6 +57,8 @@ public class CacheCore {
     public Jedis getJedis() {
         try {
             if (jedisPool != null) {
+                logger.info("active redis connection number:" + jedisPool.getNumActive());
+                logger.info("idle redis connection number:" + jedisPool.getNumIdle());
                 return jedisPool.getResource();
             } else {
                 return null;
@@ -67,6 +73,7 @@ public class CacheCore {
         Jedis jedis = getJedis();
         long v = jedis.incr(key);
         jedis.expire(key, second);
+        jedis.close();
         return v;
     }
 }
