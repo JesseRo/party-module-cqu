@@ -60,6 +60,8 @@
         }
 
         $(function () {
+            $('#upload-block form').attr("action",sessionStorage.getItem("feeUrl") + '/fee/branch/importConfig' );
+
             var checked = {};
             $('#config_audit').on('click', function () {
                 var ids = Object.keys(checked);
@@ -81,12 +83,10 @@
                 window.location.href = "/branch/config-set";
             })
             $('#config_import').on('click', function () {
-                var ids = Object.keys(checked);
-                if (ids.length > 0) {
-                    reject(2, ids, "驳回");
-                } else {
-                    layuiModal.alert("请选择人员");
-                }
+                $('#upload-block [type="file"]').click();
+            })
+            $('#upload-block [type="file"]').change(function () {
+                $('#upload-block [type="submit"]').click();
             })
             layui.use('table', function () {
                 var table = layui.table;
@@ -174,6 +174,14 @@
                     </span>
         </div>
         <div class="bg_white_container">
+            <div id="upload-block" style="display: none;">
+                <form method="post" target="uploadTarget"
+                      enctype="multipart/form-data">
+                    <input type="file" name="excel">
+                    <input type="submit">
+                    <iframe name="uploadTarget"></iframe>
+                </form>
+            </div>
             <div class="operate_form_group">
                 <button type="button" id="config_audit" class="layui-btn custom_btn search_btn"
                         style="float: right;height: 38px;">批量通过

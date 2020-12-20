@@ -247,6 +247,8 @@ public class PartyPortletKeys {
 
     public static final String BranchBackFeePortlet = "BranchBackFeePortlet";
 
+    public static final String FeeConfigSetPortlet = "FeeConfigSetPortlet";
+
     public static final String BranchFeeStatisticsPortlet = "BranchFeeStatisticsPortlet";
 
     public static final String BranchFeeYearStatisticsPortlet = "BranchFeeYearStatisticsPortlet";
