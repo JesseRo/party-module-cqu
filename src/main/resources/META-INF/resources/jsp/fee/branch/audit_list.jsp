@@ -60,7 +60,8 @@
         }
 
         $(function () {
-            $('#upload-block form').attr("action",sessionStorage.getItem("feeUrl") + '/fee/branch/importConfig' );
+            $('#upload-block form').attr("action",sessionStorage.getItem("feeUrl") + '/fee/branch/importConfig');
+            $('#upload-block [name=token]').val(sessionStorage.getItem("sessionKey"));
 
             var checked = {};
             $('#config_audit').on('click', function () {
@@ -178,6 +179,7 @@
                 <form method="post" target="uploadTarget"
                       enctype="multipart/form-data">
                     <input type="file" name="excel">
+                    <input type="text" name="token">
                     <input type="submit">
                     <iframe name="uploadTarget"></iframe>
                 </form>

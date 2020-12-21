@@ -23,6 +23,9 @@
             function renderFee(d) {
                 return d ? (d / 100) : '';
             }
+            $('#export').on('click', function () {
+                window.open(sessionStorage.getItem("feeUrl") + '/fee/branch/statistics-export' + "?token=" + sessionStorage.getItem("sessionKey"));
+            })
             layui.use('table', function(){
                 var table = layui.table;
 
@@ -111,6 +114,11 @@
                     </span>
         </div>
         <div class="bg_white_container">
+            <div class="operate_form_group">
+                <button type="button" id="export" class="layui-btn custom_btn search_btn"
+                        style="float: right;height: 38px;">导出excel
+                </button>
+            </div>
             <table id="feeTable" lay-filter="feeTable"></table>
         </div>
     </div>

@@ -39,9 +39,20 @@
                     return "";
                 }
             }
+            var where = {};
+            $('#export').on('click', function () {
+                var params = "";
+                for (var k in where) {
+                    if (where[k]) {
+                        params += "&" + k + "=" + where[k];
+                    }
+                }
+                window.open(sessionStorage.getItem("feeUrl") + '/fee/branch/donate/statistics-export' + "?token=" + sessionStorage.getItem("sessionKey") + '&orgId=' + orgId + params);
+            })
+            var orgId = getQueryVariable('orgId');
+
             layui.use('table', function(){
                 var table = layui.table;
-                var orgId = getQueryVariable('orgId');
 
                 tableObj = table.render({
                     elem: '#feeTable',
@@ -91,13 +102,14 @@
                 });
             })
             function reload() {
+                where = {
+                    task: $('#task').val(),
+                    name: $('#searchCondition').val(),
+                    start: startDate,
+                    end: endDate
+                };
                 tableObj.reload({
-                    where: {
-                        task: $('#task').val(),
-                        name: $('#searchCondition').val(),
-                        start: startDate,
-                        end: endDate
-                    },
+                    where: where,
                     page: {
                         curr: 1 //重新从第 1 页开始
                     }
@@ -122,16 +134,19 @@
         <div class="bg_white_container">
             <div class="operate_form_group">
                 <div class="layui-input-inline" style="height: 40px;">
-                    <input type="text" class="layui-input" id="date_range" placeholder="日期范围">
+                    <input type="text" class="layui-input" id="date_range" placeholder="日期范围" style="height: 38px;" autocomplete="off">
                 </div>
                 <input type="text" name="title" id="searchCondition" placeholder="输入姓名搜索" autocomplete="off"
                        class="layui-input custom_input"
-                       style="margin-left: 20px; float: none;height: 40px;">
+                       style="margin-left: 20px; float: none;height: 38px;">
                 <button type="button" id="transportSearchBtn" class="layui-btn custom_btn search_btn"
-                        style="float: none;">查询
+                        style="float: none;height: 38px;">查询
+                </button>
+                <button type="button" id="export" class="layui-btn custom_btn search_btn"
+                        style="float: none;height: 38px;">导出excel
                 </button>
                 <select type="text" name="title" id="task" autocomplete="off" class="form-control"
-                        style="width: 15%;float: right;border-radius: 0;height: 40px!important;text-indent: 0;">
+                        style="width: 15%;float: right;border-radius: 0;height: 38px!important;text-indent: 0;">
                     <option value="">所有项目</option>
                     <c:forEach items="${tasks}" var="task">
                         <option value="${task.id}">${task.title}</option>

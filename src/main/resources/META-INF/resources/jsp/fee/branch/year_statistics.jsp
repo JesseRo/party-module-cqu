@@ -58,14 +58,24 @@
                 return d || '';
             }
             var orgId = getQueryVariable('orgId');
+            var exportUrl;
+            var where;
+            $('#export').on('click', function () {
+                window.open(exportUrl + "?year=" + where.year + "&orgId=" + where.orgId + "&token=" + sessionStorage.getItem("sessionKey"));
+            })
             layui.use('table', function () {
                 var table = layui.table;
                 $.get(sessionStorage.getItem("feeUrl") + '/fee/branch/org-status?id=' + orgId, function (res) {
                     if (res.code === 0) {
                         if (res.data == 1) {
+                            where = {
+                                orgId: orgId,
+                                year: getQueryVariable('year')
+                            }
+                            exportUrl = sessionStorage.getItem("feeUrl") + '/fee/branch/year/statistics-export'
                             tableObj = table.render({
                                 elem: '#feeTable',
-                                url: sessionStorage.getItem("feeUrl") + '/fee/branch/year/statistics?year=' + getQueryVariable('year') + '&orgId=' + orgId, //数据接口
+                                url: sessionStorage.getItem("feeUrl") + '/fee/branch/year/statistics', //数据接口
                                 headers: {Authorization: sessionStorage.getItem("sessionKey")},
                                 method: 'get',
                                 page: {
@@ -75,6 +85,7 @@
                                     next: '下一页&gt;',
                                     groups: 4,
                                 },
+                                where: where,
                                 cols: [[ //表头
                                     {field: 'id', title: 'id', hide: true},
                                     {
@@ -169,9 +180,14 @@
                                 }
                             });
                         } else {
+                            where = {
+                                orgId: orgId,
+                                year: getQueryVariable('year')
+                            }
+                            exportUrl = sessionStorage.getItem("feeUrl") + '/fee/secondary/year/statistics-export'
                             tableObj = table.render({
                                 elem: '#feeTable',
-                                url: sessionStorage.getItem("feeUrl") + '/fee/secondary/year/statistics?year=' + getQueryVariable('year') + '&orgId=' + orgId, //数据接口
+                                url: sessionStorage.getItem("feeUrl") + '/fee/secondary/year/statistics', //数据接口
                                 headers: {Authorization: sessionStorage.getItem("sessionKey")},
                                 method: 'get',
                                 page: {
@@ -181,6 +197,7 @@
                                     next:'下一页&gt;',
                                     groups:4,
                                 },
+                                where: where,
                                 cols: [[ //表头
                                     {field: 'id', title: 'id', hide: true},
                                     {field: 'year', title: '组织', width:'9%', templet: function (d) {
@@ -259,6 +276,11 @@
                     </span>
         </div>
         <div class="bg_white_container">
+            <div class="operate_form_group">
+                <button type="button" id="export" class="layui-btn custom_btn search_btn"
+                        style="float: right;height: 38px;">导出excel
+                </button>
+            </div>
             <table id="feeTable" lay-filter="feeTable"></table>
         </div>
     </div>
