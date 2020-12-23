@@ -137,9 +137,12 @@
             renderEditor();
              /*     表单提交*/
             form.on('submit(activityForm)', function(data){
-
-                $('#attendances').val(transfer.getData('attendance')
-                    .map(function(att){return att.value}).join(","));
+                var at = transfer.getData('attendance');
+                if (at.length === 0) {
+                    layuiModal.alert("实到人员不得为空！");
+                    return false;
+                }
+                $('#attendances').val(at.map(function(att){return att.value}).join(","));
                 $('#isTemp').val(0);
                 $('#activityForm').submit();
                 return true;

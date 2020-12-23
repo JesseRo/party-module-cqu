@@ -404,7 +404,7 @@
                                 {field: 'org_secretary', title: '党委书记', width: '15%'},
                                 {field: 'branch_count', title: '开展支部数', width: '14%'},
                                 {field: 'plan_count', title: '开展会议次数', width: '14%'},
-                                {field: 'member_count', title: '参数人数', width: '14%'},
+                                {field: 'member_count', title: '参会人数', width: '14%'},
                                 {field: 'leader_count', title: '参会领导', width: '14%'},
                                 {field: 'operate', title: '操作', width: '14%', toolbar: '#retentionBtns'}
                             ]],

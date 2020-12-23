@@ -45,6 +45,7 @@ public class MemberMeetingDao extends PostgresqlDaoImpl<MemberMeeting> {
 		params.add(start);
 		params.add(end);
 		String sql = "SELECT \n" +
+				"\tT.org as org_id,\n" +
 				"\tT.*,\n" +
 				"\tl.id,\n" +
 				"\tl.org_name,\n" +
@@ -52,21 +53,22 @@ public class MemberMeetingDao extends PostgresqlDaoImpl<MemberMeeting> {
 				"\tl.org_secretary \n" +
 				"FROM\n" +
 				"\t(\n" +
-				"\tSELECT P.org_id,\n" +
+				"\tSELECT case when o.org_type = 'secondary' then o.org_id else p.org_id end as org,\n" +
 				"\t\tCOUNT ( DISTINCT o.org_id ) as branch_count,\n" +
 				"\tcount(plan.id)\tas plan_count\n" +
 				"\tFROM\n" +
 				"\t\thg_party_meeting_plan_info plan\n" +
+				"\t\tLEFT JOIN hg_party_meeting_notes_info note ON plan.meeting_id = note.meeting_id\n" +
 				"\t\tLEFT JOIN hg_party_org o ON plan.organization_id = o.org_id\n" +
 				"\t\tLEFT JOIN hg_party_org P ON P.org_id = o.org_parent \n" +
 				"\tWHERE\n" +
-				"\t\to.historic = FALSE and plan.task_status > '4'\n" +
+				"\t\to.historic = FALSE and plan.task_status > '4' and note.status = 2\n" +
 				"\t\tand (p.org_id in (" + suffix + ") or o.org_id in (" + suffix + ")) \n" +
 				"\t\tand date(plan.start_time) >= ?::date and date(plan.start_time) <= ?::date\n" +
 				"\tGROUP BY\n" +
-				"\t\tP.org_id \n" +
+				"\t\t org \n" +
 				"\t)\n" +
-				"\tT LEFT JOIN hg_party_org l ON T.org_id = l.org_id";
+				"\tT LEFT JOIN hg_party_org l ON T.org = l.org_id";
 		return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(MeetingStatistics.class), params.toArray());
 	}
 
@@ -81,10 +83,11 @@ public class MemberMeetingDao extends PostgresqlDaoImpl<MemberMeeting> {
 				"\t( M.member_is_leader = '是' AND M.member_is_leader IS NOT NULL ) AS leader,\n" +
 				"\tCOUNT ( DISTINCT M.ID ) \n" +
 				"FROM\n" +
-				"\t\"hg_party_meeting_member_info\" par\n" +
-				"\tINNER JOIN hg_party_member M ON par.participant_id = M.member_identity\n" +
+				"(SELECT meeting_id,status, jsonb_array_elements_text(attendance::jsonb) as par from\n" +
+				"\t\"hg_party_meeting_notes_info\") note\n" +
+				"\tleft JOIN hg_party_member M ON note.par = m.member_identity\n" +
 				"\tLEFT JOIN hg_party_org o ON M.member_org = o.org_id \n" +
-				"\tLEFT JOIN hg_party_meeting_plan_info plan ON par.meeting_id = plan.meeting_id \n" +
+				"\tLEFT JOIN hg_party_meeting_plan_info plan ON note.meeting_id = plan.meeting_id " +
 				"\tWHERE\n" +
 				"\t\to.historic = FALSE and plan.task_status > '4'" +
 				"\t\tand (o.org_parent in (" + suffix + ") or o.org_id in (" + suffix + "))\n" +
@@ -107,11 +110,12 @@ public class MemberMeetingDao extends PostgresqlDaoImpl<MemberMeeting> {
 				"\tCOUNT ( plan.ID ) AS plan_count \n" +
 				"FROM\n" +
 				"\thg_party_meeting_plan_info plan\n" +
+				"\tLEFT JOIN hg_party_meeting_notes_info note ON plan.meeting_id = note.meeting_id\n" +
 				"\tLEFT JOIN hg_party_org o ON plan.organization_id = o.org_id\n" +
 				"\tLEFT JOIN hg_party_org P ON o.org_parent = P.org_id \n" +
 				"WHERE\n" +
 				"\to.historic = FALSE \n" +
-				"\tAND plan.task_status > '4' \n" +
+				"\tAND plan.task_status > '4' and note.status = 2\n" +
 				"\t\tand o.org_id in (" + suffix + ")\n" +
 				"\t\tand date(plan.start_time) >= ?::date and date(plan.start_time) <= ?::date\n" +
 				"GROUP BY\n" +
@@ -130,11 +134,12 @@ public class MemberMeetingDao extends PostgresqlDaoImpl<MemberMeeting> {
 				"\t( M.member_is_leader = '是' AND M.member_is_leader IS NOT NULL ) AS leader,\n" +
 				"\tCOUNT ( DISTINCT M.ID ) \n" +
 				"FROM\n" +
-				"\t\"hg_party_meeting_member_info\" par\n" +
-				"\tINNER JOIN hg_party_member M ON par.participant_id = M.member_identity\n" +
+				"\t(SELECT meeting_id,status, jsonb_array_elements_text(attendance::jsonb) as par from\n" +
+				"\t\"hg_party_meeting_notes_info\") note\n" +
+				"\tINNER JOIN hg_party_member M ON note.par = M.member_identity\n" +
 				"\tLEFT JOIN hg_party_org o ON M.member_org = o.org_id \n" +
-				"\tLEFT JOIN hg_party_meeting_plan_info plan ON par.meeting_id = plan.meeting_id \n" +
-				"WHERE plan.task_status > '4' and o.org_id in (" + suffix + ")\n" +
+				"\tLEFT JOIN hg_party_meeting_plan_info plan ON note.meeting_id = plan.meeting_id \n" +
+				"WHERE plan.task_status > '4' and note.status = 2 and o.org_id in (" + suffix + ")\n" +
 				"\t\tand date(plan.start_time) >= ?::date and date(plan.start_time) <= ?::date\n" +
 				"GROUP BY\n" +
 				"\to.org_id,\n" +
@@ -153,7 +158,7 @@ public class MemberMeetingDao extends PostgresqlDaoImpl<MemberMeeting> {
 			sql += " and o.org_name like ?\n";
 			params.add("%" + search + "%");
 		}
-		sql += "\tORDER BY o. org_type = 'organization' desc, o. org_type = 'secondary' desc";
+		sql += "\tORDER BY o. org_type = 'organization' desc, o. org_type = 'secondary' desc, o.id";
 		return pageBySql(pageNow, pageSize, sql, params);
 	}
 

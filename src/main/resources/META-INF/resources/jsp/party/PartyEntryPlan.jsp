@@ -271,13 +271,14 @@
 						groups:4
 					},
 					cols: [[ //表头
-						{field: 'org_name', align:'center',width:'12.14%', title: '党组织'},
-						{field: 'meeting_type', align:'center',width:'12.14%', title: '会议类型'},
-						{field: 'meeting_theme', align:'center',width:'12.14%', title: '开展主题'},
-						{field: 'start_time', align:'center', title: '开始时间',width:'12.14%',templet: function(d){return new Date(d.start_time).format("yyyy-MM-dd hh:mm:ss");}},
-						{field: 'member_name', align:'center', title: '联系人',width:'12.14%'},
-						{field: 'contact_phone', align:'center', title: '联系电话',width:'12.14%'},
-						{field: 'task_status', align:'center', title: '审批状态',width:'12.14%',templet: function(d){
+						{field: 'org_name', align:'center',width:'10.625%', title: '党组织'},
+						{field: 'meeting_type', align:'center',width:'10.625%', title: '会议类型'},
+						{field: 'meeting_theme', align:'center',width:'10.625%', title: '开展主题'},
+						{field: 'submit_time', align:'center', title: '报送时间',width:'10.625%',templet: function(d){return new Date(d.submit_time).format("yyyy-MM-dd");}},
+						{field: 'start_time', align:'center', title: '开始时间',width:'10.625%',templet: function(d){return new Date(d.start_time).format("yyyy-MM-dd hh:mm:ss");}},
+						{field: 'member_name', align:'center', title: '联系人',width:'10.625%'},
+						{field: 'contact_phone', align:'center', title: '联系电话',width:'10.625%'},
+						{field: 'task_status', align:'center', title: '审批状态',width:'10.625%',templet: function(d){
 								var status = '';
 								switch(parseInt(d.task_status)){
 									case 1:status = '待审核';break;

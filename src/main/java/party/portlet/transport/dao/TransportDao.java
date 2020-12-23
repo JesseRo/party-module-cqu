@@ -150,7 +150,7 @@ public class TransportDao extends PostgresqlDaoImpl<Transport> {
                 "\tLEFT JOIN hg_party_org P ON P.org_id = o.org_parent\n" +
                 "\tLEFT JOIN hg_party_org org ON org.org_id = T.current_approve_org \n" +
                 "WHERE\n" +
-                "\tT.TYPE IN ( '2', '3' )";
+                "\t1 = 1 ";
         List<Object> params = new ArrayList<>();
         if (completed) {
             sql += " and (t.status = 4 or (t.status = 1 and t.type != '3'))";
