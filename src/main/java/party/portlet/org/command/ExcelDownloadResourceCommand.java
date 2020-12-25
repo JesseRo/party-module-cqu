@@ -139,6 +139,7 @@ public class ExcelDownloadResourceCommand implements MVCResourceCommand {
                     jsonObject.put("fomalDate", member.getMember_fomal_date());
                     jsonObject.put("address", member.getMember_address());
                     jsonObject.put("marriage", member.getMember_marriage());
+                    jsonObject.put("jobNumber", member.getJobNumber());
 //                    jsonObject.put("position", member.getMember_party_position());
 //                    jsonObject.put("title", member.getMember_major_title());
 //                    jsonObject.put("class", member.getMember_new_class());
@@ -162,6 +163,7 @@ public class ExcelDownloadResourceCommand implements MVCResourceCommand {
                 headMap.put("fomalDate", "转正时间");
                 headMap.put("address", "家庭住址");
                 headMap.put("marriage", "婚姻状况");
+                headMap.put("jobNumber", "学号/工号");
 //                headMap.put("position", "党内职务");
 //                headMap.put("title", "党费标准（元/月）");
 //                headMap.put("class", "学生宿舍");
