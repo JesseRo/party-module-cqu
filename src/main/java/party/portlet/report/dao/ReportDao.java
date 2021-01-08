@@ -66,7 +66,7 @@ public class ReportDao extends PostgresqlDaoImpl<Report> {
         String sql = "select r.report_id as report_id, r.task_id as task_id, r.org_id as org_id, o.org_name as org_name, t.theme as theme, t.description as description, " +
                 "t.publish_time as publish_time, r.time as time, r.status as status, r.reason as reason, r.files as files, r.word_files from hg_party_report r " +
                 "inner join hg_party_report_task t on r.task_id = t.task_id inner join hg_party_org o on r.org_id = o.org_id " +
-                "where r.task_id = ? order by r.status ";
+                "where r.task_id = ? order by r.status, r.time desc";
         return postGresqlFindBySql(page, 10, sql, taskId);
     }
 

@@ -89,6 +89,7 @@
             $('.donate_notice').show();
         }
         $(function() {
+            layuiModal.alert("目前党费收缴系统处于测试中，尚未正式开放，请勿交纳党费。")
             var tableObj;
             layui.use("layer", function () {
                 layer = layui.layer;
@@ -215,7 +216,7 @@
 </div>
 <script type="text/html" id="operationButton">
     {{# if(d.state == 0){ }}
-    <a class="layui-btn layui-btn-xs" onclick="feePay('{{d.recordId}}');">缴费</a>
+    <a class="layui-btn layui-btn-xs" onclick="feePay('{{d.recordId}}');">交纳党费</a>
     {{# } }}
     <a class="layui-btn layui-btn-xs" onclick="window.location.href='/member_fee_detail?id={{d.id}}&memberId={{d.memberId}}'">详情</a>
 </script>

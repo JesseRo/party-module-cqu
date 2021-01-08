@@ -50,29 +50,34 @@
     }
 
     function audit() {
-        layuiModal.confirm("确定要提交党费设置吗？", function () {
-            var fee = $('#fee_amount').val();
-            var feeType = $('#config_type').val();
-            $.ajax({
-                type: "post",
-                url: sessionStorage.getItem("feeUrl") + '/fee/member/fee-config',
-                data: JSON.stringify({
-                    fee: Number(fee) * 100,
-                    feeType: feeType
-                }),
-                dataType: "json",
-                contentType: "application/json; charset=utf-8",
-                success: function (res) {
-                    if (res.code === 0) {
-                        layuiModal.alert("已提交", function () {
-                            window.location.href = '/member/config';
-                        });
-                    } else {
-                        layuiModal.alert(res.message)
-                    }
-                }
-            });
-        })
+        var feeType = $('#config_type').val();
+        if (!feeType) {
+            layuiModal.alert("请选择党费类型")
+        }
+        window.location.href = '/fee?feeType=' + feeType;
+        // layuiModal.confirm("确定要提交党费设置吗？", function () {
+        //     var fee = $('#fee_amount').val();
+        //     var feeType = $('#config_type').val();
+        //     $.ajax({
+        //         type: "post",
+        //         url: sessionStorage.getItem("feeUrl") + '/fee/member/fee-config',
+        //         data: JSON.stringify({
+        //             fee: Number(fee) * 100,
+        //             feeType: feeType
+        //         }),
+        //         dataType: "json",
+        //         contentType: "application/json; charset=utf-8",
+        //         success: function (res) {
+        //             if (res.code === 0) {
+        //                 layuiModal.alert("已提交", function () {
+        //                     window.location.href = '/member/config';
+        //                 });
+        //             } else {
+        //                 layuiModal.alert(res.message)
+        //             }
+        //         }
+        //     });
+        // })
     }
 
     $(function () {
@@ -80,16 +85,16 @@
             var form = layui.form;
         })
 
-        $.get(sessionStorage.getItem("feeUrl") + '/fee/member/fee-calculate', function (res) {
-            if (res.code === 0) {
-                $('#config_type').val(1);
-                $('#fee_amount').val(res.data.fee);
-            } else if (res.code === -2) {
-                layuiModal.alert("未能获取到您的工资数据");
-            } else {
-                layuiModal.alert(res.message)
-            }
-        })
+        // $.get(sessionStorage.getItem("feeUrl") + '/fee/member/fee-calculate', function (res) {
+        //     if (res.code === 0) {
+        //         $('#config_type').val(1);
+        //         $('#fee_amount').val(res.data.fee);
+        //     } else if (res.code === -2) {
+        //         layuiModal.alert("未能获取到您的工资数据");
+        //     } else {
+        //         layuiModal.alert(res.message)
+        //     }
+        // })
     })
 </script>
 <div class="table_form_content">
@@ -119,20 +124,16 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="layui-form-item layui-row">
-                            <p class="layui-col-xs3 layui-col-sm3 layui-col-md3"><span>党费金额</span></p>
-                            <div class="layui-input-inline"><input id="fee_amount" class="layui-input"></div>
-                            <p style="line-height: 30px;">元/月</p>
-                        </div>
-                        <div class="layui-form-item layui-row" id="fee_state_container" style="display: none;">
-                            <p class="layui-col-xs3 layui-col-sm3 layui-col-md3"><span>审核状态</span></p>
-                            <p class="layui-col-xs6 layui-col-sm6 layui-col-md6"><span style="color: red;" id="fee_state"></span></p>
-                        </div>
+<%--                        <div class="layui-form-item layui-row">--%>
+<%--                            <p class="layui-col-xs3 layui-col-sm3 layui-col-md3"><span>党费金额</span></p>--%>
+<%--                            <div class="layui-input-inline"><input id="fee_amount" class="layui-input"></div>--%>
+<%--                            <p style="line-height: 30px;">元/月</p>--%>
+<%--                        </div>--%>
                     </form>
                     <div class="layui-form-item layui-row">
                         <button type="button" id="button_pass"
                                 class="layui-btn layui-btn-warm" onclick="audit()">
-                            提交
+                            下一步
                         </button>
                         <button type="button" onclick="window.history.back();"
                                 class="layui-btn layui-btn-primary"

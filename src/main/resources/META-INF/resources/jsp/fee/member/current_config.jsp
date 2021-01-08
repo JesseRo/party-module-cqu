@@ -57,8 +57,9 @@
             if (res.code === 0) {
                 $('#config_type').val(res.data.feeType);
                 $('#fee_amount').val(Number(res.data.fee) / 100);
-                $('#fee_state').text((res.data.stateName || '') + '  ' + (res.data.reason || ''));
+                $('#fee_state').text((res.data.orgName || '') + (res.data.stateName || '') + '  ' + (res.data.reason || ''));
                 $('#fee_state_container').show();
+                $('#fee_time').val(res.data.createTime)
                 if (res.data.state === 0) {
                     $('#button_pass').show();
                     $('#button_reject').hide();
@@ -113,6 +114,10 @@
                             <p class="layui-col-xs3 layui-col-sm3 layui-col-md3"><span>党费金额</span></p>
                             <div class="layui-input-inline"><input id="fee_amount" class="layui-input" disabled></div>
                             <p style="line-height: 30px;">元/月</p>
+                        </div>
+                        <div class="layui-form-item layui-row">
+                            <p class="layui-col-xs3 layui-col-sm3 layui-col-md3"><span>提交时间</span></p>
+                            <div class="layui-input-inline"><input id="fee_time" class="layui-input" disabled></div>
                         </div>
                         <div class="layui-form-item layui-row" id="fee_state_container">
                             <p class="layui-col-xs3 layui-col-sm3 layui-col-md3"><span>审核状态</span></p>

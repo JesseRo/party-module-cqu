@@ -6,6 +6,7 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.MVCResourceCommand;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 
+import com.liferay.portal.kernel.util.PortalUtil;
 import dt.session.SessionManager;
 
 import hg.party.dao.org.MemberDao;
@@ -26,6 +27,7 @@ import party.constants.PartyPortletKeys;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -58,7 +60,16 @@ public class MeetingPlanSaveCommand implements MVCResourceCommand {
 
     @Override
     public boolean serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse) {
+        PrintWriter printWriter = null;
         String orgId = (String) SessionManager.getAttribute(resourceRequest.getRequestedSessionId(), "department");
+        if (orgId == null) {
+            try {
+                printWriter = resourceResponse.getWriter();
+                printWriter.write(JSON.toJSONString(ResultUtil.success("/home", "当前会话已过期，请重新登录")));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
         String conferenceType = ParamUtil.getString(resourceRequest, "conferenceType");
         String meeting_theme = ParamUtil.getString(resourceRequest, "subject");
@@ -96,7 +107,7 @@ public class MeetingPlanSaveCommand implements MVCResourceCommand {
         timeLasts = HtmlUtil.escape(timeLasts);
         sitId = HtmlUtil.escape(sitId);
         meetingId = HtmlUtil.escape(meetingId);
-        PrintWriter printWriter = null;
+
         try {
             printWriter = resourceResponse.getWriter();
             MeetingPlan m = new MeetingPlan();
@@ -179,7 +190,6 @@ public class MeetingPlanSaveCommand implements MVCResourceCommand {
             }
             //转跳
             //获取组织类型
-            String orgType = partyBranchService.findSconedAndBranch(orgId);
             String url;
             if (!StringUtils.isEmpty(meetingId)) {
                 url = "/backlogtwo";

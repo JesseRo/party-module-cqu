@@ -698,7 +698,7 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
             return postGresqlFindPageBySql(page, size, sb.toString(),orgId);
         }
     }
-    public PostgresqlPageResult<Map<String, Object>> searchCheckPage(int page, int size, String orgId, String search) {
+    public PostgresqlPageResult<Map<String, Object>> searchCheckPage(int page, int size, String orgId, String search,String status) {
         if (size <= 0){
             size = 10;
         }
@@ -725,17 +725,22 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
 //                break;
 //            default: return new PostgresqlPageResult(null, 0,0);
 //        }
-        if(!StringUtils.isEmpty(search)){
+        List<Object> params = new ArrayList<>();
+        if(!StringUtils.isEmpty(search)) {
             search = "%" + search + "%";
-            sb.append(" and (plan.meeting_theme like ? or org.org_name like ?)");
-            sb.append(" ORDER BY plan.id desc");
-            logger.debug("checkPage:"+sb.toString());
-            return postGresqlFindPageBySql(page, size, sb.toString(),search,search);
-        }else{
-            sb.append(" ORDER BY plan.id desc");
-            logger.debug("checkPage:"+sb.toString());
-            return postGresqlFindPageBySql(page, size, sb.toString());
+            sb.append(" and (plan.meeting_theme like ? or org.org_name like ? or users.user_name like ?)");
+            params.add(search);
+            params.add(search);
+            params.add(search);
         }
+        if (!StringUtils.isEmpty(status)) {
+            sb.append(" and plan.task_status = ? ");
+            params.add(status);
+        }
+        sb.append(" ORDER BY plan.id desc");
+        logger.debug("checkPage:"+sb.toString());
+        return postGresqlFindPageBySql(page, size, sb.toString(), params.toArray());
+
     }
 
     public PostgresqlPageResult<Map<String, Object>> searchOrgPage(int page, int size, String orgId, String search) {

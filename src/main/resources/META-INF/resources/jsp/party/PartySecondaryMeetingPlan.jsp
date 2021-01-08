@@ -92,16 +92,21 @@
 						</span>
 				</div>
 				<div class="bg_white_container">
+					<div class="operate_form_group">
 					<form class="layui-form" id="searchForm">
-						<div class="layui-form-item">
-							<div class="layui-inline">
-								<div class="layui-input-inline keyword">
-									<input type="text" name="keyword"  placeholder="请输入组织名称、主题关键字" class="layui-input">
-								</div>
-								<button type="button"  class="layui-btn layui-btn-warm"  lay-submit="" lay-filter="searchForm"><icon class="layui-icon layui-icon-search"></icon>搜索</button>
-							</div>
+						<select type="text" name="status" id="status" autocomplete="off" class="form-control"
+								style="width: 15%;float: left;border-radius: 0;height: 38px!important;text-indent: 0;" lay-ignore>
+							<option value="">所有</option>
+							<option value="6">未指派</option>
+							<option value="5">已指派</option>
+							<option value="7">已检查</option>
+						</select>
+						<div class="layui-input-inline keyword" style="margin-left: 20px;">
+							<input type="text" name="keyword"  placeholder="请输入组织名称、主题关键字" class="layui-input">
 						</div>
+						<button type="button"  class="layui-btn layui-btn-warm"  lay-submit="" lay-filter="searchForm"><icon class="layui-icon layui-icon-search"></icon>搜索</button>
 					</form>
+					</div>
 					<table id="meetingCheckTable" lay-filter="meetingCheckTable"></table>
 				</div>
 			</div>
@@ -213,7 +218,8 @@
 			})
 			function renderTable(page,size){
 				var  where = {
-					keyword: $("#searchForm input[name=keyword]").val()
+					keyword: $("#searchForm input[name=keyword]").val(),
+					status: $('#status').val()
 				};
 				var ins = table.render({
 					elem: '#meetingCheckTable',
@@ -245,7 +251,7 @@
 									case 3:status = '已驳回';break;
 									case 4:status = '已通过';break;
 									case 5:status = '已指派';break;
-									case 6:status = '未检查';break;
+									case 6:status = '未指派';break;
 									case 7:status = '已检查';break;
 								}
 								return status;

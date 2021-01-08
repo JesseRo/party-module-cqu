@@ -56,7 +56,7 @@
 		$(function () {
 			$.get(sessionStorage.getItem("feeUrl") + '/fee/member/fee-detail?id=${id}', function (res) {
 				if (res.code === 0) {
-					if (!res.data.feeState) {
+					if (!res.data.state) {
 						$('#button_pay').show();
 					}
 					$('#member_name').text(res.data.memberName);
@@ -65,7 +65,7 @@
 					$('.fee_amount').text(Number(res.data.shouldFee) / 100 + '元');
 					$('#fee_yearMonth').text(res.data.yearMonth);
 					$('#end_time').text(res.data.endDate);
-					$('#fee_state').text(res.data.feeState == 1 ? '已缴费' : '未缴费');
+					$('#fee_state').text(res.data.state == 1 ? '已缴费' : '未缴费');
 					recordId = res.data.recordId;
 				} else {
 					layuiModal.alert(res.message);

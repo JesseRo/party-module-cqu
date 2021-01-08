@@ -197,6 +197,9 @@
                 <button type="button" id="config_import" class="layui-btn custom_btn search_btn"
                         style="float: right;height: 38px;">批量导入
                 </button>
+                <button type="button" id="config_template" class="layui-btn custom_btn search_btn"
+                        style="float: right;height: 38px;" onclick="window.open('/images/党费设置模板.xlsx')">下载导入模板
+                </button>
             </div>
             <table id="feeTable" lay-filter="feeTable" class="custom_table"></table>
         </div>

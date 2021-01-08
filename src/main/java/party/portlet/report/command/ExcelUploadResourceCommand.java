@@ -154,9 +154,9 @@ public class ExcelUploadResourceCommand implements MVCResourceCommand {
                     ReportOrgTask reportOrgTask = reportTaskOrgDao.findByTaskIdAndOrgId(taskId, department);
                     reportOrgTask.setStatus(ConstantsKey.REPORTED);
                     reportTaskOrgDao.saveOrUpdate(reportOrgTask);
-                    transactionUtil.commit();
                     SessionManager.setAttribute(resourceRequest.getRequestedSessionId(), "formId-report", "null");
                     redirect = "window.parent.location.href='/brunch_report_list';";
+                    transactionUtil.commit();
                 } catch (Exception e) {
                     e.printStackTrace();
                     transactionUtil.rollback();
