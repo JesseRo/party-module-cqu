@@ -263,7 +263,14 @@
 										<span class="duesPerMonth"></span>
 									</div>
 								</div>
-								<div class="layui-form-item">
+								<div class="layui-form-item" style="width: 100%;">
+									<label class="layui-form-label">备注:</label>
+									<div class="layui-input-block dues" style="width: 88%;">
+										<span style="width: auto;color: red;">系统无法从财务数据中自动提取年薪制党员类型，因此无法自动抓取工资数据，请结合各自情况，自己输入工资结构数据，计算党费。
+										</span>
+									</div>
+								</div>
+								<div class="layui-form-item" style="width: 100%;">
 									<div class="layui-input-block">
 										<button type="submit" class="layui-btn custom_btn" lay-submit="" lay-filter="yearCalForm">计算党费</button>
 										<button type="button" class="layui-btn layui-btn-primary" onclick="setFeeConfig(this, 2);">设置党费</button>

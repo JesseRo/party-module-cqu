@@ -21,7 +21,7 @@ import java.util.List;
         property = {
                 "com.liferay.portlet.display-category=category.cqu",
                 "com.liferay.portlet.instanceable=true",
-                "javax.portlet.display-name=支部党费收缴查询",
+                "javax.portlet.display-name=支部党费收交查询",
                 "javax.portlet.init-param.template-path=/",
 
                 "com.liferay.portlet.requires-namespaced-parameters=false",

@@ -45,7 +45,7 @@ public class PublicInformationDao extends PostgresqlDaoImpl<OrgInform> {
 	}
 	
 	public int seconedAssign(String assignId,int id) {	
-		String sql="update hg_party_meeting_plan_info set check_person= ? ,task_status='5' where id= ? ";
+		String sql="update hg_party_meeting_plan_info set check_person= ? ,task_status='5', assign_time = CURRENT_TIMESTAMP where id= ? ";
 		int n = jdbcTemplate.update(sql,assignId,id);
 		return n;
 	}
@@ -53,7 +53,7 @@ public class PublicInformationDao extends PostgresqlDaoImpl<OrgInform> {
 	
 	
 	public int orgAssign(String assignId,int id) {	
-		String sqlOrg = "update hg_party_meeting_plan_info set check_person_org= ? ,task_status_org='"+5+"' where id= ? ";
+		String sqlOrg = "update hg_party_meeting_plan_info set check_person_org= ? ,task_status_org='5', assign_time = CURRENT_TIMESTAMP where id= ? ";
 		int n = jdbcTemplate.update(sqlOrg,assignId,id);
 		return n;
 	}

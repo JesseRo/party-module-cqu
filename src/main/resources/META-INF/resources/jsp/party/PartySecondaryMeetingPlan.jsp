@@ -101,6 +101,9 @@
 							<option value="5">已指派</option>
 							<option value="7">已检查</option>
 						</select>
+						<div class="layui-input-inline" style="margin-left: 20px;height: 40px;">
+							<input type="text" class="layui-input" id="date_range" placeholder="日期范围" autocomplete="off" >
+						</div>
 						<div class="layui-input-inline keyword" style="margin-left: 20px;">
 							<input type="text" name="keyword"  placeholder="请输入组织名称、主题关键字" class="layui-input">
 						</div>
@@ -204,6 +207,29 @@
 			<a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
 		</script>
     <script type="text/javascript">
+		function toDateStr(date){
+			if (date.year) {
+				return date.year + '-' + date.month + '-' + date.date;
+			}else {
+				return "";
+			}
+		}
+		var startDate, endDate;
+
+		layui.use('laydate', function () {
+			var laydate = layui.laydate;
+			laydate.render({
+				elem: '#date_range'
+				, range: '-',
+				done: function (value, date, e) {
+					console.log(value); //得到日期生成的值，如：2017-08-18
+					console.log(date); //得到日期时间对象：{year: 2017, month: 8, date: 18, hours: 0, minutes: 0, seconds: 0}
+					console.log(e); //得结束的日期时间对象，开启范围选择（range: true）才会返回。对象成员同上。
+					startDate = toDateStr(date);
+					endDate = toDateStr(e);
+				}
+			});
+		})
 		layui.use(['table','layer','form'], function() {
 			var table = layui.table,
 					layer = layui.layer,
@@ -219,7 +245,9 @@
 			function renderTable(page,size){
 				var  where = {
 					keyword: $("#searchForm input[name=keyword]").val(),
-					status: $('#status').val()
+					status: $('#status').val(),
+					start: startDate,
+					end: endDate
 				};
 				var ins = table.render({
 					elem: '#meetingCheckTable',

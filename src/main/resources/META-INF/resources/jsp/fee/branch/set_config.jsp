@@ -117,7 +117,7 @@
 				当前位置：
 				<span class="layui-breadcrumb" lay-separator=">">
 					<a href="javascript:;">党费管理</a>
-					<a href="javascript:;">补缴录入</a>
+					<a href="javascript:;">设置党费</a>
 				</span>
 			</div>
 			<div class="bg_white_container release_event_form">
@@ -158,7 +158,7 @@
 					</div>
 					<div class="layui-form-item">
 						<div class="layui-input-block">
-							<button type="button" class="layui-btn layui-btn layui-btn-warm" lay-submit="" lay-filter="submit">补缴录入</button>
+							<button type="button" class="layui-btn layui-btn layui-btn-warm" lay-submit="" lay-filter="submit">设置党费</button>
 							<button type="button" class="layui-btn layui-btn-primary" onclick="window.history.back();">返回</button>
 						</div>
 					</div>

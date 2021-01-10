@@ -71,9 +71,9 @@
                 },
                 yes: function (index) {
                     layer.close(index);
-                    if (text === '短信催缴') {
+                    if (text === '短信催交') {
                         sendSms([recordId]);
-                    } else if (text === '代缴') {
+                    } else if (text === '代交') {
                         feePay([recordId]);
                     }
                 }
@@ -132,7 +132,7 @@
                         {field: 'memberName', title: '姓名', width:'10%'},
                         {field: 'secondaryName', title: '所在组织', width:'20%'},
                         {field: 'orgName', title: '所在支部', width:'20%'},
-                        {field: 'yearMonth', title: '缴费年月', width:'10%'},
+                        {field: 'yearMonth', title: '交费年月', width:'10%'},
                         {field: 'feeTypeName', title: '党费类型', width:'10%'},
                         {field: 'fee', title: '党费金额', width: '10%', templet: function (d) {
                                 return Number(d.fee) / 100;
@@ -195,11 +195,11 @@
 
             var representButton = $('#represent_fee');
             representButton.on('click', function () {
-                representFee("代缴");
+                representFee("代交");
             });
             var smsButton = $('#sms_fee');
             smsButton.on('click', function () {
-                representFee("短信催缴");
+                representFee("短信催交");
             });
             var backButton = $('#back_fee');
             backButton.on('click', function () {
@@ -238,9 +238,9 @@
                             var d = checked[k];
                             ids.push(d.id);
                         }
-                        if (text === '短信催缴') {
+                        if (text === '短信催交') {
                             sendSms(ids);
-                        } else if (text === '代缴') {
+                        } else if (text === '代交') {
                             feePay(ids);
                         }
                         layer.close(index);
@@ -277,7 +277,7 @@
             当前位置：
             <span class="layui-breadcrumb" lay-separator=">">
                         <a href="javascript:;">党费管理</a>
-                        <a href="javascript:;">缴费查询</a>
+                        <a href="javascript:;">交费查询</a>
                     </span>
         </div>
         <div class="bg_white_container">
@@ -301,13 +301,13 @@
                         style="float: none;height: 38px;">查询
                 </button>
                 <button type="button" id="back_fee" class="layui-btn custom_btn search_btn"
-                        style="float: right;height: 38px;">补缴
+                        style="float: right;height: 38px;">补交
                 </button>
                 <button type="button" id="represent_fee" class="layui-btn custom_btn search_btn"
-                        style="float: right;height: 38px;">代缴
+                        style="float: right;height: 38px;">代交
                 </button>
                 <button type="button" id="sms_fee" class="layui-btn custom_btn search_btn"
-                        style="float: right;height: 38px;">短信催缴
+                        style="float: right;height: 38px;">短信催交
                 </button>
             </div>
             <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief" style="height: 100%;">
@@ -325,8 +325,8 @@
 </div>
 <script type="text/html" id="operationButton">
     {{# if(d.state == 0){ }}
-    <a class="layui-btn layui-btn-xs" onclick="audit('{{d.memberId}}', '{{d.memberName}}', '{{d.month}}','{{d.fee}}', '{{d.recordId}}', '代缴')">代缴</a>
-    <a class="layui-btn layui-btn-xs" onclick="audit('{{d.memberId}}', '{{d.memberName}}', '{{d.month}}','{{d.fee}}', '{{d.recordId}}', '短信催缴')">短信催缴</a>
+    <a class="layui-btn layui-btn-xs" onclick="audit('{{d.memberId}}', '{{d.memberName}}', '{{d.month}}','{{d.fee}}', '{{d.recordId}}', '代交')">代交</a>
+    <a class="layui-btn layui-btn-xs" onclick="audit('{{d.memberId}}', '{{d.memberName}}', '{{d.month}}','{{d.fee}}', '{{d.recordId}}', '短信催交')">短信催交</a>
     {{# } }}
 </script>
 </body>

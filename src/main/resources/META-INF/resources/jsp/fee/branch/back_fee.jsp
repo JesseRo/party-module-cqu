@@ -140,7 +140,7 @@
 				当前位置：
 				<span class="layui-breadcrumb" lay-separator=">">
 					<a href="javascript:;">党费管理</a>
-					<a href="javascript:;">补缴录入</a>
+					<a href="javascript:;">补交录入</a>
 				</span>
 			</div>
 			<div class="bg_white_container release_event_form">
@@ -167,14 +167,14 @@
 						</div>
 					</div>
 					<div class="layui-form-item">
-						<label class="layui-form-label layui-required">补缴月份</label>
+						<label class="layui-form-label layui-required">补交月份</label>
 						<div class="layui-input-inline">
 							<input type="text" name="date" id="date_range" autocomplete="off" class="layui-input" lay-verify="title|required">
 						</div>
 					</div>
 					<div class="layui-form-item">
 						<div class="layui-input-block">
-							<button type="button" class="layui-btn layui-btn layui-btn-warm" lay-submit="" lay-filter="submit">补缴录入</button>
+							<button type="button" class="layui-btn layui-btn layui-btn-warm" lay-submit="" lay-filter="submit">补交录入</button>
 							<button type="button" class="layui-btn layui-btn-primary" onclick="window.history.back();">返回</button>
 						</div>
 					</div>

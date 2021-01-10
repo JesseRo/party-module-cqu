@@ -45,9 +45,9 @@ public class StatisticsDao extends PostgresqlDaoImpl<Place> {
     public PageQueryResult<Map<String, Object>> leaderPage(int page, int limit, String orgId, String name) {
         List<Object> params = new ArrayList<>();
         String sql = "SELECT m.member_identity, m.member_name, branch.org_id, branch.org_name from hg_party_member M\n" +
-                "inner join hg_party_org branch on m.member_org = branch.org_id and branch.historic = false \n" +
-                "\tinner join hg_party_org secondary on branch.org_parent = secondary.org_id and secondary.historic = false\n" +
-                "\tinner join hg_party_org school on secondary.org_parent = school.org_id and \n" +
+                "left join hg_party_org branch on m.member_org = branch.org_id and branch.historic = false \n" +
+                "\tleft join hg_party_org secondary on branch.org_parent = secondary.org_id and secondary.historic = false\n" +
+                "\tleft join hg_party_org school on secondary.org_parent = school.org_id and \n" +
                 "school.historic = false\n" +
                 "WHERE\n" +
                 "\t(branch.org_id = ?\n" +
@@ -71,17 +71,19 @@ public class StatisticsDao extends PostgresqlDaoImpl<Place> {
         }
         String prefix = orgIds.stream().map(p->"?").collect(Collectors.joining(","));
         String sql = "SELECT\n" +
-                "\tmi.participant_id AS property,\n" +
-                "\tCOUNT ( mi.meeting_id ) AS num \n" +
+                "\tnote.par AS property,\n" +
+                "\tCOUNT ( DISTINCT note.meeting_id ) AS num \n" +
                 "FROM\n" +
-                "\t\"hg_party_meeting_member_info\" mi\n" +
-                "\tinner join hg_party_meeting_plan_info info on mi.meeting_id = info.meeting_id" +
-                "\tINNER JOIN hg_party_member M ON mi.participant_id = M.member_identity and m.historic = false\n" +
+                "(SELECT meeting_id,status, jsonb_array_elements_text(attendance::jsonb) as par from \n" +
+                "\t\t\thg_party_meeting_notes_info) note\n" +
+                "\tinner join hg_party_meeting_plan_info info on note.meeting_id = info.meeting_id\t\n" +
+                "\tINNER JOIN hg_party_member M ON note.par = M.member_identity and m.historic = false\n" +
                 "where\n" +
-                "\tmi.participant_id in (" + prefix + ") and info.task_status > '4'\n" +
-                "\tand date(info.start_time) >= ?::date and date(info.start_time) <= ?::date" +
-                "\tGROUP BY\n" +
-                "\tmi.participant_id";
+                "\tnote.par in (" + prefix + ")\n" +
+                "\tand info.task_status > '4' and note.status = 2\n" +
+                "\tand date(info.start_time) >= ?::date and date(info.start_time) <= ?::date\n" +
+                "GROUP BY\n" +
+                "\tnote.par";
         List<Object> params = new ArrayList<>(orgIds);
         params.add(start);
         params.add(end);
@@ -100,8 +102,10 @@ public class StatisticsDao extends PostgresqlDaoImpl<Place> {
                 "\thg_party_meeting_plan_info info \n" +
                 "LEFT JOIN\n" +
                 "\thg_party_member member on info.sit_id = member.member_identity\n" +
+                "LEFT JOIN\n" +
+                "\thg_party_meeting_notes_info note on note.meeting_id = info.meeting_id\n" +
                 "where \n" +
-                "\tmember.historic is false and info.task_status > '4'\n" +
+                "\tmember.historic is false and info.task_status > '4' and note.status = 2\n" +
                 "\tand member.member_identity in (" + prefix + ")\n" +
                 "\tand date(info.start_time) >= ?::date and date(info.start_time) <= ?::date" +
                 "\tGROUP BY member.member_identity";
@@ -123,8 +127,10 @@ public class StatisticsDao extends PostgresqlDaoImpl<Place> {
                 "\t\"hg_party_meeting_speaker\" mi\n" +
                 "\tinner join hg_party_meeting_plan_info info on mi.meeting_id = info.meeting_id" +
                 "\tINNER JOIN hg_party_member M ON mi.member_id = M.member_identity and m.historic = false\n" +
+                "LEFT JOIN\n" +
+                "\thg_party_meeting_notes_info note on note.meeting_id = info.meeting_id\n" +
                 "where\n" +
-                "\tmi.member_id in (" + prefix + ") and info.task_status > '4'\n" +
+                "\tmi.member_id in (" + prefix + ") and info.task_status > '4' and note.status = 2\n" +
                 "\tand date(info.start_time) >= ?::date and date(info.start_time) <= ?::date" +
                 "\tGROUP BY\n" +
                 "\tmi.member_id";

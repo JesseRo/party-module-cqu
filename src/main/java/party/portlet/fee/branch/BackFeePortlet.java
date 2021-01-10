@@ -15,7 +15,7 @@ import java.io.IOException;
         property = {
                 "com.liferay.portlet.display-category=category.cqu",
                 "com.liferay.portlet.instanceable=true",
-                "javax.portlet.display-name=补缴",
+                "javax.portlet.display-name=补交",
                 "javax.portlet.init-param.template-path=/",
 
                 "com.liferay.portlet.requires-namespaced-parameters=false",

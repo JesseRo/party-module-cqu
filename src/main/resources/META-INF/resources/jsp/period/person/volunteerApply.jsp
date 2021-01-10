@@ -207,7 +207,7 @@
                                 + '</div>'
                                 + '<div class="col-sm-6 col-xs-12">'
                                 + '    <div class="col-sm-3 col-xs-3 ">'
-                                + '        <span class="control-label form-label-required">应缴党费</span>'
+                                + '        <span class="control-label form-label-required">应交党费</span>'
                                 + '    </div>'
                                 + '    <div class="col-sm-9 col-xs-9">'
                                 + '        <input class="form-control" type="number" name="should_fee" value="' + data.should_fee + '">'
@@ -215,7 +215,7 @@
                               + '  </div>'
                               + '  <div class="col-sm-6 col-xs-12">'
                               + '      <div class="col-sm-3 col-xs-3 ">'
-                              + '          <span class="control-label form-label-required">实缴党费</span>'
+                              + '          <span class="control-label form-label-required">实交党费</span>'
                               + '      </div>'
                               + '      <div class="col-sm-9 col-xs-9">'
                               + '          <input class="form-control" type="number" name="paid_fee" value="' + data.paid_fee + '">'
@@ -343,7 +343,7 @@
 <!--                                </div>-->
 <!--                                <div class="col-sm-6 col-xs-12">-->
 <!--                                    <div class="col-sm-3 col-xs-3 ">-->
-<!--                                        <span class="control-label form-label-required">应缴党费</span>-->
+<!--                                        <span class="control-label form-label-required">应交党费</span>-->
 <!--                                    </div>-->
 <!--                                    <div class="col-sm-9 col-xs-9">-->
 <!--                                        <input class="form-control" type="number" name="should" value="">-->
@@ -351,7 +351,7 @@
 <!--                                </div>-->
 <!--                                <div class="col-sm-6 col-xs-12">-->
 <!--                                    <div class="col-sm-3 col-xs-3 ">-->
-<!--                                        <span class="control-label form-label-required">实缴党费</span>-->
+<!--                                        <span class="control-label form-label-required">实交党费</span>-->
 <!--                                    </div>-->
 <!--                                    <div class="col-sm-9 col-xs-9">-->
 <!--                                        <input class="form-control" type="number" name="paid" value="">-->

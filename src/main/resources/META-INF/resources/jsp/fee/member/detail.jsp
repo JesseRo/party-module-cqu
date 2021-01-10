@@ -61,11 +61,11 @@
 					}
 					$('#member_name').text(res.data.memberName);
 					$('#member_org').text(res.data.secondaryName + res.data.orgName);
-					$('#fee_type').text(res.data.yearMonth + '党费缴纳通知');
+					$('#fee_type').text(res.data.yearMonth + '党费交纳通知');
 					$('.fee_amount').text(Number(res.data.shouldFee) / 100 + '元');
 					$('#fee_yearMonth').text(res.data.yearMonth);
 					$('#end_time').text(res.data.endDate);
-					$('#fee_state').text(res.data.state == 1 ? '已缴费' : '未缴费');
+					$('#fee_state').text(res.data.state == 1 ? '已交费' : '未交费');
 					recordId = res.data.recordId;
 				} else {
 					layuiModal.alert(res.message);
@@ -80,7 +80,7 @@
 				当前位置：
 				<span class="layui-breadcrumb" lay-separator=">">
 					<a href="javascript:;">党费管理</a>
-					<a href="javascript:;">缴费详情</a>
+					<a href="javascript:;">交费详情</a>
 				</span>
 			</div>
 			<div class="bg_white_container">

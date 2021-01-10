@@ -19,7 +19,7 @@
     </style>
     <script type="text/javascript" >
         $(function() {
-            var unpay = '<span style="color: red;font-size: 13px;">未缴费</span>';
+            var unpay = '<span style="color: red;font-size: 13px;">未交费</span>';
             function renderFee(d) {
                 return d ? (d.state === 1 ? (d.fee / 100) : unpay) : '';
             }

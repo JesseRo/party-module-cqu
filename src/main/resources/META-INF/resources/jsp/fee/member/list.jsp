@@ -89,7 +89,7 @@
             $('.donate_notice').show();
         }
         $(function() {
-            layuiModal.alert("目前党费收缴系统处于测试中，尚未正式开放，请勿交纳党费。")
+            layuiModal.alert("目前党费收交系统处于测试中，尚未正式开放，请勿交纳党费。")
             var tableObj;
             layui.use("layer", function () {
                 layer = layui.layer;
@@ -140,7 +140,7 @@
                                 return d.state == 0 ? 0 : Number(d.shouldFee) / 100
                             }},
                         {field: 'state', title: '交费状态', width: '12.5%', templet: function (d) {
-                                return d.state == 0 ? '<p style="color: red;">未缴</p>' : '已缴'
+                                return d.state == 0 ? '<p style="color: red;">未交</p>' : '已交'
                             }},
                         {field: 'operation', title: '操作', width: '12.5%', toolbar: '#operationButton'}
                     ]],
@@ -183,7 +183,7 @@
 <div class="donate_notice" style="display: none;">
     <div style="background-image: url('images/img_juankuan_bg.png');width: 1200px;height: 700px;padding: 20px 150px;background-repeat: repeat no-repeat;background-size: 100% 100%;box-sizing: border-box;">
         <div class="notice_top">
-            <img src="images/ic_danghui.png" style="margin-right: 20px;">党员缴费
+            <img src="images/ic_danghui.png" style="margin-right: 20px;">党员交费
         </div>
         <div class="notice_inner">
             <div class="inner_left">

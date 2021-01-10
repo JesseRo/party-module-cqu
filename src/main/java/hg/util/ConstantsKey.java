@@ -126,8 +126,8 @@ public class ConstantsKey {
         REPORT_CONTENT_HEAD.put("position", "党员职位");
         REPORT_CONTENT_HEAD.put("party_age", "党员党龄");
         REPORT_CONTENT_HEAD.put("join_date", "入党日期");
-        REPORT_CONTENT_HEAD.put("should_fee", "应缴党费");
-        REPORT_CONTENT_HEAD.put("paid_fee", "实缴党费");
+        REPORT_CONTENT_HEAD.put("should_fee", "应交党费");
+        REPORT_CONTENT_HEAD.put("paid_fee", "实交党费");
         REPORT_CONTENT_HEAD.put("extra", "备注信息");
     }
 
@@ -135,10 +135,10 @@ public class ConstantsKey {
 
     static {
         BRUNCH_REPORT_CONTENT_HEAD.put("orgName", "支部名称");
-        BRUNCH_REPORT_CONTENT_HEAD.put("paid_number", "缴清人数");
+        BRUNCH_REPORT_CONTENT_HEAD.put("paid_number", "交清人数");
         BRUNCH_REPORT_CONTENT_HEAD.put("total_number", "总人数");
-        BRUNCH_REPORT_CONTENT_HEAD.put("paid_fee", "实缴党费总计");
-        BRUNCH_REPORT_CONTENT_HEAD.put("should_fee", "应缴党费总计");
+        BRUNCH_REPORT_CONTENT_HEAD.put("paid_fee", "实交党费总计");
+        BRUNCH_REPORT_CONTENT_HEAD.put("should_fee", "应交党费总计");
     }
 
     public static Map<String, String> DROPDOWN_TYPES_MAPPING = new LinkedHashMap<>();

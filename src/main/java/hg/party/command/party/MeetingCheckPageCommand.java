@@ -42,11 +42,13 @@ public class MeetingCheckPageCommand implements MVCResourceCommand {
 		int size = ParamUtil.getInteger(resourceRequest, "limit");
 		String keyword = ParamUtil.getString(resourceRequest, "keyword");
 		String status = ParamUtil.getString(resourceRequest, "status");
+		String start = ParamUtil.getString(resourceRequest, "start");
+		String end = ParamUtil.getString(resourceRequest, "end");
 		Object orgId = SessionManager.getAttribute(resourceRequest.getRequestedSessionId(), "department");
 		try {
 			PostgresqlPageResult<Map<String, Object>> data = new PostgresqlPageResult<>(null, 0,0);
 			if(orgId!=null && !StringUtils.isEmpty(String.valueOf(orgId))){
-				data = partyMeetingPlanInfoService.searchCheckPage(page, size, String.valueOf(orgId),keyword, status);
+				data = partyMeetingPlanInfoService.searchCheckPage(page, size, String.valueOf(orgId),keyword, status, start, end);
 			}
 			Gson gson = new Gson();
 			res.getWriter().write(gson.toJson(data.toJsonPageResponse()));

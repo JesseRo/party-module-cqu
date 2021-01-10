@@ -86,16 +86,16 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
                 "\tplan.check_status,\n" +
                 "\tleader.member_name as leader_name\n" +
                 "\tfrom\n" +
-                "\thg_party_meeting_member_info participant \n" +
-                "\tleft join hg_party_meeting_plan_info plan on plan.meeting_id = participant.meeting_id\n" +
-                "\tLEFT JOIN hg_party_meeting_notes_info note ON plan.meeting_id = note.meeting_id\n" +
+                "\thg_party_meeting_plan_info plan\n" +
+                "\tLEFT JOIN (SELECT meeting_id,status, jsonb_array_elements_text(attendance::jsonb) as par from \n" +
+                "\t\t\thg_party_meeting_notes_info) note on note.meeting_id = plan.meeting_id\t\n" +
                 "\tLEFT JOIN hg_party_org org ON plan.organization_id = org.org_id\n" +
                 "\tLEFT JOIN hg_party_member contact ON plan.contact = contact.member_identity\n" +
                 "\tLEFT JOIN hg_party_member HOST ON plan.HOST = HOST.member_identity\n" +
                 "\tLEFT JOIN hg_party_member checker ON plan.HOST = checker.member_identity\n" +
-                "\tLEFT JOIN hg_party_member leader ON participant.participant_id = leader.member_identity or plan.sit_id = leader.member_identity\n" +
+                "\tLEFT JOIN hg_party_member leader ON note.par = leader.member_identity or plan.sit_id = leader.member_identity\n" +
                 "\tLEFT JOIN hg_party_place place ON place.\"id\" = plan.place\n" +
-                "\twhere leader.member_is_leader = '是' ";
+                "\twhere leader.member_is_leader = '是' plan info.task_status > '4' and note.status = 2";
 
 
         if(!StringUtils.isEmpty(orgId)){
@@ -698,7 +698,7 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
             return postGresqlFindPageBySql(page, size, sb.toString(),orgId);
         }
     }
-    public PostgresqlPageResult<Map<String, Object>> searchCheckPage(int page, int size, String orgId, String search,String status) {
+    public PostgresqlPageResult<Map<String, Object>> searchCheckPage(int page, int size, String orgId, String search, String status, String start, String end) {
         if (size <= 0){
             size = 10;
         }
@@ -736,6 +736,14 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
         if (!StringUtils.isEmpty(status)) {
             sb.append(" and plan.task_status = ? ");
             params.add(status);
+        }
+        if (!StringUtils.isEmpty(start)) {
+            sb.append(" and date(plan.start_time) >= ?::date ");
+            params.add(start);
+        }
+        if (!StringUtils.isEmpty(end)) {
+            sb.append(" and date(plan.start_time) <= ?::date ");
+            params.add(end);
         }
         sb.append(" ORDER BY plan.id desc");
         logger.debug("checkPage:"+sb.toString());
