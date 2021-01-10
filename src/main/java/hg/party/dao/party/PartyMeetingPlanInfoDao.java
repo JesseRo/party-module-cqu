@@ -95,7 +95,7 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
                 "\tLEFT JOIN hg_party_member checker ON plan.HOST = checker.member_identity\n" +
                 "\tLEFT JOIN hg_party_member leader ON note.par = leader.member_identity or plan.sit_id = leader.member_identity\n" +
                 "\tLEFT JOIN hg_party_place place ON place.\"id\" = plan.place\n" +
-                "\twhere leader.member_is_leader = '是' plan info.task_status > '4' and note.status = 2";
+                "\twhere leader.member_is_leader = '是' and plan.task_status > '4' and note.status = 2";
 
 
         if(!StringUtils.isEmpty(orgId)){
