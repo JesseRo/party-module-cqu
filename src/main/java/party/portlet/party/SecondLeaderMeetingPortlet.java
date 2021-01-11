@@ -36,6 +36,7 @@ import java.util.Map;
                 "javax.portlet.display-name=领导参会检索",
                 "javax.portlet.init-param.template-path=/",
                 "com.liferay.portlet.requires-namespaced-parameters=false",
+                "javax.portlet.init-param.view-template=/jsp/party/leaderMeeting.jsp",
                 "javax.portlet.name=" + PartyPortletKeys.LeaderMeetingStatistics,
                 "javax.portlet.resource-bundle=content.Language",
                 "javax.portlet.security-role-ref=power-user,user"
