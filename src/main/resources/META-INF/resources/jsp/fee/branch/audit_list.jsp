@@ -192,10 +192,10 @@
                         style="float: right;height: 38px;">批量驳回
                 </button>
                 <button type="button" id="config_set" class="layui-btn custom_btn search_btn"
-                        style="float: right;height: 38px;">录入
+                        style="float: right;height: 38px;">录入党员党费数据
                 </button>
                 <button type="button" id="config_import" class="layui-btn custom_btn search_btn"
-                        style="float: right;height: 38px;">批量导入
+                        style="float: right;height: 38px;">批量录入党费数据
                 </button>
                 <button type="button" id="config_template" class="layui-btn custom_btn search_btn"
                         style="float: right;height: 38px;" onclick="window.open('/images/党费设置模板.xlsx')">下载导入模板

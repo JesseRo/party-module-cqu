@@ -301,10 +301,10 @@
                         style="float: none;height: 38px;">查询
                 </button>
                 <button type="button" id="back_fee" class="layui-btn custom_btn search_btn"
-                        style="float: right;height: 38px;">补交
+                        style="float: right;height: 38px;">党费补交信息登记
                 </button>
                 <button type="button" id="represent_fee" class="layui-btn custom_btn search_btn"
-                        style="float: right;height: 38px;">代交
+                        style="float: right;height: 38px;">党费代交
                 </button>
                 <button type="button" id="sms_fee" class="layui-btn custom_btn search_btn"
                         style="float: right;height: 38px;">短信催交

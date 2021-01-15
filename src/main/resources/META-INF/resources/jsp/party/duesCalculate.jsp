@@ -536,13 +536,14 @@
 			var el = $(e);
 			var _fee = fee[type];
 			if (_fee) {
-				layuiModal.confirm("确定提交党费设置： " + $('[partyType=' + type + ']').text() + " " + _fee + "元/月", function () {
+				layuiModal.confirm("你的党费设置如下：\n" +
+						"党费类型：\n" + $('[partyType=' + type + ']').text() + ";\n党费金额："  + _fee + "元/月", function () {
 					$.post(sessionStorage.getItem("feeUrl") + '/fee/member/fee-config', {
 						type: type,
 						fee: Number(_fee) * 100
 					}, function (res) {
 						if (res.code === 0) {
-							layuiModal.alert("已提交设置!", function () {
+							layuiModal.alert("你已提交党费设置，请等待支部书记、二级党组织审核。", function () {
 								window.location.href = "/member/config";
 							});
 						} else {

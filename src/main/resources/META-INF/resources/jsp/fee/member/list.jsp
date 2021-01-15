@@ -207,8 +207,7 @@
             </div>
         </div>
         <div class="notice_top" style="margin-right: 272px;">
-            <button id="pay_fee" style="background-image: url('/images/我要支付@2x.png');width: 120px;background-size: 100% 100%;background-repeat: repeat no-repeat;height: 40px;">&nbsp;</button>
-        </div>
+            <button id="pay_fee" style="width: 120px;/height: 40px;background-color: #bd333c;font-size: 16px;line-height: 16px;color: white;letter-spacing: 5px;">交纳党费</button>        </div>
     </div>
     <div class="statue">
 
