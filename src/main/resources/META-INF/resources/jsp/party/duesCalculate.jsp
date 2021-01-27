@@ -190,11 +190,22 @@
 										<span class="duesPerMonth"></span>
 									</div>
 								</div>
-								<div class="layui-form-item">
+								<div class="layui-form-item" style="margin-left: 132px;clear: both;">
 									<div class="layui-input-block">
 										<button type="submit" class="layui-btn custom_btn" lay-submit="" lay-filter="monthCalForm">计算党费</button>
 										<button type="button" class="layui-btn layui-btn-primary" onclick="setFeeConfig(this, 1);">设置党费</button>
 									</div>
+								</div>
+								<div class="layui-form-item" style="margin-left: 46px;width: 90%; display: inline-block;">
+									<p>
+										(1)目前党建信息化平台仅能抓取月薪制党员的工资信息。由于工资数据较为复杂，系统自动提取的工资数据仅供参考，请认真核对。如果数据有偏差，请修改相关数据后再计算党费。
+									</p>
+									<p>
+										(2)年薪制党员、企业员工/其他协议工资党员、离退休教职工党员、学生党员、在职就读硕士博士党员，请参考《重庆大学党费收缴、使用和管理规定》，根据相关数据进行党费计算。
+									</p>
+									<p>
+										(3)党员提交党费类型和党费数据，完成党费设置后，需要党支部书记和二级党组织管理员审核。
+									</p>
 								</div>
 							</div>
 							</form>
@@ -270,11 +281,22 @@
 										</span>
 									</div>
 								</div>
-								<div class="layui-form-item" style="width: 100%;">
+								<div class="layui-form-item" style="margin-left: 132px;clear: both;">
 									<div class="layui-input-block">
 										<button type="submit" class="layui-btn custom_btn" lay-submit="" lay-filter="yearCalForm">计算党费</button>
 										<button type="button" class="layui-btn layui-btn-primary" onclick="setFeeConfig(this, 2);">设置党费</button>
 									</div>
+								</div>
+								<div class="layui-form-item" style="margin-left: 46px;width: 90%; display: inline-block;">
+									<p>
+										(1)目前党建信息化平台仅能抓取月薪制党员的工资信息。由于工资数据较为复杂，系统自动提取的工资数据仅供参考，请认真核对。如果数据有偏差，请修改相关数据后再计算党费。
+									</p>
+									<p>
+										(2)年薪制党员、企业员工/其他协议工资党员、离退休教职工党员、学生党员、在职就读硕士博士党员，请参考《重庆大学党费收缴、使用和管理规定》，根据相关数据进行党费计算。
+									</p>
+									<p>
+										(3)党员提交党费类型和党费数据，完成党费设置后，需要党支部书记和二级党组织管理员审核。
+									</p>
 								</div>
 							</div>
 							</form>
@@ -379,11 +401,22 @@
 										<span class="duesPerMonth"></span>
 									</div>
 								</div>
-								<div class="layui-form-item">
+								<div class="layui-form-item" style="margin-left: 132px;clear: both;">
 									<div class="layui-input-block">
 										<button type="submit" class="layui-btn custom_btn" lay-submit="" lay-filter="companyCalForm">计算党费</button>
 										<button type="button" class="layui-btn layui-btn-primary" onclick="setFeeConfig(this, 3);">设置党费</button>
 									</div>
+								</div>
+								<div class="layui-form-item" style="margin-left: 46px;width: 90%; display: inline-block;">
+									<p>
+										(1)目前党建信息化平台仅能抓取月薪制党员的工资信息。由于工资数据较为复杂，系统自动提取的工资数据仅供参考，请认真核对。如果数据有偏差，请修改相关数据后再计算党费。
+									</p>
+									<p>
+										(2)年薪制党员、企业员工/其他协议工资党员、离退休教职工党员、学生党员、在职就读硕士博士党员，请参考《重庆大学党费收缴、使用和管理规定》，根据相关数据进行党费计算。
+									</p>
+									<p>
+										(3)党员提交党费类型和党费数据，完成党费设置后，需要党支部书记和二级党组织管理员审核。
+									</p>
 								</div>
 							</div>
 							</form>
@@ -417,11 +450,22 @@
 										<span class="duesPerMonth"></span>
 									</div>
 								</div>
-								<div class="layui-form-item">
+								<div class="layui-form-item" style="margin-left: 132px;clear: both;">
 									<div class="layui-input-block">
 										<button type="submit" class="layui-btn custom_btn" lay-submit="" lay-filter="retireEmployeeCalForm">计算党费</button>
 										<button type="button" class="layui-btn layui-btn-primary" onclick="setFeeConfig(this, 4);">设置党费</button>
 									</div>
+								</div>
+								<div class="layui-form-item" style="margin-left: 46px;width: 90%; display: inline-block;">
+									<p>
+										(1)目前党建信息化平台仅能抓取月薪制党员的工资信息。由于工资数据较为复杂，系统自动提取的工资数据仅供参考，请认真核对。如果数据有偏差，请修改相关数据后再计算党费。
+									</p>
+									<p>
+										(2)年薪制党员、企业员工/其他协议工资党员、离退休教职工党员、学生党员、在职就读硕士博士党员，请参考《重庆大学党费收缴、使用和管理规定》，根据相关数据进行党费计算。
+									</p>
+									<p>
+										(3)党员提交党费类型和党费数据，完成党费设置后，需要党支部书记和二级党组织管理员审核。
+									</p>
 								</div>
 							</div>
 							</form>
@@ -437,10 +481,21 @@
 									</div>
 								</div>
 							</div>
-							<div class="layui-form-item">
+							<div class="layui-form-item" style="margin-left: 132px;clear: both;">
 								<div class="layui-input-block">
 									<button type="button" class="layui-btn layui-btn-primary" onclick="setFeeConfig(this, 5);">设置党费</button>
 								</div>
+							</div>
+							<div class="layui-form-item" style="margin-left: 46px;width: 90%; display: inline-block;">
+								<p>
+									(1)目前党建信息化平台仅能抓取月薪制党员的工资信息。由于工资数据较为复杂，系统自动提取的工资数据仅供参考，请认真核对。如果数据有偏差，请修改相关数据后再计算党费。
+								</p>
+								<p>
+									(2)年薪制党员、企业员工/其他协议工资党员、离退休教职工党员、学生党员、在职就读硕士博士党员，请参考《重庆大学党费收缴、使用和管理规定》，根据相关数据进行党费计算。
+								</p>
+								<p>
+									(3)党员提交党费类型和党费数据，完成党费设置后，需要党支部书记和二级党组织管理员审核。
+								</p>
 							</div>
 						</div>
 
@@ -472,11 +527,22 @@
 										<span class="duesPerMonth"></span>
 									</div>
 								</div>
-								<div class="layui-form-item">
+								<div class="layui-form-item" style="margin-left: 132px;clear: both;">
 									<div class="layui-input-block">
 										<button type="submit" class="layui-btn custom_btn" lay-submit="" lay-filter="masterCalForm">计算党费</button>
 										<button type="button" class="layui-btn layui-btn-primary custom_btn" onclick="setFeeConfig(this, 6);">设置党费</button>
 									</div>
+								</div>
+								<div class="layui-form-item" style="margin-left: 46px;width: 90%; display: inline-block;">
+									<p>
+										(1)目前党建信息化平台仅能抓取月薪制党员的工资信息。由于工资数据较为复杂，系统自动提取的工资数据仅供参考，请认真核对。如果数据有偏差，请修改相关数据后再计算党费。
+									</p>
+									<p>
+										(2)年薪制党员、企业员工/其他协议工资党员、离退休教职工党员、学生党员、在职就读硕士博士党员，请参考《重庆大学党费收缴、使用和管理规定》，根据相关数据进行党费计算。
+									</p>
+									<p>
+										(3)党员提交党费类型和党费数据，完成党费设置后，需要党支部书记和二级党组织管理员审核。
+									</p>
 								</div>
 							</div>
 							</form>
@@ -537,10 +603,10 @@
 			var _fee = fee[type];
 			if (_fee) {
 				layuiModal.confirm("你的党费设置如下：\n" +
-						"党费类型：\n" + $('[partyType=' + type + ']').text() + ";\n党费金额："  + _fee + "元/月", function () {
+						"党费类型：\n" + $('[partyType=' + type + ']').text() + ";\n党费金额："  + _fee.toFixed(2) + "元/月", function () {
 					$.post(sessionStorage.getItem("feeUrl") + '/fee/member/fee-config', {
 						type: type,
-						fee: Number(_fee) * 100
+						fee: (_fee * 100).toFixed(2)
 					}, function (res) {
 						if (res.code === 0) {
 							layuiModal.alert("你已提交党费设置，请等待支部书记、二级党组织审核。", function () {
@@ -741,7 +807,7 @@
 							}
 
 						}
-						fee[_data.partyType] = duesPerMonth.toFixed(2);
+						fee[_data.partyType] = duesPerMonth;
 						$(".layui-tab-content .layui-tab-item .layui-input-block .duesPerMonth").text(duesPerMonth.toFixed(2)+"元");
 					}
 
