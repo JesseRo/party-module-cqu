@@ -80,6 +80,7 @@
 						</div>
 						<button type="button"  class="layui-btn layui-btn-warm"  lay-submit="" lay-filter="searchForm"><icon class="layui-icon layui-icon-search"></icon>搜索</button>
 					</div>
+					<button type="button" id="export" class="layui-btn layui-btn-warm" style="float: right;height: 38px;">导出pdf </button>
 				</div>
 			</form>
 			<table id="noteAuditTable" lay-filter="noteAuditTable"></table>
@@ -95,12 +96,14 @@
 </script>
 <script type="text/javascript">
 	layui.use(['table','layer','form'], function() {
+		var all;
+		var checked = {};
 		var table = layui.table,
 				layer = layui.layer,
 				form = layui.form;
 		var pageInfo = {
 			page:1,
-			size:10
+			size:30
 		};
 		renderTable(1,pageInfo.size);
 		form.on('submit(searchForm)', function (data) {
@@ -119,13 +122,14 @@
 				page: {
 					limit:size,   //每页条数
 					curr:page,
-					limits:[10,15,20],
+					limits:[30,20,10],
 					prev:'&lt;上一页',
 					next:'下一页&gt;',
 					theme: '#FFB800',
 					groups:4
 				},
 				cols: [[ //表头
+					{type:'checkbox'},
 					{field: 'org_name', align:'center',width:'12.14%', title: '党组织'},
 					{field: 'meeting_type', align:'center',width:'12.14%', title: '会议类型'},
 					{field: 'meeting_theme', align:'center',width:'12.14%', title: '开展主题'},
@@ -147,8 +151,32 @@
 				done: function(res, curr, count){
 					pageInfo.page = curr;
 					pageInfo.size = ins.config.limit;
+					all = res.data;
 				}
 			});
+			table.on('checkbox(noteAuditTable)', function(obj){
+				if (obj.checked) {
+					if (obj.type == 'all') {
+						checked = {};
+						for (var i = 0; i < all.length; i++) {
+							var a = all[i];
+							checked[a.note_id] = a;
+						}
+					} else {
+						checked[obj.data.note_id] = obj.data;
+					}
+				} else {
+					if (obj.type == 'all') {
+						checked = {};
+					} else {
+						delete checked[obj.data.note_id];
+					}
+				}
+				console.log(obj.checked); //当前是否选中状态
+				console.log(obj.data); //选中行的相关数据
+				console.log(obj.type); //如果触发的是全选，则为：all，如果触发的是单选，则为：one
+			});
+
 			$(".layui-table-view .layui-table-page").addClass("layui-table-page-center");
 			$(".layui-table-view .layui-table-page").removeClass("layui-table-page");
 			//监听事件
@@ -163,6 +191,15 @@
 				};
 			});
 		}
+
+		$('#export').on('click', function () {
+			var ids = Object.keys(checked);
+			if (ids.length === 0) {
+				layuiModal.alert("请先勾选需要导出的纪要。");
+				return;
+			}
+			window.open(sessionStorage.getItem("feeUrl") + '/fee/school/note/export?id=' + ids.join(','));
+		})
 	});
 	Date.prototype.format = function (fmt) {
 		var o = {
