@@ -44,16 +44,12 @@ public class MeetingNoteAuditPageCommand implements MVCResourceCommand {
 		int page = ParamUtil.getInteger(resourceRequest, "page");
 		int size = ParamUtil.getInteger(resourceRequest, "limit");
 		String keyword = ParamUtil.getString(resourceRequest, "keyword");
-		Object orgId = SessionManager.getAttribute(resourceRequest.getRequestedSessionId(), "department");
+		String startDate = ParamUtil.getString(resourceRequest, "startDate");
+		String endDate = ParamUtil.getString(resourceRequest, "endDate");
+		String selectOrg = ParamUtil.getString(resourceRequest, "orgId");
+		String orgId = (String) SessionManager.getAttribute(resourceRequest.getRequestedSessionId(), "department");
 		try {
-			PostgresqlPageResult<Map<String, Object>> data = new PostgresqlPageResult(null, 0,0);
-			if(orgId!=null && !StringUtils.isEmpty(String.valueOf(orgId))){
-				if (StringUtils.isEmpty(keyword)){
-					data = partyMeetingNoteService.meetingNoteAuditPageAndSearch(page, size,String.valueOf(orgId),null);
-				}else {
-					data = partyMeetingNoteService.meetingNoteAuditPageAndSearch(page, size, String.valueOf(orgId),keyword);
-				}
-			}
+			PostgresqlPageResult<Map<String, Object>> data = partyMeetingNoteService.meetingNoteAuditPageAndSearch(page, size, orgId, keyword, startDate, endDate, selectOrg);
 			Gson gson = new Gson();
 			res.getWriter().write(gson.toJson(data.toJsonPageResponse()));
 		} catch (Exception e) {

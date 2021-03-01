@@ -19,8 +19,8 @@ public class PartyMeetingNoteService {
        return  partyMeetingNoteDao.meetingNotePageAndSearch(page,size,orgId,keyword);
     }
 
-    public PostgresqlPageResult<Map<String, Object>> meetingNoteAuditPageAndSearch(int page, int size, String orgId, String keyword) {
-        return  partyMeetingNoteDao.meetingNoteAuditPageAndSearch(page,size,orgId,keyword);
+    public PostgresqlPageResult<Map<String, Object>> meetingNoteAuditPageAndSearch(int page, int size, String orgId, String keyword, String startDate, String endDate, String selectOrg) {
+        return  partyMeetingNoteDao.meetingNoteAuditPageAndSearch(page,size,orgId,keyword,startDate, endDate, selectOrg);
     }
 
     public int passMeetingNote(int noteId) {

@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ include file="/init.jsp" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <portlet:resourceURL id="/org/meetingNote/audit/page" var="NoteAuditPage" />
 <!DOCTYPE html>
 <html>
@@ -74,6 +75,18 @@
 		<div class="bg_white_container">
 			<form class="layui-form" id="searchForm">
 				<div class="layui-form-item">
+					<c:if test="${orgs != null && fn:length(orgs) > 0}">
+						<select type="text" name="title" id="secondary" autocomplete="off" class="form-control"
+								style="display: initial; width: 15%;float: left;border-radius: 0;height: 38px!important;text-indent: 0;">
+							<option value="">所有</option>
+							<c:forEach items="${orgs}" var="org">
+								<option value="${org.org_id}">${org.org_name}</option>
+							</c:forEach>
+						</select>
+					</c:if>
+					<div class="layui-input-inline" style="height: 38px;margin-left: 20px;">
+						<input type="text" class="layui-input" id="date_range" placeholder="日期范围" autocomplete="off">
+					</div>
 					<div class="layui-inline">
 						<div class="layui-input-inline keyword">
 							<input type="text" name="keyword"  placeholder="请输入组织名称、主题关键字" class="layui-input">
@@ -95,7 +108,7 @@
 	<a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
 </script>
 <script type="text/javascript">
-	layui.use(['table','layer','form'], function() {
+	layui.use(['table','layer','form', 'laydate'], function() {
 		var all;
 		var checked = {};
 		var table = layui.table,
@@ -105,15 +118,40 @@
 			page:1,
 			size:30
 		};
+		var startDate = null, endDate = null;
+		var ins;
+		function toDateStr(date){
+			if (date.year) {
+				return date.year + '-' + date.month + '-' + date.date;
+			}else {
+				return "";
+			}
+		}
 		renderTable(1,pageInfo.size);
+		var where = {
+			keyword: $("#searchForm input[name=keyword]").val(),
+			startDate: startDate,
+			endDate: endDate,
+			orgId: $('#secondary').val()
+		};
 		form.on('submit(searchForm)', function (data) {
-			renderTable(1,pageInfo.size);
+			ins.reload({
+				page: {
+					limit:pageInfo.size,   //每页条数
+					curr:pageInfo.page,
+					limits:[30,20,10],
+					prev:'&lt;上一页',
+					next:'下一页&gt;',
+					theme: '#FFB800',
+					groups:4
+				},
+				where: where
+			})
 		})
+
 		function renderTable(page,size){
-			var  where = {
-				keyword: $("#searchForm input[name=keyword]").val()
-			};
-			var ins = table.render({
+
+			ins = table.render({
 				elem: '#noteAuditTable',
 				where: where,
 				height:560,
@@ -189,6 +227,19 @@
 						window.location.href='/noteDetail?meetingId='+obj.data.meeting_id;
 						break;
 				};
+			});
+
+			var laydate = layui.laydate;
+			laydate.render({
+				elem: '#date_range'
+				, range: '-'
+				, done: function (value, date, e) {
+					console.log(value); //得到日期生成的值，如：2017-08-18
+					console.log(date); //得到日期时间对象：{year: 2017, month: 8, date: 18, hours: 0, minutes: 0, seconds: 0}
+					console.log(e); //得结束的日期时间对象，开启范围选择（range: true）才会返回。对象成员同上。
+					startDate = toDateStr(date);
+					endDate = toDateStr(e);
+				}
 			});
 		}
 
