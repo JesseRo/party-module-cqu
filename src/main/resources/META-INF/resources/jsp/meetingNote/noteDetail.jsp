@@ -185,7 +185,7 @@
                                 <label class="layui-form-label"></label>
                                 <div class="layui-input-inline">
                                     <button type="button" class="layui-btn layui-btn-primary" onclick="window.history.back();">返回</button>
-                                    <button type="button" class="layui-btn layui-btn-warm" id="pdf_button">导出pdf</button>
+                                    <button type="button" class="layui-btn layui-btn-warm" id="pdf_button">导出会议纪要</button>
                                 </div>
                             </div>
                         </div>
@@ -266,36 +266,36 @@
 
 
         $('#pdf_button').on('click', function () {
-            $('#pdf_button').attr("disabled", true);
-            var children = $('.inform-detail').children();
-            var doms = [];
-            var title = $('#pdf_title')[0];
-            doms.push(title);
-            var length = children.length;
-            var note = children[length - 2];
-            var noteTitle = children[length - 3];
-            var meeting = children[length - 4];
-            var meetingTitle = children[length - 5];
-            for(var i = 0; i < length - 5; i++) {
-                doms.push(children[i]);
-            }
-            doms.push(meetingTitle);
-            var meetingDoms = $(meeting).find('.layui-long').children();
-            var meetingLength = meetingDoms.length;
-            for(var j = 0; j < meetingLength; j++) {
-                doms.push(meetingDoms[j]);
-            }
-            doms.push(noteTitle);
-            var noteDoms = $(note).find('.layui-long').children();
-            var noteLength = noteDoms.length;
-            for(j = 0; j < noteLength; j++) {
-                doms.push(noteDoms[j]);
-            }
-            var source = $('#pdf_source')[0];
-            doms.push(source);
-            var cd = $('#pdf_date')[0];
-            doms.push(cd);
-            renderPdf(doms, 0, 0, 0);
+            window.open(sessionStorage.getItem("feeUrl") + '/fee/school/note/export?id=${meetingNote.id}');
+            // var children = $('.inform-detail').children();
+            // var doms = [];
+            // var title = $('#pdf_title')[0];
+            // doms.push(title);
+            // var length = children.length;
+            // var note = children[length - 2];
+            // var noteTitle = children[length - 3];
+            // var meeting = children[length - 4];
+            // var meetingTitle = children[length - 5];
+            // for(var i = 0; i < length - 5; i++) {
+            //     doms.push(children[i]);
+            // }
+            // doms.push(meetingTitle);
+            // var meetingDoms = $(meeting).find('.layui-long').children();
+            // var meetingLength = meetingDoms.length;
+            // for(var j = 0; j < meetingLength; j++) {
+            //     doms.push(meetingDoms[j]);
+            // }
+            // doms.push(noteTitle);
+            // var noteDoms = $(note).find('.layui-long').children();
+            // var noteLength = noteDoms.length;
+            // for(j = 0; j < noteLength; j++) {
+            //     doms.push(noteDoms[j]);
+            // }
+            // var source = $('#pdf_source')[0];
+            // doms.push(source);
+            // var cd = $('#pdf_date')[0];
+            // doms.push(cd);
+            // renderPdf(doms, 0, 0, 0);
         })
     })
 </script>

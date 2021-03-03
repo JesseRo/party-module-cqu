@@ -386,12 +386,13 @@ public class PartyMeetingPlanInfoDao extends HgPostgresqlDaoImpl<MeetingPlan> {
     //bb
     public List<Map<String, Object>> find(String starDdate, String endDate, String meetType, String theme, String seconedId, String branchId, Integer pageSize, Integer startPage, String checkState,String orgId) { String sql = "\n" +
                 "\tSELECT\n" +
-                "\t\tplan.task_status AS plan_state,org_o.org_name AS branch_name,plc.place as place_name," +
+                "\t\tplan.task_status AS plan_state,org_o.org_name AS branch_name,plc.place as place_name,note.id as note_id," +
                 " us.user_name as check_person_name, contact.user_name as contact_name, host.user_name as host_name, \n" +
                 "\t\t( SELECT org_name FROM hg_party_org WHERE org_id = ( SELECT org_parent FROM hg_party_org WHERE org_id = plan.organization_id ) AND org_type != 'organization' ) AS second_name,\n" +
                 "\t\tplan.*\n" +
                 "\tFROM\n" +
                 "\t\thg_party_meeting_plan_info AS plan\n" +
+                "\t\tLEFT JOIN  hg_party_meeting_notes_info AS note ON note.meeting_id = plan.meeting_id and note.status = 2 \n" +
                 "\t\tLEFT OUTER JOIN hg_users_info AS us ON plan.check_person = us.user_id \n" +
                 "\t\tLEFT OUTER JOIN hg_users_info AS contact ON plan.contact = contact.user_id \n" +
                 "\t\tLEFT OUTER JOIN hg_users_info AS host ON plan.host = host.user_id \n" +
