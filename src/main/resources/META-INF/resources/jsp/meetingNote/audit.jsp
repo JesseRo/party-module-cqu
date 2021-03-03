@@ -93,7 +93,7 @@
 						</div>
 						<button type="button"  class="layui-btn layui-btn-warm"  lay-submit="" lay-filter="searchForm"><icon class="layui-icon layui-icon-search"></icon>搜索</button>
 					</div>
-					<button type="button" id="export" class="layui-btn layui-btn-warm" style="float: right;height: 38px;">导出pdf </button>
+					<button type="button" id="export" class="layui-btn layui-btn-warm" style="float: right;height: 38px;">批量导出会议纪要</button>
 				</div>
 			</form>
 			<table id="noteAuditTable" lay-filter="noteAuditTable"></table>

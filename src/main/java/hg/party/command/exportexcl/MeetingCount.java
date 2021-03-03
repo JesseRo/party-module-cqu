@@ -92,7 +92,7 @@ public class MeetingCount implements MVCResourceCommand {
                 o.setContact((String) map.get("contact_name"));
                 o.setContact_phone((String) map.get("contact_phone"));
                 String plan_state = StringUtils.isEmpty(map.get("plan_state").toString()) ? "" : map.get("plan_state").toString();
-                o.setPlan_state(ExprotUntil.getTaskState(plan_state));
+                o.setPlan_state(StringUtils.isEmpty(map.get("note_id")) ? ExprotUntil.getMeetingRecordState(plan_state) : "已纪要");
                 o.setAuditor(StringUtils.isEmpty(map.get("auditor")) ? "" : map.get("auditor") + "");
                 o.setNote(ExprotUntil.getNote(map));
                 jsonArray.add(o);

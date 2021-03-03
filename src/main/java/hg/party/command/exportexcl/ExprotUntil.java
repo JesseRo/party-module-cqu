@@ -2,9 +2,11 @@ package hg.party.command.exportexcl;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Map;
 
+import com.liferay.portal.kernel.util.StringComparator;
 import org.springframework.util.StringUtils;
 
 public class ExprotUntil {
@@ -23,6 +25,19 @@ public class ExprotUntil {
             return "未检查";
         } else if ("7".equals(taskState)) {
             return "已检查";
+        }
+        return "";
+    }
+
+    public static String getMeetingRecordState(String taskState) {
+        if ("1".equals(taskState)) {
+            return "已提交";
+        } else if ("2".equals(taskState)) {
+            return "已撤回";
+        } else if ("3".equals(taskState)) {
+            return "被驳回";
+        } else if (taskState.compareTo("4") >= 0) {
+            return "已通过";
         }
         return "";
     }
