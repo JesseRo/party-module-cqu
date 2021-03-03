@@ -76,7 +76,7 @@
 			<form class="layui-form" id="searchForm">
 				<div class="layui-form-item">
 					<c:if test="${orgs != null && fn:length(orgs) > 0}">
-						<select type="text" name="title" id="secondary" autocomplete="off" class="form-control"
+						<select type="text" name="title" lay-ignore id="secondary" autocomplete="off" class="form-control"
 								style="display: initial; width: 15%;float: left;border-radius: 0;height: 38px!important;text-indent: 0;">
 							<option value="">所有</option>
 							<c:forEach items="${orgs}" var="org">
@@ -145,7 +145,12 @@
 					theme: '#FFB800',
 					groups:4
 				},
-				where: where
+				where: {
+					keyword: $("#searchForm input[name=keyword]").val(),
+					startDate: startDate,
+					endDate: endDate,
+					orgId: $('#secondary').val()
+				}
 			})
 		})
 

@@ -302,12 +302,15 @@
                         {field: 'org_name', title: '所在支部', width: '18.33%'},
                         {field: 'to_org_name', title: '去往单位', width: '18.33%'},
                         {field: 'time', title: '申请时间', width: '10%'},
-                        {field: 'reason', title: '原因', width: '15%'},
+                        {field: 'reason', title: '原因', width: '10%'},
                         {
-                            field: 'status', title: '状态', width: '10%', templet: function (d) {
+                            field: 'status', title: '状态', width: '7.5%', templet: function (d) {
                                 return statusList[d.status];
                             }
                         },
+                        {field: 'receipt', title: '回执', width: '7.5%', templet: function (d) {
+                                return d.receipt ? '<span style="color: #2E87FF;cursor: pointer;" class="blue_text" onclick="window.open(\'' + d.receipt +'\');">回执</span>\n' : '';
+                            }},
                     ]],
                     parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
                         transportCount = res.count;
